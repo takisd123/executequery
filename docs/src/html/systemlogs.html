@@ -1,0 +1,97 @@
+<html>
+<head>
+<title>Application Logging</title>
+<link rel="stylesheet" type="text/css" href="eqhelp.css">
+</head>
+<body>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-1.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+    <td align="right" background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-2.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+  </tr>
+</table>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h1>Application Logging</h1><hr></td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><p>Execute Query logging includes system output for 
+        information, error or debugging purposes and can be configured from the 
+        <a href="prefs.html">application preferences</a>.</p>
+        <p>Generated application logs can be found within the directory:
+        <font class="mono">~/.executequery/logs</font> (~ - the user's home 
+        directory)</p>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h2>Main Application Log</h2></td>
+  <tr>
+  <tr>
+    <td><p>The primary system output log is the file 
+        <font class="mono">system.log</font>. The application output console,
+        typically located as a docked component at the bottom of the application
+        window (select View &gt; Output Console if not currently visible) 
+        mirrors the output written to this log file.</p>
+        <p>Please use the contents of the log file when reporting any
+        application errors and/or bugs.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h2>Data Import and Export Logging</h2></td>
+  <tr>
+  <tr>
+    <td><p>During any data import/export action, the output as
+        generated and displayed within the final step of respective
+        import/export processes is written to the log files 
+        <font class="mono">import.log</font> and 
+        <font class="mono">export.log</font>.
+        <p>The above include all relevant information regarding the process
+        including what was imported/exported, to where, the duration of the
+        process and any success or error messages as may have been generated 
+        during each individual process.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h2>Viewing System Logs</h2></td>
+  <tr>
+  <tr>
+    <td><p>System logs may be accessed and viewed in their entirety from the
+        menu item Tools &gt; System Logs &gt; &lt;log file type&gt;.</p>
+        <p>The above will open respective system logs within a simple text
+        viewer as a part of the central pane. Each log may be cleared (contents
+        deleted and the log reset) or reloaded as required.</p>
+        <p>Use the log selection drop-down box to display different logs from
+        the one viewer.</p>
+        <p>Logs may also be reset using the appropriate menu item within the
+        menu Tools &gt; System Logs &gt; Reset Logs &gt; &lt;log file type&gt;
+        </p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Main-Class: org.executequery.ExecuteQuery
+Created-By: Takis Diakoumis
+Class-Path: docs/eqhelp.jar \
+            lib/browser-launcher.jar \
+            lib/jh.jar \
+            lib/hssf.jar \
+            lib/batik.jar \
+            lib/batik-svggen.jar \
+            lib/batik-util.jar \
+            lib/batik-dom.jar \
+            lib/batik-xml.jar \
+            lib/batik-awt-util.jar \
+            lib/log4j-1.2.13.jar \
+            lib/liquibase-1.9.1.jar \
+            lib/commons-lang-2.3.jar \
+            lib/poi-2.5-final-20040302.jar \
+            lib/commons-logging-1.1.1.jar \
+            lib/commons-codec-1.3.jar \
+            lib/commons-httpclient-3.1.jar
+

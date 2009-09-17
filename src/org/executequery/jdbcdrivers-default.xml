@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    =======================================================================
+    File:         jdbcdrivers-default.xml
+    Author:       Takis Diakoumis
+    Description:  Default empty JDBC driver definitions file (contains
+                  ODBC definition only)
+    Date:         $Date: 2007-01-03 19:05:33 +1100 (Wed, 03 Jan 2007) $
+    Version:      $Revision: 638 $
+    =======================================================================
+-->
+
+<jdbcdrivers>
+
+   <databasedrivers>
+      <id>9999999999999</id>
+      <name>ODBC Driver</name>
+      <description>Sun ODBC Driver</description>
+      <type>8</type>
+      <path/>
+      <classname>sun.jdbc.odbc.JdbcOdbcDriver</classname>
+      <url>jdbc:odbc:[source]</url>
+   </databasedrivers>
+
+</jdbcdrivers>

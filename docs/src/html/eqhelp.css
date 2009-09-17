@@ -1,0 +1,182 @@
+
+/* Generic Elements ------------------------------------------------- */
+
+BODY {
+  background-color: #ffffff;
+  font-size: 10px;
+  font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  color: #000000;
+  margin-top:0px;
+  margin-left:10px;
+  margin-right:8px;
+  margin-bottom:16px;
+  padding:0px;
+}
+
+a:link, a:visited {
+  color: #5353DA;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+a:link:hover, a:visited:hover  {
+  color: #5353DA;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+H1 {
+  font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  clear:both;
+  font-size: 13px;
+  font-weight:bold;
+  margin:0px;
+  padding:0px;
+  color:#5358A7;
+}
+
+/* border-bottom does not seem to work in JH
+H1 {
+  font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  border-bottom:1px solid #808080;
+  clear:both;
+  font-size: 13px;
+  font-weight:bold;
+  margin:0px;
+  padding:0px;
+  color:#5358A7;
+}
+H2 {
+  font-size: 12px;
+  font-weight:bold;
+  margin:0px;
+  border-bottom:1px solid #AFAFAF;
+  margin-top:5px;
+  margin-bottom:5px;
+  color:#5358A7;
+}
+*/
+
+H2 {
+  font-size: 12px;
+  font-weight:bold;
+  margin-top:5px;
+  margin-bottom:0px;
+  color:#5358A7;
+}
+
+H3 {
+  font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  font-size: 11px;
+  font-weight:bold;
+  margin-top:10px;
+  margin-bottom:0px;
+  padding:0px;
+  color:#5358A7;
+}
+
+H4 {
+  font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  color:#5358A7;
+}
+
+H5 {
+  font-family: Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+  font-size: 10px;
+  font-weight:bold;
+  padding-bottom:0px;
+  margin-bottom:0px;
+  border-bottom:1px solid #AFAFAF;
+  color:#5358A7;
+  clear:both;
+}
+
+dl {margin-left: 0;
+    margin-top: 10;
+    margin-bottom: 5}
+
+dt {font-size: small;
+    font-style: normal;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-indent: 0}
+
+dd {font-size: small;
+    font-style: normal;
+    font-weight: normal;
+    margin-top: 2;
+    margin-left: 25}
+
+table {border-style: solid;
+       border-color: silver;
+       margin-top: 5;
+       margin-bottom: 5}
+
+td {font-size: 10px;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    color: #000000;
+    border-style: solid;
+    border-color: silver;
+    padding-left: 1;
+    padding-right: 1;
+    padding-top: 1;
+    padding-bottom: 1}
+
+th {border-style: solid;
+    border-color: silver;
+    padding-left: 1;
+    padding-right: 1;
+    padding-top: 1;
+    padding-bottom: 1}
+
+small {font-size: x-small}
+
+.header-footer {
+    font-size: 9px;
+    font-weight:bold;
+    font-family: Verdana, "Verdana CE",  Arial, "Arial CE", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+    color: #373e94;
+}
+
+pre {
+  font-size: 9px;
+}
+
+/* Misc Elements ------------------------------------------------- */
+
+.indent {
+  margin-left:5px;
+}
+
+.indent-contents {
+  margin-left:15px;
+}
+
+.examplecode {
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 10px;
+  font-family: "Courier New", monospace;
+  background-color: #ffffcc;
+}
+
+/* List Elements ------------------------------------------------- */
+
+ol {list-style-type: decimal;
+    margin-top: 5;
+    margin-bottom: 0;
+ 	  margin-left: 22;
+}
+
+ol li ol{list-style-type: lower-alpha}
+
+ul {list-style-image:url(../images/blue-ball-mid.gif);
+    margin-top: 5;
+    margin-bottom: 0;
+	 margin-left: 16;
+}
+
+ul li ul{list-style-image:url(../images/blue-sqr-mid.gif)}
+

@@ -1,0 +1,86 @@
+-----------------------------------
+Execute Query Library Dependencies
+-----------------------------------
+
+
+Browser Launcher 2
+-----------------------
+Lib jar file: BrowserLauncher2-1_3.jar
+Version: 1.3
+URL: http://browserlaunch2.sourceforge.net/
+Used in: launches local system default web browser referenced URLs etc.
+Licence: LGPL
+
+Batik SVG Toolkit
+----------------------
+Lib jar file: batik.jar batik-awt-util.jar batik-dom.jar batik-svggen.jar batik-util.jar batik-xml.jar batik-codec.jar batik-rasterizer-ext.jar xml-apis.jar batik-ext.jar
+Version: 1.7 (works with >= v1.5)
+URL: http://xmlgraphics.apache.org/batik/index.html
+Used in: Generate SVG image type of ERD diagram.
+Licence: Apache License v2.0
+
+Commons HTTP Client
+-----------------------
+Lib jar file: commons-httpclient-3.1.jar
+Version: 3.1
+URL: http://hc.apache.org/httpclient-3.x/
+Used in: External HTTP requests such as feedback and version check feature.
+Licence: Apache License v2.0
+
+Commons Codec
+-----------------------
+Lib jar file: commons-codec-1.3.jar
+Version: 1.3
+URL: http://commons.apache.org/codec/
+Used in: Dependency of HTTP Client
+Licence: Apache License v2.0
+
+Commons Lang
+-----------------------
+Lib jar file: commons-lang-2.4.jar
+Version: 2.4 (works with >= v2.0)
+URL: http://commons.apache.org/lang/
+Used in: Misc utils
+Licence: Apache License v2.0
+
+Commons Logging
+-----------------------
+Lib jar file: commons-logging-1.1.1.jar
+Version: 1.1.1
+URL: http://commons.apache.org/logging/
+Used in: Application logging mechanism
+Licence: Apache License v2.0
+
+POI-HSSF
+-----------------------
+Lib jar file: poi-3.2-FINAL-20081019.jar hssf.jar
+Version: 3.2-FINAL-20081019
+URL: http://poi.apache.org/spreadsheet/index.html
+Used in: Excel spreadsheet generator for data export
+Licence: Apache License v2.0
+
+JavaHelp
+-----------------------
+Lib jar file: jh.jar
+Version: 2.0_05 (works with >= v2.0)
+URL: http://java.sun.com/javase/technologies/desktop/javahelp/
+Used in: Application help feature
+Licence: GPL
+
+Liquibase
+-----------------------
+Lib jar file: liquibase-1.9.2.jar
+Version: 1.9.2 (works with >= v1.8.0)
+URL: http://www.liquibase.org/
+Used in: Selected SQL statement generation
+Licence: LGPL
+
+Log4j
+-----------------------
+Lib jar file: log4j-1.2.13.jar
+Version: 1.2.13 (works with >= v1.2.9)
+URL: http://logging.apache.org/log4j/
+Used in: Application logging.
+Licence: Apache License v2.0
+
+

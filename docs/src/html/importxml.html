@@ -1,0 +1,130 @@
+<html>
+<head>
+<title>Importing Data from XML Files</title>
+<link rel="stylesheet" type="text/css" href="eqhelp.css">
+</head>
+<body>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-1.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+    <td align="right" background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-2.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+  </tr>
+</table>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h1>Importing Data from XML Files</h1><hr></td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td>
+      The Import from XML File feature allows for the insertion of data 
+      from one or more XML files into selected database tables.
+    </td>
+  </tr>
+  <tr>
+    <td><i>Note:</i> XML file imports rely on the table name and column name
+        tags being present within the import file. For example:<br>
+        <div class="examplecode">
+        <pre>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+
+  &lt;table name=&quot;employees&quot;&gt;
+
+     &lt;row rownum=&quot;1&quot;&gt;
+       &lt;employee_id&gt;1234&lt;/employee_id&gt;
+       &lt;first_name&gt;John&lt;/first_name&gt;
+       &lt;second_name&gt;Smith&lt;/second_name&gt;
+       &lt;department&gt;001&lt;/department&gt;
+       &lt;start_date&gt;20020506&lt;/start_date&gt;
+       &lt;salary&gt;55000&lt;/salary&gt;
+     &lt;/row&gt;
+
+     ...
+
+  &lt;/table&gt;</pre></div>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <ol>
+        <li>Select the menu item Tools &gt; Import Data &gt; Import from 
+            XML File or the Import from XML File button from the
+            main tool bar</li>
+        <li>Select the open connection to use for this data export</li>
+        <li>Select whether to import a single table or multiple tables</li>
+        <li>For a multiple table import:</li>
+          <ol type="a">
+            <li>Select whether to import from one file that includes ALL
+                tables or multiple files where a single file is used
+                for each individual table</li>
+          </ol>
+        <li>Select the Next button to proceed to the next step</li>
+        <li>Select the database catalog or schema containing the table(s) to
+            be imported to</li>
+        <li>For a single table import:</li>
+          <ol type="a">
+            <li>Select the table to be imported from the drop-down list</li>
+            <li>Select the desired columns (or all) to be imported from the
+                selected table</li>
+            <li>Reorder the columns as desired using the Move up/down
+                buttons to match the order the columns appear in the file</li>
+          </ol>
+        <li>For a multiple table import:</li>
+          <ol type="a">
+            <li>Select the tables to be imported from the 'Available Tables'
+            list using the arrow selection buttons
+            <li>Alter the order in which each table will be imported using 
+                the Move up/down buttons</li>
+          </ol>
+        <li>Select the Next button to proceed to the next step</li>
+        <li>Select a valid file path or paths for each individual table to be
+            imported</li>
+        <li>Select the Next button to proceed to the next step</li>
+        <li>Enter the XML element style as contained within the import
+            file(s) (use the sample button on the form to view an example</li>
+        <li>Select the action on error for the extraction process</li>
+        <li>Select the rollback segment size (commit block) for the 
+            process</li>
+        <li>Select whether to attempt to parse date values before inserting
+            into respective tables<br>
+            <i>Note:</i> If date values exist and this option is not selected
+            the system will insert each date values as the relevant CHAR 
+            format to be converted to date/time values by the database upon
+            record insertion. Please review your specific database product 
+            documentation for the acceptable default date/time syntax.</li>
+          <ol type="a">
+            <li>Select the date pattern to be applied to each date value (see 
+                <a href="datepatterns.html">date patterns</a>)</li>
+          </ol>
+        <li>Select whether to run as a batch process (usually faster for very
+            large record sets)
+        <li>Select the Next button to proceed to the next step</li>
+        <li>Review and confirm the import process to be performed</li>
+        <li>Select the Next button to begin the data import process</li>
+        <li>Monitor the output pane for any errors - use the Stop button to 
+            halt the process at any stage during the run<br>
+            <i>Note:</i> Data may or may not have been committed to the
+            database when the Stop button is selected</li>
+        <li>Select Finish (or Back to correct errors etc) when the process
+            has completed</li>
+      </ol>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
