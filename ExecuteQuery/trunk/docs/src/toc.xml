@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE toc
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/toc_2_0.dtd">
+
+<toc version="2.0">
+
+  <tocitem image="dbicon1" text="Execute Query Help" target="introduction">
+
+    <tocitem image="dbicon2" text="Overview" target="overview" />
+
+    <tocitem image="dbicon2" text="Release Information" target="release-info">    
+      <tocitem image="dbicon2" text="Release Notes" target="release-notes" />
+      <tocitem image="dbicon2" text="GNU General Public License" target="gpl" />
+      <tocitem image="dbicon2" text="GNU Free Documentation License" target="gpl-doc" />
+    </tocitem>
+
+    <tocitem image="dbicon2" text="Getting Started" target="getting-started" />
+    <tocitem image="dbicon2" text="Toolbars" target="tool-bars" />
+    <tocitem image="dbicon2" text="Database Drivers" target="jdbc-drivers" />
+    <tocitem image="dbicon2" text="Creating a New Connection" target="connection" />
+
+    <tocitem image="dbicon2" text="Connection and Database Explorer" target="database-explorer">
+      <tocitem image="dbicon2" text="Browsing Database Objects" target="database-browsing" />
+      <tocitem image="dbicon2" text="Modifying the Database" target="database-editing" />
+    </tocitem>
+    
+    <tocitem image="dbicon2" text="Query Editor" target="query-editor">
+      <tocitem image="dbicon2" text="Query Editor Toolbar" target="editor-toolbar" />
+      <tocitem image="dbicon2" text="Executing SQL Queries" target="editor-execute" />
+      <tocitem image="dbicon2" text="Editor Transaction Control" target="editor-tx-control" />
+      <tocitem image="dbicon2" text="Query Editor Output Pane" target="editor-output" />
+      <tocitem image="dbicon2" text="Generating Result Set Metadata" target="editor-rs-meta" />
+      <tocitem image="dbicon2" text="Exporting Result Sets" target="editor-export" />
+      <tocitem image="dbicon2" text="History of Executed Statements" target="editor-history" />
+      <tocitem image="dbicon2" text="Printing Queries and Result Sets" target="editor-printing" />
+    </tocitem>
+
+    <tocitem image="dbicon2" text="Entity Relationship Diagrams" target="erd">
+      <tocitem image="dbicon2" text="ERD Toolbar" target="erd-toolbar" />
+      <tocitem image="dbicon2" text="Creating a New ERD" target="erd-new" />
+      <tocitem image="dbicon2" text="Mapping an Existing Database" target="erd-mapping" />
+      <tocitem image="dbicon2" text="Manipulating Tables" target="erd-tables" />
+      <tocitem image="dbicon2" text="Manipulating the Diagram" target="erd-diagram" />
+      <tocitem image="dbicon2" text="Saving and Exporting ERDs" target="erd-save" />
+    </tocitem>
+
+    <tocitem image="dbicon2" text="Creating Tables" target="create-table" />
+    <tocitem image="dbicon2" text="Creating Indexes" target="create-index" />
+    <tocitem image="dbicon2" text="Generating SQL Scripts" target="generate-scripts" />
+    <tocitem image="dbicon2" text="Executing Stored Objects" target="execute-stored-objects" />
+    <tocitem image="dbicon2" text="Comparing Data Types" target="compare-data-types" />
+    <tocitem image="dbicon2" text="The Scratch Pad" target="scratch-pad" />
+    <tocitem image="dbicon2" text="User Defined Keywords" target="user-defined-keywords" />
+    
+    <tocitem image="dbicon2" text="Importing and Exporting Data" target="import-export">
+      <tocitem image="dbicon2" text="Date Value Syntax Patterns" target="date-patterns" />
+      <tocitem image="dbicon2" text="Exporting to Delimited Files" target="export-delimited" />
+      <tocitem image="dbicon2" text="Exporting to XML Files" target="export-xml" />
+      <tocitem image="dbicon2" text="Exporting to Excel Files" target="export-excel" />
+      <tocitem image="dbicon2" text="Importing from Delimited Files" target="import-delimited" />
+      <tocitem image="dbicon2" text="Importing from XML Files" target="import-xml" />
+    </tocitem>
+    
+    <tocitem image="dbicon2" text="Dockable Views" target="docks" />
+    
+    <tocitem image="dbicon2" text="Printing" target="print" />
+    <tocitem image="dbicon2" text="Application Logging" target="system-logs"/>
+    
+    <tocitem image="dbicon2" text="Customising Excecute Query" target="prefs"/>
+
+  </tocitem>
+    
+</toc>

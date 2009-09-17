@@ -1,0 +1,199 @@
+--- RELEASE NOTES ---
+
+Date: 18 May 2009
+
+Execute Query Version 3.1.5 Build 5124
+----------------------------------------
+
+Summary of changes from 3.1.4 Build 5121:
+----------------------------------------
+
+- Updated dependancy libraries.
+- Last used file path now persistent between application sessions.
+- Added option to store editor result set table column widths when resized.
+- Fixed stored procedure and function errors on execution from editor and stored
+  object execution tab.
+- Added option to use a single result set tab within the editor and not open 
+  multiple for each returned result set.
+- Fixed advanced connection properties not applied when connection created.
+- Added ability to define a custom delimiter for import/export data.
+
+
+Summary of changes from 3.1.3 Build 5117:
+----------------------------------------
+
+- Fixed query execution where insert/update char values have line breaks.
+- Added BLOB and CLOB support for the Query Editor and Schema Browser.
+- Added record item viewer for result set cells.
+- Added code completion for the Query Editor - stage 1 supporting default 
+  connected schema only (this is a very early release of this feature with much
+  yet to be done - if issues present, disable from Preferences | Editor)
+- Changed export as SQL to write 'default' value types as quoted values.
+- Added transpose row feature for editor result sets.
+- Fixed table data errors for non-connected default schemas/catalogs. 
+- Minor UI tweaks.
+
+
+Summary of changes from 3.1.2 Build 5111:
+----------------------------------------
+
+- Fixed proxy configuration for external http calls including update checks
+- Modified ERD to reset x,y-0,0 position when a table is moved off screen
+- Added SQL text pane to query history dialog
+- Added connection and schema tree panel node sorting (a-z, z-a and restore)
+- Added schema tree panel node search lookup and selection
+- Fixed create DROP scripts where constraints were being added as ALTER TABLE
+- Fixed SQL statement export to account for column selections
+- Fixed editor connection errors when the single and selected connection is 
+  closed and reopened and used by the same editor
+- Fixed export as SQL where CREATE TABLE was not being included when selected
+- Added window nav menu and shortcuts
+
+
+Summary of changes from 3.1.1 Build 5107:
+----------------------------------------
+
+- Added [close/close others/close all] popup menu on editor's result set tabs.
+- Fixed result set tab rollover label error with set indexes.  
+- Fixed reported leak when executing 'unknown' statement types - resources were
+  not being correctly handled and cleaned up after use.
+- Fixed recycle connection on host node error on selection.
+- Fixed menu item shortcut key display errors.
+- Fixed SaveAs action not opening a new save dialog.
+- Fixed possible statement execution error (result set closed) after query 
+  auto-format.
+- Fixed quoted strings syntax highlighting errors
+- Added export to/as SQL feature
+- Modified SQL statement generation and ordering of constraints
+
+
+Summary of changes from 3.1.0 Build 5101:
+----------------------------------------
+
+- Modified result set tab pane of the Query Editor to not close tabs when a 
+  non-result set generating statement is executed. 
+- Fixed incorrect handling of query bookmark deletion where the query deleted
+  was instead attached to the previous bookmarks name value.
+- Added new icons to identify primary and foreign key columns within the 
+  connections/schema browser tree.
+- Added new submitted graphics work for logos, icons and splash.
+- Added formatted error message for cell value when exception thrown on get 
+  value for result set table views.
+- Fixed query history scrolling that would miss the very last query executed.
+- Added format SQL button and icon to editor tool bar.
+- Updated third-party lib dependencies. 
+- Improved Mac installation and configuration support.
+- Improved support for non Metal look and feel extensions.
+
+Summary of changes from 3.1.0 Build 5099:
+----------------------------------------
+
+- Fixed error dialog popup following query execution in editor where existing
+  history file was not available. 
+- Added 'New Driver' button to connection fields to the right of the jdbc combo.
+
+
+Summary of changes from 3.1.0 Build 5098:
+----------------------------------------
+
+- Fixed exception where selection of the SQL tab from the table view in the 
+  browser caused an error when a new column was added but not defined
+- Fixed exception where removal of a new column caused an error from the table
+  view in the schema browser.
+- Modified build environment to Java version 1.5.0_15
+
+
+Summary of changes from 3.0.1 Build 5058:
+----------------------------------------
+
+- Added query bookmarking feature.
+- Added MaxDB and Firebird database within the driver selection options.
+- Added query editor shortcuts.
+- SQL query code formatter.
+- Selection of default views for catalog or schema from the schema browser
+- Added database specific SQL statement generation for the schema browser
+  and table viewer. 
+- Fixed recent file list errors.
+- Added user defined date pattern format output for query results
+- Added null value in query results output customisation
+- Added date pattern formatting for data exports
+
+
+--------
+
+This releases continues the second stage of planned source code refactoring and
+has been lighter on the feature addition list beyond critical bug fixes. There
+remains much more to do here, but with most core design changes now in place the 
+upcoming release changes will focus on feature enhancements and additions.
+
+Thanks to those who submitted bugs and suggestions. Keep them coming!
+
+
+License:
+--------
+This is free software, and you are welcome to redistribute it under 
+certain conditions. See the GNU General Public License for details. 
+
+Deployment Environment:
+-----------------------
+At present the recommended Java 2 Runtime Environment (JRE) version is at least 
+1.5.0.
+
+This program has been tested under JRE version 1.5.0 (and 1.6.0) on the 
+following platforms:
+
+   -- Windows versions 2000, XP and Vista
+   -- Solaris8, Solaris9, Solaris10 and OpenSolaris
+   -- Various flavours of Linux
+
+
+Startup files:
+--------------
+The application may be started by using the executable file eq.exe (Windows 
+only) or the Unix shell scripts eq.sh.
+
+Alternatively you may simply execute the Java archive eq.jar from the 
+installation directory using your installed Java 1.5 runtime environment.
+
+
+Source Code:
+------------
+Source code is available for download directly from the download link at
+executequery.org (where this program was downloaded). The source file is 
+typically named executequery-src-<version>.tar.gz.
+
+Source code snapshots are also available from the Execute Query project
+on sourceforge at http://sourceforge.net/projects/executequery. Source may be
+checked out using svn as shown below:
+
+svn co https://executequery.svn.sourceforge.net/svnroot/executequery/trunk executequery
+
+The source requires Java version 1.5 to build successfully. If building under 
+Java version 1.6 or later you will need to uncomment the new java.sql.Connection
+implementation methods in the class org.executequery.datasource.PooledConnection
+otherwise it will not build under v1.6+.
+
+If you are interested in a particular feature but can not locate it within the 
+code, please contact myself at the above address and you will be pointed in the 
+right direction.
+
+Note: In line with the significant redesign of much of Execute Query, the 
+opportunity was taken to refactor much of the source code. Packages have been 
+reorganised and many classes renamed, merged or removed. This process is ongoing
+and will continue across the next few versions.
+
+
+Web Site:
+---------
+Please visit executequery.org for updates and information on upcoming 
+releases including improved documentation. Use the relevant form to report
+any bugs or send an email directly to Takis Diakoumis at the address below. 
+Please consult the page Known Bugs of the help documentation before sending 
+any bug report. Requests for enhancements/improvements can also be made 
+via the site or email.
+
+Thank you for trying Execute Query.
+
+Takis Diakoumis
+takisd@executequery.org
+18 May 2009

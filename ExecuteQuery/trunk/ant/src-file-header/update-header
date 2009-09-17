@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ -z $1 ]; then
+    echo
+    echo "Error: You must provide the source directory"
+    echo "Exiting"
+    echo
+    exit 1
+fi
+
+java SourceHeader $1 header.txt
+

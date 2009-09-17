@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Query Editor Output Pane</title>
+<link rel="stylesheet" type="text/css" href="eqhelp.css">
+</head>
+<body>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-1.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+    <td align="right" background="../images/header.gif">
+      <OBJECT CLASSID="java:org.executequery.gui.help.HelpLinkLabel">
+        <param name="iconByName" value="../images/header-text-2.gif">
+        <param name="urlRedirect" value="http://executequery.org">
+        <param name="mouseOverText" value="Visit executequery.org">
+      </OBJECT></td>
+  </tr>
+</table>
+<table width="100%"  border="0" cellpadding="2" cellspacing="0">
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><h1>Query Editor Output Pane</h1><hr></td>
+  </tr>
+  <tr>
+    <td><img src="../images/spacer.png" height="3"></td>
+  </tr>
+  <tr>
+    <td><p>The query editor's output pane is a tabbed interface displaying SQL
+        <a href="#output">execution messages</a> (information, warnings, errors 
+        etc.) and <a href="#resultsets">result sets</a>.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><a name="output"></a><h2>Query Execution Output</h2></td>
+  </tr>
+  <tr>
+    <td><p>When executing any type of query, the connection in use and SQL text
+        is logged to the pane. Success and error messages will be displayed 
+        following the executed SQL text for any particular query.</p>
+        <p>The pane may be cleared of its content at any time using the Clear
+        output log button on the editor's toolbar.</p>
+        <p>The generated editor output may be logged to file. This may be
+        configured from the user application preferences.</p>
+    </td>
+  </tr>
+  <tr>
+    <td><a name="resultsets"></a><h2>Result Set Output</h2></td>
+  </tr>
+  <tr>
+    <td><p>Results sets generated from executed queries are displayed as
+        separate tabs within the output pane. Multiple result set generating
+        queries are displayed in their own tabs in the order of execution.</p>
+        <p>Open result set displays from previously executed queries are reset
+        upon execution of a new 'query set' unless the next query was executed
+        as a single statement at the cursor position (see 
+        <a href="editorexecutequeries.html">executing SQL queries</a>). In this 
+        case, a new tab is appended to the end of the display.</p>
+        <p>Result set tabs allow for display and navigation to the originating 
+        query by placing the mouse cursor over any particular tab. Executed
+        queries may be scrolled, copied or referenced back to the editor from
+        the popup window on roll-over.</p>
+        <p>Selecting a result set's column header will sort the returned records
+        in ascending or descending order and back again on the specific column
+        selected. Column reordering is also supported and may be achieved by 
+        dragging any column from its header to a new position in the table 
+        display.</p>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
