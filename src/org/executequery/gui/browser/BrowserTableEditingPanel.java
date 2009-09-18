@@ -117,7 +117,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     
     /** The panel displaying the table's constraints */
     private EditableColumnConstraintTable constraintsTable;
-    //private EditTableConstraintsPanel conPanel;
     
     /** Contains the column indexes for a selected table */
     private JTable columnIndexTable;
@@ -126,15 +125,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      *  This is not a new <code>JTable</code> instance */
     private JTable focusTable;
     
-    /** Whether the SQL pane is currently visible */
-    private boolean hasSQL;
-    
-    /** Contains the constraints for a selected table */
-    private Vector<ColumnConstraint> constraintsVector;
-    
-    /** The table column index table model */
-    //private ColumnIndexTableModel citm;
-
     private TableColumnIndexTableModel citm;
     
     /** Holds temporary SQL text during modifications */
@@ -343,8 +333,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         gbc.insets.left = 0;
         base.add(cancelButton, gbc);
         
-        hasSQL = false;
-        
         // set up and add the focus listener for the tables
         FocusListener tableFocusListener = new FocusListener() {
             public void focusGained(FocusEvent e) {
@@ -416,13 +404,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      * @param e - the event
      */
     public void actionPerformed(ActionEvent e) {
-        // if there is nothing to apply or cancel - bail
-
-        /*        
-        if (!hasSQLText()) {
-            return;
-        }
-        */
 
         Object source = e.getSource();
         if (source == applyButton) {
@@ -478,7 +459,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 
             case 4:
                 return referencesPanel.getPrintable();
-                
+
             case 5:
                 return new TablePrinter(tableDataPanel.getTable(),
                                         "Table Data: " + table.getName());
@@ -520,7 +501,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 loadReferences();
                 break;
             case 5:
-                tableDataPanel.getTableData(table);
+                tableDataPanel.loadDataForTable(table);
                 break;
             case 6:
                 try {
@@ -545,34 +526,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         
     }
     
-    /*
-    private boolean executing;
-    
-    private void loadTableData() {
-        SwingWorker worker = new SwingWorker() {
-            public Object construct() {
-                try {
-                    executing = true;
-                    showWaitCursor();
-                    return setTableResultsPanel(dc, metaObject);
-                }
-                catch (Exception e) {
-                    GUIUtilities.displayExceptionErrorDialog(
-                                        "An error occured retrieving the table data.\n" + 
-                                        e.getMessage(), e);
-                    return "done";
-                }
-            }
-            public void finished() {
-                executing = false;
-                querySender.releaseResources();
-                showNormalCursor();
-            }
-        };        
-        worker.start();
-    }
-    */
-
     /**
      * Returns whether the specified object exists in this
      * object cache.
@@ -656,95 +609,21 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         }
         
         referencesLoaded = true;
-        
-        /*
-        if (referencesLoaded) {
-            return;
-        }
-
-        Vector tableNames = null;
-        Vector tableMeta = null;
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        
-        if (!cacheObject.isReferenceDataLoaded()) {
-            
-            String catalogName = metaObject.getCatalogName();
-            String schemaName = metaObject.getSchemaName();
-            String tableName = metaObject.getName();
-            
-            String[] importedTables = controller.getImportedKeyTables(catalogName,
-                                                                      schemaName,
-                                                                      tableName);
-            
-            String[] exportedTables = controller.getExportedKeyTables(catalogName,
-                                                                      schemaName,
-                                                                      tableName);
-            
-            int size = importedTables.length + exportedTables.length + 1;
-            
-            tableNames = new Vector(size);
-            tableNames.add(tableName);
-            
-            DatabaseTable dt = cacheObject.getDatabaseTable();
-            ColumnData[] columnData = dt.getColumns();
-            tableMeta = new Vector(size);
-            tableMeta.add(columnData);
-            
-            for (int i = 0; i < importedTables.length; i++) {
-                tableNames.add(importedTables[i]);
-                tableMeta.add(controller.getColumnData(catalogName,
-                                                       schemaName,
-                                                       importedTables[i]));
-            }
-            
-            for (int i = 0; i < exportedTables.length; i++) {
-                tableNames.add(exportedTables[i]);
-                tableMeta.add(controller.getColumnData(catalogName,
-                                                       schemaName,
-                                                       exportedTables[i]));
-            }
-            
-            ReferencesCacheObject reference = new ReferencesCacheObject(tableNames, 
-                                                                        tableMeta);
-            cacheObject.setReferencesObject(reference);
-            
-        }        
-        else {
-            ReferencesCacheObject reference = cacheObject.getReferencesObject();
-            tableNames = reference.getTableNames();
-            tableMeta = reference.getColumnData();
-        }
-
-        referencesPanel.setTables(tableNames, tableMeta);
-        referencesLoaded = true;*/
     }
     
     /**
      * Loads database table indexes.
      */
     private void loadTableMetaData() {
+
         try {
+
             metaDataModel.createTable(table.getColumnMetaData());
-        }
-        catch (DataSourceException e) {
+        } catch (DataSourceException e) {
+          
             controller.handleException(e);
             metaDataModel.createTable(null);
         }
-/*
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        if (cacheObject == null) {
-            return;
-        }
-
-        try {
-            metaDataModel.createTable(
-                    controller.getTableMetaData(metaObject.getCatalogName(),
-                                                metaObject.getSchemaName(),
-                                                metaObject.getName()));
-        }
-        finally {
-            controller.closeConnection();
-        } */
     }
 
     /**
@@ -770,63 +649,23 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             citm.setIndexData(null);
         }
 
-        /*
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        if (cacheObject == null) {
-            return;
-        }
-        
-        ColumnIndex[] indexes = null;
-        DatabaseTable dt = cacheObject.getDatabaseTable();
-        if (!dt.hasIndexes()) {
-            Vector _indexes = controller.getTableIndexes(metaObject.getCatalogName(),
-                                                         metaObject.getSchemaName(),
-                                                         metaObject.getName());
-            
-            indexes = (ColumnIndex[])_indexes.toArray(new ColumnIndex[_indexes.size()]);
-            dt.setIndexes(indexes);
-        }
-        else {
-            indexes = dt.getIndexes();
-        }
-        
-        citm.setIndexData(indexes);
-        setIndexTableColumnProperties(columnIndexTable);
-         */
     }
     
     /**
      * Loads database table privileges.
      */
     private void loadPrivileges() {
+
         try {
+        
             tablePrivilegePanel.setValues(table.getPrivileges());
-        } 
-        catch (DataSourceException e) {
+            
+        } catch (DataSourceException e) {
+          
             controller.handleException(e);
             tablePrivilegePanel.setValues(new TablePrivilege[0]);
         }
 
-        /*
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        if (cacheObject == null) {
-            return;
-        }
-
-        TablePrivilege[] privileges = null;
-        DatabaseTable dt = cacheObject.getDatabaseTable();
-        if (!dt.hasPrivileges()) {
-            privileges = controller.getPrivileges(
-                                            metaObject.getCatalogName(),
-                                            metaObject.getSchemaName(),
-                                            metaObject.getName());
-            dt.setPrivileges(privileges);
-        }
-        else {
-            privileges = dt.getPrivileges();
-        }
-        tablePrivilegePanel.setValues(privileges);
-         */
     }
 
     private DatabaseTable table; 
@@ -867,11 +706,14 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
     
     protected void reloadDataRowCount() {
+
         try {
+
             rowCountField.setText(
                     String.valueOf(table.getDataRowCount()));
-        }
-        catch (DataSourceException e) {
+        
+        } catch (DataSourceException e) {
+          
             rowCountField.setText("Error: " + e.getMessage());
         }        
     }
@@ -885,53 +727,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      *                view which may be the same metaObject
      */
     public void selectionChanged(BaseDatabaseObject metaObject, boolean reset) {
+
         if (this.metaObject == metaObject && !reset) {
+        
             return;
         }
+
         this.metaObject = metaObject;
-        
-        /*
-        if (columnDataTable.isEditing()) {
-            columnDataTable.removeEditor();
-        }
-        
-        columnDataTable.reset();
-        ColumnData[] columnData = null;
-        tabPane.setSelectedIndex(0);
-        
-        DatabaseTable dt = null;
-        if (reset || !cache.containsKey(metaObject)) {
-            columnData = controller.getColumnData(
-                                            metaObject.getCatalogName(),
-                                            metaObject.getSchemaName(),
-                                            metaObject.getName());
-
-            // populate the table object
-            dt = new DatabaseTable();
-            dt.setValues(metaObject);
-            dt.setColumns(columnData);
-            
-            CacheObject cacheObject = new CacheObject();
-            cacheObject.setDatabaseTable(dt);
-            cache.put(metaObject, cacheObject);
-        }        
-        else {
-            CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-            dt = cacheObject.getDatabaseTable();
-            columnData = dt.getColumns();
-        }
-
-        tableNameField.setText(dt.getName());
-        schemaNameField.setText(dt.getSchema());
-        
-        String rowCount = controller.getTableDataRowCount(
-                                        metaObject.getSchemaName(),
-                                        metaObject.getName());
-        rowCountField.setText(rowCount);
-
-        loadColumnData(columnData);
-        referencesLoaded = false;
-         */
     }
     
     /**
@@ -942,57 +744,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      */
     public void selectionChanged(BaseDatabaseObject metaObject) {
         selectionChanged(metaObject, false);        
-    }
-    
-    /**
-     * Loads the table column data.
-     */
-    private void loadColumnData(ColumnData[] cda) {
-
-        /*
-        
-        // let the table handle this first to clear if empty
-        //columnDataTable.setColumnDataArray(cda, controller.getDataTypesArray());
-
-        // ... then check here
-        if (cda == null) {
-            return;
-        }
-        
-        // configure the constraints panel
-        if (constraintsVector == null) {
-            constraintsVector = new Vector<ColumnConstraint>();
-        } else {
-            constraintsVector.clear();
-        }
-        
-        Vector<ColumnConstraint> ccv = null;        
-        for (int i = 0; i < cda.length; i++) {
-            
-            if (cda[i].isKey()) {
-                ccv = cda[i].getColumnConstraintsVector();
-                for (int j = 0, k = ccv.size(); j < k; j++) {
-                    constraintsVector.add(ccv.get(j));
-                }
-            }
-
-        }
-        
-        conPanel.reset();
-        conPanel.setData(constraintsVector, false);
-
-        try {
-            String createTable = ScriptGenerationUtils.
-                                      createTableScript(metaObject.getName(), cda);
-            String alterTable = ScriptGenerationUtils.
-                                      alterTableConstraintsScript(constraintsVector);
-            createSqlText.setSQLText(createTable + alterTable);
-        } catch (InterruptedException e) {}
-        
-        //columnDataTable.setOriginalData();
-        conPanel.setOriginalData();
-        
-        //databaseTable.setConstraints(ccv); */
     }
     
     public void setBrowserPreferences() {
@@ -1032,30 +783,18 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      * Deletes the selected row on the currently selected table. 
      */
     public void deleteRow() {
+
         int tabIndex = tabPane.getSelectedIndex();
+        
         if (tabIndex == 0) {
+        
             descriptionTable.deleteSelectedColumn();
-        }
-        else if (tabIndex == 1) {
+            
+        } else if (tabIndex == 1) {
+          
             constraintsTable.deleteSelectedConstraint();
         }
 
-/*
-        if (focusTable == descriptionTable) {
-            
-        }
-        else if (focusTable == constraintsTable) {
-            
-        }
-*/        
-        /*
-        if (focusTable == columnDataTable.getTable()) {
-            columnDataTable.markDeleteRow();
-        } 
-         * /       
-        else if (focusTable == conPanel.getTable()) {
-            conPanel.markDeleteRow();
-        } */
         setSQLText();
     }
     
@@ -1063,54 +802,32 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      * Inserts a row after the selected row on the currently selected table. 
      */
     public void insertAfter() {
+
         int tabIndex = tabPane.getSelectedIndex();
+
         if (tabIndex == 0) {
+
             DatabaseTableColumn column = new DatabaseTableColumn(table);
             column.setNewColumn(true);
             descriptionTable.addColumn(column);
-        }
-        else if (tabIndex == 1) {
+
+        } else if (tabIndex == 1) {
+          
             TableColumnConstraint constraint = new TableColumnConstraint(-1);
             constraint.setNewConstraint(true);
             constraintsTable.addConstraint(constraint);
         }
 
-        /*
-        if (focusTable == descriptionTable) {
-            DatabaseTableColumn column = new DatabaseTableColumn(table);
-            column.setNewColumn(true);
-            
-        }
-        else if (focusTable == constraintsTable) {
-            TableColumnConstraint constraint = new TableColumnConstraint(-1);
-            constraint.setNewConstraint(true);
-            constraintsTable.addConstraint(constraint);
-        }
-*/
-/*
-        if (focusTable == columnDataTable.getTable()) {
-            columnDataTable.insertAfter();
-            columnDataTable.setOriginalData();
-        }
-* /
-        else if (focusTable == conPanel.getTable()) {
-            conPanel.insertRowAfter();
-//            conPanel.setCellEditor(2, new ComboBoxCellEditor(
-//            columnDataTable.getTableColumnData()));
-        }
-  */      
     }
     
     public void setSQLText() {
+
         sbTemp.setLength(0);
-        
-        /*
-        sbTemp.append(columnDataTable.getSQLText()).
-               append(conPanel.getSQLText());        */
-        alterSqlText.setSQLText(sbTemp.toString());
+        alterSqlText.setSQLText("");
     }
     
     public void setSQLText(String values, int type) {
+        
         sbTemp.setLength(0);
         
         /*
@@ -1172,40 +889,5 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         }
         return null;
     }
-    
 
-    /** Stored cache object */
-    private class CacheObject {
-        
-        private ReferencesCacheObject cacheObject;
-        
-        private boolean referenceDataLoaded;
-        
-        public CacheObject() {}
-        
-        public boolean isReferenceDataLoaded() {
-            return referenceDataLoaded;
-        }
-        
-        public void setReferencesObject(ReferencesCacheObject cacheObject) {
-            if (cacheObject != null) {
-                referenceDataLoaded = true;
-            }
-            this.cacheObject = cacheObject;
-        }
-
-        public ReferencesCacheObject getReferencesObject() {
-            return cacheObject;
-        }
-/*
-        public DatabaseTable getDatabaseTable() {
-            return databaseTable;
-        }
-
-        public void setDatabaseTable(DatabaseTable databaseTable) {
-            this.databaseTable = databaseTable;
-        }
-        */
-    }
-    
 }

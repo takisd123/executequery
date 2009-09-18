@@ -49,8 +49,7 @@ import org.underworldlabs.swing.DisabledField;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class HostPanel extends AbstractFormObjectViewPanel
-                       implements ConnectionListener {
+public class HostPanel extends AbstractFormObjectViewPanel implements ConnectionListener {
     
     public static final String NAME = "HostPanel";
     
@@ -316,12 +315,8 @@ public class HostPanel extends AbstractFormObjectViewPanel
     
     private class HostModel extends AbstractTableModel {
         
-        private Vector values;
+        private Vector values = new Vector(0);
         private String header = "Catalog Name";
-        
-        public HostModel() {
-            values = new Vector(0);
-        }
         
         public void setValues(Vector values) {
             this.values = values;
@@ -342,10 +337,6 @@ public class HostPanel extends AbstractFormObjectViewPanel
         
         public Object getValueAt(int row, int col) {
             return values.elementAt(row);
-        }
-        
-        public boolean isCellEditable() {
-            return false;
         }
         
     } // class HostModel

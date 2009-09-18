@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -101,7 +102,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     
     public void createTable(ResultSet resultSet) {
 
-        if (resultSet == null) {
+        if (!isOpenAndValid(resultSet)) {
+
             clearData();
             return;
         }
@@ -243,8 +245,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
         } catch (SQLException e) {
 
-            System.err.println("SQL error populating table model at: "
-                    + e.getMessage());
+            System.err.println("SQL error populating table model at: " + e.getMessage());
 
             if (Log.isDebugEnabled()) {
 
@@ -276,12 +277,23 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 try {
                 
                     resultSet.close();
+                    
+                    Statement statement = resultSet.getStatement();
+                    if (statement != null) {
+                        
+                        statement.close();
+                    }
 
                 } catch (SQLException sqlExc) {}
 
             }
         }
 
+    }
+
+    private boolean isOpenAndValid(ResultSet resultSet) {
+
+        return (resultSet != null);
     }
 
     private void resetMetaData() {

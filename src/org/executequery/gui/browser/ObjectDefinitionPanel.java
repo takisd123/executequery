@@ -91,9 +91,6 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
     /** header icons */
     private ImageIcon[] icons;
 
-    /** loaded meta data object cache */
-    //private HashMap cache;
-    
     /** whether we have privilege data loaded */
     private boolean privilegesLoaded;
     
@@ -240,118 +237,34 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
     }
 
     private void loadData() {
-        try {
-            String schemaName = currentObjectView.getNamePrefix();
-            String objectName = currentObjectView.getName();
 
-            tableDataPanel.getTableData(
-                    currentObjectView.getHost().getDatabaseConnection(),
-                    schemaName, objectName);
-        }
-        finally {
+        try {
+
+            tableDataPanel.loadDataForTable(currentObjectView);
+
+        } finally {
+
             dataLoaded = true;
         }
     }
     
     private void loadPrivileges() {
+
         try {
+
             tablePrivilegePanel.setValues(currentObjectView.getPrivileges());
-        } 
-        catch (DataSourceException e) {
+
+        } catch (DataSourceException e) {
+          
             controller.handleException(e);
             tablePrivilegePanel.setValues(new TablePrivilege[0]);
-        }
-        finally {
+
+        } finally {
+
             privilegesLoaded = true;
         }
-    }
-    /*
-    private void resetPrivilegePanel_() {
-        TablePrivilege[] privileges = null;
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        
-        if (!cacheObject.isPrivilegesLoaded()) {
-            privileges = controller.getPrivileges(metaObject.getCatalogName(),
-                                                  metaObject.getSchemaName(),
-                                                  metaObject.getName());
-            cacheObject.setTablePrivilege(privileges);
-        }
-        else {
-            privileges = cacheObject.getTablePrivileges();
-        }
 
-        tablePrivilegePanel.setValues(privileges);
     }
-
-    /*
-    private void resetPrivilegePanel() {
-        GUIUtils.startWorker(new Runnable() {
-            public void run() {
-        
-                try {
-                    GUIUtilities.showWaitCursor();
-                
-                
-        TablePrivilege[] privileges = null;
-        CacheObject cacheObject = (CacheObject)cache.get(metaObject);
-        
-        if (!cacheObject.isPrivilegesLoaded()) {
-            privileges = controller.getPrivileges(metaObject.getCatalogName(),
-                                                  metaObject.getSchemaName(),
-                                                  metaObject.getName());
-            cacheObject.setTablePrivilege(privileges);
-        }
-        else {
-            privileges = cacheObject.getTablePrivileges();
-        }
-
-        populatePrivilegeValues(privileges);
-        
-                }
-                finally {
-                    GUIUtilities.showNormalCursor();
-                }
-        
-            }
-        });
-        
-        //tablePrivilegePanel.setValues(privileges);
-    }
-
-    */
-/*    
-    private void populatePrivilegeValues(final TablePrivilege[] privileges) {
-        GUIUtils.invokeAndWait(new Runnable() {
-            public void run() {
-                tablePrivilegePanel.setValues(privileges);
-            }
-        });
-    }
-    *
-    public void changeTable(BaseDatabaseObject _metaObject) {
-        changeTable(_metaObject, false);
-    }
-    /*
-    public void changeTable(BaseDatabaseObject _metaObject, boolean reload) {
-        
-        if (metaObject == _metaObject) {
-            return;
-        }
-        
-        tabPane.removeChangeListener(this);
-        tabPane.setSelectedIndex(0);
-        
-        if (!reload && cache.containsKey(_metaObject)) {
-            CacheObject cacheObject = (CacheObject)cache.get(_metaObject);
-            changeTable(_metaObject, cacheObject, false);
-        }
-        else {
-            changeTable(_metaObject, new CacheObject(), true);
-        }
-        
-        tabPane.addChangeListener(this);
-        
-    }*/
     
     /**
      * Create the table description panel if not yet initialised.
@@ -422,58 +335,6 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         repaint();
     }
     
-    /*
-    private void changeTable(BaseDatabaseObject _metaObject,
-                             CacheObject cacheObject, boolean store) {
-        
-        if (metaObject == _metaObject) {
-            return;
-        }
-        
-        hasResults = false;
-        metaObject = _metaObject;
-        setHeaderText("Database " + MiscUtils.firstLetterToUpper(metaObject.getMetaDataKey()));
-        tableNameField.setText(metaObject.getName());
-        schemaNameField.setText(metaObject.getSchemaName());
-        
-        int type = metaObject.getType();
-        
-        if (type < icons.length) {
-            setHeaderIcon(icons[type]);
-        }
-        else {
-            setHeaderIcon(icons[BrowserConstants.TABLE_NODE]);
-        }
-        
-        int tabIndex = tabPane.getSelectedIndex();
-        descBottomPanel.removeAll();
-        
-        ColumnData[] columnData = cacheObject.getColumnData();
-        TablePrivilege[] privileges = cacheObject.getTablePrivileges();
-        
-        if (!cacheObject.isColumnDataLoaded()) {
-            columnData = controller.getColumnData(metaObject.getCatalogName(),
-                                                  metaObject.getSchemaName(),
-                                                  metaObject.getName());
-        }
-        
-        if (columnData == null) {
-            descBottomPanel.add(noResultsLabel, BorderLayout.CENTER);
-        }
-        else {
-            hasResults = true;
-            //tableDescPanel.setTableColumnData(columnData);
-            //        tablePrivilegePanel.setValues(privileges);
-            //descBottomPanel.add(tableDescPanel, BorderLayout.CENTER);
-        }
-        
-        if (store) {
-            cache.put(metaObject, cacheObject);
-        }
-        repaint();
-    }
-    */
-    
     public void refresh() {
         super.refresh();
         privilegesLoaded = false;
@@ -498,51 +359,5 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         }
 
     }
-    /*
-    private class CacheObject {
-        
-        private boolean privilegesLoaded;
-        private boolean columnDataLoaded;
-        private ColumnData[] columnData;
-        private TablePrivilege[] privileges;
-        
-        public CacheObject() {}
-        
-        public boolean isPrivilegesLoaded() {
-            return privilegesLoaded;
-        }
-        
-        public boolean isColumnDataLoaded() {
-            return columnDataLoaded;
-        }
-        
-        public void setTablePrivilege(TablePrivilege[] privileges) {
-            privilegesLoaded = true;
-            this.privileges = privileges;
-        }
-        
-        public TablePrivilege[] getTablePrivileges() {
-            return privileges;
-        }
-        
-        public void setColumnData(ColumnData[] columnData) {
-            columnDataLoaded = true;
-            this.columnData = columnData;
-        }
-        
-        public ColumnData[] getColumnData() {
-            return columnData;
-        }
-        
-    } // class CacheObject
-    */
+
 }
-
-
-
-
-
-
-
-
-

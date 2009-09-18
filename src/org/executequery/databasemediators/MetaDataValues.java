@@ -838,43 +838,6 @@ public class MetaDataValues implements ConnectionListener {
         }
     }
     
-    /**
-     * Retrieves the table data row count for the specified table.
-     *
-     * @param schema - the schema name (may be null)
-     * @param table - the table name
-     * @return the data row count
-     */
-    public int getTableDataRowCount(String schema, String table) 
-        throws DataSourceException {
-        ResultSet rs = null;
-        Statement stmnt = null;
-        try {
-            ensureConnection();
-            StringBuffer sb = new StringBuffer();
-            sb.append("SELECT COUNT(*) FROM ");
-            
-            if (!MiscUtils.isNull(schema)) {
-                sb.append(schema);
-                sb.append(".");
-            }
-            sb.append(table);
-            
-            stmnt = connection.createStatement();
-            rs = stmnt.executeQuery(sb.toString());
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-        }
-        catch (SQLException e) {
-            throw new DataSourceException(e);
-        }
-        finally {
-            releaseResources(stmnt, rs);
-        } 
-    }
-    
     public boolean hasStoredObjects(String schema, String[] types)
         throws DataSourceException {
         return hasStoredObjects(null, schema, types);
