@@ -355,12 +355,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         public int indexOf(DatabaseConnection dc) {
             return values.indexOf(dc);
         }
-        
-        public void setValues(List<DatabaseConnection> values) {
-            this.values = values;
-            fireTableDataChanged();
-        }
-        
+                
         public int getRowCount() {
             return values.size();
         }
@@ -393,10 +388,6 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
             return values.get(row);
         }
         
-        public boolean isCellEditable() {
-            return false;
-        }
-        
     }
 
     
@@ -420,7 +411,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
             
             setHorizontalAlignment(JLabel.CENTER);
 
-            if (connected) {
+            if (connected != null && connected) {
                 setIcon(connectedImage);
                 setToolTipText("Connected (double-click icon to disconnect)");
             } else {

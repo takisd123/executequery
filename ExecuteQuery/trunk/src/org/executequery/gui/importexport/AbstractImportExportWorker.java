@@ -211,7 +211,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         
         int columnCount = columns.size();
         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
-            query.append(columns.get(i).toString());
+            query.append(formatColumnName(columns.get(i).toString()));
             if (i != n) {
                 query.append(',');
             }
@@ -233,6 +233,16 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         conn = getConnection();
         stmnt = conn.createStatement();
         return stmnt.executeQuery(query.toString());
+    }
+    
+    private String formatColumnName(String columnName) {
+        
+        if (columnName.contains(" ")) {
+
+            return "\"" + columnName + "\"";
+        }
+
+        return columnName;
     }
     
     /**

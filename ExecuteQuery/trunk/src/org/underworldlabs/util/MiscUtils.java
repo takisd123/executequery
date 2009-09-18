@@ -287,7 +287,7 @@ public final class MiscUtils {
 
             jarFile = new JarFile(files[i]);
 
-            for (Enumeration j = jarFile.entries(); j.hasMoreElements();) {
+            for (Enumeration<?> j = jarFile.entries(); j.hasMoreElements();) {
                 ZipEntry entry = (ZipEntry)j.nextElement();
                 className = getClassName(entry.getName());
 
@@ -450,7 +450,7 @@ public final class MiscUtils {
         String[] keys = new String[sysProps.size()];
         
         int count = 0;
-        for (Enumeration i = sysProps.propertyNames(); i.hasMoreElements();) {
+        for (Enumeration<?> i = sysProps.propertyNames(); i.hasMoreElements();) {
             keys[count++] = (String)i.nextElement();            
         }
 

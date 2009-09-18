@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.TablePrivilege;
+import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -55,6 +57,12 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     
     /** this objects columns */
     private List<DatabaseColumn> columns;
+    
+    /** the data row count */
+    private int dataRowCount = -1;
+
+    /** statement object for open queries */
+    private Statement statement;
     
     /**
      * Returns the catalog name parent to this database object.
@@ -213,6 +221,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
      */
     public void reset() {
         super.reset();
+        dataRowCount = -1;
         columns = null;
     }
 
@@ -222,8 +231,10 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
      * @return drop statement result
      */
     public int drop() throws DataSourceException {
+
         String queryStart = null;
         int _type = getType();
+
         switch (_type) {
             case FUNCTION:
                 queryStart = "DROP FUNCTION ";
@@ -256,23 +267,148 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         }
         
         Statement stmnt = null;
+
         try {
+
             stmnt = getHost().getConnection().createStatement();
             return stmnt.executeUpdate(queryStart + getName());
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
+          
             throw new DataSourceException(e);
-        }
-        finally {
+
+        } finally {
+          
             releaseResources(stmnt);
         }
 
     }
 
+    /**
+     * Retrieves the data row count for this object (where applicable).
+     * 
+     * @return the data row count for this object
+     */
+    public int getDataRowCount() throws DataSourceException {
+         
+        if (dataRowCount != -1) {
+         
+            return dataRowCount;
+        }
+
+        ResultSet rs = null;
+        Statement stmnt = null;
+
+        try {
+
+           stmnt = getHost().getConnection().createStatement();
+           rs = stmnt.executeQuery(recordCountQueryString());
+
+           if (rs.next()) {
+            
+               dataRowCount = rs.getInt(1);
+           }
+
+           return dataRowCount;
+
+        } catch (SQLException e) {
+
+           throw new DataSourceException(e);
+
+        }  finally {
+           
+            releaseResources(stmnt, rs);
+        }
+
+    }
+
+    /**
+     * Retrieves the data for this object (where applicable).
+     * 
+     * @return the data for this object
+     */
+    public ResultSet getData() throws DataSourceException {
+         
+        ResultSet rs = null;
+
+        try {
+
+            if (statement != null) {
+                
+                try {
+                    
+                    statement.close();
+
+                } catch (SQLException e) {}
+                
+            }
+            
+            statement = getHost().getConnection().createStatement();
+            rs = statement.executeQuery(recordsQueryString());
+
+            return rs;
+
+        } catch (SQLException e) {
+
+            throw new DataSourceException(e);
+        }
+
+    }
+
+    public void cancelStatement() {
+
+        if (statement != null) {
+            
+            try {
+
+                statement.cancel();
+                statement.close();
+                statement = null;
+         
+            } catch (SQLException e) {
+
+                if (Log.isDebugEnabled()) {
+
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        
+    }
+    
+    private String recordCountQueryString() {
+
+        return "SELECT COUNT(*) FROM " + getNameWithPrefixForQuery();
+    }
+
+    private String recordsQueryString() {
+
+        return "SELECT * FROM " + getNameWithPrefixForQuery();
+    }
+
+    protected final String getNameWithPrefixForQuery() {
+        
+        String prefix = getNamePrefix();
+
+        if (StringUtils.isNotBlank(prefix)) {
+
+            return prefix + "." + getNameForQuery();
+        }
+
+        return getNameForQuery();
+    }
+    
+    protected final String getNameForQuery() {
+        
+        String name = getName();
+        
+        if (name.contains(" ")) { // eg. access db allows this
+
+            return "\"" + name + "\"";
+        }
+
+        return name;
+    }
+    
 }
-
-
-
-
-
-

@@ -50,8 +50,6 @@ public class MetaKeyPanel extends BrowserNodeBasePanel {
     
     private JLabel noValuesLabel;
     
-    private ImageIcon[] icons;
-    
     private Map cache;
     
     private static String HEADER_PREFIX = "Database Object: ";
@@ -198,16 +196,6 @@ public class MetaKeyPanel extends BrowserNodeBasePanel {
             return values[row];
         }
         
-        public boolean isCellEditable() {
-            return false;
-        }
-        
     }
     
 }
-
-
-
-
-
-

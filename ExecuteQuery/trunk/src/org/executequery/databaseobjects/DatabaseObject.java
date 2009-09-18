@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects;
 
+import java.sql.ResultSet;
 import java.util.List;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -102,11 +103,24 @@ public interface DatabaseObject extends NamedObject {
      * @param the parent named object
      */
     void setParent(NamedObject parent);
+
+    /**
+     * Retrieves the data row count for this object (where applicable).
+     * 
+     * @return the data row count for this object
+     */
+    int getDataRowCount() throws DataSourceException;
+
+    /**
+     * Retrieves the data for this object (where applicable).
+     * 
+     * @return the data for this object
+     */
+    ResultSet getData() throws DataSourceException;
+
+    /**
+     * Cancels any open running statement against this object.
+     */
+    void cancelStatement();
     
 }
-
-
-
-
-
-

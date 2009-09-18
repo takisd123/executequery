@@ -175,16 +175,6 @@ public class SchemaPanel extends BrowserNodeBasePanel {
             }
         }
         
-        public boolean isCellEditable() {
-            return false;
-        }
-        
     }
     
 }
-
-
-
-
-
-

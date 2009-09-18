@@ -62,8 +62,3 @@ public class ReferencesDiagramPanel extends JPanel {
     }
    
 }
-
-
-
-
-

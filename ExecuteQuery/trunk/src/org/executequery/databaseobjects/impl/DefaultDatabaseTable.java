@@ -59,9 +59,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     /** the user modified SQL text for changes */
     private String modifiedSQLText;
     
-    /** the data row count */
-    private int dataRowCount = -1;
-    
     /** Creates a new instance of DatabaseTable */
     public DefaultDatabaseTable(DatabaseObject object) {
 
@@ -176,9 +173,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             
             if (constraint.isForeignKey()) {
 
-//                System.out.println("ref: "+constraint.getReferencedTable() + 
-//                        " other: "+anotherTableName);
-                
                 if (constraint.getReferencedTable().equals(anotherTableName)) {
 
                     return true;
@@ -302,30 +296,31 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                         }
                     }
                     
-                    } catch (SQLException e) { }
+                    } catch (SQLException e) {}
                 }
-            }
-            catch (DataSourceException e) {
+            
+            } catch (DataSourceException e) {
 
                 // catch and re-throw here to create
                 // an empty column list so we don't
                 // keep hitting the same error
                 columns = new ArrayList<DatabaseColumn>(0);
                 throw e;
-            }
-            catch (SQLException e) {
+            
+            } catch (SQLException e) {
 
                 // catch and re-throw here to create
                 // an empty column list so we don't
                 // keep hitting the same error
                 columns = new ArrayList<DatabaseColumn>(0);
                 throw new DataSourceException(e);
-            }
-            finally {
+            
+            } finally {
 
                 releaseResources(rs);
                 setMarkedForReload(false);
             }
+
         }
         return columns;
     }
@@ -335,8 +330,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      *
      * @return the columns
      */
-    public List<ColumnConstraint> getConstraints()
-        throws DataSourceException {
+    public List<ColumnConstraint> getConstraints() throws DataSourceException {
 
         if (getColumns() != null) {
 
@@ -374,8 +368,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      *
      * @return the indexes
      */
-    public List<TableColumnIndex> getIndexes() 
-        throws DataSourceException {
+    public List<TableColumnIndex> getIndexes() throws DataSourceException {
         
         if (!isMarkedForReload() && indexes != null) {
         
@@ -406,22 +399,25 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
             return indexes;
-        }
-        catch (DataSourceException e) {
+        
+        } catch (DataSourceException e) {
+          
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
             indexes = new ArrayList<TableColumnIndex>(0);
             throw e;
-        }
-        catch (SQLException e) {
+        
+        } catch (SQLException e) {
+          
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
             indexes = new ArrayList<TableColumnIndex>(0);
             throw new DataSourceException(e);
-        }
-        finally {
+        
+        } finally {
+          
             releaseResources(rs);
             setMarkedForReload(false);
         }
@@ -472,63 +468,10 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     }
     
     /**
-     * Retrieves the table data row count.
-     */
-     public int getDataRowCount() throws DataSourceException {
-         
-         if (dataRowCount != -1) {
-         
-             return dataRowCount;
-         }
-
-         ResultSet rs = null;
-         Statement stmnt = null;
-
-         try {
-            StringBuilder sb = new StringBuilder();
-            sb.append("SELECT COUNT(*) FROM ");
-
-            String prefix = getNamePrefix();
-
-            if (StringUtils.isNotBlank(prefix)) {
-
-                sb.append(prefix);
-                sb.append(".");
-            }
-            
-            String _name = getName();
-            if (_name.contains(" ")) { // eg. access db allows this
-                _name  = "\"" + _name + "\"";
-            }
-
-            sb.append(_name);
-
-            stmnt = getHost().getConnection().createStatement();
-            rs = stmnt.executeQuery(sb.toString());
-
-            if (rs.next()) {
-            
-                dataRowCount = rs.getInt(1);
-            }
-
-            return dataRowCount;
-
-        } catch (SQLException e) {
-
-            throw new DataSourceException(e);
-
-        }  finally {
-           
-            releaseResources(stmnt, rs);
-        }
-     }
-    
-    /**
      * Override to clear the columns.
      */
     public void reset() {
         super.reset();
-        dataRowCount = -1;
         modifiedSQLText = null;
         clearColumns();
         clearIndexes();
@@ -1118,11 +1061,13 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             sb.append(";\n");
 
             return sb.toString();
-        }
-        catch (DataSourceException e) {
+
+        } catch (DataSourceException e) {
+
             e.printStackTrace();
             return "";
         }
+
     }
     
     private String columnAsValueString(String column) {

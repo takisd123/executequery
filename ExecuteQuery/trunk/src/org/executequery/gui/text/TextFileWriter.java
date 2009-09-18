@@ -112,6 +112,7 @@ public class TextFileWriter {
     private int writeFile() {
         
         if (path == null || path.length() == 0) {
+            
             return SaveFunction.SAVE_INVALID;
         }
         
@@ -160,6 +161,7 @@ public class TextFileWriter {
             }
 
             if (message != null) {
+                
                 setStatusText(message);
             }
 
@@ -174,10 +176,12 @@ public class TextFileWriter {
     }
     
     private void setStatusText(String message) {
+        
         GUIUtilities.getStatusBar().setSecondLabelText(message);
     }
     
     public File getSavedFile() {
+        
         return new File(path);
     }
     
@@ -239,8 +243,3 @@ public class TextFileWriter {
     }
 
 }
-
-
-
-
-

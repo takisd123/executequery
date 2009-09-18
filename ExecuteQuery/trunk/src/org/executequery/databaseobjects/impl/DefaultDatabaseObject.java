@@ -65,18 +65,25 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
      * All others will return a null list.
      */
     public List<NamedObject> getObjects() throws DataSourceException {
+
         if (getType() == SYSTEM_TABLE || getType() == TABLE) {
+
             List<DatabaseColumn> _columns = getColumns();
+            
             if (_columns == null) {
+            
                 return null;
             }
 
             List<NamedObject> objects = new ArrayList<NamedObject>(_columns.size());
             for (DatabaseColumn i : _columns) {
+                
                 objects.add(i);
             }
+
             return objects;
         }
+
         return null;
     }
 
@@ -86,19 +93,27 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
      * @return the object type
      */
     public int getType() {
+
         String key = getMetaDataKey();
+
         for (int i = 0; i < META_TYPES.length; i++) {
+        
             if (META_TYPES[i].equals(key)) {
+            
                 return i;
             }
+
         }
 
         // check if this a 'derivative object' - 
         // ie. a SYSTEM INDEX is still an INDEX
         for (int i = 0; i < META_TYPES.length; i++) {
+
             if (MiscUtils.containsWholeWord(key, META_TYPES[i])) {
+            
                 return i;
             }
+
         }
 
         // ...and if all else fails
@@ -110,6 +125,7 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
         String underscore = "_";
         
         if (!value.contains(underscore)) {
+            
             return value.toLowerCase();
         }
         
@@ -117,20 +133,19 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
         
         String[] parts = value.split(underscore);
         for (int i = 0; i < parts.length; i++) {
+
             if (i > 0) {
+
                 sb.append(MiscUtils.firstLetterToUpper(parts[i]));
+
             } else {
+                
                 sb.append(parts[i]);
             }
+
         }
 
         return sb.toString();
     }
     
 }
-
-
-
-
-
-
