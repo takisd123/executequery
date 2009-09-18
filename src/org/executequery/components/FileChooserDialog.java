@@ -74,13 +74,11 @@ public class FileChooserDialog extends JFileChooser {
     
     public int showOpenDialog(Component parent) throws HeadlessException {
         int result = super.showOpenDialog(parent);
-        resetLastOpenFilePath(result);
         return result;
     }
     
     public int showSaveDialog(Component parent) throws HeadlessException {
         int result = super.showSaveDialog(parent);
-        resetLastOpenFilePath(result);
         File file = getSelectedFile();
 
         if (file == null|| result == CANCEL_OPTION) {
@@ -101,8 +99,7 @@ public class FileChooserDialog extends JFileChooser {
         return result;
     }
     
-    public int showDialog(Component parent, String approveButtonText)
-        throws HeadlessException {
+    public int showDialog(Component parent, String approveButtonText) throws HeadlessException {
         
         int result = super.showDialog(parent, approveButtonText);
         resetLastOpenFilePath(result);
@@ -125,7 +122,14 @@ public class FileChooserDialog extends JFileChooser {
     private void resetLastOpenFilePath(int result) {
         if (result != JFileChooser.CANCEL_OPTION) {
             
-            String lastOpenFilePath = getSelectedFile().getPath();
+            File file = getSelectedFile();
+            String lastOpenFilePath = file.getPath();
+
+            if (file.isFile() || !file.exists()) {
+
+                lastOpenFilePath = file.getParent();
+            }
+            
             SystemProperties.setStringProperty("user", LAST_OPEN_FILE_PATH, lastOpenFilePath);
         }
     }
