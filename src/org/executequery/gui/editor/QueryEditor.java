@@ -275,7 +275,7 @@ public class QueryEditor extends DefaultTabView
         gbc.insets.top = 2;
         gbc.insets.bottom = 2;
         gbc.insets.left = 0;
-        gbc.insets.right = 0;
+        gbc.insets.right = 2;
         gbc.fill = GridBagConstraints.BOTH;
         toolsPanel.add(maxRowCountField, gbc);
 
@@ -981,9 +981,14 @@ public class QueryEditor extends DefaultTabView
      */
     public DatabaseConnection getSelectedConnection() {
         if (connectionsCombo.getSelectedIndex() != -1) {
+
             return (DatabaseConnection) connectionsCombo.getSelectedItem();
         }
         return null;
+    }
+
+    public void setSelectedConnection(DatabaseConnection databaseConnection) {
+        connectionsCombo.setSelectedItem(databaseConnection);
     }
     
     public void preExecute() {

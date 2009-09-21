@@ -1,9 +1,20 @@
 --- RELEASE NOTES ---
 
-Date: 18 May 2009
+Date: 23 September 2009
 
-Execute Query Version 3.1.5 Build 5124
+Execute Query Version 3.1.6 Build 5132
 ----------------------------------------
+
+Summary of changes from 3.1.5 Build 5124:
+----------------------------------------
+
+- Improved support for table and column names with spaces.
+- Fixed "Save As" not storing the last save path between application sessions.
+- Fixed row count hang on database table browser tab.
+- Fixed statement generator from table node not selecting correct connection.
+- Added line separator property option (Unix, Windows, Mac) for saving text
+  files.
+
 
 Summary of changes from 3.1.4 Build 5121:
 ----------------------------------------

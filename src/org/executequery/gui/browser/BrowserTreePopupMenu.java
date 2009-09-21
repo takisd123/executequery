@@ -241,8 +241,3 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
 }
-
-
-
-
-

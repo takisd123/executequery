@@ -26,13 +26,6 @@ import org.executequery.gui.browser.*;
 import org.executequery.gui.table.TableConstraintFunction;
 import org.underworldlabs.swing.table.ComboBoxCellEditor;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis

@@ -949,7 +949,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("INSERT INTO ");
-            sb.append(getName());
+            sb.append(getNameForQuery());
             sb.append(" (");
 
             String indent = getSpacesForLength(sb.length());
@@ -959,7 +959,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (int i = 0, n = _columns.size(); i < n; i++) {
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
 
-                sb.append(column.getName());
+                sb.append(column.getNameForQuery());
 
                 if (i < n - 1) {
                     sb.append(",\n");
@@ -1001,7 +1001,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("UPDATE ");
-            sb.append(getName());
+            sb.append(getNameForQuery());
             
             String setString = "SET ";
             sb.append("\n");
@@ -1014,7 +1014,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (int i = 0, n = _columns.size(); i < n; i++) {
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
 
-                sb.append(column.getName());
+                sb.append(column.getNameForQuery());
                 sb.append(" = ");
                 sb.append(columnAsValueString(column.getName()));
 
@@ -1047,7 +1047,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (int i = 0, n = _columns.size(); i < n; i++) {
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
 
-                sb.append(column.getName());
+                sb.append(column.getNameForQuery());
 
                 if (i < n - 1) {
                     sb.append(",\n");
@@ -1057,7 +1057,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
             sb.append("\nFROM ");
-            sb.append(getName());
+            sb.append(getNameForQuery());
             sb.append(";\n");
 
             return sb.toString();
