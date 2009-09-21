@@ -231,16 +231,18 @@ public class GUIUtils {
          SwingWorker worker = new SwingWorker() {
              public Object construct() {
                  try {
+
                      runnable.run();
-                 }
-                 catch (final Exception e) {
+
+                 } catch (final Exception e) {
+                   
                      invokeAndWait(new Runnable() {
                          public void run() {
                             displayExceptionErrorDialog(null, 
-                                    "Error in EDT thread execution: " + 
-                                    e.getMessage(), e);
+                                    "Error in EDT thread execution: " + e.getMessage(), e);
                          }
                      });
+
                  }
                  return null;
              }

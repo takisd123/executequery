@@ -23,13 +23,6 @@ package org.executequery.gui.prefs;
 import java.awt.Color;
 import org.executequery.Constants;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -60,20 +53,24 @@ public class UserPreference {
 
     public UserPreference(int type, int maxLength, String key, 
                           String displayedKey, Object value) {
+
         this(type, maxLength, key, displayedKey, value, null);
     }
 
     public UserPreference(int type, String key, String displayedKey, Object value) {
+
         this(type, -1, key, displayedKey, value, null);
     }
 
     public UserPreference(int type, String key, String displayedKey,
                           Object value, String[] availableValues) {
+        
         this(type, -1, key, displayedKey, value, availableValues);
     }
 
     public UserPreference(int type, int maxLength, String key, String displayedKey,
                           Object value, String[] availableValues) {
+
         this.type = type;
         this.key = key;
         this.maxLength = maxLength;
@@ -82,16 +79,20 @@ public class UserPreference {
             savedValue = value.toString();
 
             if (availableValues != null && availableValues.length > 0) {
+
                 try {
+                  
                     int index = Integer.parseInt(savedValue);
                     this.value = availableValues[index];
-                } 
-                catch (NumberFormatException e) {
+                
+                } catch (NumberFormatException e) {
+                    
                     saveActual = true;
                     // try the value
                     for (int i = 0; i < availableValues.length; i++) {
                         
                         if (availableValues[i].equals(value)) {
+                    
                             this.value = availableValues[i];
                             break;
                         }
@@ -99,13 +100,14 @@ public class UserPreference {
                     }
                     
                 }
-            } 
-            else { 
+            
+            } else { 
+              
                 this.value = value; 
             }
             
-        } 
-        else {
+        } else {
+          
             this.value = value;
         }
 
@@ -221,12 +223,3 @@ public class UserPreference {
     }
 
 }
-
-
-
-
-
-
-
-
-

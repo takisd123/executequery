@@ -124,14 +124,16 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
         
         String underscore = "_";
         
-        if (!value.contains(underscore)) {
+        String _value = value.replaceAll(" ", underscore);
+        
+        if (!_value.contains(underscore)) {
             
-            return value.toLowerCase();
+            return _value.toLowerCase();
         }
         
         StringBuilder sb = new StringBuilder();
         
-        String[] parts = value.split(underscore);
+        String[] parts = _value.split(underscore);
         for (int i = 0; i < parts.length; i++) {
 
             if (i > 0) {

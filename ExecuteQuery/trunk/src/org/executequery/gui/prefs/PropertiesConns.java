@@ -150,15 +150,3 @@ public class PropertiesConns extends PropertiesBase {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

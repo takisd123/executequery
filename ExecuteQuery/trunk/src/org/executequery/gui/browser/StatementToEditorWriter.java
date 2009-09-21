@@ -21,6 +21,7 @@
 package org.executequery.gui.browser;
 
 import org.executequery.GUIUtilities;
+import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.editor.QueryEditor;
 
 /**
@@ -31,7 +32,7 @@ import org.executequery.gui.editor.QueryEditor;
  */
 class StatementToEditorWriter {
     
-    public void writeToOpenEditor(String statement) {
+    public void writeToOpenEditor(DatabaseConnection databaseConnection, String statement) {
         
         QueryEditor editor = null;
         Object panel = GUIUtilities.getSelectedCentralPane();
@@ -47,6 +48,7 @@ class StatementToEditorWriter {
         }
         
         editor.insertTextAtEnd(statement);
+        editor.setSelectedConnection(databaseConnection);
     }
 
     private void addEditorToPane(QueryEditor editor) {
@@ -59,8 +61,3 @@ class StatementToEditorWriter {
     }
     
 }
-
-
-
-
-

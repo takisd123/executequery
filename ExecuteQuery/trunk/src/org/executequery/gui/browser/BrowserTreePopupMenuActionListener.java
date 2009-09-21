@@ -243,25 +243,25 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         return statementWriter;
     }
     
-    private void statementToEditor(String statement) {
-        getStatementWriter().writeToOpenEditor(statement);
+    private void statementToEditor(DatabaseConnection databaseConnection, String statement) {
+        getStatementWriter().writeToOpenEditor(databaseConnection, statement);
     }
     
     public void selectStatement(ActionEvent e) {
-        statementToEditor(getSelectedTable().getSelectSQLText());
+        statementToEditor(treePanel.getSelectedDatabaseConnection(), getSelectedTable().getSelectSQLText());
     }
 
     public void insertStatement(ActionEvent e) {
-        statementToEditor(getSelectedTable().getInsertSQLText());
+        statementToEditor(treePanel.getSelectedDatabaseConnection(), getSelectedTable().getInsertSQLText());
     }
 
     public void updateStatement(ActionEvent e) {
-        statementToEditor(getSelectedTable().getUpdateSQLText());
+        statementToEditor(treePanel.getSelectedDatabaseConnection(), getSelectedTable().getUpdateSQLText());
     }
 
     public void createTableStatement(ActionEvent e) {
         try {
-            statementToEditor(getSelectedTable().getCreateSQLText());
+            statementToEditor(treePanel.getSelectedDatabaseConnection(), getSelectedTable().getCreateSQLText());
         } catch (DataSourceException dse) {
             handleException(dse);
         }

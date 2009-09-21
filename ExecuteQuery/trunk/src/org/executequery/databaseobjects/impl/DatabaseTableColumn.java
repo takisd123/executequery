@@ -484,6 +484,18 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
 
     }
 
+    protected final String getNameForQuery() {
+        
+        String name = getName();
+        
+        if (name.contains(" ")) { // eg. access db allows this
+
+            return "\"" + name + "\"";
+        }
+
+        return name;
+    }
+
     /**
      * Copies the specified source object to the specified 
      * destination object of the same type.

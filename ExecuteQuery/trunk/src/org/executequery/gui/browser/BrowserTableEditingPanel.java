@@ -71,6 +71,7 @@ import org.executequery.gui.table.TableConstraintFunction;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.print.TablePrinter;
+import org.executequery.util.ThreadUtils;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.FlatSplitPane;
@@ -707,15 +708,22 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     
     protected void reloadDataRowCount() {
 
-        try {
+        ThreadUtils.startWorker(new Runnable() {
+            public void run() {
+                
+                try {
 
-            rowCountField.setText(
-                    String.valueOf(table.getDataRowCount()));
+                    rowCountField.setText(
+                            String.valueOf(table.getDataRowCount()));
+                    
+                } catch (DataSourceException e) {
+                    
+                    rowCountField.setText("Error: " + e.getMessage());
+                }        
+                
+            }
+        });
         
-        } catch (DataSourceException e) {
-          
-            rowCountField.setText("Error: " + e.getMessage());
-        }        
     }
     
     /**

@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.executequery.Constants;
+import org.executequery.gui.text.LineSeparator;
+import org.underworldlabs.util.SystemProperties;
 
 /** 
  * <p>System preferences general panel.
@@ -77,6 +79,16 @@ public class PropertiesGeneral extends PropertiesBase {
                     key,
                     "Recent files to store",
                     stringUserProperty(key)));
+
+        key = "general.line.separator";
+        list.add(new UserPreference(
+                    UserPreference.STRING_TYPE,
+                    key,
+                    "Line separator",
+                    SystemProperties.getProperty("user", key),
+                    new String[]{LineSeparator.DOS.label, 
+                        LineSeparator.WINDOWS.label,
+                        LineSeparator.MAC_OS.label}));
 
         key = "general.save.prompt";
         list.add(new UserPreference(

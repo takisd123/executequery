@@ -35,6 +35,7 @@ import org.executequery.gui.SaveFunction;
 import org.executequery.io.SimpleTextFileWriter;
 import org.underworldlabs.swing.FileSelector;
 import org.underworldlabs.util.MiscUtils;
+import org.underworldlabs.util.SystemProperties;
 
 /**
  *
@@ -119,7 +120,7 @@ public class TextFileWriter {
         try {
 
             SimpleTextFileWriter writer = new SimpleTextFileWriter();
-            writer.write(path, text);
+            writer.write(path, text, lineSeparator());
 
             fireFileOpened(path);
 
@@ -138,6 +139,12 @@ public class TextFileWriter {
 
         }
 
+    }
+
+    private LineSeparator lineSeparator() {
+
+        return LineSeparator.valueForIndex(
+                SystemProperties.getIntProperty("user", "general.line.separator"));
     }
 
     public int write() {

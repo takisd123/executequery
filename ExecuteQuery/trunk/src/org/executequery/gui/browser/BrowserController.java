@@ -360,8 +360,7 @@ public class BrowserController {
                     return procsPanel;
                     
                 case NamedObject.TABLE:
-                    BrowserTableEditingPanel editingPanel = 
-                            viewPanel.getEditingPanel();
+                    BrowserTableEditingPanel editingPanel = viewPanel.getEditingPanel();
                     editingPanel.setValues((DatabaseTable)databaseObject);
                     return editingPanel;
 
