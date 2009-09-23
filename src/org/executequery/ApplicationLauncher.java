@@ -331,11 +331,17 @@ public class ApplicationLauncher {
     private SplashPanel createSplashPanel() {
 
         return new SplashPanel(
-                progressBarColour(),
-                "/org/executequery/images/SplashImage.png",
-                versionString(), 
-                5, 15);
-                //345, 225);
+                        progressBarColour(),
+                        "/org/executequery/images/SplashImage.png",
+                        versionString(),
+                        versionTextColour(),
+                        325, 230);
+//        5, 15); // top-left
+    }
+
+    private Color versionTextColour() {
+
+        return new Color(60, 60, 60);
     }
 
     private String versionString() {
@@ -345,7 +351,7 @@ public class ApplicationLauncher {
 
     private Color progressBarColour() {
 
-        return new Color(55, 55, 120);
+        return new Color(120, 120, 180);
     }
     
     public ExecuteQueryFrame createFrame() {
