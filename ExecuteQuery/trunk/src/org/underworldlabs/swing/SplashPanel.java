@@ -35,6 +35,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Window;
+
 import org.underworldlabs.swing.plaf.UIUtils;
 
 /** 
@@ -71,10 +72,10 @@ public class SplashPanel extends Canvas {
     private String version;
     
     /** The progress bar's colour */
-    private Color progressColour;
+    private final Color progressColour;
 
     /** the light gradient colour */
-    private Color gradientColour;
+    private final Color gradientColour;
     
     /** the x-coord of the version string */
     private int versionLabelX;
@@ -83,21 +84,36 @@ public class SplashPanel extends Canvas {
     private int versionLabelY;
     
     /** The progress bar height */
-    private int PROGRESS_HEIGHT = 20;
+    private static final int PROGRESS_HEIGHT = 15;
+
+    private final Color versionTextColour;
     
     /** Creates a new instance of the splash panel. */
     public SplashPanel(Color progressBarColour, 
                        String imageResourcePath,
                        String versionNumber) {
+
         this(progressBarColour, imageResourcePath, versionNumber, -1, -1);
     }
-    
+
+    public SplashPanel(Color progressBarColour, 
+                        String imageResourcePath,
+                        String versionNumber,
+                        int versionLabelX,
+                        int versionLabelY) {
+
+        this(progressBarColour, imageResourcePath, versionNumber, 
+                Color.WHITE, versionLabelX, versionLabelY);
+    }
+
     public SplashPanel(Color progressBarColour, 
                        String imageResourcePath,
                        String versionNumber,
+                       Color versionTextColour,
                        int versionLabelX,
                        int versionLabelY) {
 
+        this.versionTextColour = versionTextColour;
         this.versionLabelX = versionLabelX;
         this.versionLabelY = versionLabelY;
         
@@ -105,7 +121,7 @@ public class SplashPanel extends Canvas {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         setBackground(Color.white);
         
-        gradientColour = UIUtils.getBrighter(progressBarColour, 0.65);
+        gradientColour = UIUtils.getBrighter(progressBarColour, 0.75);
         
         //Font font = new Font("Dialog", Font.BOLD, 15);
         Font font = new Font("Dialog", Font.PLAIN, 11);
@@ -113,7 +129,7 @@ public class SplashPanel extends Canvas {
         fontMetrics = getFontMetrics(font);
         
         image = getToolkit().getImage(getClass().getResource(imageResourcePath));
-        
+
         MediaTracker tracker = new MediaTracker(this);
         tracker.addImage(image, 0);
 
@@ -124,43 +140,50 @@ public class SplashPanel extends Canvas {
         }
 
         try {
+
             tracker.waitForAll();
+
         } catch(Exception e) {
+        
             e.printStackTrace();
         }
         
         window = new Window(new Frame());
         
         Dimension screen = getToolkit().getScreenSize();
-        Dimension size = new Dimension(image.getWidth(this),
-        image.getHeight(this));
+        Dimension size = new Dimension(image.getWidth(this), image.getHeight(this));
         window.setSize(size);
         
         window.setLayout(new BorderLayout());
         window.add(BorderLayout.CENTER, this);
+
+        window.setLocation((screen.width - size.width) / 2, 
+                (screen.height - size.height) / 2);
         
-        window.setLocation((screen.width - size.width) / 2,
-        (screen.height - size.height) / 2);
+        // window.setLocation(500, 300);
+        
         window.validate();
         window.setVisible(true);
-
     }
 
     public synchronized void advance() {
+
         progress++;
         repaint();
         
         // wait for it to be painted to ensure
         // progress is updated continuously
+
         try {
+
             wait();
-        } catch(InterruptedException ie) {
-            ie.printStackTrace();
-        }
+
+        } catch (InterruptedException ie) {}
         
     }
     
     public synchronized void paint(Graphics g) {
+
         Dimension size = getSize();
 
         if(offscreenImg == null) {
@@ -195,10 +218,12 @@ public class SplashPanel extends Canvas {
         if (version != null) {
             
             if (versionLabelX == -1) {
+
                 versionLabelX = (getWidth() - fontMetrics.stringWidth(version)) / 2;
             }
 
             if (versionLabelY == -1) {
+
                 // if no y value - set just above progress bar
                 versionLabelY = image.getHeight(this) - PROGRESS_HEIGHT - fontMetrics.getHeight();
             }
@@ -209,7 +234,7 @@ public class SplashPanel extends Canvas {
             offscreenGfx2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
 
-            offscreenGfx.setColor(Color.WHITE);
+            offscreenGfx.setColor(versionTextColour);
             offscreenGfx.drawString(version,
                                     versionLabelX, 
                                     versionLabelY);
@@ -221,19 +246,21 @@ public class SplashPanel extends Canvas {
     }
 
     public void dispose() {
+        
         // wait a moment
         try {
+        
             Thread.sleep(600);
-//            Thread.sleep(90000);
+            //Thread.sleep(90000);
+
         } catch (Exception e) {}
+
         window.dispose();
     }
     
     public void update(Graphics g) {
+
         paint(g);
     }
     
 }
-
-
-
