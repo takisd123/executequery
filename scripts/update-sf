@@ -41,7 +41,7 @@ echo "copying and cleaning src..."
 echo
 
 cp -R $EQ_SRC/org .
-cp -R $UL_SRC/org .
+#cp -R $UL_SRC/org .
 
 /home/takisd/bin/remove-cvs .
 cp -R org $SF_SRC
