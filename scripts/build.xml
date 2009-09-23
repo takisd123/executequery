@@ -43,11 +43,11 @@
 		<copy todir="${lib.dir}">
 			<fileset dir="${libs}/" excludes="**/.svn" />
 		</copy>
-
+<!--
 		<copy todir="${src.path}">
 			<fileset dir="${ul.src}/" excludes="**/.svn" />
 		</copy>
-
+-->
 		<copy todir="${compile.outdir}">
 			<fileset dir="${src.path}" excludes="**/*.java" />
 		</copy>
