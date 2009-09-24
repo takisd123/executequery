@@ -160,7 +160,7 @@ public class SplashPanel extends Canvas {
         window.setLocation((screen.width - size.width) / 2, 
                 (screen.height - size.height) / 2);
         
-        // window.setLocation(500, 300);
+//        window.setLocation(500, 300);
         
         window.validate();
         window.setVisible(true);
@@ -234,6 +234,9 @@ public class SplashPanel extends Canvas {
             offscreenGfx2d.setRenderingHint(RenderingHints.KEY_RENDERING,
                     RenderingHints.VALUE_RENDER_QUALITY);
 
+            offscreenGfx2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
             offscreenGfx.setColor(versionTextColour);
             offscreenGfx.drawString(version,
                                     versionLabelX, 
@@ -251,7 +254,7 @@ public class SplashPanel extends Canvas {
         try {
         
             Thread.sleep(600);
-            //Thread.sleep(90000);
+//            Thread.sleep(90000);
 
         } catch (Exception e) {}
 

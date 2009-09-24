@@ -375,7 +375,9 @@ public class AboutPanel extends BaseDialog
         
         private static final int HEIGHT = 180;
         private static final int WIDTH = 350;
-        
+
+        private final Color FOREGROUND_COLOUR = new Color(60, 60, 60);
+
         private Timer timer;
         private Image eqImage;
         private Image background;
@@ -397,7 +399,7 @@ public class AboutPanel extends BaseDialog
         
         protected AboutImagePanel() {
 
-            versionText = "Version " + 
+            versionText = "version " + 
                           System.getProperty("executequery.major.version");
             versionFont = new Font("dialog", Font.BOLD, 12);
 
@@ -489,8 +491,15 @@ public class AboutPanel extends BaseDialog
             g2d.drawImage(eqImage, imageX - 1, imageY - 1, this);
             
             if (stageOneComplete) {
-            
-                g2d.setColor(Color.WHITE);
+
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
+                    RenderingHints.VALUE_RENDER_QUALITY);                 
+                g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+                    RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+                g2d.setColor(FOREGROUND_COLOUR);
                 g2d.setFont(versionFont);
 
                 FontMetrics fm = g.getFontMetrics(versionFont);
