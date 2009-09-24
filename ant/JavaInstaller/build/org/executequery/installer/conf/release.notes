@@ -1,9 +1,22 @@
 --- RELEASE NOTES ---
 
-Date: 18 May 2009
+Date: 28 September 2009
 
-Execute Query Version 3.1.5 Build 5124
+Execute Query Version 3.1.6 Build 5132
 ----------------------------------------
+
+Summary of changes from 3.1.5 Build 5124:
+----------------------------------------
+
+- Improved support for table and column names with spaces.
+- Fixed "Save As" not storing the last save path between application sessions.
+- Fixed row count hang on database table browser tab.
+- Fixed statement generator from table node not selecting correct connection in 
+  the Query Editor.
+- Added line separator property option (Unix, Windows, Mac) for writing text
+  to file.
+- Artwork update stage 1.
+
 
 Summary of changes from 3.1.4 Build 5121:
 ----------------------------------------
@@ -103,22 +116,6 @@ Summary of changes from 3.1.0 Build 5098:
 - Modified build environment to Java version 1.5.0_15
 
 
-Summary of changes from 3.0.1 Build 5058:
-----------------------------------------
-
-- Added query bookmarking feature.
-- Added MaxDB and Firebird database within the driver selection options.
-- Added query editor shortcuts.
-- SQL query code formatter.
-- Selection of default views for catalog or schema from the schema browser
-- Added database specific SQL statement generation for the schema browser
-  and table viewer. 
-- Fixed recent file list errors.
-- Added user defined date pattern format output for query results
-- Added null value in query results output customisation
-- Added date pattern formatting for data exports
-
-
 --------
 
 This releases continues the second stage of planned source code refactoring and
@@ -196,4 +193,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-18 May 2009
+28 September 2009
