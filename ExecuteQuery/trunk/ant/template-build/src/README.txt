@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 23 September 2009
+Date: 28 September 2009
 
 Execute Query Version 3.1.6 Build 5132
 ----------------------------------------
@@ -15,6 +15,7 @@ Summary of changes from 3.1.5 Build 5124:
   the Query Editor.
 - Added line separator property option (Unix, Windows, Mac) for writing text
   to file.
+- Artwork update stage 1.
 
 
 Summary of changes from 3.1.4 Build 5121:
@@ -192,4 +193,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-23 September 2009
+28 September 2009
