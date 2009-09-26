@@ -335,7 +335,7 @@ public class ApplicationLauncher {
                         "/org/executequery/images/SplashImage.png",
                         versionString(),
                         versionTextColour(),
-                        250, 230);
+                        110, 210);
 //        5, 15); // top-left
     }
 
