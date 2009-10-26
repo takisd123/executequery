@@ -40,7 +40,7 @@ public final class DerivedQuery {
     }
 
     public void setDerivedQuery(String derivedQuery) {
-        this.derivedQuery = derivedQuery;
+        this.derivedQuery = derivedQuery.replaceAll("\t", " ");
     }
     
 }
