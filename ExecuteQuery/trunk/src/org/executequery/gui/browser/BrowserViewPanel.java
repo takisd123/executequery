@@ -31,7 +31,7 @@ import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
 
 /**
- * Base panel bor browser tree selection views.
+ * Base panel for browser tree selection views.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
