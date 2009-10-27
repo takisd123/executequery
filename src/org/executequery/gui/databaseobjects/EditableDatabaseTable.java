@@ -65,8 +65,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
 
                 DefaultCellEditor _cellEditor = (DefaultCellEditor)cellEditor;
                 if (_cellEditor.getComponent() instanceof JTextField) {
-                    ((JTextField)_cellEditor.
-                            getComponent()).addKeyListener(this);
+                    ((JTextField)_cellEditor.getComponent()).addKeyListener(this);
                 }
 
             }
@@ -78,8 +77,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
      *
      * @param databaseTable the db table shown
      */
-    public void setDatabaseTable(DatabaseTable databaseTable) 
-    throws DataSourceException {
+    public void setDatabaseTable(DatabaseTable databaseTable) throws DataSourceException {
         this.databaseTable = databaseTable;
         if (databaseTable != null) {
             setColumnData(databaseTable.getColumns());

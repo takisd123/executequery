@@ -32,9 +32,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.print.Printable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -71,10 +69,10 @@ import org.executequery.gui.table.TableConstraintFunction;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.print.TablePrinter;
-import org.executequery.util.ThreadUtils;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.FlatSplitPane;
+import org.underworldlabs.swing.util.SwingWorker;
 
 /**
  *
@@ -96,9 +94,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     /** Contains the table name */
     private DisabledField tableNameField;
     
-    /** Contains the schema name */
-    //private DisabledField schemaNameField;
-
     /** Contains the data row count */
     private DisabledField rowCountField;
 
@@ -111,9 +106,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     /** The SQL text pane for create table text */
     private SimpleSqlTextPanel createSqlText;
 
-    /** Contains the column descriptions for a selected table */
-    //private EditTablePanel columnDataTable;
-    
     private EditableDatabaseTable descriptionTable;
     
     /** The panel displaying the table's constraints */
@@ -142,9 +134,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     
     /** table privileges list */
     private TablePrivilegeTab tablePrivilegePanel;
-    
-    /** panel cache */
-    private Map cache;
     
     /** the apply changes button */
     private JButton applyButton;
@@ -345,7 +334,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         constraintsTable.addFocusListener(tableFocusListener);
 
         sbTemp = new StringBuffer(100);        
-        cache = new HashMap();
 
         setContentPanel(base);
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseTable24.gif"));
@@ -433,7 +421,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
     
     public void refresh() {
-        cache.clear();
+        
     }
     
     public Printable getPrintable() {
@@ -477,6 +465,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
     
     public void cleanup() {
+        
+        if (worker != null) {
+
+            worker.interrupt();
+            worker = null;
+        }
+        
         referencesPanel.cleanup();
         EventMediator.deregisterListener(this);
     }
@@ -525,16 +520,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 break;
         }
         
-    }
-    
-    /**
-     * Returns whether the specified object exists in this
-     * object cache.
-     *
-     * @return true | false
-     */
-    public boolean containsObject(BaseDatabaseObject metaObject) {
-        return cache.containsKey(metaObject);
     }
     
     /** 
@@ -682,6 +667,8 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         try {
 
+            rowCountField.setText("Querying...");
+            
             referencesLoaded = false;
 
             tableNameField.setText(table.getName());
@@ -706,24 +693,28 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         return table.getCreateSQLText();
     }
     
+    private SwingWorker worker;
+    
     protected void reloadDataRowCount() {
 
-        ThreadUtils.startWorker(new Runnable() {
-            public void run() {
-                
+        worker = new SwingWorker() {
+            public Object construct() {
                 try {
 
-                    rowCountField.setText(
-                            String.valueOf(table.getDataRowCount()));
+                    return String.valueOf(table.getDataRowCount());
                     
                 } catch (DataSourceException e) {
                     
-                    rowCountField.setText("Error: " + e.getMessage());
-                }        
-                
+                    return "Error: " + e.getMessage();
+                }
             }
-        });
-        
+            public void finished() {
+
+                rowCountField.setText(get().toString());
+            }
+        };
+        worker.start();
+
     }
     
     /**
@@ -861,6 +852,9 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
     
     public Vector getSchemaTables(String schemaName) {
+        
+//        table.getHost().getSchemas()
+        
         return controller.getTables(schemaName);
     }
     

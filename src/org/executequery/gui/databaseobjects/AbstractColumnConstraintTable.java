@@ -107,9 +107,3 @@ public abstract class AbstractColumnConstraintTable extends DefaultTable {
     }
     
 }
-
-
-
-
-
-

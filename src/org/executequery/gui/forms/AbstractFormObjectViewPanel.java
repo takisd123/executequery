@@ -41,10 +41,10 @@ import org.underworldlabs.swing.GradientLabel;
  */
 public abstract class AbstractFormObjectViewPanel extends JPanel
                                                   implements FormObjectView {
-    /** Reload flag indicator */
     private boolean reload;
     
     protected static Border emptyBorder;
+
     protected GradientLabel gradientLabel;
     
     private static GridBagConstraints panelConstraints;
