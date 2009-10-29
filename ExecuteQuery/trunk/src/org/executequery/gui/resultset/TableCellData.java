@@ -110,7 +110,7 @@ public final class TableCellData {
 			return getValue().toString();
 		}
 
-		return  null;
+		return null;
 	}
 
     public boolean isClob() {

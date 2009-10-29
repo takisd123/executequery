@@ -46,9 +46,12 @@ public class DefaultExcelWorkbookBuilder implements ExcelWorkbookBuilder {
 
     private HSSFSheet currentSheet;
     
+    private HSSFCellStyle defaultCellStyle;
+    
     public DefaultExcelWorkbookBuilder() {
 
         workbook = new HSSFWorkbook();
+        defaultCellStyle = createStyle();
     }
     
     public void reset() {
@@ -69,7 +72,7 @@ public class DefaultExcelWorkbookBuilder implements ExcelWorkbookBuilder {
     
     public void addRow(List<String> values) {
 
-        fillRow(values, createRow(++currentRow), createStyle());
+        fillRow(values, createRow(++currentRow), defaultCellStyle);
     }
 
     public void addRowHeader(List<String> values) {

@@ -56,6 +56,7 @@ import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.importexport.DefaultExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ImportExportProcess;
+import org.executequery.gui.resultset.RecordDataItem;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.CharLimitedTextField;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -91,22 +92,27 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     private TableModel model;
     
     public QueryEditorResultsExporter(TableModel model) {
+
         super(GUIUtilities.getParentFrame(), "Export Query Results", true);
         
-        this.model = model;   
+        this.model = model;
+
         try {
-            jbInit();
-        }
-        catch (Exception e) {
+            
+            init();
+
+        } catch (Exception e) {
+          
             e.printStackTrace();
         }
         
         pack();
         this.setLocation(GUIUtilities.getLocationForDialog(this.getSize()));
-        setVisible(true);  
+        setVisible(true);
     }
     
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
+
         ReflectiveAction action = new ReflectiveAction(this);       
         
         String[] delims = {"Pipe","Comma","Semi-colon","Hash","Custom"};
@@ -118,15 +124,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         customDelimField = new CharLimitedTextField(1);
         fileNameField = new JTextField();
         
-        //Dimension fieldDim = new Dimension(100, 25);
-        //delimCombo.setPreferredSize(fieldDim);
-        
         JButton browseButton = ActionUtilities.createButton(action, "Browse", "browse");
-        //Dimension brBtnDim = new Dimension(60, 25);
-        //browseButton.setPreferredSize(brBtnDim);
-        //Insets btnIns = new Insets(0,0,0,0);
-        //browseButton.setMargin(btnIns);
-
         JButton okButton = new DefaultPanelButton(action, "OK", "export");
         JButton cancelButton = new DefaultPanelButton(action, "Cancel", "cancel");
         
@@ -238,11 +236,15 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     }
 
     private int getExportFormatType() {
+
         int index = typeCombo.getSelectedIndex();
-        if (index == 0) {
+
+        if (index == 0) { 
+            
             return ImportExportProcess.DELIMITED;
-        }
-        else {
+
+        } else {
+          
             return ImportExportProcess.EXCEL;
         }
     }
@@ -364,8 +366,6 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
                     GUIUtilities.getLocationForDialog(progressDialog.getSize()));
             progressDialog.setVisible(true);
 
-            String EMPTY = "";
-
             List<String> values = new ArrayList<String>(columnCount);
             
             if (columnHeadersCheck.isSelected()) {
@@ -383,10 +383,9 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
                 values.clear();
 
                 for (int j = 0; j < columnCount; j++) {
-                 
-                    Object value = model.getValueAt(i, j);
 
-                    values.add(value != null ? value.toString() : EMPTY);
+                    Object value = model.getValueAt(i, j);
+                    values.add(valueAsString(value));
                 }
 
                 builder.addRow(values);
@@ -460,8 +459,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         try {
             exportFile = new File(fileNameField.getText());
             
-            String EMPTY = "";
-            StringBuffer rowLines = new StringBuffer(5000);
+            StringBuilder rowLines = new StringBuilder(5000);
             writer = new PrintWriter(new FileWriter(exportFile, false), true);
             
             int rowCount = model.getRowCount();
@@ -490,18 +488,18 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
                 for (int j = 0; j < columnCount; j++) {
                     
                     Object value = model.getValueAt(i, j);
-                    rowLines.append(value != null ? value : EMPTY);
-
+                    rowLines.append(valueAsString(value));
+                    
                     if (j != columnCount - 1) {
+
                         rowLines.append(delim);
                     }
                     
                 }
-                
+
                 writer.println(rowLines.toString());
                 rowLines.setLength(0);
                 progressDialog.increment(i+1);
-
             }
             
             return "done";
@@ -526,6 +524,27 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     }
     
     
+    private String valueAsString(Object value) {
+
+        if (value instanceof RecordDataItem) {
+            
+            if (!((RecordDataItem) value).isValueNull()) {
+
+                return value.toString();
+            
+            } else {
+                
+                return "";
+            }
+            
+        } else {
+        
+            return (value != null ? value.toString() : "");
+        }
+
+    }
+
+
     class ResultsProgressDialog extends JDialog {
         // the progess bar
         private JProgressBar progressBar;
@@ -533,7 +552,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         public ResultsProgressDialog(int recordCount) {
             super(GUIUtilities.getParentFrame(), "Exporting Query Results", false);
             progressBar = new JProgressBar(JProgressBar.HORIZONTAL, 0, recordCount);
-            
+
             JPanel base = new JPanel(new GridBagLayout());
             GridBagConstraints gbc = new GridBagConstraints();
 
