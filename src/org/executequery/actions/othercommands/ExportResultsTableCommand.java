@@ -39,16 +39,22 @@ import org.executequery.gui.editor.QueryEditorResultsExporter;
 public class ExportResultsTableCommand extends AbstractBaseCommand {
     
     public void execute(ActionEvent e) {
+
         JPanel panel = GUIUtilities.getSelectedCentralPane();
+        
         if (panel instanceof QueryEditor) {
+        
             QueryEditor editor = (QueryEditor)panel;
             if (editor.isResultSetSelected()) {
+            
                 new QueryEditorResultsExporter(editor.getResultSetTableModel());
-            }
-            else {
+            
+            } else {
+              
                 GUIUtilities.displayErrorMessage(
                         "The required result set tab panel must be selected to proceed.");
             }
+
         }        
     }
     
