@@ -617,7 +617,6 @@ public class QueryEditor extends DefaultTabView
     public void setResultSet(ResultSet rset, String query) throws SQLException {
         
         resultsPanel.setResultSet(rset, true, getMaxRecords(), query);
-        //revalidate();
     }
 
     public void destroyTable() {

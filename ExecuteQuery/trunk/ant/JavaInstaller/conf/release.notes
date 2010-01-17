@@ -1,9 +1,21 @@
 --- RELEASE NOTES ---
 
-Date: 28 September 2009
+Date: 18 January 2010
 
-Execute Query Version 3.1.6 Build 5132
+Execute Query Version 3.1.7 Build 5137
 ----------------------------------------
+
+Summary of changes from 3.1.6 Build 5132:
+----------------------------------------
+
+- Fixed result set exporter printing 'null' string for null values.
+- Fixed tab character in SQL statement causing errors in editor execution.
+- Modified row count in browser threading.
+- Modified Excel data export cell style creation to reuse data cell style across
+  all exported values.
+- Fixed execution of 'unknown' statement types that would return a valid result
+  set that would be closed before access in the Query Editor. 
+
 
 Summary of changes from 3.1.5 Build 5124:
 ----------------------------------------
@@ -193,4 +205,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-28 September 2009
+18 January 2010
