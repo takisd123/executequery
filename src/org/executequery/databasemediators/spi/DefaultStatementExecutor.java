@@ -849,14 +849,18 @@ public class DefaultStatementExecutor implements StatementExecutor {
             isResultSet = stmnt.execute(query);
             
             if (isResultSet) {
+
                 ResultSet rs = stmnt.getResultSet();
                 statementResult.setResultSet(rs);
-            }            
-            else {
-                int updateCount = stmnt.getUpdateCount();
 
-                if (updateCount == -1)
-                    updateCount = -10000;
+            } else {
+              
+            	int updateCount = stmnt.getUpdateCount();
+
+                if (updateCount == -1) {
+                 
+                	updateCount = -10000;
+                }
                 
                 statementResult.setUpdateCount(updateCount);
             }
@@ -871,7 +875,11 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } finally {
 
-            finished();
+        	if (!isResultSet) {
+        	
+        		finished();
+        	}
+
         }
 
         return statementResult;        
