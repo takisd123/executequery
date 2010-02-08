@@ -344,7 +344,7 @@ public final class MiscUtils {
 
     public static boolean implementsClass(Class<?> clazz, String implementation) {
         Class<?>[] interfaces = clazz.getInterfaces();
-        if (interfaces != null || interfaces.length > 0) {
+        if (interfaces != null && interfaces.length > 0) {
 
             for (int k = 0; k < interfaces.length; k++) {
                 String name = interfaces[k].getName();
