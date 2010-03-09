@@ -59,7 +59,6 @@ import org.executequery.event.ConnectionRepositoryEvent;
 import org.executequery.event.DatabaseDriverEvent;
 import org.executequery.event.DatabaseDriverListener;
 import org.executequery.event.DefaultConnectionRepositoryEvent;
-import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.FormPanelButton;
 import org.executequery.gui.drivers.DialogDriverPanel;
@@ -68,6 +67,7 @@ import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ActionPanel;
+import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.NumberTextField;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -172,14 +172,15 @@ public class ConnectionPanel extends ActionPanel
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(10,10,5,10);
+        gbc.insets = new Insets(10,10,10,10);
         gbc.gridy = 0;
         gbc.gridx = 0;
         
-        statusLabel = new JLabel();
+        statusLabel = new DefaultFieldLabel();
         addLabelFieldPair(mainPanel, "Status:", 
                 statusLabel, "Current connection status", gbc);
         
+        gbc.insets.bottom = 5;
         addLabelFieldPair(mainPanel, "Connection Name:", 
                 nameField, "A friendly name for this connection", gbc);
 
@@ -272,10 +273,10 @@ public class ConnectionPanel extends ActionPanel
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         advPropsPanel.add(
-                new JLabel("Enter any key/value pair properties for this connection"), gbc);
+                new DefaultFieldLabel("Enter any key/value pair properties for this connection"), gbc);
         gbc.gridy++;
         advPropsPanel.add(
-                new JLabel("Refer to the relevant JDBC driver documentation for possible entries"), gbc);
+                new DefaultFieldLabel("Refer to the relevant JDBC driver documentation for possible entries"), gbc);
         gbc.gridy++;
         gbc.insets.bottom = 10;
         gbc.weighty = 1.0;
@@ -1116,7 +1117,7 @@ public class ConnectionPanel extends ActionPanel
 
         gbc.insets.left = 10;
         gbc.weightx = 0;
-        panel.add(new JLabel(label), gbc);
+        panel.add(new DefaultFieldLabel(label), gbc);
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.gridx = 1;
         gbc.insets.left = 5;
@@ -1135,19 +1136,21 @@ public class ConnectionPanel extends ActionPanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
-        gbc.insets.top = 6;
+        gbc.insets.top = 0;
         gbc.insets.left = 10;
         gbc.weightx = 0;
-        panel.add(new JLabel("JDBC Driver:"), gbc);
+        panel.add(new DefaultFieldLabel("JDBC Driver:"), gbc);
         gbc.gridx = 1;
         gbc.insets.left = 5;
+        gbc.insets.right = 5;
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
         panel.add(driverCombo, gbc);
 
         driverCombo.setToolTipText("The JDBC driver to be used for this database");
 
-        JButton button = new DefaultPanelButton("New Driver", "addNewDriver");
+        JButton button = new DefaultInlineFieldButton("New Driver");
+        button.setActionCommand("addNewDriver");
         button.addActionListener(this);
         button.setMnemonic('r');
 
@@ -1155,6 +1158,8 @@ public class ConnectionPanel extends ActionPanel
         gbc.weightx = 0;
         gbc.gridwidth = 1;
         gbc.insets.left = 0;
+        gbc.ipadx = 10;
+        gbc.insets.right = 10;
         panel.add(button, gbc);
     }
     

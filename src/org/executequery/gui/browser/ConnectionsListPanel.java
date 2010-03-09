@@ -90,6 +90,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     }
     
     private void init() {
+        
         model = new ConnectionsTableModel(connections());
         table = new SortableColumnsTable(model);
         table.setColumnSelectionAllowed(false);
@@ -111,7 +112,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         tcm.getColumn(0).setCellRenderer(new ConnectCellRenderer());
         
         // new connection button
-        JButton button = new JButton("New Connection");
+        JButton button = WidgetFactory.createButton("New Connection");
         button.addActionListener(this);
         
         JPanel tablePanel = new JPanel(new GridBagLayout());

@@ -478,16 +478,19 @@ public class PropertiesEditorSyntax extends PropertiesBase
     
     class MouseHandler extends MouseAdapter {
         public void mouseClicked(MouseEvent evt) {
-            int row = table.rowAtPoint(evt.getPoint());
-            int col = table.columnAtPoint(evt.getPoint());
 
+            int row = table.rowAtPoint(evt.getPoint());
             if (row == -1) {
+
                 return;
             }
 
+            int col = table.columnAtPoint(evt.getPoint());
+            
             if (col == 1) {
+                
                 Color color = JColorChooser.showDialog(
-                                    GUIUtilities.getParentFrame(),
+                                    GUIUtilities.getFocusedDialog(),
                                     "Select Colour",
                                     (Color)tableModel.getValueAt(row, 1));
                 
@@ -496,20 +499,11 @@ public class PropertiesEditorSyntax extends PropertiesBase
                 }
 
             } else if (col == 2) {
+
                 tableModel.setValueAt(tableModel.getValueAt(row, col), row, 2);
-            } else {
-                return;
             }
+
         }
     } // MouseHandler
     
 }
-
-
-
-
-
-
-
-
-

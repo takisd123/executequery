@@ -26,18 +26,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-
 import java.util.Vector;
-import javax.swing.BorderFactory;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -47,19 +45,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.SimpleValueSelectionDialog;
 import org.executequery.gui.browser.WidgetFactory;
-import org.executequery.components.FileChooserDialog;
-import org.underworldlabs.swing.FileSelector;
 import org.executequery.plaf.LookAndFeelDefinition;
 import org.executequery.repository.LookAndFeelProperties;
+import org.underworldlabs.swing.FileSelector;
 import org.underworldlabs.util.MiscUtils;
 
 
@@ -628,7 +626,7 @@ public class PropertiesLookPlugins extends JPanel
         fileChooser.setDialogTitle("Select Look & Feel Plugin Library...");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getFocusedDialog(), "Select");
         
         if (result == JFileChooser.CANCEL_OPTION)
             return;

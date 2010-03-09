@@ -27,13 +27,6 @@ import javax.swing.JFileChooser;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Table cell with file selection button.
  *
@@ -50,7 +43,7 @@ public class FileSelectionTableCell extends BrowsingCellEditor {
         FileChooserDialog dialog = new FileChooserDialog();
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        int result = dialog.showOpenDialog(GUIUtilities.getParentFrame());
+        int result = dialog.showOpenDialog(GUIUtilities.getFocusedDialog());
         
         if (result == JFileChooser.CANCEL_OPTION) {
             fireEditingStopped();
@@ -66,12 +59,3 @@ public class FileSelectionTableCell extends BrowsingCellEditor {
     }
 
 }
-
-
-
-
-
-
-
-
-

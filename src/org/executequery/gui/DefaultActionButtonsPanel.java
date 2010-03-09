@@ -28,6 +28,7 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 
 import org.executequery.components.BaseActionPanel;
@@ -72,7 +73,7 @@ public abstract class DefaultActionButtonsPanel extends BaseActionPanel {
 
     protected final void addHelpButton(String command) {
         
-        JButton helpButton = new JButton();
+        JButton helpButton = new DefaultPanelButton();
 
         helpButton.setAction(ActionBuilder.get("help-command"));
         helpButton.setText("Help");
@@ -111,10 +112,11 @@ public abstract class DefaultActionButtonsPanel extends BaseActionPanel {
         
         for (int i = 0, n = buttons.size(); i < n; i++) {
 
-            gbc.gridx++;            
+            gbc.gridx++;
             gbc.weightx = 0;
 
             gbc.insets.top = 5;
+            gbc.insets.bottom = 5;
             gbc.insets.left = 5;
             
             gbc.anchor = GridBagConstraints.EAST;

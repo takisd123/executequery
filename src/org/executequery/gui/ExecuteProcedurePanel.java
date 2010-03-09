@@ -226,13 +226,13 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
         base.add(splitPane, gbc);
         
         JButton executeButton = ActionUtilities.createButton(this, "Execute", "execute");
-        executeButton.setPreferredSize(Constants.FORM_BUTTON_SIZE);
-        executeButton.setMinimumSize(Constants.FORM_BUTTON_SIZE);
 
         gbc.gridy++;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.EAST;
+        gbc.insets.top = 0;
+        gbc.insets.bottom = 20;
         base.add(executeButton, gbc);
         
         base.setBorder(BorderFactory.createEtchedBorder());

@@ -49,13 +49,15 @@ import org.executequery.components.FileChooserDialog;
 import org.executequery.components.TextFieldPanel;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
-import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SimpleValueSelectionDialog;
+import org.executequery.gui.browser.DefaultInlineFieldButton;
 import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.log.Log;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
+import org.underworldlabs.swing.DefaultButton;
+import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.FileSelector;
 import org.underworldlabs.swing.actions.ReflectiveAction;
@@ -96,13 +98,15 @@ public abstract class AbstractDriverPanel extends JPanel
         
         ReflectiveAction action = new ReflectiveAction(this);
         
-        JButton browseButton = new DefaultPanelButton(
+        JButton browseButton = new DefaultButton(
                 action, getString("AbstractDriverPanel.addLibraryButton"), "browseDrivers");
-        JButton findButton = new DefaultPanelButton(
-                action, getString("AbstractDriverPanel.addFindButton"), "findDriverClass");
-        JButton removeButton = new DefaultPanelButton(
+        JButton removeButton = new DefaultButton(
                 action, getString("AbstractDriverPanel.addRemoveButton"), "removeDrivers");
 
+        JButton findButton = new DefaultInlineFieldButton(action);
+        findButton.setText(getString("AbstractDriverPanel.addFindButton"));
+        findButton.setActionCommand("findDriverClass");
+        
         jarPathListModel = new DefaultListModel();
 
         nameField = textFieldWithKey("AbstractDriverPanel.driverNameToolTip");
@@ -165,9 +169,10 @@ public abstract class AbstractDriverPanel extends JPanel
         gbc.insets.right = 10;
         gbc.gridheight = 1;
         gbc.insets.left = 5;
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         base.add(browseButton, gbc);
         gbc.gridy++;
+        gbc.insets.top = 5;
         base.add(removeButton, gbc);
         
         gbc.gridy+=3;
@@ -175,21 +180,22 @@ public abstract class AbstractDriverPanel extends JPanel
         gbc.weightx = 1.0;
         gbc.insets.right = 0;
         gbc.insets.left = 10;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.top = 0;
         base.add(classField, gbc);
         gbc.gridx = 2;
         gbc.weightx = 0;
         gbc.weighty = 1.0;
         gbc.insets.right = 10;
         gbc.insets.left = 5;
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         base.add(findButton, gbc);
 
         add(base, BorderLayout.CENTER);
     }
 
     private JLabel labelWithKey(String key) {
-        return new JLabel(getString(key));
+
+        return new DefaultFieldLabel(getString(key));
     }
 
     private JTextField textFieldWithKey(String key) {

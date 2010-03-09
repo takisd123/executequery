@@ -20,11 +20,14 @@
 
 package org.executequery.gui.table;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -72,7 +75,7 @@ public class CreateTableToolBar extends JPanel
     
     public CreateTableToolBar(TableFunction parent, boolean canMove) {
         super();
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridBagLayout());
         this.parent = parent;
         this.canMove = canMove;
         initialiseButtons();
@@ -81,6 +84,7 @@ public class CreateTableToolBar extends JPanel
     /** <p>Creates the tool bar buttons and associates
      *  these with the relevant listener. */
     private void initialiseButtons() {
+
         insertAfterButton = ActionUtilities.createButton(
                 this,
                 GUIUtilities.getAbsoluteIconPath("ColumnInsertAfter16.gif"),
@@ -99,10 +103,17 @@ public class CreateTableToolBar extends JPanel
                 "Delete the selected value", 
                 null);
 
-        add(insertAfterButton);
-        add(insertBeforeButton);
-        add(deleteRowButton);
-        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.gridy++;
+        gbc.gridx++;
+        gbc.insets.bottom = 1;
+        add(insertAfterButton, gbc);
+        gbc.gridy++;
+        add(insertBeforeButton, gbc);
+        gbc.gridy++;
+        add(deleteRowButton, gbc);
+
         if (canMove) {
             moveUpButton = ActionUtilities.createButton(
                     this,
@@ -116,8 +127,10 @@ public class CreateTableToolBar extends JPanel
                     "Move the selection down", 
                     null);
 
-            add(moveUpButton);
-            add(moveDownButton);
+            gbc.gridy++;
+            add(moveUpButton, gbc);
+            gbc.gridy++;
+            add(moveDownButton, gbc);
         }
         
     }

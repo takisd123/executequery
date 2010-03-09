@@ -53,6 +53,7 @@ import javax.swing.table.TableModel;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.DefaultInlineFieldButton;
 import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.importexport.DefaultExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ExcelWorkbookBuilder;
@@ -125,7 +126,10 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         customDelimField = new CharLimitedTextField(1);
         fileNameField = WidgetFactory.createTextField();
         
-        JButton browseButton = ActionUtilities.createButton(action, "Browse", "browse");
+        JButton browseButton = new DefaultInlineFieldButton(action);
+        browseButton.setText("Browse");
+        browseButton.setActionCommand("browse");
+        
         JButton okButton = new DefaultPanelButton(action, "OK", "export");
         JButton cancelButton = new DefaultPanelButton(action, "Cancel", "cancel");
         
@@ -201,7 +205,6 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         gbc.weightx = 0;
         gbc.gridx = 2;
         gbc.insets.left = 0;
-        gbc.insets.top = 3;
         gbc.fill = GridBagConstraints.NONE;
         base.add(browseButton, gbc);
         

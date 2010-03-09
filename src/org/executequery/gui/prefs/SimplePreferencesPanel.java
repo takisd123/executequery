@@ -316,7 +316,7 @@ public class SimplePreferencesPanel extends JPanel
             if (preferences[row].getType() == UserPreference.COLOUR_TYPE) {
                 Color oldColor = (Color)preferences[row].getValue();
                 Color newColor = JColorChooser.showDialog(
-                                        GUIUtilities.getParentFrame(),
+                                        GUIUtilities.getFocusedDialog(),
                                         "Select Colour",
                                         (Color)tableModel.getValueAt(row, valueColumn));
 

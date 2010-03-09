@@ -184,11 +184,11 @@ public class CreateIndexPanel extends ActionPanel
 
         // add table panel components
         GridBagConstraints gbc = new GridBagConstraints();
-        Insets ins = new Insets(0,0,0,5);
+        Insets ins = new Insets(0, 0, 5, 5);
         gbc.insets = ins;
         tablePanel.add(moveUpButton, gbc);
         gbc.gridy = 1;
-        gbc.insets.top = 5;
+        gbc.insets.top = 1;
         tablePanel.add(moveDownButton, gbc);
         gbc.insets.top = 0;
         gbc.insets.right = 0;
@@ -283,7 +283,7 @@ public class CreateIndexPanel extends ActionPanel
 
         });
         
-        setPreferredSize(new Dimension(520,480));
+        setPreferredSize(new Dimension(750,480));
 
         // register as a keyword listener
         EventMediator.registerListener(this);

@@ -27,12 +27,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.actions.othercommands.RestoreDefaultsCommand;
+import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.util.SystemProperties;
 
 /**
@@ -61,13 +61,15 @@ abstract class PropertiesBase extends JPanel
     }
     
     public PropertiesBase() {
+
         super(new GridBagLayout());
+        
         setBorder(BorderFactory.createLineBorder(
                 GUIUtilities.getDefaultBorderColour()));
+        
         try {
-            jbInit();
-        }
-        catch (Exception e) {
+            init();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         
@@ -77,14 +79,14 @@ abstract class PropertiesBase extends JPanel
         add(panel, contentPanelConstraints);
     }
     
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panel.add(new JButton(new RestoreDefaultsCommand(this)));
+        panel.add(new DefaultButton(new RestoreDefaultsCommand(this)));
         add(panel, new GridBagConstraints(
                             1, 2, 1, 1, 0, 0,
                             GridBagConstraints.SOUTHEAST, 
                             GridBagConstraints.NONE,
-                            new Insets(0, 0, 0, 0), 0, 0));
+                            new Insets(0, 0, 5, 0), 0, 0));
         
     }
 
