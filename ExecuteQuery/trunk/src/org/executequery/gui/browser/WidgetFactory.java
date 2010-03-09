@@ -3,18 +3,25 @@ package org.executequery.gui.browser;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.executequery.gui.DefaultComboBox;
 import org.executequery.gui.DefaultNumberTextField;
-import org.executequery.gui.DefaultPasswordField;
-import org.executequery.gui.DefaultTextField;
+import org.underworldlabs.swing.DefaultButton;
+import org.underworldlabs.swing.DefaultComboBox;
+import org.underworldlabs.swing.DefaultPasswordField;
+import org.underworldlabs.swing.DefaultTextField;
 import org.underworldlabs.swing.NumberTextField;
 
 public final class WidgetFactory {
 
+    public static JButton createButton(String text) {
+        
+        return new DefaultButton(text);
+    }
+    
     public static JComboBox createComboBox(Vector<?> items) {
         
         return new DefaultComboBox(items);

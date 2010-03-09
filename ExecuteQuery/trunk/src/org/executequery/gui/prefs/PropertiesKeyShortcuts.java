@@ -282,7 +282,9 @@ public class PropertiesKeyShortcuts extends PropertiesBase
         private ShortcutKey shortcutKey;
         
         public ShortcutDialog(int row) {
-            super(GUIUtilities.getParentFrame(), "Select Shortcut", true);
+
+            super(GUIUtilities.getFocusedDialog(), "Select Shortcut", true);
+
             this.row = row;
             shortcutKey = (ShortcutKey)tableModel.getShortcut(row);
 
@@ -635,11 +637,9 @@ public class PropertiesKeyShortcuts extends PropertiesBase
     class MouseHandler extends MouseAdapter {
         public void mouseClicked(MouseEvent evt) {
             int row = table.rowAtPoint(evt.getPoint());
-
             if (row == -1) {
                 return;
             }
-
             int col = table.columnAtPoint(evt.getPoint());
             if (col == 1) {
                 new ShortcutDialog(row);
@@ -648,12 +648,3 @@ public class PropertiesKeyShortcuts extends PropertiesBase
     } // MouseHandler
     
 }
-
-
-
-
-
-
-
-
-

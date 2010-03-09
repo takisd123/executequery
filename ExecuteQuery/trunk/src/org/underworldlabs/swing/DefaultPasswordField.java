@@ -1,9 +1,11 @@
-package org.executequery.gui;
+package org.underworldlabs.swing;
 
 import java.awt.Insets;
 
 import javax.swing.JPasswordField;
 import javax.swing.text.Document;
+
+import org.executequery.gui.GUIConstants;
 
 public class DefaultPasswordField extends JPasswordField {
 
@@ -39,8 +41,7 @@ public class DefaultPasswordField extends JPasswordField {
     
     public int getHeight() {
 
-        return super.getHeight() < GUIConstants.DEFAULT_FIELD_HEIGHT ? 
-                GUIConstants.DEFAULT_FIELD_HEIGHT : super.getHeight();
+        return Math.max(super.getHeight(), GUIConstants.DEFAULT_FIELD_HEIGHT);
     }
     
 }

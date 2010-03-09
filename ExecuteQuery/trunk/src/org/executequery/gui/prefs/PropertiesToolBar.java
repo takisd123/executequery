@@ -26,7 +26,6 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-
 import java.util.Collections;
 import java.util.Vector;
 
@@ -41,6 +40,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -49,13 +49,6 @@ import org.underworldlabs.swing.toolbar.ButtonComparator;
 import org.underworldlabs.swing.toolbar.ToolBarButton;
 import org.underworldlabs.swing.toolbar.ToolBarProperties;
 import org.underworldlabs.swing.toolbar.ToolBarWrapper;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  *
@@ -113,7 +106,7 @@ public class PropertiesToolBar extends PropertiesBase {
         moveUpButton.setMargin(Constants.EMPTY_INSETS);
         moveDownButton.setMargin(Constants.EMPTY_INSETS);
         
-        addSeparatorButton = ActionUtilities.createButton(               
+        addSeparatorButton = ActionUtilities.createButton(
                                 action, 
                                 "Add Separator", 
                                 "addSeparator");
@@ -157,7 +150,7 @@ public class PropertiesToolBar extends PropertiesBase {
         panel.add(scroller, gbc);
         gbc.gridy++;
         gbc.weighty = 0;
-        gbc.insets.bottom = 0;
+        gbc.insets.bottom = 10;
         gbc.insets.right = 10;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -169,19 +162,22 @@ public class PropertiesToolBar extends PropertiesBase {
         JPanel movePanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc2 = new GridBagConstraints();
         gbc2.gridy = 0;
-        gbc2.insets.bottom = 5;
+        gbc2.insets.bottom = 10;
         gbc2.anchor = GridBagConstraints.CENTER;
         movePanel.add(moveUpButton, gbc2);
         gbc2.gridy++;
+        gbc2.insets.bottom = 5;
+        gbc2.insets.top = 5;
         movePanel.add(new JLabel("Move"), gbc2);
         gbc2.gridy++;
-        gbc2.insets.bottom = 0;
+        gbc2.insets.bottom = 10;
         movePanel.add(moveDownButton, gbc2);
 
         gbc.gridx++;
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.weightx = 0;
+        gbc.insets.left = 5;
         gbc.anchor = GridBagConstraints.CENTER;
         gbc.gridheight = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.NONE;

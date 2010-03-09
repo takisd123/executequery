@@ -43,11 +43,13 @@ import javax.swing.table.TableColumnModel;
 import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.gui.DefaultTable;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.print.TablePrinter;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
+import org.underworldlabs.swing.DefaultButton;
 
 /**
  * Driver root node view panel.
@@ -97,7 +99,7 @@ public class DriverListPanel extends AbstractFormObjectViewPanel
         tcm.getColumn(2).setPreferredWidth(70);
         
         // new connection button
-        JButton button = new JButton("New Driver");
+        JButton button = WidgetFactory.createButton("New Driver");
         button.addActionListener(this);
         
         JPanel tablePanel = new JPanel(new GridBagLayout());
@@ -244,8 +246,7 @@ public class DriverListPanel extends AbstractFormObjectViewPanel
             return values.get(row);
         }
         
-        public boolean isCellEditable() {
-
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
             return false;
         }
         

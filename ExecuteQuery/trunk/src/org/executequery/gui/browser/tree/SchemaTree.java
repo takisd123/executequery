@@ -95,6 +95,8 @@ public class SchemaTree extends DynamicTree
 
         //setEditable(true);
         
+        setRowHeight(20);
+        
     }
 
     private Map<String, Icon> loadIcons() {

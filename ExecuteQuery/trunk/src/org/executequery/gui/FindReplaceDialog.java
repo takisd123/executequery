@@ -47,6 +47,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.search.TextAreaSearch;
+import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.swing.actions.ReflectiveAction;
@@ -143,9 +144,9 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
         btnGroup.add(searchUpRadio);
         btnGroup.add(searchDownRadio);
         
-        findNextButton = new JButton("Find Next");
-        replaceButton = new JButton("Replace");
-        replaceAllButton = new JButton("Replace All");
+        findNextButton = new DefaultButton("Find Next");
+        replaceButton = new DefaultButton("Replace");
+        replaceAllButton = new DefaultButton("Replace All");
         closeButton = ActionUtilities.createButton("Close", "close");
 
         setExpandButtonsToFill(true);

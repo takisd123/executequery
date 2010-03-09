@@ -178,11 +178,13 @@ public class UserDefinedWordsPanel extends DefaultActionButtonsPanel
         gbc.gridx = 3;
         gbc.weightx = 0.0;
         gbc.insets.right = 5;
+        gbc.insets.left = 0;
         addPanel.add(addButton, gbc);
         gbc.insets.right = 0;
         gbc.gridwidth = 3;
         gbc.gridy = 1;
         gbc.gridx = 0;
+        gbc.insets.left = 5;
         tablePanel.add(addPanel, gbc);
         
         tablePanel.setBorder(BorderFactory.createEtchedBorder());

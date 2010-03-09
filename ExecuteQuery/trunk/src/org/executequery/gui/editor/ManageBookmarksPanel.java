@@ -517,7 +517,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.insets.top = 0;
-        gbc.insets.bottom = 2;
+        gbc.insets.bottom = 10;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(addButton, gbc);
@@ -525,7 +525,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         panel.add(deleteButton, gbc);
         gbc.gridy++;
         gbc.insets.top = 10;
-        gbc.insets.bottom = 2;
+        gbc.insets.bottom = 10;
         panel.add(upButton, gbc);
         gbc.gridy++;
         gbc.insets.top = 0;

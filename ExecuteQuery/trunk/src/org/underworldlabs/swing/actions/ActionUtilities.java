@@ -23,18 +23,14 @@ package org.underworldlabs.swing.actions;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import org.underworldlabs.swing.util.IconUtilities;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
+import org.underworldlabs.swing.DefaultButton;
+import org.underworldlabs.swing.util.IconUtilities;
 
 /**
  *
@@ -50,7 +46,7 @@ public class ActionUtilities {
                                        Icon icon,
                                        String name, 
                                        String command) {
-        JButton item = new JButton(name);
+        JButton item = new DefaultButton(name);
         item.setActionCommand(command);
         
         if (icon != null) {
@@ -68,7 +64,7 @@ public class ActionUtilities {
                                        String command,
                                        Icon icon,
                                        String toolTipText) {
-        JButton item = new JButton(icon);
+        JButton item = new DefaultButton(icon);
         item.setMargin(new Insets(1, 1, 1, 1));
 
         item.setToolTipText(toolTipText);
@@ -86,7 +82,7 @@ public class ActionUtilities {
                                        String toolTipText, 
                                        String command) {
         
-        JButton item = new JButton();
+        JButton item = new DefaultButton();
         if (icon != null) {
             item.setIcon(IconUtilities.loadIcon(icon));
             item.setMargin(new Insets(1, 1, 1, 1));
@@ -106,7 +102,7 @@ public class ActionUtilities {
                                        String icon, 
                                        String command,
                                        boolean iconOnly) {
-        JButton item = new JButton(name);
+        JButton item = new DefaultButton(name);
         item.setToolTipText(name);
         item.setActionCommand(command);
         
@@ -124,14 +120,14 @@ public class ActionUtilities {
     public static JButton createButton(ActionListener actionListener, 
                                        String name, 
                                        String command) {
-        JButton item = new JButton(name);
+        JButton item = new DefaultButton(name);
         item.setActionCommand(command);
         item.addActionListener(actionListener);
         return item;
     }
 
     public static JButton createButton(String name, String command) {
-        JButton item = new JButton(name);
+        JButton item = new DefaultButton(name);
         item.setActionCommand(command);
         return item;
     }
@@ -185,7 +181,7 @@ public class ActionUtilities {
     }
 
     public static JComboBox createComboBox(ActionListener actionListener, 
-                                           Vector values, 
+                                           Vector<?> values, 
                                            String command) {
         JComboBox combo = new JComboBox(values);
         combo.setActionCommand(command);
@@ -197,17 +193,8 @@ public class ActionUtilities {
         return combo;
     }
 
-    public static JComboBox createComboBox(Vector values, String command) {
+    public static JComboBox createComboBox(Vector<?> values, String command) {
         return createComboBox(null, values, command);
     }
 
 }
-
-
-
-
-
-
-
-
-

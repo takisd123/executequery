@@ -623,6 +623,11 @@ public final class GUIUtilities {
         
         focusedDialog = _focusedDialog;
     }
+
+    public static JDialog getFocusedDialog() {
+     
+        return focusedDialog;
+    }
     
     public static void removeFocusedDialog(JDialog _focusedDialog) {
         

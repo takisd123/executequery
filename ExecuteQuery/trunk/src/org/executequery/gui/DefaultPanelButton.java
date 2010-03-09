@@ -32,7 +32,7 @@ public class DefaultPanelButton extends JButton {
 
     private static final int DEFAULT_WIDTH = 75;
     
-    private static final int DEFAULT_HEIGHT = 25;
+    private static final int DEFAULT_HEIGHT = GUIConstants.DEFAULT_BUTTON_HEIGHT;
     
     private static final Insets DEFAULT_INSETS = new Insets(2, 2, 2, 2);
     
@@ -42,38 +42,31 @@ public class DefaultPanelButton extends JButton {
     
     public DefaultPanelButton() {
         super();
-        prepare();
     }
 
     public DefaultPanelButton(Action a) {
         super(a);
-        prepare();
     }
 
     public DefaultPanelButton(Icon icon) {
         super(icon);
-        prepare();
     }
 
     public DefaultPanelButton(String text, Icon icon) {
         super(text, icon);
-        prepare();
     }
 
     public DefaultPanelButton(String text) {
         super(text);
-        prepare();
     }
 
     public DefaultPanelButton(String text, String actionCommand) {
         super(text);
-        prepare();
         setActionCommand(actionCommand);
     }    
     
     public DefaultPanelButton(ActionListener actionListener, String text, String actionCommand) {
         super(text);
-        prepare();
         addActionListener(actionListener);
         setActionCommand(actionCommand);
     }    
@@ -100,11 +93,11 @@ public class DefaultPanelButton extends JButton {
 
     }
     
-    private void prepare() {
+    public Insets getMargin() {
 
-        setMargin(DEFAULT_INSETS);
+        return DEFAULT_INSETS;
     }
-
+    
     public int getDefaultWidth() {
 
         if (defaultWidth == 0) {

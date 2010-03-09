@@ -115,10 +115,12 @@ public class BaseDialog extends AbstractBaseDialog
     // FocusListener implementation
     
     public void focusGained(FocusEvent e) {
+        System.out.println("focusGained");
         dialogFocusChanged(true);
     }
     
     public void focusLost(FocusEvent e) {
+        System.out.println("focusLost");
         dialogFocusChanged(false);
     }
 
@@ -246,8 +248,3 @@ public class BaseDialog extends AbstractBaseDialog
     }
 
 }
-
-
-
-
-

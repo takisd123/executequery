@@ -45,6 +45,7 @@ import org.executequery.repository.RepositoryException;
 import org.executequery.repository.UserFeedback;
 import org.executequery.repository.UserFeedbackRepository;
 import org.executequery.repository.spi.UserFeedbackRepositoryImpl;
+import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.InterruptibleProgressDialog;
 import org.underworldlabs.swing.util.InterruptibleProcess;
 import org.underworldlabs.swing.util.SwingWorker;
@@ -164,16 +165,16 @@ public class FeedbackPanel extends DefaultActionButtonsPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         basePanel.add(new JScrollPane(commentsField), gbc);
 
-        JButton cancelButton = new JButton("Cancel");
-        JButton sendButton = new JButton("Send");
+        JButton cancelButton = new DefaultButton("Cancel");
+        JButton sendButton = new DefaultButton("Send");
 
         sendButton.addActionListener(this);
         cancelButton.addActionListener(this);
         
         addActionButton(sendButton);
         addActionButton(cancelButton);
-        
-        setPreferredSize(new Dimension(500, 400));
+
+        setPreferredSize(new Dimension(550, 450));
 
         addContentPanel(basePanel);        
     }

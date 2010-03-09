@@ -29,7 +29,7 @@ public class WizardPanelButton extends JButton {
 
     public static final int DEFAULT_WIDTH = 75;
     
-    public static final int DEFAULT_HEIGHT = 25;
+    public static final int DEFAULT_HEIGHT = 30;
     
     public static final Insets DEFAULT_INSETS = new Insets(2, 2, 2, 2);
     

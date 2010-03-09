@@ -89,16 +89,8 @@ public class SimpleValueSelectionDialog {
         public SelectionDialog(String title, String[] values) {
             super(GUIUtilities.getParentFrame(), title, true);
 
-            JButton cancel = new JButton("Cancel");
-            JButton ok = new JButton("OK");
-
-            Dimension btnDim = new Dimension(70,25);
-            cancel.setPreferredSize(btnDim);
-            ok.setPreferredSize(btnDim);
-
-            Insets btnInsets = new Insets(0,0,0,0);
-            cancel.setMargin(btnInsets);
-            ok.setMargin(btnInsets);
+            JButton cancel = new DefaultPanelButton("Cancel");
+            JButton ok = new DefaultPanelButton("OK");
 
             cancel.addActionListener(this);
             ok.addActionListener(this);

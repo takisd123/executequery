@@ -1,9 +1,11 @@
-package org.executequery.gui;
+package org.underworldlabs.swing;
 
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+
+import org.executequery.gui.GUIConstants;
 
 public class DefaultComboBox extends JComboBox {
 
@@ -29,8 +31,7 @@ public class DefaultComboBox extends JComboBox {
 
     public int getHeight() {
 
-        return super.getHeight() < GUIConstants.DEFAULT_FIELD_HEIGHT ? 
-                GUIConstants.DEFAULT_FIELD_HEIGHT : super.getHeight();
+        return Math.max(super.getHeight(), GUIConstants.DEFAULT_FIELD_HEIGHT); 
     }
     
 }

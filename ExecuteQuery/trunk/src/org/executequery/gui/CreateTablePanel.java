@@ -81,7 +81,7 @@ public class CreateTablePanel extends CreateTableFunctionPanel
     private void jbInit() throws Exception {
         addButtonsPanel(new BottomButtonPanel(
                                 this, "Create", "create-table", parent.isDialog()));
-        setPreferredSize(new Dimension(650,480));
+        setPreferredSize(new Dimension(750,480));
         EventMediator.registerListener(this);
     }
     
