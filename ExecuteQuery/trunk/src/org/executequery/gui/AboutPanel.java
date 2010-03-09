@@ -97,7 +97,7 @@ public class AboutPanel extends BaseDialog
         imagePanel = new AboutImagePanel();
         
         JPanel basePanel = new JPanel(new BorderLayout());
-        basePanel.setPreferredSize(new Dimension(350, 420));
+        basePanel.setPreferredSize(new Dimension(350, 460));
         basePanel.add(imagePanel, BorderLayout.NORTH);
         basePanel.add(tabPane, BorderLayout.CENTER);
         basePanel.add(addButtonPanel(), BorderLayout.SOUTH);

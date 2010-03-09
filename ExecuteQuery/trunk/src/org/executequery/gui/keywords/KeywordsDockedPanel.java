@@ -56,6 +56,7 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
 import org.executequery.gui.AbstractDockedTabActionPanel;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.log.Log;
 import org.executequery.repository.KeywordRepository;
@@ -138,7 +139,7 @@ public class KeywordsDockedPanel extends AbstractDockedTabActionPanel
         PanelToolBar tools = new PanelToolBar();
 
         tools.addLabel("Find: ");
-        searchField = new JTextField();
+        searchField = WidgetFactory.createTextField();
         searchField.addActionListener(this);
         searchField.setActionCommand("search");
         tools.addTextField(searchField);

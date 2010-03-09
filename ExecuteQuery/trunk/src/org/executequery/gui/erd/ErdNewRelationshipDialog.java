@@ -45,6 +45,7 @@ import javax.swing.SwingUtilities;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.browser.ColumnConstraint;
 import org.executequery.gui.browser.ColumnData;
+import org.executequery.gui.browser.WidgetFactory;
 
 /**
  *
@@ -111,18 +112,18 @@ public class ErdNewRelationshipDialog extends ErdPrintableDialog {
         
         sqlText.setPreferredSize(new Dimension(420, 120));
         
-        nameField = new JTextField();
+        nameField = WidgetFactory.createTextField();
         nameField.addKeyListener(new KeyAdapter() {
             public void keyReleased(KeyEvent e) {
                 setSQLText(); }
         });
         
         ErdTable[] tables = parent.getAllComponentsArray();
-        referencingTableCombo = new JComboBox(tables);
-        referencedTableCombo = new JComboBox(tables);
+        referencingTableCombo = WidgetFactory.createComboBox(tables);
+        referencedTableCombo = WidgetFactory.createComboBox(tables);
         
-        referencingColumnCombo = new JComboBox();
-        referencedColumnCombo = new JComboBox();
+        referencingColumnCombo = WidgetFactory.createComboBox();
+        referencedColumnCombo = WidgetFactory.createComboBox();
         
         Dimension fieldDim = new Dimension(50, 20);
         nameField.setPreferredSize(fieldDim);

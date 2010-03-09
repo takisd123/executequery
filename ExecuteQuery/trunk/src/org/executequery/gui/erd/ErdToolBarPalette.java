@@ -32,6 +32,7 @@ import java.util.Vector;
 import org.executequery.Constants;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 import org.underworldlabs.swing.RolloverButton;
 import org.underworldlabs.swing.actions.ActionBuilder;
@@ -143,7 +144,7 @@ public class ErdToolBarPalette extends PanelToolBar
         addButton(canvasBgButton);
         
         String[] scaleValues = ErdViewerPanel.scaleValues;
-        scaleCombo = new JComboBox(scaleValues);
+        scaleCombo = WidgetFactory.createComboBox(scaleValues);
         scaleCombo.setFont(new Font("dialog", Font.PLAIN, 10));
         scaleCombo.setPreferredSize(new Dimension(58, 20));
         scaleCombo.setLightWeightPopupEnabled(false);

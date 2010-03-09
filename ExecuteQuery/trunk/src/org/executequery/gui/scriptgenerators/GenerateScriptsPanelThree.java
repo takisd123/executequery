@@ -40,6 +40,7 @@ import javax.swing.JTextField;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.ComponentTitledPanel;
 import org.underworldlabs.swing.FileSelector;
 
@@ -86,7 +87,7 @@ public class GenerateScriptsPanelThree extends JPanel
 
     private void init() throws Exception {
 
-        pathField = new JTextField();
+        pathField = WidgetFactory.createTextField();
 
         JButton browseButton = new DefaultPanelButton("Browse");
         browseButton.setMnemonic('B');

@@ -35,6 +35,7 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.GUIUtilities;
 import org.executequery.base.TabView;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.DefaultTextEditorContainer;
 import org.executequery.gui.text.SimpleTextArea;
 import org.executequery.repository.LogRepository;
@@ -89,7 +90,7 @@ public class SystemLogsViewer extends DefaultTextEditorContainer
                          "Export Log: ~/.executequery/logs/eq.export.log",
                          "Import Log: ~/.executequery/logs/eq.import.log"};
         
-        logCombo = new JComboBox(logs);
+        logCombo = WidgetFactory.createComboBox(logs);
         logCombo.addItemListener(this);
 
         SimpleTextArea simpleTextArea = new SimpleTextArea();

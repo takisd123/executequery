@@ -47,6 +47,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ComponentTitledPanel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -126,8 +127,8 @@ public class BaseScriptGeneratorPanel extends JPanel
                                            "Selected Tables:");
 
         // combo boxes
-        connectionsCombo = new JComboBox();
-        schemaCombo = new JComboBox();
+        connectionsCombo = WidgetFactory.createComboBox();
+        schemaCombo = WidgetFactory.createComboBox();
 
         if (tables != null) {
             schemaCombo.setEnabled(false);
@@ -165,7 +166,7 @@ public class BaseScriptGeneratorPanel extends JPanel
             }
         }
         
-        pathField = new JTextField();
+        pathField = WidgetFactory.createTextField();
         browseButton = new DefaultPanelButton("Browse");
         browseButton.setMnemonic('B');
         

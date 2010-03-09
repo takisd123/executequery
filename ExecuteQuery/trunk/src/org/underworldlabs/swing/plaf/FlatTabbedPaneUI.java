@@ -35,8 +35,6 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Shape;
-//import java.awt.Toolkit;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ContainerEvent;
@@ -47,10 +45,8 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -67,20 +63,16 @@ import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.InputMapUIResource;
 import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.UIResource;
-
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicGraphicsUtils;
 import javax.swing.plaf.basic.BasicHTML;
-
 import javax.swing.text.View;
 
 /*

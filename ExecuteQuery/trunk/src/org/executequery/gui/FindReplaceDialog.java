@@ -44,6 +44,7 @@ import javax.swing.text.JTextComponent;
 
 import org.executequery.ActiveComponent;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.search.TextAreaSearch;
 import org.underworldlabs.swing.GUIUtils;
@@ -114,8 +115,8 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
             addFind(selectedText);
         }
        
-        findField = new JComboBox(TextAreaSearch.getPrevFindValues());
-        replaceField = new JComboBox(TextAreaSearch.getPrevReplaceValues());
+        findField = WidgetFactory.createComboBox(TextAreaSearch.getPrevFindValues());
+        replaceField = WidgetFactory.createComboBox(TextAreaSearch.getPrevReplaceValues());
         findField.setEditable(true);
         replaceField.setEditable(true);
         

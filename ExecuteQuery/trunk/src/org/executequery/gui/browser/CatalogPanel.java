@@ -141,8 +141,8 @@ public class CatalogPanel extends BrowserNodeBasePanel {
             
             return null; 
         }
-        
-        public boolean isCellEditable() {
+
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
 
             return false;
         }

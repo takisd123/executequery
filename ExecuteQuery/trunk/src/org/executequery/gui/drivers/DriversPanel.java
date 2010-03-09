@@ -51,6 +51,7 @@ import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SimpleValueSelectionDialog;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.repository.DatabaseDriverRepository;
@@ -112,10 +113,10 @@ public class DriversPanel extends AbstractFormObjectViewPanel
 
         jarPathListModel = new DefaultListModel();
         
-        nameField = new JTextField();
-        descField = new JTextField();
+        nameField = WidgetFactory.createTextField();
+        descField = WidgetFactory.createTextField();
         jarPathList = new JList(jarPathListModel);
-        classField = new JTextField();
+        classField = WidgetFactory.createTextField();
         
         nameField.addFocusListener(new DriverNameFieldListener(this));
         
@@ -135,11 +136,11 @@ public class DriversPanel extends AbstractFormObjectViewPanel
         _databases.insertElementAt(new DatabaseDefinition(
                 DatabaseDefinition.INVALID_DATABASE_ID, "Select..."), 0);
 
-        databaseNameCombo = new JComboBox(_databases);
+        databaseNameCombo = WidgetFactory.createComboBox(_databases);
         databaseNameCombo.addItemListener(this);
 
         urlComboModel = new DynamicComboBoxModel();
-        driverUrlCombo = new JComboBox(urlComboModel);
+        driverUrlCombo = WidgetFactory.createComboBox(urlComboModel);
         driverUrlCombo.setEditable(true);
 
         JPanel base = new TextFieldPanel(new GridBagLayout());

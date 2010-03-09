@@ -20,16 +20,9 @@
 
 package org.executequery.gui.browser;
 
+import java.io.Serializable;
 import java.sql.Types;
 import java.util.Vector;
-import java.io.Serializable;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /** 
  * This class represents a single table
@@ -178,6 +171,7 @@ public class ColumnData implements Serializable {
         }        
     }
     
+    @SuppressWarnings("unchecked")
     public void setValues(ColumnData cd) {
         tableName = cd.getTableName();
         columnName = cd.getColumnName();
@@ -189,9 +183,9 @@ public class ColumnData implements Serializable {
         columnRequired = cd.getColumnRequired();
         sqlType = cd.getSQLType();
         
-        Vector constraints = cd.getColumnConstraintsVector();
+        Vector<ColumnConstraint> constraints = cd.getColumnConstraintsVector();
         if (constraints != null) {
-            columnConstraints = (Vector)constraints.clone();
+            columnConstraints = (Vector<ColumnConstraint>)constraints.clone();
         }        
     }
     
@@ -342,8 +336,9 @@ public class ColumnData implements Serializable {
      * @return the formatted type string
      */
     public String getFormattedDataType() {
+
         String typeString = getColumnType();
-        StringBuffer buffer = new StringBuffer(typeString);
+        StringBuilder sb = new StringBuilder(typeString);
 
         // if the type doesn't end with a digit or it
         // is a char type then add the size - attempt
@@ -357,24 +352,18 @@ public class ColumnData implements Serializable {
 
             if (getColumnSize() > 0 && !isDateDataType() 
                                     && !isNonPrecisionType()) {
-                buffer.append("(");
-                buffer.append(getColumnSize());
+                sb.append("(");
+                sb.append(getColumnSize());
 
                 if (getColumnScale() > 0) {
-                    buffer.append(",");
-                    buffer.append(getColumnScale());
+                    sb.append(",");
+                    sb.append(getColumnScale());
                 }
-                buffer.append(")");
+                sb.append(")");
             }
         }
-        return buffer.toString();
+        return sb.toString();
     }
 
     
 }
-
-
-
-
-
-

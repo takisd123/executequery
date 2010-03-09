@@ -29,6 +29,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
+import org.executequery.gui.browser.WidgetFactory;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -129,7 +131,7 @@ class ExportAsSQLPanelFour extends AbstractImportExportPanel {
                 getString("ImportExportPanelFour.onErrorOptionTwo")
         };
 
-        JComboBox comboBox = new JComboBox(options);
+        JComboBox comboBox = WidgetFactory.createComboBox(options);
         comboBox.setPreferredSize(new Dimension(150, 20));
 
         return comboBox;

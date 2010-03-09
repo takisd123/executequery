@@ -42,6 +42,7 @@ import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.log.Log;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -69,7 +70,7 @@ public class TableSelectionCombosGroup implements ItemListener {
 
     public TableSelectionCombosGroup() {
         
-        this(new JComboBox(), new JComboBox(), new JComboBox(), null);
+        this(WidgetFactory.createComboBox(), WidgetFactory.createComboBox(), WidgetFactory.createComboBox(), null);
     }
     
     public TableSelectionCombosGroup(JComboBox connectionsCombo,

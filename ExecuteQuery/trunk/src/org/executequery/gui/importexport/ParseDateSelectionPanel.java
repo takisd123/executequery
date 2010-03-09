@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.help.HelpPopupBase;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.ComponentTitledPanel;
@@ -89,7 +90,7 @@ public class ParseDateSelectionPanel extends ComponentTitledPanel
         
         this.importExportProcess = importExportProcess;
 
-        dateFormats = new JComboBox(loadDatePatterns());
+        dateFormats = WidgetFactory.createComboBox(loadDatePatterns());
         dateFormats.setEditable(true);
         
         JPanel panel = getContentPane();

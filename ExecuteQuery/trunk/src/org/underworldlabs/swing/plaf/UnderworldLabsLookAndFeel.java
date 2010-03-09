@@ -29,18 +29,21 @@ import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class ShadesOfGrayLookAndFeel extends SmoothGradientLookAndFeel {
+public class UnderworldLabsLookAndFeel extends SmoothGradientLookAndFeel {
     
     /** Creates a new instance of ShadesOfGrayLookAndFeel */
-    public ShadesOfGrayLookAndFeel() {
-        setCurrentTheme(new ShadesOfGrayTheme());
+    public UnderworldLabsLookAndFeel() {
+        
+        setCurrentTheme(new BluerpleTheme());
     }
     
     public String getName() {
-        return "Shades of Gray Look and Feel";
+        
+        return "Default UnderworldLabs Look and Feel with the default Bluerple Theme";
     }
     
     public String getDescription() {
+        
         return "Themed extension to Smooth Gradient Look and Feel - modified from " +
                 "The JGoodies Plastic Look and Feel";
     }

@@ -46,6 +46,7 @@ import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.FocusComponentPanel;
 import org.executequery.gui.browser.ColumnConstraint;
 import org.executequery.gui.browser.ColumnData;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
@@ -113,7 +114,7 @@ public abstract class CreateTableFunctionPanel extends JPanel
         super(new BorderLayout());
         
         try  {
-            jbInit();
+            init();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -121,21 +122,20 @@ public abstract class CreateTableFunctionPanel extends JPanel
         
     }
     
-    /** <p>Initializes the state of this instance. */
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
         
-        nameField = new JTextField();
+        nameField = WidgetFactory.createTextField();
         //initialise the schema label
         metaData = new MetaDataValues(true);
 
         // combo boxes
-        Vector connections = ConnectionManager.getActiveConnections();
+        Vector<DatabaseConnection> connections = ConnectionManager.getActiveConnections();
         connectionsModel = new DynamicComboBoxModel(connections);
-        connectionsCombo = new JComboBox(connectionsModel);
+        connectionsCombo = WidgetFactory.createComboBox(connectionsModel);
         connectionsCombo.addItemListener(this);
 
         schemaModel = new DynamicComboBoxModel();
-        schemaCombo = new JComboBox(schemaModel);
+        schemaCombo = WidgetFactory.createComboBox(schemaModel);
         schemaCombo.addItemListener(this);
 
         // create tab pane

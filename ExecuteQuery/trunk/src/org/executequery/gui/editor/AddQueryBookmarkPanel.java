@@ -43,6 +43,7 @@ import org.executequery.gui.ActionContainer;
 import org.executequery.gui.DefaultActionButtonsPanel;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.FocusComponentPanel;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
@@ -149,7 +150,7 @@ public class AddQueryBookmarkPanel extends DefaultActionButtonsPanel
             names.add(bookmark.getName());
         }
 
-        nameField = new JComboBox(names);
+        nameField = WidgetFactory.createComboBox(names);
         nameField.setEditable(true);
         nameField.setActionCommand(SAVE_COMMAND_NAME);
 

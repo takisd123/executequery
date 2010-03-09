@@ -35,12 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
+import org.executequery.gui.browser.WidgetFactory;
 
 /**
  *
@@ -66,17 +61,18 @@ public class ImportExportXMLPanel_6 extends JPanel {
         super(new GridBagLayout());
         this.parent = parent;
         try {
-            jbInit();
+            init();
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
     
-    private void jbInit() throws Exception {
-        typeField = new JTextField();
-        pathField = new JTextField();
-        formatField = new JTextField();
-        tableField = new JTextField();
+    private void init() throws Exception {
+
+        typeField = WidgetFactory.createTextField();
+        pathField = WidgetFactory.createTextField();
+        formatField = WidgetFactory.createTextField();
+        tableField = WidgetFactory.createTextField();
         
         setFieldProperties(typeField);
         setFieldProperties(pathField);
@@ -90,7 +86,7 @@ public class ImportExportXMLPanel_6 extends JPanel {
         JLabel pathLabel;
         JLabel formatLabel;
         
-        if (parent.getTransferType() == parent.EXPORT) {
+        if (parent.getTransferType() == ImportExportXMLPanel.EXPORT) {
             typeLabel = new JLabel("Export Type:");
             pathLabel = new JLabel("Export Files:");
             formatLabel = new JLabel("XML Format:");
@@ -205,7 +201,7 @@ public class ImportExportXMLPanel_6 extends JPanel {
 
         pathField.setText(sb.toString());
 
-        formatField.setText(parent.getTransferType() == parent.EXPORT ?
+        formatField.setText(parent.getTransferType() == ImportExportXMLPanel.EXPORT ?
             parent.getXMLFormatString() : parent.getPrimaryImportNodes());
 
 //        columnsList.setListData(parent.getSelectedColumns());

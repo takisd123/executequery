@@ -21,7 +21,6 @@
 package org.underworldlabs.swing;
 
 import java.awt.Toolkit;
-
 import java.text.NumberFormat;
 import java.text.ParseException;
 
@@ -30,14 +29,8 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
-import org.underworldlabs.util.MiscUtils;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
+import org.underworldlabs.util.MiscUtils;
 
 /**
  *
@@ -47,7 +40,6 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class NumberTextField extends JTextField {
     
-    private Toolkit toolkit;
     private NumberFormat integerFormatter;
     private WholeNumberDocument numberDocument;
     private int digits;
@@ -60,7 +52,6 @@ public class NumberTextField extends JTextField {
         
         digits = -1;
         numberDocument.setDigits(digits);
-        toolkit = Toolkit.getDefaultToolkit();
         integerFormatter = NumberFormat.getNumberInstance();
         integerFormatter.setParseIntegerOnly(true);
     }
@@ -166,12 +157,3 @@ class WholeNumberDocument extends PlainDocument {
     }
     
 } // class WholeNumberDocument
-
-
-
-
-
-
-
-
-

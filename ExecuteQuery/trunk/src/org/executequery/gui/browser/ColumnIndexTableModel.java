@@ -22,13 +22,6 @@ package org.executequery.gui.browser;
 
 import javax.swing.table.AbstractTableModel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -106,7 +99,7 @@ public class ColumnIndexTableModel extends AbstractTableModel {
         fireTableRowsUpdated(row, row);
     }
     
-    public Class getColumnClass(int col) {
+    public Class<?> getColumnClass(int col) {
         if (col == 3) {
             return Boolean.class;
         }

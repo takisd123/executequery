@@ -37,6 +37,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.ListSelectionPanel;
@@ -104,11 +105,11 @@ public class ErdSelectionPanel extends JPanel
         // combo boxes
         Vector connections = ConnectionManager.getActiveConnections();
         connectionsModel = new DynamicComboBoxModel(connections);
-        connectionsCombo = new JComboBox(connectionsModel);
+        connectionsCombo = WidgetFactory.createComboBox(connectionsModel);
         connectionsCombo.addItemListener(this);
 
         schemaModel = new DynamicComboBoxModel();
-        schemaCombo = new JComboBox(schemaModel);
+        schemaCombo = WidgetFactory.createComboBox(schemaModel);
         schemaCombo.addItemListener(this);
 
         /*

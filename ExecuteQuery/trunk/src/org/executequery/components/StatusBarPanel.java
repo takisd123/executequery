@@ -49,7 +49,7 @@ public class StatusBarPanel extends AbstractStatusBarPanel {
         super(HEIGHT);
     
         try {
-            jbInit();
+            init();
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -58,8 +58,7 @@ public class StatusBarPanel extends AbstractStatusBarPanel {
         setThirdLabelText(text2);
     }
     
-    /** <p>Initialises the state of this instance. */
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
         
         setBorder(BorderFactory.createEmptyBorder(2,3,3,4));
         

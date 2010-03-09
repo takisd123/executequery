@@ -39,6 +39,7 @@ import javax.swing.JTextField;
 import org.executequery.GUIUtilities;
 import org.executequery.components.TextFieldPanel;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.util.DateUtils;
 
@@ -141,12 +142,12 @@ public class ErdTitlePanelDialog extends AbstractBaseDialog {
         cancelButton.addActionListener(btnListener);
         createButton.addActionListener(btnListener);
         
-        nameTextField = new JTextField();
-        dateTextField = new JTextField();
-        revTextField = new JTextField();
-        databaseTextField = new JTextField();
-        authorTextField = new JTextField();
-        fileTextField = new JTextField();
+        nameTextField = WidgetFactory.createTextField();
+        dateTextField = WidgetFactory.createTextField();
+        revTextField = WidgetFactory.createTextField();
+        databaseTextField = WidgetFactory.createTextField();
+        authorTextField = WidgetFactory.createTextField();
+        fileTextField = WidgetFactory.createTextField();
         descTextArea = new JTextArea();
         
         descTextArea.setLineWrap(true);

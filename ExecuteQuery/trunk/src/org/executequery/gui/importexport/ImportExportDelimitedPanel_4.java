@@ -32,6 +32,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.executequery.gui.browser.WidgetFactory;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -89,15 +91,15 @@ public class ImportExportDelimitedPanel_4 extends JPanel
         JLabel rollbackLabel = new JLabel("Rollback Segment Size:");
         
         String[] delims = {"|",",",";","#"};
-        delimCombo = new JComboBox(delims);
+        delimCombo = WidgetFactory.createComboBox(delims);
         delimCombo.setEditable(true);
         
         String[] errors = {"Log and Continue", "Stop Transfer"};
-        errorCombo = new JComboBox(errors);
+        errorCombo = WidgetFactory.createComboBox(errors);
 
         String[] rolls = {"50", "100", "500", "1000", "5000",
                           "10000", "50000", "End of File", "End of all Files"};
-        rollbackCombo = new JComboBox(rolls);
+        rollbackCombo = WidgetFactory.createComboBox(rolls);
         rollbackCombo.setSelectedIndex(2);
         rollbackCombo.addActionListener(this);
         

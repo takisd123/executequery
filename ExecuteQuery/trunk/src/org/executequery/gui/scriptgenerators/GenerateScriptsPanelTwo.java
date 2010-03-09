@@ -31,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.ListSelectionPanel;
 
 /**
@@ -66,7 +67,7 @@ public class GenerateScriptsPanelTwo extends JPanel {
 
     private void init() throws Exception {
 
-        schemaCombo = new JComboBox();
+        schemaCombo = WidgetFactory.createComboBox();
 
         list = new ListSelectionPanel("Available Tables:", "Selected Tables:");
 

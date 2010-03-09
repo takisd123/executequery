@@ -535,9 +535,11 @@ public class ScrollingTabPane extends AbstractTabPane
             return getView().getWidth() - getWidth();
         }
 
+        /*
         protected int getMaxYExtent() {
             return getView().getHeight() - getHeight();
         }
+        */
 
     } // class ScrollableTabViewport
 
@@ -593,15 +595,15 @@ public class ScrollingTabPane extends AbstractTabPane
             // evil hack to continue the tab selection border
             if (selectedIndex != -1) {
                 g.setColor(tabPanel.controlShadow);
-                g.drawLine(0, getHeight() - tabPanel.TAB_BOTTOM_BORDER_HEIGHT - 1,
-                           getWidth(), getHeight() - tabPanel.TAB_BOTTOM_BORDER_HEIGHT - 1);
+                g.drawLine(0, getHeight() - TabPanel.TAB_BOTTOM_BORDER_HEIGHT - 1,
+                           getWidth(), getHeight() - TabPanel.TAB_BOTTOM_BORDER_HEIGHT - 1);
                 if (isFocusedTabPane) {
                     g.setColor(tabPanel.activeColor);
                 } else {
                     g.setColor(tabPanel.activeNoFocusColor);
                 }
-                g.fillRect(0, getHeight() - tabPanel.TAB_BOTTOM_BORDER_HEIGHT,
-                           getWidth() , tabPanel.TAB_BOTTOM_BORDER_HEIGHT);
+                g.fillRect(0, getHeight() - TabPanel.TAB_BOTTOM_BORDER_HEIGHT,
+                           getWidth() , TabPanel.TAB_BOTTOM_BORDER_HEIGHT);
             }
         }
         
@@ -611,18 +613,12 @@ public class ScrollingTabPane extends AbstractTabPane
     private class ScrollButton extends JButton
                                implements ActionListener {
 
-        /** Indicates whether to draw a border */
-        protected boolean drawBorder;
-        
         /** the disabled button colour */
         protected Color disabledColour;
         
         /** the direction this button faces */
         protected int direction;
 
-        /** whether the popup menu has been invoked */
-        protected boolean menuShowing;
-        
         public ScrollButton(int direction) {
             this.direction = direction;
             setBorder(null);
@@ -894,7 +890,6 @@ public class ScrollingTabPane extends AbstractTabPane
         protected Color foreground;
         protected Color background;        
         protected Color activeColor;
-        protected Color selectedColor;
         protected Color controlShadow;
         protected Color activeNoFocusColor;
 
@@ -985,10 +980,6 @@ public class ScrollingTabPane extends AbstractTabPane
                     tabInsets.bottom + TAB_BOTTOM_BORDER_HEIGHT + 7;
         }
 
-        protected Rectangle getTabRectangleAt(int x, int y) {
-            return null;
-        }
-        
         private int getTabHeight() {
             return height - TAB_BOTTOM_BORDER_HEIGHT;
         }
@@ -1181,11 +1172,11 @@ public class ScrollingTabPane extends AbstractTabPane
         private Icon closeIcon = new DockedTabCloseIcon();
 
         private void initDefaults() {
-            Font _font = ScrollingTabPane.this.getFont();
+            Font _font = getFont();
             if (_font != null) {
-                font = _font.deriveFont(Font.PLAIN, 11);
+                font = _font.deriveFont(Font.PLAIN);
             } else {
-                font = UIManager.getFont("TabbedPane.font").deriveFont(Font.PLAIN, 11);
+                font = UIManager.getFont("TabbedPane.font").deriveFont(Font.PLAIN);
             }
             
             background = getTabBackground();

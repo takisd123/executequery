@@ -39,9 +39,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.FormPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.MultiLineLabel;
 
@@ -76,8 +76,8 @@ public class ImportXMLPanel_4 extends JPanel {
     
     private void jbInit() throws Exception {
         // fields with default values
-        tableTagField = new JTextField("table,name");
-        rowTagField = new JTextField("row");
+        tableTagField = WidgetFactory.createTextField("table,name");
+        rowTagField = WidgetFactory.createTextField("row");
         
         JButton sampleButton = new JButton("Sample");
         sampleButton.setMargin(new Insets(2,2,2,2));

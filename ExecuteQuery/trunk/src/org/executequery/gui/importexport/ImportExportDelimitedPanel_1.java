@@ -33,6 +33,7 @@ import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.MultiLineLabel;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.gui.browser.WidgetFactory;
 
 /**
  *
@@ -110,7 +111,7 @@ public class ImportExportDelimitedPanel_1 extends JPanel {
         // combo boxes
         Vector connections = ConnectionManager.getActiveConnections();
         connectionsModel = new DynamicComboBoxModel(connections);
-        connectionsCombo = new JComboBox(connectionsModel);
+        connectionsCombo = WidgetFactory.createComboBox(connectionsModel);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy++;

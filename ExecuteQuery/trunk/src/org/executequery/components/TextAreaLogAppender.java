@@ -29,13 +29,6 @@ import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Layout;
 import org.apache.log4j.spi.LoggingEvent;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
