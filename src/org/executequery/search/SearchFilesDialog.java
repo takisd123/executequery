@@ -46,6 +46,7 @@ import javax.swing.ListSelectionModel;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.DisabledField;
 
@@ -137,8 +138,8 @@ public class SearchFilesDialog extends AbstractBaseDialog implements FileSearchV
         
         enableReplaceTextArea(false);
         
-        fileTypesCombo = new JComboBox(FileSearch.getTypesValues());
-        pathCombo = new JComboBox(FileSearch.getPathValues());
+        fileTypesCombo = WidgetFactory.createComboBox(FileSearch.getTypesValues());
+        pathCombo = WidgetFactory.createComboBox(FileSearch.getPathValues());
         fileTypesCombo.setEditable(true);
         pathCombo.setEditable(true);
         

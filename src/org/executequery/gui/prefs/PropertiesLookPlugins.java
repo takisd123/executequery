@@ -55,6 +55,7 @@ import javax.swing.event.ListSelectionListener;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.SimpleValueSelectionDialog;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.components.FileChooserDialog;
 import org.underworldlabs.swing.FileSelector;
 import org.executequery.plaf.LookAndFeelDefinition;
@@ -136,10 +137,10 @@ public class PropertiesLookPlugins extends JPanel
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);       
         list.addListSelectionListener(this);
         
-        nameField = new JTextField();
-        libPathField = new JTextField();
-        classField = new JTextField();
-        themeField = new JTextField();
+        nameField = WidgetFactory.createTextField();
+        libPathField = WidgetFactory.createTextField();
+        classField = WidgetFactory.createTextField();
+        themeField = WidgetFactory.createTextField();
         
         findClassButton = new JButton("Find");
         libBrowseButton = new JButton("Browse");

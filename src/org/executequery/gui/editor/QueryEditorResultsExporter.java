@@ -53,6 +53,7 @@ import javax.swing.table.TableModel;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.importexport.DefaultExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ImportExportProcess;
@@ -122,7 +123,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         typeCombo = ActionUtilities.createComboBox(action, types, "exportTypeChanged");
         
         customDelimField = new CharLimitedTextField(1);
-        fileNameField = new JTextField();
+        fileNameField = WidgetFactory.createTextField();
         
         JButton browseButton = ActionUtilities.createButton(action, "Browse", "browse");
         JButton okButton = new DefaultPanelButton(action, "OK", "export");

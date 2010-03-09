@@ -63,6 +63,7 @@ import org.executequery.databaseobjects.ProcedureParameter;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.editor.QueryEditorResultsPanel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.FlatSplitPane;
@@ -140,18 +141,18 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);
         
-        connectionsCombo = new JComboBox();
-        schemaCombo = new JComboBox();
+        connectionsCombo = WidgetFactory.createComboBox();
+        schemaCombo = WidgetFactory.createComboBox();
 
         combosGroup = new TableSelectionCombosGroup(connectionsCombo, schemaCombo, null);
         combosGroup.addItemSelectionListener(this);
         
-        objectTypeCombo = new JComboBox(createAvailableObjectTypes());
+        objectTypeCombo = WidgetFactory.createComboBox(createAvailableObjectTypes());
         objectTypeCombo.setToolTipText("Select the database object type");
         objectTypeCombo.addItemListener(this);
         
         proceduresModel = new DynamicComboBoxModel();
-        procedureCombo = new JComboBox(proceduresModel);
+        procedureCombo = WidgetFactory.createComboBox(proceduresModel);
         procedureCombo.setActionCommand("procedureSelectionChanged");
         procedureCombo.setToolTipText("Select the database object name");
         procedureCombo.addActionListener(this);

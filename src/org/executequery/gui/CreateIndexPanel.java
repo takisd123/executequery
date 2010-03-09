@@ -65,6 +65,7 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.DefaultKeywordEvent;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
@@ -143,11 +144,11 @@ public class CreateIndexPanel extends ActionPanel
     
     private void init() throws Exception {
         
-        nameField = new JTextField();
+        nameField = WidgetFactory.createTextField();
 
-        connectionsCombo = new JComboBox();
-        schemaCombo = new JComboBox();
-        tableCombo = new JComboBox();
+        connectionsCombo = WidgetFactory.createComboBox();
+        schemaCombo = WidgetFactory.createComboBox();
+        tableCombo = WidgetFactory.createComboBox();
         
         combosGroup = new TableSelectionCombosGroup(
                 connectionsCombo, schemaCombo, tableCombo);

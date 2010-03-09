@@ -20,13 +20,6 @@
 
 package org.executequery.gui.browser;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** 
  * This object maintains table index data
  * as retrieved from the <code>DatabaseMetaData</code>
@@ -48,9 +41,6 @@ public class ColumnIndex  {
     /** The indexed column */
     private String column;
     
-    /** The index type */
-    private int type;
-    
     /** Whether this a new index value */
     private boolean markedNew;
     
@@ -58,10 +48,6 @@ public class ColumnIndex  {
     private boolean markedDeleted;
 
     public ColumnIndex() {}
-    
-    public void setIndexType(int type) {
-        this.type = type;
-    }
     
     public void setIndexedColumn(String column) {
         this.column = column;
@@ -108,9 +94,3 @@ public class ColumnIndex  {
     }
     
 }
-
-
-
-
-
-

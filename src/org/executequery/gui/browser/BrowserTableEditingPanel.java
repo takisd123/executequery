@@ -847,18 +847,15 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         return tableNameField.getText();
     }
     
-    public Vector getHostedSchemasVector() {
+    public Vector<String> getHostedSchemasVector() {
         return controller.getHostedSchemas();
     }
     
-    public Vector getSchemaTables(String schemaName) {
-        
-//        table.getHost().getSchemas()
-        
+    public Vector<String> getSchemaTables(String schemaName) {        
         return controller.getTables(schemaName);
     }
     
-    public Vector getColumnNamesVector(String tableName, String schemaName) {
+    public Vector<String> getColumnNamesVector(String tableName, String schemaName) {
         return controller.getColumnNamesVector(tableName, schemaName);
     }
     
@@ -871,7 +868,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         //return columnDataTable.getTableColumnData();
     }
     
-    public Vector getTableColumnDataVector() {
+    public Vector<ColumnData> getTableColumnDataVector() {
         return null;
         //return columnDataTable.getTableColumnDataVector();
     }

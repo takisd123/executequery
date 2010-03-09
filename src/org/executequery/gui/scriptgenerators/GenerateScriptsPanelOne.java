@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.gui.browser.WidgetFactory;
 
 /**
  * Step one panel in the generate scripts wizard.
@@ -75,7 +76,7 @@ public class GenerateScriptsPanelOne extends JPanel {
         bg.add(createTableButton);
         bg.add(dropTableButton);
         
-        connectionsCombo = new JComboBox();
+        connectionsCombo = WidgetFactory.createComboBox();
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;

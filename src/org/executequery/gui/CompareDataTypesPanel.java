@@ -62,6 +62,7 @@ import org.executequery.datasource.ConnectionManager;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -163,14 +164,14 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         Vector<DatabaseConnection> connections = ConnectionManager.getActiveConnections();
         connectionsModel_1 = new DynamicComboBoxModel(connections);
 
-        connectionsCombo = new JComboBox(connectionsModel_1);
+        connectionsCombo = WidgetFactory.createComboBox(connectionsModel_1);
         connectionsCombo.addActionListener(this);
         connectionsCombo.setActionCommand("firstConnectionChanged");
 
         connectionsModel_2 = new DynamicComboBoxModel(
                 (Vector<DatabaseConnection>)connections);
 
-        connectionsCombo2 = new JComboBox(connectionsModel_2);
+        connectionsCombo2 = WidgetFactory.createComboBox(connectionsModel_2);
         connectionsCombo2.addActionListener(this);
         connectionsCombo2.setActionCommand("secondConnectionChanged");
 

@@ -43,6 +43,7 @@ import javax.swing.border.MatteBorder;
 
 import org.executequery.ActiveComponent;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.RolloverButton;
@@ -139,7 +140,7 @@ public class PrintPreviewer extends AbstractBaseDialog
         closeButton.setMnemonic('C');
         
         String[] scales = {"10 %", "25 %", "50 %", "75 %", "100 %"};
-        scaleCombo = new JComboBox(scales);
+        scaleCombo = WidgetFactory.createComboBox(scales);
         scaleCombo.setActionCommand("scales");
         scaleCombo.setPreferredSize(new Dimension(70, 28));
         scaleCombo.setSelectedIndex(2);

@@ -36,6 +36,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.gui.browser.ColumnData;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.ListSelectionPanel;
@@ -101,11 +102,11 @@ public class ImportExportPanel_2 extends JPanel
         }
 
         schemaSelectionModel = new DynamicComboBoxModel(schemas);
-        schemaCombo = new JComboBox(schemaSelectionModel);
+        schemaCombo = WidgetFactory.createComboBox(schemaSelectionModel);
         schemaCombo.addItemListener(this);
 
         tableSelectionModel = new DynamicComboBoxModel();
-        tableCombo = new JComboBox(tableSelectionModel);
+        tableCombo = WidgetFactory.createComboBox(tableSelectionModel);
         tableCombo.addItemListener(this);
 
         tableLabel = new JLabel("Table:");

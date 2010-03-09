@@ -37,6 +37,7 @@ import javax.swing.JTextArea;
 
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 
 
@@ -153,7 +154,7 @@ public class ImportExportExcelPanel_1 extends JPanel  {
         // combo boxes
         Vector connections = ConnectionManager.getActiveConnections();
         connectionsModel = new DynamicComboBoxModel(connections);
-        connectionsCombo = new JComboBox(connectionsModel);
+        connectionsCombo = WidgetFactory.createComboBox(connectionsModel);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy++;

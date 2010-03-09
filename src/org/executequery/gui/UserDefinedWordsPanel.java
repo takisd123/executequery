@@ -41,6 +41,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.RolloverButton;
@@ -104,7 +105,7 @@ public class UserDefinedWordsPanel extends DefaultActionButtonsPanel
         
         JPanel tablePanel = new JPanel(new GridBagLayout());
         
-        Dimension dim = new Dimension(250, 300);
+        Dimension dim = new Dimension(300, 350);
         
         userModel = new KeywordModel(definedTypes, true);
         userTable = new DefaultTable(userModel);
@@ -148,7 +149,7 @@ public class UserDefinedWordsPanel extends DefaultActionButtonsPanel
         sql92Panel.add(js2, BorderLayout.CENTER);
         sql92Panel.setPreferredSize(dim);
         
-        newWordField = new JTextField();
+        newWordField = WidgetFactory.createTextField();
         actionToField(newWordField, "addWord");
 
         addButton = new JButton("Add");
@@ -169,7 +170,7 @@ public class UserDefinedWordsPanel extends DefaultActionButtonsPanel
         gbc.insets.top = 0;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        addPanel.add(new JLabel("Add Keyword:"), gbc);
+        addPanel.add(new JLabel("New Keyword:"), gbc);
         gbc.gridx = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;

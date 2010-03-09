@@ -51,6 +51,7 @@ import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SimpleValueSelectionDialog;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.log.Log;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.util.StringBundle;
@@ -113,12 +114,12 @@ public abstract class AbstractDriverPanel extends JPanel
         
         nameField.addFocusListener(new DriverNameFieldListener(this));
         
-        databaseNameCombo = new JComboBox(createDatabaseComboValues());
+        databaseNameCombo = WidgetFactory.createComboBox(createDatabaseComboValues());
         databaseNameCombo.setToolTipText(getString("AbstractDriverPanel.databaseToolTip"));
         databaseNameCombo.addItemListener(this);
 
         urlComboModel = new DynamicComboBoxModel();
-        driverUrlCombo = new JComboBox(urlComboModel);
+        driverUrlCombo = WidgetFactory.createComboBox(urlComboModel);
         driverUrlCombo.setToolTipText(getString("AbstractDriverPanel.jdbcUrlToolTip"));
         driverUrlCombo.setEditable(true);
 
@@ -192,8 +193,10 @@ public abstract class AbstractDriverPanel extends JPanel
     }
 
     private JTextField textFieldWithKey(String key) {
-        JTextField field = new JTextField();
+
+        JTextField field = WidgetFactory.createTextField();
         field.setToolTipText(getString(key));
+        
         return field;        
     }
     

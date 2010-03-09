@@ -294,7 +294,7 @@ public class ConnectionPanel extends ActionPanel
         for (int i = 1; i < txLevels.length; i++) {
             txLevels[i] = Constants.TRANSACTION_LEVELS[i - 1];
         }
-        txCombo = new JComboBox(txLevels);
+        txCombo = WidgetFactory.createComboBox(txLevels);
 
         JPanel advTxPanel = new JPanel(new GridBagLayout());
         advTxPanel.setBorder(BorderFactory.createTitledBorder("Transaction Isolation"));
@@ -352,7 +352,7 @@ public class ConnectionPanel extends ActionPanel
 
     private NumberTextField createNumberTextField() {
         
-        NumberTextField textField = new NumberTextField();
+        NumberTextField textField = WidgetFactory.createNumberTextField();
         formatTextField(textField);
         
         return textField;
@@ -360,7 +360,7 @@ public class ConnectionPanel extends ActionPanel
 
     private JPasswordField createPasswordField() {
         
-        JPasswordField field = new JPasswordField();
+        JPasswordField field = WidgetFactory.createPasswordField();
         formatTextField(field);
         
         return field;
@@ -368,7 +368,7 @@ public class ConnectionPanel extends ActionPanel
 
     private JTextField createTextField() {
         
-        JTextField textField = new JTextField();
+        JTextField textField = WidgetFactory.createTextField();
         formatTextField(textField);
 
         return textField;
@@ -427,7 +427,7 @@ public class ConnectionPanel extends ActionPanel
 
             DynamicComboBoxModel comboModel = new DynamicComboBoxModel();
             comboModel.setElements(driverNames);
-            driverCombo = new JComboBox(comboModel);
+            driverCombo = WidgetFactory.createComboBox(comboModel);
 
         } else {
 
@@ -1102,16 +1102,16 @@ public class ConnectionPanel extends ActionPanel
     }
 
     private void addLabelFieldPair(JPanel panel, String label, 
-                                        JComponent field, String toolTip,
-                                        GridBagConstraints gbc) {
+            JComponent field, String toolTip, GridBagConstraints gbc) {
+
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.gridwidth = 1;
+        gbc.insets.top = 10;
 
         if (panel.getComponentCount() > 0) {
+         
             gbc.insets.top = 0;
-        } else {
-            gbc.insets.top = 10;
         }
 
         gbc.insets.left = 10;
@@ -1124,8 +1124,10 @@ public class ConnectionPanel extends ActionPanel
         panel.add(field, gbc);
         
         if (toolTip != null) {
+            
             field.setToolTipText(toolTip);
         }
+
     }
 
     private void addDriverFields(JPanel panel, GridBagConstraints gbc) {
@@ -1140,6 +1142,7 @@ public class ConnectionPanel extends ActionPanel
         gbc.gridx = 1;
         gbc.insets.left = 5;
         gbc.weightx = 1.0;
+        gbc.insets.top = 0;
         panel.add(driverCombo, gbc);
 
         driverCombo.setToolTipText("The JDBC driver to be used for this database");
@@ -1150,7 +1153,6 @@ public class ConnectionPanel extends ActionPanel
 
         gbc.gridx = 2;
         gbc.weightx = 0;
-        gbc.insets.top = 5;
         gbc.gridwidth = 1;
         gbc.insets.left = 0;
         panel.add(button, gbc);

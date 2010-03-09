@@ -137,9 +137,9 @@ public interface Constants {
     int DEFAULT_BUTTON_WIDTH = 75;
     int DEFAULT_BUTTON_HEIGHT = 26;
     
-    Dimension BUTTON_SIZE = new Dimension(75, 26);
+    Dimension xBUTTON_SIZE = new Dimension(75, 26);
     
-    Insets BUTTON_INSETS = new Insets(2, 2, 2, 2);
+    Insets xBUTTON_INSETS = new Insets(2, 2, 2, 2);
 
     Dimension FORM_BUTTON_SIZE = new Dimension(100, 25);
     

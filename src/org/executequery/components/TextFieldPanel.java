@@ -25,12 +25,6 @@ import java.awt.LayoutManager;
 import javax.swing.JPanel;
 import org.underworldlabs.swing.TextFieldFocusController;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  *

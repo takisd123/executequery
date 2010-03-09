@@ -125,7 +125,7 @@ public class UIUtils {
     }
 
     /**
-     * Returns whether the current applied look and feel is
+     * Returns whether the current applied look and feel is 
      * an instance of GTK look and feel.
      *
      * @return true | false

@@ -59,6 +59,7 @@ import org.executequery.event.DefaultFileIOEvent;
 import org.executequery.event.FileIOEvent;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SaveFunction;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.imageio.DefaultImageWriterFactory;
 import org.executequery.imageio.GifImageWriterInfo;
 import org.executequery.imageio.ImageWriter;
@@ -180,7 +181,7 @@ public class ErdSaveDialog extends AbstractBaseDialog
         qualityTextField.setValue(8);        
         qualityTextField.addKeyListener(this);
 
-        qualityCombo = new JComboBox(new String[]{"Low", "Medium", "High", "Maximum"});
+        qualityCombo = WidgetFactory.createComboBox(new String[]{"Low", "Medium", "High", "Maximum"});
         qualityCombo.setSelectedIndex(2);
         
         Dimension fieldDim = new Dimension(50, 20);
@@ -220,7 +221,7 @@ public class ErdSaveDialog extends AbstractBaseDialog
         qualityPanel.setBorder(BorderFactory.createTitledBorder("JPEG Options"));
         
         backgroundLabel = new JLabel("Background:");
-        backgroundCombo = new JComboBox(new String[]{"Transparent", "White"});
+        backgroundCombo = WidgetFactory.createComboBox(new String[]{"Transparent", "White"});
         backgroundCombo.setPreferredSize(comboDim);
         backgroundCombo.setSelectedIndex(0);
         
@@ -235,11 +236,11 @@ public class ErdSaveDialog extends AbstractBaseDialog
         svgPanel.add(svgFontCheckbox);
         svgPanel.setBorder(BorderFactory.createTitledBorder("SVG Options"));
 
-        imageTypeCombo = new JComboBox(new String[]{
+        imageTypeCombo = WidgetFactory.createComboBox(new String[]{
             "Execute Query ERD", "JPEG", "GIF", "PNG", "SVG"});
         imageTypeCombo.setPreferredSize(comboDim);
 
-        pathField = new JTextField();
+        pathField = WidgetFactory.createTextField();
         pathField.setPreferredSize(fieldDim);
         
         JButton browseButton = new JButton("Browse");

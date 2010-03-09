@@ -47,6 +47,7 @@ import javax.swing.event.ListSelectionListener;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.repository.SqlCommandHistoryRepository;
@@ -143,7 +144,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         Container c = getContentPane();
         c.setLayout(new GridBagLayout());
         
-        searchField = new JTextField();
+        searchField = WidgetFactory.createTextField();
         searchField.addActionListener(this);
         JButton searchButton = createButton("Search", null);
 

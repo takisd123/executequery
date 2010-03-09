@@ -48,6 +48,7 @@ import javax.swing.UIManager;
 import org.executequery.GUIUtilities;
 import org.executequery.components.ColourChooserButton;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 
 /**
@@ -141,18 +142,18 @@ public class ErdLineStyleDialog extends AbstractBaseDialog {
         new LineWeightIcon(1),
         new LineWeightIcon(2),
         new LineWeightIcon(3)};
-        weightCombo = new JComboBox(weightIcons);
+        weightCombo = WidgetFactory.createComboBox(weightIcons);
         weightCombo.setRenderer(renderer);
         
         LineStyleIcon[] styleIcons = {new LineStyleIcon(0),
         new LineStyleIcon(1),
         new LineStyleIcon(2)};
-        styleCombo = new JComboBox(styleIcons);
+        styleCombo = WidgetFactory.createComboBox(styleIcons);
         styleCombo.setRenderer(renderer);
         
         ArrowStyleIcon[] arrowIcons = {new ArrowStyleIcon(0),
         new ArrowStyleIcon(1)};
-        arrowCombo = new JComboBox(arrowIcons);
+        arrowCombo = WidgetFactory.createComboBox(arrowIcons);
         arrowCombo.setRenderer(renderer);
         
         JButton cancelButton = new DefaultPanelButton("Cancel");

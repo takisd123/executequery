@@ -47,6 +47,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.browser.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.GUIUtils;
 
@@ -150,8 +151,8 @@ public class ErdFontStyleDialog extends AbstractBaseDialog
         ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
         String[] fontStyles = {"Plain", "Italic", "Bold", "Bold/Italic"};
-        tableNameCombo = new JComboBox(fontStyles);
-        columnNameCombo = new JComboBox(fontStyles);
+        tableNameCombo = WidgetFactory.createComboBox(fontStyles);
+        columnNameCombo = WidgetFactory.createComboBox(fontStyles);
         
         Dimension comboDim = new Dimension(90, 20);
         tableNameCombo.setPreferredSize(comboDim);

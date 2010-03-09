@@ -30,6 +30,8 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.executequery.gui.browser.WidgetFactory;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -79,14 +81,14 @@ public class ImportExportXMLPanel_5 extends JPanel {
         JLabel rollbackLabel = new JLabel("Rollback Segment Size:");
         
 //        JLabel dateFormatLabel = new JLabel("Date Format:");
-//        dateFormatField = new JTextField();
+//        dateFormatField = WidgetFactory.createTextField();
         
         String[] errors = {"Log and Continue", "Stop Transfer"};
-        errorCombo = new JComboBox(errors);
+        errorCombo = WidgetFactory.createComboBox(errors);
         
         String[] rolls = {"50", "100", "500", "1000", "5000",
                           "10000", "50000", "End of File", "End of all Files"};
-        rollbackCombo = new JComboBox(rolls);
+        rollbackCombo = WidgetFactory.createComboBox(rolls);
         rollbackCombo.setSelectedIndex(2);
         
         batchCheck = new JCheckBox("Run as a batch process");

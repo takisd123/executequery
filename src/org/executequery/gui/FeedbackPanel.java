@@ -24,6 +24,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -39,6 +40,7 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.repository.RepositoryException;
 import org.executequery.repository.UserFeedback;
 import org.executequery.repository.UserFeedbackRepository;
@@ -50,7 +52,7 @@ import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
 
 /** 
- * base feedback panel for comments, requests and bugs.
+ * Base feedback panel for comments, requests and bugs.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
@@ -112,9 +114,10 @@ public class FeedbackPanel extends DefaultActionButtonsPanel
         String labelText = generateLabelText();
         
         commentsField = new JTextArea(createHeader());
+        commentsField.setMargin(new Insets(2,2,2,2));
         
-        nameField = new JTextField();
-        emailField = new JTextField();
+        nameField = WidgetFactory.createTextField();
+        emailField = WidgetFactory.createTextField();
         initFieldValues();
 
         JPanel basePanel = new JPanel(new GridBagLayout());

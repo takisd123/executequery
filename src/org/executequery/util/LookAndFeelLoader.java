@@ -99,6 +99,11 @@ public final class LookAndFeelLoader {
             throw new ApplicationException(e);
         }
 
+        // http://mindprod.com/jgloss/antialiasing.html
+        
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+//        System.setProperty("awt.useSystemAAFontSettings", "lcd");
+        
         return lookAndFeel;
     }
 
@@ -164,8 +169,8 @@ public final class LookAndFeelLoader {
     public void loadDefaultLookAndFeel() {
 
         try {
-            org.underworldlabs.swing.plaf.ShadesOfGrayLookAndFeel metal = 
-                    new org.underworldlabs.swing.plaf.ShadesOfGrayLookAndFeel();
+            org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel metal = 
+                    new org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel();
 
             UIManager.setLookAndFeel(metal);
 

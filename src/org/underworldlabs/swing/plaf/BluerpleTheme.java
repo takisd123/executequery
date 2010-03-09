@@ -37,7 +37,7 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class ShadesOfGrayTheme extends DefaultMetalTheme {
+public class BluerpleTheme extends DefaultMetalTheme {
     
     // ---------------------------------
     // --------- System Fonts ----------
@@ -64,7 +64,7 @@ public class ShadesOfGrayTheme extends DefaultMetalTheme {
     // --------------------------------------------
     // ********************************************
     // --------------------------------------------
-    // ------------ Execute Query Theme -----------
+    // ------------ Bluerple Theme -----------
     // --------------------------------------------
     
     // --- active internal frame borders ---
@@ -85,14 +85,18 @@ public class ShadesOfGrayTheme extends DefaultMetalTheme {
     // --- panel/frame, normal background ---
     private final ColorUIResource secondary3 = new ColorUIResource(240, 240, 240);
     
-    public ShadesOfGrayTheme() {
+    public BluerpleTheme() {
+
         // ------------------------------
         // add some further l&f settings
         // ------------------------------
+        
         // black text for labels
         UIManager.put("Label.foreground", new ColorUIResource(0, 0, 0));
+        
         // black text for title border
         UIManager.put("TitledBorder.titleColor", new ColorUIResource(0, 0, 0));
+        
         // toggle button selected colour to primary3
         UIManager.put("ToggleButton.select", primary3);
 
@@ -112,11 +116,11 @@ public class ShadesOfGrayTheme extends DefaultMetalTheme {
 
         Object[] defaults = new Object[] {
             
-            "TabbedPane.borderHightlightColor", secondary1,
-            "TabbedPane.contentAreaColor", secondary3,
+            "TabbedPane.borderHightlightColor", getSecondary1(),
+            "TabbedPane.contentAreaColor", getSecondary3(),
             "TabbedPane.contentBorderInsets", new Insets(2, 2, 3, 3),
-            "TabbedPane.selected", secondary3,
-            "TabbedPane.tabAreaBackground", secondary3,
+            "TabbedPane.selected", getSecondary3(),
+            "TabbedPane.tabAreaBackground", getSecondary3(),
             "TabbedPane.tabAreaInsets", new Insets(4, 2, 0, 6),
             "TabbedPane.unselectedBackground", cccccc,
             
@@ -133,10 +137,10 @@ public class ShadesOfGrayTheme extends DefaultMetalTheme {
     }
     
     public String getName() {
-        return "Shades of Gray";
+        return "Bluerple";
     }
     
-    private static final int DEFAULT_FONT_SIZE = 11;
+    private static final int DEFAULT_FONT_SIZE = 12;
 
     public int getDefaultFontSize() {
         return DEFAULT_FONT_SIZE;

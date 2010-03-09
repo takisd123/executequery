@@ -417,7 +417,7 @@ public class DockedTabPane extends AbstractTabPane {
         protected Color foreground;
         protected Color background;        
         protected Color activeColor;
-        protected Color activeNoFocusColor;
+//        protected Color activeNoFocusColor;
         protected Color controlShadow;
 
         protected int textIconGap;
@@ -476,10 +476,12 @@ public class DockedTabPane extends AbstractTabPane {
                     tabInsets.bottom + TAB_BOTTOM_BORDER_HEIGHT + 6;
         }
 
+        /*
         protected Rectangle getTabRectangleAt(int x, int y) {
             return null;
         }
-        
+        */
+
         private int getTabHeight() {
             return height - TAB_BOTTOM_BORDER_HEIGHT;
         }
@@ -666,7 +668,7 @@ public class DockedTabPane extends AbstractTabPane {
             }
 
             background = getTabBackground();
-            activeNoFocusColor = getNofocusTabBackground();
+//            activeNoFocusColor = getNofocusTabBackground();
 
             foreground = getTabForeground();
             activeColor = getSelectedTabBackground();
