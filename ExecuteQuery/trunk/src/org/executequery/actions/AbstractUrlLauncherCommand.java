@@ -1,5 +1,5 @@
 /*
- * VisitOnline.java
+ * AbstractUrlLauncherCommand.java
  *
  * Copyright (C) 2002-2009 Takis Diakoumis
  *
@@ -18,7 +18,7 @@
  *
  */
 
-package org.executequery.actions.helpcommands;
+package org.executequery.actions;
 
 import java.awt.event.ActionEvent;
 
@@ -28,22 +28,18 @@ import org.executequery.util.SystemWebBrowserLauncher;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
- * Executes the Help | Visit executequery.org command.<br>
- * This will open a browser window with URL http://executequery.org.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1514 $
  * @date     $Date: 2009-04-10 15:42:56 +1000 (Fri, 10 Apr 2009) $
  */
-public class VisitOnline implements BaseCommand {
-
-    private static final String URL = "http://executequery.org";
+public abstract class AbstractUrlLauncherCommand implements BaseCommand {
 
     public void execute(ActionEvent e) {
         
         try {
             
-            new SystemWebBrowserLauncher().launch(URL);
+            new SystemWebBrowserLauncher().launch(url());
             
         } catch (ApplicationException applicationException) {
             
@@ -55,6 +51,8 @@ public class VisitOnline implements BaseCommand {
 
     }
 
+    public abstract String url();
+    
 }
 
 

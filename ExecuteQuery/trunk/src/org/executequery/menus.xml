@@ -541,6 +541,9 @@
           <menu-item id="visit-eq-command"
                      class="javax.swing.JMenuItem"/>
 
+          <menu-item id="donate-command"
+                     class="javax.swing.JMenuItem"/>
+
           <menu name="Feedback"
                 class="javax.swing.JMenu"
                 mnemonic="F">
