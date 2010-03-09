@@ -313,12 +313,12 @@ public class QueryEditorAutoCompletePopupProvider
     // TODO: determine query being executed and suggest based on that
     // introduce query types (select, insert etc)
     // track columns/tables in statement ????
+
+    private static final int MINIMUM_CHARS_FOR_SCHEMA_LOOKUP = 2;
     
     private List<AutoCompleteListItem> itemsStartingWith(String prefix) {
         
-        boolean blankPrefix = StringUtils.isBlank(prefix);
-        
-        if (blankPrefix) {
+        if (StringUtils.isBlank(prefix) || prefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP) {
             
             return selectionsBuilder.buildKeywords(databaseHost);
         }
@@ -496,6 +496,14 @@ public class QueryEditorAutoCompletePopupProvider
                 selectedValue = selectedValue.toLowerCase();
             }
 
+            if (!Character.isLetterOrDigit(wordAtCursor.charAt(0))) {
+                
+                // cases where you might have a.column_name or similar
+
+                insertionIndex++;
+                wordAtCursorLength--;
+            }
+            
             Document document = textComponent.getDocument();
             document.remove(insertionIndex, wordAtCursorLength);
             document.insertString(insertionIndex, selectedValue, null);
