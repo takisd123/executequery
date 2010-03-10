@@ -198,12 +198,3 @@ public class DefaultTextEditorContainer extends JPanel
     }
 
 }
-
-
-
-
-
-
-
-
-

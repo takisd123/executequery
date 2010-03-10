@@ -215,7 +215,7 @@
 
           <menu-item name="Drivers"
                      class="org.executequery.gui.menu.MainCheckBoxMenuItem"
-                     mnemonic="N"
+                     mnemonic="D"
                      action-command="viewDrivers"
                      property-key="system.display.drivers"
                      tool-tip="Opens JDBC drivers panel"/>
@@ -227,6 +227,13 @@
                      property-key="system.display.systemprops"
                      tool-tip="Opens the system properties palette"/>
 
+          <menu-item name="Notepad"
+                     class="org.executequery.gui.menu.MainCheckBoxMenuItem"
+                     mnemonic="O"
+                     action-command="viewNotepad"
+                     property-key="system.display.notepad"
+                     tool-tip="Displays the text notepad"/>
+                     
           <menu-item name="Status Bar"
                      class="org.executequery.gui.menu.MainCheckBoxMenuItem"
                      mnemonic="S"

@@ -61,6 +61,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.ComponentPanel;
 import org.executequery.gui.NamedView;
+import org.executequery.gui.NotepadDockedPanel;
 import org.executequery.gui.OpenComponentRegister;
 import org.executequery.gui.SaveFunction;
 import org.executequery.gui.SystemOutputPanel;
@@ -77,10 +78,10 @@ import org.executequery.io.RecentFileIOListener;
 import org.executequery.listeners.ConnectionRepositoryChangeListener;
 import org.executequery.listeners.DefaultConnectionListener;
 import org.executequery.listeners.DefaultUserPreferenceListener;
+import org.executequery.listeners.HttpProxyUserPreferenceListener;
 import org.executequery.listeners.KeyboardShortcutsUserPreferenceListener;
 import org.executequery.listeners.LogUserPreferenceListener;
 import org.executequery.listeners.PreferencesChangesListener;
-import org.executequery.listeners.HttpProxyUserPreferenceListener;
 import org.executequery.listeners.ToolBarVisibilityListener;
 import org.executequery.log.Log;
 import org.executequery.print.PrintFunction;
@@ -241,12 +242,15 @@ public final class GUIUtilities {
     protected static void setDividerLocations() {
         String[] keys = DesktopMediator.DIVIDER_LOCATION_KEYS;
         for (int i = 0; i < keys.length; i++) {
+            
             String key = keys[i];
+
             int location = SystemProperties.getIntProperty("user", key);
-            //Log.debug("key: "+key+" loc: "+location);
             if (location > 0) {
+        
                 desktopMediator.setSplitPaneDividerLocation(key, location);
             }
+        
         }
     }
     
@@ -1067,27 +1071,38 @@ public final class GUIUtilities {
         JPanel panel = null;
         // determine which panel to initialise
         if (key.equals(ConnectionsTreePanel.PROPERTY_KEY)) {
+
             panel = new ConnectionsTreePanel();
-        }
-        else if (key.equals(DriversTreePanel.PROPERTY_KEY)) {
+        
+        } else if (key.equals(DriversTreePanel.PROPERTY_KEY)) {
+          
             panel = new DriversTreePanel();
-        }
-        else if (key.equals(SystemPropertiesDockedTab.PROPERTY_KEY)) {
+
+        } else if (key.equals(SystemPropertiesDockedTab.PROPERTY_KEY)) {
+            
             panel = new SystemPropertiesDockedTab();
-        }
-        else if (key.equals(SystemOutputPanel.PROPERTY_KEY)) {
+
+        } else if (key.equals(NotepadDockedPanel.PROPERTY_KEY)) {
+            
+            panel = new NotepadDockedPanel();
+
+        } else if (key.equals(SystemOutputPanel.PROPERTY_KEY)) {
+          
             // init the logger 
             // this method will add the output panel
             startLogger();
-        }
-        else if (key.equals(KeywordsDockedPanel.PROPERTY_KEY)) {
+
+        } else if (key.equals(KeywordsDockedPanel.PROPERTY_KEY)) {
+
             panel = new KeywordsDockedPanel();
-        }
-        else if (key.equals(SQLStateCodesDockedPanel.PROPERTY_KEY)) {
+
+        } else if (key.equals(SQLStateCodesDockedPanel.PROPERTY_KEY)) {
+          
             panel = new SQLStateCodesDockedPanel();
         }
         
         if (panel != null) {
+        
             dockedTabComponents.put(key, panel);
         }
         
@@ -1148,6 +1163,7 @@ public final class GUIUtilities {
         int position = layoutProperties.getPosition(key);
 
         if (position == -1) {
+
             // default NORTH_WEST position
             position = SwingConstants.NORTH_WEST;
         }

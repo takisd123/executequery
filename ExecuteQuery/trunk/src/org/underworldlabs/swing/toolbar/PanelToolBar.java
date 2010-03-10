@@ -71,6 +71,10 @@ public class PanelToolBar extends AbstractToolBarPanel {
         return button;
     }
 
+    public void removeButton(JButton button) {
+        remove(button);
+    }
+    
     public JButton addButton(ActionListener action, String actionCommand,
                               String icon, String toolTip) {
         return addButton(action, actionCommand, icon, toolTip, true);

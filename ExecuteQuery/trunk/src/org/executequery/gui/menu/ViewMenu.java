@@ -86,6 +86,7 @@ public class ViewMenu extends AbstractOptionsMenu
         actionCommandsToPropertiesMap.put("viewSqlStateCodes", "system.display.state-codes");
         actionCommandsToPropertiesMap.put("viewDrivers", "system.display.drivers");
         actionCommandsToPropertiesMap.put("viewSystemProperties", "system.display.systemprops");
+        actionCommandsToPropertiesMap.put("viewNotepad", "system.display.notepad");
         actionCommandsToPropertiesMap.put("viewStatusBar", "system.display.statusbar");
 
     }

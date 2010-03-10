@@ -267,7 +267,9 @@ public class UserLayoutProperties implements Serializable,
     private static LayoutSorter layoutSorter;
     
     public List<UserLayoutObject> getLayoutObjectsSorted() {
+
         if (layoutObjects == null || layoutObjects.isEmpty()) {
+        
             return null;
         }
 
@@ -277,6 +279,7 @@ public class UserLayoutProperties implements Serializable,
         List<UserLayoutObject> list = new ArrayList<UserLayoutObject>(size);
         
         for (Iterator i = layoutObjects.keySet().iterator(); i.hasNext();) {
+        
             String key = i.next().toString();
             list.add(layoutObjects.get(key));
         }

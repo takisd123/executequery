@@ -23,6 +23,7 @@ package org.executequery.actions.viewcommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.NotepadDockedPanel;
 import org.executequery.gui.SystemOutputPanel;
 import org.executequery.gui.SystemPropertiesDockedTab;
 import org.executequery.gui.browser.ConnectionsTreePanel;
@@ -66,6 +67,11 @@ public class ViewOptionsCommand extends AbstractViewOptionsCommand {
     public void viewDrivers(ActionEvent e) {
 
         displayDockedComponent(e, DriversTreePanel.PROPERTY_KEY);
+    }
+
+    public void viewNotepad(ActionEvent e) {
+
+        displayDockedComponent(e, NotepadDockedPanel.PROPERTY_KEY);
     }
 
     public void viewSystemProperties(ActionEvent e) {

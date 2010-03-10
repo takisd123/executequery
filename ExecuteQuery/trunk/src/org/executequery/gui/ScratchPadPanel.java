@@ -62,31 +62,38 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
     private RolloverButton trashButton;
     
     private static int count = 1;
+
+    private PanelToolBar tools;
     
     /** Constructs a new instance. */
     public ScratchPadPanel() {
+        
         this(null);
     }
     
     public ScratchPadPanel(String text) {
+
         super(new BorderLayout());
         
         try {
-            jbInit();
-        }
-        catch (Exception e) {
+            
+            init();
+
+        } catch (Exception e) {
+          
             e.printStackTrace();
         }
 
         if (text != null) {
+
             textArea.setText(text);
             textArea.setCaretPosition(0);
         }
 
     }
     
-    /** Initializes the state of this instance. */
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
+
         editorButton = new RolloverButton("/org/executequery/icons/ScratchToEditor16.gif",
                                          "Paste to Query Editor");
         newButton = new RolloverButton("/org/executequery/icons/NewScratchPad16.gif",
@@ -103,7 +110,7 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
         textArea.setMargin(new Insets(2,2,2,2));
         textComponent = textArea;
 
-        PanelToolBar tools = new PanelToolBar();
+        tools = new PanelToolBar();
         tools.addButton(newButton);
         tools.addButton(editorButton);
         tools.addButton(trashButton);
@@ -114,6 +121,11 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
         
         simpleTextArea.setBorder(BorderFactory.createEmptyBorder(0,3,3,3));
         add(base, BorderLayout.CENTER);
+        
+    }
+    
+    public PanelToolBar getPanelToolBar() {
+        return tools;
     }
     
     public Component getDefaultFocusComponent() {
@@ -204,12 +216,3 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
     // --------------------------------------------
 
 }
-
-
-
-
-
-
-
-
-
