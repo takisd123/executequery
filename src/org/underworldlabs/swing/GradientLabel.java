@@ -71,13 +71,13 @@ public class GradientLabel extends JComponent {
     private static Insets insets;
     
     /** the default font size - 15pts */
-    public static final int DEFAULT_FONT_SIZE = 15;
+    public static final float DEFAULT_FONT_SIZE = 15f;
     
-    /** 
-     * Creates a new instance with default component settings.
-     */
+    /** Creates a new instance with default component settings. */
     public GradientLabel() {
-        this("", null, new Font("dialog", Font.BOLD, DEFAULT_FONT_SIZE));
+
+        this("", null, 
+                UIManager.getFont("Label.font").deriveFont(Font.BOLD, DEFAULT_FONT_SIZE));
     }
 
     /**
@@ -88,6 +88,7 @@ public class GradientLabel extends JComponent {
      * @param font - the label font
      */
     public GradientLabel(String text, ImageIcon icon, Font font) {
+
         this(text, icon, font, null, null);
     }
     
@@ -99,6 +100,7 @@ public class GradientLabel extends JComponent {
     public GradientLabel(String text, ImageIcon icon, Font font, 
                          Color leftGradientColor, Color rightGradientColor,
                          Color foregroundColor, boolean shadowDropped) {
+
         this.text = text;
         this.icon = icon;
         this.font = font;
