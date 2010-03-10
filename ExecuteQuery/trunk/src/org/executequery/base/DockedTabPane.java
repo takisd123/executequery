@@ -44,6 +44,7 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 
+import org.executequery.gui.GUIConstants;
 import org.executequery.gui.menu.MenuItemFactory;
 
 /**
@@ -664,9 +665,9 @@ public class DockedTabPane extends AbstractTabPane {
         private void initDefaults() {
             Font _font = DockedTabPane.this.getFont();
             if (_font != null) {
-                font = _font.deriveFont(Font.PLAIN, 11);
+                font = _font.deriveFont(Font.PLAIN, GUIConstants.DEFAULT_FONT_SIZE);
             } else {
-                font = UIManager.getFont("TabbedPane.font").deriveFont(Font.PLAIN, 11);
+                font = UIManager.getFont("TabbedPane.font").deriveFont(Font.PLAIN, GUIConstants.DEFAULT_FONT_SIZE);
             }
 
             background = getTabBackground();
