@@ -47,7 +47,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ComponentTitledPanel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -379,7 +379,7 @@ public class BaseScriptGeneratorPanel extends JPanel
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
         
         if (result == JFileChooser.CANCEL_OPTION) {
             return;

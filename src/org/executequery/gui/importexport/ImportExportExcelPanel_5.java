@@ -31,7 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 
 /**
  *

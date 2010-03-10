@@ -428,6 +428,34 @@ public final class GUIUtilities {
         return frame;
     }
     
+    public static Component getInFocusDialogOrWindow() {
+        
+        if (getFocusedDialog() != null) {
+            
+            return getFocusedDialog();
+
+        } else {
+            
+            if (register.getOpenDialogCount() > 0) {
+                
+                List<JDialog> list = register.getOpenDialogs();
+                
+                for (int i = 0, k = list.size(); i < k; i++) {
+                
+                    JDialog dialog = list.get(i);
+                    if (dialog.isFocused()) {
+
+                        return dialog;
+                    }
+                    
+                }
+
+            }
+        }
+        
+        return getParentFrame();
+    }
+    
     /**
      * Selects the next tab from the current selection.
      */
@@ -1642,35 +1670,35 @@ public final class GUIUtilities {
     // within the entire screen as you get with JOptionPane.showXXX()
     
     public static final void displayInformationMessage(Object message) {
-        GUIUtils.displayInformationMessage(frame, message);
+        GUIUtils.displayInformationMessage(getInFocusDialogOrWindow(), message);
     }
     
     public static final void displayWarningMessage(Object message) {
-        GUIUtils.displayWarningMessage(frame, message);
+        GUIUtils.displayWarningMessage(getInFocusDialogOrWindow(), message);
     }
     
     public static final void displayErrorMessage(Object message) {
-        GUIUtils.displayErrorMessage(frame, message);
+        GUIUtils.displayErrorMessage(getInFocusDialogOrWindow(), message);
     }
 
     public static final String displayInputMessage(String title, Object message) {
-        return GUIUtils.displayInputMessage(frame, title, message);
+        return GUIUtils.displayInputMessage(getInFocusDialogOrWindow(), title, message);
     }
 
     public static final int displayConfirmCancelErrorMessage(Object message) {
-        return GUIUtils.displayConfirmCancelErrorMessage(frame, message);
+        return GUIUtils.displayConfirmCancelErrorMessage(getInFocusDialogOrWindow(), message);
     }
 
     public static final int displayYesNoDialog(Object message, String title) {        
-        return GUIUtils.displayYesNoDialog(frame, message, title);
+        return GUIUtils.displayYesNoDialog(getInFocusDialogOrWindow(), message, title);
     }
     
     public static final int displayConfirmCancelDialog(Object message) {
-        return GUIUtils.displayConfirmCancelDialog(frame, message);
+        return GUIUtils.displayConfirmCancelDialog(getInFocusDialogOrWindow(), message);
     }
     
     public static final int displayConfirmDialog(Object message) {
-        return GUIUtils.displayConfirmDialog(frame, message);
+        return GUIUtils.displayConfirmDialog(getInFocusDialogOrWindow(), message);
     }
     
 }

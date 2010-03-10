@@ -61,6 +61,7 @@ import org.executequery.event.DatabaseDriverListener;
 import org.executequery.event.DefaultConnectionRepositoryEvent;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.FormPanelButton;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.drivers.DialogDriverPanel;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.DatabaseDriverRepository;
@@ -284,7 +285,7 @@ public class ConnectionPanel extends ActionPanel
         advPropsPanel.add(scroller, gbc);        
         
         // transaction isolation
-        txApplyButton = ActionUtilities.createButton("Apply", "transactionLevelChanged");
+        txApplyButton =  WidgetFactory.createInlineFieldButton("Apply", "transactionLevelChanged");        
         txApplyButton.setToolTipText("Apply this level to all open connections of this type");
         txApplyButton.setEnabled(false);
         txApplyButton.addActionListener(this);
@@ -311,11 +312,11 @@ public class ConnectionPanel extends ActionPanel
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         advTxPanel.add(
-                new JLabel("Default transaction isolation level for this connection"), gbc);
+                new DefaultFieldLabel("Default transaction isolation level for this connection"), gbc);
         gbc.gridy++;
         gbc.insets.bottom = 10;
         advTxPanel.add(
-                new JLabel("Note: the selected isolation level " +
+                new DefaultFieldLabel("Note: the selected isolation level " +
                            "will apply to ALL open connections of this type."), gbc);        
         gbc.gridy++;
         gbc.gridx = 0;
@@ -323,12 +324,12 @@ public class ConnectionPanel extends ActionPanel
         gbc.insets.top = 0;
         gbc.insets.left = 10;
         gbc.weightx = 0;
-        advTxPanel.add(new JLabel("Isolation Level:"), gbc);
+        advTxPanel.add(new DefaultFieldLabel("Isolation Level:"), gbc);
         gbc.gridx = 1;
         gbc.insets.left = 5;
         gbc.weightx = 1.0;
         gbc.insets.right = 5;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         advTxPanel.add(txCombo, gbc);
         gbc.gridx = 2;
         gbc.weightx = 0;
@@ -1149,7 +1150,7 @@ public class ConnectionPanel extends ActionPanel
 
         driverCombo.setToolTipText("The JDBC driver to be used for this database");
 
-        JButton button = new DefaultInlineFieldButton("New Driver");
+        JButton button = WidgetFactory.createInlineFieldButton("New Driver");
         button.setActionCommand("addNewDriver");
         button.addActionListener(this);
         button.setMnemonic('r');

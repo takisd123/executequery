@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 
 /**
  * Step one panel in the generate scripts wizard.

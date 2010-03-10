@@ -51,6 +51,7 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
 import org.executequery.gui.SortableColumnsTable;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.print.TablePrinter;
 import org.executequery.repository.DatabaseConnectionRepository;

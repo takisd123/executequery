@@ -212,7 +212,7 @@ public class TextFileWriter {
             fileChooser.setSelectedFile(selectedFile);
         }
 
-        int result = fileChooser.showSaveDialog(GUIUtilities.getParentFrame());
+        int result = fileChooser.showSaveDialog(GUIUtilities.getInFocusDialogOrWindow());
         if (result == JFileChooser.CANCEL_OPTION) {
             
             return false;

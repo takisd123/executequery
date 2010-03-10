@@ -32,7 +32,7 @@ import java.util.Vector;
 import org.executequery.Constants;
 
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 import org.underworldlabs.swing.RolloverButton;
 import org.underworldlabs.swing.actions.ActionBuilder;

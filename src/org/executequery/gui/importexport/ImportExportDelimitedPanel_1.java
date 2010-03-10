@@ -33,7 +33,7 @@ import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.MultiLineLabel;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 
 /**
  *

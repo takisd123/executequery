@@ -37,7 +37,7 @@ import javax.swing.JTextArea;
 
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 
 

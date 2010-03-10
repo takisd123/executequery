@@ -53,8 +53,8 @@ import javax.swing.table.TableModel;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.browser.DefaultInlineFieldButton;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.importexport.DefaultExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ImportExportProcess;
@@ -96,7 +96,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     public QueryEditorResultsExporter(TableModel model) {
 
         super(GUIUtilities.getParentFrame(), "Export Query Results", true);
-        
+            
         this.model = model;
 
         try {
@@ -275,7 +275,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         fileChooser.setDialogTitle("Select Export File Path");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
         if (result == JFileChooser.CANCEL_OPTION) {
             return;
         }

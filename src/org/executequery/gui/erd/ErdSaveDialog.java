@@ -59,7 +59,7 @@ import org.executequery.event.DefaultFileIOEvent;
 import org.executequery.event.FileIOEvent;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SaveFunction;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.imageio.DefaultImageWriterFactory;
 import org.executequery.imageio.GifImageWriterInfo;
 import org.executequery.imageio.ImageWriter;

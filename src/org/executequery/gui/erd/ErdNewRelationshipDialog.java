@@ -43,9 +43,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.browser.ColumnConstraint;
 import org.executequery.gui.browser.ColumnData;
-import org.executequery.gui.browser.WidgetFactory;
 
 /**
  *

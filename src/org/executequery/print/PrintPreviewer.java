@@ -43,7 +43,7 @@ import javax.swing.border.MatteBorder;
 
 import org.executequery.ActiveComponent;
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.RolloverButton;

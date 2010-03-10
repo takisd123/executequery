@@ -22,6 +22,7 @@ package org.executequery.gui.prefs;
 
 
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -283,9 +284,10 @@ public class PropertiesKeyShortcuts extends PropertiesBase
         
         public ShortcutDialog(int row) {
 
-            super(GUIUtilities.getFocusedDialog(), "Select Shortcut", true);
+            super((Dialog) GUIUtilities.getInFocusDialogOrWindow(), "Select Shortcut", true);
 
             this.row = row;
+
             shortcutKey = (ShortcutKey)tableModel.getShortcut(row);
 
             JButton okButton = new JButton("OK");
@@ -332,8 +334,9 @@ public class PropertiesKeyShortcuts extends PropertiesBase
             this.setLocation(GUIUtilities.getLocationForDialog(this.getSize()));
             shortcutField.requestFocusInWindow();
             this.setVisible(true);
-        }
 
+        }
+        
         public void actionPerformed(ActionEvent e) {
             String command = e.getActionCommand();
             

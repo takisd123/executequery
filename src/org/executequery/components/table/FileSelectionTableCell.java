@@ -43,7 +43,7 @@ public class FileSelectionTableCell extends BrowsingCellEditor {
         FileChooserDialog dialog = new FileChooserDialog();
         dialog.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-        int result = dialog.showOpenDialog(GUIUtilities.getFocusedDialog());
+        int result = dialog.showOpenDialog(GUIUtilities.getInFocusDialogOrWindow());
         
         if (result == JFileChooser.CANCEL_OPTION) {
             fireEditingStopped();

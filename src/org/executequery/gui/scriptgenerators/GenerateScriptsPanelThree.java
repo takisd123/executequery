@@ -33,23 +33,16 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.ComponentTitledPanel;
+import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.FileSelector;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  * Step three panel in the generate scripts wizard.
@@ -74,7 +67,6 @@ public class GenerateScriptsPanelThree extends JPanel
     /** the parent controller */
     private GenerateScriptsWizard parent;
     
-    /** Creates a new instance of GenerateScriptsPanelThree */
     public GenerateScriptsPanelThree(GenerateScriptsWizard parent) {
         super(new GridBagLayout());
         this.parent = parent;
@@ -98,7 +90,7 @@ public class GenerateScriptsPanelThree extends JPanel
         gbc.gridy++;
         gbc.insets = new Insets(7,5,5,5);
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        add(new JLabel("Save Path:"), gbc);
+        add(new DefaultFieldLabel("Save Path:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -201,7 +193,7 @@ public class GenerateScriptsPanelThree extends JPanel
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
         if (result == JFileChooser.CANCEL_OPTION) {
             return;
         }
@@ -230,12 +222,3 @@ public class GenerateScriptsPanelThree extends JPanel
     }
 
 }
-
-
-
-
-
-
-
-
-

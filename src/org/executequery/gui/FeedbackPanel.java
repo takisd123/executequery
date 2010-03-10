@@ -40,7 +40,6 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.repository.RepositoryException;
 import org.executequery.repository.UserFeedback;
 import org.executequery.repository.UserFeedbackRepository;

@@ -21,6 +21,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.ActionContainer;
 import org.executequery.gui.DefaultActionButtonsPanel;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.resultset.SimpleRecordDataItem;
 import org.executequery.log.Log;
 import org.underworldlabs.util.FileUtils;
@@ -90,7 +91,7 @@ public class SimpleDataItemViewerPanel extends DefaultActionButtonsPanel {
 
     private JButton create(String text, String actionCommand) {
         
-        JButton button = new JButton(text);
+        JButton button = WidgetFactory.createButton(text);
         button.setActionCommand(actionCommand);
         button.addActionListener(this);
         

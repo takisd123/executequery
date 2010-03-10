@@ -47,7 +47,7 @@ import javax.swing.event.ListSelectionListener;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.repository.SqlCommandHistoryRepository;

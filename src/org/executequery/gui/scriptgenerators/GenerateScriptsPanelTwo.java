@@ -31,7 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.executequery.databaseobjects.NamedObject;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.ListSelectionPanel;
 
 /**

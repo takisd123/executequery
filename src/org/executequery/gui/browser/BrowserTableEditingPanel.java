@@ -307,7 +307,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         gbc.gridx = 2;
         gbc.insets.top = 0;
         gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.BOTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = 1;
         gbc.insets.right = 0;
         base.add(rowCountField, gbc);

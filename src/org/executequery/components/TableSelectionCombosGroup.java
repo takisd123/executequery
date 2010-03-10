@@ -42,7 +42,7 @@ import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.log.Log;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.jdbc.DataSourceException;

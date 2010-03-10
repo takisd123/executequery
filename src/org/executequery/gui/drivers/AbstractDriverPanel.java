@@ -50,8 +50,8 @@ import org.executequery.components.TextFieldPanel;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
 import org.executequery.gui.SimpleValueSelectionDialog;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.browser.DefaultInlineFieldButton;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.log.Log;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.util.StringBundle;
@@ -172,7 +172,7 @@ public abstract class AbstractDriverPanel extends JPanel
         gbc.fill = GridBagConstraints.HORIZONTAL;
         base.add(browseButton, gbc);
         gbc.gridy++;
-        gbc.insets.top = 5;
+        gbc.insets.top = 0;
         base.add(removeButton, gbc);
         
         gbc.gridy+=3;
@@ -426,7 +426,7 @@ public abstract class AbstractDriverPanel extends JPanel
         fileChooser.setMultiSelectionEnabled(true);
         
         int result = fileChooser.showDialog(
-                GUIUtilities.getParentFrame(), getString("AbstractDriverPanel.select"));
+                GUIUtilities.getInFocusDialogOrWindow(), getString("AbstractDriverPanel.select"));
 
         if (result == JFileChooser.CANCEL_OPTION) {
 

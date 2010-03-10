@@ -37,7 +37,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.ListSelectionPanel;

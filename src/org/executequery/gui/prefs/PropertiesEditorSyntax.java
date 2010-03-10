@@ -50,13 +50,6 @@ import org.underworldlabs.swing.table.ComboBoxCellEditor;
 import org.underworldlabs.swing.table.ColourTableCellRenderer;
 import org.underworldlabs.swing.table.ComboBoxCellRenderer;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Query Editor syntax highlighting preferences panel.
  *
  *  @author   Takis Diakoumis
@@ -70,7 +63,6 @@ public class PropertiesEditorSyntax extends PropertiesBase
     private ColorTableModel tableModel;
     private SamplePanel samplePanel;
     
-    /** <p>Constructs a new instance. */
     public PropertiesEditorSyntax() {
         try  {
             init();
@@ -80,9 +72,6 @@ public class PropertiesEditorSyntax extends PropertiesBase
         }
     }
     
-    /**
-     * Initializes the state of this instance.
-     */
     private void init() throws Exception {        
         tableModel = new ColorTableModel();
         table = new JTable(tableModel);
@@ -198,11 +187,6 @@ public class PropertiesEditorSyntax extends PropertiesBase
         tableModel.save();
     }
     
-    private Color getStyleColour(String colour) {
-        return new Color(Integer.parseInt(colour));
-    }
-    
-    
     class SamplePanel extends JPanel
                       implements Scrollable {
         int size;
@@ -274,13 +258,13 @@ public class PropertiesEditorSyntax extends PropertiesBase
     
     class ColorTableModel extends AbstractTableModel {
         
-        private Vector syntaxColours;
+        private Vector<SyntaxColour> syntaxColours;
         private String[] columnHeaders = {"Syntax Style",
                                           "Colour",
                                           "Font Style"};
         
         ColorTableModel() {
-            syntaxColours = new Vector(SYNTAX_TYPES.length);
+            syntaxColours = new Vector<SyntaxColour>(SYNTAX_TYPES.length);
             
             for (int i = 0; i < SYNTAX_TYPES.length; i++) {
                 addSyntaxColour(
@@ -488,9 +472,9 @@ public class PropertiesEditorSyntax extends PropertiesBase
             int col = table.columnAtPoint(evt.getPoint());
             
             if (col == 1) {
-                
+
                 Color color = JColorChooser.showDialog(
-                                    GUIUtilities.getFocusedDialog(),
+                                    GUIUtilities.getInFocusDialogOrWindow(),
                                     "Select Colour",
                                     (Color)tableModel.getValueAt(row, 1));
                 

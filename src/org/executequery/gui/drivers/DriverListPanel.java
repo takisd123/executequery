@@ -43,13 +43,12 @@ import javax.swing.table.TableColumnModel;
 import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.gui.DefaultTable;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.print.TablePrinter;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
-import org.underworldlabs.swing.DefaultButton;
 
 /**
  * Driver root node view panel.
@@ -205,13 +204,15 @@ public class DriverListPanel extends AbstractFormObjectViewPanel
             this.values = values;
         }
         
+        /*
         public void setValues(List<DatabaseDriver> values) {
             
             this.values = values;
             
             fireTableDataChanged();
         }
-        
+        */
+
         public int getRowCount() {
             
             if (values != null) {

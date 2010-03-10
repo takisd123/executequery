@@ -29,13 +29,6 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** 
  * A convenience class providing a simple component
  * to display text within a rectangle achieving the same
@@ -101,11 +94,3 @@ public class DisabledField extends JLabel {
     } // class DisabledBorder
 
 }
-
-
-
-
-
-
-
-

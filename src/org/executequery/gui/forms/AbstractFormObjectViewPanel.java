@@ -29,8 +29,9 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
 import javax.swing.border.Border;
+import javax.swing.plaf.ColorUIResource;
+
 import org.underworldlabs.swing.GradientLabel;
 
 /**
@@ -49,12 +50,6 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
     
     private static GridBagConstraints panelConstraints;
     
-    public AbstractFormObjectViewPanel() {
-        super(new BorderLayout());
-        gradientLabel = new GradientLabel();
-        add(gradientLabel, BorderLayout.NORTH);
-    }
-    
     static {
         emptyBorder = BorderFactory.createEmptyBorder(5,5,5,5);
         panelConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
@@ -62,8 +57,18 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
                                                   GridBagConstraints.BOTH,
                                                   new Insets(5, 5, 5, 5), 0, 0);
     }
-    
+
+    public AbstractFormObjectViewPanel() {
+
+        super(new BorderLayout());
+        
+        gradientLabel = new GradientLabel();
+        gradientLabel.setForeground(new ColorUIResource(0x333333));
+        add(gradientLabel, BorderLayout.NORTH);
+    }
+
     protected void setContentPanel(JComponent panel) {
+
         add(panel, BorderLayout.CENTER);
     }
     

@@ -35,7 +35,6 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.GUIUtilities;
 import org.executequery.base.TabView;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.DefaultTextEditorContainer;
 import org.executequery.gui.text.SimpleTextArea;
 import org.executequery.repository.LogRepository;

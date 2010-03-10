@@ -41,9 +41,8 @@ import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 
 /**
- * Database connection host panel.<br>
- * Displays connection/hsot info and database properties 
- * once connected.
+ * Database connection host panel.
+ * Displays connection/host info and database properties once connected.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
@@ -285,7 +284,9 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     public void cleanup() {}
     
     public Printable getPrintable() {
-        return new TablePrinter(schemaTable, "Database Server: " + hostField.getText());
+        
+        String hostText = hostField != null ? hostField.getText() : "";
+        return new TablePrinter(schemaTable, "Database Server: " + hostText);
     }
     
     public JTable getTable() {

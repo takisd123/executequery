@@ -47,7 +47,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.GUIUtils;
 
@@ -82,6 +82,7 @@ public class ErdFontStyleDialog extends AbstractBaseDialog
     
     
     public ErdFontStyleDialog(ErdViewerPanel parent) {
+
         super(GUIUtilities.getParentFrame(), "Font Style", true);
         
         this.parent = parent;
