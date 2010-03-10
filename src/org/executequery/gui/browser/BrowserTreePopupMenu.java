@@ -33,6 +33,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
+import org.executequery.gui.menu.MenuItemFactory;
 
 /**
  *
@@ -108,7 +109,8 @@ class BrowserTreePopupMenu extends JPopupMenu {
     private JMenuItem createMenuItem(String text, 
                                      String actionCommand, 
                                      ActionListener listener) {
-        JMenuItem menuItem = new JMenuItem(text);
+
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(text);
         menuItem.setActionCommand(actionCommand);
         menuItem.addActionListener(listener);
         return menuItem;
@@ -117,7 +119,8 @@ class BrowserTreePopupMenu extends JPopupMenu {
     private JCheckBoxMenuItem createCheckBoxMenuItem(String text, 
                                      String actionCommand, 
                                      ActionListener listener) {
-        JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(text);
+
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(text);
         menuItem.setActionCommand(actionCommand);
         menuItem.addActionListener(listener);
         return menuItem;
@@ -194,7 +197,7 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
     private void createImportMenu(ActionListener listener) {
-        importData = new JMenu("Import Data");
+        importData = MenuItemFactory.createMenu("Import Data");
         importData.add(
                 createMenuItem("Import from XML File", "importXml", listener));
         importData.add(
@@ -203,7 +206,7 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
     private void createExportMenu(ActionListener listener) {
-        exportData = new JMenu("Export Data");
+        exportData = MenuItemFactory.createMenu("Export Data");
         exportData.add(createMenuItem("Export as SQL", "exportSQL", listener));
         exportData.add(createMenuItem("Export to XML File", "exportXml", listener));
         exportData.add(createMenuItem("Export to Delimited File", "exportDelimited", listener));
@@ -212,7 +215,7 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
     private void createSqlMenu(ActionListener listener) {
-        sql = new JMenu("SQL");
+        sql = MenuItemFactory.createMenu("SQL");
         sql.add(createMenuItem("SELECT statement", "selectStatement", listener));
         sql.add(createMenuItem("INSERT statement", "insertStatement", listener));
         sql.add(createMenuItem("UPDATE statement", "updateStatement", listener));

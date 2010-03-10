@@ -32,6 +32,7 @@ import javax.swing.KeyStroke;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
 import org.underworldlabs.swing.PopupMenuButton;
@@ -319,7 +320,7 @@ class QueryEditorToolBar extends PanelToolBar {
     }
 
     private JMenuItem createMenuItemFromCommand(String actionId) {
-        return new JMenuItem(ActionBuilder.get(actionId));
+        return MenuItemFactory.createMenuItem(ActionBuilder.get(actionId));
     }
 
     /**

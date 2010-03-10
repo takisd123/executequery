@@ -2,20 +2,31 @@ package org.executequery.gui.menu;
 
 import java.awt.Dimension;
 
-import javax.swing.JMenu;
+import javax.swing.Action;
+import javax.swing.JCheckBoxMenuItem;
 
 import org.executequery.gui.GUIConstants;
 
-public class MainMenu extends JMenu {
-
-    public MainMenu() {
+public class MainCheckBoxMenuItem extends JCheckBoxMenuItem {
     
+    public MainCheckBoxMenuItem() {
+
         super();
     }
     
-    public MainMenu(String text) {
+    public MainCheckBoxMenuItem(String text) {
         
         super(text);
+    }
+
+    public MainCheckBoxMenuItem(Action action) {
+
+        super(action);
+    }
+
+    public MainCheckBoxMenuItem(String text, boolean selected) {
+
+        super(text, selected);
     }
 
     public Dimension getPreferredSize() {
@@ -25,5 +36,5 @@ public class MainMenu extends JMenu {
 
         return preferredSize;
     }
-    
+
 }

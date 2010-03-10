@@ -44,6 +44,8 @@ import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 
+import org.executequery.gui.menu.MenuItemFactory;
+
 /**
  * Left, right and bottom docked tab pane.
  *
@@ -895,9 +897,9 @@ public class DockedTabPane extends AbstractTabPane {
                                         deriveFont(Font.PLAIN, 10);
             setFont(font);
             
-            close = new JMenuItem("Close");
-            minimise = new JMenuItem("Minimize");
-            minimiseAll = new JMenuItem("Minimize All");
+            close = MenuItemFactory.createMenuItem("Close");
+            minimise = MenuItemFactory.createMenuItem("Minimize");
+            minimiseAll = MenuItemFactory.createMenuItem("Minimize All");
             
             close.addActionListener(this);
             minimiseAll.addActionListener(this);

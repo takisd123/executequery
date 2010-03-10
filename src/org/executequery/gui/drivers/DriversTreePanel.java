@@ -55,6 +55,7 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.DatabaseDriverEvent;
 import org.executequery.event.DatabaseDriverListener;
 import org.executequery.gui.AbstractDockedTabActionPanel;
+import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.plaf.UIUtils;
@@ -605,16 +606,16 @@ public class DriversTreePanel extends AbstractDockedTabActionPanel
         protected DatabaseDriver hover;
         
         public PopMenu() {
-            addNewDriver = new JMenuItem("New Driver");
+            addNewDriver = MenuItemFactory.createMenuItem("New Driver");
             addNewDriver.addActionListener(this);
             
-            duplicate = new JMenuItem("Duplicate");
+            duplicate = MenuItemFactory.createMenuItem("Duplicate");
             duplicate.addActionListener(this);
 
-            delete = new JMenuItem("Remove");
+            delete = MenuItemFactory.createMenuItem("Remove");
             delete.addActionListener(this);
 
-            properties = new JMenuItem("Driver Properties");
+            properties = MenuItemFactory.createMenuItem("Driver Properties");
             properties.addActionListener(this);
 
             add(addNewDriver);

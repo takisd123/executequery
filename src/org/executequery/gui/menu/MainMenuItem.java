@@ -2,20 +2,28 @@ package org.executequery.gui.menu;
 
 import java.awt.Dimension;
 
-import javax.swing.JMenu;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JMenuItem;
 
 import org.executequery.gui.GUIConstants;
 
-public class MainMenu extends JMenu {
-
-    public MainMenu() {
+public class MainMenuItem extends JMenuItem {
     
+    public MainMenuItem() {
         super();
     }
-    
-    public MainMenu(String text) {
-        
+
+    public MainMenuItem(Action a) {
+        super(a);
+    }
+
+    public MainMenuItem(String text) {
         super(text);
+    }
+
+    public MainMenuItem(String text, Icon icon) {
+        super(text, icon);
     }
 
     public Dimension getPreferredSize() {

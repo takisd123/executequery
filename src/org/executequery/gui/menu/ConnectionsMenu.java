@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Action;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import org.executequery.EventMediator;
@@ -42,7 +41,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
  * @version  $Revision:1105 $
  * @date     $Date:2008-02-08 15:05:55 +0000 (Fri, 08 Feb 2008) $
  */
-public class ConnectionsMenu extends JMenu 
+public class ConnectionsMenu extends MainMenu 
                              implements ConnectionRepositoryListener {
 
     private List<JMenuItem> connectionMenuItemList;
@@ -120,7 +119,7 @@ public class ConnectionsMenu extends JMenu
     
     private JMenuItem createSavedConnectionMenuItem() {
 
-        JMenuItem menuItem = new JMenuItem(loadAction());
+        JMenuItem menuItem = new MainMenuItem(loadAction());
         
         menuItem.setIcon(null);
         menuItem.setMnemonic(0);
