@@ -1,8 +1,8 @@
 --- RELEASE NOTES ---
 
-Date: 18 January 2010
+Date: 11 March 2010
 
-Execute Query Version 3.1.7 Build 5137
+Execute Query Version 3.2 Build 5140
 ----------------------------------------
 
 Summary of changes from 3.1.6 Build 5132:
@@ -13,8 +13,15 @@ Summary of changes from 3.1.6 Build 5132:
 - Modified row count in browser threading.
 - Modified Excel data export cell style creation to reuse data cell style across
   all exported values.
+- Added make donation help menu item :)
 - Fixed execution of 'unknown' statement types that would return a valid result
-  set that would be closed before access in the Query Editor. 
+  set that would be closed before access in the Query Editor.
+- Modified autocomplete popup to use schema lookups when at least 2 characters 
+  have been entered.
+- Added docked notepad.
+- Modified autocomplete to insert text after any non-letter-or-digit characters.
+- Modified look and feel - default font size changes, button sizes.
+- Fixed dialog popups off open dialogs being hidden behind current modal views.
 
 
 Summary of changes from 3.1.5 Build 5124:
@@ -205,4 +212,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-18 January 2010
+11 March 2010
