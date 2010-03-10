@@ -27,7 +27,7 @@ public class SimpleHtmlContentPane extends JEditorPane implements DialogMessageC
 
         Font font = UIManager.getFont("OptionPane.font");
         String bodyRule = "body { font-family: " + font.getFamily() + "; " +
-                "font-size: " + (font.getSize() - 1) + "pt; }";
+                "font-size: " + (font.getSize()) + "pt; }";
 
         ((HTMLDocument) getDocument()).getStyleSheet().addRule(bodyRule);
         
