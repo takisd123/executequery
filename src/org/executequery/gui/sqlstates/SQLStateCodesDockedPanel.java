@@ -254,9 +254,3 @@ public class SQLStateCodesDockedPanel extends AbstractDockedTabActionPanel {
     } // class StateCodesModel
 
 }
-
-
-
-
-
-
