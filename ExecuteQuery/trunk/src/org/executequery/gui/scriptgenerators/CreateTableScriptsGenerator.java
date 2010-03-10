@@ -444,6 +444,7 @@ public class CreateTableScriptsGenerator {
         private int max;
         
         public ProgressDialog(int tables) {
+
             super(GUIUtilities.getParentFrame(), "Progress", false);
 
             max = tables;

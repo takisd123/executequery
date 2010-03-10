@@ -28,7 +28,7 @@ import javax.swing.JComboBox;
 
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 
 public abstract class AbstractImportExportPanelOne extends AbstractImportExportPanel {

@@ -152,12 +152,3 @@ public class DataTypesDialog extends AbstractBaseDialog
     }
     
 }
-
-
-
-
-
-
-
-
-

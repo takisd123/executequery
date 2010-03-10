@@ -44,7 +44,6 @@ import javax.swing.text.JTextComponent;
 
 import org.executequery.ActiveComponent;
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.search.TextAreaSearch;
 import org.underworldlabs.swing.DefaultButton;

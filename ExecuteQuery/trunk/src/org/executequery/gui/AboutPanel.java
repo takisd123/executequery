@@ -97,7 +97,7 @@ public class AboutPanel extends BaseDialog
         imagePanel = new AboutImagePanel();
         
         JPanel basePanel = new JPanel(new BorderLayout());
-        basePanel.setPreferredSize(new Dimension(350, 460));
+        basePanel.setPreferredSize(new Dimension(400, 480));
         basePanel.add(imagePanel, BorderLayout.NORTH);
         basePanel.add(tabPane, BorderLayout.CENTER);
         basePanel.add(addButtonPanel(), BorderLayout.SOUTH);
@@ -373,8 +373,8 @@ public class AboutPanel extends BaseDialog
     
     class AboutImagePanel extends JPanel {
         
-        private static final int HEIGHT = 180;
-        private static final int WIDTH = 350;
+        private static final int HEIGHT = 206;
+        private static final int WIDTH = 400;
 
         private final Color FOREGROUND_COLOUR = new Color(60, 60, 60);
 
@@ -434,7 +434,7 @@ public class AboutPanel extends BaseDialog
                     
                     if (stageOneComplete && !stageTwoComplete) {
                         
-                        if (bottomOffsetVersion >= 30) {
+                        if (bottomOffsetVersion >= 45) {
                             
                             stageTwoComplete = true;
                             

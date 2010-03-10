@@ -26,14 +26,6 @@ import java.util.List;
 
 import org.underworldlabs.util.SystemProperties;
 
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>The Query Editor properties panel.
  *
  *  @author   Takis Diakoumis
@@ -44,7 +36,6 @@ public class PropertiesEditorDisplay extends PropertiesBase {
     
     private SimplePreferencesPanel preferencesPanel;
     
-    /** <p>Constructs a new instance. */
     public PropertiesEditorDisplay() {       
         try {
             init();
@@ -54,7 +45,6 @@ public class PropertiesEditorDisplay extends PropertiesBase {
         }
     }
     
-    /** <p>Initializes the state of this instance. */
     private void init() throws Exception {
         
     	List<UserPreference> list = new ArrayList<UserPreference>();

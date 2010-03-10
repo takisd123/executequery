@@ -182,7 +182,7 @@ public class TextUtilities {
         fileChooser.setDialogTitle("Insert from file");
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Insert");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Insert");
         
         if (result == JFileChooser.CANCEL_OPTION)
             return;

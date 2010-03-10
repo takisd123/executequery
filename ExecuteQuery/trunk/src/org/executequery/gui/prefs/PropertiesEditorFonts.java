@@ -79,8 +79,8 @@ public class PropertiesEditorFonts extends PropertiesBase
         selectedFontField = new DisabledField();
         selectedSizeField = new DisabledField();
         
-        Vector fontNames = GUIUtils.getSystemFonts();
-        String[] fontSizes = {"8", "9", "10", "11", "12", "14"};
+        Vector<String> fontNames = GUIUtils.getSystemFonts();
+        String[] fontSizes = {"8", "9", "10", "11", "12", "13", "14", "15", "16"};
         fontList = new JList(fontNames);
         sizeList = new JList(fontSizes);
         

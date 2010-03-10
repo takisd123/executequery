@@ -54,7 +54,7 @@ import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.SimpleValueSelectionDialog;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.plaf.LookAndFeelDefinition;
 import org.executequery.repository.LookAndFeelProperties;
 import org.underworldlabs.swing.FileSelector;
@@ -626,7 +626,7 @@ public class PropertiesLookPlugins extends JPanel
         fileChooser.setDialogTitle("Select Look & Feel Plugin Library...");
         fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
         
-        int result = fileChooser.showDialog(GUIUtilities.getFocusedDialog(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
         
         if (result == JFileChooser.CANCEL_OPTION)
             return;

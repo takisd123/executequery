@@ -70,8 +70,8 @@ public class GradientLabel extends JComponent {
     /** The component's insets */
     private static Insets insets;
     
-    /** the default font size - 14pts */
-    public static final int DEFAULT_FONT_SIZE = 14;
+    /** the default font size - 15pts */
+    public static final int DEFAULT_FONT_SIZE = 15;
     
     /** 
      * Creates a new instance with default component settings.
@@ -129,15 +129,6 @@ public class GradientLabel extends JComponent {
     private Color determineForegroundColour() {
 
         return UIManager.getColor("controlText");
-
-        /*
-        if (leftGradientColor == null) {
-        
-            leftGradientColor = getLeftGradientColor();
-        }
-
-        return UIUtils.getInverse(leftGradientColor).darker();
-        */
     }
 
     /** 
@@ -156,7 +147,7 @@ public class GradientLabel extends JComponent {
      */
     public Insets getInsets() {
         if (insets == null) {
-            insets = new Insets(3,2,3,2);
+            insets = new Insets(3, 2, 3, 2);
         }
         return insets;
     }
@@ -218,7 +209,7 @@ public class GradientLabel extends JComponent {
         // draw the icon and text
         Insets _insets = getInsets();
         int x = _insets.left + 5;
-        int y = _insets.top + 1;
+        int y = (getHeight() - icon.getIconHeight()) / 2;
         if (icon != null) {
             icon.paintIcon(this, g2, x, y);
             x += icon.getIconWidth() + 10;
@@ -288,7 +279,7 @@ public class GradientLabel extends JComponent {
             FontMetrics metrics = getFontMetrics(getFont());
             int fontHeight = metrics.getHeight();
 
-            height += Math.max(iconHeight, fontHeight) + 2;
+            height += Math.max(iconHeight, fontHeight) + 10;
         }
         return height;
     }

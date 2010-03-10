@@ -22,6 +22,7 @@ package org.executequery.gui.importexport;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -41,7 +42,7 @@ import javax.swing.JTextField;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.FormPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.MultiLineLabel;
 
@@ -261,7 +262,8 @@ public class ImportXMLPanel_4 extends JPanel {
                               implements ActionListener {
         
         public SampleDialog() {
-            super(GUIUtilities.getParentFrame(), "Import XML Sample", true);
+
+            super((Dialog) GUIUtilities.getInFocusDialogOrWindow(), "Import XML Sample", true);
             
             StringBuffer sb = new StringBuffer(100);
             sb.append(" <?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n   ").

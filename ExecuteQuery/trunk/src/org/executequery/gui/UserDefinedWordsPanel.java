@@ -41,7 +41,6 @@ import javax.swing.table.AbstractTableModel;
 
 import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.RolloverButton;

@@ -46,7 +46,7 @@ import javax.swing.ListSelectionModel;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.DisabledField;
 

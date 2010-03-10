@@ -63,7 +63,6 @@ import org.executequery.databaseobjects.ProcedureParameter;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
-import org.executequery.gui.browser.WidgetFactory;
 import org.executequery.gui.editor.QueryEditorResultsPanel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.FlatSplitPane;

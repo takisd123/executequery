@@ -58,7 +58,7 @@ public class ColourChooserButton extends JButton
     
     public void actionPerformed(ActionEvent e) {
         Color _buttonColour = JColorChooser.showDialog(
-                                                GUIUtilities.getParentFrame(),
+                                                GUIUtilities.getInFocusDialogOrWindow(),
                                                 "Select Colour", buttonColour);
 
         if (_buttonColour != null) {

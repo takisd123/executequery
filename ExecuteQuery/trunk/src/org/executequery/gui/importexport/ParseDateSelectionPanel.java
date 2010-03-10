@@ -42,7 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.executequery.GUIUtilities;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.help.HelpPopupBase;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.ComponentTitledPanel;

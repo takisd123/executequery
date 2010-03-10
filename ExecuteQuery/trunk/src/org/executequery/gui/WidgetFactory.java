@@ -1,4 +1,4 @@
-package org.executequery.gui.browser;
+package org.executequery.gui;
 
 import java.util.Vector;
 
@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.executequery.gui.DefaultNumberTextField;
+import org.executequery.gui.browser.DefaultInlineFieldButton;
 import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.DefaultComboBox;
 import org.underworldlabs.swing.DefaultPasswordField;
@@ -17,6 +17,19 @@ import org.underworldlabs.swing.NumberTextField;
 
 public final class WidgetFactory {
 
+    public static JButton createInlineFieldButton(String text) {
+        
+        return new DefaultInlineFieldButton(text);
+    }
+    
+    public static JButton createInlineFieldButton(String text, String actionCommand) {
+        
+        JButton button = new DefaultInlineFieldButton(text);
+        button.setActionCommand(actionCommand);
+
+        return button;
+    }
+    
     public static JButton createButton(String text) {
         
         return new DefaultButton(text);

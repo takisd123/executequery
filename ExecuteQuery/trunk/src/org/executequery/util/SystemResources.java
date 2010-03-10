@@ -191,7 +191,7 @@ public class SystemResources {
         catch (IOException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(
-                            GUIUtilities.getParentFrame(),
+                            GUIUtilities.getInFocusDialogOrWindow(),
                             "Error opening default\nsystem properties", "Error",
                             JOptionPane.ERROR_MESSAGE);
             System.exit(0);
@@ -209,7 +209,7 @@ public class SystemResources {
         }
         catch (IOException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(GUIUtilities.getParentFrame(),
+            JOptionPane.showMessageDialog(GUIUtilities.getInFocusDialogOrWindow(),
                                 "Error opening user\nsystem properties", "Error",
                                 JOptionPane.ERROR_MESSAGE);
             return null;

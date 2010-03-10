@@ -424,7 +424,7 @@ public class ImportExportPanel_3 extends JPanel {
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-                int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");                
+                int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");                
                 if (result == JFileChooser.CANCEL_OPTION) {
                     return label;
                 }

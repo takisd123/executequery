@@ -44,7 +44,7 @@ public class OpenCommand implements BaseCommand {
     
         OpenFileDialog fileChooser = new OpenFileDialog();
 
-        int result = fileChooser.showOpenDialog(GUIUtilities.getParentFrame());
+        int result = fileChooser.showOpenDialog(GUIUtilities.getInFocusDialogOrWindow());
 
         if (result == JFileChooser.CANCEL_OPTION) {
         

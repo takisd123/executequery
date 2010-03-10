@@ -166,7 +166,7 @@ public class HelpPopupBase extends JPanel
     
     public void showPopup(MouseEvent event) {
         if (owner == null) {
-            owner = GUIUtilities.getParentFrame();
+            owner = GUIUtilities.getInFocusDialogOrWindow();
         }
         
         Point p = SwingUtilities.convertPoint(

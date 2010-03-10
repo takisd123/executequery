@@ -54,6 +54,7 @@ import javax.swing.text.Position;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.plaf.UIUtils;
 
 /**

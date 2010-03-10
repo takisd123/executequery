@@ -160,6 +160,8 @@ public class DriversTreePanel extends AbstractDockedTabActionPanel
 
         EventMediator.registerListener(this);
         
+        tree.setRowHeight(20);
+        
         // make sure we have a display panel
         //checkDriversPanel();
     }

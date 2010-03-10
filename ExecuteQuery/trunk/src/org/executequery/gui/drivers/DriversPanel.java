@@ -51,7 +51,7 @@ import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.SimpleValueSelectionDialog;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.repository.DatabaseDriverRepository;
@@ -417,7 +417,7 @@ public class DriversPanel extends AbstractFormObjectViewPanel
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setMultiSelectionEnabled(true);
         
-        int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");
+        int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
 
         if (result == JFileChooser.CANCEL_OPTION) {
 

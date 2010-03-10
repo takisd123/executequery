@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 10 March 2010
+Date: 11 March 2010
 
 Execute Query Version 3.1.7 Build 5137
 ----------------------------------------
@@ -19,6 +19,8 @@ Summary of changes from 3.1.6 Build 5132:
 - Modified autocomplete popup to use schema lookups when at least 2 characters 
   have been entered.
 - Modified autocomplete to insert text after any non-letter-or-digit characters.
+- Modified look and feel - default font size changes, button sizes.
+- Fixed dialog popups off open dialogs being hidden behind current modal views.
 
 
 Summary of changes from 3.1.5 Build 5124:
@@ -209,4 +211,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-10 March 2010
+11 March 2010

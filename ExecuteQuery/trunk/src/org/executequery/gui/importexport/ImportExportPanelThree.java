@@ -65,7 +65,6 @@ public class ImportExportPanelThree extends AbstractImportExportPanel {
     public ImportExportPanelThree(ImportExportWizard importExportWizard) {
         
         super(new GridBagLayout(), importExportWizard);
-        
         init();
     }
 
@@ -249,7 +248,7 @@ public class ImportExportPanelThree extends AbstractImportExportPanel {
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-                int result = fileChooser.showDialog(GUIUtilities.getParentFrame(), "Select");                
+                int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");                
                 if (result == JFileChooser.CANCEL_OPTION) {
                     return "";
                 }
@@ -451,10 +450,21 @@ public class ImportExportPanelThree extends AbstractImportExportPanel {
         }
         
         public void setValueAt(Object value, int row, int col) {
+        
             if (col == 1) {
-                singleExportfile = (File) value;
+
+                if (value != null && !(value instanceof File)) {
+                 
+                    singleExportfile = new File(value.toString());
+                    
+                } else {
+                    
+                    singleExportfile = (File) value;                    
+                }
+                
                 fireTableRowsUpdated(row, row);                
             }
+
         }
         
         public String getColumnName(int col) {

@@ -48,7 +48,7 @@ import javax.swing.UIManager;
 import org.executequery.GUIUtilities;
 import org.executequery.components.ColourChooserButton;
 import org.executequery.gui.DefaultPanelButton;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.swing.AbstractBaseDialog;
 
 /**

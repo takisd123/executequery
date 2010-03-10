@@ -43,7 +43,7 @@ import org.executequery.gui.ActionContainer;
 import org.executequery.gui.DefaultActionButtonsPanel;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.FocusComponentPanel;
-import org.executequery.gui.browser.WidgetFactory;
+import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
