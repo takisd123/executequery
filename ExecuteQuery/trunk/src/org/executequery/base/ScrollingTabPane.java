@@ -55,6 +55,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
+import org.executequery.gui.menu.MenuItemFactory;
+
 /**
  * Central tab pane with scroll and menu buttons.
  *
@@ -742,9 +744,9 @@ public class ScrollingTabPane extends AbstractTabPane
             }
             setFont(popupMenuFont);
             
-            close = new JMenuItem("Close");
-            closeAll = new JMenuItem("Close All");
-            closeOther = new JMenuItem("Close Others");
+            close = MenuItemFactory.createMenuItem("Close");
+            closeAll = MenuItemFactory.createMenuItem("Close All");
+            closeOther = MenuItemFactory.createMenuItem("Close Others");
             
             close.addActionListener(this);
             closeAll.addActionListener(this);
@@ -809,7 +811,7 @@ public class ScrollingTabPane extends AbstractTabPane
             if (menuItems == null) {
                 menuItems = new ArrayList<JMenuItem>();
             }
-            JMenuItem menuItem = new JMenuItem(tabComponent.getDisplayName(),
+            JMenuItem menuItem = MenuItemFactory.createMenuItem(tabComponent.getDisplayName(),
                                                tabComponent.getIcon());
             menuItem.addActionListener(this);
             menuItems.add(menuItem);

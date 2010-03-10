@@ -39,6 +39,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.menu.MenuItemFactory;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.util.MenuBuilder;
 
@@ -297,23 +298,21 @@ public class ErdLayeredPane extends JLayeredPane
             
             MenuBuilder builder = new MenuBuilder();
             
-            JMenu newMenu = new JMenu("New");
+            JMenu newMenu = MenuItemFactory.createMenu("New");
             JMenuItem newTable = builder.createMenuItem(newMenu, "Database Table",
-                                                        builder.ITEM_PLAIN,
-                                                        "Create a new database table");
+                    MenuBuilder.ITEM_PLAIN, "Create a new database table");
             JMenuItem newRelation = builder.createMenuItem(newMenu, "Relationship",
-                                                           builder.ITEM_PLAIN,
-                                                           "Create a new table relationship");
+                    MenuBuilder.ITEM_PLAIN, "Create a new table relationship");
             
-            JMenuItem fontProperties = new JMenuItem("Font Style");
-            JMenuItem lineProperties = new JMenuItem("Line Style");
+            JMenuItem fontProperties = MenuItemFactory.createMenuItem("Font Style");
+            JMenuItem lineProperties = MenuItemFactory.createMenuItem("Line Style");
             
-            JMenu viewMenu = new JMenu("View");
+            JMenu viewMenu = MenuItemFactory.createMenu("View");
             
             JMenuItem zoomIn = builder.createMenuItem(viewMenu, "Zoom In",
-                                                      builder.ITEM_PLAIN, null);
+                    MenuBuilder.ITEM_PLAIN, null);
             JMenuItem zoomOut = builder.createMenuItem(viewMenu, "Zoom Out",
-                                                       builder.ITEM_PLAIN, null);
+                    MenuBuilder.ITEM_PLAIN, null);
             viewMenu.addSeparator();
             
             ButtonGroup bg = new ButtonGroup();
@@ -323,7 +322,7 @@ public class ErdLayeredPane extends JLayeredPane
             String defaultZoom = "75%";
             
             for (int i = 0; i < scaleValues.length; i++) {
-                scaleChecks[i] = new JCheckBoxMenuItem(scaleValues[i]);
+                scaleChecks[i] = MenuItemFactory.createCheckBoxMenuItem(scaleValues[i]);
                 viewMenu.add(scaleChecks[i]);
                 if (scaleValues[i].equals(defaultZoom)) {
                     scaleChecks[i].setSelected(true);
@@ -334,10 +333,10 @@ public class ErdLayeredPane extends JLayeredPane
 
             gridCheck = new JCheckBoxMenuItem("Display grid", parent.shouldDisplayGrid());
             
-            JCheckBoxMenuItem marginCheck = new JCheckBoxMenuItem(
+            JCheckBoxMenuItem marginCheck = MenuItemFactory.createCheckBoxMenuItem(
                                                         "Display page margin",
                                                         parent.shouldDisplayMargin());
-            JCheckBoxMenuItem displayColumnsCheck = new JCheckBoxMenuItem(
+            JCheckBoxMenuItem displayColumnsCheck = MenuItemFactory.createCheckBoxMenuItem(
                                                         "Display referenced keys only", true);
             
             viewMenu.addSeparator();
@@ -355,7 +354,7 @@ public class ErdLayeredPane extends JLayeredPane
             fontProperties.addActionListener(this);
             lineProperties.addActionListener(this);
             
-            JMenuItem help = new JMenuItem(ActionBuilder.get("help-command"));
+            JMenuItem help = MenuItemFactory.createMenuItem(ActionBuilder.get("help-command"));
             help.setIcon(null);
             help.setActionCommand("erd");
             help.setText("Help");

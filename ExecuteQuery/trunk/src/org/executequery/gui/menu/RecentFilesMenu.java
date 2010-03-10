@@ -25,7 +25,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import org.executequery.EventMediator;
@@ -36,7 +35,7 @@ import org.executequery.event.RecentOpenFileEventListener;
 import org.executequery.repository.RecentlyOpenFileRepository;
 import org.executequery.repository.RepositoryCache;
 
-public class RecentFilesMenu extends JMenu 
+public class RecentFilesMenu extends MainMenu 
                              implements RecentOpenFileEventListener {
 
     private List<JMenuItem> recentMenuItemList;
@@ -102,7 +101,7 @@ public class RecentFilesMenu extends JMenu
             File file = new File(files[i]);
             String absolutePath = file.getAbsolutePath();
 
-            JMenuItem menuItem = new JMenuItem(file.getName());
+            JMenuItem menuItem = new MainMenuItem(file.getName());
             
             menuItem.setToolTipText(absolutePath);
             menuItem.setActionCommand(absolutePath);

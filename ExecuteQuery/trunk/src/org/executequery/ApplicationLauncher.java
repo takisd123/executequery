@@ -30,7 +30,7 @@ import javax.swing.JMenuBar;
 import org.executequery.databasemediators.ConnectionMediator;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.ExecuteQueryFrame;
-import org.executequery.gui.menu.MainMenu;
+import org.executequery.gui.menu.ExecuteQueryMenu;
 import org.executequery.log.Log;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
@@ -146,7 +146,7 @@ public class ApplicationLauncher {
             // build the tool bar
             GUIUtilities.createToolBar();
 
-            JMenuBar menuBar = new MainMenu();
+            JMenuBar menuBar = new ExecuteQueryMenu();
             frame.setJMenuBar(menuBar);
 
             advanceSplash(splash);

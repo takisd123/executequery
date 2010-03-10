@@ -17,6 +17,7 @@ import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.UserPreferencesManager;
 import org.executequery.gui.BaseDialog;
+import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.gui.resultset.LobRecordDataItem;
 import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTable;
@@ -50,12 +51,12 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         reflectiveAction = new ReflectiveAction(this);
         
         // the print sub-menu
-        JMenu printMenu = new JMenu("Print");
+        JMenu printMenu = MenuItemFactory.createMenu("Print");
         create(printMenu, "Selection", "printSelection");
         create(printMenu, "Table", "printTable");
 
         JCheckBoxMenuItem cellOpensDialog = 
-            new JCheckBoxMenuItem(reflectiveAction);
+            MenuItemFactory.createCheckBoxMenuItem(reflectiveAction);
         cellOpensDialog.setText("Double-Click Opens Item View");
         cellOpensDialog.setSelected(doubleClickCellOpensDialog());
         cellOpensDialog.setActionCommand("cellOpensDialog");
@@ -101,7 +102,7 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
     
     private JMenuItem create(String text, String actionCommand) {
 
-        JMenuItem menuItem = new JMenuItem(reflectiveAction);
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(reflectiveAction);
         menuItem.setActionCommand(actionCommand);
         menuItem.setText(text);
 

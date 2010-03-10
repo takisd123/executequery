@@ -20,9 +20,8 @@
 
 package org.executequery.gui.menu;
 
-import javax.swing.JCheckBoxMenuItem;
 
-public class ViewMenuCheckBoxMenuItem extends JCheckBoxMenuItem {
+public class ViewMenuCheckBoxMenuItem extends MainCheckBoxMenuItem {
 
     private String propertyKey;
 

@@ -35,6 +35,7 @@ import javax.swing.KeyStroke;
 
 import org.executequery.Constants;
 import org.executequery.UserPreferencesManager;
+import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.sql.QueryDelegate;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
@@ -169,7 +170,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
     
     private JMenuItem createHelpMenuItem() {
-        JMenuItem menuItem = new JMenuItem(ActionBuilder.get("help-command"));
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(ActionBuilder.get("help-command"));
         menuItem.setIcon(null);
         menuItem.setActionCommand("qedit");
         menuItem.setText("Help");
@@ -177,7 +178,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createClearOutputMenuItem() {
-        JMenuItem menuItem = new JMenuItem(
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(
                 ActionBuilder.get("clear-editor-output-command"));
         menuItem.setIcon(null);
         menuItem.setText("Clear Output Log");
@@ -186,7 +187,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createRecycleResultSetTabMenuItem() {
-        JCheckBoxMenuItem menuItem = new JCheckBoxMenuItem(action());
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
         menuItem.setText("Use Single Resut Set Tab");
         menuItem.setSelected(UserPreferencesManager.isResultSetTabSingle());
         menuItem.setActionCommand("recycleResultSetTabs");
@@ -195,7 +196,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createFormatSqlMenuItem() {
-        JMenuItem menuItem = new JMenuItem(
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(
                 ActionBuilder.get("editor-format-sql-command"));
         menuItem.setIcon(null);
         executeActionButtons().add(menuItem);
@@ -203,7 +204,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createRollbackMenuItem() {
-        JMenuItem menuItem = new JMenuItem(action());
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setText("Rollback");
         menuItem.setActionCommand("rollback");
         executeActionButtons().add(menuItem);
@@ -212,7 +213,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createCommitMenuItem() {
-        JMenuItem menuItem = new JMenuItem(action());
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setText("Commit");
         menuItem.setActionCommand("commit");
         executeActionButtons().add(menuItem);
@@ -221,7 +222,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createStopMenuItem() {
-        JMenuItem menuItem = new JMenuItem(action());
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setText("Cancel Query");
         menuItem.setActionCommand("cancelQuery");
         menuItem.setEnabled(false);
@@ -230,7 +231,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createExecuteBlockMenuItem() {
-        JMenuItem menuItem = new JMenuItem(action());
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setActionCommand("executeAsBlock");
         menuItem.setText("Execute as Single Statement");
         executeActionButtons().add(menuItem);
@@ -238,7 +239,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createExecuteSelectionMenuItem() {
-        JMenuItem menuItem = new JMenuItem(
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(
                 ActionBuilder.get("execute-selection-command"));
         menuItem.setText("Execute Selected Query Text");
         menuItem.setIcon(null);
@@ -247,7 +248,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createPartialExecuteMenuItem() {
-        JMenuItem menuItem = new JMenuItem(
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(
                 ActionBuilder.get("execute-at-cursor-command"));
         menuItem.setText("Execute Query at Cursor");
         menuItem.setIcon(null);
@@ -256,7 +257,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createExecuteMenuItem() {
-        JMenuItem menuItem = new JMenuItem(action());
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setText("Execute");
         menuItem.setActionCommand("execute");
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0));
@@ -265,21 +266,21 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
     
     private JMenuItem createPasteMenuItem() {
-        JMenuItem paste = new JMenuItem(ActionBuilder.get("paste-command"));
+        JMenuItem paste = MenuItemFactory.createMenuItem(ActionBuilder.get("paste-command"));
         paste.setText("Paste");
         paste.setIcon(null);
         return paste;
     }
 
     private JMenuItem createCopyMenuItem() {
-        JMenuItem copy = new JMenuItem(ActionBuilder.get("copy-command"));
+        JMenuItem copy = MenuItemFactory.createMenuItem(ActionBuilder.get("copy-command"));
         copy.setText("Copy");
         copy.setIcon(null);
         return copy;
     }
 
     private JMenuItem createCutMenuItem() {
-        JMenuItem cut = new JMenuItem(ActionBuilder.get("cut-command"));
+        JMenuItem cut = MenuItemFactory.createMenuItem(ActionBuilder.get("cut-command"));
         cut.setText("Cut");
         cut.setIcon(null);
         return cut;

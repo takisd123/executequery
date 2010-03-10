@@ -86,7 +86,7 @@ public class JMenuItemFactory {
         }
 
         jMenuItem.setIcon(null);
-    
+        
         return jMenuItem;
     }
 
@@ -126,7 +126,7 @@ public class JMenuItemFactory {
 
         if (MiscUtils.isNull(implClass)) {
             
-            return new JMenuItem();
+            return MenuItemFactory.createMenuItem();
         }
         
         try {
@@ -160,8 +160,3 @@ public class JMenuItemFactory {
     }
 
 }
-
-
-
-
-

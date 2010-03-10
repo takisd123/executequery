@@ -30,6 +30,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 
+import org.executequery.gui.menu.MenuItemFactory;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
 
@@ -92,16 +93,19 @@ public class TextUtilitiesPopUpMenu extends JPopupMenu {
     private JMenuItem createMenuItem(String text, 
                                      String actionName, 
                                      String actionCommand) {
-        JMenuItem menuItem = new JMenuItem(text);
+
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(text);
         Action action = ActionBuilder.get(actionName);
         Object object = action.getValue(Action.ACCELERATOR_KEY);
         if (object != null) {
             menuItem.setAccelerator((KeyStroke)object);
         }
+        
         object = action.getValue(Action.MNEMONIC_KEY);
         if (object != null) {
             menuItem.setMnemonic(((Integer)object).intValue());
         }
+        
         menuItem.setActionCommand(actionCommand);
         menuItem.addActionListener(reflectiveAction);
         return menuItem;
