@@ -42,4 +42,4 @@ mv $BUILD_DIR/html/releasenotes.html.1 $BUILD_DIR/html/releasenotes.html
 $JAVA_HOME/bin/jar cvf $DIST_DIR/$JAR_NAME html/ images/ jhelpsearch/ eq.hs helpmap.jhm toc.xml 
 
 #cd ../
-cp -f $DIST_DIR/$JAR_NAME ../
+#cp -f $DIST_DIR/$JAR_NAME ../
