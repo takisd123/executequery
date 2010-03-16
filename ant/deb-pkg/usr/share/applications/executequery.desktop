@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Execute Query
+Comment=Database query and visualisation tool
+Type=Application
+Exec=executequery
+Icon=executequery.png
+Terminal=false
+Categories=GNOME;Application;Database;Development

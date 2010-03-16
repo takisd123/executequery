@@ -1,0 +1,20 @@
+Package: executequery
+Version: {eq-version}
+Maintainer: Takis Diakoumis <takisd@executequery.org>
+Section: contrib/misc
+Homepage: http://www.executequery.org/ 
+Architecture: all
+Recommends: sun-java5-jre | sun-java6-jre
+Suggests: ant, sun-java5-jdk, sun-java6-jdk
+Priority: optional
+Installed-Size: {install_size}
+Description: A database query and visualisation tool.
+ Execute Query is an operating system independent database 
+ utility written entirely in Java.
+ .
+ Using the flexibility provided by Java Database Connectivity (JDBC), 
+ Execute Query provides a simple way to interact with almost any 
+ database from simple queries to table creation and import/export of an 
+ entire schema's data.
+ .
+
