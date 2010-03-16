@@ -21,6 +21,8 @@
 package org.executequery.gui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.net.URL;
 import java.util.Enumeration;
@@ -79,7 +81,7 @@ public class HelpWindow {
         target = page;
         isSearch = false;
 
-        if (page!= null && page.equals("search_help_on")) {
+        if ("search_help_on".equals(page)) {
 
             isSearch = true;
         }
@@ -206,10 +208,19 @@ public class HelpWindow {
         if (frameSize.width > screenSize.width) {
             frameSize.width = screenSize.width;
         }
-        
-        frame.setLocation((screenSize.width - frameSize.width) - 50,
-                        (screenSize.height - frameSize.height) / 2);
 
+        Frame parentFrame = GUIUtilities.getParentFrame();
+        if (parentFrame != null) {
+            
+            Point parentLocation = parentFrame.getLocation();
+            frame.setLocation(new Point(parentLocation.x + 40, parentLocation.y + 40));
+            
+        } else {
+
+          frame.setLocation((screenSize.width - frameSize.width) / 2,
+                            (screenSize.height - frameSize.height) / 2);
+        }
+        
         return frame;
     }
     
@@ -227,9 +238,3 @@ public class HelpWindow {
     }
     
 }
-
-
-
-
-
-

@@ -25,13 +25,6 @@ import java.awt.event.ActionEvent;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.gui.HelpWindow;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** 
  * Executes the Help command.<br>
  * This will open the system help in a separate window.
@@ -72,9 +65,3 @@ public class HelpCommand implements BaseCommand {
     }
     
 }
-
-
-
-
-
-
