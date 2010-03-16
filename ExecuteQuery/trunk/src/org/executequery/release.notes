@@ -2,8 +2,15 @@
 
 Date: 11 March 2010
 
-Execute Query Version 3.2 Build 5140
+Execute Query Version 3.2.1 Build 5142
 ----------------------------------------
+
+Summary of changes from 3.2 Build 5140:
+----------------------------------------
+
+- Minor help doc update.
+- Added deb package for download.
+
 
 Summary of changes from 3.1.6 Build 5132:
 ----------------------------------------

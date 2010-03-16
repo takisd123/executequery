@@ -28,6 +28,7 @@ BUILD_NUMBER=$2
 EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
 UW_DIR=/home/takisd/softdev/workspaces/eclipse/UnderworldLabs
 
+DOCS_DIR=$EQ_DIR/docs
 ANT_DIR=$EQ_DIR/ant
 ANT_BUILDS=$ANT_DIR/builds/$NEW_VERSION
 
@@ -97,6 +98,14 @@ echo "copying new release notes to the Java installer and source dirs"
 cp $RELEASE_NOTES $INSTALLER_TEMPLATE/conf
 cp $RELEASE_NOTES $ANT_DIR/template-build/src/README.txt
 cp $RELEASE_NOTES $ANT_BUILDS/src/README.txt
+
+# generate and copy help
+echo
+echo "creating new help doc archive"
+cd $DOCS_DIR/src
+. build-docs-jar.sh
+cp $DOCS_DIR/dist/eqhelp.jar $ANT_DIR/template-build/src/docs
+echo 
 
 # start ant
 cd $ANT_BUILDS
@@ -235,6 +244,7 @@ print_progress
 print_progress
 cd $EQ_DEPLOY_DIR/ExecuteQuery
 print_progress
+rm -f $INSTALLER_BUILD_DIR/org/executequery/installer/program/executequery-*.zip
 zip -rq $INSTALLER_BUILD_DIR/org/executequery/installer/program/$ZIP_FILE *
 print_progress
 
