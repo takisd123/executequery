@@ -12,7 +12,7 @@ print_progress() {
   echo -n "."
 }
 
-JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk5
+JAVA_HOME=/home/takisd/softdev/java/jdk1.5.0_18
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
@@ -23,7 +23,9 @@ java -version
 REMOVE_CVS=/home/takisd/bin/remove-cvs
 
 NEW_VERSION=$1
-EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+BUILD_NUMBER=$2
+
+EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
 UW_DIR=/home/takisd/softdev/workspaces/eclipse/UnderworldLabs
 
 ANT_DIR=$EQ_DIR/ant
@@ -257,7 +259,69 @@ rm -Rf $EQ_DEPLOY_DIR/JavaInstaller
 rm -Rf $INSTALLER_TEMP
 print_progress
 
-# copy new jar to current deply dir for use
+# ---------------------------------------
+# build deb package
+
+echo
+echo
+echo "Building deb package"
+
+DEB_TEMPLATE=$ANT_DIR/deb-pkg
+DEB_TEMP=$EQ_DEPLOY_DIR/deb-pkg
+cd $EQ_DEPLOY_DIR
+cp -R $DEB_TEMPLATE $EQ_DEPLOY_DIR
+print_progress
+cp ExecuteQuery/README.txt $DEB_TEMP/usr/share/doc/executequery
+rm -Rf $DEB_TEMP/usr/share/executequery/*
+print_progress
+cp -R ExecuteQuery/eq.jar ExecuteQuery/lib ExecuteQuery/docs $DEB_TEMP/usr/share/executequery
+print_progress
+cp ExecuteQuery/eq.png $DEB_TEMP/usr/share/pixmaps/executequery.png
+print_progress
+cp $DEB_TEMP/usr/share/doc/executequery/* $DEB_TEMP/usr/share/executequery/docs
+print_progress
+
+MAN_PAGE_TEMPLATE=$DEB_TEMP/usr/share/man/man1/executequery.1.template
+cd $DEB_TEMP/usr/share/man/man1
+print_progress
+sed -e "s/{todays_date}/`date "+%d %B, %Y"`/ig" $MAN_PAGE_TEMPLATE > $MAN_PAGE_TEMPLATE.1
+sed -e "s/{eq-version}/$NEW_VERSION-$BUILD_NUMBER/ig" $MAN_PAGE_TEMPLATE.1 > $MAN_PAGE_TEMPLATE.2
+print_progress
+mv $MAN_PAGE_TEMPLATE.2 executequery.1
+gzip -9 executequery.1
+rm -f $MAN_PAGE_TEMPLATE.*
+print_progress
+rm -f $MAN_PAGE_TEMPLATE
+
+print_progress
+
+cd $DEB_TEMP
+INSTALL_SIZE=`du usr | grep usr$ | sed -e "s/\tusr//ig"`
+
+cd $DEB_TEMP/DEBIAN
+print_progress
+sed -e "s/{eq-version}/$NEW_VERSION-$BUILD_NUMBER/ig" control > control.1
+mv control.1 control
+
+sed -e "s/{install_size}/$INSTALL_SIZE/ig" control > control.1
+mv control.1 control
+
+print_progress
+
+cd $DEB_TEMP
+md5sum `find . -type f | grep -v '^[.]/DEBIAN/'` >DEBIAN/md5sums
+
+print_progress
+echo
+
+cd $EQ_DEPLOY_DIR
+fakeroot dpkg-deb --build $DEB_TEMP executequery_$NEW_VERSION-$BUILD_NUMBER.deb
+
+rm -Rf $DEB_TEMP
+
+# ---------------------------------------
+
+# copy new jar to current deploy dir for use
 #cp -f $ANT_BUILDS/build/eq.jar /home/takisd/softdev/deployments/final_jre 
 
 rm -Rf $ANT_BUILDS/build

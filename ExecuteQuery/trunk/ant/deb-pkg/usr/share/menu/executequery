@@ -1,0 +1,5 @@
+?package(executequery):needs="x11" \
+    section="Applications/Programming" \
+    title="Execute Query" \
+    command="/usr/bin/executequery" \
+    icon="/usr/share/pixmaps/executequery.png"

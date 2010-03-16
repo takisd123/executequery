@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cd executequery
+md5sum `find . -type f | grep -v '^[.]/DEBIAN/'` >DEBIAN/md5sums
+
+cd ../
+rm -f executequery.deb
+fakeroot dpkg-deb --build executequery executequery.deb
+
+
+# http://ptspts.blogspot.com/2010/02/how-to-create-debianubuntu-package-deb.html
+
+# http://tldp.org/HOWTO/html_single/Debian-Binary-Package-Building-HOWTO/
+
+#http://tldp.org/HOWTO/Man-Page/q3.html
+
