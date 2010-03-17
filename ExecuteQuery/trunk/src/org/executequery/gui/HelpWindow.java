@@ -198,7 +198,7 @@ public class HelpWindow {
 
         frame.setIconImage(frameIcon.getImage());
 
-        frame.setSize(800, 700);
+        frame.setSize(900, 700);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = frame.getSize();
         
