@@ -13,6 +13,7 @@ print_progress() {
 }
 
 JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk1.5.0_18
+#JAVA_HOME=/home/takisd/softdev/java/jdk1.5.0_18
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
@@ -26,6 +27,7 @@ NEW_VERSION=$1
 BUILD_NUMBER=$2
 
 EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+#EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
 
 DOCS_DIR=$EQ_DIR/docs
 ANT_DIR=$EQ_DIR/ant
@@ -320,6 +322,9 @@ cd $DEB_TEMP
 md5sum `find . -type f | grep -v '^[.]/DEBIAN/'` >DEBIAN/md5sums
 
 print_progress
+echo
+
+$REMOVE_CVS $DEB_TEMP
 echo
 
 cd $EQ_DEPLOY_DIR
