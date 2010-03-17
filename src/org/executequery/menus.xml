@@ -526,6 +526,12 @@
           mnemonic="H">
 
           <menu-item id="help-command"
+                     name="Help Contents"
+                     class="org.executequery.gui.menu.MainMenuItem"
+                     mnemonic="H"
+                     accel-key="F1"/>
+
+          <menu-item id="help-command"
                      name="Search for help on"
                      class="org.executequery.gui.menu.MainMenuItem"
                      mnemonic="S"

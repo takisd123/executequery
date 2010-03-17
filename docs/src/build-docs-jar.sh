@@ -4,6 +4,8 @@ JAR_NAME=eqhelp.jar
 DIST_DIR=../dist
 BUILD_DIR=../build
 
+. build-search.sh
+
 if [ -d $BUILD_DIR ]; then
   rm -Rf $BUILD_DIR
 fi
@@ -34,12 +36,14 @@ done
 echo
 echo
 
-RELEASE_NOTES_TEXT=`cat ../../src/org/executequery/release.notes`
+RELEASE_NOTES_DIR=$BUILD_DIR/../src/release-notes-html
+cat $RELEASE_NOTES_DIR/releasenotes-part1.html > $BUILD_DIR/html/releasenotes.html
+cat ../../src/org/executequery/release.notes >> $BUILD_DIR/html/releasenotes.html
+cat $RELEASE_NOTES_DIR/releasenotes-part2.html >> $BUILD_DIR/html/releasenotes.html
 
 cd $BUILD_DIR
-sed -e "s/{release-notes}/$RELEASE_NOTES_TEXT/ig" $BUILD_DIR/html/releasenotes.html > $BUILD_DIR/html/releasenotes.html.1
-mv $BUILD_DIR/html/releasenotes.html.1 $BUILD_DIR/html/releasenotes.html
 $JAVA_HOME/bin/jar cvf $DIST_DIR/$JAR_NAME html/ images/ jhelpsearch/ eq.hs helpmap.jhm toc.xml 
 
 #cd ../
-#cp -f $DIST_DIR/$JAR_NAME ../
+cp -f $DIST_DIR/$JAR_NAME ../
+

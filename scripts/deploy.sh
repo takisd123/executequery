@@ -12,7 +12,7 @@ print_progress() {
   echo -n "."
 }
 
-JAVA_HOME=/home/takisd/softdev/java/jdk1.5.0_18
+JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk1.5.0_18
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
@@ -25,7 +25,7 @@ REMOVE_CVS=/home/takisd/bin/remove-cvs
 NEW_VERSION=$1
 BUILD_NUMBER=$2
 
-EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
+EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
 UW_DIR=/home/takisd/softdev/workspaces/eclipse/UnderworldLabs
 
 DOCS_DIR=$EQ_DIR/docs
@@ -67,6 +67,14 @@ if [ -d $ANT_BUILDS ]; then
   fi
 fi
 
+# generate and copy help
+echo
+echo "creating new help doc archive"
+cd $DOCS_DIR/src
+. build-docs-jar.sh
+cp $DOCS_DIR/dist/eqhelp.jar $ANT_DIR/template-build/src/docs
+echo 
+
 # create the new dir within the eq ant dir
 echo
 echo "Creating new version directory $NEW_VERSION"
@@ -88,7 +96,7 @@ $REMOVE_CVS $SRC_DIR
 
 echo
 echo
-echo "CVS directories removed"
+echo "SVN directories removed"
 echo
 
 # copy release notes
@@ -98,14 +106,6 @@ echo "copying new release notes to the Java installer and source dirs"
 cp $RELEASE_NOTES $INSTALLER_TEMPLATE/conf
 cp $RELEASE_NOTES $ANT_DIR/template-build/src/README.txt
 cp $RELEASE_NOTES $ANT_BUILDS/src/README.txt
-
-# generate and copy help
-echo
-echo "creating new help doc archive"
-cd $DOCS_DIR/src
-. build-docs-jar.sh
-cp $DOCS_DIR/dist/eqhelp.jar $ANT_DIR/template-build/src/docs
-echo 
 
 # start ant
 cd $ANT_BUILDS
