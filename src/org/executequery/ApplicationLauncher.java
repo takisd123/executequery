@@ -310,12 +310,12 @@ public class ApplicationLauncher {
 
     private void printVersionInfo() {
 
-        Log.info("Execute Query version: " + 
-                System.getProperty("executequery.major.version"));            
-        Log.info("Execute Query build: " + 
-                System.getProperty("executequery.build"));
         Log.info("Using Java version " +
                 System.getProperty("java.version"));
+        Log.info("Execute Query version: " + 
+                System.getProperty("executequery.minor.version"));            
+        Log.info("Execute Query build: " + 
+                System.getProperty("executequery.build"));
         Log.info("System is ready.");
     }
 
