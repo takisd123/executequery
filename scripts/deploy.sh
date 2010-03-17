@@ -26,7 +26,6 @@ NEW_VERSION=$1
 BUILD_NUMBER=$2
 
 EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
-UW_DIR=/home/takisd/softdev/workspaces/eclipse/UnderworldLabs
 
 DOCS_DIR=$EQ_DIR/docs
 ANT_DIR=$EQ_DIR/ant
@@ -86,7 +85,6 @@ mkdir -p $ANT_BUILDS/src/java
 echo "copying src..."
 cp -R $ANT_DIR/template-build/* $ANT_BUILDS
 cp -R $EQ_DIR/src/* $ANT_BUILDS/src/java
-cp -R $UW_DIR/src/* $ANT_BUILDS/src/java
 
 # remove CVS dirs from copied source
 SRC_DIR=$ANT_BUILDS/src
@@ -335,6 +333,7 @@ rm -Rf $DEB_TEMP
 #cp -f $ANT_BUILDS/build/eq.jar /home/takisd/softdev/deployments/final_jre 
 
 rm -Rf $ANT_BUILDS/build
+rm -f $INSTALLER_BUILD_DIR/org/executequery/installer/program/executequery-*.zip
 
 echo
 echo
