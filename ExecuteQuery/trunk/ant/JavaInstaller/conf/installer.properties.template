@@ -25,7 +25,7 @@ finished.file.path=org/executequery/installer/conf/finished.html
 # Product information
 product.name=Execute Query
 product.version={eq-version}
-product.install.size=9MB
+product.install.size=11MB
 product.install.directory=ExecuteQuery
 
 product.zip.path=org/executequery/installer/program/{zip-file}
