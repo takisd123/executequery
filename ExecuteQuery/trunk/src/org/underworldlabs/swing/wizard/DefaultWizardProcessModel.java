@@ -22,14 +22,8 @@ package org.underworldlabs.swing.wizard;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JPanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
+import javax.swing.JPanel;
 
 /**
  * The default model for a wizard process panel.

@@ -185,7 +185,17 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return false;
     
     }
-    
+
+    /**
+     * Returns the column count of this table.
+     *
+     * @return the column count
+     */
+    public int getColumnCount() throws DataSourceException {
+
+        return getColumns().size();
+    }
+        
     /**
      * Returns the columns of this table.
      *
@@ -825,7 +835,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return getHost().getDatabaseProductName();
     }
 
-    private LiquibaseStatementGenerator createStatementGenerator() {
+    private StatementGenerator createStatementGenerator() {
 
         return new LiquibaseStatementGenerator();
     }

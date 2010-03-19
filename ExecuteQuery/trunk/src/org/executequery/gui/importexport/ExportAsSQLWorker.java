@@ -34,6 +34,7 @@ import java.util.List;
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseTable;
+import org.executequery.databaseobjects.impl.DatabaseTableColumn;
 import org.executequery.log.Log;
 import org.executequery.util.Base64;
 import org.executequery.util.ThreadWorker;
@@ -70,6 +71,10 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                 setResult(importExportResult);
                 
                 printResults();
+                if (importExportDataModel().isSingleFileExport()) {
+
+                    printExportFileSize(importExportDataModel().getImportExportFiles().get(0));
+                }
                 setProgressStatus(-1);
 
                 importExportWizard().processComplete(importExportResult);
@@ -83,6 +88,8 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
     private Object doWork() {
 
+        importExportWizard().enableButtons(false);
+        
         ImportExportDataModel model = importExportDataModel();
         
         appendProgressText("Beginning export to SQL process...");
@@ -177,8 +184,8 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                         rs = resultSetForExport(importExportFile);
                         ResultSetMetaData rsmd = rs.getMetaData();
                         
-                        String insertStatement = insertStatementForTable(table, rsmd);
-                        
+                        String insertStatement = insertStatementForTable(table);
+
                         while (rs.next()) {
                             
                             if (Thread.interrupted()) {
@@ -232,12 +239,13 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
                         throw new DataSourceException(e);
                     }
-                    
+
                 } finally {
                     
                     if (!model.isSingleFileExport()) {
 
-                        flushAndClose(writer);
+                        flushAndClose(writer);                        
+                        printExportFileSize(importExportFile);
                     }
 
                     closeResultSet(rs);
@@ -414,25 +422,26 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
     private StringBuilder stringBuilder = new StringBuilder();
     
-    private String insertStatementForTable(DatabaseTable table,
-            ResultSetMetaData rsmd) throws SQLException {
+    private String insertStatementForTable(DatabaseTable table) throws SQLException {
 
         stringBuilder.setLength(0);
         stringBuilder.append("INSERT INTO ");
         stringBuilder.append(table.getName());
         stringBuilder.append(" (");
+
+        List<DatabaseColumn> columns = table.getColumns();
         
-        for (int i = 1, n = rsmd.getColumnCount(); i <= n; i++) {
+        for (int i = 0, n = columns.size(); i < n; i++) {
 
-            stringBuilder.append(rsmd.getColumnName(i));
+            stringBuilder.append(((DatabaseTableColumn) columns.get(i)).getNameEscaped());
 
-            if (i < n) {
+            if (i < (n - 1)) {
                 
                 stringBuilder.append(", ");
             }
 
         }
-
+        
         stringBuilder.append(") VALUES \n    (");
 
         return stringBuilder.toString();
@@ -472,9 +481,9 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         
         for (int i = 0, n = columns.size(); i < n; i++) {
             
-            DatabaseColumn column = columns.get(i);
+            DatabaseTableColumn column = (DatabaseTableColumn) columns.get(i);
             
-            sb.append(column.getName());
+            sb.append(column.getNameEscaped());
             
             if (i < (n - 1)) {
                 

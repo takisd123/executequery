@@ -64,6 +64,21 @@ public final class MiscUtils {
 
     private MiscUtils() {}
     
+    public static double bytesToKiloBytes(long bytes) {
+        
+        return ((double) bytes / 1024);
+    }
+    
+    public static double bytesToMegaBytes(long bytes) {
+        
+        return ((double) bytes / 1048576);
+    }
+    
+    public static double bytesToGigaBytes(long bytes) {
+
+        return ((double) bytes / 1073741824);
+    }
+    
     /**
      * Checks if the specified value is <code>null</code>.
      * This will also return <code>true</code> if the length

@@ -40,5 +40,7 @@ public interface ImportExportWizard {
     
     String getFileSuffix();
     
+    void enableButtons(boolean enable);
+    
 }
 

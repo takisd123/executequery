@@ -26,6 +26,8 @@ import java.util.List;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.sql.StatementGenerator;
+import org.executequery.sql.spi.LiquibaseStatementGenerator;
 import org.underworldlabs.util.MiscUtils;
 
 /**
@@ -49,6 +51,8 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     /** an original copy of this object */
     private DatabaseTableColumn copy;
 
+    private transient static final StatementGenerator STATEMENT_GENERATOR = new LiquibaseStatementGenerator();
+    
     /** 
      * Creates a new instance of DatabaseTableColumn 
      * belonging to the specified table.
@@ -90,6 +94,11 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
         setForeignKey(column.isForeignKey());
     }
 
+    public String getNameEscaped() {
+        
+        return STATEMENT_GENERATOR.columnNameValueEscaped(this);
+    }
+    
     /**
      * Returns the constraints attached to this table column.
      *
@@ -493,7 +502,7 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
             return "\"" + name + "\"";
         }
 
-        return name;
+        return getNameEscaped();
     }
 
     /**

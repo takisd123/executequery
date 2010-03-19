@@ -27,6 +27,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -300,6 +301,19 @@ public abstract class BaseImportExportWorker {
         
     }
     
+    protected void printExportFileSize(ImportExportFile importExportFile) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        long fileSize = importExportFile.getFile().length();
+        
+        sb.append(getBundle().getString("AbstractImportExportWorker.fileSize"));
+        sb.append(new DecimalFormat("0.00").format(MiscUtils.bytesToMegaBytes(fileSize)));
+        sb.append("Mb");
+
+        appendProgressText(sb.toString());        
+    }
+    
     /** 
      * Cancels the current data transfer process. 
      */
@@ -315,6 +329,7 @@ public abstract class BaseImportExportWorker {
      * Logs the start time of this process.
      */
     protected void start() {
+        monitor.reset();
         startTime = System.currentTimeMillis();
     }
     
