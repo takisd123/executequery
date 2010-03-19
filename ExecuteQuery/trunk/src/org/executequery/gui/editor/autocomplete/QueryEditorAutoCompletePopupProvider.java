@@ -318,13 +318,13 @@ public class QueryEditorAutoCompletePopupProvider
     
     private List<AutoCompleteListItem> itemsStartingWith(String prefix) {
         
-        if (StringUtils.isBlank(prefix) || prefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP) {
+        if (StringUtils.isBlank(prefix)) {
             
             return selectionsBuilder.buildKeywords(databaseHost);
         }
 
         String wordPrefix = prefix.trim().toUpperCase();
-        
+
         int dotIndex = prefix.indexOf('.');
         if (dotIndex != -1) {
 
@@ -332,22 +332,37 @@ public class QueryEditorAutoCompletePopupProvider
             return itemsStartingWith(wordPrefix);
         }
 
-        List<AutoCompleteListItem> itemsStartingWith = new ArrayList<AutoCompleteListItem>();
-
-        for (AutoCompleteListItem item : autoCompleteListItems) {
-
-            if (item.getInsertionValue().toUpperCase().startsWith(wordPrefix, 0)) {
+        if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP) {
             
-                itemsStartingWith.add(item);
-            }
-
+            return buildItemsStartingWithForList(
+                    selectionsBuilder.buildKeywords(databaseHost), wordPrefix);
         }
+
+        List<AutoCompleteListItem> itemsStartingWith = 
+            buildItemsStartingWithForList(autoCompleteListItems, wordPrefix);
         
         if (itemsStartingWith.isEmpty()) {
             
             itemsStartingWith.add(noProposalsListItem());
         }
         
+        return itemsStartingWith;
+    }
+    
+    private List<AutoCompleteListItem> buildItemsStartingWithForList(
+            List<AutoCompleteListItem> items, String prefix) {
+        
+        List<AutoCompleteListItem> itemsStartingWith = new ArrayList<AutoCompleteListItem>();
+
+        for (AutoCompleteListItem item : items) {
+
+            if (item.getInsertionValue().toUpperCase().startsWith(prefix, 0)) {
+
+                itemsStartingWith.add(item);
+            }
+
+        }
+
         return itemsStartingWith;
     }
     
