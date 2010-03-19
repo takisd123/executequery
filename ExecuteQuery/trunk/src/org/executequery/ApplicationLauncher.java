@@ -313,9 +313,8 @@ public class ApplicationLauncher {
         Log.info("Using Java version " +
                 System.getProperty("java.version"));
         Log.info("Execute Query version: " + 
-                System.getProperty("executequery.minor.version"));            
-        Log.info("Execute Query build: " + 
-                System.getProperty("executequery.build"));
+                System.getProperty("executequery.minor.version") +
+                "-" + System.getProperty("executequery.build"));
         Log.info("System is ready.");
     }
 
