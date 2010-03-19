@@ -150,13 +150,19 @@ public class ExportAsSQLWizard extends WizardProcessPanel
 
     public void cancel() {
         setButtonsEnabled(true);
-        
         parent.finished();
     }
 
     public void cleanup() {
         tableSelectionCombosGroup.close();
         exportDataModel.getDatabaseHost().close();
+    }
+    
+    public void enableButtons(boolean enable) {
+        setButtonsEnabled(enable);
+        setNextButtonEnabled(enable);
+        setBackButtonEnabled(enable);
+        setCancelButtonEnabled(enable);
     }
     
     private boolean doNext() {
@@ -252,7 +258,7 @@ public class ExportAsSQLWizard extends WizardProcessPanel
         setNextButtonEnabled(false);
         setCancelButtonEnabled(false);
         setBackButtonEnabled(false);
-        
+
         exportAsSQLWorker.export();
     }
 
@@ -396,6 +402,7 @@ public class ExportAsSQLWizard extends WizardProcessPanel
     }
     
     private boolean doPrevious() {
+        
         
         setCancelButtonText("Cancel");
         setCancelButtonEnabled(true);

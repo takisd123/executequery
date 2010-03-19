@@ -169,5 +169,7 @@ public interface DatabaseTable extends DatabaseObject {
 
     String getAlterSQLTextForForeignKeys();
 
+    int getColumnCount() throws DataSourceException;
+
 }
 

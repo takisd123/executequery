@@ -21,10 +21,13 @@
 package org.executequery.sql;
 
 import org.executequery.databaseobjects.DatabaseTable;
+import org.executequery.databaseobjects.impl.DatabaseTableColumn;
 
 public interface StatementGenerator {
 
     String END_DELIMITER = ";";
+    
+    String columnNameValueEscaped(DatabaseTableColumn tableColumn);
     
     String alterTable(String databaseName, DatabaseTable table);
     

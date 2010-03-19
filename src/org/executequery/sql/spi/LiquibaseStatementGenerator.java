@@ -57,6 +57,14 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     private LiquibaseDatabaseFactory databaseFactory;
 
+    public String columnNameValueEscaped(DatabaseTableColumn tableColumn) {
+
+        Database database = databaseFromName(tableColumn.getTable().getHost().getDatabaseProductName());
+        
+        return database.escapeColumnName(tableColumn.getSchemaName(),
+                tableColumn.getTable().getName(), tableColumn.getName());
+    }
+    
     public String dropTable(String databaseName, DatabaseTable table) {
 
         return dropTable(databaseName, table, false);
