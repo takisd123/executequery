@@ -11,6 +11,10 @@ Summary of changes from 3.2 Build 5140:
 - Minor help doc update.
 - Help menu changes.
 - Added deb package for download.
+- Modified generated queries to use escaped column names where appropriate (ie. 
+  in the Query Editor, import/export processes etc).
+- Fixed editor auto-complete popup for less than 2 characters not scrolling to 
+  'starts with' word.
 
 
 Summary of changes from 3.1.6 Build 5132:

@@ -56,7 +56,7 @@ import org.underworldlabs.swing.table.ComboBoxCellRenderer;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class PropertiesEditorSyntax extends PropertiesBase
+public class PropertiesEditorSyntax extends PropertiesBasePanel
                                     implements Constants {
     
     private JTable table;
@@ -75,12 +75,12 @@ public class PropertiesEditorSyntax extends PropertiesBase
     private void init() throws Exception {        
         tableModel = new ColorTableModel();
         table = new JTable(tableModel);
-        table.setFont(PropertiesBase.panelFont);
+        table.setFont(PropertiesBasePanel.panelFont);
         table.addMouseListener(new MouseHandler());
 
         TableColumnModel tcm = table.getColumnModel();
         ColourTableCellRenderer colourRenderer = new ColourTableCellRenderer();
-        colourRenderer.setFont(PropertiesBase.panelFont);
+        colourRenderer.setFont(PropertiesBasePanel.panelFont);
         
         tcm.getColumn(1).setCellRenderer(colourRenderer);
         tcm.getColumn(2).setCellRenderer(new ComboBoxCellRenderer());
@@ -98,7 +98,7 @@ public class PropertiesEditorSyntax extends PropertiesBase
         
         ComboBoxCellEditor comboEditor = new ComboBoxCellEditor(
                                             new String[]{PLAIN, ITALIC, BOLD});
-        comboEditor.setFont(PropertiesBase.panelFont);
+        comboEditor.setFont(PropertiesBasePanel.panelFont);
         tcm.getColumn(2).setCellEditor(comboEditor);
 
         JScrollPane tableScroller = new JScrollPane();

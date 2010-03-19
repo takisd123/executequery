@@ -15,6 +15,7 @@ Summary of changes from 3.2 Build 5140:
   in the Query Editor, import/export processes etc).
 - Fixed editor auto-complete popup for less than 2 characters not scrolling to 
   'starts with' word.
+- Ongoing look and feel tweaks - field dimension changes, font changes.
 
 
 Summary of changes from 3.1.6 Build 5132:

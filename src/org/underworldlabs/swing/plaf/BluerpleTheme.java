@@ -246,10 +246,10 @@ public class BluerpleTheme extends DefaultMetalTheme {
             
             try {
                 smallFont = new FontUIResource(Font.getFont("swing.plaf.metal.smallFont",
-                                               new Font("Dialog", Font.PLAIN, 10)));
+                                               new Font("Dialog", Font.PLAIN, 11)));
             }
             catch (Exception e) {
-                smallFont = new FontUIResource("Dialog", Font.PLAIN, 10);
+                smallFont = new FontUIResource("Dialog", Font.PLAIN, 11);
             } 
             
         } 

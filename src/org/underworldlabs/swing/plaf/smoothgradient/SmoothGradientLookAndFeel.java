@@ -151,7 +151,7 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
         
         // 	Should be active.
         int treeFontSize = table.getFont("Tree.font").getSize();
-        Integer rowHeight = Integer.valueOf(treeFontSize + 5);
+        Integer rowHeight = Integer.valueOf(treeFontSize + 6);
         Object treeExpandedIcon = SmoothGradientIconFactory.getExpandedTreeIcon();
         Object treeCollapsedIcon = SmoothGradientIconFactory.getCollapsedTreeIcon();
         ColorUIResource gray = new ColorUIResource(
