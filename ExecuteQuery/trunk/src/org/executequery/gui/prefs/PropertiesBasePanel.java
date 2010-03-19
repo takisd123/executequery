@@ -42,7 +42,7 @@ import org.underworldlabs.util.SystemProperties;
  * @version  $Revision: 1525 $
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
-abstract class PropertiesBase extends JPanel
+abstract class PropertiesBasePanel extends JPanel
                                      implements UserPreferenceFunction {
 
     /** common font used across props panels */
@@ -52,7 +52,7 @@ abstract class PropertiesBase extends JPanel
     protected static GridBagConstraints contentPanelConstraints;
 
     static {
-        panelFont = new Font("dialog", Font.PLAIN, 11);
+        panelFont = new Font("dialog", Font.PLAIN, 12);
         contentPanelConstraints = new GridBagConstraints(
                                             1, 1, 1, 1, 1.0, 1.0,
                                             GridBagConstraints.NORTHWEST, 
@@ -60,7 +60,7 @@ abstract class PropertiesBase extends JPanel
                                             new Insets(5, 5, 0, 5), 0, 0);
     }
     
-    public PropertiesBase() {
+    public PropertiesBasePanel() {
 
         super(new GridBagLayout());
         

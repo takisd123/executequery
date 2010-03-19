@@ -65,7 +65,7 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class PropertiesKeyShortcuts extends PropertiesBase
+public class PropertiesKeyShortcuts extends PropertiesBasePanel
                                     implements Constants {
     
     private JTable table;
@@ -91,7 +91,7 @@ public class PropertiesKeyShortcuts extends PropertiesBase
         Vector<ShortcutKey> shortcuts = formatValues(ActionBuilder.getActions());
         tableModel = new ShortcutsTableModel(shortcuts);
         table = new JTable(tableModel);
-        table.setFont(PropertiesBase.panelFont);
+        table.setFont(PropertiesBasePanel.panelFont);
         table.addMouseListener(new MouseHandler());
         
         table.setRowHeight(20);

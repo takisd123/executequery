@@ -25,13 +25,6 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DockedTabView;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Abstract tab panel view object.
  *

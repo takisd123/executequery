@@ -53,7 +53,7 @@ import org.underworldlabs.swing.GUIUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class PropertiesEditorFonts extends PropertiesBase
+public class PropertiesEditorFonts extends PropertiesBasePanel
                                    implements ListSelectionListener {
     
     private JLabel normalSample;

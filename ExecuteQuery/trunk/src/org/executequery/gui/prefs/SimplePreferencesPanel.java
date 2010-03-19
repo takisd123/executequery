@@ -107,7 +107,7 @@ public class SimplePreferencesPanel extends JPanel
         table.setCellSelectionEnabled(true);
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);
-        table.setFont(PropertiesBase.panelFont);
+        table.setFont(PropertiesBasePanel.panelFont);
         table.setTableHeader(null);
 
         EachRowEditor rowEditor = new EachRowEditor(table);
@@ -157,7 +157,7 @@ public class SimplePreferencesPanel extends JPanel
                 case UserPreference.INTEGER_TYPE:
                     final NumberCellEditor numEditor = 
                             new NumberCellEditor(preferences[i].getMaxLength(), true);
-                    numEditor.setFont(PropertiesBase.panelFont);
+                    numEditor.setFont(PropertiesBasePanel.panelFont);
 
                     editor = new DefaultCellEditor(numEditor) {
                         public Object getCellEditorValue() {
@@ -181,7 +181,7 @@ public class SimplePreferencesPanel extends JPanel
                     
                     if (colourRenderer == null) {
                         colourRenderer = new ColourTableCellRenderer();
-                        colourRenderer.setFont(PropertiesBase.panelFont);
+                        colourRenderer.setFont(PropertiesBasePanel.panelFont);
                         table.addMouseListener(this);
                     }
 
@@ -203,7 +203,7 @@ public class SimplePreferencesPanel extends JPanel
                     
                     if (fileRenderer == null) {
                         fileRenderer = new FileSelectionTableCell();
-                        fileRenderer.setFont(PropertiesBase.panelFont);
+                        fileRenderer.setFont(PropertiesBasePanel.panelFont);
                     }
 
                     rowRendererValues.add(i, fileRenderer);
@@ -395,7 +395,7 @@ public class SimplePreferencesPanel extends JPanel
 
         public TableComboBox(String[] values) {
             super(values);
-            setFont(PropertiesBase.panelFont);
+            setFont(PropertiesBasePanel.panelFont);
         }
 
     } // class TableComboBox

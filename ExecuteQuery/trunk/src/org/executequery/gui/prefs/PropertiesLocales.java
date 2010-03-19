@@ -47,7 +47,7 @@ import org.underworldlabs.swing.util.StringSorter;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class PropertiesLocales extends PropertiesBase
+public class PropertiesLocales extends PropertiesBasePanel
                                implements ListSelectionListener {
     
     private JList localeList;

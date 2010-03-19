@@ -32,7 +32,7 @@ import org.underworldlabs.util.SystemProperties;
  * @version  $Revision: 1525 $
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
-public class PropertiesEditorGeneral extends PropertiesBase {
+public class PropertiesEditorGeneral extends PropertiesBasePanel {
     
     private SimplePreferencesPanel preferencesPanel;
 

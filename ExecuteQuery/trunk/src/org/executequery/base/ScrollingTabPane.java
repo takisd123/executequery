@@ -1192,6 +1192,12 @@ public class ScrollingTabPane extends AbstractTabPane
             textIconGap = UIManager.getInt("TabbedPane.textIconGap");
             tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
             tabInsets.left = 5;
+            
+            tabInsets.top += 1;
+            tabInsets.bottom += 1;
+            tabInsets.left += 1;
+            tabInsets.right += 1;
+            
         }
         
     } // class TabPanel
