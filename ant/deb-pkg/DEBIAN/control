@@ -4,8 +4,7 @@ Maintainer: Takis Diakoumis <takisd@executequery.org>
 Section: contrib/misc
 Homepage: http://www.executequery.org/ 
 Architecture: all
-Recommends: sun-java5-jre | sun-java6-jre
-Suggests: ant, sun-java5-jdk, sun-java6-jdk
+Recommends: openjdk-6-jre | sun-java6-jre | sun-java5-jre
 Priority: optional
 Installed-Size: {install_size}
 Description: A database query and visualisation tool.
