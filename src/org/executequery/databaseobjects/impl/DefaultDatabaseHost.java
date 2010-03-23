@@ -239,12 +239,12 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             }
 
             return schemas;
-        }
-        catch (SQLException e) {
+        
+        } catch (SQLException e) {
 
             throw new DataSourceException(e);
-        }
-        finally {
+
+        } finally {
 
             releaseResources(rs);
             setMarkedForReload(false);
@@ -327,8 +327,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             }
 
             return new ArrayList<NamedObject>(0);
-            
-//            throw new DataSourceException(e);
 
         } finally {
 

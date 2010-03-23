@@ -193,6 +193,17 @@ public class DefaultDatabaseSchema extends AbstractDatabaseSource
         return getCatalog() == null ? getHost() : getCatalog();
     }
     
+    @Override
+    public void setParent(NamedObject parent) {
+
+        if (parent instanceof  DatabaseCatalog) {
+            
+            this.catalog = (DatabaseCatalog) parent;
+        }
+        
+        super.setParent(parent);
+    }
+    
     /**
      * Override to return value from getName().
      */
