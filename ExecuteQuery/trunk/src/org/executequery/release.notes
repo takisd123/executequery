@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 11 March 2010
+Date: 5 April 2010
 
 Execute Query Version 3.2.1 Build 5142
 ----------------------------------------
@@ -16,6 +16,9 @@ Summary of changes from 3.2 Build 5140:
 - Fixed editor auto-complete popup for less than 2 characters not scrolling to 
   'starts with' word.
 - Ongoing look and feel tweaks - field dimension changes, font changes.
+- Added option to execute queries with comments, whitespace, line-breaks etc 
+  as-is. Defaults to executing 'sanitised' queries with comments etc stripped 
+  out as has always been the case.
 
 
 Summary of changes from 3.1.6 Build 5132:
@@ -225,4 +228,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-11 March 2010
+5 April 2010

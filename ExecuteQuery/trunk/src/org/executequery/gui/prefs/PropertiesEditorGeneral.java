@@ -115,6 +115,13 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     "Recycle result set tabs",
                     Boolean.valueOf(stringUserProperty(key))));
         
+        key = "editor.execute.remove.comments";
+        list.add(new UserPreference(
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Remove comments for execution",
+                Boolean.valueOf(stringUserProperty(key))));
+        
         key = "editor.max.records";
         list.add(new UserPreference(
                     UserPreference.INTEGER_TYPE,
