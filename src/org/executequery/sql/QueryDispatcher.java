@@ -42,10 +42,10 @@ import org.executequery.util.ThreadWorker;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.util.MiscUtils;
 
-/** <p>Determines the type of exeuted query and returns
- *  appropriate results.
+/** 
+ * Determines the type of exeuted query and returns appropriate results.
  *
- *  @author   Takis Diakoumis
+ * @author   Takis Diakoumis
  * @version  $Revision: 1521 $
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
@@ -380,7 +380,8 @@ public class QueryDispatcher {
             }
 
             List<DerivedQuery> queries = queryTokenizer.tokenize(sql);
-
+            boolean removeQueryComments = userProperties().getBooleanProperty("editor.execute.remove.comments");
+            
             for (DerivedQuery query : queries) {
                 
                 // reset clock
@@ -388,12 +389,12 @@ public class QueryDispatcher {
                 start = 0l;
 
                 String derivedQueryString = query.getDerivedQuery();
+                String queryToExecute = removeQueryComments ? derivedQueryString : query.getOriginalQuery();
 
                 int type = querySender.getQueryType(derivedQueryString);
-                
                 if (type != QueryTypes.COMMIT && type != QueryTypes.ROLLBACK) {
 
-                    logExecution(derivedQueryString);
+                    logExecution(queryToExecute);
 
                 } else {
 
@@ -414,7 +415,7 @@ public class QueryDispatcher {
 
                 start = System.currentTimeMillis();
 
-                SqlStatementResult result = querySender.execute(type, derivedQueryString);
+                SqlStatementResult result = querySender.execute(type, queryToExecute);
 
                 if (statementCancelled || Thread.interrupted()) {
 

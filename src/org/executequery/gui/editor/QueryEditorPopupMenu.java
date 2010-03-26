@@ -76,6 +76,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         add(createFormatSqlMenuItem());
         add(createClearOutputMenuItem());
+        add(createRemoveCommentsForQueryMenuItem());
         add(createRecycleResultSetTabMenuItem());
         
         addSeparator();
@@ -123,6 +124,16 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         SystemProperties.setBooleanProperty(
                 Constants.USER_PROPERTIES_KEY, "editor.results.tabs.single", item.isSelected());
+
+        UserPreferencesManager.fireUserPreferencesChanged();
+    }
+    
+    public void removeCommentsPriorToQueryExecution(ActionEvent e) {
+        
+        JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
+
+        SystemProperties.setBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "editor.execute.remove.comments", item.isSelected());
 
         UserPreferencesManager.fireUserPreferencesChanged();
     }
@@ -191,6 +202,16 @@ public class QueryEditorPopupMenu extends JPopupMenu
         menuItem.setText("Use Single Resut Set Tab");
         menuItem.setSelected(UserPreferencesManager.isResultSetTabSingle());
         menuItem.setActionCommand("recycleResultSetTabs");
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+
+    private JMenuItem createRemoveCommentsForQueryMenuItem() {
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
+        menuItem.setText("Remove comments for execution");
+        menuItem.setSelected(SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "editor.execute.remove.comments"));
+        menuItem.setActionCommand("removeCommentsPriorToQueryExecution");
         executeActionButtons().add(menuItem);
         return menuItem;
     }
