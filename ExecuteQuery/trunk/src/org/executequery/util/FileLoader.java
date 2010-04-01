@@ -211,7 +211,6 @@ public class FileLoader {
     private void openNewEditor(File file, String contents) {
 
         QueryEditor editor = new QueryEditor(contents, file.getAbsolutePath());
-
         GUIUtilities.addCentralPane(QueryEditor.TITLE,
                                     QueryEditor.FRAME_ICON, 
                                     editor,
@@ -220,8 +219,3 @@ public class FileLoader {
     }
 
 }
-
-
-
-
-
