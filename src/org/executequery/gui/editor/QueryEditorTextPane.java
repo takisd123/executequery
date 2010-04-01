@@ -38,7 +38,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
@@ -223,12 +222,8 @@ public class QueryEditorTextPane extends SQLTextPane
         undoManager.reinstate();
     }
 
-    private Document newDocument() {
-        return new DefaultStyledDocument();
-    }
-    
     private void loadDummyDocument() {
-        setDocument(newDocument());
+        setDocument(new DefaultStyledDocument());
     }
     
     /**
@@ -270,6 +265,7 @@ public class QueryEditorTextPane extends SQLTextPane
     public void loadText(String text) {
 
         try {
+
             fireTextUpdateStarting();
             
             // clear the current held edits
@@ -282,10 +278,12 @@ public class QueryEditorTextPane extends SQLTextPane
                 // clear the contents of we have any
                 int length = document.getLength();
                 if (length > 0) {
+            
                     // replace the existing text
                     document.replace(0, length, text, null);
-                }
-                else {
+
+                } else {
+                
                     // set the new text
                     document.insertString(0, text, null);
                 }
@@ -294,12 +292,14 @@ public class QueryEditorTextPane extends SQLTextPane
             catch (BadLocationException e) {}
 
             // reset the SQL document
-            setDocument(document);            
-        }
-        finally {
+            setDocument(document);
+        
+        } finally {
+
             fireTextUpdateFinished();
             setCaretPosition(0);
-        }        
+        }
+
     }
     
     private void fireTextUpdateStarting() {

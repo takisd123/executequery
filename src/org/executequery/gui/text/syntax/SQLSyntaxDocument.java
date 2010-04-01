@@ -22,22 +22,20 @@ package org.executequery.gui.text.syntax;
 
 import java.awt.Color;
 import java.awt.Font;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.Style;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.StyleConstants;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.executequery.Constants;
 import org.executequery.gui.editor.QueryEditorSettings;
@@ -391,6 +389,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
 
             /* check if we convert tabs to spaces */
             if ((firstChar == Constants.TAB_CHAR) && tabsToSpaces) {
+
                 text = QueryEditorSettings.getTabs();
                 length = text.length();
             }
@@ -450,6 +449,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
      *  the document has been updated
      */
     public void remove(int offset, int length) throws BadLocationException {
+
         //Log.debug("remove");
 
         resetBracePosition();
@@ -457,6 +457,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
         processChangedLines(offset, 0);
         
         if (offset > 0) {
+        
             updateBraces(offset);
         }
 
@@ -481,15 +482,18 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
         // scan for multi-line comments
         List<Token> tokens = new ArrayList<Token>();
         while ((tokenStart = content.indexOf(OPEN_COMMENT, tokenEnd)) != -1) {
+
             tokenEnd = content.indexOf(CLOSE_COMMENT, tokenStart);
 
             if (tokenEnd != -1) {
+            
                 tokenEnd += 2;
             }
 
             tokens.add(new Token(tokenStart, tokenEnd));
             
             if (tokenEnd == -1) {
+                
                 break;
             }
 
