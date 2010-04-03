@@ -1194,7 +1194,7 @@ public class ScrollingTabPane extends AbstractTabPane
                 
                 textIconGap = 4;
             }
-            tabInsets = uiTabInsetsOrDefault();
+            tabInsets = tabInsets();
             tabInsets.left = 5;
             
             tabInsets.top += 1;
@@ -1202,17 +1202,6 @@ public class ScrollingTabPane extends AbstractTabPane
             tabInsets.left += 1;
             tabInsets.right += 1;
             
-        }
-
-        private Insets uiTabInsetsOrDefault() {
-            
-            Insets insets = UIManager.getInsets("TabbedPane.tabInsets");
-            if (insets == null) {
-                
-                insets = new Insets(0, 9, 1, 9);
-            }
-
-            return insets;
         }
         
     } // class TabPanel

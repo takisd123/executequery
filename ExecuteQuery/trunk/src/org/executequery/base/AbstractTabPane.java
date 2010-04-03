@@ -24,6 +24,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -624,14 +625,16 @@ public abstract class AbstractTabPane extends JPanel
             return components.get(selectedIndex);
         }
     }
-    
+
+    protected final Insets tabInsets() {
+        
+        Insets insets = UIManager.getInsets("TabbedPane.tabInsets");
+        if (insets == null) {
+            
+            insets = new Insets(0, 9, 1, 9);
+        }
+
+        return insets;
+    }
+
 }
-
-
-
-
-
-
-
-
-
