@@ -690,7 +690,7 @@ public class DockedTabPane extends AbstractTabPane {
             controlShadow = UIManager.getColor("controlShadow");
 
             textIconGap = 2;
-            tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
+            tabInsets = tabInsets();
         }
         
     } // TabPanel

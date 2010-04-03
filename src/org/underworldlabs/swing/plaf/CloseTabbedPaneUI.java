@@ -301,6 +301,10 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         //textIconGap = UIManager.getInt("TabbedPane.textIconGap");
 
         tabInsets = UIManager.getInsets("TabbedPane.tabInsets");
+        if (tabInsets == null) {
+            
+            tabInsets = new Insets(0, 9, 1, 9);
+        }
         
         selectedTabPadInsets = UIManager.getInsets("TabbedPane.selectedTabPadInsets");
 
