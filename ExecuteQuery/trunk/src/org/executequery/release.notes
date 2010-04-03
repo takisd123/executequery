@@ -19,7 +19,9 @@ Summary of changes from 3.2 Build 5140:
 - Added option to execute queries with comments, whitespace, line-breaks etc 
   as-is. Defaults to executing 'sanitised' queries with comments etc stripped 
   out as has always been the case.
-
+- Added default insets for UIManager returning null for some look and feels 
+  using TabbedPane.tabInsets in determining tab dimensions for scrolling center 
+  panel.  
 
 Summary of changes from 3.1.6 Build 5132:
 ----------------------------------------

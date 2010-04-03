@@ -315,6 +315,10 @@ public class ApplicationLauncher {
         Log.info("Execute Query version: " + 
                 System.getProperty("executequery.minor.version") +
                 "-" + System.getProperty("executequery.build"));
+        Log.info("Operating System: " + 
+                System.getProperty("os.name") +
+                " [ " + System.getProperty("os.version") + " ]");
+
         Log.info("System is ready.");
     }
 
