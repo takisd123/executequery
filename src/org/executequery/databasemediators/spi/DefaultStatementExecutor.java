@@ -348,18 +348,28 @@ public class DefaultStatementExecutor implements StatementExecutor {
             // init the string buffer
             StringBuilder sb = new StringBuilder("{ ");
 
-            // build the out params place holders
-            for (int i = 0, n = outs.size(); i < n; i++) {
-                sb.append(QUESTION_MARK);
-                if (i < n - 1) {
-                    sb.append(COMMA);
-                }
-            }
+            if (!outs.isEmpty()) {
+            
+                // build the out params place holders
+                for (int i = 0, n = outs.size(); i < n; i++) {
 
-            sb.append(" = call ");
+                    sb.append(QUESTION_MARK);
+                    
+                    if (i < n - 1) {
+                    
+                        sb.append(COMMA);
+                    }
+
+                }
+    
+                sb.append(" = ");
+            }
+            
+            sb.append(" call ");
             
             String namePrefix = databaseExecutable.getNamePrefix();
             if (namePrefix != null) {
+
                 sb.append(namePrefix).append('.');
             }
 

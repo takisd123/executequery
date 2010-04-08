@@ -17,10 +17,6 @@ public abstract class AbstractConnectionPool implements ConnectionPool {
     static final String SOURCE = "[source]";
     static final String HOST = "[host]";
     
-    static final String PORT_REGEX = "\\[port\\]";
-    static final String SOURCE_REGEX = "\\[source\\]";
-    static final String HOST_REGEX = "\\[host\\]";
-
     static {
         
         DRIVER_LOADER = new DefaultDriverLoader();

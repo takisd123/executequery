@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 5 April 2010
+Date: 8 April 2010
 
 Execute Query Version 3.2.1 Build 5142
 ----------------------------------------
@@ -22,6 +22,9 @@ Summary of changes from 3.2 Build 5140:
 - Added default insets for UIManager returning null for some look and feels 
   using TabbedPane.tabInsets in determining tab dimensions for scrolling center 
   panel.  
+- Modified callable statement generation removing left-hand equals where out
+  parameters do not exist.
+
 
 Summary of changes from 3.1.6 Build 5132:
 ----------------------------------------
@@ -230,4 +233,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-5 April 2010
+8 April 2010
