@@ -1,13 +1,18 @@
 #!/bin/bash
 
-JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk5
-export JAVA_HOME
+JAVA_HOME=/home/takisd/softdev/java/jdk1.5.0_18
+PATH=$JAVA_HOME/bin:$PATH
+export PATH JAVA_HOME
 
-EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+echo
+echo "using java version:"
+java -version
+
+EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
 BUILD_DIR=$EQ_DIR/scripts/ExecuteQuery
 OUTPUT_JAR=$BUILD_DIR/build/eq.jar
 
-IDE_DIR=/home/takisd/softdev/dev-env/ide/executequery
+IDE_DIR=/home/takisd/softdev/ide/executequery
 
 echo $BUILD_DIR
 
@@ -24,7 +29,6 @@ if [ -f $OUTPUT_JAR ]; then
 
     cp $IDE_DIR/eq.jar $IDE_DIR/eq.jar.1
     cp $OUTPUT_JAR $IDE_DIR
-    cp $OUTPUT_JAR /home/takisd/transfers/public
     rm -Rf $BUILD_DIR
 
 fi

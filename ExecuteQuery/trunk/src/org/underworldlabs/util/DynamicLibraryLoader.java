@@ -38,29 +38,31 @@ public class DynamicLibraryLoader extends URLClassLoader {
         parent = ClassLoader.getSystemClassLoader();
     }
     
-    public Class loadLibrary(String clazz)
+    public Class<?> loadLibrary(String clazz)
       throws ClassNotFoundException {
         return loadClass(clazz, true);
     }
     
-    public Class loadLibrary(String clazz, boolean resolve)
+    public Class<?> loadLibrary(String clazz, boolean resolve)
       throws ClassNotFoundException {
         return loadClass(clazz, resolve);
     }
     
-    protected synchronized Class loadClass(String classname, boolean resolve)
+    protected synchronized Class<?> loadClass(String classname, boolean resolve)
       throws ClassNotFoundException {
 
-        Class theClass = findLoadedClass(classname);
+        Class<?> theClass = findLoadedClass(classname);
 
         if (theClass != null) {
             return theClass;
         }
         
         try {
+            
             theClass = findBaseClass(classname);
-        } 
-        catch (ClassNotFoundException cnfe) {
+
+        } catch (ClassNotFoundException cnfe) {
+        
             theClass = findClass(classname);
         } 
         
@@ -72,7 +74,7 @@ public class DynamicLibraryLoader extends URLClassLoader {
         
     }
     
-    private Class findBaseClass(String name) throws ClassNotFoundException {
+    private Class<?> findBaseClass(String name) throws ClassNotFoundException {
 
         if (parent == null) {
             return findSystemClass(name);
@@ -83,8 +85,3 @@ public class DynamicLibraryLoader extends URLClassLoader {
     }
     
 }
-
-
-
-
-

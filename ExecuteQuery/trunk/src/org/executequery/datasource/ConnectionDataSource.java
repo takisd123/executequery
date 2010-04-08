@@ -129,10 +129,6 @@ public class ConnectionDataSource implements DataSource {
         return usingOracleThinDriver;
     }
     
-    public void setUsingOracleThinDriver(boolean thin) {
-        usingOracleThinDriver = thin;
-    }
-    
     public String getJdbcUrl() {
         return jdbcUrl;
     }
@@ -205,6 +201,7 @@ public class ConnectionDataSource implements DataSource {
             
             // check if this driver has already been loaded
             if (loadedDrivers.containsKey(databaseDriver)) {
+                
                 driver = loadedDrivers.get(databaseDriver);
                 driverLoaded = true;
                 return;
@@ -216,20 +213,24 @@ public class ConnectionDataSource implements DataSource {
             Log.info("Loading JDBC driver class: " + driverName);
             
             if (!usingODBC) {
+                
                 String path = databaseDriver.getPath();
+                
                 if (!MiscUtils.isNull(path)) {
                     URL[] urls = MiscUtils.loadURLs(path);
 
                     /* Load the JDBC libraries and initialise the driver. */
                     DynamicLibraryLoader loader = new DynamicLibraryLoader(urls);
                     clazz = loader.loadLibrary(driverName);
-                }
-                else {
+                
+                } else {
+
                     clazz = Class.forName(driverName, true,
                                           ClassLoader.getSystemClassLoader());
                 }
-            }
-            else {
+
+            } else {
+                
                 clazz = Class.forName(driverName, true,
                                       ClassLoader.getSystemClassLoader());
             } 
@@ -240,24 +241,29 @@ public class ConnectionDataSource implements DataSource {
             driverLoaded = true;
             //DriverManager.setLogStream(System.out);
             
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
+          
             if (Log.isDebugEnabled()) {
+            
                 Log.error("Error loading JDBC driver " + 
                         databaseDriver.getClassName(), e);
             }
             driverLoaded = false;
+
             throw new SQLException("The specified JDBC driver class was not found");
-        }
-        catch (IllegalAccessException e) {
+
+        } catch (IllegalAccessException e) {
+          
             driverLoaded = false;
-            throw new SQLException("The specified JDBC driver class was not accessible");            
-        }
-        catch (MalformedURLException e) {
+            throw new SQLException("The specified JDBC driver class was not accessible");
+
+        } catch (MalformedURLException e) {
+
             driverLoaded = false;
             throw new SQLException(e.getMessage());
-        }
-        catch (InstantiationException e) {
+
+        } catch (InstantiationException e) {
+        
             driverLoaded = false;
             throw new SQLException(e.getMessage());            
         }

@@ -47,7 +47,7 @@ import org.underworldlabs.util.SystemProperties;
 public final class ConnectionManager {
     
     /** the connection 'container' */
-    private static Map<DatabaseConnection,ConnectionPool> connectionPools;
+    private static Map<DatabaseConnection, ConnectionPool> connectionPools;
     
     /** 
      * Creates a stored data source for the specified database
@@ -62,7 +62,6 @@ public final class ConnectionManager {
         if (databaseConnection.getJDBCDriver() == null) {
             
             long driverId = databaseConnection.getDriverId();
-
             DatabaseDriver driver = driverById(driverId);
 
             if (driver != null) {
@@ -78,22 +77,21 @@ public final class ConnectionManager {
 
         Log.info("Initialising data source for " + databaseConnection.getName());
 
-        ConnectionDataSource dataSource = 
-                new ConnectionDataSource(databaseConnection);
-        
-        // associate the connection pool with the data source
-        ConnectionPool pool = new ConnectionPool(dataSource);
+        DataSource dataSource = new ConnectionDataSource(databaseConnection);
+        ConnectionPool pool = new DefaultConnectionPool(dataSource);
+
         //pool.setPoolScheme(SystemProperties.getIntProperty("connection.scheme"));
         pool.setMinimumConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
         pool.setMaximumConnections(5);
-        pool.ensureCapacity();
+        pool.setInitialConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
+//        pool.ensureCapacity();
         
         // TODO: ?????????????????
         //pool.setMinConns(determineMinimumConnections());
 
         if (connectionPools == null) {
 
-            connectionPools = new HashMap<DatabaseConnection,ConnectionPool>();
+            connectionPools = new HashMap<DatabaseConnection, ConnectionPool>();
         }
 
         connectionPools.put(databaseConnection, pool);
@@ -124,11 +122,9 @@ public final class ConnectionManager {
             }
 
             ConnectionPool pool = connectionPools.get(databaseConnection);
-            
             Connection connection = pool.getConnection();
 
             return connection;
-
         }
         
     }
