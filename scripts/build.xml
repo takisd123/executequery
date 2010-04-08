@@ -9,7 +9,7 @@
 	<property name="dist.outdir" value="${build.dir}/build" />
 	<property name="lib.dir" value="${dist.outdir}/lib" />
 
-	<property name="eclipse.dir" value="/home/takisd/temp/workspace4" />
+	<property name="eclipse.dir" value="/home/takisd/softdev/workspaces/eclipse" />
 	<property name="eq.src" value="${eclipse.dir}/ExecuteQuery/src" />
 	<property name="ul.src" value="${eclipse.dir}/UnderworldLabs/src" />
 	<property name="libs" value="${eclipse.dir}/ExecuteQuery/lib" />	
