@@ -55,8 +55,7 @@ public final class ConnectionManager {
      *
      * @param the database connection properties object
      */
-    public static synchronized void createDataSource(DatabaseConnection databaseConnection) 
-        throws DataSourceException {
+    public static synchronized void createDataSource(DatabaseConnection databaseConnection) {
         
         // check the connection has a driver
         if (databaseConnection.getJDBCDriver() == null) {
@@ -80,6 +79,8 @@ public final class ConnectionManager {
         DataSource dataSource = new ConnectionDataSource(databaseConnection);
         ConnectionPool pool = new DefaultConnectionPool(dataSource);
 
+//        ConnectionPool pool = new C3poConnectionPool(databaseConnection);
+        
         //pool.setPoolScheme(SystemProperties.getIntProperty("connection.scheme"));
         pool.setMinimumConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
         pool.setMaximumConnections(5);

@@ -162,7 +162,7 @@ public class DefaultConnectionPool implements ConnectionPool {
 
         try {
             for (int i = 0, k = pool.size(); i < k; i++) {
-                PooledConnection c = pool.get(i);
+                Connection c = pool.get(i);
                 if (!c.isClosed()) {
                     c.setTransactionIsolation(isolationLevel);
                 }

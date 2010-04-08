@@ -4,6 +4,10 @@ import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -14,10 +18,18 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class C3poConnectionPool extends AbstractConnectionPool {
 
+    private static final int ACQUIRE_INCREMENT = 1;
+
+    private final List<Connection> activeConnections = new ArrayList<Connection>();
+    
     private final ComboPooledDataSource dataSource = new ComboPooledDataSource();
     
     private final DatabaseConnection databaseConnection;
 
+    private int defaultTxIsolation;
+    
+    private Properties properties = new Properties();
+    
     public C3poConnectionPool(DatabaseConnection databaseConnection) {
 
         this.databaseConnection = databaseConnection;
@@ -31,13 +43,41 @@ public class C3poConnectionPool extends AbstractConnectionPool {
             dataSource.setUser(databaseConnection.getUserName());
             dataSource.setPassword(databaseConnection.getUnencryptedPassword());
 
+            dataSource.setAcquireIncrement(ACQUIRE_INCREMENT);
+
+            if (databaseConnection.hasAdvancedProperties()) {
+                
+                populateAdvancedProperties();
+            }
+
+            dataSource.setProperties(properties);
+            
+            Connection connection = dataSource.getConnection();
+            connection.close();
+            
         } catch (PropertyVetoException e) {
 
             rethrowAsDataSourceException(e);
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }
     
+    @SuppressWarnings("unchecked")
+    private void populateAdvancedProperties() {
+
+        Properties advancedProperties = databaseConnection.getJdbcProperties();
+        
+        for (Iterator i = advancedProperties.keySet().iterator(); i.hasNext();) {
+
+            String key = (String) i.next();
+            properties.put(key, advancedProperties.getProperty(key));
+        }
+        
+    }
+
     public DatabaseConnection getDatabaseConnection() {
      
         return databaseConnection;
@@ -46,7 +86,8 @@ public class C3poConnectionPool extends AbstractConnectionPool {
     public void close(Connection connection) {
 
         try {
-        
+
+            activeConnections.remove(connection);
             connection.close();
 
         } catch (SQLException e) {
@@ -68,6 +109,10 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         try {
 
             connection = dataSource.getConnection();
+            defaultTxIsolation = connection.getTransactionIsolation();
+            connection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+
+            activeConnections.add(connection);
             
         } catch (SQLException e) {
 
@@ -99,23 +144,22 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
     public int getPoolActiveSize() {
 
-        int activeSize = 0;
-        
+        return activeConnections.size();
+    }
+
+    public int getSize() {
+
+        int size = 0;
         try {
         
-            activeSize = dataSource.getNumConnectionsDefaultUser();
+            size = dataSource.getNumConnectionsDefaultUser();
 
         } catch (SQLException e) {
 
             rethrowAsDataSourceException(e);
         }
         
-        return activeSize;
-    }
-
-    public int getSize() {
-
-        return 0;
+        return size;
     }
 
     public boolean isTransactionSupported() {
@@ -168,9 +212,33 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         dataSource.setMinPoolSize(minimumConnections);
     }
 
-    public void setTransactionIsolationLevel(int isolationLevel)
-            throws DataSourceException {
+    public void setTransactionIsolationLevel(int isolationLevel) {
 
+        if (!isTransactionSupported()) {
+
+            return;
+        }
+        
+        if (isolationLevel == -1) {
+         
+            isolationLevel = defaultTxIsolation;
+        }
+
+        try {
+        
+            for (Connection connection : activeConnections) {
+
+                if (!connection.isClosed()) {
+                
+                    connection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+                }
+
+            }
+
+        } catch (SQLException e) {
+            
+            throw new DataSourceException(e);
+        }
         
     }
     
