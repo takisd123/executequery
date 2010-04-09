@@ -23,6 +23,5 @@
 	<classpathentry kind="lib" path="lib/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.1.2.jar" sourcepath="/home/takisd/softdev/libs/c3p0-0.9.1.2.src/src/classes"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
