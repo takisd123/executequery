@@ -113,6 +113,7 @@ public class DefaultConnectionBuilder implements ConnectionBuilder {
 
         worker.start();
         progressDialog.run();
+
     }
     
     private void createDataSource() {

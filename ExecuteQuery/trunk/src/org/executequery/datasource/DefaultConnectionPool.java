@@ -30,7 +30,6 @@ import javax.sql.DataSource;
 
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
-import org.underworldlabs.jdbc.PooledConnection;
 
 /**
  *
@@ -324,7 +323,7 @@ public class DefaultConnectionPool implements ConnectionPool {
         }
     }
     
-    public void close(Connection connection) throws DataSourceException {
+    public void close(Connection connection) {
         try {
             
             Connection realConnection = null;
@@ -347,7 +346,7 @@ public class DefaultConnectionPool implements ConnectionPool {
         }
     }
 
-    public void close() throws DataSourceException {
+    public void close() {
         try {
             for (int i = 0, k = pool.size(); i < k; i++) {
                 PooledConnection c = (PooledConnection)pool.get(i);

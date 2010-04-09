@@ -120,11 +120,6 @@ public class ConnectionDataSource implements DataSource {
         
     }
 
-    protected void destroy() {
-        driver = null;
-        databaseDriver = null;
-    }
-    
     public boolean isUsingOracleThinDriver() {
         return usingOracleThinDriver;
     }
@@ -309,14 +304,6 @@ public class ConnectionDataSource implements DataSource {
         return null;
     }
     
-    public void setDriverObject(DatabaseDriver d) {
-        databaseDriver = d;
-    }
-    
-    public String getDriverClassName() {
-        return databaseDriver.getClassName();
-    }
-    
     public int getLoginTimeout() throws SQLException {
         return DriverManager.getLoginTimeout();
     }
@@ -331,10 +318,6 @@ public class ConnectionDataSource implements DataSource {
     
     public void setLogWriter(PrintWriter writer) throws SQLException {
         DriverManager.setLogWriter(writer);
-    }
-
-    public boolean isDriverLoaded() {
-        return driverLoaded;
     }
 
 	public boolean isWrapperFor(Class<?> iface) throws SQLException {

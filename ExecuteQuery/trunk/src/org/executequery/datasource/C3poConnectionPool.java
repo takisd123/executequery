@@ -1,81 +1,58 @@
 package org.executequery.datasource;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Vector;
 
 import javax.sql.DataSource;
 
 import org.executequery.databasemediators.DatabaseConnection;
 import org.underworldlabs.jdbc.DataSourceException;
 
-import com.mchange.v2.c3p0.ComboPooledDataSource;
+import com.mchange.v2.c3p0.DataSources;
+import com.mchange.v2.c3p0.PoolBackedDataSource;
 
+/**
+ *
+ * @author   Takis Diakoumis
+ * @version  $Revision: 1521 $
+ * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
+ */
 public class C3poConnectionPool extends AbstractConnectionPool {
+
+    private static final String ACQUIRE_INCREMENT_KEY = "acquireIncrement";
+
+    private static final String INITIAL_POOL_SIZE_KEY = "initialPoolSize";
+
+    private static final String MAX_POOL_SIZE_KEY = "maxPoolSize";
+
+    private static final String MIN_POOL_SIZE_KEY = "minPoolSize";
 
     private static final int ACQUIRE_INCREMENT = 1;
 
-    private final List<Connection> activeConnections = new ArrayList<Connection>();
-    
-    private final ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    private final List<Connection> activeConnections = new Vector<Connection>();
     
     private final DatabaseConnection databaseConnection;
 
-    private int defaultTxIsolation;
+    private final Properties c3poPoolProperties;
+
+    private int defaultTxIsolation = -1;
+
+    private DataSource dataSource;
     
-    private Properties properties = new Properties();
+    private PoolBackedDataSource pooledDataSource;
     
     public C3poConnectionPool(DatabaseConnection databaseConnection) {
 
         this.databaseConnection = databaseConnection;
-        Driver driver = loadDriver(databaseConnection.getJDBCDriver());
         
-        try {
-
-            dataSource.setDriverClass(driver.getClass().getName());
-            dataSource.setJdbcUrl(generateUrl(databaseConnection));
-
-            dataSource.setUser(databaseConnection.getUserName());
-            dataSource.setPassword(databaseConnection.getUnencryptedPassword());
-
-            dataSource.setAcquireIncrement(ACQUIRE_INCREMENT);
-
-            if (databaseConnection.hasAdvancedProperties()) {
-                
-                populateAdvancedProperties();
-            }
-
-            dataSource.setProperties(properties);
-            
-            Connection connection = dataSource.getConnection();
-            connection.close();
-            
-        } catch (PropertyVetoException e) {
-
-            rethrowAsDataSourceException(e);
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
-    
-    @SuppressWarnings("unchecked")
-    private void populateAdvancedProperties() {
-
-        Properties advancedProperties = databaseConnection.getJdbcProperties();
-        
-        for (Iterator i = advancedProperties.keySet().iterator(); i.hasNext();) {
-
-            String key = (String) i.next();
-            properties.put(key, advancedProperties.getProperty(key));
-        }
-        
+        c3poPoolProperties = new Properties();
+        setMinimumConnections(MIN_POOL_SIZE);
+        setMaximumConnections(MAX_POOL_SIZE);
+        setInitialConnections(INITIAL_POOL_SIZE);
+        c3poPoolProperties.put(ACQUIRE_INCREMENT_KEY, asString(ACQUIRE_INCREMENT));
     }
 
     public DatabaseConnection getDatabaseConnection() {
@@ -89,7 +66,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
             activeConnections.remove(connection);
             connection.close();
-
+            
         } catch (SQLException e) {
             
             rethrowAsDataSourceException(e);
@@ -99,7 +76,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
     public void close() {
 
-        dataSource.close();        
+        pooledDataSource.close();
     }
 
     public Connection getConnection() {
@@ -108,9 +85,23 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         
         try {
 
-            connection = dataSource.getConnection();
-            defaultTxIsolation = connection.getTransactionIsolation();
-            connection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+            if (pooledDataSource == null) {
+                
+                initialiseDataSource(new SimpleDataSource(databaseConnection));
+            }
+
+            connection = pooledDataSource.getConnection();
+
+            if (defaultTxIsolation == -1) {
+             
+                defaultTxIsolation = connection.getTransactionIsolation();
+            }
+            
+            int transactionIsolation = databaseConnection.getTransactionIsolation();
+            if (transactionIsolation != -1) {
+            
+                connection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+            }
 
             activeConnections.add(connection);
             
@@ -122,6 +113,13 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         return connection;
     }
 
+    private void initialiseDataSource(DataSource dataSource) throws SQLException {
+
+        this.dataSource = dataSource;
+        pooledDataSource = (PoolBackedDataSource) DataSources.pooledDataSource(
+                dataSource, c3poPoolProperties);
+    }
+
     public DataSource getDataSource() {
 
         return dataSource;
@@ -129,7 +127,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
     public int getMaximumConnections() {
 
-        return dataSource.getMaxPoolSize();
+        return ((Integer) c3poPoolProperties.get(MAX_POOL_SIZE_KEY)).intValue();
     }
 
     public int getMaximumUseCount() {
@@ -138,8 +136,8 @@ public class C3poConnectionPool extends AbstractConnectionPool {
     }
 
     public int getMinimumConnections() {
-
-        return dataSource.getMinPoolSize();
+        
+        return ((Integer) c3poPoolProperties.get(MIN_POOL_SIZE_KEY)).intValue();
     }
 
     public int getPoolActiveSize() {
@@ -152,7 +150,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         int size = 0;
         try {
         
-            size = dataSource.getNumConnectionsDefaultUser();
+            size = pooledDataSource.getNumConnectionsDefaultUser();
 
         } catch (SQLException e) {
 
@@ -168,13 +166,20 @@ public class C3poConnectionPool extends AbstractConnectionPool {
     }
 
     public void setDataSource(DataSource dataSource) {
-        
-        // not allowed here 
+
+        try {
+
+            initialiseDataSource(dataSource);
+
+        } catch (SQLException e) {
+
+            rethrowAsDataSourceException(e);
+        }
     }
 
     public int getInitialConnections() {
-
-        return dataSource.getInitialPoolSize();
+        
+        return ((Integer) c3poPoolProperties.get(INITIAL_POOL_SIZE_KEY)).intValue();
     }
     
     public void setInitialConnections(int initialConnections) {
@@ -184,7 +189,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
             throw new IllegalArgumentException("Initial connection count must be at least 1");
         }
 
-        dataSource.setInitialPoolSize(initialConnections);
+        c3poPoolProperties.put(INITIAL_POOL_SIZE_KEY, asString(initialConnections));
     }
     
     public void setMaximumConnections(int maximumConnections) {
@@ -194,7 +199,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
             throw new IllegalArgumentException("Maximum connection count must be at least 1");
         }
 
-        dataSource.setMaxPoolSize(maximumConnections);
+        c3poPoolProperties.put(MAX_POOL_SIZE_KEY, asString(maximumConnections));
     }
 
     public void setMaximumUseCount(int maximumUseCount) {
@@ -209,7 +214,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
             throw new IllegalArgumentException("Minimum connection count must be at least 1");
         }
         
-        dataSource.setMinPoolSize(minimumConnections);
+        c3poPoolProperties.put(MIN_POOL_SIZE_KEY, asString(minimumConnections));
     }
 
     public void setTransactionIsolationLevel(int isolationLevel) {
@@ -241,5 +246,10 @@ public class C3poConnectionPool extends AbstractConnectionPool {
         }
         
     }
-    
+
+    private Object asString(int value) {
+
+        return String.valueOf(value);
+    }
+
 }

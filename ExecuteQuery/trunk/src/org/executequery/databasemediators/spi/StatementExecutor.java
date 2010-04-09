@@ -25,7 +25,6 @@ import java.sql.SQLException;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databaseobjects.DatabaseExecutable;
-import org.executequery.databaseobjects.DatabaseProcedure;
 
 public interface StatementExecutor {
 
@@ -52,7 +51,7 @@ public interface StatementExecutor {
     SqlStatementResult execute(String query, boolean enableEscapes)
             throws SQLException;
 
-    /** <p>Executes the specified query and returns 0 if this
+    /** Executes the specified query and returns 0 if this
      *  executes successfully. If an exception occurs, -1 is
      *  returned and the relevant error message, if available,
      *  assigned to this object for retrieval. This will
@@ -64,7 +63,7 @@ public interface StatementExecutor {
      */
     SqlStatementResult createProcedure(String query) throws SQLException;
 
-    /** <p>Executes the specified query and returns
+    /** Executes the specified query and returns
      *  the number of rows affected by this query.
      *  <p>If an exception occurs, -1 is returned and
      *  the relevant error message, if available, assigned
@@ -112,7 +111,7 @@ public interface StatementExecutor {
      */
     void disconnected(DatabaseConnection dc);
 
-    /** <p>Releases database resources held by this class. */
+    /** Releases database resources held by this class. */
     void releaseResources();
 
     void setDatabaseConnection(DatabaseConnection _databaseConnection);

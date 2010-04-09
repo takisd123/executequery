@@ -18,7 +18,7 @@
  *
  */
 
-package org.underworldlabs.jdbc;
+package org.executequery.datasource;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -27,6 +27,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,6 +55,8 @@ public class PooledConnection implements Connection {
     /** the real JDBC connection that this object wraps */
     private Connection realConnection;
     
+    private List<PooledConnectionListener> listeners;
+    
     /** 
      * Creates a new PooledConnection object with the
      * specified connection as the source.
@@ -60,6 +64,7 @@ public class PooledConnection implements Connection {
      * @param the real java.sql.Connection
      */  
     public PooledConnection(Connection realConnection) {
+
         this(realConnection, false);
     }
 
@@ -70,62 +75,84 @@ public class PooledConnection implements Connection {
      * @param the real java.sql.Connection
      */  
     public PooledConnection(Connection realConnection, boolean closeOnReturn) {
+     
         useCount = 0;
         this.realConnection = realConnection;
         this.closeOnReturn = closeOnReturn;
         
         try {
+        
             originalAutoCommit = realConnection.getAutoCommit();
+
         } catch (SQLException e) {
+
             // default to true on dump
             originalAutoCommit = true;
         }
+
     }
 
-    /*
-    public boolean equals(Object obj) {
-        if (realConnection == null) {
-            return false;
-        } else {
-            return realConnection.equals(obj);
+    public void addPooledConnectionListener(PooledConnectionListener pooledConnectionListener) {
+        
+        if (listeners == null) {
+            
+            listeners = new ArrayList<PooledConnectionListener>();
         }
+
+        listeners.add(pooledConnectionListener);
     }
     
-    public int hashCode() {
-        if (realConnection == null) {
-            return 0;
-        }
-        return realConnection.hashCode();
-    }    
-    */
-
     /**
-     *  <p>Determine if the connection is available
+     *  Determine if the connection is available
      *
      * @return true if the connection can be used
      */
     public boolean isAvailable() {
         try {
+            
             if (realConnection != null) {
+            
                 if (!inUse && !realConnection.isClosed()) {
+
                     return true;
-                }
-                else {
+
+                } else {
+
                     return false;
                 }
+
             }
+            
             return false;
-        }
-        catch (SQLException ex) {
+        
+        } catch (SQLException e) {
+          
             return false;
         }
     }
     
     public void setInUse(boolean inUse) {
+
         if (inUse) {
+
             useCount++;
         }
+
         this.inUse = inUse;
+    }
+    
+    protected void destroy() {
+        
+        try {
+
+            if (realConnection != null) {
+            
+                realConnection.close();
+            }
+
+        } catch (SQLException e) {}
+
+        realConnection = null;
     }
     
     /**
@@ -133,23 +160,41 @@ public class PooledConnection implements Connection {
      * any Statements that were not explicitly closed.
      */
     public void close() throws SQLException {
+
         inUse = false;
+        
         if (realConnection != null) {
+        
             if (closeOnReturn) {
+              
                 realConnection.close();
                 realConnection = null;
-            }
-            else {
+
+            } else {
+
                 // reset the original auto-commit mode
                 try {
+                
                     realConnection.setAutoCommit(originalAutoCommit);
-                } 
-                // ignore errors and don't want to re-throw
-                catch (SQLException e) {}
+
+                } catch (SQLException e) {}
+
             }
+
+            fireConnectionClosed();
+            
         }
     }
     
+    private void fireConnectionClosed() {
+
+        for (PooledConnectionListener listener : listeners) {
+            
+            listener.connectionClosed(this);
+        }
+        
+    }
+
     protected void handleException(SQLException e) throws SQLException {
         throw e;
     }
@@ -159,8 +204,7 @@ public class PooledConnection implements Connection {
         return realConnection.createStatement();
     }
     
-    public Statement createStatement(int resultSetType,
-                                     int resultSetConcurrency) 
+    public Statement createStatement(int resultSetType, int resultSetConcurrency) 
         throws SQLException {
         checkOpen();
         return realConnection.createStatement(resultSetType,resultSetConcurrency);

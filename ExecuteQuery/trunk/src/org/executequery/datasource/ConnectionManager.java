@@ -76,15 +76,18 @@ public final class ConnectionManager {
 
         Log.info("Initialising data source for " + databaseConnection.getName());
 
-        DataSource dataSource = new ConnectionDataSource(databaseConnection);
-        ConnectionPool pool = new DefaultConnectionPool(dataSource);
+//        DataSource dataSource = new ConnectionDataSource(databaseConnection);
+//        ConnectionPool pool = new DefaultConnectionPool(dataSource);
 
 //        ConnectionPool pool = new C3poConnectionPool(databaseConnection);
+        ConnectionPool pool = new ConnectionPoolImpl(databaseConnection);
         
         //pool.setPoolScheme(SystemProperties.getIntProperty("connection.scheme"));
+
         pool.setMinimumConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
         pool.setMaximumConnections(5);
         pool.setInitialConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
+
 //        pool.ensureCapacity();
         
         // TODO: ?????????????????
@@ -259,16 +262,19 @@ public final class ConnectionManager {
      *
      * @param the connection be closed
      */
-    public static void close(
-            DatabaseConnection databaseConnection, Connection connection)
-            throws DataSourceException {
+    public static void close(DatabaseConnection databaseConnection, Connection connection) {
+
         if (connectionPools == null || connectionPools.isEmpty()) {
+        
             return;
         }
+        
         if (connectionPools.containsKey(databaseConnection)) {            
+            
             ConnectionPool pool = connectionPools.get(databaseConnection);
             pool.close(connection);
         }
+
     }
     
     /**

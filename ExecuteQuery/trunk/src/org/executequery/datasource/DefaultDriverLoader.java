@@ -62,6 +62,10 @@ public class DefaultDriverLoader implements DriverLoader {
     
             Object object = clazz.newInstance();
             driver = (Driver) object;
+            
+            Log.info("JDBC driver " + driverName + " loaded - v" 
+                    + driver.getMajorVersion() + "." + driver.getMinorVersion());
+            
             LOADED_DRIVERS.put(databaseDriver, driver);
             
         } catch (ClassNotFoundException e) {
