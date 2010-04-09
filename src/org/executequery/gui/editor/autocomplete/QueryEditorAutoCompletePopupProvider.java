@@ -549,8 +549,12 @@ public class QueryEditorAutoCompletePopupProvider
             databaseHost.close();
         }
         
-        databaseHost = databaseObjectFactory.createDatabaseHost(databaseConnection);
-        scheduleListItemLoad();
+        if (databaseConnection != null) {
+
+            databaseHost = databaseObjectFactory.createDatabaseHost(databaseConnection);
+            scheduleListItemLoad();
+        }
+
     }
 
     public void focusGained(FocusEvent e) {

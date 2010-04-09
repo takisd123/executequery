@@ -30,6 +30,8 @@ import java.awt.event.ActionListener;
 import java.awt.print.Printable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -135,6 +137,8 @@ public class QueryEditor extends DefaultTabView
     private QueryEditorDelegate delegate;
     
     private TokenizingFormatter formatter;
+    
+    private List<ConnectionChangeListener> connectionChangeListeners;
     
     /** Constructs a new instance. */
     public QueryEditor() {
@@ -318,6 +322,13 @@ public class QueryEditor extends DefaultTabView
                 connectionChangeListener.connectionChanged(getSelectedConnection());
             }
         });
+        
+        if (connectionChangeListeners == null) {
+            
+            connectionChangeListeners = new ArrayList<ConnectionChangeListener>();
+        }
+
+        connectionChangeListeners.add(connectionChangeListener);
     }
     
     public void removePopupComponent(JComponent component) {
@@ -547,8 +558,7 @@ public class QueryEditor extends DefaultTabView
      * @param the executed result set
      * @param whether to return the result set row count
      */
-    public int setResultSet(ResultSet rset, boolean showRowNumber)
-        throws SQLException {  
+    public int setResultSet(ResultSet rset, boolean showRowNumber) throws SQLException {  
         
         return setResultSet(rset, showRowNumber, null);
     }
@@ -589,11 +599,8 @@ public class QueryEditor extends DefaultTabView
     public int setResultSet(ResultSet rset, boolean showRowNumber, String query)
         throws SQLException {
         
-        int rowCount = resultsPanel.setResultSet(
-                rset, showRowNumber, getMaxRecords());
-        
+        int rowCount = resultsPanel.setResultSet(rset, showRowNumber, getMaxRecords());
         revalidate();
-        
         return rowCount;
     }
     
@@ -915,6 +922,13 @@ public class QueryEditor extends DefaultTabView
         toolBar = null;
         editorPanel = null;
 
+        delegate.disconnected(getSelectedConnection());
+        
+        for (ConnectionChangeListener listener : connectionChangeListeners) {
+            
+            listener.connectionChanged(null);
+        }
+        
         removeAll();
         EventMediator.deregisterListener(this);
         GUIUtilities.registerUndoRedoComponent(null);
