@@ -89,9 +89,6 @@ public final class ConnectionManager {
 
 //        pool.ensureCapacity();
         
-        // TODO: ?????????????????
-        //pool.setMinConns(determineMinimumConnections());
-
         if (connectionPools == null) {
 
             connectionPools = new HashMap<DatabaseConnection, ConnectionPool>();

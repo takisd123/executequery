@@ -58,6 +58,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         pooledConnection.destroy();
         
         openConnections.remove(pooledConnection);
+        ensureCapacity(minimumConnections);
     }
 
     public synchronized void close() {

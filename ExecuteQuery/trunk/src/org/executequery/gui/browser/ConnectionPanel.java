@@ -1036,6 +1036,7 @@ public class ConnectionPanel extends ActionPanel
     private void paintStatusLabel() {
         Runnable update = new Runnable() {
             public void run() {
+                repaint();
                 Dimension dim = statusLabel.getSize();
                 statusLabel.paintImmediately(0, 0, dim.width, dim.height);
             }
