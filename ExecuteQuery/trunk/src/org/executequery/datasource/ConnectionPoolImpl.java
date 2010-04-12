@@ -10,8 +10,6 @@ import javax.sql.DataSource;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.underworldlabs.jdbc.DataSourceException;
 
-import com.sun.swing.internal.plaf.synth.resources.synth;
-
 /**
  *
  * @author   Takis Diakoumis
@@ -57,7 +55,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         activeConnections.remove(connection);
 
         PooledConnection pooledConnection = (PooledConnection) connection;
-        pooledConnection.destroy();        
+        pooledConnection.destroy();
         
         openConnections.remove(pooledConnection);
     }
@@ -66,7 +64,8 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
         for (Connection connection : openConnections) {
             
-            close(connection);
+            PooledConnection pooledConnection = (PooledConnection) connection;
+            pooledConnection.destroy();
         }
 
         activeConnections.clear();
@@ -104,7 +103,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
         while (openConnections.size() < capacity) {
 
-            createConnection();            
+            createConnection();
         }
         
     }
@@ -115,7 +114,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
             
             PooledConnection connection = getNextOpenAvailable();
             if (connection != null) {
-            
+
                 close(connection);
             
             } else {
@@ -231,7 +230,6 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         }
 
         this.initialConnections = initialConnections;
-        ensureCapacity(initialConnections);
     }
     
     public void setMaximumConnections(int maximumConnections) {
@@ -257,6 +255,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         }
         
         this.minimumConnections = minimumConnections;
+        ensureCapacity(minimumConnections);
     }
 
     public void setTransactionIsolationLevel(int isolationLevel) {
