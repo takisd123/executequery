@@ -12,7 +12,7 @@ import javax.sql.DataSource;
  */
 interface ConnectionPool {
 
-    int MAX_POOL_SIZE = 5;
+    int MAX_POOL_SIZE = 50;
     int MIN_POOL_SIZE = 1;
     int INITIAL_POOL_SIZE = 1;
     

@@ -85,7 +85,6 @@ public final class ConnectionManager {
         //pool.setPoolScheme(SystemProperties.getIntProperty("connection.scheme"));
 
         pool.setMinimumConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
-        pool.setMaximumConnections(5);
         pool.setInitialConnections(SystemProperties.getIntProperty("user", "connection.initialcount"));
 
 //        pool.ensureCapacity();
@@ -110,7 +109,7 @@ public final class ConnectionManager {
      * @param the stored database connection properties object
      * @return the connection itself
      */
-    public static Connection getConnection(DatabaseConnection databaseConnection) throws DataSourceException {
+    public static Connection getConnection(DatabaseConnection databaseConnection) {
 
         if (databaseConnection == null) {
 
@@ -138,7 +137,7 @@ public final class ConnectionManager {
      *
      * @param the stored database connection properties object
      */
-    public static void closeConnection(DatabaseConnection databaseConnection) throws DataSourceException {
+    public static void closeConnection(DatabaseConnection databaseConnection) {
 
         synchronized (databaseConnection) {
 
@@ -162,15 +161,17 @@ public final class ConnectionManager {
      *
      * @param the stored database connection properties object
      */
-    public static void close() throws DataSourceException {
+    public static void close() {
 
         if (connectionPools == null || connectionPools.isEmpty()) {
+         
             return;
         }
 
         // iterate and close all the pools
         for (Iterator<DatabaseConnection> i = 
-        		connectionPools.keySet().iterator(); i.hasNext();) {
+                connectionPools.keySet().iterator(); i.hasNext();) {
+
             ConnectionPool pool = connectionPools.get(i.next());
             pool.close();
         }
@@ -198,8 +199,7 @@ public final class ConnectionManager {
      * @see java.sql.Connection for possible values
      */
     public static void setTransactionIsolationLevel(
-                    DatabaseConnection databaseConnection, int isolationLevel) 
-        throws DataSourceException {
+                    DatabaseConnection databaseConnection, int isolationLevel) {
         if (connectionPools == null || 
                 connectionPools.containsKey(databaseConnection)) {
             ConnectionPool pool = connectionPools.get(databaseConnection);
