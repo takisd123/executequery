@@ -49,6 +49,7 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class ConnectionDataSource implements DataSource {
     
+    /*
     public static final int ORACLE = 1;
     public static final int SYBASEw = 2;
     public static final int DB2 = 3;
@@ -56,11 +57,13 @@ public class ConnectionDataSource implements DataSource {
     public static final int MYSQL = 5;
     public static final int POSTGRESQL = 6;
     public static final int INFORMIX = 7;
-    public static final int ODBC = 8;
     public static final int POINTBASE = 9;
     public static final int HSQL = 10;
     public static final int ACCESS = 11;
     public static final int OTHER = 99;
+    */
+
+    public static final int ODBC = 8;
     
     public static final String PORT = "[port]";
     public static final String SOURCE = "[source]";
@@ -72,8 +75,6 @@ public class ConnectionDataSource implements DataSource {
     
     private static final Map<DatabaseDriver,Driver> loadedDrivers = new HashMap<DatabaseDriver,Driver>();
 
-    protected boolean usingOracleThinDriver;
-    
     /** flag indicating whether we are using the ODBC bridge driver */
     protected boolean usingODBC;
     
@@ -120,10 +121,6 @@ public class ConnectionDataSource implements DataSource {
         
     }
 
-    public boolean isUsingOracleThinDriver() {
-        return usingOracleThinDriver;
-    }
-    
     public String getJdbcUrl() {
         return jdbcUrl;
     }
@@ -139,11 +136,7 @@ public class ConnectionDataSource implements DataSource {
             driverLoaded = false;
             int driverType = databaseDriver.getType();
             
-            if (driverType == ORACLE) {
-
-                usingOracleThinDriver = true;
-
-            } else if (driverType == ODBC) {
+            if (driverType == ODBC) {
 
                 usingODBC = true;
             }

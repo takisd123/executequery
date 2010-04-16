@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -889,6 +890,25 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         
         return getParent().parseDateValues();
     }
+
+    private String databaseProductName;
+    private static final String ORACLE = "ORACLE";
+
+    protected boolean isOracle() throws SQLException {
+        
+        if (databaseProductName == null) {
+            
+            DatabaseMetaData metaData = conn.getMetaData();
+            databaseProductName = metaData.getDatabaseProductName().toUpperCase();
+        
+        } else {
+        
+            return databaseProductName.contains(ORACLE);
+        }
+        
+        return false;
+    }
+
     
 }
 
