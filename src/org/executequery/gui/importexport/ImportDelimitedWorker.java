@@ -24,6 +24,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.BatchUpdateException;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -386,9 +387,11 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                         
                         // if we didn't find any columns at all, show warning
                         if (temp.isEmpty()) {
+
                             String message = "No matching column names were " +
                                     "found within the specified file's first line.\n" +
                                     "The current file will be ignored.";
+
                             outputBuffer.append(message);
                             appendProgressWarningText(outputBuffer);
 
@@ -401,8 +404,9 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             } else {
                                 throw new InterruptedException();
                             }
-                        }
-                        else {
+
+                        } else {
+                          
                             // add any other selected columns to the
                             // end of the temp list with the columns
                             // available in the file
@@ -431,9 +435,12 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                 // otherwise just populate the columns in the file
                 // with all the selected columns
                 else {
+
                     for (int j = 0; j < columnCount; j++) {
+
                         fileImportedColumns.put(columns.get(j), INCLUDED_COLUMN);
                     }
+
                 }
 
                 /*
@@ -491,15 +498,18 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                 rowLength = 0;
                 
                 while ((row = reader.readLine()) != null) {
+
                     insertLine = true;
                     lineNumber++;
                     tableRowCount++;
                     totalRecordCount++;
 
                     if (Thread.interrupted()) {
+
                         fileReader.close();
                         printTableResult(tableRowCount, 
                                 tableCommitCount, dto.getTableName());
+                        
                         setProgressStatus(100);
                         throw new InterruptedException();
                     }
@@ -507,6 +517,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     currentRowLength = row.length();
                     
                     if (currentRowLength == 0) {
+
                         outputBuffer.append("Line ");
                         outputBuffer.append(lineNumber);
                         outputBuffer.append(" contains no delimited values");
@@ -527,6 +538,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     
                     rowLength += currentRowLength;
                     if (progressCheck < rowLength) {
+
                         setProgressStatus(progressStatus);
                         progressStatus += 10;
                         rowLength = 0;
@@ -637,8 +649,8 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                                 boundVariables.put(cd, VARIABLE_BOUND);
                             }
 
-                        }
-                        catch (ParseException e) {
+                        } catch (ParseException e) {
+                       
                             errorCount++;
                             failed = true;
                             outputBuffer.append("Error parsing date value on line ");
@@ -647,8 +659,9 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             outputBuffer.append(j);
                             outputExceptionError(null, e);
                             break;
-                        }
-                        catch (NumberFormatException e) {
+                       
+                        } catch (NumberFormatException e) {
+                            
                             errorCount++;
                             failed = true;
                             outputBuffer.append("Error parsing value on line ");
@@ -662,11 +675,13 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     }
                     
                     if (!insertLine) {
+
                         prepStmnt.clearParameters();
                         continue;
                     }
                     
                     if (failed && haltOnError) {
+
                         processResult = FAILED;
                         break;
                     }
@@ -990,7 +1005,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
     }
 
     
-    private int[] getBatchResult(int[] updateCount) {
+    private int[] getBatchResult(int[] updateCount) throws SQLException {
         int insert = 0;
         int success = 0;
         int errors = 0;
@@ -998,11 +1013,13 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         // annoying as becoming a little db specific,
         // but Oracle returns -2 on a successful batch
         // execution using prepared statement (-3 on error)
-        ConnectionDataSource cds = (ConnectionDataSource)
-                ConnectionManager.getDataSource(getParent().getDatabaseConnection());
-        if (cds.isUsingOracleThinDriver()) {
+
+        if (isOracle()) {
+        
             success = -2;
+
         } else {
+            
             success = 1;
         }
         
@@ -1032,12 +1049,3 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
     public void finished() {}
     
 }
-
-
-
-
-
-
-
-
-

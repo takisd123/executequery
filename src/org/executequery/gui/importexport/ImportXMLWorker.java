@@ -786,7 +786,7 @@ public class ImportXMLWorker extends AbstractImportExportWorker
 
         }
 
-        private int[] getBatchResult(int[] updateCount) {
+        private int[] getBatchResult(int[] updateCount) throws SQLException {
             int insert = 0;
             int success = 0;
             int errors = 0;
@@ -795,11 +795,12 @@ public class ImportXMLWorker extends AbstractImportExportWorker
             // but Oracle returns -2 on a successful batch
             // execution using prepared statement (-3 on error)
             
-            ConnectionDataSource cds = (ConnectionDataSource)
-                    ConnectionManager.getDataSource(getParent().getDatabaseConnection());
-            if (cds.isUsingOracleThinDriver()) {
+            if (isOracle()) {
+                
                 success = -2;
+
             } else {
+                
                 success = 1;
             }
 
