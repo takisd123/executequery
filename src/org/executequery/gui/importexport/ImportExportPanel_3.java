@@ -68,26 +68,18 @@ public class ImportExportPanel_3 extends JPanel {
     /** The controlling object for this process */
     private ImportExportProcess parent;
     
-    /** <p>Creates a new instance with the specified
-     *  process as the parent.
-     *
-     *  @param the parent controlling the process
-     */
     public ImportExportPanel_3(ImportExportProcess parent) {
         super(new GridBagLayout());
         this.parent = parent;
-        
         try {
-            jbInit();
+            init();
         } catch(Exception e) {
             e.printStackTrace();
-        }
-        
+        }        
     }
     
-    /** <p>Initialises the state of this instance and
-     *  lays out components on the panel. */
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
+
         JLabel label = new JLabel("Select respective data files for " +
                                   "the tables to be processed.");
         
@@ -132,115 +124,129 @@ public class ImportExportPanel_3 extends JPanel {
     
     /** <p>Generates and displays the table/data file <code>JTable</code>*/
     public void buildTable() {
+
         int type = parent.getTableTransferType();
-        boolean hasData = tableModel.hasData();
-        Vector<DataTransferObject> v = null;
+        Vector<DataTransferObject> tables = null;
+        Vector<DataTransferObject> currentSelections = currentSelections();
         
         switch (type) {
             
             case ImportExportProcess.SINGLE_TABLE:
                 
                 String tableName = parent.getTableName();
-                
-                if (hasData && tableModel.getRowCount() > 1)
-                    hasData = false;
-                
-                if (!hasData || !tableName.equals(tableModel.getDataVector().
-                elementAt(0).toString())) {
-                    v = new Vector(1);
-                    v.add(new DataTransferObject(tableName));
+                tables = new Vector<DataTransferObject>(1);
+
+                DataTransferObject tableWithName = tableWithName(tableName, currentSelections);
+                if (tableWithName != null) {
+                    
+                    tables.add(tableWithName);                    
+
+                } else {
+                    
+                    tables.add(new DataTransferObject(tableName));
                 }
-                
-                else
-                    v = tableModel.getDataVector();
                 
                 break;
-                
+
             case ImportExportProcess.MULTIPLE_TABLE:
-                String[] tables = parent.getSelectedTables();
                 
-                v = new Vector<DataTransferObject>(tables.length);
+                String[] selectedTables = parent.getSelectedTables();
+                tables = new Vector<DataTransferObject>(selectedTables.length);
                 
-                int multipleFile = parent.getMutlipleTableTransferType();
-                
-                if (multipleFile == ImportExportProcess.SINGLE_FILE)
-                    v.add(new DataTransferObject("ALL TABLES"));
-                
-                else {
+                if (parent.isSingleFileExport()) {
                     
-                    for (int i = 0; i < tables.length; i++) {
-                        v.add(new DataTransferObject(tables[i]));
-                    }
+                    tables.add(new DataTransferObject("ALL TABLES"));
 
-                }
-                
-                if (hasData) {
-                    Vector<DataTransferObject> v_current = tableModel.getDataVector();
-                    int v_currentSize =  v_current.size();
+                } else {
                     
-                    String newTable = null;
-                    Object obj = null;
-                    
-                    for (int i = 0, j = v.size(); i < j; i++) {
-                        newTable = v.elementAt(i).toString();
+                    for (String name : selectedTables) {
+
+                        if (tableExists(name, currentSelections)) {
                         
-                        for (int k = 0; k < v_currentSize; k++) {
-                            obj = v_current.elementAt(k);
-                            
-                            if (newTable.equals(obj.toString())) {
+                            tables.add(tableWithName(name, currentSelections));
 
-                                v.add(i, (DataTransferObject)obj);
-                                break;
-                            }
+                        } else {
                             
+                            tables.add(new DataTransferObject(name));
                         }
-                        
+
                     }
-                    
+
                 }
-                
+
                 break;
                 
         }
         
-        tableModel.setColumnDataVector(v);
+        tableModel.setColumnDataVector(tables);
         table.setModel(tableModel);
         table.revalidate();
+    }
+
+    private boolean tableExists(String name, Vector<DataTransferObject> selections) {
+
+        return tableWithName(name, selections) != null;
+    }
+
+    private DataTransferObject tableWithName(String name, Vector<DataTransferObject> selections) {
         
+        String _name = name.toUpperCase();
+        
+        for (DataTransferObject selection : selections) {
+            
+            if (_name.equals(selection.getTableName().toUpperCase())) {
+                
+                return selection;
+            }
+            
+        }
+
+        return null;
     }
     
-    /** <p>Returns a <code>Vector</code> of <code>
-     *  DataTransferObject</code> objects containing
-     *  all relevant data for the process.
+    private Vector<DataTransferObject> currentSelections() {
+     
+        Vector<DataTransferObject> currentSelections = tableModel.getDataVector();
+        if (currentSelections == null) {
+
+            currentSelections = new Vector<DataTransferObject>();
+        }
+
+        return currentSelections;
+    }
+    
+    /** 
+     * <p>Returns a <code>Vector</code> of <code>DataTransferObject</code> 
+     * objects containing all relevant data for the process.
      *
      *  @return a <code>Vector</code> of
      *          <code>DataTransferObject</code> objects
      */
     public Vector<DataTransferObject> getDataFileVector() {
-        return tableModel.getDataVector();
+        return currentSelections();
     }
     
-    /** <p>Validates that all tables selected have
-     *  an associated data file selected.
+    /** 
+     * <p>Validates that all tables selected have an associated data
+     * file selected.
      *
      *  @return whether transfer files are present
      */
     public boolean transferObjectsComplete() {
         
         if (table.isEditing()) {
+
             table.getCellEditor(table.getEditingRow(), 1).stopCellEditing();
         }
 
-        Vector v = tableModel.getDataVector();
-        int v_size = v.size();
         int type = parent.getTransferType();
-        
-        for (int i = 0; i < v_size; i++) {
-            DataTransferObject dto = (DataTransferObject)v.elementAt(i);
+        for (DataTransferObject dto : currentSelections()) {
             
             if (!dto.hasDataFile(type)) {
+
                 GUIUtilities.displayErrorMessage(
-                "You must provide a valid data file for each selected table.");
+                    "You must provide a valid data file for each selected table.");
+
                 return false;
             }
             
@@ -267,32 +273,42 @@ public class ImportExportPanel_3 extends JPanel {
         }
         
         public boolean hasData() {
-            return data != null;
+            return data != null && !data.isEmpty();
         }
         
         public int getRowCount() {
-            return data.size();
+            
+            if (data != null) {
+            
+                return data.size();
+            }
+            
+            return 0;
         }
         
         public int getColumnCount() {
-            return 3;
+
+            return header.length;
         }
         
-        public void setColumnDataVector(Vector data) {
+        public void setColumnDataVector(Vector<DataTransferObject> data) {
+
             this.data = data;
             if (table.isEditing()) {
+            
                 fireTableRowsUpdated(0, data.size());
             }
+
         }
         
-        /** <p>Sets the data file for the specified row
-         *  to the specified file.
+        /** 
+         *  Sets the data file for the specified row to the specified file.
          *
          *  @param the row (<code>Vector</code> index)
          *  @param the file name
          */
         public void setDataFile(int row, String fileName) {
-            DataTransferObject obj = (DataTransferObject)data.elementAt(row);
+            DataTransferObject obj = (DataTransferObject) data.elementAt(row);
             obj.setFileName(getFileName(fileName));
             fireTableRowsUpdated(row, row);
         }
@@ -424,8 +440,9 @@ public class ImportExportPanel_3 extends JPanel {
                 fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-                int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");                
+                int result = fileChooser.showDialog(parent.getDialog(), "Select");                
                 if (result == JFileChooser.CANCEL_OPTION) {
+
                     return label;
                 }
 
