@@ -341,6 +341,10 @@ public class ImportExportExcelPanel extends WizardProcessPanel
     public int getMutlipleTableTransferType() {
         return firstPanel.getMutlipleTableTransferType();
     }
+
+    public boolean isSingleFileExport() {
+        return getMutlipleTableTransferType() == SINGLE_FILE;
+    }
     
     /** <p>Indicates whether the process (import only)
      *  should be run as a batch process.

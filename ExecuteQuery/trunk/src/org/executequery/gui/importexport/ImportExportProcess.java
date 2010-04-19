@@ -215,6 +215,13 @@ public interface ImportExportProcess {
      */
     int getMutlipleTableTransferType();
     
+    /** 
+     * Returns whether the table transfer type is single or multiple file.
+     *
+     * @return true | false
+     */
+    boolean isSingleFileExport();
+    
     /**
      * Returns the schema name where applicable.
      *

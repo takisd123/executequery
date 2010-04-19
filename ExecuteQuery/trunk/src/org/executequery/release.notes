@@ -24,6 +24,9 @@ Summary of changes from 3.2 Build 5140:
   panel.  
 - Modified callable statement generation removing left-hand equals where out
   parameters do not exist.
+- Fixed issue with data exports for multiple tables where back/next button 
+  selection from export file entry would duplicate selected tables in returning
+  to file selection panel. 
 
 
 Summary of changes from 3.1.6 Build 5132:

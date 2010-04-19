@@ -504,7 +504,11 @@ public class ImportExportDelimitedPanel extends WizardProcessPanel
      *  @return the type of multiple table transfer
      */
     public int getMutlipleTableTransferType() {
-        return -1;
+        return MULTIPLE_FILE;
+    }
+
+    public boolean isSingleFileExport() {
+        return false;
     }
     
     
