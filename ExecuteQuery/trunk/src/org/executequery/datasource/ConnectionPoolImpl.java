@@ -52,12 +52,16 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
     public void close(Connection connection) {
 
-        activeConnections.remove(connection);
-
-        PooledConnection pooledConnection = (PooledConnection) connection;
-        pooledConnection.destroy();
+        if (connection != null) {
         
-        openConnections.remove(pooledConnection);
+            activeConnections.remove(connection);
+    
+            PooledConnection pooledConnection = (PooledConnection) connection;
+            pooledConnection.destroy();
+            
+            openConnections.remove(pooledConnection);
+        }
+
         ensureCapacity(minimumConnections);
     }
 
