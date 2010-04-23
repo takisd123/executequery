@@ -40,12 +40,15 @@ public final class DerivedQuery {
     }
 
     public void setDerivedQuery(String derivedQuery) {
-        this.derivedQuery = derivedQuery.replaceAll("\t", " ");
+        
+        String query = derivedQuery.replaceAll("\t", " ");
+        
+        if (query.endsWith(";")) {
+            
+            query = query.substring(0, query.length() - 1);
+        }
+        
+        this.derivedQuery = query;
     }
     
 }
-
-
-
-
-
