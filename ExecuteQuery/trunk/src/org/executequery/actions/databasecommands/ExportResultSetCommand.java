@@ -1,5 +1,5 @@
 /*
- * CreateIndexCommand.java
+ * ExportSQLCommand.java
  *
  * Copyright (C) 2002-2009 Takis Diakoumis
  *
@@ -25,17 +25,17 @@ import java.awt.event.ActionEvent;
 import org.executequery.GUIUtilities;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
-import org.executequery.gui.CreateIndexPanel;
+import org.executequery.gui.ExportResultSetPanel;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
- * Command execution for Database | Create Index.
+ * Execution for Export Excel
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision: 1241 $
+ * @date     $Date: 2008-03-24 18:19:43 +1100 (Mon, 24 Mar 2008) $
  */
-public class CreateIndexCommand extends OpenFrameCommand
+public class ExportResultSetCommand extends OpenFrameCommand
                                 implements BaseCommand {
     
     public void execute(ActionEvent e) {
@@ -49,16 +49,16 @@ public class CreateIndexCommand extends OpenFrameCommand
             return;
         }
 
-        if (!isDialogOpen(CreateIndexPanel.TITLE)) {
+        if (!isDialogOpen(ExportResultSetPanel.TITLE)) {
 
             try {
 
                 GUIUtilities.showWaitCursor();
 
                 BaseDialog dialog = 
-                        createDialog(CreateIndexPanel.TITLE, false);
+                        createDialog(ExportResultSetPanel.TITLE, false);
                 
-                CreateIndexPanel panel = new CreateIndexPanel(dialog);
+                ExportResultSetPanel panel = new ExportResultSetPanel(dialog);
                 
                 dialog.addDisplayComponentWithEmptyBorder(panel);
                 dialog.display();
@@ -73,3 +73,4 @@ public class CreateIndexCommand extends OpenFrameCommand
     }
     
 }
+

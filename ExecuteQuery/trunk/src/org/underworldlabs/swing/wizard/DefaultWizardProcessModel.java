@@ -50,12 +50,12 @@ public class DefaultWizardProcessModel implements WizardProcessModel {
     public DefaultWizardProcessModel() {}
     
     /** Creates a new instance of WizardProcessModel */
-    public DefaultWizardProcessModel(List panels) {
+    public DefaultWizardProcessModel(List<JPanel> panels) {
         this(panels, null, null);
     }
 
     /** Creates a new instance of WizardProcessModel */
-    public DefaultWizardProcessModel(List panels, String[] steps, String[] titles) {
+    public DefaultWizardProcessModel(List<JPanel> panels, String[] steps, String[] titles) {
         this.panels = panels;
         this.steps = steps;
         this.titles = titles;
@@ -261,12 +261,3 @@ public class DefaultWizardProcessModel implements WizardProcessModel {
     }
     
 }
-
-
-
-
-
-
-
-
-

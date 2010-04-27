@@ -36,11 +36,8 @@ import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.gui.ActionContainer;
 import org.executequery.log.Log;
-import org.executequery.util.StringBundle;
-import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.wizard.DefaultWizardProcessModel;
-import org.underworldlabs.swing.wizard.WizardProcessPanel;
 
 /**
  *
@@ -48,13 +45,13 @@ import org.underworldlabs.swing.wizard.WizardProcessPanel;
  * @version  $Revision: 1241 $
  * @date     $Date: 2008-03-24 18:19:43 +1100 (Mon, 24 Mar 2008) $
  */
-public class ExportAsSQLWizard extends WizardProcessPanel
+public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
                                implements ActiveComponent, ImportExportWizard {
 
+    public static final String TITLE = "Export as SQL";
+    
     private static final Dimension panelSize = new Dimension(525, 340);
 
-    private StringBundle bundle;
-    
     private ExportAsSQLDataModel exportDataModel;
     
     private TableSelectionCombosGroup tableSelectionCombosGroup;
@@ -443,25 +440,6 @@ public class ExportAsSQLWizard extends WizardProcessPanel
             return false;
         }
 
-    }
-
-    private StringBundle getBundle() {
-        return bundle();
-    }
-
-    private StringBundle bundle() {
-        if (bundle == null) {
-            bundle = SystemResources.loadBundle(getClass());
-        }
-        return bundle;
-    }
-
-    private String getString(String key) {
-        return getBundle().getString(key);
-    }
-
-    private String getString(String key, Object arg) {
-        return getBundle().getString(key, arg);
     }
 
     public ImportExportMonitor getImportExportMonitor() {
