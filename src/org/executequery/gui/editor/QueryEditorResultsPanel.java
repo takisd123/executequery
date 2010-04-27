@@ -36,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.UserPreferencesManager;
 import org.executequery.databasemediators.QueryTypes;
@@ -701,9 +702,11 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             setSelectedIndex(0);
         }
         
-        if (!MiscUtils.isNull(text)) {            
+        if (StringUtils.isNotBlank(text)) {
+
             appendOutput(type, text);
         }
+
         if (queryEditor != null) {
             
             if (!isResultSetSelected()) {

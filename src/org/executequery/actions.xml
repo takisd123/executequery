@@ -605,7 +605,7 @@
 
   <action id="export-resultset-command"
           name="Export Result Set"
-          mnemonic="R"
+          mnemonic="x"
           accel-editable="true"
           small-icon="/org/executequery/icons/ExportDelimited16.gif"
           large-icon="/org/executequery/icons/ExportDelimited24.gif"

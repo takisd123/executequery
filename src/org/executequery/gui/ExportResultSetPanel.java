@@ -26,7 +26,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ItemEvent;
+import java.awt.Insets;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,32 +39,41 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.ActiveComponent;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
+import org.executequery.UserPreferencesManager;
 import org.executequery.components.BottomButtonPanel;
 import org.executequery.components.FileChooserDialog;
-import org.executequery.components.ItemSelectionListener;
 import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
 import org.executequery.databasemediators.spi.StatementExecutor;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.event.ApplicationEvent;
+import org.executequery.event.ConnectionEvent;
+import org.executequery.event.ConnectionListener;
 import org.executequery.event.DefaultKeywordEvent;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
+import org.executequery.gui.editor.QueryEditorOutputPane;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
 import org.underworldlabs.swing.ActionPanel;
+import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
+import org.underworldlabs.swing.plaf.UIUtils;
+import org.underworldlabs.util.MiscUtils;
 
 /** 
- * The Create Index panel.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
@@ -74,8 +83,9 @@ public class ExportResultSetPanel extends ActionPanel
                               implements FocusComponentPanel,
                                          ActiveComponent,
                                          KeywordListener,
-                                         TextEditorContainer,
-                                         ItemSelectionListener {
+                                         DocumentListener,
+                                         ConnectionListener,
+                                         TextEditorContainer {
     
     public static final String TITLE = "Export Result Set";
     public static final String FRAME_ICON = "NewIndex16.gif";
@@ -93,6 +103,8 @@ public class ExportResultSetPanel extends ActionPanel
     private ActionContainer parent;
 
     private TableSelectionCombosGroup combosGroup;
+
+    private QueryEditorOutputPane outputPane;
 
     public ExportResultSetPanel(ActionContainer parent) {
 
@@ -121,12 +133,32 @@ public class ExportResultSetPanel extends ActionPanel
         delimiterCombo.setEditable(true);
         
         combosGroup = new TableSelectionCombosGroup(connectionsCombo);
-        combosGroup.addItemSelectionListener(this);
 
         includeColumNamesCheck = new JCheckBox("Include column names as first row");
         
         sqlText = new SimpleSqlTextPanel();
         sqlText.getTextPane().setBackground(Color.WHITE);
+        sqlText.setBorder(null);
+
+        outputPane = new QueryEditorOutputPane();
+        outputPane.setMargin(new Insets(5, 5, 5, 5));
+        outputPane.setDisabledTextColor(Color.black);
+        
+        Color bg = UserPreferencesManager.getOutputPaneBackground();
+        outputPane.setBackground(bg);
+
+        JScrollPane textOutputScroller = new JScrollPane(outputPane);
+        textOutputScroller.setBackground(bg);
+        textOutputScroller.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
+        textOutputScroller.getViewport().setBackground(bg);
+
+        outputPane.getDocument().addDocumentListener(this);
+        
+        FlatSplitPane splitPane = new FlatSplitPane(
+                JSplitPane.VERTICAL_SPLIT, sqlText, textOutputScroller);
+        splitPane.setResizeWeight(0.5);
+        splitPane.setDividerLocation(0.8);
+        splitPane.setDividerSize(5);
 
         JButton button = WidgetFactory.createInlineFieldButton("Browse");
         button.setActionCommand("browse");
@@ -192,7 +224,7 @@ public class ExportResultSetPanel extends ActionPanel
         gbc.insets.left = 5;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(sqlText, gbc);
+        mainPanel.add(splitPane, gbc);
         
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
         
@@ -202,7 +234,7 @@ public class ExportResultSetPanel extends ActionPanel
 
         BottomButtonPanel buttonPanel = new BottomButtonPanel(
                 this, "Execute", "export-result-set", true);
-        buttonPanel.setOkButtonActionCommand("doCreateIndex");
+        buttonPanel.setOkButtonActionCommand("executeAndExport");
         
         base.add(buttonPanel, BorderLayout.SOUTH);
         
@@ -278,7 +310,7 @@ public class ExportResultSetPanel extends ActionPanel
 
     public boolean canHandleEvent(ApplicationEvent event) {
 
-        return (event instanceof DefaultKeywordEvent);
+        return (event instanceof DefaultKeywordEvent) || (event instanceof ConnectionEvent);
     }
 
     /** Notification of a new keyword added to the list. */
@@ -301,7 +333,7 @@ public class ExportResultSetPanel extends ActionPanel
         return fileNameField;
     }
 
-    public void doCreateIndex() {
+    public void executeAndExport() {
         
         if (fieldsValid()) {
 
@@ -328,35 +360,57 @@ public class ExportResultSetPanel extends ActionPanel
         DatabaseHost host = combosGroup.getSelectedHost();
         StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection());
 
+        long startTime = System.currentTimeMillis();
+        SqlStatementResult statementResult = null;
+
         try {
 
             String query = sqlText.getEditorText();
-            int type = statementExecutor.getQueryType(query);
-            SqlStatementResult statementResult = statementExecutor.execute(type, query);
+            
+            outputPane.appendAction("Executing:");
+            outputPane.appendActionFixedWidth(query);
 
-            if (statementResult.isResultSet()) {
+            int type = statementExecutor.getQueryType(query);
+            statementResult = statementExecutor.execute(type, query);
+
+            if (statementResult.isException()) {
+                
+                throw statementResult.getSqlException();
+                
+            } else if (statementResult.isResultSet()) {
 
                 resultSet = statementResult.getResultSet();
+
                 return writeToFile(resultSet);
 
             } else {
 
-                GUIUtilities.displayErrorMessage(
-                        "The executed query did not return a valid result set");
+                outputPane.appendWarning("The executed query did not return a valid result set");
                 return false;
             }
             
         } catch (SQLException e) {
 
-            GUIUtilities.displayExceptionErrorDialog("Execution error:\n" + e.getMessage(), e);
+            if (statementResult != null) {
+            
+                outputPane.appendError(statementResult.getErrorMessage());
+
+            } else {
+
+                outputPane.appendError("Execution error:\n" + e.getMessage());
+            }
+            
             return false;
 
         } finally {
 
+            long endTime = System.currentTimeMillis();
+            outputPane.append("Duration: " + MiscUtils.formatDuration(endTime - startTime));
+
             try {
                 
                 if (resultSet != null) {
-                    
+
                     resultSet.close();
                 }
                 
@@ -403,19 +457,48 @@ public class ExportResultSetPanel extends ActionPanel
         return TITLE;
     }
 
-    public void itemStateChanging(ItemEvent e) {
-        
-        parent.block();
+    // ---------------------------------------------
+    // ConnectionListener implementation
+    // ---------------------------------------------
+    
+    /**
+     * Indicates a connection has been established.
+     * 
+     * @param the encapsulating event
+     */
+    public void connected(ConnectionEvent connectionEvent) {
+
+        combosGroup.connectionOpened(connectionEvent.getDatabaseConnection());
     }
 
-    public void itemStateChanged(ItemEvent event) {
+    /**
+     * Indicates a connection has been closed.
+     * 
+     * @param the encapsulating event
+     */
+    public void disconnected(ConnectionEvent connectionEvent) {
 
+        combosGroup.connectionClosed(connectionEvent.getDatabaseConnection());
+    }
+
+    public void changedUpdate(DocumentEvent e) {
+
+        documentChanged();
+    }
+
+    public void insertUpdate(DocumentEvent e) {
         
+        documentChanged();
+    }
+
+    public void removeUpdate(DocumentEvent e) {
+        
+        documentChanged();
+    }
+
+    private void documentChanged() {
+        
+        outputPane.setCaretPosition(outputPane.getDocument().getLength());
     }
     
 }
-
-
-
-
-

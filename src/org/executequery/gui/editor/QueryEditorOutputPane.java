@@ -31,13 +31,6 @@ import javax.swing.text.StyleConstants;
 import org.executequery.Constants;
 import org.executequery.sql.SqlMessages;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -227,13 +220,3 @@ public class QueryEditorOutputPane extends JTextPane {
     } // class OutputPaneDocument
     
 }
-
-
-
-
-
-
-
-
-
-
