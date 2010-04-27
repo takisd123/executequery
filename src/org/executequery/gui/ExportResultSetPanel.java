@@ -28,6 +28,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
@@ -40,6 +41,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.ActiveComponent;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
@@ -47,10 +49,10 @@ import org.executequery.components.BottomButtonPanel;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.components.ItemSelectionListener;
 import org.executequery.components.TableSelectionCombosGroup;
-import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
 import org.executequery.databasemediators.spi.StatementExecutor;
+import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.DefaultKeywordEvent;
 import org.executequery.event.KeywordEvent;
@@ -60,7 +62,6 @@ import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
 import org.underworldlabs.swing.ActionPanel;
 import org.underworldlabs.swing.GUIUtils;
-import org.underworldlabs.util.MiscUtils;
 
 /** 
  * The Create Index panel.
@@ -246,6 +247,29 @@ public class ExportResultSetPanel extends ActionPanel
         fileNameField.setText(file.getAbsolutePath());
     }
 
+    private boolean fieldsValid() {
+        
+        if (StringUtils.isBlank(delimiterCombo.getSelectedItem().toString())) {
+            
+            GUIUtilities.displayErrorMessage("Please select or enter an appropriate delimiter");
+            return false;
+        }
+
+        if (StringUtils.isBlank(fileNameField.getText())) {
+
+            GUIUtilities.displayErrorMessage("Please select an output file");
+            return false;            
+        }
+        
+        if (StringUtils.isBlank(sqlText.getEditorText())) {
+
+            GUIUtilities.displayErrorMessage("Please enter a valid SQL query");
+            return false;            
+        }
+        
+        return true;
+    }
+    
     public void cleanup() {
 
         combosGroup.close();
@@ -279,72 +303,82 @@ public class ExportResultSetPanel extends ActionPanel
 
     public void doCreateIndex() {
         
-        GUIUtils.startWorker(new Runnable() {
-            public void run() {
-                try {
+        if (fieldsValid()) {
 
-                    parent.block();
-                    createIndex();
+            GUIUtils.startWorker(new Runnable() {
+                public void run() {
+                    try {
 
-                } finally {
-
-                    parent.unblock();
+                        parent.block();
+                        execute();
+    
+                    } finally {
+    
+                        parent.unblock();
+                    }
                 }
-            }
-        });
+            });
 
+        }
     }
     
-    private void createIndex() {
-
-        DatabaseConnection dc = combosGroup.getSelectedHost().getDatabaseConnection();
+    private boolean execute() {
+     
+        ResultSet resultSet = null;
+        DatabaseHost host = combosGroup.getSelectedHost();
+        StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection());
 
         try {
 
-            StatementExecutor qs = new DefaultStatementExecutor(dc);
+            String query = sqlText.getEditorText();
+            int type = statementExecutor.getQueryType(query);
+            SqlStatementResult statementResult = statementExecutor.execute(type, query);
 
-            SqlStatementResult result = qs.updateRecords(createIndexStatement());
+            if (statementResult.isResultSet()) {
 
-            if (result.getUpdateCount() >= 0) {
-
-                GUIUtilities.displayInformationMessage(
-                        "Index " + fileNameField.getText() + " created.");
-
-                parent.finished();
+                resultSet = statementResult.getResultSet();
+                return writeToFile(resultSet);
 
             } else {
 
-                SQLException e = result.getSqlException();
-
-                if (e != null) {
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("An error occurred applying the specified changes.").
-                       append("\n\nThe system returned:\n").
-                       append(MiscUtils.formatSQLError(e));
-
-                    GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
-
-                } else {
-
-                    GUIUtilities.displayErrorMessage(result.getErrorMessage());
-                }
-
+                GUIUtilities.displayErrorMessage(
+                        "The executed query did not return a valid result set");
+                return false;
             }
             
-        } catch (Exception e) {
-          
-            GUIUtilities.displayExceptionErrorDialog(
-                    "Error:\n" + e.getMessage(), e);
+        } catch (SQLException e) {
+
+            GUIUtilities.displayExceptionErrorDialog("Execution error:\n" + e.getMessage(), e);
+            return false;
+
+        } finally {
+
+            try {
+                
+                if (resultSet != null) {
+                    
+                    resultSet.close();
+                }
+                
+                statementExecutor.closeConnection();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+
+            host.close();
         }
         
     }
-
-    private String createIndexStatement() {
-
-        return sqlText.getSQLText();
-    }
     
+    private boolean writeToFile(ResultSet resultSet) {
+
+        ResultSetDelimitedFileWriter writer = new ResultSetDelimitedFileWriter(); 
+        return (writer.write(fileNameField.getText(), 
+                delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected()) != -1);
+    }
+
     // ------------------------------------------------
     // ----- TextEditorContainer implementations ------
     // ------------------------------------------------
