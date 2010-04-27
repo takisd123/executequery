@@ -154,6 +154,10 @@ public class SqlStatementResult {
         this.resultSet = resultSet;
     }
 
+    public boolean isException() {
+        return sqlException != null;
+    }
+    
     public SQLException getSqlException() {
         return sqlException;
     }

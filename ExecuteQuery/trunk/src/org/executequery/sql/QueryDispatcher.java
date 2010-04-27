@@ -339,8 +339,7 @@ public class QueryDispatcher {
                         setResultSet(rset, sql);
                     }
 
-                }
-                else {
+                } else {
 
                     int updateCount = result.getUpdateCount();
                     
@@ -451,8 +450,8 @@ public class QueryDispatcher {
 
                     end = System.currentTimeMillis();
 
-                }
-                else {
+                } else {
+                 
                     end  = System.currentTimeMillis();
 
                     // check that we executed a 'normal' statement (not a proc)
