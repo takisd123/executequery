@@ -84,9 +84,9 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         this.appending = appending;
     }
 
-    /** <p>Initialises the state of this instance. */
     private void jbInit() throws Exception {
-        setBorder(BorderFactory.createTitledBorder("SQL Text"));
+
+        setBorder(BorderFactory.createTitledBorder("SQL"));
         
         textPane = new SQLTextPane();
         textPane.setFont(new Font("monospaced", Font.PLAIN, 12));
@@ -227,6 +227,10 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         return "Execute Query - SQL Editor";
     }
 
+    public SQLTextPane getTextPane() {
+        return textPane;
+    }
+    
     public int save(File file) {
 
         String text = textPane.getText();
@@ -251,8 +255,3 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
     }
     
 }
-
-
-
-
-

@@ -50,18 +50,15 @@ public class ExportSQLCommand extends OpenFrameCommand
             return;
         }
 
-        String title = "Export as SQL";
-        
-        if (!isDialogOpen(title)) {
+        if (!isDialogOpen(ExportAsSQLWizard.TITLE)) {
             
             GUIUtilities.showWaitCursor();
             
             try {
             
-                BaseDialog dialog = createDialog(title, false, false);
+                BaseDialog dialog = createDialog(ExportAsSQLWizard.TITLE, false, false);
 
                 ExportAsSQLWizard panel = null;
-                
                 if (e.getSource() instanceof DatabaseTable) {
 
                     panel = new ExportAsSQLWizard(dialog, (DatabaseTable) e.getSource());

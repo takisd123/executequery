@@ -57,7 +57,9 @@ import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.databasemediators.MetaDataValues;
+import org.executequery.databaseobjects.DatabaseHost;
+import org.executequery.databaseobjects.DatabaseObjectFactory;
+import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
@@ -74,6 +76,7 @@ import org.underworldlabs.swing.GUIUtils;
  * @version  $Revision: 1525 $
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
+@SuppressWarnings("unchecked")
 public class CompareDataTypesPanel extends DefaultTabViewActionPanel
                                    implements NamedView,
                                               ListSelectionListener,
@@ -106,9 +109,6 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     /** the table model */
     private DataTypesTableModel tableModel;
     
-    /** database meta data utility */
-    private MetaDataValues metaData;
-
     /** the instance count */
     private static int count = 1;
 
@@ -145,6 +145,8 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     /** the result set column number for the type value */
     private static final int TYPE_COLUMN = 2;
 
+    private DatabaseObjectFactory databaseObjectFactory;
+    
     /** Creates a new instance of CompareDataTypesPanel */
     public CompareDataTypesPanel() {
         super(new BorderLayout());
@@ -157,7 +159,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     
     private void init() throws Exception {
         
-        metaData = new MetaDataValues(true);
+        databaseObjectFactory = new DatabaseObjectFactoryImpl();
         
         // combo boxes
         Vector<DatabaseConnection> connections = ConnectionManager.getActiveConnections();
@@ -343,9 +345,9 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         rendererApplied = true;
     }
     
-    private List<List> buildDataTypeList(List<List> dataTypes, 
-                                         ResultSet rs, 
-                                         boolean reloadColumns) {
+    private List<List> buildDataTypeList(
+            List<List> dataTypes, ResultSet rs, boolean reloadColumns) {
+
         try {
             
             if (reloadColumns) {
@@ -401,15 +403,12 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
                 }
             }
 
-        }
-        catch (SQLException e) {
-            //e.printStackTrace();
+        } catch (SQLException e) {
+
             handleError(e);
+
         }
-        finally {
-            releaseResources(rs);
-            metaData.closeConnection();
-        }
+
         return dataTypes;
     }
     
@@ -443,31 +442,41 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     }
 
     public void buildFirstConnectionValues() {
+
         // retrieve connection selection
-        DatabaseConnection connection = 
-                (DatabaseConnection)connectionsCombo.getSelectedItem();
-        // reset meta data
-        metaData.setDatabaseConnection(connection);
+        DatabaseConnection databaseConnection = 
+                (DatabaseConnection) connectionsCombo.getSelectedItem();
+        DatabaseHost host = hostForConnection(databaseConnection);
 
         // set the database name
         try {
-            setDatabaseFieldText(1, metaData.getDatabaseProductName());
+
+            setDatabaseFieldText(1, host.getDatabaseProductName());
+
         } catch (DataSourceException e) {
+
             setDatabaseFieldText(1, "Not Available");
         }
 
         ResultSet rs = null;
         try {
-            rs = metaData.getDataTypesResultSet();
+
+            rs = host.getDataTypeInfo();
+            masterTypes = buildDataTypeList(masterTypes, rs, true);
+
         } catch (DataSourceException e) {
+
             GUIUtilities.displayExceptionErrorDialog(
                     "Error retrieving data types for selected " +
                     "connection:.\n\nThe system returned:\n" + 
                     e.getExtendedMessage(), e);
             return;
-        }
 
-        masterTypes = buildDataTypeList(masterTypes, rs, true);
+        } finally {
+            
+            releaseResources(rs);
+            host.close();
+        }
 
         // sort the rows in alpha
         Collections.sort(masterTypes, sorter);
@@ -487,6 +496,11 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
             }
         });
 
+    }
+
+    private DatabaseHost hostForConnection(DatabaseConnection databaseConnection) {
+        DatabaseHost host = databaseObjectFactory.createDatabaseHost(databaseConnection);
+        return host;
     }
 
     private void setDatabaseFieldText(final int connection, final String name) {
@@ -516,35 +530,47 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     }
 
     public void buildSecondConnectionValues() {
+
         // retrieve connection selection
-        DatabaseConnection connection = 
-                (DatabaseConnection)connectionsCombo2.getSelectedItem();
-        // reset meta data
-        metaData.setDatabaseConnection(connection);
+        DatabaseConnection databaseConnection = 
+                (DatabaseConnection) connectionsCombo2.getSelectedItem();
+        DatabaseHost host = hostForConnection(databaseConnection);
 
         try {
-            setDatabaseFieldText(2, metaData.getDatabaseProductName());
+
+            setDatabaseFieldText(2, host.getDatabaseProductName());
+
         } catch (DataSourceException e) {
+
             setDatabaseFieldText(2, "Not Available");
         }
 
         ResultSet rs = null;
         try {
-            rs = metaData.getDataTypesResultSet();
-        } 
-        catch (DataSourceException e) {
+            
+            rs = host.getDataTypeInfo();
+            mappedToTypes = buildDataTypeList(mappedToTypes, rs, false);
+
+        } catch (DataSourceException e) {
+
             GUIUtilities.displayExceptionErrorDialog(
                     "Error retrieving data types for the selected " +
                     "connection.\n\nThe system returned:\n" + 
                     e.getExtendedMessage(), e);
             return;
+
+        } finally {
+            
+            releaseResources(rs);
+            host.close();
         }
 
-        mappedToTypes = buildDataTypeList(mappedToTypes, rs, false);
 
         GUIUtils.invokeAndWait(new Runnable() {
             public void run() {
-                if (mappedToTypes != null && mappedToTypes.size() > 0) {
+
+                if (mappedToTypes != null && !mappedToTypes.isEmpty()) {
+
                     generateMappedList();
                 }
             }
@@ -634,12 +660,6 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     public void cleanup() {
 
         EventMediator.deregisterListener(this);
-
-        if (metaData != null) {
-
-            metaData.closeConnection();
-        }
-
     }
     
     private void enableCombos(boolean enable) {

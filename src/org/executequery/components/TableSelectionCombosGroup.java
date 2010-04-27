@@ -73,6 +73,11 @@ public class TableSelectionCombosGroup implements ItemListener {
         this(WidgetFactory.createComboBox(), WidgetFactory.createComboBox(), WidgetFactory.createComboBox(), null);
     }
     
+    public TableSelectionCombosGroup(JComboBox connectionsCombo) {
+
+        this(connectionsCombo, null, null);
+    }
+
     public TableSelectionCombosGroup(JComboBox connectionsCombo,
             JComboBox schemasCombo) {
 
@@ -333,7 +338,7 @@ public class TableSelectionCombosGroup implements ItemListener {
     
     public DatabaseSource getSelectedSource() {
 
-        if (schemasCombo.getSelectedItem() != null) {
+        if (schemasCombo != null && schemasCombo.getSelectedItem() != null) {
 
             return (DatabaseSource) schemasCombo.getSelectedItem();
         }
