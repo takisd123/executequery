@@ -448,7 +448,7 @@ public class TableSelectionCombosGroup implements ItemListener {
         
             DatabaseHost host = getSelectedHost();
 
-            if (host != null) {
+            if (host != null && schemasCombo != null) {
 
                 List<DatabaseSchema> schemas = host.getSchemas();
 
@@ -590,7 +590,7 @@ public class TableSelectionCombosGroup implements ItemListener {
     }
 
     private void clearCombos() {
-        
+
         if (schemasCombo != null) {
 
             populateModelForCombo(schemasCombo, null);

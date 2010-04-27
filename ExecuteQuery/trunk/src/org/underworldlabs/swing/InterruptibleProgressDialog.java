@@ -21,6 +21,7 @@
 package org.underworldlabs.swing;
 
 import java.awt.Container;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
@@ -28,11 +29,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import org.underworldlabs.Constants;
 import org.underworldlabs.swing.util.InterruptibleProcess;
 
@@ -78,7 +81,28 @@ public class InterruptibleProgressDialog extends JDialog
         }
 
     }
-    
+
+    public InterruptibleProgressDialog(Dialog parentDialog,
+                                        String title,
+                                        String labelText,
+                                        InterruptibleProcess process) {
+
+        super(parentDialog, title, true);
+        
+        this.process = process;
+        this.labelText = labelText;
+
+        try {
+        
+            init();
+        
+        } catch (Exception e) {
+        
+            e.printStackTrace();
+        }
+        
+    }
+
     public void run() {
         pack();
         setLocation(GUIUtils.getLocationForDialog(parentFrame, getSize()));
@@ -172,8 +196,3 @@ public class InterruptibleProgressDialog extends JDialog
     }
 
 }
-
-
-
-
-
