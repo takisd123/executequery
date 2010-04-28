@@ -33,7 +33,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.executequery.gui.editor.LoggingOutputPane;
+import org.executequery.components.LoggingOutputPane;
 import org.executequery.sql.SqlMessages;
 
 /** 
