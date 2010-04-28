@@ -13,7 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 import org.executequery.UserPreferencesManager;
-import org.executequery.gui.editor.LoggingOutputPane;
+import org.executequery.components.LoggingOutputPane;
 import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
@@ -39,14 +39,25 @@ public class LoggingOutputPanel extends JPanel
 
         JScrollPane textOutputScroller = new JScrollPane(outputPane);
         textOutputScroller.setBackground(bg);
-        textOutputScroller.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
+        textOutputScroller.setBorder(null);
         textOutputScroller.getViewport().setBackground(bg);
 
+        setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
+
         add(textOutputScroller, BorderLayout.CENTER);
-        
         addDocumentListener(this);
     }
 
+    @Override
+    public void setBackground(Color bg) {
+
+        super.setBackground(bg);
+        if (outputPane != null) {
+         
+            outputPane.setBackground(bg);
+        }
+    }
+    
     public void append(String text) {
         
         outputPane.append(text);
@@ -130,6 +141,12 @@ public class LoggingOutputPanel extends JPanel
     private void documentChanged() {
 
         outputPane.setCaretPosition(getDocument().getLength());
+    }
+
+    public void clear() {
+
+        outputPane.setText("");
+        outputPane.setCaretPosition(0);
     }
 
 }

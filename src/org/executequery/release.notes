@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 23 April 2010
+Date: 28 April 2010
 
 Execute Query Version 3.2.1 Build 5144
 ----------------------------------------
@@ -28,6 +28,8 @@ Summary of changes from 3.2 Build 5140:
   selection from export file entry would duplicate selected tables in returning
   to file selection panel. 
 - Fixed query execution with trailing semi-colon errors noted with Oracle.
+- Added export result set to file allowing for executing arbitrary SQL SELECT 
+  statements and writing the output to a delimited file.
 
 
 Summary of changes from 3.1.6 Build 5132:
@@ -237,4 +239,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-23 April 2010
+28 April 2010

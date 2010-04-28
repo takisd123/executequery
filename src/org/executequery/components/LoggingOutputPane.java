@@ -18,7 +18,7 @@
  *
  */
 
-package org.executequery.gui.editor;
+package org.executequery.components;
 
 import java.awt.Color;
 import javax.swing.JTextPane;

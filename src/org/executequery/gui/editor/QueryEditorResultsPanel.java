@@ -22,16 +22,13 @@ package org.executequery.gui.editor;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Insets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
@@ -40,6 +37,7 @@ import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.UserPreferencesManager;
 import org.executequery.databasemediators.QueryTypes;
+import org.executequery.gui.LoggingOutputPanel;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.sql.SqlMessages;
 import org.underworldlabs.swing.SimpleCloseTabbedPane;
@@ -65,10 +63,8 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     private QueryEditor queryEditor;
     
     /** the text output message pane */
-    private LoggingOutputPane outputTextPane;
+    private LoggingOutputPanel outputTextPane;
 
-    private JViewport outputTextViewport;
-    
     /** the result set tab count */
     private int resultSetTabTitleCounter;
     
@@ -78,13 +74,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     /** the text output tab icon */
     private Icon outputTabIcon;
 
-    /** the text output scroll pane */
-    private JScrollPane textOutputScroller;
-
     private static final String SUCCESS = " Statement executed successfully";
     private static final String NO_ROWS = "No rows selected";
     private static final String ZERO_ROWS = " 0 rows returned";
-    private static final String EMPTY = "";
     private static final String SPACE = " ";
     private static final String ROW_RETURNED = " row returned";
     private static final String ROWS_RETURNED = " rows returned";
@@ -125,24 +117,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     private void init() {
 
-        outputTextPane = new LoggingOutputPane();
-        
-        outputTextPane.setMargin(new Insets(5, 5, 5, 5));
-        outputTextPane.setDisabledTextColor(Color.black);
-        
-        Color bg = UserPreferencesManager.getOutputPaneBackground();
+        outputTextPane = new LoggingOutputPanel();
+        outputTextPane.setBorder(null);
 
-        outputTextPane.setBackground(bg);
-        
-        textOutputScroller = new JScrollPane(
-                                    outputTextPane,
-                                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-                                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        textOutputScroller.setBackground(bg);
-        textOutputScroller.setBorder(null);
-        outputTextViewport = textOutputScroller.getViewport();
-        outputTextViewport.setBackground(bg);
-        
         addTextOutputTab();
 
         if (queryEditor == null) { // editor calls this also
@@ -229,8 +206,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
                 outputTabIcon = GUIUtilities.loadIcon("SystemOutput.gif", true);
             }
 
-            insertTab(OUTPUT_TAB_TITLE, outputTabIcon, 
-                    textOutputScroller, "Database output", 0);
+            insertTab(OUTPUT_TAB_TITLE, outputTabIcon, outputTextPane, "Database output", 0);
         }
 
     }
@@ -589,6 +565,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     }
     
     public void setResultBackground(Color colour) {
+
         outputTextPane.setBackground(colour);
         
         Component[] tabs = getComponents();
@@ -719,13 +696,10 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     
     protected void appendOutput(int type, String text) {
         outputTextPane.append(type, text);
-        outputTextPane.setCaretPosition(outputTextPane.getDocument().getLength());
-        //outputTextViewport.validate();
     }
     
     public void clearOutputPane() {
-        outputTextPane.setText(EMPTY);
-        outputTextPane.setCaretPosition(0);
+        outputTextPane.clear();
     }
 
     /**
@@ -876,6 +850,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public boolean isTransposeAvailable() {
         return true;
     }
+ 
     
 }
 

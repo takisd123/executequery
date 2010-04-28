@@ -37,7 +37,11 @@ public class ResultSetDelimitedFileWriter {
 
                 for (int i = 1; i <= columnCount; i++) {
                     
-                    sb.append(resultSet.getString(i));
+                    String value = resultSet.getString(i);
+                    if (!resultSet.wasNull()) {
+
+                        sb.append(value);                        
+                    }
                     
                     if (i < columnCount) {
                      

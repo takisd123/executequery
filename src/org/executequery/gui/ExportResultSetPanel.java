@@ -26,11 +26,16 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -40,6 +45,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.ActiveComponent;
@@ -76,12 +83,12 @@ import org.underworldlabs.util.MiscUtils;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class ExportResultSetPanel extends DefaultTabViewActionPanel
-                                implements NamedView,
-                                            FocusComponentPanel,
-                                         ActiveComponent,
-                                         KeywordListener,
-                                         ConnectionListener,
-                                         TextEditorContainer {
+                                  implements NamedView,
+                                             FocusComponentPanel,
+                                             ActiveComponent,
+                                             KeywordListener,
+                                             ConnectionListener,
+                                             TextEditorContainer {
     
     public static final String TITLE = "Export Result Set ";
     public static final String FRAME_ICON = "ExportDelimited16.gif";
@@ -145,7 +152,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         sqlPanel.add(statusBar, BorderLayout.SOUTH);
         statusBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 1));
 
-        outputPanel = new LoggingOutputPanel();        
+        outputPanel = new LoggingOutputPanel();
         FlatSplitPane splitPane = new FlatSplitPane(
                 JSplitPane.VERTICAL_SPLIT, sqlPanel, outputPanel);
         splitPane.setResizeWeight(0.5);
@@ -226,10 +233,19 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);        
-        setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
+        setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         // register as a keyword and connection listener
         EventMediator.registerListener(this);
+        
+        JTextPane textPane = sqlText.getTextPane();
+        ActionMap actionMap = textPane.getActionMap();
+
+        String actionKey = "executeQueryAction";
+        actionMap.put(actionKey, executeQueryAction);
+
+        InputMap inputMap = textPane.getInputMap();
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), actionKey);        
     }
 
     public void browse() {
@@ -549,6 +565,17 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             progressBar.stop();
         }
 
-    }
+    } // SqlTextPaneStatusBar
     
+    private final ExecuteQueryAction executeQueryAction = new ExecuteQueryAction();
+
+    class ExecuteQueryAction extends AbstractAction {
+        
+        public void actionPerformed(ActionEvent e) {
+
+            executeAndExport();
+        }
+
+    } // ExecuteQueryAction
+
 }
