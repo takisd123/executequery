@@ -121,7 +121,7 @@ public class ExportDelimitedWorker extends AbstractImportExportWorker {
             StringBuilder rowData = new StringBuilder(5000);
 
             // retrieve the export to files
-            Vector files = getParent().getDataFileVector();
+            Vector<DataTransferObject> files = getParent().getDataFileVector();
             int fileCount = files.size();
 
             // ---------------------------
@@ -167,7 +167,7 @@ public class ExportDelimitedWorker extends AbstractImportExportWorker {
                 appendProgressText(outputBuffer);
 
                 // retrieve the columns to be exported (or all)
-                Vector columns = getColumns(dto.getTableName());
+                Vector<ColumnData> columns = getColumns(dto.getTableName());
                 columnCount = columns.size();
 
                 // initialise the writer

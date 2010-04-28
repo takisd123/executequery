@@ -32,7 +32,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.executequery.gui.editor.QueryEditorOutputPane;
+import org.executequery.gui.editor.LoggingOutputPane;
 import org.executequery.sql.SqlMessages;
 
 /*
@@ -55,7 +55,7 @@ public class NewImportExportProgressPanel extends AbstractImportExportPanel
     
     private JProgressBar progressBar;
     
-    private QueryEditorOutputPane output;
+    private LoggingOutputPane output;
 
     public NewImportExportProgressPanel(ImportExportWizard importExportWizard) {
 
@@ -76,7 +76,7 @@ public class NewImportExportProgressPanel extends AbstractImportExportPanel
             labelText = getString("ImportExportProgressPanel.importDataLabel");
         }
         
-        output = new QueryEditorOutputPane();
+        output = new LoggingOutputPane();
         output.setBackground(getBackground());
         
         progressBar = new JProgressBar(0, 100);

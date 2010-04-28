@@ -1297,7 +1297,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
                 conn = null;
 
             }
-            
+
         } catch (SQLException e) {
 
             handleSQLException(e);

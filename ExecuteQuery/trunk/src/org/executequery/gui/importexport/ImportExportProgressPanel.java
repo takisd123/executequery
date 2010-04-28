@@ -33,7 +33,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import org.executequery.gui.editor.QueryEditorOutputPane;
+import org.executequery.gui.editor.LoggingOutputPane;
 import org.executequery.sql.SqlMessages;
 
 /** 
@@ -56,7 +56,7 @@ public class ImportExportProgressPanel extends JPanel
     private JProgressBar progressBar;
     
     /** The text area displaying process info */
-    private QueryEditorOutputPane output;
+    private LoggingOutputPane output;
     
     /** the parent process object */
     private ImportExportProcess parent;
@@ -87,7 +87,7 @@ public class ImportExportProgressPanel extends JPanel
             transferLabel.setText("Exporting Data...");
         }
 
-        output = new QueryEditorOutputPane();
+        output = new LoggingOutputPane();
         output.setBackground(getBackground());
         
         progressBar = new JProgressBar(0, 100);

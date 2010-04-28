@@ -52,14 +52,11 @@ public class BottomButtonPanel extends JPanel {
     /** Indicates whether this is a dialog */
     private boolean isDialog;
     
-    /**
-     * Constructs a new instance.
-     */
     public BottomButtonPanel(boolean isDialog) {
         super(new GridBagLayout());
         this.isDialog = isDialog;
         try  {
-            jbInit();
+            init();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -127,10 +124,7 @@ public class BottomButtonPanel extends JPanel {
         helpButton.setText("Help");
     }
     
-    /**
-     * Initializes the state of this instance.
-     */
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
         
         helpButton = new DefaultPanelButton("Help");
         okButton = new DefaultPanelButton("OK");
