@@ -23,10 +23,9 @@ package org.executequery.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -39,18 +38,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.ActiveComponent;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
-import org.executequery.UserPreferencesManager;
-import org.executequery.components.BottomButtonPanel;
+import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databasemediators.SqlStatementResult;
@@ -63,14 +58,15 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.event.DefaultKeywordEvent;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
-import org.executequery.gui.editor.QueryEditorOutputPane;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
-import org.underworldlabs.swing.ActionPanel;
+import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
-import org.underworldlabs.swing.GUIUtils;
+import org.underworldlabs.swing.IndeterminateProgressBar;
+import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.swing.plaf.UIUtils;
+import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.MiscUtils;
 
 /** 
@@ -79,16 +75,16 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class ExportResultSetPanel extends ActionPanel
-                              implements FocusComponentPanel,
+public class ExportResultSetPanel extends DefaultTabViewActionPanel
+                                implements NamedView,
+                                            FocusComponentPanel,
                                          ActiveComponent,
                                          KeywordListener,
-                                         DocumentListener,
                                          ConnectionListener,
                                          TextEditorContainer {
     
-    public static final String TITLE = "Export Result Set";
-    public static final String FRAME_ICON = "NewIndex16.gif";
+    public static final String TITLE = "Export Result Set ";
+    public static final String FRAME_ICON = "ExportDelimited16.gif";
     
     private JComboBox connectionsCombo; 
 
@@ -100,17 +96,19 @@ public class ExportResultSetPanel extends ActionPanel
     
     private SimpleSqlTextPanel sqlText;
 
-    private ActionContainer parent;
-
     private TableSelectionCombosGroup combosGroup;
 
-    private QueryEditorOutputPane outputPane;
+    private LoggingOutputPanel outputPanel;
+    
+    private SqlTextPaneStatusBar statusBar;
 
-    public ExportResultSetPanel(ActionContainer parent) {
+    private static final String BUTTON_STOP = "Stop";
+    
+    private static final String BUTTON_EXECUTE = "Execute";
+    
+    public ExportResultSetPanel() {
 
         super(new BorderLayout());
-
-        this.parent = parent;
 
         try  {
 
@@ -139,23 +137,17 @@ public class ExportResultSetPanel extends ActionPanel
         sqlText = new SimpleSqlTextPanel();
         sqlText.getTextPane().setBackground(Color.WHITE);
         sqlText.setBorder(null);
+        sqlText.setScrollPaneBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, UIUtils.getDefaultBorderColour()));
 
-        outputPane = new QueryEditorOutputPane();
-        outputPane.setMargin(new Insets(5, 5, 5, 5));
-        outputPane.setDisabledTextColor(Color.black);
-        
-        Color bg = UserPreferencesManager.getOutputPaneBackground();
-        outputPane.setBackground(bg);
+        statusBar = new SqlTextPaneStatusBar();
+        JPanel sqlPanel = new JPanel(new BorderLayout());
+        sqlPanel.add(sqlText, BorderLayout.CENTER);
+        sqlPanel.add(statusBar, BorderLayout.SOUTH);
+        statusBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 1));
 
-        JScrollPane textOutputScroller = new JScrollPane(outputPane);
-        textOutputScroller.setBackground(bg);
-        textOutputScroller.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
-        textOutputScroller.getViewport().setBackground(bg);
-
-        outputPane.getDocument().addDocumentListener(this);
-        
+        outputPanel = new LoggingOutputPanel();        
         FlatSplitPane splitPane = new FlatSplitPane(
-                JSplitPane.VERTICAL_SPLIT, sqlText, textOutputScroller);
+                JSplitPane.VERTICAL_SPLIT, sqlPanel, outputPanel);
         splitPane.setResizeWeight(0.5);
         splitPane.setDividerLocation(0.8);
         splitPane.setDividerSize(5);
@@ -225,26 +217,18 @@ public class ExportResultSetPanel extends ActionPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(splitPane, gbc);
-        
+
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
-        
-        JPanel base = new JPanel(new BorderLayout());
 
-        base.add(mainPanel, BorderLayout.CENTER);
+        executeButton = ActionUtilities.createButton(this, BUTTON_EXECUTE, "executeAndExport");
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 5));
+        buttonPanel.add(executeButton);
 
-        BottomButtonPanel buttonPanel = new BottomButtonPanel(
-                this, "Execute", "export-result-set", true);
-        buttonPanel.setOkButtonActionCommand("executeAndExport");
-        
-        base.add(buttonPanel, BorderLayout.SOUTH);
-        
-        // add the base to the panel
+        add(mainPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);        
         setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
-        add(base, BorderLayout.CENTER);
 
-        setPreferredSize(new Dimension(750,480));
-
-        // register as a keyword listener
+        // register as a keyword and connection listener
         EventMediator.registerListener(this);
     }
 
@@ -302,9 +286,21 @@ public class ExportResultSetPanel extends ActionPanel
         return true;
     }
     
+    public boolean tabViewClosing() {
+
+        cleanup();        
+        return true;
+    }
+
     public void cleanup() {
 
         combosGroup.close();
+
+        if (statusBar != null) {
+         
+            statusBar.cleanup();
+        }
+        
         EventMediator.deregisterListener(this);
     }
 
@@ -325,36 +321,58 @@ public class ExportResultSetPanel extends ActionPanel
         sqlText.setSQLKeywords(true);
     }
 
-    /**
-     * Returns the index name field.
-     */
     public Component getDefaultFocusComponent() {
 
         return fileNameField;
     }
 
+    private SwingWorker swingWorker;
+    private boolean executing;
+    
     public void executeAndExport() {
+
+        if (executing) {
+            
+            if (swingWorker != null) {
+                
+                swingWorker.interrupt();
+            }
+
+        } else {
         
-        if (fieldsValid()) {
-
-            GUIUtils.startWorker(new Runnable() {
-                public void run() {
-                    try {
-
-                        parent.block();
-                        execute();
+            if (fieldsValid()) {
     
-                    } finally {
+                swingWorker = new SwingWorker() {
+                    public Object construct() {
     
-                        parent.unblock();
+                        executing = true;                    
+                        executeButton.setText(BUTTON_STOP);
+                        return execute();
                     }
-                }
-            });
+                    public void finished() {
+    
+                        try {
+    
+                            Integer recordCount = (Integer) get();
+                            if (recordCount != -1) {
+        
+                                outputPanel.append("Records transferred: " + recordCount);
+                            }
+    
+                        } finally {
 
+                            executing = false;                         
+                            executeButton.setText(BUTTON_EXECUTE);
+                        }
+                    }
+                };
+                swingWorker.start();
+            }
+            
         }
     }
     
-    private boolean execute() {
+    private int execute() {
      
         ResultSet resultSet = null;
         DatabaseHost host = combosGroup.getSelectedHost();
@@ -367,8 +385,11 @@ public class ExportResultSetPanel extends ActionPanel
 
             String query = sqlText.getEditorText();
             
-            outputPane.appendAction("Executing:");
-            outputPane.appendActionFixedWidth(query);
+            statusBar.setStatusText("Executing...");
+            statusBar.startProgressBar();
+
+            outputPanel.appendAction("Executing:");
+            outputPanel.appendActionFixedWidth(query);
 
             int type = statementExecutor.getQueryType(query);
             statementResult = statementExecutor.execute(type, query);
@@ -380,32 +401,41 @@ public class ExportResultSetPanel extends ActionPanel
             } else if (statementResult.isResultSet()) {
 
                 resultSet = statementResult.getResultSet();
-
                 return writeToFile(resultSet);
 
             } else {
 
-                outputPane.appendWarning("The executed query did not return a valid result set");
-                return false;
+                outputPanel.appendWarning("The executed query did not return a valid result set");
+                return -1;
             }
             
         } catch (SQLException e) {
 
             if (statementResult != null) {
             
-                outputPane.appendError(statementResult.getErrorMessage());
+                outputPanel.appendError(statementResult.getErrorMessage());
 
             } else {
 
-                outputPane.appendError("Execution error:\n" + e.getMessage());
+                outputPanel.appendError("Execution error:\n" + e.getMessage());
             }
             
-            return false;
+            return -1;
+
+        } catch (InterruptedException e) {
+            
+            outputPanel.appendWarning("Operation cancelled by user action");
+
+            return -1;
 
         } finally {
 
             long endTime = System.currentTimeMillis();
-            outputPane.append("Duration: " + MiscUtils.formatDuration(endTime - startTime));
+
+            statusBar.setStatusText("Done");
+            statusBar.stopProgressBar();
+
+            outputPanel.append("Duration: " + MiscUtils.formatDuration(endTime - startTime));
 
             try {
                 
@@ -422,15 +452,16 @@ public class ExportResultSetPanel extends ActionPanel
             }
 
             host.close();
+            GUIUtilities.scheduleGC();
         }
         
     }
     
-    private boolean writeToFile(ResultSet resultSet) {
+    private int writeToFile(ResultSet resultSet) throws InterruptedException {
 
         ResultSetDelimitedFileWriter writer = new ResultSetDelimitedFileWriter(); 
-        return (writer.write(fileNameField.getText(), 
-                delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected()) != -1);
+        return writer.write(fileNameField.getText(), 
+                delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected());
     }
 
     // ------------------------------------------------
@@ -446,15 +477,15 @@ public class ExportResultSetPanel extends ActionPanel
         return sqlText;
     }
     
-    
+    private static int count = 1;
     public String getDisplayName() {
 
-        return "";
+        return TITLE + (count++);
     }
 
     public String toString() {
-        
-        return TITLE;
+
+        return getDisplayName();
     }
 
     // ---------------------------------------------
@@ -481,24 +512,43 @@ public class ExportResultSetPanel extends ActionPanel
         combosGroup.connectionClosed(connectionEvent.getDatabaseConnection());
     }
 
-    public void changedUpdate(DocumentEvent e) {
+    private static final int STATUS_BAR_HEIGHT = 21;
 
-        documentChanged();
-    }
+    private IndeterminateProgressBar progressBar;
+    private JButton executeButton;
+    
+    class SqlTextPaneStatusBar extends AbstractStatusBarPanel {
 
-    public void insertUpdate(DocumentEvent e) {
+        protected SqlTextPaneStatusBar() {
+            
+            super(STATUS_BAR_HEIGHT);
+
+            addLabel(0, 200, true);
+            progressBar = new IndeterminateProgressBar(false);
+            addComponent(progressBar, 1, 120, false);
+        }
         
-        documentChanged();
-    }
-
-    public void removeUpdate(DocumentEvent e) {
+        public void setStatusText(String text) {
+            
+            setLabelText(0, text);
+        }
         
-        documentChanged();
-    }
-
-    private void documentChanged() {
+        public void cleanup() {
+         
+            progressBar.cleanup();
+            progressBar = null;
+        }
         
-        outputPane.setCaretPosition(outputPane.getDocument().getLength());
+        public void startProgressBar() {
+
+            progressBar.start();
+        }
+
+        public void stopProgressBar() {
+            
+            progressBar.stop();
+        }
+
     }
     
 }

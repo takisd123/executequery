@@ -65,7 +65,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     private QueryEditor queryEditor;
     
     /** the text output message pane */
-    private QueryEditorOutputPane outputTextPane;
+    private LoggingOutputPane outputTextPane;
 
     private JViewport outputTextViewport;
     
@@ -125,7 +125,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     private void init() {
 
-        outputTextPane = new QueryEditorOutputPane();
+        outputTextPane = new LoggingOutputPane();
         
         outputTextPane.setMargin(new Insets(5, 5, 5, 5));
         outputTextPane.setDisabledTextColor(Color.black);

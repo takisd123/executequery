@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 public class ResultSetDelimitedFileWriter {
 
-    public int write(String fileName, String delimiter, ResultSet resultSet, boolean columnNamesAsFirstRow) {
+    public int write(String fileName, String delimiter, ResultSet resultSet, boolean columnNamesAsFirstRow) throws InterruptedException {
 
         PrintWriter writer = null;
         
@@ -32,7 +32,6 @@ public class ResultSetDelimitedFileWriter {
 
                 if (Thread.interrupted()) {
 
-//                    setProgressStatus(recordCount);
                     throw new InterruptedException();
                 }
 
@@ -63,10 +62,6 @@ public class ResultSetDelimitedFileWriter {
 
             e.printStackTrace();
 
-        } catch (InterruptedException e) {
-
-            e.printStackTrace();
-            
         } finally {
             
             if (writer != null) {

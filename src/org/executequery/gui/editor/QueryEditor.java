@@ -199,7 +199,7 @@ public class QueryEditor extends DefaultTabView
 
         // construct the two query text area and results panels
         statusBar = new QueryEditorStatusBar();
-        statusBar.setBorder(BorderFactory.createEmptyBorder(2,-1,-2,-2));
+        statusBar.setBorder(BorderFactory.createEmptyBorder(0, -1, -2, -2));
 
         editorPanel = new QueryEditorTextPanel(this);
         resultsPanel = new QueryEditorResultsPanel(this);

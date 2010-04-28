@@ -99,7 +99,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
 
         sqlScroller = new JScrollPane(textPane);
         defaultBorder = sqlScroller.getBorder();
-        //sqlScroller.setBorder(null);
+//        sqlScroller.setBorder(null);
         add(sqlScroller, BorderLayout.CENTER);
         
         // register as a keyword listener
@@ -132,11 +132,11 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
     public void setDefaultBorder() {
         sqlScroller.setBorder(defaultBorder);
     }
+
+    public void setScrollPaneBorder(Border border) {
+        sqlScroller.setBorder(border);
+    }
     
-    /** <p>Sets the SQL text as specified.
-     *
-     *  @param the SQL text
-     */
     public void setSQLText(String text) {
         textPane.deleteAll();
         textPane.setText(text == null ? Constants.EMPTY : text);

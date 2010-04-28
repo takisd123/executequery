@@ -728,7 +728,7 @@ public class QueryEditorTextPanel extends JPanel {
         
         protected EditorScrollerBorder() {
             if (borderInsets == null) {
-                borderInsets = new Insets(0,0,1,0);
+                borderInsets = new Insets(0, 0, 0, 0);
             }
             if (borderColour == null) {
                 borderColour = GUIUtilities.getDefaultBorderColour();

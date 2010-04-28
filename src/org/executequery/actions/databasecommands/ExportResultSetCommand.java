@@ -24,7 +24,6 @@ import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
 import org.executequery.actions.OpenFrameCommand;
-import org.executequery.gui.BaseDialog;
 import org.executequery.gui.ExportResultSetPanel;
 import org.underworldlabs.swing.actions.BaseCommand;
 
@@ -55,13 +54,19 @@ public class ExportResultSetCommand extends OpenFrameCommand
 
                 GUIUtilities.showWaitCursor();
 
-                BaseDialog dialog = 
-                        createDialog(ExportResultSetPanel.TITLE, false);
-                
-                ExportResultSetPanel panel = new ExportResultSetPanel(dialog);
-                
-                dialog.addDisplayComponentWithEmptyBorder(panel);
-                dialog.display();
+                GUIUtilities.addCentralPane(ExportResultSetPanel.TITLE,
+                        ExportResultSetPanel.FRAME_ICON, 
+                        new ExportResultSetPanel(),
+                        null,
+                        true);
+
+//                BaseDialog dialog = 
+//                        createDialog(ExportResultSetPanel.TITLE, false);
+//                
+//                ExportResultSetPanel panel = new ExportResultSetPanel(dialog);
+//                
+//                dialog.addDisplayComponentWithEmptyBorder(panel);
+//                dialog.display();
 
             } finally {
               

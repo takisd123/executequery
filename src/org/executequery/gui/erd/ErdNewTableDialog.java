@@ -233,11 +233,11 @@ public class ErdNewTableDialog extends ErdPrintableDialog {
             return new Vector(0);
         }
         
-        public Vector getSchemaTables(String schemaName) {
+        public Vector<String> getSchemaTables(String schemaName) {
             Vector _tables = parent.getAllComponentsVector();
             
             int size = _tables.size();
-            Vector tableNames = new Vector(size);
+            Vector<String> tableNames = new Vector<String>(size);
             
             for (int i = 0; i < size; i++) {
                 tableNames.add(_tables.elementAt(i).toString());
@@ -246,7 +246,7 @@ public class ErdNewTableDialog extends ErdPrintableDialog {
             return tableNames;
         }
         
-        public Vector getColumnNamesVector(String tableName, String schemaName) {
+        public Vector<String> getColumnNamesVector(String tableName, String schemaName) {
             return parent.getTableColumnsVector(tableName);
         }
         

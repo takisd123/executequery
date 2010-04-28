@@ -40,7 +40,7 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
     private IndeterminateProgressBar progressBar;
     
     /** the status bar panel fixed height */
-    private static final int HEIGHT = 19;
+    private static final int HEIGHT = 21;
     
     public QueryEditorStatusBar() {
         super(HEIGHT);
@@ -51,7 +51,6 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
         }
     }
     
-    /** <p>Initialises the state of this instance. */
     private void jbInit() throws Exception {
         caretBuffer = new StringBuffer();
         // setup the progress bar

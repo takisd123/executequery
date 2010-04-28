@@ -203,11 +203,13 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
         
         JSplitPane splitPane = null;
         if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
+            
             splitPane = new FlatSplitPane(JSplitPane.VERTICAL_SPLIT,
                                           new JScrollPane(table),
                                           resultsBase);
-        }
-        else {
+
+        } else {
+          
             splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                                        new JScrollPane(table),
                                        resultsBase);
