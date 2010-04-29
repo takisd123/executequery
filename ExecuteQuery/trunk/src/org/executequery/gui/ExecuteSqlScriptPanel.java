@@ -31,11 +31,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -45,6 +45,7 @@ import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.components.FileChooserDialog;
+import org.executequery.components.MinimumWidthActionButton;
 import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
@@ -59,7 +60,6 @@ import org.executequery.gui.importexport.ResultSetDelimitedFileWriter;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.IndeterminateProgressBar;
-import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.MiscUtils;
@@ -89,10 +89,18 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     
     private SqlTextPaneStatusBar statusBar;
 
-    private static final String BUTTON_STOP = "Stop";
+    private JComboBox actionOnErrorCombo;
     
-    private static final String BUTTON_START = "Start";
+    private JComboBox actionOnCancelCombo;
     
+    private JButton startButton;
+
+    private JButton rollbackButton;
+    
+    private JButton commitButton;
+    
+    private JButton stopButton;
+
     public ExecuteSqlScriptPanel() {
 
         super(new BorderLayout());
@@ -113,6 +121,25 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         fileNameField = WidgetFactory.createTextField();
         connectionsCombo = WidgetFactory.createComboBox();
         combosGroup = new TableSelectionCombosGroup(connectionsCombo);
+
+        actionOnErrorCombo = WidgetFactory.createComboBox();
+
+        ActionOnError[] actionsOnError = {
+                ActionOnError.HALT_ROLLBACK,
+                ActionOnError.HALT_COMMIT,
+                ActionOnError.CONTINUE
+        };        
+        
+        actionOnErrorCombo.setModel(new DefaultComboBoxModel(actionsOnError));
+        
+        actionOnCancelCombo = WidgetFactory.createComboBox();
+
+        ActionOnCancel[] actionsOnCancel = {
+                ActionOnCancel.HALT_ROLLBACK,
+                ActionOnCancel.HALT_COMMIT
+        };        
+        
+        actionOnCancelCombo.setModel(new DefaultComboBoxModel(actionsOnCancel));
 
         outputPanel = new LoggingOutputPanel();
         statusBar = new SqlTextPaneStatusBar();
@@ -140,6 +167,27 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(connectionsCombo, gbc);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        gbc.gridwidth = 1;
+        gbc.insets.top = 2;
+        mainPanel.add(new JLabel("Action on Error:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(actionOnErrorCombo, gbc);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weightx = 0;
+        gbc.gridwidth = 1;
+        mainPanel.add(new JLabel("Action on Stop:"), gbc);
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(actionOnCancelCombo, gbc);
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.weightx = 0;
@@ -174,9 +222,21 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
 
-        executeButton = ActionUtilities.createButton(this, BUTTON_START, "executeAndExport");
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 5));
-        buttonPanel.add(executeButton);
+        int minimumButtonWidth = 85;
+        startButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Start", "start");
+        rollbackButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Commit", "commit");
+        commitButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Rollback", "rollback");
+        stopButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Stop", "stop");
+
+        rollbackButton.setEnabled(false);
+        commitButton.setEnabled(false);
+        stopButton.setEnabled(false);
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 5));
+        buttonPanel.add(startButton);
+        buttonPanel.add(rollbackButton);
+        buttonPanel.add(commitButton);
+        buttonPanel.add(stopButton);
 
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);        
@@ -201,29 +261,27 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         }
 
         File file = fileChooser.getSelectedFile();
-        if (!file.exists()) {
-            
-            
-            // **************
-            GUIUtilities.displayErrorMessage("The selected file does not exists in the file system");
-
-            if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
-                
-                browse();
-                return;
-            }
-
-        }
-        
         fileNameField.setText(file.getAbsolutePath());
     }
 
     private boolean fieldsValid() {
         
-        if (StringUtils.isBlank(fileNameField.getText())) {
+        String fileName = fileNameField.getText();
+        if (StringUtils.isBlank(fileName)) {
 
-            GUIUtilities.displayErrorMessage("Please select an output file");
+            GUIUtilities.displayErrorMessage("Please select an input file");
             return false;            
+        
+        } else {
+
+            File file = new File(fileName); 
+            
+            if (!file.exists()) {
+                
+                GUIUtilities.displayErrorMessage("The selected file does not exists in the file system");
+                return false;
+            }
+            
         }
         
         return true;
@@ -231,7 +289,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     
     public boolean tabViewClosing() {
 
-        cleanup();        
+        cleanup();
         return true;
     }
 
@@ -260,10 +318,10 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     private SwingWorker swingWorker;
     private boolean executing;
     
-    public void executeAndExport() {
+    public void start() {
 
         if (executing) {
-            
+
             if (swingWorker != null) {
                 
                 swingWorker.interrupt();
@@ -277,7 +335,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                     public Object construct() {
 
                         executing = true;
-                        executeButton.setText(BUTTON_STOP);
                         return execute();
                     }
                     public void finished() {
@@ -293,7 +350,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                         } finally {
 
                             executing = false;                         
-                            executeButton.setText(BUTTON_START);
                         }
                     }
                 };
@@ -315,7 +371,11 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
 
         try {
 
-            String query = null;//sqlText.getEditorText();
+            String query = null;
+            
+        //    SqlScriptLoader scriptLoader = new SqlScriptLoader(fileNameField.getText()); 
+            
+            String script = FileUtils.loadFile(fileNameField.getText());
             
             statusBar.setStatusText("Executing...");
             statusBar.startProgressBar();
@@ -359,6 +419,9 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
             
             outputPanel.appendWarning("Operation cancelled by user action");
 
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         } finally {
 
             long endTime = System.currentTimeMillis();
@@ -434,7 +497,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     private static final int STATUS_BAR_HEIGHT = 21;
 
     private IndeterminateProgressBar progressBar;
-    private JButton executeButton;
     
     class SqlTextPaneStatusBar extends AbstractStatusBarPanel {
 
@@ -487,6 +549,47 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         }
 
         return "Enter the SQL SELECT query below";
+    }
+
+    enum ActionOnError {
+        
+        HALT_ROLLBACK("Halt and Rollback"),
+        HALT_COMMIT("Halt and Commit"),
+        CONTINUE("Continue");
+        
+        private final String label;
+        
+        private ActionOnError(String label) {
+        
+            this.label = label;
+        }
+        
+        @Override
+        public String toString() {
+            
+            return label;
+        }
+        
+    }
+    
+    enum ActionOnCancel {
+        
+        HALT_ROLLBACK("Halt and Rollback"),
+        HALT_COMMIT("Halt and Commit");
+        
+        private final String label;
+        
+        private ActionOnCancel(String label) {
+        
+            this.label = label;
+        }
+        
+        @Override
+        public String toString() {
+            
+            return label;
+        }
+        
     }
 
 }

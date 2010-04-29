@@ -57,6 +57,7 @@ import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.components.FileChooserDialog;
+import org.executequery.components.MinimumWidthActionButton;
 import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
@@ -76,8 +77,8 @@ import org.executequery.gui.text.TextEditorContainer;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.IndeterminateProgressBar;
-import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.FileUtils;
@@ -115,11 +116,8 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
     private LoggingOutputPanel outputPanel;
     
     private SqlTextPaneStatusBar statusBar;
+    private MinimumWidthActionButton stopButton;
 
-    private static final String BUTTON_STOP = "Stop";
-    
-    private static final String BUTTON_EXECUTE = "Execute";
-    
     private static final KeyStroke EXECUTE_KEYSTROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
     
     public ExportResultSetPanel() {
@@ -240,10 +238,15 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
 
-        executeButton = ActionUtilities.createButton(this, BUTTON_EXECUTE, "executeAndExport");
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 5));
+        int minimumButtonWidth = 85;
+        executeButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Execute", "executeAndExport");
+        stopButton = new MinimumWidthActionButton(minimumButtonWidth, this, "Stop", "stop");
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 2, 5));
         buttonPanel.add(executeButton);
+        buttonPanel.add(stopButton);
 
+        stopButton.setEnabled(false);
+        
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);        
         setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
@@ -359,27 +362,45 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         return fileNameField;
     }
 
-    private SwingWorker swingWorker;
-    private boolean executing;
-    
-    public void executeAndExport() {
+    public void stop() {
 
         if (executing) {
-            
+
             if (swingWorker != null) {
                 
                 swingWorker.interrupt();
             }
 
-        } else {
-        
+        }
+            
+    }
+    
+    private void enableButtons(final boolean enableExecute, final boolean enableStop) {
+
+        GUIUtils.invokeLater(new Runnable() {
+           public void run() {
+               executeButton.setEnabled(enableExecute);
+               stopButton.setEnabled(enableStop);                
+            } 
+            
+        });        
+    }
+
+    private SwingWorker swingWorker;
+    private boolean executing;
+    
+    public void executeAndExport() {
+
+        if (!executing) {
+
             if (fieldsValid()) {
     
+                enableButtons(false, true);
+                
                 swingWorker = new SwingWorker() {
                     public Object construct() {
 
                         executing = true;
-                        executeButton.setText(BUTTON_STOP);
                         return execute();
                     }
                     public void finished() {
@@ -394,8 +415,8 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
     
                         } finally {
 
-                            executing = false;                         
-                            executeButton.setText(BUTTON_EXECUTE);
+                            executing = false;
+                            enableButtons(true, false);
                         }
                     }
                 };
@@ -458,7 +479,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             outputPanel.appendError("Execution error:\n" + e.getMessage());
 
         } catch (InterruptedException e) {
-            
+
             outputPanel.appendWarning("Operation cancelled by user action");
 
         } finally {
