@@ -26,6 +26,8 @@ import java.awt.Font;
 import java.io.File;
 
 import javax.swing.BorderFactory;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
@@ -67,6 +69,8 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
     /** The default border */
     private Border defaultBorder;
 
+    private TextUtilitiesPopUpMenu popup;
+
     public SimpleSqlTextPanel() {
         this(false);
     }
@@ -75,7 +79,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         super(new BorderLayout());
         
         try {
-            jbInit();
+            init();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,7 +88,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         this.appending = appending;
     }
 
-    private void jbInit() throws Exception {
+    private void init() throws Exception {
 
         setBorder(BorderFactory.createTitledBorder("SQL"));
         
@@ -94,12 +98,20 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         textPane.setDragEnabled(true);
         textComponent = textPane;
         
-        TextUtilitiesPopUpMenu popup = new TextUtilitiesPopUpMenu();
+        popup = new TextUtilitiesPopUpMenu();
         popup.registerTextComponent(textPane);
 
         sqlScroller = new JScrollPane(textPane);
         defaultBorder = sqlScroller.getBorder();
         add(sqlScroller, BorderLayout.CENTER);
+    }
+
+    public JPopupMenu getPopup() {
+        return popup;
+    }
+   
+    public void addPopupMenuItem(JMenuItem menuItem, int index) {
+        popup.add(menuItem, index);
     }
     
     public void setSQLKeywords(boolean reset) {

@@ -1,4 +1,4 @@
-package org.executequery.gui;
+package org.executequery.gui.importexport;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -60,11 +60,11 @@ public class ResultSetDelimitedFileWriter {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            handleError(e);
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            handleError(e);
 
         } finally {
             
@@ -89,6 +89,11 @@ public class ResultSetDelimitedFileWriter {
         }
 
         return sb.substring(0, sb.length() - delimiter.length());
+    }
+    
+    private void handleError(Throwable e) {
+        
+        throw new ImportExportDataException(e);
     }
     
 }

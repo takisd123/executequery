@@ -64,11 +64,12 @@ public class TextUtilitiesPopUpMenu extends JPopupMenu {
         String[] actionCommands = {"cut", "copy", "paste"};
         
         for (int i = 0; i < menuLabels.length; i++) {
+
             add(createMenuItem(menuLabels[i], actionNames[i], actionCommands[i]));
         }
 
     }
-    
+
     /**
      * Executes the cut action on the registered text component.
      */
