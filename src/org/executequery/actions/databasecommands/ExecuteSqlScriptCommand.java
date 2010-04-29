@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
 import org.executequery.actions.OpenFrameCommand;
+import org.executequery.gui.ExecuteSqlScriptPanel;
 import org.executequery.gui.ExportResultSetPanel;
 import org.underworldlabs.swing.actions.BaseCommand;
 
@@ -34,7 +35,7 @@ import org.underworldlabs.swing.actions.BaseCommand;
  * @version  $Revision: 1241 $
  * @date     $Date: 2008-03-24 18:19:43 +1100 (Mon, 24 Mar 2008) $
  */
-public class ExportResultSetCommand extends OpenFrameCommand
+public class ExecuteSqlScriptCommand extends OpenFrameCommand
                                 implements BaseCommand {
     
     public void execute(ActionEvent e) {
@@ -54,9 +55,9 @@ public class ExportResultSetCommand extends OpenFrameCommand
 
                 GUIUtilities.showWaitCursor();
 
-                GUIUtilities.addCentralPane(ExportResultSetPanel.TITLE,
+                GUIUtilities.addCentralPane(ExecuteSqlScriptPanel.TITLE,
                         ExportResultSetPanel.FRAME_ICON, 
-                        new ExportResultSetPanel(),
+                        new ExecuteSqlScriptPanel(),
                         null,
                         true);
 

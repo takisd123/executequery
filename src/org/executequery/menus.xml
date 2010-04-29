@@ -356,6 +356,9 @@
           <menu-item id="export-resultset-command"
                      class="org.executequery.gui.menu.MainMenuItem"/>
 
+          <menu-item id="execute-sql-script-command"
+                     class="org.executequery.gui.menu.MainMenuItem"/>
+
           <menu-item id="generate-scripts-command"
                      class="org.executequery.gui.menu.MainMenuItem"/>
 

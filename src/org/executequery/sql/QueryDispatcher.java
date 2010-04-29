@@ -383,6 +383,11 @@ public class QueryDispatcher {
             
             for (DerivedQuery query : queries) {
                 
+                if (!query.isExecutable()) {
+                    
+                    continue;
+                }
+                
                 // reset clock
                 end = 0l;
                 start = 0l;
