@@ -36,7 +36,12 @@ public class ResultSetDelimitedFileWriter {
                 }
 
                 for (int i = 1; i <= columnCount; i++) {
-                    
+
+                    if (Thread.interrupted()) {
+
+                        throw new InterruptedException();
+                    }
+
                     String value = resultSet.getString(i);
                     if (!resultSet.wasNull()) {
 
