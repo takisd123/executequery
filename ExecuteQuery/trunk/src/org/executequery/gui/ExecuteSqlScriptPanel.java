@@ -21,35 +21,23 @@
 package org.executequery.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.InputMap;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.KeyStroke;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.ActiveComponent;
@@ -66,19 +54,12 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
 import org.executequery.event.DefaultKeywordEvent;
-import org.executequery.event.KeywordEvent;
-import org.executequery.event.KeywordListener;
 import org.executequery.gui.importexport.ImportExportDataException;
 import org.executequery.gui.importexport.ResultSetDelimitedFileWriter;
-import org.executequery.gui.text.SimpleSqlTextPanel;
-import org.executequery.gui.text.TextEditor;
-import org.executequery.gui.text.TextEditorContainer;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
-import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.IndeterminateProgressBar;
 import org.underworldlabs.swing.actions.ActionUtilities;
-import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.MiscUtils;
@@ -174,14 +155,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         gbc.insets.left = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(button, gbc);
-//        gbc.gridy++;
-//        gbc.insets.bottom = 10;
-//        mainPanel.add(new JLabel(instructionNote()), gbc);
-
-//        JPanel sqlPanel = new JPanel(new BorderLayout());
-//        sqlPanel.add(outputPanel, BorderLayout.CENTER);
-//        sqlPanel.add(statusBar, BorderLayout.SOUTH);
-
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.weighty = 1.0;
@@ -209,7 +182,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         add(buttonPanel, BorderLayout.SOUTH);        
         setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-        // register as a keyword and connection listener
         EventMediator.registerListener(this);        
     }
 
@@ -229,9 +201,11 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         }
 
         File file = fileChooser.getSelectedFile();
-        if (file.exists()) {
+        if (!file.exists()) {
             
-            result = GUIUtilities.displayConfirmCancelDialog("The selected file exists.\nOverwrite existing file?");
+            
+            // **************
+            GUIUtilities.displayErrorMessage("The selected file does not exists in the file system");
 
             if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
                 
