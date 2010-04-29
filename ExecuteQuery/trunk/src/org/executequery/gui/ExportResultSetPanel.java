@@ -29,10 +29,12 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
@@ -43,6 +45,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -65,15 +68,19 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.event.DefaultKeywordEvent;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
+import org.executequery.gui.importexport.ImportExportDataException;
+import org.executequery.gui.importexport.ResultSetDelimitedFileWriter;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
+import org.executequery.log.Log;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.IndeterminateProgressBar;
 import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
+import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.MiscUtils;
 
 /** 
@@ -112,6 +119,8 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
     private static final String BUTTON_STOP = "Stop";
     
     private static final String BUTTON_EXECUTE = "Execute";
+    
+    private static final KeyStroke EXECUTE_KEYSTROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
     
     public ExportResultSetPanel() {
 
@@ -211,9 +220,13 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.weightx = 0;
-        gbc.gridwidth = 2;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.insets.top = 2;
+        gbc.insets.left = 5;
         mainPanel.add(includeColumNamesCheck, gbc);
+        gbc.gridy++;
+        gbc.insets.bottom = 10;
+        mainPanel.add(new JLabel(instructionNote()), gbc);
 
         gbc.gridy++;
         gbc.gridx = 0;
@@ -221,7 +234,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
         gbc.insets.left = 5;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.insets.bottom = 5;
         gbc.fill = GridBagConstraints.BOTH;
         mainPanel.add(splitPane, gbc);
 
@@ -245,7 +258,11 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         actionMap.put(actionKey, executeQueryAction);
 
         InputMap inputMap = textPane.getInputMap();
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), actionKey);        
+        inputMap.put(EXECUTE_KEYSTROKE, actionKey);
+
+        JPopupMenu popupMenu = sqlText.getPopup();
+        popupMenu.addSeparator();
+        popupMenu.add(executeQueryAction);        
     }
 
     public void browse() {
@@ -394,6 +411,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         DatabaseHost host = combosGroup.getSelectedHost();
         StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection());
 
+        int result = -1;
         long startTime = System.currentTimeMillis();
         SqlStatementResult statementResult = null;
 
@@ -417,12 +435,11 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             } else if (statementResult.isResultSet()) {
 
                 resultSet = statementResult.getResultSet();
-                return writeToFile(resultSet);
+                result = writeToFile(resultSet);
 
             } else {
 
                 outputPanel.appendWarning("The executed query did not return a valid result set");
-                return -1;
             }
             
         } catch (SQLException e) {
@@ -436,13 +453,13 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
                 outputPanel.appendError("Execution error:\n" + e.getMessage());
             }
             
-            return -1;
+        } catch (ImportExportDataException e) {
+
+            outputPanel.appendError("Execution error:\n" + e.getMessage());
 
         } catch (InterruptedException e) {
             
             outputPanel.appendWarning("Operation cancelled by user action");
-
-            return -1;
 
         } finally {
 
@@ -471,6 +488,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             GUIUtilities.scheduleGC();
         }
         
+        return result;
     }
     
     private int writeToFile(ResultSet resultSet) throws InterruptedException {
@@ -571,11 +589,36 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
     class ExecuteQueryAction extends AbstractAction {
         
+        public ExecuteQueryAction() {
+
+            super("Execute");
+            putValue(Action.ACCELERATOR_KEY, EXECUTE_KEYSTROKE);
+        }
+        
         public void actionPerformed(ActionEvent e) {
 
             executeAndExport();
         }
 
     } // ExecuteQueryAction
+
+    private String instructionNote() {
+
+        try {
+
+            return FileUtils.loadResource(
+                    "org/executequery/gui/resource/exportResultSetInstruction.html");
+
+        } catch (IOException e) {
+
+            if (Log.isDebugEnabled()) {
+                
+                Log.debug("Error loading export result set instruction note", e);
+            }
+
+        }
+
+        return "Enter the SQL SELECT query below";
+    }
 
 }

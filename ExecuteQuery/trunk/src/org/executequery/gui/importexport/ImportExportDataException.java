@@ -18,21 +18,23 @@
  *
  */
 
-package org.executequery;
+package org.executequery.gui.importexport;
 
-public final class ApplicationException extends AbstractBaseRuntimeException {
+import org.executequery.AbstractBaseRuntimeException;
 
-    public ApplicationException(String message, Throwable cause) {
+public final class ImportExportDataException extends AbstractBaseRuntimeException {
+
+    public ImportExportDataException(String message, Throwable cause) {
 
         super(message, cause);
     }
 
-    public ApplicationException(String message) {
+    public ImportExportDataException(String message) {
 
         super(message);
     }
 
-    public ApplicationException(Throwable cause) {
+    public ImportExportDataException(Throwable cause) {
 
         super(cause);
     }
