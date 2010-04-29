@@ -89,26 +89,18 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class ExportResultSetPanel extends DefaultTabViewActionPanel
+public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                                   implements NamedView,
                                              FocusComponentPanel,
                                              ActiveComponent,
-                                             KeywordListener,
-                                             ConnectionListener,
-                                             TextEditorContainer {
+                                             ConnectionListener {
     
-    public static final String TITLE = "Export Result Set ";
+    public static final String TITLE = "Execute SQL Script ";
     public static final String FRAME_ICON = "ExportDelimited16.gif";
     
     private JComboBox connectionsCombo; 
 
-    private JComboBox delimiterCombo;
-
     private JTextField fileNameField;
-
-    private JCheckBox includeColumNamesCheck;
-    
-    private SimpleSqlTextPanel sqlText;
 
     private TableSelectionCombosGroup combosGroup;
 
@@ -118,11 +110,9 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
     private static final String BUTTON_STOP = "Stop";
     
-    private static final String BUTTON_EXECUTE = "Execute";
+    private static final String BUTTON_START = "Start";
     
-    private static final KeyStroke EXECUTE_KEYSTROKE = KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0);
-    
-    public ExportResultSetPanel() {
+    public ExecuteSqlScriptPanel() {
 
         super(new BorderLayout());
 
@@ -141,32 +131,11 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         
         fileNameField = WidgetFactory.createTextField();
         connectionsCombo = WidgetFactory.createComboBox();
-
-        String[] delims = {"|", ",", ";", "#"};
-        delimiterCombo = WidgetFactory.createComboBox(delims);
-        delimiterCombo.setEditable(true);
-        
         combosGroup = new TableSelectionCombosGroup(connectionsCombo);
 
-        includeColumNamesCheck = new JCheckBox("Include column names as first row");
-        
-        sqlText = new SimpleSqlTextPanel();
-        sqlText.getTextPane().setBackground(Color.WHITE);
-        sqlText.setBorder(null);
-        sqlText.setScrollPaneBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, UIUtils.getDefaultBorderColour()));
-
-        statusBar = new SqlTextPaneStatusBar();
-        JPanel sqlPanel = new JPanel(new BorderLayout());
-        sqlPanel.add(sqlText, BorderLayout.CENTER);
-        sqlPanel.add(statusBar, BorderLayout.SOUTH);
-        statusBar.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 1));
-
         outputPanel = new LoggingOutputPanel();
-        FlatSplitPane splitPane = new FlatSplitPane(
-                JSplitPane.VERTICAL_SPLIT, sqlPanel, outputPanel);
-        splitPane.setResizeWeight(0.5);
-        splitPane.setDividerLocation(0.8);
-        splitPane.setDividerSize(5);
+        statusBar = new SqlTextPaneStatusBar();
+        statusBar.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 1));
 
         JButton button = WidgetFactory.createInlineFieldButton("Browse");
         button.setActionCommand("browse");
@@ -190,24 +159,12 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(connectionsCombo, gbc);
-        gbc.insets.left = 5;
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.weightx = 0;
-        gbc.gridwidth = 1;
-        gbc.insets.top = 0;
-        mainPanel.add(new JLabel("Data Delimiter:"), gbc);
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(delimiterCombo, gbc);
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.weightx = 0;
         gbc.gridwidth = 1;
         gbc.insets.top = 2;
-        mainPanel.add(new JLabel("Output File:"), gbc);
+        mainPanel.add(new JLabel("Input File:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -217,16 +174,13 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         gbc.insets.left = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(button, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.weightx = 0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets.top = 2;
-        gbc.insets.left = 5;
-        mainPanel.add(includeColumNamesCheck, gbc);
-        gbc.gridy++;
-        gbc.insets.bottom = 10;
-        mainPanel.add(new JLabel(instructionNote()), gbc);
+//        gbc.gridy++;
+//        gbc.insets.bottom = 10;
+//        mainPanel.add(new JLabel(instructionNote()), gbc);
+
+//        JPanel sqlPanel = new JPanel(new BorderLayout());
+//        sqlPanel.add(outputPanel, BorderLayout.CENTER);
+//        sqlPanel.add(statusBar, BorderLayout.SOUTH);
 
         gbc.gridy++;
         gbc.gridx = 0;
@@ -234,13 +188,20 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
         gbc.insets.left = 5;
-        gbc.insets.bottom = 5;
+        gbc.insets.bottom = 0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.BOTH;
-        mainPanel.add(splitPane, gbc);
-
+        mainPanel.add(outputPanel, gbc);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weighty = 0;
+        gbc.insets.bottom = 5;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(statusBar, gbc);
+        
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
 
-        executeButton = ActionUtilities.createButton(this, BUTTON_EXECUTE, "executeAndExport");
+        executeButton = ActionUtilities.createButton(this, BUTTON_START, "executeAndExport");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 5));
         buttonPanel.add(executeButton);
 
@@ -249,20 +210,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         // register as a keyword and connection listener
-        EventMediator.registerListener(this);
-        
-        JTextPane textPane = sqlText.getTextPane();
-        ActionMap actionMap = textPane.getActionMap();
-
-        String actionKey = "executeQueryAction";
-        actionMap.put(actionKey, executeQueryAction);
-
-        InputMap inputMap = textPane.getInputMap();
-        inputMap.put(EXECUTE_KEYSTROKE, actionKey);
-
-        JPopupMenu popupMenu = sqlText.getPopup();
-        popupMenu.addSeparator();
-        popupMenu.add(executeQueryAction);        
+        EventMediator.registerListener(this);        
     }
 
     public void browse() {
@@ -298,21 +246,9 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
     private boolean fieldsValid() {
         
-        if (StringUtils.isBlank(delimiterCombo.getSelectedItem().toString())) {
-            
-            GUIUtilities.displayErrorMessage("Please select or enter an appropriate delimiter");
-            return false;
-        }
-
         if (StringUtils.isBlank(fileNameField.getText())) {
 
             GUIUtilities.displayErrorMessage("Please select an output file");
-            return false;            
-        }
-        
-        if (StringUtils.isBlank(sqlText.getEditorText())) {
-
-            GUIUtilities.displayErrorMessage("Please enter a valid SQL query");
             return false;            
         }
         
@@ -340,18 +276,6 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
     public boolean canHandleEvent(ApplicationEvent event) {
 
         return (event instanceof DefaultKeywordEvent) || (event instanceof ConnectionEvent);
-    }
-
-    /** Notification of a new keyword added to the list. */
-    public void keywordsAdded(KeywordEvent e) {
-
-        sqlText.setSQLKeywords(true);
-    }
-
-    /** Notification of a keyword removed from the list. */
-    public void keywordsRemoved(KeywordEvent e) {
-
-        sqlText.setSQLKeywords(true);
     }
 
     public Component getDefaultFocusComponent() {
@@ -395,7 +319,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
                         } finally {
 
                             executing = false;                         
-                            executeButton.setText(BUTTON_EXECUTE);
+                            executeButton.setText(BUTTON_START);
                         }
                     }
                 };
@@ -417,7 +341,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
         try {
 
-            String query = sqlText.getEditorText();
+            String query = null;//sqlText.getEditorText();
             
             statusBar.setStatusText("Executing...");
             statusBar.startProgressBar();
@@ -494,23 +418,10 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
     private int writeToFile(ResultSet resultSet) throws InterruptedException {
 
         ResultSetDelimitedFileWriter writer = new ResultSetDelimitedFileWriter(); 
-        return writer.write(fileNameField.getText(), 
-                delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected());
+        return 1 ;//writer.write(fileNameField.getText(), 
+                //delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected());
     }
 
-    // ------------------------------------------------
-    // ----- TextEditorContainer implementations ------
-    // ------------------------------------------------
-    
-    /**
-     * Returns the SQL text pane as the TextEditor component 
-     * that this container holds.
-     */
-    public TextEditor getTextEditor() {
-
-        return sqlText;
-    }
-    
     private static int count = 1;
     public String getDisplayName() {
 
@@ -585,23 +496,6 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
     } // SqlTextPaneStatusBar
     
-    private final ExecuteQueryAction executeQueryAction = new ExecuteQueryAction();
-
-    class ExecuteQueryAction extends AbstractAction {
-        
-        public ExecuteQueryAction() {
-
-            super("Execute");
-            putValue(Action.ACCELERATOR_KEY, EXECUTE_KEYSTROKE);
-        }
-        
-        public void actionPerformed(ActionEvent e) {
-
-            executeAndExport();
-        }
-
-    } // ExecuteQueryAction
-
     private String instructionNote() {
 
         try {

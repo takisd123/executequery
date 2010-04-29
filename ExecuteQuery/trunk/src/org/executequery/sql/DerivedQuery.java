@@ -20,6 +20,8 @@
 
 package org.executequery.sql;
 
+import org.apache.commons.lang.StringUtils;
+
 public final class DerivedQuery {
 
     private String derivedQuery;
@@ -49,6 +51,10 @@ public final class DerivedQuery {
         }
         
         this.derivedQuery = query;
+    }
+
+    public boolean isExecutable() {
+        return StringUtils.isNotBlank(getDerivedQuery()); 
     }
     
 }

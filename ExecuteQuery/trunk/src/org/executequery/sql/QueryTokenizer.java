@@ -83,7 +83,7 @@ public class QueryTokenizer {
             
             String noCommentsQuery = 
                 removeAllCommentsFromQuery(derivedQuery.getOriginalQuery());
-            
+
             derivedQuery.setDerivedQuery(noCommentsQuery.trim());
         }
         
@@ -130,6 +130,11 @@ public class QueryTokenizer {
         }
         
         return queries;
+    }
+
+    private boolean isValid(String snippet) {
+
+        return !(";".equals(snippet));
     }
 
     private boolean notInAnyToken(int index) {

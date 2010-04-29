@@ -612,6 +612,14 @@
           large-icon="/org/executequery/icons/ExportDelimited24.gif"
           execute-class="org.executequery.actions.databasecommands.ExportResultSetCommand"/>
 
+  <action id="execute-sql-script-command"
+          name="Load and Execute SQL Script"
+          mnemonic="S"
+          description="Open and execute an SQL script"
+          accel-editable="false"
+          small-icon="/org/executequery/icons/ExportDelimited16.gif"
+          execute-class="org.executequery.actions.databasecommands.ExecuteSqlScriptCommand"/>
+
   <action id="execute-object"
           name="Execute Stored Objects"
           mnemonic="B"
