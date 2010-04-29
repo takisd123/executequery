@@ -158,7 +158,7 @@
           
   <action id="cut-command"
           name="Cut"
-          mnemonic="t"
+          mnemonic="T"
           small-icon="/org/executequery/icons/Cut16.gif"
           large-icon="/org/executequery/icons/Cut24.gif"
           accel-key="control X"
@@ -236,7 +236,7 @@
 
   <action id="replace-command"
           name="Replace..."
-          mnemonic="e"
+          mnemonic="E"
           small-icon="/org/executequery/icons/Replace16.gif"
           large-icon="/org/executequery/icons/Replace24.gif"
           accel-key="control R"
@@ -245,7 +245,7 @@
 
   <action id="replace-next-command"
           name="Replace Next"
-          mnemonic="x"
+          mnemonic="X"
           small-icon="/org/executequery/icons/FindAgain16.gif"
           large-icon="/org/executequery/icons/FindAgain24.gif"
           execute-class="org.executequery.actions.searchcommands.ReplaceNextCommand"/>
@@ -605,7 +605,8 @@
 
   <action id="export-resultset-command"
           name="Export Result Set"
-          mnemonic="x"
+          description="Execute SQL SELECT statements writing results direct to file"
+          mnemonic="X"
           accel-editable="true"
           small-icon="/org/executequery/icons/ExportDelimited16.gif"
           large-icon="/org/executequery/icons/ExportDelimited24.gif"
@@ -613,7 +614,7 @@
 
   <action id="execute-object"
           name="Execute Stored Objects"
-          mnemonic="b"
+          mnemonic="B"
           accel-editable="true"
           small-icon="/org/executequery/icons/Procedure16.gif"
           large-icon="/org/executequery/icons/Procedure24.gif"
