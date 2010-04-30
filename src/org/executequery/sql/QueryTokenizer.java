@@ -118,7 +118,9 @@ public class QueryTokenizer {
 
             if (notInAnyToken(index)) {
 
-                queries.add(new DerivedQuery(query.substring(lastIndex, index)));
+                String substring = query.substring(lastIndex, index);
+
+                queries.add(new DerivedQuery(substring));
                 lastIndex = index + 1;
             }
 
@@ -130,11 +132,6 @@ public class QueryTokenizer {
         }
         
         return queries;
-    }
-
-    private boolean isValid(String snippet) {
-
-        return !(";".equals(snippet));
     }
 
     private boolean notInAnyToken(int index) {
