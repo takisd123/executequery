@@ -21,6 +21,7 @@
 package org.executequery.components;
 
 import java.awt.Color;
+
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -28,8 +29,10 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
+
 import org.executequery.Constants;
 import org.executequery.sql.SqlMessages;
+import org.underworldlabs.swing.GUIUtils;
 
 /**
  *
@@ -51,35 +54,36 @@ public class LoggingOutputPane extends JTextPane {
     }
     
     public void append(int type, String text) {
-        switch (type) {
-            case SqlMessages.ACTION_MESSAGE:
-                appendAction(text);
-                break;
-            case SqlMessages.ERROR_MESSAGE:
-                appendError(text);
-                break;
-            case SqlMessages.WARNING_MESSAGE:
-                appendWarning(text);
-                break;
-            case SqlMessages.PLAIN_MESSAGE:
-                appendPlain(text);
-                break;
-            case SqlMessages.ACTION_MESSAGE_PREFORMAT:
-                appendActionFixedWidth(text);
-                break;
-            case SqlMessages.ERROR_MESSAGE_PREFORMAT:
-                appendErrorFixedWidth(text);
-                break;
-            case SqlMessages.WARNING_MESSAGE_PREFORMAT:
-                appendWarningFixedWidth(text);
-                break;
-            case SqlMessages.PLAIN_MESSAGE_PREFORMAT:
-                appendPlainFixedWidth(text);
-                break;
-            default:
-                appendPlain(text);
-                break;
-        }
+        
+            switch (type) {
+                case SqlMessages.ACTION_MESSAGE:
+                    appendAction(text);
+                    break;
+                case SqlMessages.ERROR_MESSAGE:
+                    appendError(text);
+                    break;
+                case SqlMessages.WARNING_MESSAGE:
+                    appendWarning(text);
+                    break;
+                case SqlMessages.PLAIN_MESSAGE:
+                    appendPlain(text);
+                    break;
+                case SqlMessages.ACTION_MESSAGE_PREFORMAT:
+                    appendActionFixedWidth(text);
+                    break;
+                case SqlMessages.ERROR_MESSAGE_PREFORMAT:
+                    appendErrorFixedWidth(text);
+                    break;
+                case SqlMessages.WARNING_MESSAGE_PREFORMAT:
+                    appendWarningFixedWidth(text);
+                    break;
+                case SqlMessages.PLAIN_MESSAGE_PREFORMAT:
+                    appendPlainFixedWidth(text);
+                    break;
+                default:
+                    appendPlain(text);
+                    break;
+            }
     }
 
     public void appendError(String text) {
@@ -201,20 +205,32 @@ public class LoggingOutputPane extends JTextPane {
             append(text, action);
         }
 
-        protected void append(String text, AttributeSet attrs) {
-            int length = getLength();
-            if (length > 0) {
-                textBuffer.append(Constants.NEW_LINE_CHAR);
-            }
+        protected void append(final String text, final AttributeSet attrs) {
             
-            textBuffer.append(text).
-                       append(Constants.NEW_LINE_CHAR);
+            GUIUtils.invokeLater(new Runnable() {
+                
+                public void run() {
+                
+                    int length = getLength();
+                    if (length > 0) {
+        
+                        textBuffer.append(Constants.NEW_LINE_CHAR);
+                    }
+                    
+                    textBuffer.append(text).append(Constants.NEW_LINE_CHAR);
+        
+                    try {
+                        
+                        insertString(length, textBuffer.toString(), attrs);
+                    
+                    } catch (BadLocationException	e) {}
+        
+                    textBuffer.setLength(0);
+                    
+                }
+            
+            });
 
-            try {
-                insertString(length, textBuffer.toString(), attrs);
-            }
-            catch (BadLocationException	e) {}
-            textBuffer.setLength(0);
         }
 
     } // class OutputPaneDocument

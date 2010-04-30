@@ -18,7 +18,7 @@
  *
  */
 
-package org.executequery.databasemediators;
+package org.executequery.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +37,8 @@ public class SqlStatementResult {
     
     private int updateCount;
     
+    private int statementCount;
+    
     private String message;
     
     private String otherErrorMessage;
@@ -47,9 +49,10 @@ public class SqlStatementResult {
     
     private SQLWarning sqlWarning;
     
+    private Throwable otherException;
+    
     private Object otherResult;
     
-    /** Creates a new instance of SqlStatementResult */
     public SqlStatementResult() {}
 
     public SqlStatementResult(ResultSet resultSet, 
@@ -92,6 +95,10 @@ public class SqlStatementResult {
         } else if (otherErrorMessage != null) {
 
             return otherErrorMessage;
+
+        } else if (sqlException == null && otherException != null) {
+            
+            return otherException.getMessage();
         }
 
         String text = sqlException.getMessage();
@@ -155,7 +162,11 @@ public class SqlStatementResult {
     }
 
     public boolean isException() {
-        return sqlException != null;
+        return sqlException != null || otherException != null;
+    }
+    
+    public boolean isInterrupted() {
+        return otherException instanceof InterruptedException;  
     }
     
     public SQLException getSqlException() {
@@ -213,10 +224,21 @@ public class SqlStatementResult {
     public void setOtherErrorMessage(String otherErrorMessage) {
         this.otherErrorMessage = otherErrorMessage;
     }
-    
+
+    public int getStatementCount() {
+        return statementCount;
+    }
+
+    public void setStatementCount(int statementCount) {
+        this.statementCount = statementCount;
+    }
+
+    public Throwable getOtherException() {
+        return otherException;
+    }
+
+    public void setOtherException(Throwable otherException) {
+        this.otherException = otherException;
+    }
+
 }
-
-
-
-
-

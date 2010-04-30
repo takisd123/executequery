@@ -34,10 +34,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
 import org.executequery.GUIUtilities;
-import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.StatementExecutor;
 import org.executequery.gui.browser.ColumnConstraint;
 import org.executequery.gui.browser.ColumnData;
+import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.table.ComboBoxCellEditor;
 import org.underworldlabs.util.MiscUtils;

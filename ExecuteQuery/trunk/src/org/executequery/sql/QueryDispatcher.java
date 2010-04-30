@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 import org.executequery.Constants;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.QueryTypes;
-import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
 import org.executequery.databasemediators.spi.StatementExecutor;
 import org.executequery.datasource.ConnectionManager;
@@ -237,8 +236,7 @@ public class QueryDispatcher {
 
         };
         
-        setOutputMessage(SqlMessages.PLAIN_MESSAGE, 
-                "---\nUsing connection: " + dc);
+        setOutputMessage(SqlMessages.PLAIN_MESSAGE, "---\nUsing connection: " + dc);
 
         delegate.executing();
         delegate.setStatusMessage(Constants.EMPTY);
@@ -385,6 +383,8 @@ public class QueryDispatcher {
                 
                 if (!query.isExecutable()) {
                     
+                    setOutputMessage(
+                            SqlMessages.WARNING_MESSAGE, "Non executable query provided");                    
                     continue;
                 }
                 

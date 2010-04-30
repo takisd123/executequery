@@ -26,8 +26,6 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.io.File;
-import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
@@ -47,21 +45,18 @@ import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.components.MinimumWidthActionButton;
 import org.executequery.components.TableSelectionCombosGroup;
-import org.executequery.databasemediators.SqlStatementResult;
-import org.executequery.databasemediators.spi.DefaultStatementExecutor;
-import org.executequery.databasemediators.spi.StatementExecutor;
-import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
 import org.executequery.event.DefaultKeywordEvent;
-import org.executequery.gui.importexport.ImportExportDataException;
-import org.executequery.gui.importexport.ResultSetDelimitedFileWriter;
-import org.executequery.log.Log;
+import org.executequery.sql.ActionOnError;
+import org.executequery.sql.ExecutionController;
+import org.executequery.sql.SqlScriptRunner;
+import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.IndeterminateProgressBar;
 import org.underworldlabs.swing.util.SwingWorker;
-import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.MiscUtils;
 
 /** 
@@ -74,6 +69,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                                   implements NamedView,
                                              FocusComponentPanel,
                                              ActiveComponent,
+                                             ExecutionController,
                                              ConnectionListener {
     
     public static final String TITLE = "Execute SQL Script ";
@@ -91,8 +87,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
 
     private JComboBox actionOnErrorCombo;
     
-    private JComboBox actionOnCancelCombo;
-    
     private JButton startButton;
 
     private JButton rollbackButton;
@@ -101,6 +95,8 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     
     private JButton stopButton;
 
+    private SqlScriptRunner sqlScriptRunner;
+    
     public ExecuteSqlScriptPanel() {
 
         super(new BorderLayout());
@@ -125,22 +121,12 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         actionOnErrorCombo = WidgetFactory.createComboBox();
 
         ActionOnError[] actionsOnError = {
-                ActionOnError.HALT_ROLLBACK,
-                ActionOnError.HALT_COMMIT,
+                ActionOnError.HALT,
                 ActionOnError.CONTINUE
         };        
         
         actionOnErrorCombo.setModel(new DefaultComboBoxModel(actionsOnError));
         
-        actionOnCancelCombo = WidgetFactory.createComboBox();
-
-        ActionOnCancel[] actionsOnCancel = {
-                ActionOnCancel.HALT_ROLLBACK,
-                ActionOnCancel.HALT_COMMIT
-        };        
-        
-        actionOnCancelCombo.setModel(new DefaultComboBoxModel(actionsOnCancel));
-
         outputPanel = new LoggingOutputPanel();
         statusBar = new SqlTextPaneStatusBar();
         statusBar.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 1));
@@ -156,7 +142,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.gridheight = 1;
-        gbc.insets.top = 5;
+        gbc.insets.top = 7;
         gbc.insets.bottom = 5;
         gbc.insets.right = 5;
         gbc.insets.left = 5;
@@ -164,6 +150,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         mainPanel.add(new JLabel("Connection:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
+        gbc.insets.top = 5;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(connectionsCombo, gbc);
@@ -171,31 +158,23 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         gbc.gridx = 0;
         gbc.weightx = 0;
         gbc.gridwidth = 1;
-        gbc.insets.top = 2;
+        gbc.insets.top = 5;
         mainPanel.add(new JLabel("Action on Error:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.top = 0;
         mainPanel.add(actionOnErrorCombo, gbc);
         gbc.gridy++;
         gbc.gridx = 0;
         gbc.weightx = 0;
         gbc.gridwidth = 1;
-        mainPanel.add(new JLabel("Action on Stop:"), gbc);
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(actionOnCancelCombo, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.weightx = 0;
-        gbc.gridwidth = 1;
-        gbc.insets.top = 2;
+        gbc.insets.top = 5;
         mainPanel.add(new JLabel("Input File:"), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
+        gbc.insets.top = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(fileNameField, gbc);
         gbc.gridx = 2;
@@ -302,7 +281,24 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
             statusBar.cleanup();
         }
         
+        closeConnection();
         EventMediator.deregisterListener(this);
+    }
+
+    private void closeConnection() {
+
+        if (sqlScriptRunner != null) {
+
+            try {
+        
+                sqlScriptRunner.close();
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
+            }
+        
+        }
     }
 
     public boolean canHandleEvent(ApplicationEvent event) {
@@ -315,22 +311,31 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         return fileNameField;
     }
 
+    private void enableButtons(final boolean enableStart, final boolean enableStop,
+            final boolean enableCommit, final boolean enableRollback) {
+
+        GUIUtils.invokeLater(new Runnable() {
+           public void run() {
+               startButton.setEnabled(enableStart);
+               stopButton.setEnabled(enableStop);                
+               commitButton.setEnabled(enableCommit);
+               rollbackButton.setEnabled(enableRollback);                
+            } 
+            
+        });        
+    }
+
     private SwingWorker swingWorker;
     private boolean executing;
     
     public void start() {
 
-        if (executing) {
+        if (!executing) {
 
-            if (swingWorker != null) {
-                
-                swingWorker.interrupt();
-            }
-
-        } else {
-        
             if (fieldsValid()) {
     
+                enableButtons(false, true, false, false);
+                
                 swingWorker = new SwingWorker() {
                     public Object construct() {
 
@@ -338,18 +343,18 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                         return execute();
                     }
                     public void finished() {
-    
+
+                        SqlStatementResult sqlStatementResult = (SqlStatementResult) get();
+                        
                         try {
-    
-                            Integer recordCount = (Integer) get();
-                            if (recordCount != -1) {
-        
-                                outputPanel.append("Records transferred: " + recordCount);
-                            }
+
+                            outputPanel.append("Statements executed: " + sqlStatementResult.getStatementCount());
+                            outputPanel.append("Records affected: " + sqlStatementResult.getUpdateCount());
     
                         } finally {
 
-                            executing = false;                         
+                            executing = false;
+                            enableButtons(false, false, true, true);
                         }
                     }
                 };
@@ -359,110 +364,122 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         }
     }
     
-    private int execute() {
-     
-        ResultSet resultSet = null;
-        DatabaseHost host = combosGroup.getSelectedHost();
-        StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection());
+    public void stop() {
+        
+        if (executing) {
 
-        int result = -1;
+            try {
+            
+                if (swingWorker != null) {
+                    
+                    swingWorker.interrupt();
+                }
+                
+            } finally {
+                
+                executing = false;
+            }
+
+        }
+
+    }
+    
+    public void commit() {
+        
+        if (sqlScriptRunner != null) {
+            
+            try {
+
+                sqlScriptRunner.commit();
+                outputPanel.append("Commit complete");
+                
+            } catch (SQLException e) {
+
+                outputPanel.appendError("Error during commit:\n" + e.getMessage());
+
+            } finally {
+
+                closeConnection();
+                enableButtons(true, false, false, false);
+            }
+        }
+        
+    }
+    
+    public void rollback() {
+        
+        if (sqlScriptRunner != null) {
+            
+            try {
+
+                sqlScriptRunner.rollback();
+                outputPanel.append("Rollback complete");
+
+            } catch (SQLException e) {
+
+                outputPanel.appendError("Error during rollback:\n" + e.getMessage());
+                
+            } finally {
+                
+                closeConnection();
+                enableButtons(true, false, false, false);
+            }
+        }
+        
+    }
+    
+    private SqlStatementResult execute() {
+ 
+        if (sqlScriptRunner == null) {
+            
+            sqlScriptRunner = new SqlScriptRunner(this);
+        }
+
+        outputPanel.clear();
         long startTime = System.currentTimeMillis();
-        SqlStatementResult statementResult = null;
+        SqlStatementResult sqlStatementResult = null;
 
         try {
 
-            String query = null;
-            
-        //    SqlScriptLoader scriptLoader = new SqlScriptLoader(fileNameField.getText()); 
-            
-            String script = FileUtils.loadFile(fileNameField.getText());
-            
             statusBar.setStatusText("Executing...");
             statusBar.startProgressBar();
 
-            outputPanel.appendAction("Executing:");
-            outputPanel.appendActionFixedWidth(query);
+            sqlStatementResult = sqlScriptRunner.execute(
+                        combosGroup.getSelectedHost().getDatabaseConnection(),
+                        fileNameField.getText(),
+                        (ActionOnError) actionOnErrorCombo.getSelectedItem());
 
-            int type = statementExecutor.getQueryType(query);
-            statementResult = statementExecutor.execute(type, query);
-
-            if (statementResult.isException()) {
-                
-                throw statementResult.getSqlException();
-                
-            } else if (statementResult.isResultSet()) {
-
-                resultSet = statementResult.getResultSet();
-                result = writeToFile(resultSet);
-
-            } else {
-
-                outputPanel.appendWarning("The executed query did not return a valid result set");
-            }
-            
-        } catch (SQLException e) {
-
-            if (statementResult != null) {
-            
-                outputPanel.appendError(statementResult.getErrorMessage());
-
-            } else {
-
-                outputPanel.appendError("Execution error:\n" + e.getMessage());
-            }
-            
-        } catch (ImportExportDataException e) {
-
-            outputPanel.appendError("Execution error:\n" + e.getMessage());
-
-        } catch (InterruptedException e) {
-            
-            outputPanel.appendWarning("Operation cancelled by user action");
-
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } finally {
 
+            if (sqlStatementResult != null && sqlStatementResult.isException()) {
+                
+                if (sqlStatementResult.isInterrupted()) {
+                
+                    outputPanel.appendWarning("Operation cancelled by user action");
+                    
+                } else {
+                    
+                    outputPanel.appendError("Execution error:\n" + sqlStatementResult.getErrorMessage());                    
+                }
+                
+            }
+            
             long endTime = System.currentTimeMillis();
 
             statusBar.setStatusText("Done");
             statusBar.stopProgressBar();
 
             outputPanel.append("Duration: " + MiscUtils.formatDuration(endTime - startTime));
-
-            try {
-                
-                if (resultSet != null) {
-
-                    resultSet.close();
-                }
-                
-                statementExecutor.closeConnection();
-
-            } catch (SQLException e) {
-
-                e.printStackTrace();
-            }
-
-            host.close();
             GUIUtilities.scheduleGC();
         }
-        
-        return result;
+
+        return sqlStatementResult;
     }
     
-    private int writeToFile(ResultSet resultSet) throws InterruptedException {
-
-        ResultSetDelimitedFileWriter writer = new ResultSetDelimitedFileWriter(); 
-        return 1 ;//writer.write(fileNameField.getText(), 
-                //delimiterCombo.getSelectedItem().toString(), resultSet, includeColumNamesCheck.isSelected());
-    }
-
-    private static int count = 1;
+    private static int instanceCount = 1;
     public String getDisplayName() {
 
-        return TITLE + (count++);
+        return TITLE + (instanceCount++);
     }
 
     public String toString() {
@@ -522,74 +539,50 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         
         public void startProgressBar() {
 
-            progressBar.start();
+            GUIUtils.invokeLater(new Runnable() {
+               public void run() {
+
+                   progressBar.start();
+                } 
+            });
+            
         }
 
         public void stopProgressBar() {
             
-            progressBar.stop();
+            GUIUtils.invokeLater(new Runnable() {
+                public void run() {
+
+                    progressBar.stop();
+                 } 
+             });
         }
 
     } // SqlTextPaneStatusBar
     
-    private String instructionNote() {
+    public void message(String message) {
 
-        try {
-
-            return FileUtils.loadResource(
-                    "org/executequery/gui/resource/exportResultSetInstruction.html");
-
-        } catch (IOException e) {
-
-            if (Log.isDebugEnabled()) {
-                
-                Log.debug("Error loading export result set instruction note", e);
-            }
-
-        }
-
-        return "Enter the SQL SELECT query below";
+        outputPanel.append(message);
     }
 
-    enum ActionOnError {
-        
-        HALT_ROLLBACK("Halt and Rollback"),
-        HALT_COMMIT("Halt and Commit"),
-        CONTINUE("Continue");
-        
-        private final String label;
-        
-        private ActionOnError(String label) {
-        
-            this.label = label;
-        }
-        
-        @Override
-        public String toString() {
-            
-            return label;
-        }
-        
+    public void actionMessage(String message) {
+
+        outputPanel.appendAction(message);
     }
-    
-    enum ActionOnCancel {
-        
-        HALT_ROLLBACK("Halt and Rollback"),
-        HALT_COMMIT("Halt and Commit");
-        
-        private final String label;
-        
-        private ActionOnCancel(String label) {
-        
-            this.label = label;
-        }
-        
-        @Override
-        public String toString() {
-            
-            return label;
-        }
-        
+
+    public void errorMessage(String message) {
+
+        outputPanel.appendError(message);
+    }
+
+    public void queryMessage(String message) {
+
+        outputPanel.appendActionFixedWidth(message);
+    }
+
+    public void warningMessage(String message) {
+
+        outputPanel.appendWarning(message);        
     }
 
 }

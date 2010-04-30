@@ -37,6 +37,16 @@ public final class DerivedQuery {
         return originalQuery;
     }
 
+    public String getLoggingQuery() {
+        
+        if (derivedQuery.length() > 50) {
+            
+            return derivedQuery.substring(0, 50) + " ... ";
+        }
+        
+        return derivedQuery;
+    }
+    
     public String getDerivedQuery() {
         return derivedQuery;
     }

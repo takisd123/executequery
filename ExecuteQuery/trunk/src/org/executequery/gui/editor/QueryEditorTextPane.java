@@ -532,8 +532,8 @@ public class QueryEditorTextPane extends SQLTextPane
         String query = text.substring(start, end + 1);
         //Log.debug(query);
 
-        if ((MiscUtils.isNull(query) && start != 0) ||
-                start == end) {
+        if ((MiscUtils.isNull(query) && start != 0)) { // || start == end) {
+
             return getQueryAt(start);
         }
         

@@ -613,7 +613,7 @@
           execute-class="org.executequery.actions.databasecommands.ExportResultSetCommand"/>
 
   <action id="execute-sql-script-command"
-          name="Load and Execute SQL Script"
+          name="Execute SQL Script"
           mnemonic="S"
           description="Open and execute an SQL script"
           accel-editable="false"

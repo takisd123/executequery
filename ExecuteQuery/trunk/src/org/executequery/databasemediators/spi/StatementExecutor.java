@@ -23,8 +23,8 @@ package org.executequery.databasemediators.spi;
 import java.sql.SQLException;
 
 import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.databasemediators.SqlStatementResult;
 import org.executequery.databaseobjects.DatabaseExecutable;
+import org.executequery.sql.SqlStatementResult;
 
 public interface StatementExecutor {
 

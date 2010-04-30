@@ -46,7 +46,7 @@ public interface QueryDelegate {
      */
     void executing();
 
-    /** <p>Sets the result text within the designated
+    /** Sets the result text within the designated
      *  statement results area to the specified values.
      *
      *  @param the result of the executed query (update)
@@ -54,14 +54,14 @@ public interface QueryDelegate {
      */
     void setResult(int result, int type);
     
-    /** <p>Sets the text within status bar's left-hand
+    /** Sets the text within status bar's left-hand
      *  message area to the specified value.
      *
      *  @param the text to display
      */
     void setStatusMessage(String text);
     
-    /** <p>Sets the error message text within the
+    /** Sets the error message text within the
      *  designated area to the specified value. This
      *  will usually send <code>SQLException</code>
      *  messages or dumps.
@@ -84,7 +84,7 @@ public interface QueryDelegate {
      */
     void interrupt();
 
-    /** <p>Sets the table results to the specified
+    /** Sets the table results to the specified
      *  <code>ResultSet</code> object for display.
      *
      *  @param the table results to display
@@ -92,7 +92,7 @@ public interface QueryDelegate {
      */
     void setResultSet(ResultSet rs, String query) throws SQLException;
 
-    /** <p>Adds the specified SQL statement to the statement
+    /** Adds the specified SQL statement to the statement
      *  history list if available.
      *
      *  @param the statement to add
