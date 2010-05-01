@@ -536,7 +536,7 @@ public final class GUIUtilities {
                 if (!dialog.isModal() || dialog.isFocused()) {
                     if (dialog instanceof BaseDialog) {
                         // check the content panel
-                        JPanel panel = ((BaseDialog)dialog).getConentPanel();
+                        JPanel panel = ((BaseDialog)dialog).getContentPanel();
                         if (panel instanceof PrintFunction) {
                             return (PrintFunction)panel;
                         }
@@ -687,7 +687,7 @@ public final class GUIUtilities {
                     // check if its a base dialog
                     if (dialog instanceof BaseDialog) {
                         // check the content panel
-                        JPanel panel = ((BaseDialog)dialog).getConentPanel();
+                        JPanel panel = ((BaseDialog)dialog).getContentPanel();
                         if (panel instanceof TextEditor) {
                             return (TextEditor)panel;
                         }
@@ -744,7 +744,7 @@ public final class GUIUtilities {
                     // check if its a base dialog
                     if (dialog instanceof BaseDialog) {
                         // check the content panel
-                        JPanel panel = ((BaseDialog)dialog).getConentPanel();
+                        JPanel panel = ((BaseDialog)dialog).getContentPanel();
                         if (panel instanceof SaveFunction) {
                             return (SaveFunction)panel;
                         }
@@ -1514,7 +1514,7 @@ public final class GUIUtilities {
                 // check if its a BaseDialog
                 if (dialog instanceof BaseDialog) {
                     // check the content panel
-                    JPanel panel = ((BaseDialog)dialog).getConentPanel();
+                    JPanel panel = ((BaseDialog)dialog).getContentPanel();
                     if (panel instanceof ActiveComponent) {
                         dialog.toFront();
                     }
@@ -1539,7 +1539,7 @@ public final class GUIUtilities {
                 // check if its a BaseDialog
                 if (dialog instanceof BaseDialog) {
                     // check the content panel
-                    JPanel panel = ((BaseDialog)dialog).getConentPanel();
+                    JPanel panel = ((BaseDialog)dialog).getContentPanel();
                     if (panel instanceof ActiveComponent) {
                         return true;
                     }
