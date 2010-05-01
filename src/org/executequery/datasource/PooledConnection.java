@@ -30,6 +30,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+
+import org.executequery.log.Log;
 
 /**
  * Pooled connection wrapper.
@@ -39,6 +42,8 @@ import java.util.Map;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class PooledConnection implements Connection {
+
+    private String id = UUID.randomUUID().toString();
 
     /** this connections use count */
     private int useCount;
@@ -92,6 +97,10 @@ public class PooledConnection implements Connection {
 
     }
 
+    public String getId() {
+        return id;
+    }
+    
     public void addPooledConnectionListener(PooledConnectionListener pooledConnectionListener) {
         
         if (listeners == null) {
@@ -143,6 +152,11 @@ public class PooledConnection implements Connection {
     
     protected void destroy() {
         
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Destroying connection - " + id);
+        }
+        
         try {
 
             if (realConnection != null) {
@@ -164,7 +178,12 @@ public class PooledConnection implements Connection {
         inUse = false;
         
         if (realConnection != null) {
-        
+
+            if (Log.isDebugEnabled()) {
+                
+                Log.debug("Closing connection - " + id);
+            }
+            
             if (closeOnReturn) {
               
                 realConnection.close();
@@ -174,7 +193,7 @@ public class PooledConnection implements Connection {
 
                 // reset the original auto-commit mode
                 try {
-                
+
                     realConnection.setAutoCommit(originalAutoCommit);
 
                 } catch (SQLException e) {}

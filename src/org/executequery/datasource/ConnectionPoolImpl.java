@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.sql.DataSource;
 
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -36,7 +37,13 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     
     public ConnectionPoolImpl(DatabaseConnection databaseConnection) {
 
-        this.databaseConnection = databaseConnection;        
+        this.databaseConnection = databaseConnection;
+        
+        if (Log.isDebugEnabled()) {
+
+            Log.debug("Creating new pool for connection " + databaseConnection.getName()); 
+        }
+        
     }
 
     public DatabaseConnection getDatabaseConnection() {
@@ -46,6 +53,12 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     
     public void connectionClosed(PooledConnection pooledConnection) {
 
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Removing connection " + pooledConnection.getId() 
+                    + " from active connections list");
+        }
+        
         activeConnections.remove(pooledConnection);
         reduceCapacity(minimumConnections);
     }
@@ -66,6 +79,11 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     }
 
     public synchronized void close() {
+
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Closing connection pool for connection " + databaseConnection.getName()); 
+        }
 
         for (Connection connection : openConnections) {
             
@@ -100,12 +118,22 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
             throw new DataSourceException("Maximum open connection count exceeded");
         }
-        
+
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Retrieving connection " + connection.getId()); 
+        }
+
         return connection;
     }
 
     private void ensureCapacity(int capacity) {
 
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Ensuring pool capacity " + capacity); 
+        }
+        
         while (openConnections.size() < capacity) {
 
             createConnection();
@@ -114,6 +142,11 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     }
 
     private void reduceCapacity(int capacity) {
+
+        if (Log.isDebugEnabled()) {
+            
+            Log.debug("Reducing pool capacity " + capacity); 
+        }
 
         while (openConnections.size() > capacity) {
             
