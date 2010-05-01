@@ -193,6 +193,11 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
             openConnections.add(connection);
             
+            if (Log.isDebugEnabled()) {
+
+                Log.debug("Added new connection to the pool - " + connection.getId()); 
+            }
+            
         } catch (SQLException e) {
 
             rethrowAsDataSourceException(e);

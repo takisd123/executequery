@@ -219,7 +219,7 @@ public class BaseDialog extends AbstractBaseDialog
      *
      * @return the dialog's content panel
      */
-    public JPanel getConentPanel() {
+    public JPanel getContentPanel() {
         return contentPanel;
     }
     
@@ -245,6 +245,7 @@ public class BaseDialog extends AbstractBaseDialog
                     ((FocusComponentPanel)contentPanel).getDefaultFocusComponent());
         }
 
+        toFront();
     }
 
 }
