@@ -1,8 +1,8 @@
 --- RELEASE NOTES ---
 
-Date: 11 March 2010
+Date: 3 May 2010
 
-Execute Query Version 3.2.1 Build 5142
+Execute Query Version 3.2.1 Build 5146
 ----------------------------------------
 
 Summary of changes from 3.2 Build 5140:
@@ -15,6 +15,21 @@ Summary of changes from 3.2 Build 5140:
   in the Query Editor, import/export processes etc).
 - Fixed editor auto-complete popup for less than 2 characters not scrolling to 
   'starts with' word.
+- Ongoing look and feel tweaks - field dimension changes, font changes.
+- Added option to execute queries with comments, whitespace, line-breaks etc 
+  as-is. Defaults to executing 'sanitised' queries with comments etc stripped 
+  out as has always been the case.
+- Added default insets for UIManager returning null for some look and feels 
+  using TabbedPane.tabInsets in determining tab dimensions for scrolling center 
+  panel.  
+- Modified callable statement generation removing left-hand equals where out
+  parameters do not exist.
+- Fixed issue with data exports for multiple tables where back/next button 
+  selection from export file entry would duplicate selected tables in returning
+  to file selection panel. 
+- Fixed query execution with trailing semi-colon errors noted with Oracle.
+- Added export result set to file allowing for executing arbitrary SQL SELECT 
+  statements and writing the output to a delimited file.
 
 
 Summary of changes from 3.1.6 Build 5132:
@@ -224,4 +239,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-11 March 2010
+3 May 2010
