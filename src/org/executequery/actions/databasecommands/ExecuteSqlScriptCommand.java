@@ -25,11 +25,9 @@ import java.awt.event.ActionEvent;
 import org.executequery.GUIUtilities;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.ExecuteSqlScriptPanel;
-import org.executequery.gui.ExportResultSetPanel;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
- * Execution for Export Excel
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1241 $
@@ -41,31 +39,23 @@ public class ExecuteSqlScriptCommand extends OpenFrameCommand
     public void execute(ActionEvent e) {
         
         if (!isConnected()) {
+
             return;
         }
 
-        if (isActionableDialogOpen()) {
-            GUIUtilities.acionableDialogToFront();
-            return;
-        }
+        try {
 
-        if (!isDialogOpen(ExportResultSetPanel.TITLE)) {
+            GUIUtilities.showWaitCursor();
 
-            try {
+            GUIUtilities.addCentralPane(ExecuteSqlScriptPanel.TITLE,
+                    ExecuteSqlScriptPanel.FRAME_ICON, 
+                    new ExecuteSqlScriptPanel(),
+                    null,
+                    true);
 
-                GUIUtilities.showWaitCursor();
-
-                GUIUtilities.addCentralPane(ExecuteSqlScriptPanel.TITLE,
-                        ExportResultSetPanel.FRAME_ICON, 
-                        new ExecuteSqlScriptPanel(),
-                        null,
-                        true);
-
-            } finally {
-              
-                GUIUtilities.showNormalCursor();
-            }
-
+        } finally {
+          
+            GUIUtilities.showNormalCursor();
         }
 
     }

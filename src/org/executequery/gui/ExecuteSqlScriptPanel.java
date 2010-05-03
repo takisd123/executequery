@@ -73,7 +73,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                                              ConnectionListener {
     
     public static final String TITLE = "Execute SQL Script ";
-    public static final String FRAME_ICON = "ExportDelimited16.gif";
+    public static final String FRAME_ICON = "ExecuteSqlScript16.gif";
     
     private JComboBox connectionsCombo; 
 
