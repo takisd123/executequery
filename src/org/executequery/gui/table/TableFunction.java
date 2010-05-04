@@ -20,13 +20,6 @@
 
 package org.executequery.gui.table;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -35,19 +28,19 @@ package org.executequery.gui.table;
  */
 public interface TableFunction extends TableModifier {
     
-    /** <p>Inserts a row before the selection. */
+    /** Inserts a row before the selection. */
     public void insertBefore();
     
-    /** <p>Inserts a row after the selection. */
+    /** Inserts a row after the selection. */
     public void insertAfter();
     
-    /** <p>Deletes the selected row. */
+    /** Deletes the selected row. */
     public void deleteRow();
     
-    /** <p>Moves the selected row up. */
+    /** Moves the selected row up. */
     public void moveColumnUp();
     
-    /** <p>Moves the selected row down. */
+    /** Moves the selected row down. */
     public void moveColumnDown();
     
 }

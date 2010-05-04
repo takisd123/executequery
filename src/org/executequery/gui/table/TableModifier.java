@@ -20,13 +20,6 @@
 
 package org.executequery.gui.table;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * defines those objects with table functions requiring sql output
  * 
@@ -39,15 +32,12 @@ public interface TableModifier extends CreateTableSQLSyntax {
     int COLUMN_VALUES = 0;
     int CONSTRAINT_VALUES = 1;
     
-    /** 
-     * Generates and prints the SQL text. 
-     */
+    /**  Generates and prints the SQL text. */
     public void setSQLText();
     
     /** 
-     * Generates and prints the SQL text with the
-     * specified values as either column values or
-     * constraints values depending on the type parameter.
+     * Generates and prints the SQL text with the specified values as either 
+     * column values or constraints values depending on the type parameter.
      *
      * @param the values to add to the SQL
      * @param the type of values - column or constraint

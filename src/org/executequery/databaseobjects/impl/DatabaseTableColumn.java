@@ -515,10 +515,10 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     protected void copyColumn(DatabaseTableColumn source, 
                         DatabaseTableColumn destination) {
         
-        if (source == null) {
-            
-            return;
-        }
+//        if (source == null) {
+//            
+//            return;
+//        }
         
         destination.setCatalogName(source.getCatalogName());
         destination.setSchemaName(source.getSchemaName());
