@@ -22,13 +22,6 @@ package org.executequery.gui.table;
 
 import org.executequery.gui.browser.ColumnConstraint;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -52,65 +45,77 @@ public interface CreateTableSQLSyntax {
     
     /** The literal 'CREATE TABLE ' */
     String CREATE_TABLE = "CREATE TABLE ";
+    
     /** The literal ' NOT NULL' */
     String NOT_NULL = " NOT NULL";
+    
     /** The literal 'DATE' */
     String DATE = "DATE";
+    
     /** The literal 'pk_' */
     String PK_PREFIX = "pk_";
+    
     /** The literal 'NUMBER' */
     String NUMBER = "NUMBER";
+    
     /** The literal 'CONSTRAINT' */
     String CONSTRAINT = "CONSTRAINT ";
+    
     /** The String literal ' RENAME CONSTRAINT ' */
     String RENAME_CONSTRAINT = " RENAME CONSTRAINT ";
+    
     /** The String literal ' ADD CONSTRAINT ' */
     String ADD_CONSTRAINT = " ADD CONSTRAINT ";
+    
     /** The String literal ' TO ' */
     String TO = " TO ";
+    
     /** New line with 7 space indent */
     String INDENT = "\n       ";
+    
     /** The literal 'REFERENCES ' */
     String REFERENCES = " REFERENCES ";
+    
     /** The literal ' PRIMARY' */
     String PRIMARY = " PRIMARY";
+    
     /** The literal ' KEY ' */
     String KEY = " KEY ";
+    
     /** The literal '\n' */
     char NEW_LINE = '\n';
+    
     String NEW_LINE_2 = "\n    ";
+    
     /** The literal ' ' */
+    
     /** The String literal 'ALTER TABLE ' */
     String ALTER_TABLE = "ALTER TABLE ";
+    
     /** The String literal ' ADD ' */
     String ADD = " ADD ";
+    
     String SPACE = " ";
+    
     /** An empty <code>String</code> */
     String EMPTY = "";
+    
     /** The literal '(' */
     String B_OPEN = "(";
+    
     /** The literal ',' */
     char COMMA = ',';
+    
     /** The literal ')' */
     char B_CLOSE = ')';
+    
     /** The literal '.' */
     char DOT = '.';
+    
     /** The literal ';' */
     char SEMI_COLON = ';';
+
     /** The literal ' DROP CONSTRAINT ' */
     String DROP_CONSTRAINT = " DROP CONSTRAINT ";
-    
-    
+
 }
-
-
-
-
-
-
-
-
-
-
-
-

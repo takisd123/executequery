@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 3 May 2010
+Date: 4 May 2010
 
 Execute Query Version 3.2.1 Build 5146
 ----------------------------------------
@@ -30,6 +30,8 @@ Summary of changes from 3.2 Build 5140:
 - Fixed query execution with trailing semi-colon errors noted with Oracle.
 - Added export result set to file allowing for executing arbitrary SQL SELECT 
   statements and writing the output to a delimited file.
+- Added open and execute SQL script feature allowing for SQL script execution 
+  without loading the script in the editor first.
 
 
 Summary of changes from 3.1.6 Build 5132:
@@ -239,4 +241,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-3 May 2010
+4 May 2010

@@ -148,15 +148,15 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
 
         if (column instanceof DatabaseTableColumn) {
 
-            DatabaseTableColumn dbColumn = (DatabaseTableColumn)column;
+            DatabaseTableColumn tableColumn = (DatabaseTableColumn)column;
             
             // if its not currently modified or isn't new
             // ensure a copy is made for later comparison 
             // and SQL text generation.
             
-            if (!dbColumn.isNewColumn() && !dbColumn.isMarkedDeleted()) {
+            if (!tableColumn.isNewColumn() && !tableColumn.isMarkedDeleted()) {
             
-                dbColumn.makeCopy();
+                tableColumn.makeCopy();
             }
 
         }
