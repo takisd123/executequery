@@ -34,7 +34,7 @@ public class DriverViewPanel extends FormObjectViewContainer
                              implements TabView {
     
     public static final String TITLE = "Drivers";
-    public static final String FRAME_ICON = "DatabaseDrivers16.gif";
+    public static final String FRAME_ICON = "DatabaseDrivers16.png";
 
     /** the parent panel containing the selection tree */
     private DriversTreePanel parent;

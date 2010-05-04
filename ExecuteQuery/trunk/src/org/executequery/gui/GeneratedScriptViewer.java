@@ -49,7 +49,7 @@ public class GeneratedScriptViewer extends SimpleSqlTextPanel
     
     public static final String TITLE = "Generated SQL Script - ";
     
-    public static final String FRAME_ICON = "DBImage16.gif";
+    public static final String FRAME_ICON = "DBImage16.png";
     
     /** The text length */
     private int textLength;

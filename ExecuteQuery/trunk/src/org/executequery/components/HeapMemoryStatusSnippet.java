@@ -196,8 +196,8 @@ public class HeapMemoryStatusSnippet extends JPanel
             setFocusPainted(false);
             setBorderPainted(false);
             setMargin(Constants.EMPTY_INSETS);
-            setIcon(GUIUtilities.loadIcon("GcDelete16.gif"));
-            setPressedIcon(GUIUtilities.loadIcon("GcDeletePressed16.gif"));
+            setIcon(GUIUtilities.loadIcon("GcDelete16.png"));
+            setPressedIcon(GUIUtilities.loadIcon("GcDeletePressed16.png"));
             
             try {
                 setUI(new javax.swing.plaf.basic.BasicButtonUI());

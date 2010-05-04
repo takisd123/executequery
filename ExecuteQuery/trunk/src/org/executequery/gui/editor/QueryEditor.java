@@ -92,7 +92,7 @@ public class QueryEditor extends DefaultTabView
                                     FocusablePanel {
 
     public static final String TITLE = "Query Editor";
-    public static final String FRAME_ICON = "Edit16.gif";
+    public static final String FRAME_ICON = "Edit16.png";
 
     private static final String DEFAULT_SCRIPT_PREFIX = "script";
     

@@ -50,7 +50,7 @@ public class GenerateScriptsPanel extends BaseScriptGeneratorPanel
                                              ActionListener {
     
     public static final String TITLE = "Generate SQL Scripts";
-    public static final String FRAME_ICON = "CreateScripts16.gif";
+    public static final String FRAME_ICON = "CreateScripts16.png";
     
     private BottomButtonPanel bottomPanel;
     

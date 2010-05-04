@@ -266,7 +266,7 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
             stackTracePanel.add(scroller, gbc);
             
             pasteButton = new RolloverButton(
-                    IconUtilities.loadDefaultIconResource("Paste16.gif", true),
+                    IconUtilities.loadDefaultIconResource("Paste16.png", true),
                     "Paste stack to clipboard");
             pasteButton.addActionListener(this);
             

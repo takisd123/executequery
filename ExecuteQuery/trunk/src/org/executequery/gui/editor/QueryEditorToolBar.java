@@ -202,7 +202,7 @@ class QueryEditorToolBar extends PanelToolBar {
     private JButton createQueryBookmarkButton() {
 
         PopupMenuButton button = new PopupMenuButton(
-                GUIUtilities.loadIcon("Bookmarks16.gif"), "Query Bookmarks");
+                GUIUtilities.loadIcon("Bookmarks16.png"), "Query Bookmarks");
         button.setText(null);
 
         // TODO: configurable shortcut keys for bookmark actions

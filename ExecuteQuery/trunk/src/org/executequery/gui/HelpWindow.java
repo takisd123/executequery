@@ -194,7 +194,7 @@ public class HelpWindow {
         JFrame frame = new JFrame("Execute Query Help");    
 
         ImageIcon frameIcon = IconUtilities.loadIcon(
-                        "/org/executequery/icons/Help16.gif");
+                        "/org/executequery/icons/Help16.png");
 
         frame.setIconImage(frameIcon.getImage());
 

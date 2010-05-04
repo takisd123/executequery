@@ -21,11 +21,11 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
     
     static {
         
-        sql92Keyword = GUIUtilities.loadIcon("Sql92.gif", true);
-        userDefinedKeyword = GUIUtilities.loadIcon("User16.gif", true);
-        databaseSpecificKeyword = GUIUtilities.loadIcon("DatabaseKeyword16.gif", true);
-        databaseTable = GUIUtilities.loadIcon("PlainTable16.gif", true);
-        databaseTableColumn = GUIUtilities.loadIcon("TableColumn16.gif", true);
+        sql92Keyword = GUIUtilities.loadIcon("Sql92.png", true);
+        userDefinedKeyword = GUIUtilities.loadIcon("User16.png", true);
+        databaseSpecificKeyword = GUIUtilities.loadIcon("DatabaseKeyword16.png", true);
+        databaseTable = GUIUtilities.loadIcon("PlainTable16.png", true);
+        databaseTableColumn = GUIUtilities.loadIcon("TableColumn16.png", true);
     }
     
 

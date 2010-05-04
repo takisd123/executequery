@@ -58,7 +58,7 @@ public class SystemLogsViewer extends DefaultTextEditorContainer
     
     public static final String TITLE = "System Log Viewer";
     
-    public static final String FRAME_ICON = "SystemOutput.gif";
+    public static final String FRAME_ICON = "SystemOutput.png";
     
     private JTextArea textArea;
     
@@ -96,10 +96,10 @@ public class SystemLogsViewer extends DefaultTextEditorContainer
         textArea = simpleTextArea.getTextAreaComponent();
         textComponent = textArea;
 
-        reloadButton = new RolloverButton("/org/executequery/icons/Reload16.gif",
+        reloadButton = new RolloverButton("/org/executequery/icons/Reload16.png",
                                       "Reload this log file");
 
-        trashButton = new RolloverButton("/org/executequery/icons/Delete16.gif",
+        trashButton = new RolloverButton("/org/executequery/icons/Delete16.png",
                                         "Reset this log file");
         
         reloadButton.addActionListener(this);

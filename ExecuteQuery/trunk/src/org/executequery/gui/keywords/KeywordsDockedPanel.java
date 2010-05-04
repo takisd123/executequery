@@ -144,7 +144,7 @@ public class KeywordsDockedPanel extends AbstractDockedTabActionPanel
         searchField.setActionCommand("search");
         tools.addTextField(searchField);
         tools.addButton(this, "search", 
-                GUIUtilities.getAbsoluteIconPath("Zoom16.gif"), 
+                GUIUtilities.getAbsoluteIconPath("Zoom16.png"), 
                 "Search for a key word in the list");
 
         searchField.addKeyListener(this);

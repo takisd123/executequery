@@ -101,7 +101,7 @@ public class HelpPopupBase extends JPanel
         gbc.gridy = 0;
         gbc.gridx = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        add(new JLabel(GUIUtilities.loadIcon("TipOfTheDay16.gif")), gbc);
+        add(new JLabel(GUIUtilities.loadIcon("TipOfTheDay16.png")), gbc);
         gbc.gridx++;
         gbc.insets.left = 0;
         gbc.weightx = 1.0;

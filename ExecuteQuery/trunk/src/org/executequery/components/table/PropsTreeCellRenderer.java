@@ -32,16 +32,9 @@ import javax.swing.tree.TreeCellRenderer;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Properties frame tree renderer.
- * <P>
+ *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
@@ -49,6 +42,8 @@ import org.executequery.GUIUtilities;
 public class PropsTreeCellRenderer extends JLabel
                                    implements TreeCellRenderer {
     
+    private static final String BLANK_TREE_NODE = "BlankTreeNode.png";
+
     private Color textBackground;
     private Color textForeground;
     private Color selectionBackground;
@@ -63,7 +58,7 @@ public class PropsTreeCellRenderer extends JLabel
         // smaller font
         //font = new Font("Dialog", Font.PLAIN, 11);
         
-        emptyImage = GUIUtilities.loadIcon("BlankTreeNode.gif", true);
+        emptyImage = GUIUtilities.loadIcon(BLANK_TREE_NODE, true);
         setOpaque(true);
     }
     
@@ -105,8 +100,3 @@ public class PropsTreeCellRenderer extends JLabel
     }
     
 }
-
-
-
-
-

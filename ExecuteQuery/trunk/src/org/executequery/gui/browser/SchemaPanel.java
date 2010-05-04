@@ -79,7 +79,7 @@ public class SchemaPanel extends BrowserNodeBasePanel {
         
         tablePanel().setBorder(BorderFactory.createTitledBorder("Available Objects"));
         setHeaderText("Database Schema");
-        setHeaderIcon(GUIUtilities.loadIcon("User24.gif"));
+        setHeaderIcon(GUIUtilities.loadIcon("User24.png"));
         
         cache = new HashMap();
     }
@@ -158,6 +158,12 @@ public class SchemaPanel extends BrowserNodeBasePanel {
         }
         
         public Object getValueAt(int row, int col) {
+            
+            if (values.size() <= row) {
+
+                return "NULL";
+            }
+            
             SimpleDatabaseObject object = values.get(row);
             switch (col) {
                 case 0:

@@ -203,7 +203,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
             if (outputTabIcon == null) {
 
-                outputTabIcon = GUIUtilities.loadIcon("SystemOutput.gif", true);
+                outputTabIcon = GUIUtilities.loadIcon("SystemOutput.png", true);
             }
 
             insertTab(OUTPUT_TAB_TITLE, outputTabIcon, outputTextPane, "Database output", 0);
@@ -439,7 +439,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         
         if (resultSetTabIcon == null) {
 
-            resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.gif", true);
+            resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.png", true);
         }
 
         return resultSetTabIcon;
@@ -736,7 +736,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
             // otherwise add it
             insertTab(ResultSetMetaDataPanel.TITLE,
-                      GUIUtilities.loadIcon("RSMetaData16.gif", true),
+                      GUIUtilities.loadIcon("RSMetaData16.png", true),
                       metaDataPanel,
                       getToolTipTextAt(index),
                       index + 1);

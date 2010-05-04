@@ -42,7 +42,7 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
         panel = new DriverFieldsPanel();
 
         setHeaderText("Database Driver");
-        setHeaderIcon(GUIUtilities.loadIcon("DatabaseDriver24.gif"));
+        setHeaderIcon(GUIUtilities.loadIcon("DatabaseDriver24.png"));
         setContentPanel(panel);
     }
     

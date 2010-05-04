@@ -53,7 +53,7 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
                                         ActionListener {
     
     public static final String TITLE = "Scratch Pad";
-    public static final String FRAME_ICON = "ScratchPad16.gif";
+    public static final String FRAME_ICON = "ScratchPad16.png";
     
     private JTextArea textArea;
 
@@ -94,11 +94,11 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
     
     private void init() throws Exception {
 
-        editorButton = new RolloverButton("/org/executequery/icons/ScratchToEditor16.gif",
+        editorButton = new RolloverButton("/org/executequery/icons/ScratchToEditor16.png",
                                          "Paste to Query Editor");
-        newButton = new RolloverButton("/org/executequery/icons/NewScratchPad16.gif",
+        newButton = new RolloverButton("/org/executequery/icons/NewScratchPad16.png",
                                       "New Scratch Pad");
-        trashButton = new RolloverButton("/org/executequery/icons/Delete16.gif",
+        trashButton = new RolloverButton("/org/executequery/icons/Delete16.png",
                                         "Clear");
         
         editorButton.addActionListener(this);

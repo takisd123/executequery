@@ -336,7 +336,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         sbTemp = new StringBuffer(100);        
 
         setContentPanel(base);
-        setHeaderIcon(GUIUtilities.loadIcon("DatabaseTable24.gif"));
+        setHeaderIcon(GUIUtilities.loadIcon("DatabaseTable24.png"));
         setHeaderText("Database Table");
         
         // register for keyword changes

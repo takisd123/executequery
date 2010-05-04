@@ -92,7 +92,7 @@ public class CreateIndexPanel extends ActionPanel
                                          ItemSelectionListener {
     
     public static final String TITLE = "Create Index";
-    public static final String FRAME_ICON = "NewIndex16.gif";
+    public static final String FRAME_ICON = "NewIndex16.png";
     
     
     private JComboBox schemaCombo;
@@ -171,13 +171,13 @@ public class CreateIndexPanel extends ActionPanel
         // build the table's tools panel
         moveUpButton = ActionUtilities.createButton(
                 this,
-                "Up16.gif",
+                "Up16.png",
                 "Move the selection up", 
                 "moveColumnUp");
 
         moveDownButton = ActionUtilities.createButton(
                 this,
-                "Down16.gif",
+                "Down16.png",
                 "Move the selection down", 
                 "moveColumnDown");
 

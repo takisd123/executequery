@@ -150,7 +150,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         panel.add(tablePanel, gbc);
         
         setHeaderText("Database Connections");
-        setHeaderIcon(GUIUtilities.loadIcon("DatabaseConnect24.gif"));
+        setHeaderIcon(GUIUtilities.loadIcon("DatabaseConnect24.png"));
         setContentPanel(panel);
 
         // register with the event listener
@@ -402,8 +402,8 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         private ImageIcon notConnectedImage;
 
         public ConnectCellRenderer() {
-            connectedImage = GUIUtilities.loadIcon("Connected.gif", true);
-            notConnectedImage = GUIUtilities.loadIcon("Disconnected.gif", true);
+            connectedImage = GUIUtilities.loadIcon("Connected.png", true);
+            notConnectedImage = GUIUtilities.loadIcon("Disconnected.png", true);
         }
 
         public Component getTableCellRendererComponent(JTable table,

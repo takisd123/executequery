@@ -65,7 +65,7 @@ public class PrintPreviewer extends AbstractBaseDialog
     public static final String TITLE = "Print Preview";
 
     /** The icon for this panel */
-    public static final String FRAME_ICON = "PrintPreview16.gif";
+    public static final String FRAME_ICON = "PrintPreview16.png";
     
     /** The scale combo box */
     private JComboBox scaleCombo;

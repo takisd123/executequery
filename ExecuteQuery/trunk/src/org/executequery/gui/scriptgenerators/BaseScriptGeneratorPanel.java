@@ -65,7 +65,7 @@ public class BaseScriptGeneratorPanel extends JPanel
                                                  ItemListener {
     
     public static final String TITLE = "Generate SQL Scripts";
-    public static final String FRAME_ICON = "CreateScripts16.gif";
+    public static final String FRAME_ICON = "CreateScripts16.png";
     
     /** The schema combo box */
     protected JComboBox schemaCombo;

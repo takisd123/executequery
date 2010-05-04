@@ -69,7 +69,7 @@ public class AboutPanel extends BaseDialog
                                    ActionListener {
    
     public static final String TITLE = "About";
-    public static final String FRAME_ICON = "Information16.gif";
+    public static final String FRAME_ICON = "Information16.png";
     
     private JTabbedPane tabPane;
     private HeapMemoryPanel heapPanel;

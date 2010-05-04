@@ -240,12 +240,6 @@ public class ErdGenerateProgressDialog extends AbstractBaseDialog {
                                         viewerPanel,
                                         null,
                                         true);
-            /*
-            GUIUtilities.addInternalFrame(ErdViewerPanel.TITLE,
-            "DefaultApplicationIcon16.gif", viewerPanel,
-            true, true, true, true);
-            */
-
             GUIUtilities.showNormalCursor();
             selectedTables = null;
             

@@ -84,7 +84,7 @@ public abstract class FindAction<T> extends AbstractAction
 		super("Incremental Search");
 
         putValue(Action.ACCELERATOR_KEY, INVOKE_KEY_STROKE);
-        putValue(Action.SMALL_ICON, GUIUtilities.loadIcon("Zoom16.gif"));
+        putValue(Action.SMALL_ICON, GUIUtilities.loadIcon("Zoom16.png"));
 
 	    init();
 	}

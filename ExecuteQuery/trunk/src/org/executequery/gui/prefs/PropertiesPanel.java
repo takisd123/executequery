@@ -67,7 +67,7 @@ public class PropertiesPanel extends JPanel
                                         TreeSelectionListener {
     
     public static final String TITLE = "Preferences";
-    public static final String FRAME_ICON = "Preferences16.gif";
+    public static final String FRAME_ICON = "Preferences16.png";
 
     /** the property selection tree */
     private JTree tree;

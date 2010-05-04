@@ -82,7 +82,7 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
                                               ConnectionListener {
     
     public static final String TITLE = "Execute Stored Objects ";
-    public static final String FRAME_ICON = "Procedure16.gif";
+    public static final String FRAME_ICON = "Procedure16.png";
     
     /** the active connections combo */
     private JComboBox connectionsCombo;
