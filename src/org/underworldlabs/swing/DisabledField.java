@@ -53,23 +53,16 @@ public class DisabledField extends JLabel {
     protected static Border border;    
     protected static Insets insets;
 
-    /** <p>Creates a new instance with the text to be
-     *  displayed as blank.
-     */
     public DisabledField() {
         this("");
     }
 
-    /** <p>Creates a new instance with the specified
-     *  text to be displayed.
-     *
-     *  @param the text to display
-     */
     public DisabledField(String text) {
+
         super(text);
         
         if (insets == null || border == null) {
-            insets = new Insets(3, 3, 3, 3);
+            insets = new Insets(4, 3, 4, 3);
             border = new DisabledBorder(
                         UIManager.getColor("TextField.inactiveForeground"));
         }

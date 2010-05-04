@@ -263,7 +263,7 @@ public class LineNumber extends JComponent {
         
         if (executingIcon == null) {
 
-            ImageIcon icon = GUIUtilities.loadIcon("ExecutingPointer.gif", true);
+            ImageIcon icon = GUIUtilities.loadIcon("ExecutingPointer.png", true);
     
             iconWidth = icon.getIconWidth();
             iconHeight = icon.getIconHeight();

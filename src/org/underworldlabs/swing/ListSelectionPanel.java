@@ -103,25 +103,25 @@ public class ListSelectionPanel extends ActionPanel
         JButton selectOneButton = ActionUtilities.createButton(
                     this, 
                     "selectOneAction",
-                    IconUtilities.loadDefaultIconResource("SelectOne16.gif", true),
+                    IconUtilities.loadDefaultIconResource("SelectOne16.png", true),
                     "Select one");
 
         JButton selectAllButton = ActionUtilities.createButton(
                     this, 
                     "selectAllAction",
-                    IconUtilities.loadDefaultIconResource("SelectAll16.gif", true),
+                    IconUtilities.loadDefaultIconResource("SelectAll16.png", true),
                     "Select all");
 
         JButton removeOneButton = ActionUtilities.createButton(
                     this, 
                     "removeOneAction",
-                    IconUtilities.loadDefaultIconResource("RemoveOne16.gif", true),
+                    IconUtilities.loadDefaultIconResource("RemoveOne16.png", true),
                     "Remove one");
 
         JButton removeAllButton = ActionUtilities.createButton(
                     this, 
                     "removeAllAction", 
-                    IconUtilities.loadDefaultIconResource("RemoveAll16.gif", true),
+                    IconUtilities.loadDefaultIconResource("RemoveAll16.png", true),
                     "Remove all");
 
         // reset the button insets
@@ -135,13 +135,13 @@ public class ListSelectionPanel extends ActionPanel
 
         JButton moveUpButton = ActionUtilities.createButton(
                                                     this, 
-                                                    "Up16.gif", 
+                                                    "Up16.png", 
                                                     "Move selection up", 
                                                     "moveSelectionUp");
 
         JButton moveDownButton = ActionUtilities.createButton(
                                                     this, 
-                                                    "Down16.gif", 
+                                                    "Down16.png", 
                                                     "Move selection down", 
                                                     "moveSelectionDown");
 

@@ -59,7 +59,7 @@ public class CreateTablePanel extends CreateTableFunctionPanel
     public static final String TITLE = "Create Table";
     
     /** This objects icon as an internal frame */
-    public static final String FRAME_ICON = "NewTable16.gif";
+    public static final String FRAME_ICON = "NewTable16.png";
     
     /** the parent container */
     private ActionContainer parent;

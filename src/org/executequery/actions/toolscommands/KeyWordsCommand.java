@@ -28,9 +28,10 @@ import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.UserDefinedWordsPanel;
 
-/** <p>Executes the Tools | User Defined Keywords command.
+/** 
+ * Executes the Tools | User Defined Keywords command.
  *
- *  @author   Takis Diakoumis
+ * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
@@ -59,21 +60,6 @@ public class KeyWordsCommand extends OpenFrameCommand
             }
         }
 
-        /*
-        if (!isFrameOpen(UserDefinedWordsPanel.TITLE)) {        
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    UserDefinedWordsPanel panel = new UserDefinedWordsPanel();
-                    GUIUtilities.addInternalFrame(UserDefinedWordsPanel.TITLE,
-                                                  "DefaultApplicationIcon16.gif", 
-                                                  panel,
-                                                  true, false, true, false);
-        
-                    panel.setFocusComponent();
-                }
-            });
-        }
-        */
     }
     
 }

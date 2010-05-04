@@ -26,7 +26,7 @@ public interface DriverPanel {
 
     String TITLE = "Drivers";
 
-    String FRAME_ICON = "DatabaseDrivers16.gif";
+    String FRAME_ICON = "DatabaseDrivers16.png";
 
     boolean saveDrivers();
     

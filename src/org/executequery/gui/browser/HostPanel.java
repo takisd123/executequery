@@ -115,7 +115,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         enableConnectionTabs(false);
 
         setHeaderText("Database Connection");
-        setHeaderIcon(GUIUtilities.loadIcon("Database24.gif"));
+        setHeaderIcon(GUIUtilities.loadIcon("Database24.png"));
         setContentPanel(tabPane);
 
         // register with the event listener

@@ -189,21 +189,21 @@ public class FileChooserDialog extends JFileChooser {
 
         public DefaultFileView() {
 
-            SQL_ICON = GUIUtilities.loadIcon("DBImage16.gif", true);
-            JAR_ICON = GUIUtilities.loadIcon("Jar16.gif", true);
-            LOG_ICON = GUIUtilities.loadIcon("LogFile16.gif", true);
-            EQ_ICON = GUIUtilities.loadIcon("ApplicationIcon16.gif", true);
+            SQL_ICON = GUIUtilities.loadIcon("DBImage16.png", true);
+            JAR_ICON = GUIUtilities.loadIcon("Jar16.png", true);
+            LOG_ICON = GUIUtilities.loadIcon("LogFile16.png", true);
+            EQ_ICON = GUIUtilities.loadIcon("ApplicationIcon16.png", true);
 
             if (GUIUtilities.getLookAndFeel() == Constants.SMOOTH_GRADIENT_LAF ||
                   GUIUtilities.getLookAndFeel() == Constants.EQ_THM) {
-                ZIP_ICON = GUIUtilities.loadIcon("ZipFile16.gif", true);
-                TEXT_ICON = GUIUtilities.loadIcon("TextFile16.gif", true);
-                JPEG_ICON = GUIUtilities.loadIcon("JpegFile16.gif", true);
-                GIF_ICON = GUIUtilities.loadIcon("GifFile16.gif", true);
-                XML_ICON = GUIUtilities.loadIcon("XmlFile16.gif", true);
-                EXE_ICON = GUIUtilities.loadIcon("ExeFile16.gif", true);
-                SH_ICON = GUIUtilities.loadIcon("ShFile16.gif", true);
-                DEFAULT_ICON = GUIUtilities.loadIcon("DefaultFile16.gif", true);
+                ZIP_ICON = GUIUtilities.loadIcon("ZipFile16.png", true);
+                TEXT_ICON = GUIUtilities.loadIcon("TextFile16.png", true);
+                JPEG_ICON = GUIUtilities.loadIcon("JpegFile16.png", true);
+                GIF_ICON = GUIUtilities.loadIcon("GifFile16.png", true);
+                XML_ICON = GUIUtilities.loadIcon("XmlFile16.png", true);
+                EXE_ICON = GUIUtilities.loadIcon("ExeFile16.png", true);
+                SH_ICON = GUIUtilities.loadIcon("ShFile16.png", true);
+                DEFAULT_ICON = GUIUtilities.loadIcon("DefaultFile16.png", true);
             }
         }
 

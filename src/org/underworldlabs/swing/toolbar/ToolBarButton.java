@@ -92,7 +92,7 @@ public class ToolBarButton implements Serializable, Cloneable {
     public ImageIcon getIcon() {
         if (icon == null) {
             if (id == SEPARATOR_ID) {
-                icon = IconUtilities.loadDefaultIconResource("Blank16.gif", true);
+                icon = IconUtilities.loadDefaultIconResource("Blank16.png", true);
             } else {
                 if (action != null) {
                     icon = (ImageIcon)action.getValue(Action.SMALL_ICON);

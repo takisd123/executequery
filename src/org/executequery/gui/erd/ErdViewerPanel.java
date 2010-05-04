@@ -68,7 +68,7 @@ public class ErdViewerPanel extends DefaultTabView
     public static final String TITLE = "Entity Relationship Diagram";
 
     /** The panel's icon */
-    public static final String FRAME_ICON = "ErdPanel16.gif";
+    public static final String FRAME_ICON = "ErdPanel16.png";
     
     /** Whether this instance has a tool bar palatte */
     private boolean showTools;

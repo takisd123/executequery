@@ -104,7 +104,7 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
         JLabel label = getUpdateNotificationLabel();
 
         label.addMouseListener(new NotificationLabelMouseAdapter());        
-        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.gif"));
+        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.png"));
         label.setToolTipText(newVersionAvailableText());
 
         statusBar().setThirdLabelText("Update available");

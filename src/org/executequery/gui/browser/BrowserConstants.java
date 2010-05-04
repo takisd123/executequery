@@ -87,18 +87,18 @@ public class BrowserConstants {
     // to add a new node - ALL icons must be in same order as META_TYPES
     // ------------------------------------------
                                                
-    public static final String[] META_TYPE_ICONS = {"Function24.gif",
-                                                    "TableIndex24.gif",
-                                                    "Procedure24.gif",
-                                                    "Sequence24.gif",
-                                                    "Synonym24.gif",
-                                                    "SystemTable24.gif",
-                                                    "DatabaseTable24.gif",
-                                                    "DatabaseTable24.gif", // make trigger image
-                    //                              "Trigger24.gif",
-                                                    "TableView24.gif",
-                                                    "TableColumn24.gif",
-                                                    "SystemFunction24.gif"}; // system function
+    public static final String[] META_TYPE_ICONS = {"Function24.png",
+                                                    "TableIndex24.png",
+                                                    "Procedure24.png",
+                                                    "Sequence24.png",
+                                                    "Synonym24.png",
+                                                    "SystemTable24.png",
+                                                    "DatabaseTable24.png",
+                                                    "DatabaseTable24.png", // make trigger image
+                    //                              "Trigger24.png",
+                                                    "TableView24.png",
+                                                    "TableColumn24.png",
+                                                    "SystemFunction24.png"}; // system function
     
     /** The String 'All Types' */
     //  String ALL_TYPES = "All Types";
@@ -138,62 +138,62 @@ public class BrowserConstants {
     // image icons for tree nodes
     // -----------------------------
     
-    public static final String DATABASE_OBJECT_IMAGE = "DatabaseObject16.gif";
+    public static final String DATABASE_OBJECT_IMAGE = "DatabaseObject16.png";
 
-    /** The image icon 'SavedConnection16.gif' */
-    public static final String CONNECTIONS_IMAGE = "DatabaseConnections16.gif";
+    /** The image icon 'SavedConnection16.png' */
+    public static final String CONNECTIONS_IMAGE = "DatabaseConnections16.png";
 
-    /** The image icon 'Database16.gif' */
-    public static final String CATALOG_IMAGE = "DBImage16.gif";
+    /** The image icon 'Database16.png' */
+    public static final String CATALOG_IMAGE = "DBImage16.png";
     
-    /** The image icon 'Database16.gif' */
-    public static final String HOST_IMAGE = "Database16.gif";
+    /** The image icon 'Database16.png' */
+    public static final String HOST_IMAGE = "Database16.png";
 
-    /** The image icon 'DatabaseNotConnected16.gif' */
-    public static final String HOST_NOT_CONNECTED_IMAGE = "DatabaseNotConnected16.gif";
+    /** The image icon 'DatabaseNotConnected16.png' */
+    public static final String HOST_NOT_CONNECTED_IMAGE = "DatabaseNotConnected16.png";
     
-    /** The image icon 'DatabaseConnected16.gif' */
-    public static final String HOST_CONNECTED_IMAGE = "DatabaseConnected16.gif";
+    /** The image icon 'DatabaseConnected16.png' */
+    public static final String HOST_CONNECTED_IMAGE = "DatabaseConnected16.png";
 
-    /** The image icon 'User16.gif' */
-    public static final String SCHEMA_IMAGE = "User16.gif";
+    /** The image icon 'User16.png' */
+    public static final String SCHEMA_IMAGE = "User16.png";
 
-    /** The image icon 'SystemFunction16.gif' */
-    public static final String SYSTEM_FUNCTIONS_IMAGE = "SystemFunction16.gif";
+    /** The image icon 'SystemFunction16.png' */
+    public static final String SYSTEM_FUNCTIONS_IMAGE = "SystemFunction16.png";
 
-    /** The image icon 'Function16.gif' */
-    public static final String FUNCTIONS_IMAGE = "Function16.gif";
+    /** The image icon 'Function16.png' */
+    public static final String FUNCTIONS_IMAGE = "Function16.png";
     
-    /** The image icon 'TableIndex16.gif' */
-    public static final String INDEXES_IMAGE = "TableIndex16.gif";
+    /** The image icon 'TableIndex16.png' */
+    public static final String INDEXES_IMAGE = "TableIndex16.png";
     
-    /** The image icon 'Procedure16.gif' */    
-    public static final String PROCEDURES_IMAGE = "Procedure16.gif";
+    /** The image icon 'Procedure16.png' */    
+    public static final String PROCEDURES_IMAGE = "Procedure16.png";
     
-    /** The image icon 'Sequence16.gif' */
-    public static final String SEQUENCES_IMAGE = "Sequence16.gif";
+    /** The image icon 'Sequence16.png' */
+    public static final String SEQUENCES_IMAGE = "Sequence16.png";
     
-    /** The image icon 'Synonym16.gif' */
-    public static final String SYNONYMS_IMAGE = "Synonym16.gif";
+    /** The image icon 'Synonym16.png' */
+    public static final String SYNONYMS_IMAGE = "Synonym16.png";
     
-    /** The image icon 'SystemTables16.gif' */
-    public static final String SYSTEM_TABLES_IMAGE = "SystemTable16.gif";
+    /** The image icon 'SystemTables16.png' */
+    public static final String SYSTEM_TABLES_IMAGE = "SystemTable16.png";
     
-    /** The image icon 'PlainTable16.gif' */
-    public static final String TABLES_IMAGE = "PlainTable16.gif";
+    /** The image icon 'PlainTable16.png' */
+    public static final String TABLES_IMAGE = "PlainTable16.png";
     
-    /** The image icon 'TableColumn16.gif' */
-    public static final String COLUMNS_IMAGE = "TableColumn16.gif";
+    /** The image icon 'TableColumn16.png' */
+    public static final String COLUMNS_IMAGE = "TableColumn16.png";
     
-    public static final String PRIMARY_COLUMNS_IMAGE = "TableColumnPrimary16.gif";
+    public static final String PRIMARY_COLUMNS_IMAGE = "TableColumnPrimary16.png";
     
-    public static final String FOREIGN_COLUMNS_IMAGE = "TableColumnForeign16.gif";
+    public static final String FOREIGN_COLUMNS_IMAGE = "TableColumnForeign16.png";
     
-    /** The image icon 'dbNode.gif' */
+    /** The image icon 'dbNode.png' */
     //  String TRIGGERS_IMAGE = "Triggers";
 
-    /** The image icon 'Find16.gif' */
-    public static final String VIEWS_IMAGE = "TableView16.gif";
+    /** The image icon 'Find16.png' */
+    public static final String VIEWS_IMAGE = "TableView16.png";
     
     
     public static final String[] NODE_ICONS = {CONNECTIONS_IMAGE,
@@ -217,14 +217,3 @@ public class BrowserConstants {
                                                };
     
 }
-
-
-
-
-
-
-
-
-
-
-

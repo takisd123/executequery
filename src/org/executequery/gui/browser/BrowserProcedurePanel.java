@@ -140,7 +140,7 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         //base.add(schemaNameField, gbc);
         
         setHeaderText("Database Procedure");
-        setHeaderIcon(GUIUtilities.loadIcon("Procedure24.gif", true));
+        setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
         setContentPanel(base);
         cache = new HashMap();
         
@@ -184,31 +184,31 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
             case NamedObject.FUNCTION:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database Function");
-                setHeaderIcon(GUIUtilities.loadIcon("Function24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("Function24.png", true));
                 break;
 
             case NamedObject.PROCEDURE:
                 objectNameLabel.setText("Procedure Name:");
                 setHeaderText("Database Procedure");
-                setHeaderIcon(GUIUtilities.loadIcon("Procedure24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
                 break;
 
             case NamedObject.SYSTEM_STRING_FUNCTIONS:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System String Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case NamedObject.SYSTEM_NUMERIC_FUNCTIONS:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Numeric Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case NamedObject.SYSTEM_DATE_TIME_FUNCTIONS:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Date/Time Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
         }
 
@@ -234,31 +234,31 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
             case BrowserConstants.FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database Function");
-                setHeaderIcon(GUIUtilities.loadIcon("Function24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("Function24.png", true));
                 break;
 
             case BrowserConstants.PROCEDURE_NODE:
                 objectNameLabel.setText("Procedure Name:");
                 setHeaderText("Database Procedure");
-                setHeaderIcon(GUIUtilities.loadIcon("Procedure24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
                 break;
 
             case BrowserConstants.SYSTEM_STRING_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System String Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case BrowserConstants.SYSTEM_NUMERIC_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Numeric Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case BrowserConstants.SYSTEM_DATE_TIME_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Date/Time Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.gif", true));
+                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
         }
 

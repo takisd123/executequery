@@ -84,7 +84,7 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
 
     public Icon getIcon() {
 
-        return GUIUtilities.loadIcon("SystemOutput.gif");
+        return GUIUtilities.loadIcon("SystemOutput.png");
     }
     
     public String toString() {

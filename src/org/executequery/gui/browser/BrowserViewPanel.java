@@ -46,7 +46,7 @@ public class BrowserViewPanel extends FormObjectViewContainer
     public static final String TITLE = "Database Browser";
 
     /** The icon to be applied to the <code>JInternalFrame</code> */
-    public static final String FRAME_ICON = "DBmag16.gif";
+    public static final String FRAME_ICON = "DBmag16.png";
     
     /** the browser's control object */
     private BrowserController controller;

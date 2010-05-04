@@ -83,7 +83,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
                                               ConnectionListener {
     
     public static final String TITLE = "Compare Data Types ";
-    public static final String FRAME_ICON = "CompareDataTypes16.gif";
+    public static final String FRAME_ICON = "CompareDataTypes16.png";
     
     /** the active connections combo box model */
     private DynamicComboBoxModel connectionsModel_1;

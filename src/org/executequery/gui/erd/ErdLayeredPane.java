@@ -436,12 +436,3 @@ public class ErdLayeredPane extends JLayeredPane
     } // class PopMenu
    
 }
-
-
-
-
-
-
-
-
-

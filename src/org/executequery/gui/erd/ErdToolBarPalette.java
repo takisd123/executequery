@@ -79,41 +79,41 @@ public class ErdToolBarPalette extends PanelToolBar
     
     private void jbInit() throws Exception {
         
-        dropTableButton = new RolloverButton("/org/executequery/icons/DropTable16.gif",
+        dropTableButton = new RolloverButton("/org/executequery/icons/DropTable16.png",
                                             "Remove selected object(s) from the ERD");
         
-//        commitButton = new RolloverButton("/org/executequery/icons/Commit16.gif",
+//        commitButton = new RolloverButton("/org/executequery/icons/Commit16.png",
 //                                         "Commit any schema changes");
         
-        relationButton = new RolloverButton("/org/executequery/icons/TableRelationship16.gif",
+        relationButton = new RolloverButton("/org/executequery/icons/TableRelationship16.png",
                                            "Create a new table relationship");
         
         deleteRelationButton = new RolloverButton(
-                                        "/org/executequery/icons/TableRelationshipDelete16.gif",
+                                        "/org/executequery/icons/TableRelationshipDelete16.png",
                                         "Delete selected table relationship");
         
-        genScriptsButton = new RolloverButton("/org/executequery/icons/CreateScripts16.gif",
+        genScriptsButton = new RolloverButton("/org/executequery/icons/CreateScripts16.png",
                                                 "Generate SQL CREATE TABLE scripts from ERD");
         
-        fontStyleButton = new RolloverButton("/org/executequery/icons/FontStyle16.gif",
+        fontStyleButton = new RolloverButton("/org/executequery/icons/FontStyle16.png",
                                             "Font");
         
-        lineStyleButton = new RolloverButton("/org/executequery/icons/LineStyle16.gif",
+        lineStyleButton = new RolloverButton("/org/executequery/icons/LineStyle16.png",
                                             "Line style");
         
-        createTableButton = new RolloverButton("/org/executequery/icons/NewTable16.gif",
+        createTableButton = new RolloverButton("/org/executequery/icons/NewTable16.png",
                                               "Create new table");
         
-        addTableButton = new RolloverButton("/org/executequery/icons/AddTable16.gif",
+        addTableButton = new RolloverButton("/org/executequery/icons/AddTable16.png",
                                            "Add tables from an existing schema");
         
-        canvasBgButton = new RolloverButton("/org/executequery/icons/ErdBackground16.gif",
+        canvasBgButton = new RolloverButton("/org/executequery/icons/ErdBackground16.png",
                                            "Canvas background colour");
         
-        canvasFgButton = new RolloverButton("/org/executequery/icons/ErdForeground16.gif",
+        canvasFgButton = new RolloverButton("/org/executequery/icons/ErdForeground16.png",
                                            "Table background colour for selected or all tables");
         
-        erdTitleButton = new RolloverButton("/org/executequery/icons/ErdTitle16.gif",
+        erdTitleButton = new RolloverButton("/org/executequery/icons/ErdTitle16.png",
                                            "Add ERD title");
         
         genScriptsButton.addActionListener(this);
@@ -150,9 +150,9 @@ public class ErdToolBarPalette extends PanelToolBar
         scaleCombo.setLightWeightPopupEnabled(false);
         scaleCombo.setSelectedIndex(3);
         
-        zoomInButton = new RolloverButton("/org/executequery/icons/ZoomIn16.gif",
+        zoomInButton = new RolloverButton("/org/executequery/icons/ZoomIn16.png",
                                          "Zoom in");
-        zoomOutButton  = new RolloverButton("/org/executequery/icons/ZoomOut16.gif",
+        zoomOutButton  = new RolloverButton("/org/executequery/icons/ZoomOut16.png",
                                            "Zoom out");
         
         zoomInButton.addActionListener(this);

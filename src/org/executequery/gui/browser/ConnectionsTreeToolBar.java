@@ -63,32 +63,32 @@ class ConnectionsTreeToolBar extends PanelToolBar {
         
         newConnectionButton = addButton(
                 treePanel, "newConnection", 
-                GUIUtilities.getAbsoluteIconPath("NewConnection16.gif"), 
+                GUIUtilities.getAbsoluteIconPath("NewConnection16.png"), 
                 "New connection");
 
         deleteConnectionButton = addButton(
                 treePanel, "deleteConnection", 
-                GUIUtilities.getAbsoluteIconPath("Delete16.gif"),
+                GUIUtilities.getAbsoluteIconPath("Delete16.png"),
                 "Remove connection");
 
         upButton = addButton(
                 treePanel, "moveConnectionUp", 
-                GUIUtilities.getAbsoluteIconPath("Up16.gif"),
+                GUIUtilities.getAbsoluteIconPath("Up16.png"),
                 "Move connection up");
 
         downButton = addButton(
                 treePanel, "moveConnectionDown", 
-                GUIUtilities.getAbsoluteIconPath("Down16.gif"), 
+                GUIUtilities.getAbsoluteIconPath("Down16.png"), 
                 "Move connection down");
 
         reloadButton = addButton(
                 treePanel, "reloadSelection", 
-                GUIUtilities.getAbsoluteIconPath("Reload16.gif"), 
+                GUIUtilities.getAbsoluteIconPath("Reload16.png"), 
                 "Reload the currently selected node");
 
         addButton(
                 treePanel, "sortConnections", 
-                GUIUtilities.getAbsoluteIconPath("SortAtoZ16.gif"), 
+                GUIUtilities.getAbsoluteIconPath("SortAtoZ16.png"), 
                 "Sort connections");
 
         addButton(treePanel.getTreeFindAction());
