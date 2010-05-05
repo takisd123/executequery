@@ -48,7 +48,7 @@ import org.underworldlabs.util.MiscUtils;
 public class ExecuteQueryFrame extends JFrame 
                                implements ComponentListener {
 
-	private static final String APPLICATION_ICON = "ApplicationIcon32.png";
+	private static final String APPLICATION_ICON = "ApplicationIcon32.gif";
 
     private static final String WINDOW_POSITION_KEY = "window.position";
 
