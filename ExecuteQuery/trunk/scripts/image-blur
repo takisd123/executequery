@@ -14,11 +14,11 @@ fi
 
 echo
 
-for IMAGE in `ls`
+for IMAGE in `ls *.png`
 do 
     
     echo "converting $IMAGE"
-    convert $IMAGE -blur 0x.4 $IMAGE
+    convert $IMAGE -blur 0x.35 $IMAGE
 
 done
 
