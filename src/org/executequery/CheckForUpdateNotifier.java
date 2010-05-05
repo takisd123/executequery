@@ -104,7 +104,7 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
         JLabel label = getUpdateNotificationLabel();
 
         label.addMouseListener(new NotificationLabelMouseAdapter());        
-        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.png"));
+        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.gif"));
         label.setToolTipText(newVersionAvailableText());
 
         statusBar().setThirdLabelText("Update available");
@@ -250,15 +250,9 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
 
     private int displayNewVersionMessage() {
         
-        SimpleHtmlContentPane contentPane = 
-            new SimpleHtmlContentPane(newVersionMessage(version));
-
-        int yesNo = GUIUtilities.displayYesNoDialog(
-                contentPane, "Execute Query Update");
-
-//        int yesNo = GUIUtilities.displayYesNoDialog(
-//                newVersionMessage(version), "Execute Query Update");
-        return yesNo;
+        return GUIUtilities.displayYesNoDialog(
+                new SimpleHtmlContentPane(newVersionMessage(version)), 
+                "Execute Query Update");
     }
 
     private void logNewVersonInfo() {
