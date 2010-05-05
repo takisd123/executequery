@@ -36,12 +36,16 @@ import org.executequery.gui.table.TableFunction;
 public class DeleteColumnCommand extends AbstractBaseCommand {
     
     public void execute(ActionEvent e) {
+
         JPanel panel = GUIUtilities.getSelectedCentralPane();
+        
         if (panel != null) {
+        
             TableFunction tableFunction = null;
             
             // check if the current panel is a TableFunction
             if (panel instanceof TableFunction) {
+            
                 tableFunction = (TableFunction)panel;
             }
 
@@ -49,15 +53,21 @@ public class DeleteColumnCommand extends AbstractBaseCommand {
             // then check if the current browser view is a 
             // TableFunction implementation
             else if (panel instanceof BrowserViewPanel) {
+
                 BrowserViewPanel viewPanel = (BrowserViewPanel)panel;
                 if (viewPanel.getCurrentView() instanceof TableFunction) {
+                
                     tableFunction = (TableFunction)viewPanel.getCurrentView();
                 }
+
             }
+
             // do the action
             if (tableFunction != null) {
+
                 tableFunction.deleteRow();
             }
+
         }
         
     }

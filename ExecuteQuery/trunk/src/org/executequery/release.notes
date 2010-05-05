@@ -2,10 +2,17 @@
 
 Date: 4 May 2010
 
-Execute Query Version 3.2.1 Build 5146
+Execute Query Version 3.2.2 Build 5147
 ----------------------------------------
 
-Summary of changes from 3.2 Build 5140:
+Summary of changes from 3.2.1 Build 5146:
+----------------------------------------
+
+- Fixed table editing in browser when deleting a column and restoring/cancelling
+  the action not restoring that column's state.
+
+
+Summary of changes from 3.2.1 Build 5146:
 ----------------------------------------
 
 - Minor help doc update.

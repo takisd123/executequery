@@ -487,7 +487,6 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
         if (!hasCopy()) {
 
             copy = new DatabaseTableColumn(getTable());
-
             copyColumn(this, copy);
         }
 
@@ -514,11 +513,6 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
      */
     protected void copyColumn(DatabaseTableColumn source, 
                         DatabaseTableColumn destination) {
-        
-//        if (source == null) {
-//            
-//            return;
-//        }
         
         destination.setCatalogName(source.getCatalogName());
         destination.setSchemaName(source.getSchemaName());
