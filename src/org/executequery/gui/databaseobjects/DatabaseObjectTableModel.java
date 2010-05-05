@@ -38,8 +38,8 @@ import org.underworldlabs.swing.print.AbstractPrintableTableModel;
  */
 public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
     
-    protected String[] header = {"", "Name", "Datatype",
-                                 "Size", "Scale", "Required", "Default"};
+    protected String[] header = {
+            "", "Name", "Datatype", "Size", "Scale", "Required", "Default" };
 
     /** the database table columns */
     protected List<DatabaseColumn> columns;
@@ -92,7 +92,9 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
     }
     
     public Object getValueAt(int row, int col) {
+
         if (row >= getRowCount()) {
+        
             return null;
         }
 
@@ -116,6 +118,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
             default:
                 return null;
         }
+
     }
 
     private String stringValueToUpper(String value) {
@@ -136,8 +139,6 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
             return;
         }
 
-        //Log.debug("setValueAt(" + value + ", " + row + ", " + col + ")");
-        
         DatabaseColumn column = columns.get(row);
         
         // only the DefaultDatabaseColumn implementations are editable
@@ -161,32 +162,32 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
 
         }
         
-        DefaultDatabaseColumn _column = (DefaultDatabaseColumn)column;
+        DefaultDatabaseColumn defaultDatabaseColumn = (DefaultDatabaseColumn) column;
 
         switch(col) {
             case 1:
-                _column.setName((String)value);
+                defaultDatabaseColumn.setName((String)value);
                 break;
             case 2:
-                _column.setTypeName((String)value);
+                defaultDatabaseColumn.setTypeName((String)value);
                 break;
             case 3:
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                _column.setColumnSize(((Integer)value).intValue());
+                defaultDatabaseColumn.setColumnSize(((Integer)value).intValue());
                 break;
             case 4:
                 if (value == null) {
                     value = Integer.valueOf(0);
                 }
-                _column.setColumnScale(((Integer)value).intValue());
+                defaultDatabaseColumn.setColumnScale(((Integer)value).intValue());
                 break;
             case 5:
-                _column.setRequired(((Boolean)value).booleanValue());
+                defaultDatabaseColumn.setRequired(((Boolean)value).booleanValue());
                 break;
             case 6:
-                _column.setDefaultValue((String)value);
+                defaultDatabaseColumn.setDefaultValue((String)value);
                 break;
         }
 
@@ -206,9 +207,11 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
     }
     
     public void addNewDatabaseColumn(DatabaseColumn column, int toIndex) {
+
         if (!isEditable()) {
             return;
         }
+
         if (columns == null) {
             columns = new ArrayList<DatabaseColumn>();
         }
@@ -234,12 +237,12 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         if (col == 5) {
 
             return Boolean.class;
-        }
-        else if (col == 3 || col == 4) {
+
+        } else if (col == 3 || col == 4) {
             
             return Integer.class;
-        }
-        else {
+
+        } else {
             
             return String.class;
         }

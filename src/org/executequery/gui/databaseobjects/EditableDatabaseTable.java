@@ -36,13 +36,12 @@ import org.underworldlabs.util.MiscUtils;
 
 /**
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision: 1460 $
+ * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class EditableDatabaseTable extends DefaultDatabaseObjectTable
                                    implements KeyListener {
-    
-    /** the db table displayed */
-    private DatabaseTable databaseTable;
     
     /** Creates a new instance of EditableDatabaseTable */
     public EditableDatabaseTable() {
@@ -52,20 +51,21 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
         addMouseListener(new MouseHandler());
     }
     
-    /**
-     * Sets listeners on respective column cell editors.
-     */
+    /** Sets listeners on respective column cell editors. */
     protected void setCellEditorListeners() {
+
         // interested in string and int editors
-        Class[] clazzez = new Class[]{String.class, Integer.class};
+        Class<?>[] clazzez = new Class[]{String.class, Integer.class};
         for (int i = 0; i < clazzez.length; i++) {
+
             TableCellEditor cellEditor = getDefaultEditor(clazzez[i]);
 
-            if (cellEditor != null && cellEditor instanceof DefaultCellEditor) {
+            if (cellEditor instanceof DefaultCellEditor) {
 
-                DefaultCellEditor _cellEditor = (DefaultCellEditor)cellEditor;
-                if (_cellEditor.getComponent() instanceof JTextField) {
-                    ((JTextField)_cellEditor.getComponent()).addKeyListener(this);
+                DefaultCellEditor defaultCellEditor = (DefaultCellEditor) cellEditor;
+                if (defaultCellEditor.getComponent() instanceof JTextField) {
+        
+                    ((JTextField)defaultCellEditor.getComponent()).addKeyListener(this);
                 }
 
             }
@@ -77,8 +77,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
      *
      * @param databaseTable the db table shown
      */
-    public void setDatabaseTable(DatabaseTable databaseTable) throws DataSourceException {
-        this.databaseTable = databaseTable;
+    public void setDatabaseTable(DatabaseTable databaseTable) {
         if (databaseTable != null) {
             setColumnData(databaseTable.getColumns());
         } else {
@@ -120,20 +119,24 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
      * database table column (JTable row).
      */
     public void deleteSelectedColumn() {
+
         int selectedRow = getSelectedRow();
         if (selectedRow == -1) {
+        
             return;
         }
         
         DatabaseObjectTableModel _model = getDatabaseTableModel();
-        DatabaseTableColumn column = 
-                (DatabaseTableColumn)_model.getValueAt(selectedRow, 0);
+        DatabaseTableColumn column = (DatabaseTableColumn)_model.getValueAt(selectedRow, 0);
 
         // if its a new column - just remove it
         if (column.isNewColumn()) {
+            
             _model.deleteDatabaseColumnAt(selectedRow);
-        }
-        else { // otherwise mark to drop
+
+        } else { // otherwise mark to drop
+            
+            column.makeCopy();
             column.setMarkedDeleted(true);
             _model.fireTableRowsUpdated(selectedRow, selectedRow);
         }
@@ -153,7 +156,9 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
      * Invoked when a key has been released.
      */
     public void keyReleased(KeyEvent e) {
+
         Object source = e.getSource();
+        
         if (source instanceof JTextField) {
             int row = getEditingRow();
             int col = getEditingColumn();
@@ -161,17 +166,22 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
             // listeners only exist on string
             // and integer class columns
 
-            String value = ((JTextField)source).getText();
+            String value = ((JTextField) source).getText();
             if (getModel().getColumnClass(col) == Integer.class) {
+
                 if (MiscUtils.isValidNumber(value)) {
+
                     tableChanged(row, col, new Integer(value));
                 }
+
             }
             // if not an int must be a string
             else {
+
                 tableChanged(row, col, value);
             }
         }
+
     }
 
     /**
@@ -228,9 +238,3 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
     } // class MouseHandler
     
 }
-
-
-
-
-
-
