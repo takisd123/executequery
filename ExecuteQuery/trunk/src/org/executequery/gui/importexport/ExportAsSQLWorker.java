@@ -71,7 +71,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                 setResult(importExportResult);
                 
                 printResults();
-                if (importExportDataModel().isSingleFileExport()) {
+                if (importExportDataModel().isSingleFileMultiTableExport()) {
 
                     printExportFileSize(importExportDataModel().getImportExportFiles().get(0));
                 }
@@ -121,7 +121,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                 
                 ImportExportFile importExportFile = model.getImportExportFileForTable(table);
                 
-                if (!model.isSingleFileExport() || writer == null) {
+                if (!model.isSingleFileMultiTableExport() || writer == null) {
 
                     writer = new PrintWriter(
                             new FileWriter(importExportFile.getFile(), false), true);
@@ -220,7 +220,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                         
                     }
                     
-                    if (!model.isSingleFileExport()) {
+                    if (!model.isSingleFileMultiTableExport()) {
                         
                         writeConstraints(writer, primaryKeys, foreignKeys, uniqueKeys);
                     }
@@ -242,7 +242,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
                 } finally {
                     
-                    if (!model.isSingleFileExport()) {
+                    if (!model.isSingleFileMultiTableExport()) {
 
                         flushAndClose(writer);                        
                         printExportFileSize(importExportFile);
@@ -263,7 +263,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                 tableCount++;
             }
     
-            if (model.isSingleFileExport()) {
+            if (model.isSingleFileMultiTableExport()) {
                 
                 writeConstraints(writer, primaryKeys, foreignKeys, uniqueKeys);
                 

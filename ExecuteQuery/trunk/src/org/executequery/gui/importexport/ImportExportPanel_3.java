@@ -154,7 +154,7 @@ public class ImportExportPanel_3 extends JPanel {
                 tables = new Vector<DataTransferObject>(selectedTables.length);
                 
                 if (parent.isSingleFileExport()) {
-                    
+
                     tables.add(new DataTransferObject("ALL TABLES"));
 
                 } else {

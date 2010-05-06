@@ -69,7 +69,7 @@ public interface ImportExportDataModel {
 
     boolean isExport();
 
-    boolean isSingleFileExport();
+    boolean isSingleFileMultiTableExport();
 
     ImportExportFile getImportExportFileForTable(DatabaseTable databaseTable);
 

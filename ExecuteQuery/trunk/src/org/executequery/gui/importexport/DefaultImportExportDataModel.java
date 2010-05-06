@@ -92,7 +92,7 @@ public class DefaultImportExportDataModel implements ImportExportDataModel {
 
     public ImportExportFile getImportExportFileForTable(DatabaseTable databaseTable) {
         
-        if (isSingleFileExport()) {
+        if (isSingleFileMultiTableExport()) {
             
             ImportExportFile importExportFile = new ImportExportFile(databaseTable);
             importExportFile.setFile(getSingleFileExport());
@@ -120,7 +120,7 @@ public class DefaultImportExportDataModel implements ImportExportDataModel {
             importExportFiles = new Vector<ImportExportFile>();
         }
 
-        if (isSingleFileExport()) {
+        if (isSingleFileMultiTableExport()) {
 
             importExportFiles.clear();
             
@@ -234,9 +234,9 @@ public class DefaultImportExportDataModel implements ImportExportDataModel {
         return importExportTypeChanged;
     }
 
-    public boolean isSingleFileExport() {
-        return !isMultipleTableImportExport() || (isMultipleTableImportExport() 
-            && getImportExportFileType() == ImportExportFileType.SINGLE_FILE);
+    public boolean isSingleFileMultiTableExport() {
+        return (isMultipleTableImportExport() 
+                && getImportExportFileType() == ImportExportFileType.SINGLE_FILE);
     }
     
     public boolean isExport() {

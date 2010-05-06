@@ -275,7 +275,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
 
     private void thirdPanelToModel() {
 
-        if (exportDataModel.isSingleFileExport()) {
+        if (exportDataModel.isSingleFileMultiTableExport()) {
 
             exportDataModel.setSingleFileExport(thirdPanel.getSingleFileExportName());
         }
