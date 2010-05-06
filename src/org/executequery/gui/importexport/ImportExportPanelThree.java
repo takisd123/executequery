@@ -160,7 +160,8 @@ public class ImportExportPanelThree extends AbstractImportExportPanel {
     }
 
     private boolean isSingleFileMultiTableExport() {
-        return importExportDataModel().isSingleFileExport();
+        
+        return importExportDataModel().isSingleFileMultiTableExport();
     }
 
     private void initFilePerTableTableModel() {
