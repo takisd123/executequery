@@ -637,25 +637,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         if (_columns != null) {
             
-            StatementGenerator statementGenerator = createStatementGenerator();
-            
+            StatementGenerator statementGenerator = createStatementGenerator();            
             String columnsAlter = statementGenerator.alterTable(databaseProductName(), this);
-            
             sb.append(columnsAlter);
-
-            /*
-            for (DatabaseColumn i : _columns) {
-                DatabaseTableColumn column = (DatabaseTableColumn)i;
-                if (column.isAltered()) {
-                    sb.append(column.getAlteredSQLText());
-                    sb.append("\n");
-                }
-            }
-            */
         }
         
         // retrieve constraint changes
-        
         /*
         List<ColumnConstraint> constraints = getConstraints();
         if (constraints != null) {

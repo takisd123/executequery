@@ -30,8 +30,11 @@ import org.executequery.databaseobjects.impl.TableColumnConstraint;
 import org.underworldlabs.swing.print.AbstractPrintableTableModel;
 
 /**
+ * Table model for db objects display.
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision: 1460 $
+ * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class ColumnConstraintTableModel extends AbstractPrintableTableModel {
     
