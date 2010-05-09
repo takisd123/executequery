@@ -38,16 +38,12 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
     /** The table creator object - parent to this */
     private TableConstraintFunction creator;
     
-    /** The buffer for the current line */
-    private StringBuffer line;
-    
     /** The buffer off all SQL generated */
     private StringBuffer sqlBuffer;
     
     public NewTableConstraintsPanel(TableConstraintFunction creator) {
         super();
         this.creator = creator;
-        line = new StringBuffer(50);
         sqlBuffer = new StringBuffer(100);
     }
     
@@ -124,7 +120,7 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
                 hasName = true;
             }
             
-            else if (cc.getName() != cc.EMPTY) {
+            else if (cc.getName() != ColumnConstraint.EMPTY) {
                 name = cc.getName();
                 hasName = true;
             }
@@ -140,8 +136,8 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
                 
                 if (cc.getType() != -1) {
                     
-                    if (cc.getType() == cc.UNIQUE_KEY) {
-                        sqlBuffer.append(cc.UNIQUE).append(B_OPEN);
+                    if (cc.getType() == ColumnConstraint.UNIQUE_KEY) {
+                        sqlBuffer.append(ColumnConstraint.UNIQUE).append(B_OPEN);
                         sqlBuffer.append(cc.getColumn()).append(B_CLOSE);
                     }
                     
@@ -150,7 +146,7 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
                         sqlBuffer.append(cc.getColumn());
                         sqlBuffer.append(B_CLOSE);
                         
-                        if (cc.getType() == cc.FOREIGN_KEY) {
+                        if (cc.getType() == ColumnConstraint.FOREIGN_KEY) {
                             sqlBuffer.append(INDENT).append(REFERENCES);
                             
                             if (cc.hasSchema())
@@ -184,16 +180,4 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
     }
     
     
-} // class
-
-
-
-
-
-
-
-
-
-
-
-
+}

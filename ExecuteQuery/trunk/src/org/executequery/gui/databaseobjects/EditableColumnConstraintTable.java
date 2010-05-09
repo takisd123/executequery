@@ -45,7 +45,9 @@ import org.underworldlabs.swing.table.ComboBoxCellEditor;
 
 /**
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision: 1521 $
+ * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
 public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
                                            implements KeyListener {//,
@@ -132,18 +134,21 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
      *
      * @param databaseTable the db table shown
      */
-    public void setDatabaseTable(DatabaseTable databaseTable) 
-        throws DataSourceException {
+    public void setDatabaseTable(DatabaseTable databaseTable) {
 
         this.databaseTable = databaseTable;
 
         if (databaseTable != null) {
+
             setConstraintData(databaseTable.getConstraints());
+
         } else {
+
             setConstraintData(null);
         }
         
         if (!editorsLoaded) {
+        
             setCellEditors();
         }
 
@@ -208,6 +213,7 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
      * dependant on prior selections.
      */
     public void editingStopped(ChangeEvent e) {
+
         // retrieve the column edited
         int column = getEditingColumn();
 
@@ -220,35 +226,43 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
             if (column == REF_SCHEMA_COL_INDEX) { // schema selection
                 // load the schema tables
                 Object value = refSchemaEditor.getCellEditorValue();
+
                 if (value instanceof DatabaseSchema) {
+                    
                     DatabaseSchema schema = (DatabaseSchema)value;
                     Object[] tables = schema.getTables().toArray();
                     refTableEditor.setSelectionValues(tables);
-                }
-                else {
+
+                } else {
+                  
                     // clear any existing selections
                     refTableEditor.setSelectionValues(null);
                 }
-            }
-            else if (column == REF_TABLE_COL_INDEX) { // table selection
+
+            } else if (column == REF_TABLE_COL_INDEX) { // table selection
                 // load the table columns
                 Object value = refTableEditor.getCellEditorValue();
                 if (value instanceof DatabaseObject) {
+
                     DatabaseObject table = (DatabaseObject)value;
                     Object[] columns = table.getColumns().toArray();
                     refColumnEditor.setSelectionValues(columns);
-                }
-                else {
+
+                } else {
+                  
                     // clear any existing selections
                     refColumnEditor.setSelectionValues(null);
-                }                
+                }
+
             }
-        }
-        catch (DataSourceException exc) {
+
+        } catch (DataSourceException exc) {
+          
             GUIUtilities.displayExceptionErrorDialog(
                     "Error retrieving selected schema tables:\n" +
                     exc.getExtendedMessage(), exc);
         }
+
     }
 
     /**
@@ -256,7 +270,7 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
      */
     protected void setCellEditorListeners() {
         // interested in string editors
-        Class[] clazzez = new Class[]{String.class};
+        Class<?>[] clazzez = new Class[]{String.class};
         for (int i = 0; i < clazzez.length; i++) {
             TableCellEditor cellEditor = getDefaultEditor(clazzez[i]);
 
@@ -341,9 +355,3 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
     } // class MouseHandler
 
 }
-
-
-
-
-
-

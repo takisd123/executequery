@@ -28,7 +28,9 @@ import org.underworldlabs.util.MiscUtils;
 
 /**
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision: 1517 $
+ * @date     $Date: 2009-04-11 01:46:19 +1000 (Sat, 11 Apr 2009) $
  */
 public class TableColumnConstraint extends AbstractDatabaseObjectElement 
                                    implements ColumnConstraint {

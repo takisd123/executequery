@@ -401,7 +401,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 setValues(table);
             }
             catch (DataSourceException dse) {
-                StringBuffer sb = new StringBuffer();
+                StringBuilder sb = new StringBuilder();
                 sb.append("An error occurred applying the specified changes.").
                    append("\n\nThe system returned:\n").
                    append(dse.getExtendedMessage());
@@ -419,10 +419,8 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     public String getLayoutName() {
         return NAME;
     }
-    
-    public void refresh() {
-        
-    }
+
+    public void refresh() {}
     
     public Printable getPrintable() {
         
