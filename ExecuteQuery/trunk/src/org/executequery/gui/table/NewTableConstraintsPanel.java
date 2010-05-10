@@ -22,6 +22,7 @@ package org.executequery.gui.table;
 
 import java.util.Vector;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.gui.browser.*;
 import org.executequery.gui.table.TableConstraintFunction;
 import org.underworldlabs.swing.table.ComboBoxCellEditor;
@@ -105,32 +106,34 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
     }
     
     public void columnValuesChanged(int col, int row, String value) {
+
         Vector v = getKeys();
         String name = null;
         boolean hasName = false;
         
-        int v_size = v.size();
         sqlBuffer.setLength(0);
         
-        for (int i = 0; i < v_size; i++) {
-            ColumnConstraint cc = (ColumnConstraint)v.elementAt(i);
+        for (int i = 0, n = v.size(); i < n; i++) {
+
+            ColumnConstraint cc = (ColumnConstraint) v.elementAt(i);
             
-            if (i == row && value != null && value.length() != 0) {
+            if (i == row && StringUtils.isNotBlank(value)) {
+
                 name = value;
                 hasName = true;
-            }
-            
-            else if (cc.getName() != ColumnConstraint.EMPTY) {
+
+            } else if (cc.getName() != ColumnConstraint.EMPTY) {
+                
                 name = cc.getName();
                 hasName = true;
-            }
-            
-            else {
+
+            } else {
+              
                 hasName = false;
             }
             
             if (hasName) {
-                
+
                 sqlBuffer.append(COMMA).append(NEW_LINE_2).append(CONSTRAINT);
                 sqlBuffer.append(name).append(SPACE);
                 

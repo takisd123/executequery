@@ -110,6 +110,22 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     
     public boolean hasChanges() {
 
+        //*************** 
+        
+        List<ColumnConstraint> constraints = getConstraints();
+        if (constraints != null) {
+
+            for (ColumnConstraint i : constraints) {
+
+                if (i.isNewConstraint() || i.isAltered()) {
+                
+                    return true;
+                }
+
+            }
+
+        }
+
         if (!isNewColumn() && !isMarkedDeleted() && !hasCopy()) {
             
             return false;
@@ -294,10 +310,24 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     public void removeConstraint(ColumnConstraint constraint) {
 
         if (constraints != null) {
+        
+            if (constraint.isNewConstraint()) {
+    
+                constraints.remove(constraint);
+    
+            } else {
+    
+                ((TableColumnConstraint) constraint).setMarkedDeleted(true);
+            }
 
-            constraints.remove(constraint);
+            resetKeyType();
+            for (ColumnConstraint _constraint : constraints) {
+
+                setKeyType(_constraint);
+            }
+            
         }
-
+        
     }
 
     /**
@@ -319,6 +349,32 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
         }
 
         constraints.add(constraint);
+        setKeyType(constraint);
+    }
+    
+    private void resetKeyType() {
+
+        setForeignKey(false);
+        setPrimaryKey(false);
+        setUnique(false);
+    }
+    
+    private void setKeyType(ColumnConstraint constraint) {
+        
+        if (constraint.isForeignKey()) {
+            
+            setForeignKey(true);            
+        }
+        
+        if (constraint.isPrimaryKey()) {
+            
+            setPrimaryKey(true);            
+        }
+        
+        if (constraint.isUniqueKey()) {
+        
+            setUnique(true);
+        }
     }
     
     /**
@@ -463,11 +519,15 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
 
                     ColumnConstraint constraint = _constraints.get(i);
                     if (constraint.isNewConstraint()) {
-                        _constraints.remove(i);
+                        
+                        removeConstraint(constraint);
                         i--;
+
                     } else {
+
                         ((TableColumnConstraint)constraint).revert();
                     }
+
                 }
             }
 

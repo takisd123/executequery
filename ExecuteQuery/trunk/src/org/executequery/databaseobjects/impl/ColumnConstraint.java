@@ -175,5 +175,10 @@ public interface ColumnConstraint extends DatabaseObjectElement {
 
     void setColumn(DatabaseTableColumn databaseTableColumn);
 
+    /**
+     * Detaches this constraint from the owner column
+     */
+    void detachFromColumn();
+
 }
 

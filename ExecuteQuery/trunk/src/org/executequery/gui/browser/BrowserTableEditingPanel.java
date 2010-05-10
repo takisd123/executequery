@@ -809,7 +809,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             descriptionTable.addColumn(column);
 
         } else if (tabIndex == 1) {
-          
+
             TableColumnConstraint constraint = new TableColumnConstraint(-1);
             constraint.setNewConstraint(true);
             constraintsTable.addConstraint(constraint);
