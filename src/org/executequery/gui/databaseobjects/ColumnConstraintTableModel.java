@@ -109,6 +109,10 @@ public class ColumnConstraintTableModel extends AbstractPrintableTableModel {
      */
     public void deleteConstraintAt(int index) {
         if (constraints != null) {
+            
+            ColumnConstraint columnConstraint = constraints.get(index);
+            columnConstraint.detachFromColumn();
+            
             constraints.remove(index);
             fireTableRowsDeleted(index, index);
         }

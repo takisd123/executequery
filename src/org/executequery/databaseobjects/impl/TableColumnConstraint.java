@@ -492,6 +492,13 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
         return getColumn();
     }
 
+    /**
+     * Detaches this constraint from the owner column
+     */
+    public void detachFromColumn() {
+        column.removeConstraint(this);
+    }
+    
 }
 
 

@@ -35,8 +35,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 
 /**
- * A Class class.
- * <P>
+ *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
@@ -82,7 +81,7 @@ public class ComboBoxCellEditor extends JComboBox
         });
     }
     
-    public ComboBoxCellEditor(Vector values) {
+    public ComboBoxCellEditor(Vector<?> values) {
         super(values);
         d_type = STRING;
         addActionListener(new ActionListener() {
@@ -92,7 +91,7 @@ public class ComboBoxCellEditor extends JComboBox
         });
     }
     
-    public ComboBoxCellEditor(Vector values, int type) {
+    public ComboBoxCellEditor(Vector<?> values, int type) {
         super(values);
         d_type = type;
         addActionListener(new ActionListener() {
@@ -182,16 +181,3 @@ public class ComboBoxCellEditor extends JComboBox
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

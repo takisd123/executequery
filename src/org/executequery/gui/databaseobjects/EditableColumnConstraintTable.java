@@ -154,12 +154,10 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
 
         if (databaseTable != null) {
         
-            List<DatabaseColumn> tableColumns = databaseTable.getColumns();
-    
+            List<DatabaseColumn> tableColumns = databaseTable.getColumns();    
             if (tableColumns != null && !tableColumns.isEmpty()) {
                 
-                Object[] columns = tableColumns.toArray();
-                columnNameEditor.setSelectionValues(columns);            
+                columnNameEditor.setSelectionValues(tableColumns.toArray());            
             }
     
             Object[] refSchemas = databaseTable.getHost().getSchemas().toArray();
@@ -217,6 +215,9 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
         // retrieve the column edited
         int column = getEditingColumn();
 
+        int editingRow2 = getEditingRow();
+        int editingColumn2 = getEditingColumn();
+
         // call to super implementation
         super.editingStopped(e);
         
@@ -263,6 +264,11 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
                     exc.getExtendedMessage(), exc);
         }
 
+        Object value = getValueAt(editingRow2, editingColumn2);
+        
+        
+        
+                
     }
 
     /**
@@ -286,12 +292,12 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
         }
     }
 
-    /**
-     * Invoked when a key has been released.
-     */
     public void keyReleased(KeyEvent e) {
+
         Object source = e.getSource();
+        
         if (source instanceof JTextField) {
+
             int row = getEditingRow();
             int col = getEditingColumn();
 
@@ -299,6 +305,7 @@ public class EditableColumnConstraintTable extends DefaultColumnConstraintTable
             String value = ((JTextField)source).getText();
             tableChanged(row, col, value);
         }
+
     }
 
     /**
