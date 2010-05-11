@@ -470,10 +470,17 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
      * Reverts any changes made to this constraint.
      */
     public void revert() {
-        if (isAltered()) {
+
+        if (isMarkedDeleted()) {
+            
+            setMarkedDeleted(false);
+
+        } else if (isAltered()) {
+            
             copyConstraint(copy, this);
             copy = null;
         }
+
     }
 
     /**

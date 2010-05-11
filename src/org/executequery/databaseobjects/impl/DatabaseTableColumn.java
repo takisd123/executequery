@@ -111,6 +111,26 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     public boolean hasChanges() {
 
         //*************** 
+        if (hasConstraintsChanged()) {
+            
+            return true;
+        
+        } else if (!isNewColumn() && !isMarkedDeleted() && !hasCopy()) {
+
+            return false;
+
+        } else {
+
+            return (isMarkedDeleted() 
+                || isNewColumn()
+                || isNameChanged()
+                || isDataTypeChanged()
+                || isRequiredChanged()
+                || isDefaultValueChanged());
+        }
+    }
+    
+    private boolean hasConstraintsChanged() {
         
         List<ColumnConstraint> constraints = getConstraints();
         if (constraints != null) {
@@ -126,17 +146,7 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
 
         }
 
-        if (!isNewColumn() && !isMarkedDeleted() && !hasCopy()) {
-            
-            return false;
-        }
-
-        return (isMarkedDeleted() 
-            || isNewColumn()
-            || isNameChanged()
-            || isDataTypeChanged()
-            || isRequiredChanged()
-            || isDefaultValueChanged());
+        return false;
     }
     
     public boolean isRequiredChanged() {
@@ -532,8 +542,12 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
             }
 
             // revert to the copy
-            copyColumn(copy, this);
-            copy = null;
+            if (copy != null) {
+             
+                copyColumn(copy, this);
+                copy = null;
+            }
+
         }
     }
     
