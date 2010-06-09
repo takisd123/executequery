@@ -166,8 +166,7 @@ public final class ConnectionManager {
         }
 
         // iterate and close all the pools
-        for (Iterator<DatabaseConnection> i = 
-                connectionPools.keySet().iterator(); i.hasNext();) {
+        for (Iterator<DatabaseConnection> i = connectionPools.keySet().iterator(); i.hasNext();) {
 
             ConnectionPool pool = connectionPools.get(i.next());
             pool.close();

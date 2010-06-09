@@ -55,7 +55,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
-import org.executequery.gui.menu.MenuItemFactory;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 
 /**
  * Central tab pane with scroll and menu buttons.

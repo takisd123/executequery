@@ -18,7 +18,7 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jh.jar"/>
-	<classpathentry kind="lib" path="lib/liquibase-1.9.2.jar"/>
+	<classpathentry kind="lib" path="lib/liquibase-1.9.2.jar" sourcepath="/home/takisd/softdev/dev-env/libs/liquibase-1.9.2/src/java"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>

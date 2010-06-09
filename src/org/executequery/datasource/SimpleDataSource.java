@@ -23,7 +23,7 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1521 $
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
-public class SimpleDataSource implements DataSource {
+public class SimpleDataSource implements DataSource, DatabaseDataSource {
 
     private static final DriverLoader DRIVER_LOADER = new DefaultDriverLoader();
     

@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 11 May 2010
+Date: 10 June 2010
 
 Execute Query Version 3.2.2 Build 5147
 ----------------------------------------
@@ -11,7 +11,10 @@ Summary of changes from 3.2.1 Build 5146:
 - Fixed table editing in browser when deleting a column and restoring/cancelling
   the action not restoring that column's state.
 - Fixed errors in adding and removing column constraints from the table browser.
-
+- Added simple text component popup menu with cut/copy/paste for all panel text 
+  fields.
+- Fixed export as XML error throwing ClassCastException for DataSource
+- Fixed exception thrown for DB2 tables when selecting from browser tree view.
 
 
 Summary of changes from 3.2.1 Build 5146:
@@ -250,4 +253,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-11 May 2010
+10 June 2010

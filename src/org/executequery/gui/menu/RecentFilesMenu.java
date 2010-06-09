@@ -34,6 +34,8 @@ import org.executequery.event.RecentOpenFileEvent;
 import org.executequery.event.RecentOpenFileEventListener;
 import org.executequery.repository.RecentlyOpenFileRepository;
 import org.executequery.repository.RepositoryCache;
+import org.underworldlabs.swing.menu.MainMenu;
+import org.underworldlabs.swing.menu.MainMenuItem;
 
 public class RecentFilesMenu extends MainMenu 
                              implements RecentOpenFileEventListener {

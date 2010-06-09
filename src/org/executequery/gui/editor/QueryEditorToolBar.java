@@ -32,12 +32,12 @@ import javax.swing.KeyStroke;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
-import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
 import org.underworldlabs.swing.PopupMenuButton;
 import org.underworldlabs.swing.RolloverButton;
 import org.underworldlabs.swing.actions.ActionBuilder;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 
 /** 

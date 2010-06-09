@@ -35,10 +35,10 @@ import javax.swing.KeyStroke;
 
 import org.executequery.Constants;
 import org.executequery.UserPreferencesManager;
-import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.sql.QueryDelegate;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.util.SystemProperties;
 
 public class QueryEditorPopupMenu extends JPopupMenu 

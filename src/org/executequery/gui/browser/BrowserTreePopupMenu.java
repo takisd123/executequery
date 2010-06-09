@@ -33,7 +33,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
-import org.executequery.gui.menu.MenuItemFactory;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 
 /**
  *

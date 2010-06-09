@@ -45,7 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 
 import org.executequery.gui.GUIConstants;
-import org.executequery.gui.menu.MenuItemFactory;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 
 /**
  * Left, right and bottom docked tab pane.
