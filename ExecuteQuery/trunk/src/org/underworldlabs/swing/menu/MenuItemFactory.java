@@ -1,10 +1,11 @@
-package org.executequery.gui.menu;
+package org.underworldlabs.swing.menu;
 
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
 
 public final class MenuItemFactory {
 

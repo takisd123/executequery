@@ -41,8 +41,8 @@ import java.util.Vector;
 import org.executequery.EventMediator;
 import org.executequery.databaseobjects.TablePrivilege;
 import org.executequery.databaseobjects.impl.DefaultDatabaseProcedure;
-import org.executequery.datasource.ConnectionDataSource;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.datasource.DatabaseDataSource;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
@@ -1686,9 +1686,8 @@ public class MetaDataValues implements ConnectionListener {
         return catalog == null ? "Not Available" : catalog.toUpperCase();
     }
     
-    private ConnectionDataSource getDataSource() {
-        return (ConnectionDataSource)
-                    ConnectionManager.getDataSource(databaseConnection);
+    private DatabaseDataSource getDataSource() {
+        return (DatabaseDataSource) ConnectionManager.getDataSource(databaseConnection);
     }
 
     /**

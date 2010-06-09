@@ -54,17 +54,16 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     private transient static final StatementGenerator STATEMENT_GENERATOR = new LiquibaseStatementGenerator();
     
     /** 
-     * Creates a new instance of DatabaseTableColumn 
-     * belonging to the specified table.
+     * Creates a new instance of DatabaseTableColumn belonging to the 
+     * specified table.
      */
     public DatabaseTableColumn(DatabaseTable table) {
         this(table, null);
     }
 
     /** 
-     * Creates a new instance of DatabaseTableColumn with
-     * values derived from the specified column and belonging
-     * to the specified table.
+     * Creates a new instance of DatabaseTableColumn with values derived from 
+     * the specified column and belonging to the specified table.
      */
     public DatabaseTableColumn(DatabaseTable table, DatabaseColumn column) {
         setTable(table);
@@ -74,8 +73,7 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     }
 
     /**
-     * Initialises this object with values derived from 
-     * the specified column.
+     * Initialises this object with values derived from the specified column.
      * 
      * @param the column
      */
@@ -399,8 +397,8 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     }
 
     /**
-     * Returns whether this is a new table column that 
-     * does not physically exist in the database yet.
+     * Returns whether this is a new table column that does not physically 
+     * exist in the database yet.
      *
      * @return true | false
      */

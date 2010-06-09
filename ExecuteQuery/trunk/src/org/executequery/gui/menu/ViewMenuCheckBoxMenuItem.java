@@ -20,6 +20,8 @@
 
 package org.executequery.gui.menu;
 
+import org.underworldlabs.swing.menu.MainCheckBoxMenuItem;
+
 
 public class ViewMenuCheckBoxMenuItem extends MainCheckBoxMenuItem {
 

@@ -30,6 +30,7 @@ import javax.swing.JMenuItem;
 import org.executequery.Constants;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.UserPreferenceEvent;
+import org.underworldlabs.swing.menu.MainMenu;
 import org.underworldlabs.util.SystemProperties;
 
 /** 

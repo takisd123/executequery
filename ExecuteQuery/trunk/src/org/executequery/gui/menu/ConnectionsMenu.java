@@ -34,6 +34,8 @@ import org.executequery.event.ConnectionRepositoryListener;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.actions.ActionBuilder;
+import org.underworldlabs.swing.menu.MainMenu;
+import org.underworldlabs.swing.menu.MainMenuItem;
 
 /**
  *

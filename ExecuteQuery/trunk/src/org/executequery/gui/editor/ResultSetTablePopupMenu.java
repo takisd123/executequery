@@ -17,7 +17,6 @@ import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.UserPreferencesManager;
 import org.executequery.gui.BaseDialog;
-import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.gui.resultset.LobRecordDataItem;
 import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTable;
@@ -26,6 +25,7 @@ import org.executequery.gui.resultset.SimpleRecordDataItem;
 import org.executequery.print.PrintingSupport;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.swing.actions.ReflectiveAction;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.util.SystemProperties;
 

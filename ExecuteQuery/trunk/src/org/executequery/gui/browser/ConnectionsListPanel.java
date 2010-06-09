@@ -53,10 +53,10 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.gui.SortableColumnsTable;
 import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
-import org.executequery.gui.menu.MenuItemFactory;
 import org.executequery.print.TablePrinter;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.table.AbstractSortableTableModel;
 
 /**

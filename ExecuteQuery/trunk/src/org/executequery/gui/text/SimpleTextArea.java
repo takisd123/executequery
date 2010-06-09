@@ -28,6 +28,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.underworldlabs.swing.menu.SimpleTextComponentPopUpMenu;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -53,7 +55,7 @@ public class SimpleTextArea extends JPanel {
     private void jbInit() throws Exception {
         textArea = new JTextArea();
         
-        TextUtilitiesPopUpMenu popup = new TextUtilitiesPopUpMenu();
+        SimpleTextComponentPopUpMenu popup = new SimpleTextComponentPopUpMenu();
         popup.registerTextComponent(textArea);
         
         textArea.setFont(new Font("monospaced",0,12));

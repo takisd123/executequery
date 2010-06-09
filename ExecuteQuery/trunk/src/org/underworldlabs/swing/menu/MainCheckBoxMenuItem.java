@@ -1,4 +1,4 @@
-package org.executequery.gui.menu;
+package org.underworldlabs.swing.menu;
 
 import java.awt.Dimension;
 

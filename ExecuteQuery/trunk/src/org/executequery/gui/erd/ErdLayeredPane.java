@@ -39,8 +39,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.executequery.GUIUtilities;
-import org.executequery.gui.menu.MenuItemFactory;
 import org.underworldlabs.swing.actions.ActionBuilder;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.util.MenuBuilder;
 
 /**

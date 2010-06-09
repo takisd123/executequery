@@ -27,6 +27,7 @@ import javax.swing.KeyStroke;
 
 import org.executequery.log.Log;
 import org.underworldlabs.swing.actions.ActionBuilder;
+import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.util.MiscUtils;
 
 public class JMenuItemFactory {
@@ -35,7 +36,7 @@ public class JMenuItemFactory {
         
         JMenuItem jMenuItem = createMenuItemForImpl(
                 menuItem.getImplementingClass());
-
+        try {
         if (jMenuItem instanceof JMenu) {
 
             jMenuItem.setText(menuItem.getName());
@@ -85,6 +86,9 @@ public class JMenuItemFactory {
             addMenuItemToParent(parent, menuItem, jMenuItem);
         }
 
+        }catch (Exception e) {e.printStackTrace();
+        System.out.println(menuItem.getImplementingClass());}
+        
         jMenuItem.setIcon(null);
         
         return jMenuItem;

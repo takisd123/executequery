@@ -18,19 +18,18 @@
  *
  */
 
-package org.executequery.gui.text;
+package org.underworldlabs.swing.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.Action;
 
+import javax.swing.Action;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.text.JTextComponent;
 
-import org.executequery.gui.menu.MenuItemFactory;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
 
@@ -41,7 +40,7 @@ import org.underworldlabs.swing.actions.ReflectiveAction;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class TextUtilitiesPopUpMenu extends JPopupMenu {
+public class SimpleTextComponentPopUpMenu extends JPopupMenu {
     
     /** the action listener */
     private ReflectiveAction reflectiveAction;
@@ -49,7 +48,7 @@ public class TextUtilitiesPopUpMenu extends JPopupMenu {
     /** the text component this popup belongs to */
     private JTextComponent textComponent;
     
-    public TextUtilitiesPopUpMenu() {
+    public SimpleTextComponentPopUpMenu() {
         
         // create the listener
         reflectiveAction = new ReflectiveAction(this);

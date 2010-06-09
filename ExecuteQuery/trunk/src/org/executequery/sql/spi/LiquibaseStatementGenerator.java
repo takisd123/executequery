@@ -20,6 +20,7 @@
 
 package org.executequery.sql.spi;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +60,8 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     public String columnNameValueEscaped(DatabaseTableColumn tableColumn) {
 
-        Database database = databaseFromName(tableColumn.getTable().getHost().getDatabaseProductName());
+        Database database = databaseFromName(
+                connectionFromTable(tableColumn.getTable()), tableColumn.getTable().getHost().getDatabaseProductName());
         
         return database.escapeColumnName(tableColumn.getSchemaName(),
                 tableColumn.getTable().getName(), tableColumn.getName());
@@ -79,7 +81,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         
         StringBuilder sb = new StringBuilder();
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
 
         for (DatabaseColumn column : table.getColumns()) {
 
@@ -106,7 +108,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         
         StringBuilder sb = new StringBuilder();
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
 
         sb.append(addPrimaryKeys(primaryKeysForTable(table), database));
 
@@ -126,7 +128,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         StringBuilder sb = new StringBuilder();
         List<ColumnConstraint> uniqueKeys = table.getUniqueKeys();
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
 
         for (ColumnConstraint constraint : uniqueKeys) {
 
@@ -146,7 +148,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         StringBuilder sb = new StringBuilder();
         List<ColumnConstraint> foreignKeys = table.getForeignKeys();
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
         
         for (ColumnConstraint constraint : foreignKeys) {
 
@@ -192,7 +194,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         
         primaryKeyChange.setColumnNames(sb.toString());
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
         
         return generateStatements(primaryKeyChange, database);
     }
@@ -242,7 +244,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             
         }
         
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
         
         return generateStatements(tableChange, database);
     }
@@ -251,7 +253,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         
         CreateTableChange tableChange = createTableChange(table);
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
         
         return generateStatements(tableChange, database);
     }
@@ -262,7 +264,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         DropTableChange tableChange = dropTableChange(table);
         tableChange.setCascadeConstraints(Boolean.valueOf(cascadeConstraints));
 
-        Database database = databaseFromName(databaseName);
+        Database database = databaseFromName(connectionFromTable(table), databaseName);
         
         return generateStatements(tableChange, database).trim();
     }
@@ -286,6 +288,11 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return null;
     }
 
+    private Connection connectionFromTable(DatabaseTable table) {
+        
+        return table.getHost().getConnection();
+    }
+    
     private DropTableChange dropTableChange(DatabaseTable table) {
         
         DropTableChange tableChange = new DropTableChange();
@@ -633,9 +640,12 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return columnConfig;
     }
 
-    private Database databaseFromName(String databaseName) {
+    private Database databaseFromName(Connection connection, String databaseName) {
 
-        return databaseFactory().createDatabase(databaseName);        
+        Database database = databaseFactory().createDatabase(databaseName);
+        database.setConnection(connection);
+
+        return database;        
     }
     
     private LiquibaseDatabaseFactory databaseFactory() {

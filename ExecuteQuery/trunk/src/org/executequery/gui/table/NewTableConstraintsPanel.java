@@ -98,7 +98,7 @@ public class NewTableConstraintsPanel extends TableConstraintsPanel
                     setCellEditor(6, new ComboBoxCellEditor(
                                 creator.getColumnNamesVector(value, schema)));
                 }
-                catch (NullPointerException nullExc) {}
+                catch (NullPointerException nullExc) {} // i forget why
                 break;
                 
         }

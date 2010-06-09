@@ -47,22 +47,8 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1525 $
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
-public class ConnectionDataSource implements DataSource {
+public class ConnectionDataSource implements DataSource, DatabaseDataSource {
     
-    /*
-    public static final int ORACLE = 1;
-    public static final int SYBASEw = 2;
-    public static final int DB2 = 3;
-    public static final int SQLSERVER = 4;
-    public static final int MYSQL = 5;
-    public static final int POSTGRESQL = 6;
-    public static final int INFORMIX = 7;
-    public static final int POINTBASE = 9;
-    public static final int HSQL = 10;
-    public static final int ACCESS = 11;
-    public static final int OTHER = 99;
-    */
-
     public static final int ODBC = 8;
     
     public static final String PORT = "[port]";
@@ -121,6 +107,9 @@ public class ConnectionDataSource implements DataSource {
         
     }
 
+    /* (non-Javadoc)
+     * @see org.executequery.datasource.DatabaseDataSource#getJdbcUrl()
+     */
     public String getJdbcUrl() {
         return jdbcUrl;
     }

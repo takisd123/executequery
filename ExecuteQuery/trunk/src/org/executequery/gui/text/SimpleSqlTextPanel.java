@@ -35,6 +35,7 @@ import org.executequery.Constants;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
+import org.underworldlabs.swing.menu.SimpleTextComponentPopUpMenu;
 
 /** 
  * This panel is used within those components that display
@@ -69,7 +70,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
     /** The default border */
     private Border defaultBorder;
 
-    private TextUtilitiesPopUpMenu popup;
+    private SimpleTextComponentPopUpMenu popup;
 
     public SimpleSqlTextPanel() {
         this(false);
@@ -98,7 +99,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         textPane.setDragEnabled(true);
         textComponent = textPane;
         
-        popup = new TextUtilitiesPopUpMenu();
+        popup = new SimpleTextComponentPopUpMenu();
         popup.registerTextComponent(textPane);
 
         sqlScroller = new JScrollPane(textPane);
