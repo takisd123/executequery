@@ -151,12 +151,13 @@ public class SimplePreferencesPanel extends JPanel
                     }
                     break;
                 case UserPreference.PASSWORD_TYPE:
+                    PasswordCellEditor passwordCellEditor = new PasswordCellEditor();
                     if (passwordRenderer == null) {
 
-                        passwordRenderer = new PasswordTableCellRenderer();
+                        passwordRenderer = new PasswordTableCellRenderer(passwordCellEditor.getEchoChar());
                     }
                     rowRendererValues.add(i, passwordRenderer);
-                    rowEditor.setEditorAt(i, new DefaultCellEditor(new PasswordCellEditor()));
+                    rowEditor.setEditorAt(i, new DefaultCellEditor(passwordCellEditor));
                     break;
                 case UserPreference.INTEGER_TYPE:
                     final NumberCellEditor numEditor = 
