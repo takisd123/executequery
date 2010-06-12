@@ -35,6 +35,16 @@ import javax.swing.table.TableCellRenderer;
 public class PasswordTableCellRenderer extends JLabel
                                        implements TableCellRenderer {
     
+    private final char echoChar;
+
+    public PasswordTableCellRenderer() {
+        this('*');
+    }
+    
+    public PasswordTableCellRenderer(char echoChar) {
+        this.echoChar = echoChar;
+    }
+
     public Component getTableCellRendererComponent(JTable table, 
                                                    Object value,
                                                    boolean isSelected, 
@@ -71,7 +81,7 @@ public class PasswordTableCellRenderer extends JLabel
         char[] chars = string.toCharArray();
         for (int i = 0; i < chars.length; i++) {
 
-            sb.append('*');
+            sb.append(echoChar);
         }
         
         return sb.toString();
