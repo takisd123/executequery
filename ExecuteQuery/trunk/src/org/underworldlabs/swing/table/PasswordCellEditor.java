@@ -20,20 +20,22 @@
 
 package org.underworldlabs.swing.table;
 
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+
 import org.underworldlabs.Constants;
+import org.underworldlabs.util.MiscUtils;
 
 /**
- * Simple string value table column cell editor.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class StringCellEditor extends JTextField
+public class PasswordCellEditor extends JPasswordField
                               implements TableCellEditorValue {
     
-    public StringCellEditor() {
+    public PasswordCellEditor() {
         super();
         setBorder(null);
         setHorizontalAlignment(JTextField.LEFT);
@@ -46,7 +48,7 @@ public class StringCellEditor extends JTextField
      * @return the editor's value
      */
     public String getEditorValue() {
-        return getText();
+        return MiscUtils.charsToString(getPassword());
     }
 
     /**
@@ -60,7 +62,7 @@ public class StringCellEditor extends JTextField
      * Returns the current editor value string.
      */
     public String getValue() {
-        return getText();
+        return getEditorValue();
     }
     
     /**
