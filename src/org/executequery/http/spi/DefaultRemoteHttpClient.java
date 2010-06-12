@@ -33,13 +33,18 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.UsernamePasswordCredentials;
+import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.lang.StringUtils;
+import org.executequery.Constants;
 import org.executequery.http.RemoteHttpClient;
 import org.executequery.http.RemoteHttpClientException;
 import org.executequery.http.RemoteHttpResponse;
+import org.underworldlabs.util.SystemProperties;
 
 /**
  *
@@ -221,10 +226,22 @@ public class DefaultRemoteHttpClient implements RemoteHttpClient {
         if (isUsingProxy()) {
         
             client.getHostConfiguration().setProxy(getProxyHost(), getProxyPort());
+            
+            if (hasProxyAuthentication()) {
+
+                client.getState().setProxyCredentials(AuthScope.ANY, 
+                        new UsernamePasswordCredentials(getProxyUser(), getProxyPassword()));                
+            }
+            
         }
         return client;
     }
 
+
+    private boolean hasProxyAuthentication() {
+
+        return StringUtils.isNotBlank(getProxyUser()) && StringUtils.isNotBlank(getProxyPassword());
+    }
 
     private boolean isUsingProxy() {
 
@@ -244,6 +261,16 @@ public class DefaultRemoteHttpClient implements RemoteHttpClient {
     private String getProxyHost() {
         
         return System.getProperty("http.proxyHost");
+    }
+    
+    private String getProxyUser() {
+        
+        return SystemProperties.getProperty(Constants.USER_PROPERTIES_KEY, "internet.proxy.user");
+    }
+    
+    private String getProxyPassword() {
+        
+        return SystemProperties.getProperty(Constants.USER_PROPERTIES_KEY, "internet.proxy.password");
     }
     
 }

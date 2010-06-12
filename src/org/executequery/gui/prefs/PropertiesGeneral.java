@@ -28,7 +28,7 @@ import org.executequery.gui.text.LineSeparator;
 import org.underworldlabs.util.SystemProperties;
 
 /** 
- * <p>System preferences general panel.
+ * System preferences general panel.
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
@@ -47,7 +47,6 @@ public class PropertiesGeneral extends PropertiesBasePanel {
         }
     }
     
-    /** Initializes the state of this instance. */
     private void init() throws Exception {
 
     	List<UserPreference> list = new ArrayList<UserPreference>();
@@ -151,6 +150,20 @@ public class PropertiesGeneral extends PropertiesBasePanel {
                     UserPreference.INTEGER_TYPE,
                     key,
                     "Proxy Port",
+                    stringUserProperty(key)));
+
+        key = "internet.proxy.user";
+        list.add(new UserPreference(
+                    UserPreference.STRING_TYPE,
+                    key,
+                    "Proxy User",
+                    stringUserProperty(key)));
+
+        key = "internet.proxy.password";
+        list.add(new UserPreference(
+                    UserPreference.PASSWORD_TYPE,
+                    key,
+                    "Proxy Password",
                     stringUserProperty(key)));
 
         UserPreference[] preferences = 

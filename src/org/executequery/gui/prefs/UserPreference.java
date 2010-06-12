@@ -37,6 +37,7 @@ public class UserPreference {
     public static final int INTEGER_TYPE = 3;
     public static final int CATEGORY_TYPE = 4;
     public static final int FILE_TYPE = 5;
+    public static final int PASSWORD_TYPE = 6;
 
     private boolean collapsed;
     private boolean saveActual;

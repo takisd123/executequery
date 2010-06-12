@@ -25,6 +25,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
@@ -37,18 +38,21 @@ import javax.swing.JViewport;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
-import org.underworldlabs.util.SystemProperties;
 import org.executequery.components.table.CategoryHeaderCellRenderer;
+import org.executequery.components.table.FileSelectionTableCell;
 import org.underworldlabs.swing.table.CheckBoxTableCellRenderer;
 import org.underworldlabs.swing.table.ColourTableCellRenderer;
 import org.underworldlabs.swing.table.ComboBoxCellRenderer;
 import org.underworldlabs.swing.table.EachRowEditor;
 import org.underworldlabs.swing.table.EachRowRenderer;
-import org.executequery.components.table.FileSelectionTableCell;
 import org.underworldlabs.swing.table.NumberCellEditor;
+import org.underworldlabs.swing.table.PasswordCellEditor;
+import org.underworldlabs.swing.table.PasswordTableCellRenderer;
 import org.underworldlabs.swing.table.StringCellEditor;
+import org.underworldlabs.util.SystemProperties;
 
 /**
  * Properties panel base.
@@ -118,6 +122,7 @@ public class SimplePreferencesPanel extends JPanel
         CheckBoxTableCellRenderer checkBoxRenderer = null;
         CategoryHeaderCellRenderer categoryRenderer = null;
         ComboBoxCellRenderer comboRenderer = null;
+        PasswordTableCellRenderer passwordRenderer = null;
 
         EachRowRenderer rowRendererKeys = null;
         EachRowRenderer rowRendererValues = new EachRowRenderer();
@@ -140,19 +145,18 @@ public class SimplePreferencesPanel extends JPanel
                         rowRendererValues.add(i, comboRenderer);
                     }
                     else {
-                        /*
-                        final StringCellEditor stringEditor = new StringCellEditor();
-                        stringEditor.setFont(PropertiesBase.panelFont);
-                        editor = new DefaultCellEditor(stringEditor) {
-                            public Object getCellEditorValue() {
-                                return stringEditor.getEditorValue();
-                            }
-                        };
-                        */
                         rowEditor.setEditorAt(i, 
                                 new DefaultCellEditor(new StringCellEditor()));
                         //rowEditor.setEditorAt(i, editor);
                     }
+                    break;
+                case UserPreference.PASSWORD_TYPE:
+                    if (passwordRenderer == null) {
+
+                        passwordRenderer = new PasswordTableCellRenderer();
+                    }
+                    rowRendererValues.add(i, passwordRenderer);
+                    rowEditor.setEditorAt(i, new DefaultCellEditor(new PasswordCellEditor()));
                     break;
                 case UserPreference.INTEGER_TYPE:
                     final NumberCellEditor numEditor = 

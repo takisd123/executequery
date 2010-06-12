@@ -70,6 +70,7 @@ import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ActionPanel;
 import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
+import org.underworldlabs.swing.LinkButton;
 import org.underworldlabs.swing.NumberTextField;
 import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.util.MiscUtils;
@@ -191,12 +192,22 @@ public class ConnectionPanel extends ActionPanel
         addLabelFieldPair(mainPanel, "Password:", 
                 passwordField, "Login password", gbc);
 
-        addComponents(mainPanel, 
-                      savePwdCheck,
-                      "Store the password with the connection information",
-                      encryptPwdCheck, 
-                      "Encrypt the password when saving", 
-                      gbc);
+        JButton showPassword = new LinkButton("Show Password");
+        showPassword.setActionCommand("showPassword");
+        showPassword.addActionListener(this);
+
+        JPanel passwordOptionsPanel = new JPanel(new GridBagLayout());
+        addComponents(passwordOptionsPanel,
+                      new ComponentToolTipPair[]{
+                        new ComponentToolTipPair(savePwdCheck, "Store the password with the connection information"),
+                        new ComponentToolTipPair(encryptPwdCheck, "Encrypt the password when saving"),
+                        new ComponentToolTipPair(showPassword, "Show the password in plain text")});
+        
+        gbc.gridy++;
+        gbc.gridx = 1;
+        gbc.weightx = 1.0;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        mainPanel.add(passwordOptionsPanel, gbc);
         
         addLabelFieldPair(mainPanel, "Host Name:", 
                 hostField, "Server host name or IP address", gbc);
@@ -235,21 +246,6 @@ public class ConnectionPanel extends ActionPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         mainPanel.add(buttons, gbc);
         
-//        gbc.gridy++;
-//        gbc.gridx = 1;
-//        gbc.insets.top = 5;
-//        gbc.insets.left = 0;
-//        gbc.insets.right = 10;
-//        gbc.gridwidth = 1;
-//        gbc.weightx = 1.0;
-//        gbc.weighty = 1.0;
-//        gbc.anchor = GridBagConstraints.NORTHEAST;
-//        gbc.fill = GridBagConstraints.NONE;
-//        mainPanel.add(connectButton, gbc);
-//        gbc.gridx++;
-//        gbc.weightx = 0;
-//        mainPanel.add(disconnectButton, gbc);
-//        
         // ---------------------------------
         // create the advanced panel
         
@@ -599,6 +595,12 @@ public class ConnectionPanel extends ActionPanel
 
     }
 
+    public void showPassword() {
+        
+        GUIUtilities.displayInformationMessage("Password: " + 
+                MiscUtils.charsToString(passwordField.getPassword()));
+    }
+    
     /**
      * Informed by a tree selection, this readies the form for
      * a new connection object and value change.
@@ -1084,24 +1086,41 @@ public class ConnectionPanel extends ActionPanel
     } // AdvConnTableModel
 
     private void addComponents(JPanel panel, 
-                               JComponent field1, String toolTip1,
-                               JComponent field2, String toolTip2,
-                               GridBagConstraints gbc) {
+                               ComponentToolTipPair...components) {
+
+        GridBagConstraints gbc = new GridBagConstraints();
         
-        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.gridx = 0;
-        gbc.gridwidth = 1;
-        gbc.insets.top = 0;
-        gbc.insets.left = 10;
-        gbc.weightx = 0;
-        panel.add(field1, gbc);
-        field1.setToolTipText(toolTip1);
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.gridx = 1;
-        gbc.insets.left = 10;
-        gbc.weightx = 1.0;
-        panel.add(field2, gbc);
-        field2.setToolTipText(toolTip2);
+        gbc.gridy = 0;
+        gbc.insets.bottom = 10;
+
+        int count = 0;
+        for (ComponentToolTipPair pair : components) {
+
+            pair.component.setToolTipText(pair.toolTip);
+            
+            gbc.gridx++;
+            gbc.gridwidth = 1;
+            gbc.insets.top = 0;
+            gbc.weightx = 0;
+
+            if (count > 0) {
+                
+                gbc.insets.left = 15;     
+            }
+
+            count++;
+            if (count == components.length) {
+                
+                gbc.weightx = 1.0;
+                gbc.insets.right = 5;
+            }
+            
+            panel.add(pair.component, gbc);
+        }
+        
     }
 
     private void addLabelFieldPair(JPanel panel, String label, 
@@ -1181,6 +1200,18 @@ public class ConnectionPanel extends ActionPanel
     public boolean canHandleEvent(ApplicationEvent event) {
 
         return (event instanceof DatabaseDriverEvent);
+    }
+    
+    class ComponentToolTipPair {
+        
+        final JComponent component;
+        final String toolTip;
+
+        public ComponentToolTipPair(JComponent component, String toolTip) {
+            this.component = component;
+            this.toolTip = toolTip;
+        }
+        
     }
     
 }
