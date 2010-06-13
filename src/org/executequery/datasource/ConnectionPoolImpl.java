@@ -92,7 +92,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         }
 
         activeConnections.clear();
-        openConnections.clear();            
+        openConnections.clear();
     }
 
     public synchronized Connection getConnection() {
@@ -176,7 +176,14 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
             }
 
             Connection realConnection = dataSource.getConnection();
-
+            if (realConnection == null) {
+                
+                throw new DataSourceException(
+                        "A connection to the database could not be " +
+                		"established.\nPlease ensure that the details " +
+                		"are correct and the supplied host is available.");
+            }
+            
             if (defaultTxIsolation == -1) {
              
                 defaultTxIsolation = realConnection.getTransactionIsolation();
