@@ -304,9 +304,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
                 // only include if the returned reported type matches
                 if (type.equalsIgnoreCase(typeName)) {
 
-                    DefaultDatabaseObject object = 
-                            new DefaultDatabaseObject(this, type);
-
+                    DefaultDatabaseObject object = new DefaultDatabaseObject(this, type);
                     object.setCatalogName(catalog);
                     object.setSchemaName(schema);
                     object.setName(tableName);
@@ -352,8 +350,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             }
             
-        }
-        else if (getSchemas().size() == 1) {
+        } else if (getSchemas().size() == 1) {
 
             return getSchemas().get(0);
         }
@@ -784,7 +781,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         
         return source;
     }
-    
         
     /**
      * Returns the default connected to catalog or null if there isn't one
@@ -979,6 +975,30 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         return properties;
     }
 
+    public boolean supportsCatalogsInTableDefinitions() {
+        
+        try {
+        
+            return getDatabaseMetaData().supportsCatalogsInTableDefinitions();
+
+        } catch (SQLException e) {
+
+            return false;
+        }
+    }
+    
+    public boolean supportsSchemasInTableDefinitions() {
+        
+        try {
+        
+            return getDatabaseMetaData().supportsSchemasInTableDefinitions();
+
+        } catch (SQLException e) {
+
+            return false;
+        }
+    }
+    
     /**
      * Concatenates product name and product verision.
      */
