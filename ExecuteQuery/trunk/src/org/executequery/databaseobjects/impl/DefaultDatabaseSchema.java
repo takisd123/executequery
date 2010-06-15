@@ -47,15 +47,12 @@ public class DefaultDatabaseSchema extends AbstractDatabaseSource
     private DatabaseCatalog catalog;
     
     /** Creates a new instance of DefaultDatabaseSchema */
-    public DefaultDatabaseSchema(DatabaseHost host, 
-                                 String name) {
+    public DefaultDatabaseSchema(DatabaseHost host, String name) {
         this(host, null, name);
     }
 
     /** Creates a new instance of DefaultDatabaseSchema */
-    public DefaultDatabaseSchema(DatabaseHost host, 
-                                 DatabaseCatalog catalog,
-                                 String name) {
+    public DefaultDatabaseSchema(DatabaseHost host, DatabaseCatalog catalog, String name) {
 
         super(host);
 

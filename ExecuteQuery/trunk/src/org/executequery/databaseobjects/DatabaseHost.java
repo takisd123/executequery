@@ -253,5 +253,9 @@ public interface DatabaseHost extends NamedObject {
      *  @return the default database object prefix
      */
     DatabaseSource getDatabaseSource(String name);
+
+    boolean supportsSchemasInTableDefinitions();
+    
+    boolean supportsCatalogsInTableDefinitions();
     
 }

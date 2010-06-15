@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.ProcedureParameterSorter;
 import org.executequery.databasemediators.QueryTypes;
@@ -135,14 +136,14 @@ public class DefaultStatementExecutor implements StatementExecutor {
      *  @param  the table name to describe
      *  @return the query result
      */
-    private SqlStatementResult getTableDescription(String tableName) 
-        throws SQLException {
+    private SqlStatementResult getTableDescription(String tableName) throws SQLException {
 
         if (!prepared()) {
 
             return statementResult;
         }
         
+        DatabaseHost host = null;
         try {
             
             /* -------------------------------------------------
@@ -151,64 +152,100 @@ public class DefaultStatementExecutor implements StatementExecutor {
              * -------------------------------------------------
              */
 
-            String _tableName = null;
-            String _schemaName = null;
-            String schemaName = databaseConnection.getUserName();
+            String name = tableName;
+            String catalog = null;
+            String schema = null;
+
+            host = new DatabaseObjectFactoryImpl().createDatabaseHost(databaseConnection);
             
-            boolean valueFound = false;
-            DatabaseMetaData dmd = metaDataForConnection(conn);
-            ResultSet rs = dmd.getSchemas();
+            int nameDelim = tableName.indexOf('.');
+            if (nameDelim != -1) {
 
-            while (rs.next()) {
-                _schemaName = rs.getString(1);
-                if (_schemaName.equalsIgnoreCase(schemaName)) {
-                    valueFound = true;
-                    break;
+                name = tableName.substring(nameDelim + 1);
+                String value = tableName.substring(0, nameDelim);
+                DatabaseMetaData databaseMetaData = host.getDatabaseMetaData();
+                
+                if (host.supportsCatalogsInTableDefinitions()) {
+
+                    ResultSet resultSet = databaseMetaData.getCatalogs();
+                    while (resultSet.next()) {
+                        
+                        String _catalog = resultSet.getString(1);
+                        if (value.equalsIgnoreCase(_catalog)) {
+                            
+                            catalog = _catalog;
+                            break;
+                        }
+                    }
+
+                    resultSet.close();
+                
+                } else if (host.supportsSchemasInTableDefinitions()) {
+                    
+                    ResultSet resultSet = databaseMetaData.getCatalogs();
+                    while (resultSet.next()) {
+                        
+                        String _schema = resultSet.getString(1);
+                        if (value.equalsIgnoreCase(_schema)) {
+                            
+                            schema = _schema;
+                            break;
+                        }
+                    }
+
+                    resultSet.close();
                 }
-            } 
-            rs.close();
 
-            if (!valueFound) {
-                _schemaName = null;
             }
             
-            valueFound = false;
-            rs = dmd.getTables(null, _schemaName, null, null);
+            DatabaseMetaData databaseMetaData = host.getDatabaseMetaData();
+            ResultSet resultSet = databaseMetaData.getTables(catalog, schema, null, null);
             
-            while (rs.next()) {
-                _tableName = rs.getString(3);
-                if (_tableName.equalsIgnoreCase(tableName)) {
-                    valueFound = true;
+            String nameToSearchOn = null;
+            while (resultSet.next()) {
+
+                String _tableName = resultSet.getString(3);
+                if (_tableName.equalsIgnoreCase(name)) {
+
+                    nameToSearchOn = _tableName;
                     break;
                 }
-            }             
-            rs.close();
+
+            }
+            resultSet.close();
             
-            if (!valueFound) {
+            if (StringUtils.isNotBlank(nameToSearchOn)) {
+
+                resultSet = databaseMetaData.getColumns(catalog, schema, nameToSearchOn, null);
+                statementResult.setResultSet(resultSet);
+
+            } else {
+                
                 statementResult.setMessage("Invalid table name");
             }
-            else {
-                rs = dmd.getColumns(null, _schemaName, _tableName, null);
-                statementResult.setResultSet(rs);
+
+        } catch (SQLException e) {
+          
+            statementResult.setSqlException(e);
+            finished();
+
+        } catch (OutOfMemoryError e) {
+          
+            statementResult.setMessage(e.getMessage());
+            releaseResources();
+            
+        } finally {
+
+            if (host != null) {
+            
+                host.close();
             }
 
         }
-        catch (SQLException e) {
-            statementResult.setSqlException(e);
-            finished();
-        }
-        catch (OutOfMemoryError e) {
-            statementResult.setMessage(e.getMessage());
-            releaseResources();
-        }
+
         return statementResult;        
     }
 
-    private DatabaseMetaData metaDataForConnection(Connection connection) throws SQLException {
-
-        return connection.getMetaData();
-    }
-    
     private boolean prepared() throws SQLException {
 
         if (databaseConnection == null || 

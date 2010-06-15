@@ -17,6 +17,7 @@ Summary of changes from 3.2.1 Build 5146:
 - Fixed exception thrown for DB2 tables when selecting from browser tree view.
 - Added proxy user and password to proxy preferences.
 - Added 'show password' action on login panel to reveal password in plain text.
+- Improved DESC <table_name> statement support.
 
 
 Summary of changes from 3.2.1 Build 5146:
