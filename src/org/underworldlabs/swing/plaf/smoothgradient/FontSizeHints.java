@@ -20,13 +20,6 @@
 
 package org.underworldlabs.swing.plaf.smoothgradient;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Describes font size hints used by the JGoodies Windows look&amp;feel; future
  * implementations of the Plastic l&amp;f will use the same hints. In 1.3

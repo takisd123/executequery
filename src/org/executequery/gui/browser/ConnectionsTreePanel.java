@@ -973,25 +973,44 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     /** Reloads the specified tree path. */
     public void reloadPath(TreePath path) {
 
-        if (treeExpanding || path == null) {
-            return;
+        try {
+        
+            if (treeExpanding || path == null) {
+
+                return;
+            }
+
+            Object object = path.getLastPathComponent();
+            if (!(object instanceof DatabaseObjectNode)) {
+                
+                return;
+            }
+
+            GUIUtilities.showWaitCursor();
+            
+            boolean expanded = tree.isExpanded(path);
+            if (expanded) {
+
+                tree.collapsePath(path);
+            }
+            
+            DatabaseObjectNode node = (DatabaseObjectNode)object;
+            node.reset();
+    
+            nodeStructureChanged(node);
+            pathExpanded(path);
+            
+            if (expanded) {
+            
+                tree.expandPath(path);
+            }
+    
+            pathChanged(oldSelectionPath, path);
+
+        } finally {
+
+            GUIUtilities.showNormalCursor();
         }
-        
-        Object object = path.getLastPathComponent();
-        
-        if (!(object instanceof DatabaseObjectNode)) {
-            return;
-        }
-        
-        DatabaseObjectNode node = (DatabaseObjectNode)object;
-        node.reset();
-
-        nodeStructureChanged(node);
-
-        pathExpanded(path);
-        tree.collapsePath(path);
-
-        pathChanged(oldSelectionPath, path);
     }
 
     protected void nodeStructureChanged(TreeNode node) {

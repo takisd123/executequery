@@ -25,13 +25,6 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.browser.ConnectionsTreePanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Action to reload the currently selected node within the
  * connections browser panel.
