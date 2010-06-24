@@ -61,10 +61,9 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
                 databaseConnection.getUnencryptedPassword());
     }
 
-    public Connection getConnection(String username, String password)
-            throws SQLException {
+    public Connection getConnection(String username, String password) throws SQLException {
 
-        Properties advancedProperties = new Properties(properties);
+        Properties advancedProperties = buildAdvancedProperties();
         
         if (StringUtils.isNotBlank(username)) {
             
@@ -82,6 +81,19 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         }
 
         throw new DataSourceException("Error loading specified JDBC driver");
+    }
+
+    private Properties buildAdvancedProperties() {
+
+        Properties advancedProperties = new Properties();
+        
+        for (Iterator<?> i = properties.keySet().iterator(); i.hasNext();) {
+            
+            String key = i.next().toString();
+            advancedProperties.put(key, properties.get(key));
+        }
+        
+        return advancedProperties;
     }
 
     protected final Driver loadDriver(DatabaseDriver databaseDriver) {
