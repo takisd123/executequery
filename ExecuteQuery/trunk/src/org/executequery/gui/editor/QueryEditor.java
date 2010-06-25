@@ -1037,7 +1037,7 @@ public class QueryEditor extends DefaultTabView
 
         preExecute();
         
-        String query = editorPanel.getQueryAtCursor();
+        String query = getQueryAtCursor();
         
         if (StringUtils.isNotBlank(query)) {
 
@@ -1045,6 +1045,11 @@ public class QueryEditor extends DefaultTabView
             
             delegate.executeQuery(query);
         }
+    }
+
+    public String getQueryAtCursor() {
+
+        return editorPanel.getQueryAtCursor();
     }
 
     public JTextComponent getEditorTextComponent() {

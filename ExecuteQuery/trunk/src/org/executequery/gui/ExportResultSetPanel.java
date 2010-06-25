@@ -74,6 +74,7 @@ import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
 import org.executequery.log.Log;
+import org.executequery.sql.DerivedQuery;
 import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
@@ -446,8 +447,8 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             outputPanel.appendAction("Executing:");
             outputPanel.appendActionFixedWidth(query);
 
-            int type = statementExecutor.getQueryType(query);
-            statementResult = statementExecutor.execute(type, query);
+            DerivedQuery derivedQuery = new DerivedQuery(query);
+            statementResult = statementExecutor.execute(derivedQuery.getQueryType(), query);
 
             if (statementResult.isException()) {
                 

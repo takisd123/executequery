@@ -395,7 +395,7 @@ public class QueryDispatcher {
                 String derivedQueryString = query.getDerivedQuery();
                 String queryToExecute = removeQueryComments ? derivedQueryString : query.getOriginalQuery();
 
-                int type = querySender.getQueryType(derivedQueryString);
+                int type = query.getQueryType();
                 if (type != QueryTypes.COMMIT && type != QueryTypes.ROLLBACK) {
 
                     logExecution(queryToExecute);
@@ -869,7 +869,8 @@ public class QueryDispatcher {
     
     private boolean isNotSingleStatementExecution(String query) {
         
-        int type = querySender.getQueryType(query);
+        DerivedQuery derivedQuery = new DerivedQuery(query);
+        int type = derivedQuery.getQueryType();
         
         int[] nonSingleStatementExecutionTypes = {
                 QueryTypes.CREATE_FUNCTION,
