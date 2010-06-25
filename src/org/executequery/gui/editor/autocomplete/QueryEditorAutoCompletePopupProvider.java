@@ -149,7 +149,7 @@ public class QueryEditorAutoCompletePopupProvider
     private void captureAndResetListValues() {
 
         String wordAtCursor = queryEditor.getWordAtCursor();
-
+        
         ((QueryEditorAutoCompletePopupPanel) popupMenu()).
             resetValues(itemsStartingWith(wordAtCursor));
     }

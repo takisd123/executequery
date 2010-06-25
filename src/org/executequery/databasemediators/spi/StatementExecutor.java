@@ -92,14 +92,6 @@ public interface StatementExecutor {
     void cancelCurrentStatement();
 
     /** 
-     * Determines the type of query from the specified query.
-     *
-     * @param the SQL query to analyse
-     * @result the type of SQL query
-     */
-    int getQueryType(String query);
-
-    /** 
      * Closes the database connection of this object.
      */
     void closeConnection() throws SQLException;
