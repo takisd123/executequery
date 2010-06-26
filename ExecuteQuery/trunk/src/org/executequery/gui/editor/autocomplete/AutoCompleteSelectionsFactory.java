@@ -110,7 +110,9 @@ public class AutoCompleteSelectionsFactory {
             for (String columnName : columns) {
                 
                 list.add(new AutoCompleteListItem(
-                        columnName, formatColumnName(table.getValue(), columnName), 
+                        columnName, 
+                        table.getValue(),
+                        formatColumnName(table.getValue(), columnName), 
                         DATABASE_COLUMN_DESCRIPTION, 
                         AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
             }

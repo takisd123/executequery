@@ -26,6 +26,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -52,6 +54,8 @@ import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.gui.editor.ConnectionChangeListener;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.log.Log;
+import org.executequery.sql.DerivedQuery;
+import org.executequery.sql.QueryTable;
 import org.underworldlabs.swing.util.SwingWorker;
 
 public class QueryEditorAutoCompletePopupProvider 
@@ -149,9 +153,11 @@ public class QueryEditorAutoCompletePopupProvider
     private void captureAndResetListValues() {
 
         String wordAtCursor = queryEditor.getWordAtCursor();
+
+        DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
+        List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
         
-        ((QueryEditorAutoCompletePopupPanel) popupMenu()).
-            resetValues(itemsStartingWith(wordAtCursor));
+        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
     }
 
     private JComponent popupMenu() {
@@ -316,9 +322,10 @@ public class QueryEditorAutoCompletePopupProvider
 
     private static final int MINIMUM_CHARS_FOR_SCHEMA_LOOKUP = 2;
     
-    private List<AutoCompleteListItem> itemsStartingWith(String prefix) {
+    private List<AutoCompleteListItem> itemsStartingWith(List<QueryTable> tables, String prefix) {
         
-        if (StringUtils.isBlank(prefix)) {
+        boolean hasTables = hasTables(tables);
+        if (StringUtils.isBlank(prefix) && !hasTables) {
             
             return selectionsBuilder.buildKeywords(databaseHost);
         }
@@ -326,20 +333,20 @@ public class QueryEditorAutoCompletePopupProvider
         String wordPrefix = prefix.trim().toUpperCase();
 
         int dotIndex = prefix.indexOf('.');
-        if (dotIndex != -1) {
+        boolean hasDotIndex = (dotIndex != -1); 
+        if (hasDotIndex) {
 
             wordPrefix = wordPrefix.substring(dotIndex + 1);
-            return itemsStartingWith(wordPrefix);
-        }
-
-        if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP) {
+//            return itemsStartingWith(tables, wordPrefix);
+        
+        } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
             
             return buildItemsStartingWithForList(
-                    selectionsBuilder.buildKeywords(databaseHost), wordPrefix);
+                    selectionsBuilder.buildKeywords(databaseHost), tables, wordPrefix, false);
         }
 
         List<AutoCompleteListItem> itemsStartingWith = 
-            buildItemsStartingWithForList(autoCompleteListItems, wordPrefix);
+            buildItemsStartingWithForList(autoCompleteListItems, tables, wordPrefix, hasDotIndex);
         
         if (itemsStartingWith.isEmpty()) {
             
@@ -348,26 +355,62 @@ public class QueryEditorAutoCompletePopupProvider
         
         return itemsStartingWith;
     }
+
+    private boolean hasTables(List<QueryTable> tables) {
+        
+        return (tables != null && !tables.isEmpty());
+    }
     
     private List<AutoCompleteListItem> buildItemsStartingWithForList(
-            List<AutoCompleteListItem> items, String prefix) {
+            List<AutoCompleteListItem> items, List<QueryTable> tables, String prefix, 
+            boolean prefixHadAlias) {
+        
+        String searchPattern = prefix;
+        if (prefix.startsWith("(")) {
+            
+            searchPattern = prefix.substring(1);
+        }
         
         List<AutoCompleteListItem> itemsStartingWith = new ArrayList<AutoCompleteListItem>();
 
         for (AutoCompleteListItem item : items) {
 
-            if (item.getInsertionValue().toUpperCase().startsWith(prefix, 0)) {
+            if (item.isForPrefix(tables, searchPattern, prefixHadAlias)) {
 
                 itemsStartingWith.add(item);
             }
 
         }
 
+        Collections.sort(itemsStartingWith, autoCompleteListItemComparator);
         return itemsStartingWith;
     }
     
+    private AutoCompleteListItemComparator autoCompleteListItemComparator = new AutoCompleteListItemComparator();
+    static class AutoCompleteListItemComparator implements Comparator<AutoCompleteListItem> {
+
+        public int compare(AutoCompleteListItem o1, AutoCompleteListItem o2) {
+
+            if (o1.isSchemaObject() && o2.isSchemaObject()) {
+                
+                return o1.getInsertionValue().compareTo(o2.getInsertionValue());
+            
+            } else if (o1.isSchemaObject() && !o2.isSchemaObject()) {
+                
+                return -1;
+            
+            } else if (o2.isSchemaObject() && !o1.isSchemaObject()) {
+                
+                return 1;
+            }
+            
+            return o1.getValue().toUpperCase().compareTo(o2.getValue().toUpperCase());
+        }
+        
+    }
+
     private AutoCompleteListItem noProposalsAutoCompleteListItem;
-    
+
     private AutoCompleteListItem noProposalsListItem() {
         
         if (noProposalsAutoCompleteListItem == null) {
@@ -499,30 +542,43 @@ public class QueryEditorAutoCompletePopupProvider
         try {
 
             JTextComponent textComponent = queryEditorTextComponent();
+            Document document = textComponent.getDocument();
 
+            int caretPosition = textComponent.getCaretPosition();
             String wordAtCursor = queryEditor.getWordAtCursor();
 
-            int wordAtCursorLength = wordAtCursor.length();
-            int caretPosition = textComponent.getCaretPosition();
-            int insertionIndex = caretPosition - wordAtCursorLength;
-
-            if (selectedListItem.isKeyword() && isAllLowerCase(wordAtCursor)) {
-
-                selectedValue = selectedValue.toLowerCase();
-            }
-
-            if (!Character.isLetterOrDigit(wordAtCursor.charAt(0))) {
-                
-                // cases where you might have a.column_name or similar
-
-                insertionIndex++;
-                wordAtCursorLength--;
-            }
+            if (StringUtils.isNotBlank(wordAtCursor)) {
             
-            Document document = textComponent.getDocument();
-            document.remove(insertionIndex, wordAtCursorLength);
-            document.insertString(insertionIndex, selectedValue, null);
+                int wordAtCursorLength = wordAtCursor.length();
+                int insertionIndex = caretPosition - wordAtCursorLength;
+    
+                if (selectedListItem.isKeyword() && isAllLowerCase(wordAtCursor)) {
+    
+                    selectedValue = selectedValue.toLowerCase();
+                }
+    
+                if (!Character.isLetterOrDigit(wordAtCursor.charAt(0))) {
+                    
+                    // cases where you might have a.column_name or similar
+    
+                    insertionIndex++;
+                    wordAtCursorLength--;
+                
+                } else if (wordAtCursor.contains(".")) {
+                    
+                    int index = wordAtCursor.indexOf(".");
+                    insertionIndex += index + 1;
+                    wordAtCursorLength -=  index + 1;
+                }
+                
+                document.remove(insertionIndex, wordAtCursorLength);
+                document.insertString(insertionIndex, selectedValue, null);
 
+            } else {
+                
+                document.insertString(caretPosition, selectedValue, null);
+            }
+                
         } catch (BadLocationException e) {
 
             if (Log.isDebugEnabled()) {

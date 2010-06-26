@@ -607,7 +607,7 @@ public class QueryEditorTextPane extends SQLTextPane
         for (int i = end - 1; i >= 0; i--) {
 
             if (!Character.isLetterOrDigit(chars[i]) 
-                    && chars[i] != '_') {
+                    && chars[i] != '_' && chars[i] != '.') {
 
                 start = i;
                 break;
