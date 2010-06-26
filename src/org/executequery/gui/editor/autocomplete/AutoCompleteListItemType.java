@@ -8,13 +8,24 @@ public enum AutoCompleteListItemType {
     DATABASE_TABLE, 
     DATABASE_TABLE_COLUMN,
     DATABASE_SEQUENCE,
+    DATABASE_DATA_TYPE,
     NOTHING_PROPOSED;
 
-    public static boolean isKeyword(AutoCompleteListItemType type) {
+    public boolean isKeyword() {
         
-        return type == SQL92_KEYWORD 
-            || type == USER_DEFINED_KEYWORD
-            || type == DATABASE_DEFINED_KEYWORD;
+        return this == SQL92_KEYWORD 
+            || this == USER_DEFINED_KEYWORD
+            || this == DATABASE_DEFINED_KEYWORD;
+    }
+    
+    public boolean isTableColumn() {
+        
+        return this == DATABASE_TABLE_COLUMN;
+    }
+
+    public boolean isTable() {
+
+        return this == DATABASE_TABLE;
     }
     
 }

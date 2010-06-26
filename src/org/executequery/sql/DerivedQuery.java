@@ -20,18 +20,37 @@
 
 package org.executequery.sql;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.QueryTypes;
 
 public final class DerivedQuery {
 
-    private static final String WHERE = "WHERE";
-
-    private static final String FROM = "FROM";
-
+    private static DerivedTableStrategy defaultDerivedTableStrategy;
+    
+    private static Map<Integer, DerivedTableStrategy> derivedTableStrategies;
+    
     private String derivedQuery;
     
     private final String originalQuery;
+
+    private List<QueryTable> queryTables;
+    
+    static {
+        
+        defaultDerivedTableStrategy = new DefaultDerivedTableStrategy();
+        derivedTableStrategies = new HashMap<Integer, DerivedTableStrategy>();
+        derivedTableStrategies.put(QueryTypes.SELECT, new SelectDerivedTableStrategy());
+        derivedTableStrategies.put(QueryTypes.INSERT, new InsertDerivedTableStrategy());
+        derivedTableStrategies.put(QueryTypes.UPDATE, new UpdateDerivedTableStrategy());
+        derivedTableStrategies.put(QueryTypes.DELETE, new DeleteDerivedTableStrategy());
+        derivedTableStrategies.put(QueryTypes.DROP_TABLE, new DropTableDerivedTableStrategy());
+        derivedTableStrategies.put(QueryTypes.ALTER_TABLE, new AlterTableDerivedTableStrategy());
+    }
     
     public DerivedQuery(String originalQuery) {
         super();
@@ -74,30 +93,63 @@ public final class DerivedQuery {
         return StringUtils.isNotBlank(getDerivedQuery()); 
     }
 
-    private String getRelevantTables() {
+    private void deriveTables() {
+        
+        if (queryTables != null) {
+            
+            return;
+        }
         
         int queryType = getQueryType();
-        String query = derivedQuery.toUpperCase();
-
-        if (queryType == QueryTypes.SELECT) {
+        DerivedTableStrategy derivedTableStrategy = derivedTableStrategies.get(queryType);
+        if (derivedTableStrategy == null) {
             
-            int fromIndex = query.indexOf(FROM);
-            int whereIndex = query.indexOf(WHERE);
+            derivedTableStrategy = defaultDerivedTableStrategy;
+        }
+        
+        queryTables = derivedTableStrategy.deriveTables(derivedQuery);
+    }
+    
+    public List<QueryTable> tableForWord(String word) {
 
-            String tables = null;
-            if (whereIndex != -1) {
-                
-                tables = query.substring(fromIndex + FROM.length(), whereIndex);
+        deriveTables();
+        
+        String pattern = "";
+        int dotPoint = word.indexOf('.');
+        
+        if (dotPoint == -1) {
+            
+            return queryTables;
+        }
+        
+        pattern = word.substring(0, dotPoint);
+        return asList(getTableForNameOrAlias(pattern));
+    }
+    
+    private List<QueryTable> asList(QueryTable queryTable) {
 
-            } else {
-                
-                tables = query.substring(fromIndex + FROM.length());
+        List<QueryTable> list = new ArrayList<QueryTable>(1);
+        if (queryTable != null) {
+            
+            list.add(queryTable);
+        }
+        
+        return list;
+    }
+
+    public QueryTable getTableForNameOrAlias(String nameOrAlias) {
+        
+        deriveTables();
+        if (!queryTables.isEmpty()) {
+
+            for (QueryTable queryTable : queryTables) {
+            
+                if (queryTable.isNameOrAlias(nameOrAlias)) {
+                    
+                    return queryTable;
+                }
+
             }
-            
-            String[] split = StringUtils.split(",");
-            
-            
-            
         }
         
         return null;

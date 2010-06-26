@@ -1,5 +1,10 @@
 package org.executequery.gui.editor.autocomplete;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.executequery.sql.QueryTable;
+
 public class AutoCompleteListItem {
 
     private final String value;
@@ -10,12 +15,21 @@ public class AutoCompleteListItem {
 
     private final String displayValue;
 
+    private final String parentName;
+
     public AutoCompleteListItem(String value, String displayValue, String description,
             AutoCompleteListItemType type) {
-        
+
+        this(value, null, displayValue, description, type);
+    }
+
+    public AutoCompleteListItem(String value, String parentName, String displayValue, 
+            String description, AutoCompleteListItemType type) {
+
         super();
         
         this.value = value;
+        this.parentName = parentName;
         this.displayValue = displayValue;
         this.description = description;
         this.type = type;
@@ -27,8 +41,19 @@ public class AutoCompleteListItem {
     }
     
     public boolean isKeyword() {
-        
-        return AutoCompleteListItemType.isKeyword(type);
+        return type.isKeyword();
+    }
+
+    public boolean isTableColumn() {
+        return type.isTableColumn();
+    }
+    
+    public boolean isTable() {
+        return type.isTable();
+    }
+    
+    public boolean isSchemaObject() {
+        return type.isTableColumn() || type.isTable();
     }
     
     public String getDisplayValue() {
@@ -45,7 +70,7 @@ public class AutoCompleteListItem {
 
     public String getInsertionValue() {
         
-        if (type == AutoCompleteListItemType.DATABASE_TABLE_COLUMN) {
+        if (type.isTableColumn()) {
             
             int dotIndex = value.indexOf('.');
             return value.substring(dotIndex + 1);
@@ -57,10 +82,57 @@ public class AutoCompleteListItem {
         
     }
     
+    public boolean isForPrefix(List<QueryTable> tables, String prefix, boolean prefixHadAlias) {
+        
+        boolean hasTables = !(tables == null || tables.isEmpty());
+        if ((type.isKeyword() || type.isTable())) {
+
+            if (prefixHadAlias) {
+                
+                return false;
+            }
+            
+            if (!hasTables || !type.isTable()) {
+
+                return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+            }
+        }
+        
+        if (!hasTables) { // ??? hhhmmmmmm
+            
+            return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+        }
+        
+        if (parentName != null) { // shouldn't here but does TODO:
+        
+            String tableName = parentName.toUpperCase();
+            
+            for (QueryTable table : tables) {
+                
+                if (tableName.equals(table.getCompareName().toUpperCase())) {
+                
+                    if (StringUtils.isBlank(prefix)) {
+                        
+                        return true;
+                    }
+                    
+                    return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+                }
+                
+            }
+        }
+
+        return false;
+    }
+    
     public AutoCompleteListItemType getType() {
         return type;
     }
  
+    public String getParentName() {
+        return parentName;
+    }
+    
     @Override
     public String toString() {
         return getDisplayValue();
