@@ -9,6 +9,7 @@ import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
+import org.executequery.sql.QueryTable;
 
 public class AutoCompleteSelectionsFactory {
 
@@ -26,7 +27,7 @@ public class AutoCompleteSelectionsFactory {
         if (databaseHost != null && databaseHost.isConnected()) {
 
             addDatabaseDefinedKeywords(databaseHost, listSelections);
-            
+
             List<AutoCompleteListItem> tables = databaseTablesForHost(databaseHost);
             listSelections.addAll(tables);
             
@@ -56,12 +57,73 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
+    public List<AutoCompleteListItem> loadForTables(DatabaseHost databaseHost, List<QueryTable> queryTables) {
+
+        if (tables == null) {
+            
+            databaseTablesForHost(databaseHost);
+        }
+        
+        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+
+        String catalog = defaultCatalogForHost(databaseHost);
+        String schema = defaultSchemaForHost(databaseHost);
+        
+        for (QueryTable table : queryTables) {
+            
+            String _catalog = catalog;
+            String _schema = schema;
+            
+            if (table.hasCatalogOrSchemaPrefix()) {
+                
+                _catalog = table.getCatalogOrSchemaPrefix();
+                _schema= table.getCatalogOrSchemaPrefix();
+            }
+            
+            String tableName = databaseHeldTableName(table.getName());
+            List<String> columns = databaseHost.getColumnNames(_catalog, _schema, tableName);
+            
+            for (String columnName : columns) {
+                
+                list.add(new AutoCompleteListItem(
+                        columnName, 
+                        table.getName(),
+                        formatColumnName(table.getName(), columnName), 
+                        DATABASE_COLUMN_DESCRIPTION, 
+                        AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
+            }
+                
+        }
+        
+        return list;
+    }
+
+    private String databaseHeldTableName(String name) {
+
+        for (String table : tables) {
+            
+            if (table.equalsIgnoreCase(name)) {
+                
+                return table;
+            }
+        }
+
+        return name;
+    }
+
+    private List<String> tables;
+    
     private List<AutoCompleteListItem> databaseTablesForHost(DatabaseHost databaseHost) {
 
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
 
-        List<String> tables = databaseHost.getTableNames(
-                defaultCatalogForHost(databaseHost), defaultSchemaForHost(databaseHost), "TABLE");
+        tables = databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
+                defaultSchemaForHost(databaseHost), "TABLE");
+
+        return tablesToAutoCompleteListItems(list, tables);
+    }
+
+    private List<AutoCompleteListItem> tablesToAutoCompleteListItems(List<AutoCompleteListItem> list, List<String> tables) {
 
         for (String table : tables) {
 
@@ -181,5 +243,6 @@ public class AutoCompleteSelectionsFactory {
         }
         
     }
-    
+
+
 }

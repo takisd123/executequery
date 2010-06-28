@@ -33,6 +33,20 @@ public class QueryTable {
         return name;
     }
     
+    public boolean hasCatalogOrSchemaPrefix() {
+        
+        return name.contains(".");
+    }
+    
+    public String getCatalogOrSchemaPrefix() {
+        
+        if (hasCatalogOrSchemaPrefix()) {
+            
+            return name.substring(0, name.indexOf('.')); 
+        }
+        return null;        
+    }
+    
     public boolean isNameOrAlias(String nameOrAlias) {
 
         String testString = nameOrAlias.toUpperCase();

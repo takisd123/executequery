@@ -92,7 +92,7 @@ public class AutoCompleteListItem {
                 return false;
             }
             
-            if (!hasTables || !type.isTable()) {
+            if (!hasTables || !type.isTable()) { // keyword
 
                 return getInsertionValue().toUpperCase().startsWith(prefix, 0);
             }
