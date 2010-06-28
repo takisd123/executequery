@@ -1,5 +1,6 @@
 package org.executequery.sql;
 
+
 public class InsertDerivedTableStrategy extends AbstractDerivedTableStrategy {
 
     @Override
@@ -17,9 +18,6 @@ public class InsertDerivedTableStrategy extends AbstractDerivedTableStrategy {
                 
                 tables = portion.substring(0, index); 
             
-            } else {
-            
-                tables = portion;
             }
 
         }

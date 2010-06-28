@@ -150,16 +150,6 @@ public class QueryEditorAutoCompletePopupProvider
         
     }
 
-    private void captureAndResetListValues() {
-
-        String wordAtCursor = queryEditor.getWordAtCursor();
-
-        DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
-        List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
-        
-        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
-    }
-
     private JComponent popupMenu() {
 
         if (autoCompletePopup == null) {
@@ -316,6 +306,16 @@ public class QueryEditorAutoCompletePopupProvider
         autoCompleteListItems = selectionsBuilder.build(databaseHost);
     }
     
+    private void captureAndResetListValues() {
+        
+        String wordAtCursor = queryEditor.getWordAtCursor();
+        
+        DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
+        List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
+        
+        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
+    }
+
     // TODO: determine query being executed and suggest based on that
     // introduce query types (select, insert etc)
     // track columns/tables in statement ????
