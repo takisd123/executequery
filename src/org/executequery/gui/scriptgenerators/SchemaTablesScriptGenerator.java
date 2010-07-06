@@ -53,6 +53,8 @@ public class SchemaTablesScriptGenerator {
     private StringBuilder uniqueKeys;
 
     private boolean cascadeConstraints;
+
+    private boolean includeScriptBanner;
     
     public SchemaTablesScriptGenerator(int scriptType, 
             String outputFile, DatabaseSource source, List<NamedObject> tables) {
@@ -63,15 +65,17 @@ public class SchemaTablesScriptGenerator {
         this.tables = copyAndSortTables(tables);
     }
     
-    public void writeDropTablesScript(boolean cascadeConstraints) {
+    public void writeDropTablesScript(boolean includeScriptBanner, boolean cascadeConstraints) {
         
+        this.includeScriptBanner = includeScriptBanner;
         this.cascadeConstraints = cascadeConstraints;
         
         writeScript();
     }
 
-    public void writeCreateTablesScript(int constraintStyle) {
+    public void writeCreateTablesScript(boolean includeScriptBanner, int constraintStyle) {
 
+        this.includeScriptBanner = includeScriptBanner;
         this.constraintStyle = constraintStyle;
 
         writeScript();
@@ -91,7 +95,10 @@ public class SchemaTablesScriptGenerator {
             
             writer = createPrintWriter();
 
-            writer.println(createHeader());
+            if (includeScriptBanner) {
+            
+                writer.println(createHeader());
+            }
             
             for (NamedObject namedObject : tables) {
 
@@ -105,7 +112,11 @@ public class SchemaTablesScriptGenerator {
                 fireStartedNamedObjectScript(table);
                 
                 writer.println(sqlTextForTable(table));
-                writer.println();
+                
+                if (scriptType == GenerateScriptsWizard.CREATE_TABLES) {
+                 
+                    writer.println();
+                }
                 
                 if (_constraintStyle == DatabaseTable.STYLE_CONSTRAINTS_ALTER) {
                     

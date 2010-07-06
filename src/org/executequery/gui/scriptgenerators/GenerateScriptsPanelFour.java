@@ -25,7 +25,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.File;
 
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.executequery.ApplicationException;
@@ -34,6 +33,7 @@ import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.swing.wizard.InterruptibleWizardProcess;
 import org.underworldlabs.swing.wizard.WizardProgressBarPanel;
+import org.underworldlabs.util.FileUtils;
 
 /**
  * Step three panel in the generate scripts wizard.
@@ -44,6 +44,7 @@ import org.underworldlabs.swing.wizard.WizardProgressBarPanel;
  */
 public class GenerateScriptsPanelFour extends JPanel 
                                       implements InterruptibleWizardProcess,
+                                                 GenerateScriptsPanel,
                                                  ScriptGenerationObserver {
     
     /** result indicator for success */
@@ -54,9 +55,6 @@ public class GenerateScriptsPanelFour extends JPanel
 
     /** result indicator for success */
     private static final String CANCELLED = "cancelled";
-    
-    /** the view script when done check box */
-    private JCheckBox viewScriptCheck;
     
     /** the progress bar panel */
     private WizardProgressBarPanel progressPanel;
@@ -87,9 +85,6 @@ public class GenerateScriptsPanelFour extends JPanel
 
     private void init() throws Exception {
 
-        viewScriptCheck = new JCheckBox("View generated script", true);
-        viewScriptCheck.setEnabled(false);
-
         progressPanel = new WizardProgressBarPanel(this);
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -101,21 +96,9 @@ public class GenerateScriptsPanelFour extends JPanel
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         add(progressPanel, gbc);
-        gbc.gridy++;
-        gbc.weightx = 0;
-        gbc.weighty = 0;
-        gbc.insets.top = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        add(viewScriptCheck, gbc);
     }
 
-    /**
-     * The status of the view script check box.
-     */
-    protected boolean viewScriptOnCompletion() {
-
-        return viewScriptCheck.isSelected();
-    }
+    public void panelSelected() {}
     
     /**
      * Starts the generation process in a worker thread.
@@ -127,7 +110,6 @@ public class GenerateScriptsPanelFour extends JPanel
             public Object construct() {
             
                 progressPanel.reset();
-                viewScriptCheck.setEnabled(false);
                 
                 progressPanel.setMinimum(0);
                 progressPanel.setMaximum(parent.getSelectedItemCount() + 1);
@@ -150,8 +132,6 @@ public class GenerateScriptsPanelFour extends JPanel
                 GUIUtilities.scheduleGC();
 
                 boolean success = (get() == SUCCESS);
-
-                viewScriptCheck.setEnabled(success);
                 parent.finished(success);
             }
         };
@@ -170,7 +150,7 @@ public class GenerateScriptsPanelFour extends JPanel
         
             SchemaTablesScriptGenerator generator = createScriptGenerator();
     
-            generator.writeCreateTablesScript(parent.getConstraintsStyle());
+            generator.writeCreateTablesScript(parent.isWritingToFile(), parent.getConstraintsStyle());
             
             finished();
             
@@ -189,7 +169,7 @@ public class GenerateScriptsPanelFour extends JPanel
         
             SchemaTablesScriptGenerator generator = createScriptGenerator();
     
-            generator.writeDropTablesScript(parent.cascadeWithDrop());
+            generator.writeDropTablesScript(parent.isWritingToFile(), parent.cascadeWithDrop());
 
             finished();
             
@@ -248,12 +228,27 @@ public class GenerateScriptsPanelFour extends JPanel
         return new File(parent.getOutputFilePath());
     }
 
+    protected String getGeneratedFilePath() {
+        
+        return generatedFilePath;
+    }
+    
+    private String generatedFilePath;
+    
     private SchemaTablesScriptGenerator createScriptGenerator() {
 
+        String outputFilePath =  FileUtils.randomTempFilePath();
+        if (parent.isWritingToFile()) {
+            
+            outputFilePath = parent.getOutputFilePath();
+        }
+        
+        generatedFilePath = outputFilePath;
+        
         SchemaTablesScriptGenerator generator = 
             new SchemaTablesScriptGenerator(
                     parent.getScriptType(),
-                    parent.getOutputFilePath(),
+                    outputFilePath,
                     parent.getSelectedSource(),
                     parent.getSelectedTables());
 

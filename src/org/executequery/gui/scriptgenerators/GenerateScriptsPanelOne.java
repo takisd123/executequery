@@ -40,7 +40,7 @@ import org.executequery.gui.WidgetFactory;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class GenerateScriptsPanelOne extends JPanel {
+public class GenerateScriptsPanelOne extends JPanel implements GenerateScriptsPanel {
 
     /** create table script radio button */
     private JRadioButton createTableButton;
@@ -106,6 +106,8 @@ public class GenerateScriptsPanelOne extends JPanel {
         setPreferredSize(GenerateScriptsWizard.CHILD_DIMENSION);
     }
 
+    public void panelSelected() {}
+    
     protected JComboBox getConnectionsCombo() {
 
         return connectionsCombo;

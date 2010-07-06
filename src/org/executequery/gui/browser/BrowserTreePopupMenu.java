@@ -164,13 +164,6 @@ class BrowserTreePopupMenu extends JPopupMenu {
                     showDefaultCatalogsAndSchemas.setEnabled(false);
 
                     boolean importExport = (node.getType() == NamedObject.TABLE);
-
-                    /*
-                    boolean importExport = 
-                            (node.getDatabaseUserObject().getType() == 
-                                BrowserConstants.TABLE_NODE && !node.isTypeParent());
-                     */
-                    
                     sql.setEnabled(importExport);
                     exportData.setEnabled(importExport);
                     importData.setEnabled(importExport);
