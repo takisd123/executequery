@@ -41,7 +41,7 @@ import org.underworldlabs.swing.ListSelectionPanel;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class GenerateScriptsPanelTwo extends JPanel {
+public class GenerateScriptsPanelTwo extends JPanel implements GenerateScriptsPanel {
     
     /** The list table/column list selection panel */
     private ListSelectionPanel list;
@@ -101,6 +101,8 @@ public class GenerateScriptsPanelTwo extends JPanel {
         return schemaCombo;
     }
 
+    public void panelSelected() {}
+    
     protected void schemaSelectionChanged(List<NamedObject> tables) {
         
         if (tables != null && !tables.isEmpty()) {

@@ -22,6 +22,7 @@ package org.executequery.gui.scriptgenerators;
 
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -33,14 +34,14 @@ import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.ActionContainer;
-import org.executequery.gui.GeneratedScriptViewer;
+import org.executequery.gui.editor.QueryEditor;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.wizard.DefaultWizardProcessModel;
 import org.underworldlabs.swing.wizard.WizardProcessPanel;
-import org.underworldlabs.util.MiscUtils;
+import org.underworldlabs.util.FileUtils;
 
 /**
  * Base panel for the generate scripts process.
@@ -190,6 +191,10 @@ public class GenerateScriptsWizard extends WizardProcessPanel
         return thirdPanel.getOutputFilePath();
     }
     
+    protected boolean isWritingToFile() {
+        return thirdPanel.isWritingToFile();
+    }
+    
     /**
      * Returns the type of script to be generated.
      *
@@ -242,9 +247,10 @@ public class GenerateScriptsWizard extends WizardProcessPanel
                 
             case 2:
                 
-                if (MiscUtils.isNull(thirdPanel.getOutputFilePath())) {
+                if (!thirdPanel.hasOutputStrategy()) {
                     GUIUtilities.displayErrorMessage(
-                            "You must select an output file for this script.");
+                            "You must select either an output file to write to\n" +
+                            "or select to view within a Query Editor.");
                     return false;
                 }
 
@@ -258,6 +264,7 @@ public class GenerateScriptsWizard extends WizardProcessPanel
 
         }
 
+        ((GenerateScriptsPanel) nextPanel).panelSelected();
         model.addPanel(nextPanel);
         return true;
     }
@@ -303,21 +310,27 @@ public class GenerateScriptsWizard extends WizardProcessPanel
         
         // check if we're viewing the script
         if (processSuccessful) {
-            if (fourthPanel.viewScriptOnCompletion()) {
+            if (thirdPanel.openInQueryEditor()) {
                 GUIUtils.invokeLater(new Runnable() {
                     public void run() {
                         try {
                             GUIUtilities.showWaitCursor();
                             GUIUtilities.addCentralPane(
-                                    GeneratedScriptViewer.TITLE,
-                                    GeneratedScriptViewer.FRAME_ICON, 
-                                    new GeneratedScriptViewer(
-                                            null, thirdPanel.getOutputFilePath()),
-                                    GeneratedScriptViewer.TITLE,
+                                    QueryEditor.TITLE,
+                                    QueryEditor.FRAME_ICON,
+                                    new QueryEditor(getScriptText()),
+                                    null,
                                     true);
                         }
                         finally {
                             GUIUtilities.showNormalCursor();
+                        }
+                    }
+                    private String getScriptText() {
+                        try {
+                            return FileUtils.loadFile(fourthPanel.getGeneratedFilePath());
+                        } catch (IOException e) {
+                            return "";
                         }
                     }
                 });

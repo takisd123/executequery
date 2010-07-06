@@ -36,6 +36,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * File access utilities.
@@ -48,6 +49,11 @@ public class FileUtils {
     
     private FileUtils() {}
 
+    public static String randomTempFilePath() {
+        return System.getProperty("java.io.tmpdir") + 
+            System.getProperty("file.separator") +  UUID.randomUUID().toString();
+    }
+    
     public static boolean fileExists(String path) {
         File file = new File(path);
         return file.exists();

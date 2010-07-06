@@ -20,6 +20,7 @@
 
 package org.executequery.gui.scriptgenerators;
 
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,6 +38,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.gui.DefaultPanelButton;
@@ -53,7 +56,8 @@ import org.underworldlabs.swing.FileSelector;
  */
 public class GenerateScriptsPanelThree extends JPanel 
                                        implements ActionListener,
-                                                  ItemListener {
+                                                  ItemListener,
+                                                  GenerateScriptsPanel {
 
     /** save to path field */
     private JTextField pathField;
@@ -62,14 +66,22 @@ public class GenerateScriptsPanelThree extends JPanel
     private JCheckBox consAsAlterCheck;
     private JCheckBox consInCreateCheck;
     
+    private JCheckBox writeToFileCheck;
     private JCheckBox useCascadeCheck;
-
+    private JCheckBox openInQueryEditor;
+    
     /** the parent controller */
     private GenerateScriptsWizard parent;
+
+    private ComponentTitledPanel createTableOptionsPanel;
+
+    private GridBagConstraints gbc;
     
     public GenerateScriptsPanelThree(GenerateScriptsWizard parent) {
-        super(new GridBagLayout());
+        
+        super(new GridBagLayout());        
         this.parent = parent;
+        
         try {
             init();
         } catch (Exception e) {
@@ -79,62 +91,161 @@ public class GenerateScriptsPanelThree extends JPanel
 
     private void init() throws Exception {
 
+        openInQueryEditor = new JCheckBox("View in a new Query Editor", true);
+        
+        gbc = new GridBagConstraints();
+        gbc.gridx++;
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.top = 10;
+        gbc.insets.left = 10;
+        add(openInQueryEditor, gbc);
+        gbc.gridy++;
+        gbc.insets.left = 0;
+        add(createFileOutputPanel(), gbc);
+
+        gbc.gridy++;
+        gbc.insets.top = 10;
+        gbc.insets.bottom = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 1.0;
+        
+        if (parent.getScriptType() == GenerateScriptsWizard.CREATE_TABLES) {
+
+            createTableOptionsPanel();
+            add(createTableOptionsPanel, gbc);
+
+        } else {
+          
+            createUseCascadeCheck();
+            useCascadeCheck.setBorder(BorderFactory.createEmptyBorder(0, 13, 0, 0));
+            add(useCascadeCheck, gbc);
+        }
+
+    }
+
+    private JPanel createFileOutputPanel() {
+
         pathField = WidgetFactory.createTextField();
 
-        JButton browseButton = new DefaultPanelButton("Browse");
+        final JButton browseButton = new DefaultPanelButton("Browse");
         browseButton.setMnemonic('B');
         browseButton.addActionListener(this);
+
+        final DefaultFieldLabel label = new DefaultFieldLabel("Save Path:");
+
+        writeToFileCheck = new JCheckBox("Write to file");
+        writeToFileCheck.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                boolean enable = writeToFileCheck.isSelected();
+                browseButton.setEnabled(enable);
+                pathField.setEnabled(enable);
+                label.setEnabled(enable);
+            }
+        });
+
+        browseButton.setEnabled(false);
+        pathField.setEnabled(false);
+        label.setEnabled(false);
+
+        ComponentTitledPanel panel = new ComponentTitledPanel(writeToFileCheck);
+        JPanel fileOutputPanel = panel.getContentPane();
+        fileOutputPanel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx++;
         gbc.gridy++;
         gbc.insets = new Insets(7,5,5,5);
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        add(new DefaultFieldLabel("Save Path:"), gbc);
+        fileOutputPanel.add(label, gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(pathField, gbc);
+        fileOutputPanel.add(pathField, gbc);
         gbc.fill = GridBagConstraints.NONE;
         gbc.gridx = 2;
         gbc.weightx = 0;
         gbc.insets.top = 3;
         gbc.insets.right = 5;
-        add(browseButton, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.weighty = 1.0;
-        gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets.top = 10;
+        fileOutputPanel.add(browseButton, gbc);
+        
+        return panel;
+    }
+
+    private void createUseCascadeCheck() {
+
+        useCascadeCheck = new JCheckBox("Use CASCADE in DROP");
+    }
+
+    private void createTableOptionsPanel() {
+
+        constraintsCheck = new JCheckBox("Include constraints");
+        consAsAlterCheck = new JCheckBox("As ALTER TABLE statements", true);
+        consInCreateCheck = new JCheckBox("Within CREATE TABLE statements");
+
+        constraintsCheck.addItemListener(this);
+
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(consAsAlterCheck);
+        bg.add(consInCreateCheck);
+
+        consInCreateCheck.setEnabled(false);
+        consAsAlterCheck.setEnabled(false);
+
+        createTableOptionsPanel = new ComponentTitledPanel(constraintsCheck);
+        JPanel _panel = createTableOptionsPanel.getContentPane();
+        _panel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 5));
+        _panel.add(consAsAlterCheck);
+        _panel.add(consInCreateCheck);
+    }
+    
+    public void panelSelected() {
         
         if (parent.getScriptType() == GenerateScriptsWizard.CREATE_TABLES) {
-            constraintsCheck = new JCheckBox("Include constraints");
-            consAsAlterCheck = new JCheckBox("As ALTER TABLE statements", true);
-            consInCreateCheck = new JCheckBox("Within CREATE TABLE statements");
 
-            constraintsCheck.addItemListener(this);
+            if (createTableOptionsPanel == null) {
+                
+                createTableOptionsPanel();
+            }
+            
+            resetOptionsComponents(createTableOptionsPanel, useCascadeCheck);
 
-            ButtonGroup bg = new ButtonGroup();
-            bg.add(consAsAlterCheck);
-            bg.add(consInCreateCheck);
-
-            consInCreateCheck.setEnabled(false);
-            consAsAlterCheck.setEnabled(false);
-
-            ComponentTitledPanel optionsPanel = new ComponentTitledPanel(constraintsCheck);
-            JPanel _panel = optionsPanel.getContentPane();
-            _panel.setLayout(new FlowLayout(FlowLayout.LEFT, 15, 5));
-            _panel.add(consAsAlterCheck);
-            _panel.add(consInCreateCheck);
-            add(optionsPanel, gbc);
-        }
-        else {        
-            useCascadeCheck = new JCheckBox("Use CASCADE in DROP");
-            add(useCascadeCheck, gbc);
+        } else {
+            
+            if (useCascadeCheck == null) {
+                
+                createUseCascadeCheck();
+            }
+            
+            resetOptionsComponents(useCascadeCheck, createTableOptionsPanel);
         }
 
+    }
+
+    private void resetOptionsComponents(Component componentToAdd, Component componentToRemove) {
+        
+        if (!contains(componentToAdd)) {
+            
+            remove(componentToRemove);
+            add(componentToAdd, gbc);
+        }
+
+    }
+    
+    private boolean contains(Component component) {
+        
+        Component[] components = getComponents();
+        for (Component c : components) {
+            
+            if (c == component) {
+                
+                return true;
+            }
+            
+        }
+
+        return false;
     }
     
     /**
@@ -170,6 +281,26 @@ public class GenerateScriptsPanelThree extends JPanel
         return -1;
     }
 
+    protected boolean hasOutputStrategy() {
+
+        return openInQueryEditor() || (isWritingToFile() && hasOutputFile()); 
+    }
+    
+    protected boolean openInQueryEditor() {
+     
+        return openInQueryEditor.isSelected();
+    }
+    
+    protected boolean isWritingToFile() {
+        
+        return writeToFileCheck.isSelected();
+    }
+    
+    protected boolean hasOutputFile() {
+        
+        return StringUtils.isNotBlank(getOutputFilePath());
+    }
+    
     /**
      * Returns the output file path.
      *
