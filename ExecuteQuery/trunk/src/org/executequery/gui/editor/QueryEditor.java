@@ -716,9 +716,7 @@ public class QueryEditor extends DefaultTabView
         try {
 
             GUIUtilities.showWaitCursor();
-            
             String query = delegate.getPreviousQuery();
-            
             setEditorText(query);
             
         } finally {
@@ -737,7 +735,6 @@ public class QueryEditor extends DefaultTabView
         try {
         
             String query = delegate.getNextQuery();
-            
             setEditorText(query);
 
         } finally {

@@ -19,6 +19,11 @@ Summary of changes from 3.2.1 Build 5146:
 - Added 'show password' action on login panel to reveal password in plain text.
 - Improved DESC <table_name> statement support.
 - Fixed JDBC advanced properties not being applied when entered.
+- Improved code completion - now recognises table and columns by name and alias
+  in queries.
+- Added ability to output generated create/drop statement to the Query Editor 
+  and not just to file, file selection and output is no longer required for 
+  writing create/drop scripts.
 
 
 Summary of changes from 3.2.1 Build 5146:

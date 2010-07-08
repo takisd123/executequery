@@ -45,6 +45,7 @@ import liquibase.database.Database;
 import liquibase.database.sql.SqlStatement;
 import liquibase.exception.StatementNotSupportedOnDatabaseException;
 import liquibase.exception.UnsupportedChangeException;
+import liquibase.log.LogFactory;
 
 import org.executequery.ApplicationException;
 import org.executequery.databaseobjects.DatabaseColumn;
@@ -642,6 +643,8 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     private Database databaseFromName(Connection connection, String databaseName) {
 
+        LogFactory.setLoggingLevel("warning");
+        
         Database database = databaseFactory().createDatabase(databaseName);
         database.setConnection(connection);
 

@@ -150,6 +150,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         
         enableButtons(false, false, false, false);
         tree.setSelectionRow(0);
+        tree.setToggleClickCount(2);
 
     }
 
@@ -1302,27 +1303,30 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 return;
             }
 
-            TreePath path = getTreePathForLocation(e.getX(), e.getY());
+            TreePath path = pathFromMouseEvent(e);
             if (path != null && path == getTreeSelectionPath()) {
 
-                if (doubleClickHostToConnect()) {
-                
-                    Object node = path.getLastPathComponent();
-                    if (node instanceof DatabaseHostNode) {
-
-                        DatabaseHostNode hostNode = (DatabaseHostNode) node;
-                        connect(hostNode.getDatabaseConnection());
-                    }
-
-                }
-                
+                connectOnDoubleClick(path);
                 pathChanged(path);
             }
 
         }
-        
+
         public void mousePressed(MouseEvent e) {
-            maybeShowPopup(e);
+
+            if (e.getClickCount() < 2) {
+                
+                maybeShowPopup(e);
+                return;
+            }
+            
+            TreePath path = pathFromMouseEvent(e);
+            if (path != null && path == getTreeSelectionPath()) {
+
+                connectOnDoubleClick(path);
+                pathChanged(path);
+            }
+
         }
 
         public void mouseReleased(MouseEvent e) {
@@ -1363,6 +1367,25 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
         }
 
+        private TreePath pathFromMouseEvent(MouseEvent e) {
+
+            return getTreePathForLocation(e.getX(), e.getY());
+        }
+
+        private void connectOnDoubleClick(TreePath path) {
+
+            if (doubleClickHostToConnect()) {
+            
+                Object node = path.getLastPathComponent();
+                if (node instanceof DatabaseHostNode) {
+
+                    DatabaseHostNode hostNode = (DatabaseHostNode) node;
+                    connect(hostNode.getDatabaseConnection());
+                }
+
+            }
+        }
+
         private boolean doubleClickHostToConnect() {
 
             return SystemProperties.getBooleanProperty("user", "browser.double-click.to.connect");
@@ -1375,7 +1398,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (event.getEventType() == UserPreferenceEvent.ALL) {
             
             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
-
             List<DatabaseHostNode> hosts = root.getHostNodes();
 
             for (DatabaseHostNode host : hosts) {

@@ -11,71 +11,78 @@ import org.executequery.util.mime.MimeTypes;
 
 public class BlobRecordDataItem extends AbstractLobRecordDataItem {
 
-	private static final String UNKNOWN_TYPE = "Unknown BLOB";
+//    private static final String UNKNOWN_TYPE = "Unknown BLOB";
 
-	private static final String BLOB_DATA_OBJECT = "<BLOB Data Object>";
-	
-	public BlobRecordDataItem(int dataType, String dataTypeName) {
+    private static final String BLOB_DATA_OBJECT = "<BLOB Data Object>";
 
-		super(dataType, dataTypeName);
-	}
+    public BlobRecordDataItem(int dataType, String dataTypeName) {
 
-	@Override
-	public Object getDisplayValue() {
+        super(dataType, dataTypeName);
+    }
 
-		return BLOB_DATA_OBJECT;
-	}
-	
-	public String getLobRecordItemName() {
-		
+    @Override
+    public Object getDisplayValue() {
+
+        return BLOB_DATA_OBJECT;
+    }
+
+    public String getLobRecordItemName() {
+
         MimeType mimeType = mimeTypeFromByteArray(getData());
         if (mimeType != null) {
-         
+
             return mimeType.getName();
-        
+
         } else {
-            
-            return UNKNOWN_TYPE;
+
+            return getDataTypeName() + " Type"; //UNKNOWN_TYPE;
         }
 
-	}
-	
-    protected byte[] readLob() {
-    	
-    	Blob blob = (Blob) getValue();
-
-    	byte[] blobBytes = null;
-    	InputStream binaryStream = null;
-    	
-    	try {
-
-    		blobBytes = blob.getBytes(1, (int) blob.length());
-
-    	} catch (SQLException e) {
-
-			if (Log.isDebugEnabled()) {
-				
-				Log.debug("Error reading BLOB data", e);
-			}
-
-			return e.getMessage().getBytes();
-
-		} finally {
-			
-			try {
-			
-				if (binaryStream != null) {
-					
-					binaryStream.close();
-				}
-				
-			} catch (IOException e) {}
-			
-		}
-    	
-    	return blobBytes;
     }
-    
+
+    protected byte[] readLob() {
+
+        Object value = getValue();
+        if (value instanceof String) { // eg. oracle RAW type
+
+            return ((String) getValue()).getBytes();
+        }
+        
+        Blob blob = (Blob) value;
+
+        byte[] blobBytes = null;
+        InputStream binaryStream = null;
+
+        try {
+
+            blobBytes = blob.getBytes(1, (int) blob.length());
+
+        } catch (SQLException e) {
+
+            if (Log.isDebugEnabled()) {
+
+                Log.debug("Error reading BLOB data", e);
+            }
+
+            return e.getMessage().getBytes();
+
+        } finally {
+
+            try {
+
+                if (binaryStream != null) {
+
+                    binaryStream.close();
+                }
+
+            } catch (IOException e) {
+            }
+
+        }
+
+        return blobBytes;
+    }
+
     private MimeType mimeTypeFromByteArray(byte[] data) {
 
         return MimeTypes.get().getMimeType(data);
