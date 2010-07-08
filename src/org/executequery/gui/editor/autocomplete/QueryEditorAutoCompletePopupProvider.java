@@ -313,6 +313,8 @@ public class QueryEditorAutoCompletePopupProvider
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
         
+        
+        
         ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
     }
 
