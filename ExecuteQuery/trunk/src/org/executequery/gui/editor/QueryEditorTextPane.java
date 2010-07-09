@@ -590,6 +590,67 @@ public class QueryEditorTextPane extends SQLTextPane
         return getWordEndingAt(getCaretPosition());
     }
     
+    public String getCompleteWordEndingAtCursor() {
+        
+        String text = getText();
+        if (MiscUtils.isNull(text)) {
+
+            return Constants.EMPTY;
+        }
+        
+        int start = indexOfWordStartFromCursor(); 
+        int end = indexOfWordEndFromCursor();
+        
+        if (start < 0) {
+            
+            start = 0;
+        }
+        
+        if (end < 0) {
+            
+            end = getText().length();
+        }
+
+        return text.substring(start, end).trim();
+    }
+    
+    private int indexOfWordStartFromCursor() {
+        
+        int start = -1;
+        int end = getCaretPosition();
+
+        char[] chars = getText().toCharArray();
+        for (int i = end - 1; i >= 0; i--) {
+
+            if (!Character.isLetterOrDigit(chars[i]) 
+                    && chars[i] != '_' && chars[i] != '.') {
+
+                start = i;
+                break;
+            }
+
+        }
+
+        return start;
+    }
+    
+    private int indexOfWordEndFromCursor() {
+        
+        int start = getCaretPosition();
+        char[] chars = getText().toCharArray();
+
+        for (int i = start; i < chars.length; i++) {
+
+            if (Character.isWhitespace(chars[i])) {
+                
+                return i;
+            }
+            
+        }
+
+        return -1;
+    }
+    
     private String getWordEndingAt(int position) {
         
         String text = getText();

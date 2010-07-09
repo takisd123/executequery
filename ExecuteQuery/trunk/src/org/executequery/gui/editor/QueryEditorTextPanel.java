@@ -381,7 +381,12 @@ public class QueryEditorTextPanel extends JPanel {
         return null;
     }
     
-    protected String getWordAtCursor() {
+    public String getCompleteWordEndingAtCursor() {
+        
+        return queryPane.getCompleteWordEndingAtCursor();
+    }
+
+    protected String getWordToCursor() {
         
         return queryPane.getWordEndingAtCursor();
     }

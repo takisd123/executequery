@@ -1006,9 +1006,14 @@ public class QueryEditor extends DefaultTabView
         resultsPanel.preExecute();
     }
     
-    public String getWordAtCursor() {
+    public String getWordToCursor() {
         
-        return editorPanel.getWordAtCursor();
+        return editorPanel.getWordToCursor();
+    }
+    
+    public String getCompleteWordEndingAtCursor() {
+        
+        return editorPanel.getCompleteWordEndingAtCursor();
     }
     
     /**

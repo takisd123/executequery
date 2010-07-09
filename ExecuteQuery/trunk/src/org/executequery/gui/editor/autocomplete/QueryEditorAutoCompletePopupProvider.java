@@ -308,7 +308,7 @@ public class QueryEditorAutoCompletePopupProvider
     
     private void captureAndResetListValues() {
         
-        String wordAtCursor = queryEditor.getWordAtCursor();
+        String wordAtCursor = queryEditor.getWordToCursor();
         
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
@@ -547,7 +547,7 @@ public class QueryEditorAutoCompletePopupProvider
             Document document = textComponent.getDocument();
 
             int caretPosition = textComponent.getCaretPosition();
-            String wordAtCursor = queryEditor.getWordAtCursor();
+            String wordAtCursor = queryEditor.getWordToCursor();
 
             if (StringUtils.isNotBlank(wordAtCursor)) {
             

@@ -147,7 +147,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
         try {
             
             /* -------------------------------------------------
-             * Database meta data values are case-sensitive.
+             * Database meta data values can be case-sensitive.
              * search for a match and use as returned from dmd.
              * -------------------------------------------------
              */
@@ -216,6 +216,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
             
             if (StringUtils.isNotBlank(nameToSearchOn)) {
 
+                databaseMetaData = conn.getMetaData();
                 resultSet = databaseMetaData.getColumns(catalog, schema, nameToSearchOn, null);
                 statementResult.setResultSet(resultSet);
 

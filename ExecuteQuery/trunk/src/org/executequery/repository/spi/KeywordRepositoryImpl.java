@@ -53,6 +53,12 @@ public class KeywordRepositoryImpl implements KeywordRepository {
         return sql92KeyWords;
     }
 
+    public boolean contains(String word) {
+        
+        List<String> keywords = getSQLKeywords();
+        return Collections.binarySearch(keywords, word) >= 0;
+    }
+    
     public List<String> getSQLKeywords() {
 
         int sql92Size = getSQL92().size();
@@ -68,6 +74,13 @@ public class KeywordRepositoryImpl implements KeywordRepository {
         return allWords;
     }
 
+    public void addUserDefinedKeyword(String word) {
+        
+        List<String> list = getUserDefinedSQL();
+        list.add(word.toUpperCase());
+        setUserDefinedKeywords(list);
+    }
+    
     public List<String> getUserDefinedSQL() {
         
         if (userDefinedKeyWords == null) {
@@ -107,8 +120,7 @@ public class KeywordRepositoryImpl implements KeywordRepository {
             userDefinedKeyWords = keywords;
             
             // fire the event to registered listeners
-            EventMediator.fireEvent(
-                    new DefaultKeywordEvent("KeywordProperties", 
+            EventMediator.fireEvent(new DefaultKeywordEvent("KeywordProperties", 
                             DefaultKeywordEvent.KEYWORDS_ADDED));
 
         } catch (IOException e) {
@@ -119,7 +131,6 @@ public class KeywordRepositoryImpl implements KeywordRepository {
             }
 
             Log.error("Error saving keywords to file");
-            
             throw new ApplicationException(e);
         }
         

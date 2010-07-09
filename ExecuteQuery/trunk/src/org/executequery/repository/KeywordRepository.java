@@ -39,6 +39,10 @@ public interface KeywordRepository extends Repository {
     List<String> getSQLKeywords();
     
     void setUserDefinedKeywords(List<String> keywords);
+
+    boolean contains(String word);
+
+    void addUserDefinedKeyword(String word);
     
 }
 
