@@ -76,6 +76,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         add(createFormatSqlMenuItem());
         add(createClearOutputMenuItem());
+        add(createAddToUserDefinedKeywordsMenuItem());
         add(createRemoveCommentsForQueryMenuItem());
         add(createRecycleResultSetTabMenuItem());
         
@@ -219,6 +220,14 @@ public class QueryEditorPopupMenu extends JPopupMenu
     private JMenuItem createFormatSqlMenuItem() {
         JMenuItem menuItem = MenuItemFactory.createMenuItem(
                 ActionBuilder.get("editor-format-sql-command"));
+        menuItem.setIcon(null);
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+
+    private JMenuItem createAddToUserDefinedKeywordsMenuItem() {
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(
+                ActionBuilder.get("editor-add-user-keyword"));
         menuItem.setIcon(null);
         executeActionButtons().add(menuItem);
         return menuItem;
