@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.executequery.GUIUtilities;
-import org.executequery.gui.SaveFunction;
 import org.underworldlabs.swing.AbstractBaseDialog;
 
 /**
@@ -102,7 +101,7 @@ public class SaveOnExitDialog extends AbstractBaseDialog
         
         List<SaveFunction> panels = GUIUtilities.getOpenSaveFunctionPanels();
         
-        list = new JList(panels.toArray());
+        list = new DefaultList(panels.toArray());
         list.setSelectionInterval(0, panels.size() - 1);
         
         JPanel base = new JPanel(new GridBagLayout());

@@ -51,6 +51,8 @@ class QueryEditorToolBar extends PanelToolBar {
     
     private static final String QUERY_BOOKMARKS = "query-bookmarks";
 
+    private static final String QUERY_SHORTCUTS = "manage-shortcuts-command";
+
     private static final String EDITOR_HELP_COMMAND = "editor-help-command";
 
     private static final String FORMAT_SQL_COMMAND = "editor-format-sql-command";
@@ -144,6 +146,8 @@ class QueryEditorToolBar extends PanelToolBar {
         addButton(createButton(SQL_HISTORY_COMMAND, "SQL command history"));
 
         addButton(createQueryBookmarkButton());
+
+        addButton(createButton(QUERY_SHORTCUTS, "SQL shortcuts"));
 
         addButton(createButton(EDITOR_PREVIOUS_COMMAND, "Previous Statement"));
 

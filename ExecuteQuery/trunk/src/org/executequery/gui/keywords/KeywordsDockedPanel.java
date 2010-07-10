@@ -56,6 +56,7 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
 import org.executequery.gui.AbstractDockedTabActionPanel;
+import org.executequery.gui.DefaultTable;
 import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.log.Log;
@@ -124,7 +125,7 @@ public class KeywordsDockedPanel extends AbstractDockedTabActionPanel
         Collections.sort(keywords, new KeywordComparator());
 
         model = new KeywordModel();
-        table = new JTable(model);
+        table = new DefaultTable(model);
         table.setTableHeader(null);
         table.setShowVerticalLines(false);
         TableColumnModel tcm = table.getColumnModel();

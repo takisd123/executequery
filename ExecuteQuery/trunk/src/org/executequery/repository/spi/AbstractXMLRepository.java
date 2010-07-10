@@ -55,7 +55,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 abstract class AbstractXMLRepository<T> {
 
-    @SuppressWarnings("unchecked")
     protected final List<T> readResource(String classPathResource, 
             DefaultHandler handler) throws RepositoryException {
 

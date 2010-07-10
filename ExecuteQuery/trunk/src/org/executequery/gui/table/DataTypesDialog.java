@@ -38,6 +38,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.DefaultList;
 import org.underworldlabs.swing.AbstractBaseDialog;
 
 /**
@@ -79,7 +80,8 @@ public class DataTypesDialog extends AbstractBaseDialog
     }
 
     private void init() {
-        list = new JList(values);
+
+        list = new DefaultList(values);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addMouseListener(this);
         list.addKeyListener(this);

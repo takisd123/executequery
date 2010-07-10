@@ -54,6 +54,8 @@ public class MutableValueJList extends JList implements CellEditorListener {
     protected ListCellEditor editor = null; 
     private PropertyChangeListener editorRemover = null; 
  
+    private static final int DEFAULT_ROW_HEIGHT = 20;
+    
     public MutableValueJList(ListModel dataModel) {
 
         super(dataModel); 
@@ -73,6 +75,7 @@ public class MutableValueJList extends JList implements CellEditorListener {
         putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);                                                              //NOI18N 
         
         setListCellEditor(new DefaultListCellEditor(new JTextField()));
+        setFixedCellHeight(DEFAULT_ROW_HEIGHT);
     } 
  
     public void setListCellEditor(ListCellEditor editor) { 

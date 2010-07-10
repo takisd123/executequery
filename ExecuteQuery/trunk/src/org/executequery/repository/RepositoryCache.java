@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.executequery.repository.spi.DatabaseConnectionXMLRepository;
 import org.executequery.repository.spi.DatabaseDriverXMLRepository;
+import org.executequery.repository.spi.EditorSQLShortcutXMLRepository;
 import org.executequery.repository.spi.KeywordRepositoryImpl;
 import org.executequery.repository.spi.LatestVersionRepositoryImpl;
 import org.executequery.repository.spi.LogFileRepository;
@@ -60,6 +61,9 @@ public final class RepositoryCache {
 
         repositories.put(QueryBookmarkRepository.REPOSITORY_ID, 
                 new QueryBookmarkXMLRepository());
+
+        repositories.put(EditorSQLShortcutRepository.REPOSITORY_ID, 
+                new EditorSQLShortcutXMLRepository());
 
         repositories.put(RecentlyOpenFileRepository.REPOSITORY_ID, 
                 new RecentlyOpenFileRepositoryImpl());

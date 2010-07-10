@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.executequery.gui.DefaultTable;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.table.SingleColumnTableModel;
@@ -63,7 +64,7 @@ public class KeyWordsPanel extends ConnectionPropertiesPanel {
     private void init() {        
         // setup the database specific words table
         model = new SingleColumnTableModel();
-        keywordsTable = new JTable(model);
+        keywordsTable = new DefaultTable(model);
         setTableProperties(keywordsTable);
         
         JPanel panel1 = new JPanel(new BorderLayout());
@@ -71,7 +72,7 @@ public class KeyWordsPanel extends ConnectionPropertiesPanel {
         panel1.add(new JScrollPane(keywordsTable));
         
         List<String> sql92 = keywords().getSQL92();
-        savedWordsTable = new JTable(
+        savedWordsTable = new DefaultTable(
                 new SingleColumnTableModel(null, sql92));
         setTableProperties(savedWordsTable);
 

@@ -177,11 +177,11 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         connectionsCombo2.setActionCommand("secondConnectionChanged");
 
         masterListModel = new DataTypeListModel();
-        masterList = new JList(masterListModel);
+        masterList = new DefaultList(masterListModel);
         masterList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         masterList.addListSelectionListener(this);
 
-        mappedList = new JList();
+        mappedList = new DefaultList();
         mappedList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         GridBagConstraints gbc = new GridBagConstraints();
