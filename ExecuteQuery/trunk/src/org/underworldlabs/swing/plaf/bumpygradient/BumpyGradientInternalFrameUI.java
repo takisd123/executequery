@@ -1,7 +1,7 @@
 /*
  * BumpyGradientInternalFrameUI.java
  *
- * Copyright (C) 2002-2009 Takis Diakoumis
+ * Copyright (C) 2002-2010 Takis Diakoumis
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,6 +59,7 @@ public final class BumpyGradientInternalFrameUI
 	}
 
 }
+
 
 
 
