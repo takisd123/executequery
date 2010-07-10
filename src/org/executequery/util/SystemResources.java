@@ -442,6 +442,22 @@ public class SystemResources {
                 created = true;
             }
 
+            // -------------------------------------------
+            // -- Check for ~/.executequery/conf/editorsqlshortcuts.xml
+            // -------------------------------------------
+            props = new File(confDir, "editorsqlshortcuts.xml");
+            
+            if (!props.exists()) {
+                Log.debug("Creating user properties file editorsqlshortcuts.xml");
+                FileUtils.copyResource(
+                            "org/executequery/editor-sql-shortcuts.xml", 
+                            newConfPath + "editorsqlshortcuts.xml");
+                props = new File(confDir, "editorsqlshortcuts.xml");
+                created = props.exists();
+            } else {
+                created = true;
+            }
+
             return created;
             
         }

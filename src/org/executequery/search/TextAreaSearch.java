@@ -306,18 +306,22 @@ public class TextAreaSearch {
                 
             }
             
-            if (matcher.find())
+            if (matcher.find()) {
+
                 _text = matcher.replaceAll(replacementText);
-            else {
+
+            } else {
+            
                 GUIUtilities.displayWarningMessage("Search text not found.");
                 return -1;
             }
             
             
-            if (wrapSearch)
+            if (wrapSearch) {
+
                 resultText = new StringBuilder(_text);
             
-            else {
+            } else {
                 
                 resultText = new StringBuilder(text);
                 
@@ -331,9 +335,7 @@ public class TextAreaSearch {
             textComponent.setText(resultText.toString());
             return 0;
             
-        }
-        
-        catch (PatternSyntaxException pExc) {
+        } catch (PatternSyntaxException pExc) {
             
             if (useRegex)
                 GUIUtilities.displayErrorMessage(
@@ -341,9 +343,7 @@ public class TextAreaSearch {
             
             return -1;
             
-        }
-        
-        finally {
+        } finally {
             
             if (resultText != null) {
                 int length = resultText.length();

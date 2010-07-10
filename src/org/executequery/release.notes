@@ -1,6 +1,6 @@
 --- RELEASE NOTES ---
 
-Date: 10 June 2010
+Date: 10 July 2010
 
 Execute Query Version 3.2.2 Build 5147
 ----------------------------------------
@@ -24,6 +24,8 @@ Summary of changes from 3.2.1 Build 5146:
 - Added ability to output generated create/drop statement to the Query Editor 
   and not just to file, file selection and output is no longer required for 
   writing create/drop scripts.
+- Added SQL shortcuts to the Quey Editor allowing user defined SQL text 
+  abbreviations and autocorrect.
 
 
 Summary of changes from 3.2.1 Build 5146:
@@ -262,4 +264,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-10 June 2010
+10 July 2010

@@ -41,22 +41,23 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
-import org.executequery.event.DefaultQueryBookmarkEvent;
+import org.executequery.event.DefaultQueryShortcutEvent;
+import org.executequery.event.QueryShortcutEvent;
 import org.executequery.gui.ActionContainer;
 import org.executequery.gui.DefaultActionButtonsPanel;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.text.SQLTextPane;
-import org.executequery.repository.QueryBookmark;
-import org.executequery.repository.QueryBookmarks;
+import org.executequery.repository.EditorSQLShortcut;
+import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.RepositoryException;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.DefaultMutableListModel;
 import org.underworldlabs.swing.FlatSplitPane;
-import org.underworldlabs.swing.MoveJListItemsStrategy;
 import org.underworldlabs.swing.MutableValueJList;
 import org.underworldlabs.swing.actions.ActionUtilities;
 import org.underworldlabs.util.MiscUtils;
@@ -67,11 +68,11 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class ManageBookmarksPanel extends DefaultActionButtonsPanel 
+public class ManageShortcutsPanel extends DefaultActionButtonsPanel 
                                   implements ListSelectionListener {
     
-    public static final String TITLE = "Manage Query Bookmark";
-    public static final String FRAME_ICON = "Bookmarks16.png";
+    public static final String TITLE = "Manage Editor SQL Shortcuts";
+    public static final String FRAME_ICON = "Shortcut16.png";
 
     private static final String SAVE_COMMAND_NAME = "save";
     private static final String CANCEL_COMMAND_NAME = "cancel";
@@ -80,15 +81,13 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
     private SQLTextPane textPane;
 
-    private MoveJListItemsStrategy moveStrategy;
-
     private StringBundle bundle;
 
     private int lastSelectedIndex = -1;
     
     private final ActionContainer parent;
 
-    public ManageBookmarksPanel(ActionContainer parent) {
+    public ManageShortcutsPanel(ActionContainer parent) {
         
         this.parent = parent;
         
@@ -113,7 +112,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         gbc.insets.top = 5;
         gbc.insets.left = 5;
         gbc.insets.right = 5;
-        panel.add(labelForKey("bookmarks"), gbc);
+        panel.add(labelForKey("shortcuts"), gbc);
         gbc.gridy++;
         gbc.insets.bottom = 5;
         gbc.weighty = 1.0;
@@ -165,7 +164,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
     private void createList() {
 
         list = new MutableValueJList(createModel());
-        
+
         list.addListSelectionListener(this);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
@@ -174,20 +173,9 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
             list.setSelectedIndex(0);
         }
         
-        moveStrategy = new MoveJListItemsStrategy(list);
     }
 
-    public void moveUp() {
-        
-        moveSelection(true);
-    }
-
-    public void moveDown() {
-        
-        moveSelection(false);
-    }
-    
-    public void deleteBookmark() {
+    public void deleteShortcut() {
         
         int index = selectedIndex();
         
@@ -214,7 +202,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
                         list.setSelectedIndex(index);
                     }
 
-                    bookmarkSelected();
+                    shortcutSelected();
 
                 } else {
                     
@@ -230,16 +218,16 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
     }
 
-    public void addBookmark() {
+    public void addShortcut() {
         
-        QueryBookmark queryBookmark = new QueryBookmark();
-        queryBookmark.setName(bundleString("newBookmarkName"));
-        queryBookmark.setQuery(Constants.EMPTY);
+        EditorSQLShortcut shortcut = new EditorSQLShortcut();
+        shortcut.setShortcut(bundleString("newShortcutName"));
+        shortcut.setQuery(Constants.EMPTY);
         
         DefaultListModel model = modelFromList();
 
-        model.addElement(queryBookmark);        
-        int index = model.indexOf(queryBookmark);
+        model.addElement(shortcut);        
+        int index = model.indexOf(shortcut);
 
         list.setSelectedIndex(index);
         list.scrollRectToVisible(list.getCellBounds(index, index));
@@ -263,22 +251,22 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
         try {
 
-            storeQueryForBookmark();
+            storeQueryForShortcut();
 
-            List<QueryBookmark> bookmarks = bookmarksFromList();
+            List<EditorSQLShortcut> shortcuts = shortcutsFromList();
 
-            if (!bookmarksValid(bookmarks)) {
+            if (!shortcutsValid(shortcuts)) {
 
                 GUIUtilities.displayErrorMessage(
-                        bundleString("invalidBookmarks"));
+                        bundleString("invalidShortcuts"));
 
                 return;
             }
 
-            bookmarks().save(bookmarks);
+            shortcuts().save(shortcuts);
 
             EventMediator.fireEvent(
-                    new DefaultQueryBookmarkEvent(this, DefaultQueryBookmarkEvent.BOOKMARK_ADDED));
+                    new DefaultQueryShortcutEvent(this, QueryShortcutEvent.SHORTCUT_ADDED));
 
             parent.finished();
 
@@ -289,16 +277,14 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         }
     }
 
-    private boolean bookmarksValid(List<QueryBookmark> bookmarks) {
+    private boolean shortcutsValid(List<EditorSQLShortcut> shortcuts) {
 
-        for (QueryBookmark bookmark : bookmarks) {
-            
-            if (nameExists(bookmark, bookmark.getName())) {
-                
-                return false;
-            }
-            
-            if (MiscUtils.isNull(bookmark.getQuery())) {
+        char[] whitespaces = {' ', '\n', '\r', '\t'};
+        for (EditorSQLShortcut shortcut : shortcuts) {
+
+            if (nameExists(shortcut, shortcut.getShortcut()) ||
+                    StringUtils.containsAny(shortcut.getShortcut(), whitespaces) ||
+                    MiscUtils.isNull(shortcut.getQuery())) {
                 
                 return false;
             }
@@ -312,68 +298,39 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
         if (lastSelectedIndex != -1) {
 
-            storeQueryForBookmark();
+            storeQueryForShortcut();
         }
 
         if (selectedIndex() != -1) {
 
-            bookmarkSelected();
+            shortcutSelected();
         }
-    }
-
-    private void moveSelection(boolean moveUp) {
-        
-        if (selectedIndex() == -1) {
-            
-            return;
-        }
-        
-        try {
-
-            storeQueryForBookmark();
-            list.removeListSelectionListener(this);
-            
-            if (moveUp) {
-                
-                moveStrategy.moveSelectionUp();
-                
-            } else {
-                
-                moveStrategy.moveSelectionDown();
-            }
-
-        } finally {
-
-            lastSelectedIndex = selectedIndex();
-            list.addListSelectionListener(this);
-        }
-        
     }
 
     private int selectedIndex() {
         return list.getSelectedIndex();
     }
     
-    private void storeQueryForBookmark() {
+    private void storeQueryForShortcut() {
         
-        QueryBookmark bookmark = getBookmarkAt(lastSelectedIndex);
+        EditorSQLShortcut shortcut = getShortcutAt(lastSelectedIndex);
         
-        if (bookmark != null) {
+        if (shortcut != null) {
 
-            bookmark.setQuery(textPane.getText().trim());
+            shortcut.setQuery(textPane.getText().trim());
         }
 
     }
 
-    private void bookmarkSelected() {
+    private void shortcutSelected() {
         
-        QueryBookmark bookmark = getSelectedBookmark();        
-        textPane.setText(bookmark.getQuery().trim());
+        EditorSQLShortcut shortcut = getSelectedShortcut();        
+        textPane.setText(shortcut.getQuery().trim());
         
         lastSelectedIndex = selectedIndex();
     }
 
-    private QueryBookmark getBookmarkAt(int index) {
+    private EditorSQLShortcut getShortcutAt(int index) {
         
         DefaultListModel model = modelFromList();
 
@@ -382,41 +339,41 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
             return null;
         }
 
-        return (QueryBookmark)model.elementAt(index);
+        return (EditorSQLShortcut)model.elementAt(index);
     }
 
-    private QueryBookmark getSelectedBookmark() {
-        return (QueryBookmark)list.getSelectedValue();
+    private EditorSQLShortcut getSelectedShortcut() {
+        return (EditorSQLShortcut)list.getSelectedValue();
     }
 
-    private QueryBookmarks bookmarks() {
-        return QueryBookmarks.getInstance();
+    private EditorSQLShortcuts shortcuts() {
+        return EditorSQLShortcuts.getInstance();
     }
 
-    private List<QueryBookmark> bookmarksFromList() {
+    private List<EditorSQLShortcut> shortcutsFromList() {
 
-        Object[] bookmarks = modelFromList().toArray();
+        Object[] shortcuts = modelFromList().toArray();
         
-        List<QueryBookmark> bookmarkList = 
-            new ArrayList<QueryBookmark>(bookmarks.length);
+        List<EditorSQLShortcut> shortcutList = 
+            new ArrayList<EditorSQLShortcut>(shortcuts.length);
         
-        for (Object bookmark : bookmarks) {
+        for (Object shortcut : shortcuts) {
             
-            bookmarkList.add((QueryBookmark)bookmark);
+            shortcutList.add((EditorSQLShortcut)shortcut);
         }
         
-        return bookmarkList;
+        return shortcutList;
     }
 
     private StringBundle bundle() {
         if (bundle == null) {
-            bundle = SystemResources.loadBundle(ManageBookmarksPanel.class);
+            bundle = SystemResources.loadBundle(ManageShortcutsPanel.class);
         }
         return bundle;
     }
 
     private String bundleString(String key) {
-        return bundle().getString("ManageBookmarksPanel." + key);
+        return bundle().getString("ManageShortcutsPanel." + key);
     }
 
     private DefaultListModel modelFromList() {
@@ -426,18 +383,18 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
     private ListModel createModel() {
         
-        QueryBookmarksListModel model = new QueryBookmarksListModel();
+        EditorSQLShortcutsListModel model = new EditorSQLShortcutsListModel();
         
-        List<QueryBookmark> bookmarks = bookmarks().getQueryBookmarks();
-        for (QueryBookmark bookmark : bookmarks) {
+        List<EditorSQLShortcut> shortcuts = shortcuts().getEditorShortcuts();
+        for (EditorSQLShortcut shortcut : shortcuts) {
 
-            model.addElement(bookmark);
+            model.addElement(shortcut);
         }
 
         return model;
     }
 
-    class QueryBookmarksListModel extends DefaultMutableListModel {
+    class EditorSQLShortcutsListModel extends DefaultMutableListModel {
         
         public void setValueAt(Object value, int index) {
             
@@ -453,11 +410,11 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
                 return;
             }
             
-            QueryBookmark bookmark = (QueryBookmark)modelFromList().get(index);
+            EditorSQLShortcut shortcut = (EditorSQLShortcut)modelFromList().get(index);
 
-            if (!nameExists(bookmark, name)) {
+            if (!nameExists(shortcut, name)) {
                 
-                bookmark.setName(name);
+                shortcut.setShortcut(name);
                 
             } else {
 
@@ -469,14 +426,14 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         
     }
 
-    public boolean nameExists(QueryBookmark bookmark, String name) {
+    public boolean nameExists(EditorSQLShortcut shortcut, String name) {
 
         for (Enumeration<?> i = modelFromList().elements(); i.hasMoreElements();) {
             
-            QueryBookmark _bookmark = (QueryBookmark)i.nextElement();
+            EditorSQLShortcut _shortcut = (EditorSQLShortcut)i.nextElement();
             
-            if (name.equals(_bookmark.getName()) 
-                    && _bookmark != bookmark) {
+            if (name.equals(_shortcut.getShortcut()) 
+                    && _shortcut != shortcut) {
                 
                 return true;
             }
@@ -490,29 +447,17 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         
         JPanel panel = new JPanel(new GridBagLayout());
 
-        JButton upButton = ActionUtilities.createButton(
-                this, 
-                "Up16.png", 
-                "Move selection up", 
-                "moveUp");
-
-        JButton downButton = ActionUtilities.createButton(
-                this, 
-                "Down16.png", 
-                "Move selection down", 
-                "moveDown");
-
         JButton addButton = ActionUtilities.createButton(
                 this, 
-                "addBookmark",
-                GUIUtilities.loadIcon("AddBookmark16.png"), 
-                "Add bookmark");
+                "addShortcut",
+                GUIUtilities.loadIcon("ShortcutAdd16.png"), 
+                "Add shortcut");
 
         JButton deleteButton = ActionUtilities.createButton(
                 this, 
-                "deleteBookmark",
-                GUIUtilities.loadIcon("DeleteBookmark16.png"),
-                "Delete bookmark");
+                "deleteShortcut",
+                GUIUtilities.loadIcon("ShortcutDelete16.png"),
+                "Delete shortcut");
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
@@ -524,14 +469,6 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         panel.add(addButton, gbc);
         gbc.gridy++;
         panel.add(deleteButton, gbc);
-        gbc.gridy++;
-        gbc.insets.top = 10;
-        gbc.insets.bottom = 10;
-        panel.add(upButton, gbc);
-        gbc.gridy++;
-        gbc.insets.top = 0;
-        gbc.weighty = 1.0;
-        panel.add(downButton, gbc);
 
         return panel;
     }

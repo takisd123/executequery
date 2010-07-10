@@ -755,6 +755,11 @@ public class QueryEditorTextPanel extends JPanel {
         
     }
 
+    public void editorShortcutsUpdated() {
+
+        queryPane.editorShortcutsUpdated();
+    }
+
 }
 
 

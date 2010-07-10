@@ -46,6 +46,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.executequery.gui.DefaultList;
 import org.executequery.gui.DefaultPanelButton;
 import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.text.SQLTextPane;
@@ -218,7 +219,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
     
     private void initHistoryList(Vector<String> data) {
 
-        historyList = new JList(data);
+        historyList = new DefaultList(data);
         historyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 

@@ -54,13 +54,11 @@ public final class EventMediator {
             Object[] arguments = new Object[]{event};
 
             List<ApplicationEventListener> listenersCopy = copyListeners(listeners);
-
             for (ApplicationEventListener listener : listenersCopy) {
 
                 if (listener.canHandleEvent(event)) {
 
                     Method method = findMethod(event, listener);
-
                     method.invoke(listener, arguments);
                 }
 
@@ -101,7 +99,6 @@ public final class EventMediator {
             ApplicationEventListener listener) throws NoSuchMethodException {
 
         Class<?> listenerClass = listener.getClass();
-        
         String methodName = event.getMethod();
         
         for (Method method : listenerClass.getMethods()) {

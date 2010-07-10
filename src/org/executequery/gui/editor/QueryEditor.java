@@ -61,6 +61,8 @@ import org.executequery.event.KeywordEvent;
 import org.executequery.event.KeywordListener;
 import org.executequery.event.QueryBookmarkEvent;
 import org.executequery.event.QueryBookmarkListener;
+import org.executequery.event.QueryShortcutEvent;
+import org.executequery.event.QueryShortcutListener;
 import org.executequery.event.UserPreferenceEvent;
 import org.executequery.event.UserPreferenceListener;
 import org.executequery.gui.FocusablePanel;
@@ -86,6 +88,7 @@ import org.underworldlabs.util.MiscUtils;
 public class QueryEditor extends DefaultTabView
                          implements ConnectionListener,
                                     QueryBookmarkListener,
+                                    QueryShortcutListener,
                                     UserPreferenceListener,
                                     TextEditor,
                                     KeywordListener,
@@ -1319,6 +1322,7 @@ public class QueryEditor extends DefaultTabView
         return (event instanceof ConnectionEvent) 
             || (event instanceof KeywordEvent)
             || (event instanceof UserPreferenceEvent)
+            || (event instanceof QueryShortcutEvent)
             || (event instanceof QueryBookmarkEvent);
     }
 
@@ -1362,6 +1366,16 @@ public class QueryEditor extends DefaultTabView
             setEditorPreferences();
         }
         
+    }
+
+    public void queryShortcutAdded(QueryShortcutEvent e) {
+
+        editorPanel.editorShortcutsUpdated();
+    }
+
+    public void queryShortcutRemoved(QueryShortcutEvent e) {
+
+        editorPanel.editorShortcutsUpdated();
     }
 
 }

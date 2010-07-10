@@ -27,6 +27,9 @@ import java.awt.Rectangle;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JComponent;
 import javax.swing.JTextPane;
@@ -47,6 +50,8 @@ import org.executequery.components.LineNumber;
 import org.executequery.gui.UndoableComponent;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.gui.text.TextUndoManager;
+import org.executequery.repository.EditorSQLShortcut;
+import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.sql.SqlMessages;
@@ -78,6 +83,8 @@ public class QueryEditorTextPane extends SQLTextPane
 
     /** The text pane's undo manager */
     protected TextUndoManager undoManager;
+
+    private Map<String, EditorSQLShortcut> editorShortcuts;
     
     public QueryEditorTextPane(QueryEditorTextPanel editorPanel) {
 
@@ -122,6 +129,8 @@ public class QueryEditorTextPane extends SQLTextPane
 
         // set to insert mode
         document.setInsertMode(SqlMessages.INSERT_MODE);
+        
+        loadEditorShortcuts();
     }
 
     private void createCaret() {
@@ -598,8 +607,8 @@ public class QueryEditorTextPane extends SQLTextPane
             return Constants.EMPTY;
         }
         
-        int start = indexOfWordStartFromCursor(); 
-        int end = indexOfWordEndFromCursor();
+        int start = indexOfWordStartFromIndex(getCaretPosition()); 
+        int end = indexOfWordEndFromIndex();
         
         if (start < 0) {
             
@@ -614,10 +623,10 @@ public class QueryEditorTextPane extends SQLTextPane
         return text.substring(start, end).trim();
     }
     
-    private int indexOfWordStartFromCursor() {
+    private int indexOfWordStartFromIndex(int index) {
         
         int start = -1;
-        int end = getCaretPosition();
+        int end = index;
 
         char[] chars = getText().toCharArray();
         for (int i = end - 1; i >= 0; i--) {
@@ -634,7 +643,7 @@ public class QueryEditorTextPane extends SQLTextPane
         return start;
     }
     
-    private int indexOfWordEndFromCursor() {
+    private int indexOfWordEndFromIndex() {
         
         int start = getCaretPosition();
         char[] chars = getText().toCharArray();
@@ -717,6 +726,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
             // add the processing for SHIFT-TAB
             if (e.isShiftDown() && keyCode == KeyEvent.VK_TAB) {
+
                 addUndoEdit();
                 int currentPosition = getCurrentPosition();
                 int selectionStart = getSelectionStart();
@@ -749,8 +759,7 @@ public class QueryEditorTextPane extends SQLTextPane
                     document.shiftTabEvent(selectionStart, selectionEnd);
                 }
                 
-            }
-            else if (keyCode == KeyEvent.VK_INSERT) {
+            } else if (keyCode == KeyEvent.VK_INSERT) {
                 
                 // toggle insert mode on the document
                 
@@ -767,6 +776,10 @@ public class QueryEditorTextPane extends SQLTextPane
                 }
 
                 ((EditorCaret)getCaret()).modeChanged();
+            
+            } else if (keyCode == KeyEvent.VK_SPACE) {
+                
+                checkForShortcutText();
             }
 
         }
@@ -775,6 +788,46 @@ public class QueryEditorTextPane extends SQLTextPane
         updateLineBorder();
     }
 
+    private void checkForShortcutText() {
+
+        int index = getCaretPosition();
+        String word = getWordEndingAt(index).toUpperCase();
+
+        if (editorShortcuts.containsKey(word)) {
+
+            addUndoEdit();
+            String text = editorShortcuts.get(word).getQuery();
+            try {
+                document.replace(index - word.length(), word.length(), text, null);
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }
+
+    public void editorShortcutsUpdated() {
+
+        editorShortcuts.clear();
+        loadEditorShortcuts();
+    }
+
+    private void loadEditorShortcuts() {
+        
+        if (editorShortcuts == null) {
+
+            editorShortcuts = new HashMap<String, EditorSQLShortcut>();
+        }
+        
+        List<EditorSQLShortcut> shortcuts = EditorSQLShortcuts.getInstance().getEditorShortcuts();
+
+        for (EditorSQLShortcut editorSQLShortcut : shortcuts) {
+            
+            editorShortcuts.put(editorSQLShortcut.getShortcut(), editorSQLShortcut);
+        }        
+    }
+    
+    
     /** the last element count for line border updates */
     private int lastElementCount;
 
@@ -1039,6 +1092,7 @@ public class QueryEditorTextPane extends SQLTextPane
         }
 
     }
+
     
 }
 

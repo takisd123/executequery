@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import org.executequery.gui.DefaultList;
 import org.executequery.gui.WidgetFactory;
 
 /**
@@ -96,7 +97,7 @@ public class ImportExportXMLPanel_6 extends JPanel {
             formatLabel = new JLabel("Primary Nodes:");
         }
         
-        columnsList = new JList();
+        columnsList = new DefaultList();
         JScrollPane scroller = new JScrollPane(columnsList);
         scroller.setPreferredSize(new Dimension(475, 50));
         
