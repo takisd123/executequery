@@ -1,11 +1,34 @@
 --- RELEASE NOTES ---
 
-Date: 4 May 2010
+Date: 12 July 2010
 
-Execute Query Version 3.2.1 Build 5146
+Execute Query Version 3.2.2 Build 5148
 ----------------------------------------
 
-Summary of changes from 3.2 Build 5140:
+Summary of changes from 3.2.1 Build 5146:
+----------------------------------------
+
+- Fixed table editing in browser when deleting a column and restoring/cancelling
+  the action not restoring that column's state.
+- Fixed errors in adding and removing column constraints from the table browser.
+- Added simple text component popup menu with cut/copy/paste for all panel text 
+  fields.
+- Fixed export as XML error throwing ClassCastException for DataSource
+- Fixed exception thrown for DB2 tables when selecting from browser tree view.
+- Added proxy user and password to proxy preferences.
+- Added 'show password' action on login panel to reveal password in plain text.
+- Improved DESC <table_name> statement support.
+- Fixed JDBC advanced properties not being applied when entered.
+- Improved code completion - now recognises table and columns by name and alias
+  in queries.
+- Added ability to output generated create/drop statement to the Query Editor 
+  and not just to file, file selection and output is no longer required for 
+  writing create/drop scripts.
+- Added SQL shortcuts to the Quey Editor allowing user defined SQL text 
+  abbreviations and autocorrect.
+
+
+Summary of changes from 3.2.1 Build 5146:
 ----------------------------------------
 
 - Minor help doc update.
@@ -241,4 +264,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-4 May 2010
+12 July 2010
