@@ -49,7 +49,7 @@ public final class EditorSQLShortcut {
     }
 
     public void setQuery(String query) {
-        this.query = query + " ";
+        this.query = query;
     }
 
     public String toString() {
