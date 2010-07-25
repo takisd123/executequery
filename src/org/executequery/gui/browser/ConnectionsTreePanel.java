@@ -1380,7 +1380,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 if (node instanceof DatabaseHostNode) {
 
                     DatabaseHostNode hostNode = (DatabaseHostNode) node;
-                    connect(hostNode.getDatabaseConnection());
+                    DatabaseConnection databaseConnection = hostNode.getDatabaseConnection();
+                    if (!databaseConnection.isConnected()) {
+
+                        connect(databaseConnection);
+                    }
+
                 }
 
             }

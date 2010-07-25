@@ -793,6 +793,7 @@ public class QueryEditorTextPane extends SQLTextPane
         int index = getCaretPosition();
         String word = getWordEndingAt(index).toUpperCase();
 
+        word = removeBracesAtStart(word);
         if (editorShortcuts.containsKey(word)) {
 
             addUndoEdit();
@@ -804,6 +805,28 @@ public class QueryEditorTextPane extends SQLTextPane
             }
         }
         
+    }
+
+    private String removeBracesAtStart(String word) {
+
+        int index = 0;
+        String braces = "{}[]()";
+        char[] chars = word.toCharArray();
+
+        for (char c : chars) {
+            
+            if (braces.indexOf(c) != -1) {
+                
+                index++;
+
+            } else {
+
+                break;
+            }
+
+        }
+        
+        return word.substring(index);
     }
 
     public void editorShortcutsUpdated() {
