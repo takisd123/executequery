@@ -278,6 +278,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
             applyBraceHiglight(true, token);
             
         } catch (BadLocationException e) {
+            
             throw new Error(e);
         }
 
