@@ -58,53 +58,53 @@ import org.executequery.sql.DerivedQuery;
 import org.executequery.sql.QueryTable;
 import org.underworldlabs.swing.util.SwingWorker;
 
-public class QueryEditorAutoCompletePopupProvider 
-    implements AutoCompletePopupProvider, AutoCompletePopupListener, 
+public class QueryEditorAutoCompletePopupProvider
+    implements AutoCompletePopupProvider, AutoCompletePopupListener,
         CaretListener, ConnectionChangeListener, FocusListener {
 
     private static final KeyStroke KEY_STROKE_ENTER = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-    
+
     private static final KeyStroke KEY_STROKE_DOWN = KeyStroke.getKeyStroke(KeyEvent.VK_DOWN, 0);
-    
+
     private static final KeyStroke KEY_STROKE_UP = KeyStroke.getKeyStroke(KeyEvent.VK_UP, 0);
 
     private static final KeyStroke KEY_STROKE_PAGE_DOWN = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_DOWN, 0);
-    
+
     private static final KeyStroke KEY_STROKE_PAGE_UP = KeyStroke.getKeyStroke(KeyEvent.VK_PAGE_UP, 0);
 
     private static final KeyStroke KEY_STROKE_TAB = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, 0);
-    
+
     private static final String LIST_FOCUS_ACTION_KEY = "focusActionKey";
-    
+
     private static final String LIST_SCROLL_ACTION_KEY_DOWN = "scrollActionKeyDown";
-    
+
     private static final String LIST_SCROLL_ACTION_KEY_UP = "scrollActionKeyUp";
-    
+
     private static final String LIST_SCROLL_ACTION_KEY_PAGE_DOWN = "scrollActionKeyPageDown";
-    
+
     private static final String LIST_SCROLL_ACTION_KEY_PAGE_UP = "scrollActionKeyPageUp";
-    
+
     private static final String LIST_SELECTION_ACTION_KEY = "selectionActionKey";
-    
+
     private final QueryEditor queryEditor;
-    
+
     private AutoCompleteSelectionsFactory selectionsBuilder;
-    
+
     private AutoCompletePopupAction autoCompletePopupAction;
-    
+
     private QueryEditorAutoCompletePopupPanel autoCompletePopup;
 
     private DatabaseObjectFactory databaseObjectFactory;
-    
+
     private DatabaseHost databaseHost;
-    
+
     private List<AutoCompleteListItem> autoCompleteListItems;
-    
+
     public QueryEditorAutoCompletePopupProvider(QueryEditor queryEditor) {
-        
+
         super();
         this.queryEditor = queryEditor;
-        
+
         selectionsBuilder = new AutoCompleteSelectionsFactory();
         databaseObjectFactory = new DatabaseObjectFactoryImpl();
 
@@ -115,13 +115,13 @@ public class QueryEditorAutoCompletePopupProvider
     public Action getPopupAction() {
 
         if (autoCompletePopupAction == null) {
-        
+
             autoCompletePopupAction = new AutoCompletePopupAction(this);
         }
 
         return autoCompletePopupAction;
     }
-    
+
     public void firePopupTrigger() {
 
         try {
@@ -134,7 +134,7 @@ public class QueryEditorAutoCompletePopupProvider
             addFocusActions();
             captureAndResetListValues();
 
-            ((JPopupMenu) popupMenu()).show(textComponent, 
+            ((JPopupMenu) popupMenu()).show(textComponent,
                     caretCoords.x, caretCoords.y + caretCoords.height);
 
             textComponent.requestFocus();
@@ -142,39 +142,39 @@ public class QueryEditorAutoCompletePopupProvider
         } catch (BadLocationException e) {
 
             if (Log.isDebugEnabled()) {
-            
+
                 Log.debug("Error on caret coordinates", e);
             }
 
         }
-        
+
     }
 
     private JComponent popupMenu() {
 
         if (autoCompletePopup == null) {
-            
+
             autoCompletePopup = new QueryEditorAutoCompletePopupPanel();
             autoCompletePopup.addAutoCompletePopupListener(this);
-            
+
             autoCompletePopup.addPopupMenuListener(new PopupMenuListener() {
-                
+
                 public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 
                     popupHidden();
                 }
-                
+
                 public void popupMenuCanceled(PopupMenuEvent e) {
-                    
+
                     popupHidden();
                 }
 
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
 
             });
-            
+
         }
-        
+
         return autoCompletePopup;
     }
 
@@ -184,7 +184,7 @@ public class QueryEditorAutoCompletePopupProvider
     }
 
     private void focusAndSelectList() {
-        
+
         autoCompletePopup.focusAndSelectList();
     }
 
@@ -200,7 +200,7 @@ public class QueryEditorAutoCompletePopupProvider
     private void addFocusActions() {
 
         JTextComponent textComponent = queryEditorTextComponent();
-        
+
         ActionMap actionMap = textComponent.getActionMap();
         actionMap.put(LIST_FOCUS_ACTION_KEY, listFocusAction);
         actionMap.put(LIST_SCROLL_ACTION_KEY_DOWN, listScrollActionDown);
@@ -211,7 +211,7 @@ public class QueryEditorAutoCompletePopupProvider
 
         InputMap inputMap = textComponent.getInputMap();
         saveExistingActions(inputMap);
-        
+
         inputMap.put(KEY_STROKE_DOWN, LIST_SCROLL_ACTION_KEY_DOWN);
         inputMap.put(KEY_STROKE_UP, LIST_SCROLL_ACTION_KEY_UP);
 
@@ -220,14 +220,14 @@ public class QueryEditorAutoCompletePopupProvider
 
         inputMap.put(KEY_STROKE_TAB, LIST_FOCUS_ACTION_KEY);
         inputMap.put(KEY_STROKE_ENTER, LIST_SELECTION_ACTION_KEY);
-        
+
         textComponent.addCaretListener(this);
     }
 
     private void saveExistingActions(InputMap inputMap) {
 
         if (!editorActionsSaved) {
-        
+
             existingKeyStrokeDownAction = inputMap.get(KEY_STROKE_DOWN);
             existingKeyStrokeUpAction = inputMap.get(KEY_STROKE_UP);
             existingKeyStrokePageDownAction = inputMap.get(KEY_STROKE_PAGE_DOWN);
@@ -241,18 +241,18 @@ public class QueryEditorAutoCompletePopupProvider
     }
 
     private boolean canExecutePopupActions() {
-        
+
         if (popupMenu().isVisible()) {
-            
+
             return true;
         }
 
         resetEditorActions();
         return false;
     }
-    
+
     private void resetEditorActions() {
-        
+
         JTextComponent textComponent = queryEditorTextComponent();
 
         ActionMap actionMap = textComponent.getActionMap();
@@ -278,13 +278,13 @@ public class QueryEditorAutoCompletePopupProvider
 
         textComponent.removeCaretListener(this);
     }
-    
+
     private void popupHidden() {
 
         resetEditorActions();
         queryEditorTextComponent().requestFocus();
     }
-    
+
     public void refocus() {
 
         queryEditorTextComponent().requestFocus();
@@ -293,28 +293,28 @@ public class QueryEditorAutoCompletePopupProvider
     private void rebuildListSelectionsItems() {
 
         DatabaseConnection selectedConnection = queryEditor.getSelectedConnection();
-        
+
         if (selectedConnection == null) {
 
             databaseHost = null;
 
         } else if (databaseHost == null) {
-            
+
             databaseHost = databaseObjectFactory.createDatabaseHost(selectedConnection);
         }
 
         autoCompleteListItems = selectionsBuilder.build(databaseHost);
     }
-    
+
     private void captureAndResetListValues() {
-        
+
         String wordAtCursor = queryEditor.getWordToCursor();
-        
+
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
-        
-        
-        
+
+
+
         ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
     }
 
@@ -323,63 +323,67 @@ public class QueryEditorAutoCompletePopupProvider
     // track columns/tables in statement ????
 
     private static final int MINIMUM_CHARS_FOR_SCHEMA_LOOKUP = 2;
-    
+
     private List<AutoCompleteListItem> itemsStartingWith(List<QueryTable> tables, String prefix) {
-        
+
         boolean hasTables = hasTables(tables);
         if (StringUtils.isBlank(prefix) && !hasTables) {
-            
+
             return selectionsBuilder.buildKeywords(databaseHost);
         }
 
         String wordPrefix = prefix.trim().toUpperCase();
 
         int dotIndex = prefix.indexOf('.');
-        boolean hasDotIndex = (dotIndex != -1); 
+        boolean hasDotIndex = (dotIndex != -1);
         if (hasDotIndex) {
 
             wordPrefix = wordPrefix.substring(dotIndex + 1);
 //            return itemsStartingWith(tables, wordPrefix);
-        
+
         } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
-            
+
             return buildItemsStartingWithForList(
                     selectionsBuilder.buildKeywords(databaseHost), tables, wordPrefix, false);
         }
 
-        List<AutoCompleteListItem> itemsStartingWith = 
+        List<AutoCompleteListItem> itemsStartingWith =
             buildItemsStartingWithForList(autoCompleteListItems, tables, wordPrefix, hasDotIndex);
-        
+
         if (itemsStartingWith.isEmpty()) {
-            
+
             itemsStartingWith.add(noProposalsListItem());
         }
-        
+
         return itemsStartingWith;
     }
 
     private boolean hasTables(List<QueryTable> tables) {
-        
+
         return (tables != null && !tables.isEmpty());
     }
-    
+
     private List<AutoCompleteListItem> buildItemsStartingWithForList(
-            List<AutoCompleteListItem> items, List<QueryTable> tables, String prefix, 
+            List<AutoCompleteListItem> items, List<QueryTable> tables, String prefix,
             boolean prefixHadAlias) {
-        
+
         String searchPattern = prefix;
         if (prefix.startsWith("(")) {
-            
+
             searchPattern = prefix.substring(1);
         }
-        
+
         List<AutoCompleteListItem> itemsStartingWith = new ArrayList<AutoCompleteListItem>();
 
-        for (AutoCompleteListItem item : items) {
+        if (items != null) {
 
-            if (item.isForPrefix(tables, searchPattern, prefixHadAlias)) {
+            for (AutoCompleteListItem item : items) {
 
-                itemsStartingWith.add(item);
+                if (item.isForPrefix(tables, searchPattern, prefixHadAlias)) {
+
+                    itemsStartingWith.add(item);
+                }
+
             }
 
         }
@@ -387,52 +391,52 @@ public class QueryEditorAutoCompletePopupProvider
         Collections.sort(itemsStartingWith, autoCompleteListItemComparator);
         return itemsStartingWith;
     }
-    
+
     private AutoCompleteListItemComparator autoCompleteListItemComparator = new AutoCompleteListItemComparator();
     static class AutoCompleteListItemComparator implements Comparator<AutoCompleteListItem> {
 
         public int compare(AutoCompleteListItem o1, AutoCompleteListItem o2) {
 
             if (o1.isSchemaObject() && o2.isSchemaObject()) {
-                
+
                 return o1.getInsertionValue().compareTo(o2.getInsertionValue());
-            
+
             } else if (o1.isSchemaObject() && !o2.isSchemaObject()) {
-                
+
                 return -1;
-            
+
             } else if (o2.isSchemaObject() && !o1.isSchemaObject()) {
-                
+
                 return 1;
             }
-            
+
             return o1.getValue().toUpperCase().compareTo(o2.getValue().toUpperCase());
         }
-        
+
     }
 
     private AutoCompleteListItem noProposalsAutoCompleteListItem;
 
     private AutoCompleteListItem noProposalsListItem() {
-        
+
         if (noProposalsAutoCompleteListItem == null) {
-        
+
             noProposalsAutoCompleteListItem = new AutoCompleteListItem(null,
                     "No Proposals Available", null, AutoCompleteListItemType.NOTHING_PROPOSED);
         }
 
         return noProposalsAutoCompleteListItem;
-        
+
     }
-    
+
     private final ListFocusAction listFocusAction = new ListFocusAction();
 
     class ListFocusAction extends AbstractAction {
-        
+
         public void actionPerformed(ActionEvent e) {
 
             if (!canExecutePopupActions()) {
-                
+
                 return;
             }
 
@@ -444,21 +448,21 @@ public class QueryEditorAutoCompletePopupProvider
     private final ListSelectionAction listSelectionAction = new ListSelectionAction();
 
     class ListSelectionAction extends AbstractAction {
-        
+
         public void actionPerformed(ActionEvent e) {
 
             if (!canExecutePopupActions()) {
-                
+
                 return;
             }
-            
+
             popupSelectionMade();
         }
 
     } // ListSelectionAction
 
     enum ListScrollType {
-        
+
         UP, DOWN, PAGE_DOWN, PAGE_UP;
     }
 
@@ -470,7 +474,7 @@ public class QueryEditorAutoCompletePopupProvider
     class ListScrollAction extends AbstractAction {
 
         private final ListScrollType direction;
-        
+
         ListScrollAction(ListScrollType direction) {
 
             this.direction = direction;
@@ -479,24 +483,24 @@ public class QueryEditorAutoCompletePopupProvider
         public void actionPerformed(ActionEvent e) {
 
             if (!canExecutePopupActions()) {
-                
+
                 return;
             }
-            
+
             switch (direction) {
-            
+
                 case DOWN:
                     autoCompletePopup.scrollSelectedIndexDown();
                     break;
-                    
+
                 case UP:
                     autoCompletePopup.scrollSelectedIndexUp();
                     break;
-    
+
                 case PAGE_DOWN:
                     autoCompletePopup.scrollSelectedIndexPageDown();
                     break;
-                    
+
                 case PAGE_UP:
                     autoCompletePopup.scrollSelectedIndexPageUp();
                     break;
@@ -517,30 +521,30 @@ public class QueryEditorAutoCompletePopupProvider
     }
 
     private boolean isAllLowerCase(String text) {
-        
+
         for (char character : text.toCharArray()) {
-            
+
             if (Character.isUpperCase(character)) {
-                
+
                 return false;
             }
-            
+
         }
-        
+
         return true;
     }
 
     public void popupSelectionMade() {
 
         AutoCompleteListItem selectedListItem = (AutoCompleteListItem) autoCompletePopup.getSelectedItem();
-        
+
         if (selectedListItem == null || selectedListItem.isNothingProposed()) {
-            
+
             return;
         }
 
         String selectedValue = selectedListItem.getInsertionValue();
-        
+
         try {
 
             JTextComponent textComponent = queryEditorTextComponent();
@@ -550,41 +554,41 @@ public class QueryEditorAutoCompletePopupProvider
             String wordAtCursor = queryEditor.getWordToCursor();
 
             if (StringUtils.isNotBlank(wordAtCursor)) {
-            
+
                 int wordAtCursorLength = wordAtCursor.length();
                 int insertionIndex = caretPosition - wordAtCursorLength;
-    
+
                 if (selectedListItem.isKeyword() && isAllLowerCase(wordAtCursor)) {
-    
+
                     selectedValue = selectedValue.toLowerCase();
                 }
-    
+
                 if (!Character.isLetterOrDigit(wordAtCursor.charAt(0))) {
-                    
+
                     // cases where you might have a.column_name or similar
-    
+
                     insertionIndex++;
                     wordAtCursorLength--;
-                
+
                 } else if (wordAtCursor.contains(".")) {
-                    
+
                     int index = wordAtCursor.indexOf(".");
                     insertionIndex += index + 1;
                     wordAtCursorLength -=  index + 1;
                 }
-                
+
                 document.remove(insertionIndex, wordAtCursorLength);
                 document.insertString(insertionIndex, selectedValue, null);
 
             } else {
-                
+
                 document.insertString(caretPosition, selectedValue, null);
             }
-                
+
         } catch (BadLocationException e) {
 
             if (Log.isDebugEnabled()) {
-                
+
                 Log.debug("Error on autocomplete insertion", e);
             }
 
@@ -592,21 +596,21 @@ public class QueryEditorAutoCompletePopupProvider
 
             autoCompletePopup.hidePopup();
         }
-        
+
     }
-    
+
     public void caretUpdate(CaretEvent e) {
 
         captureAndResetListValues();
     }
 
     public void connectionChanged(DatabaseConnection databaseConnection) {
-        
+
         if (databaseHost != null) {
 
             databaseHost.close();
         }
-        
+
         if (databaseConnection != null) {
 
             databaseHost = databaseObjectFactory.createDatabaseHost(databaseConnection);
@@ -618,20 +622,20 @@ public class QueryEditorAutoCompletePopupProvider
     public void focusGained(FocusEvent e) {
 
         if (e.getSource() == queryEditorTextComponent()) {
-            
+
             scheduleListItemLoad();
         }
-        
+
     }
 
     private boolean rebuildingList;
-    
+
     private SwingWorker worker;
-    
+
     private void scheduleListItemLoad() {
 
         if (rebuildingList) {
-            
+
             return;
         }
 
@@ -649,13 +653,13 @@ public class QueryEditorAutoCompletePopupProvider
 
                 rebuildingList = false;
             }
-            
+
         };
         worker.start();
     }
 
     public void focusLost(FocusEvent e) {}
-    
+
 }
 
 
