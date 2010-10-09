@@ -39,12 +39,15 @@ import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.InputMap;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.JTextComponent;
 
 import org.apache.commons.lang.StringUtils;
@@ -77,8 +80,9 @@ import org.executequery.sql.TokenizingFormatter;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.swing.NumberTextField;
 import org.underworldlabs.util.MiscUtils;
+import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * The Query Editor.
  *
  * @author   Takis Diakoumis
@@ -98,54 +102,57 @@ public class QueryEditor extends DefaultTabView
     public static final String FRAME_ICON = "Edit16.png";
 
     private static final String DEFAULT_SCRIPT_PREFIX = "script";
-    
+
     private static final String DEFAULT_SCRIPT_SUFFIX = ".sql";
-    
+
     /** editor open count for title numbering */
     private static int editorCountSequence = 1;
-    
+
     /** The editor's status bar */
     private QueryEditorStatusBar statusBar;
-    
+
     /** The editor's text pan panel */
     private QueryEditorTextPanel editorPanel;
-    
+
     /** The editor's results panel */
     private QueryEditorResultsPanel resultsPanel;
-    
+
     private ScriptFile scriptFile;
 
     /** flags the content as having being changed */
     private boolean contentChanged;
-    
+
     /** the editor's tool bar */
     private QueryEditorToolBar toolBar;
-    
+
     /** the active connections combo */
     private OpenConnectionsComboBox connectionsCombo;
-    
+
     /** The text pane's popup menu */
     private QueryEditorPopupMenu popup;
 
+    /** enable/disable max rows */
+    private JCheckBox maxRowCountCheckBox;
+
     /** the max row count returned field */
     private NumberTextField maxRowCountField;
-    
+
     /** the result pane base panel */
     private JPanel resultsBase;
-    
+
     /** the editor split pane */
     private JSplitPane splitPane;
-    
+
     /** sql query execution delegate */
     private QueryEditorDelegate delegate;
-    
+
     private TokenizingFormatter formatter;
-    
+
     private List<ConnectionChangeListener> connectionChangeListeners;
-    
+
     /** Constructs a new instance. */
     public QueryEditor() {
-        
+
         this(null, null);
     }
 
@@ -155,7 +162,7 @@ public class QueryEditor extends DefaultTabView
      * @param the text content to be set
      */
     public QueryEditor(String text) {
-        
+
         this(text, null);
     }
 
@@ -167,9 +174,9 @@ public class QueryEditor extends DefaultTabView
      * @param the absolute file path;
      */
     public QueryEditor(String text, String absolutePath) {
-        
+
         super(new GridBagLayout());
-        
+
         try  {
 
             init();
@@ -189,15 +196,15 @@ public class QueryEditor extends DefaultTabView
         }
 
         contentChanged = false;
-        
+
         formatter = new TokenizingFormatter();
     }
 
     private String defaultScriptName() {
-        return DEFAULT_SCRIPT_PREFIX 
+        return DEFAULT_SCRIPT_PREFIX
             + (editorCountSequence++) + DEFAULT_SCRIPT_SUFFIX;
     }
-    
+
     private void init() throws Exception {
 
         // construct the two query text area and results panels
@@ -208,21 +215,21 @@ public class QueryEditor extends DefaultTabView
         resultsPanel = new QueryEditorResultsPanel(this);
 
         delegate = new QueryEditorDelegate(this);
-        
+
         popup = new QueryEditorPopupMenu(delegate);
         editorPanel.addEditorPaneMouseListener(popup);
-        
+
         JPanel baseEditorPanel = new JPanel(new BorderLayout());
         baseEditorPanel.add(editorPanel, BorderLayout.CENTER);
         baseEditorPanel.add(statusBar, BorderLayout.SOUTH);
         baseEditorPanel.setBorder(BorderFactory.createMatteBorder(
                                 1, 1, 1, 1, GUIUtilities.getDefaultBorderColour()));
-        
-        // add to a base panel - when last tab closed visible set 
+
+        // add to a base panel - when last tab closed visible set
         // to false on the tab pane and split collapses - want to avoid this
         resultsBase = new JPanel(new BorderLayout());
         resultsBase.add(resultsPanel, BorderLayout.CENTER);
-        
+
         if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
             splitPane = new EditorSplitPane(JSplitPane.VERTICAL_SPLIT,
                                             baseEditorPanel, resultsBase);
@@ -234,18 +241,28 @@ public class QueryEditor extends DefaultTabView
 
         splitPane.setDividerSize(4);
         splitPane.setResizeWeight(0.5);
-        
+
         // ---------------------------------------
         // the tool bar and conn combo
         toolBar = new QueryEditorToolBar(
                 editorPanel.getTextPaneActionMap(), editorPanel.getTextPaneInputMap());
-        
-        Vector<DatabaseConnection> connections = 
+
+        Vector<DatabaseConnection> connections =
             ConnectionManager.getActiveConnections();
         connectionsCombo = new OpenConnectionsComboBox(this, connections);
 
+        maxRowCountCheckBox = new JCheckBox();
+        maxRowCountCheckBox.setToolTipText("Enable/disable max records");
+        maxRowCountCheckBox.addChangeListener(new ChangeListener() {
+
+            public void stateChanged(ChangeEvent e) {
+
+                maxRowCountCheckBoxSelected();
+            }
+        });
+
         maxRowCountField = new MaxRowCountField(this);
-        
+
         JPanel toolsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -275,23 +292,25 @@ public class QueryEditor extends DefaultTabView
         gbc.weightx = 0;
         gbc.insets.top = 5;
         gbc.insets.left = 10;
+        toolsPanel.add(maxRowCountCheckBox, gbc);
+        gbc.gridx++;
+        gbc.insets.left = 0;
         gbc.insets.right = 10;
         toolsPanel.add(createLabel("Max Rows:", 'R'), gbc);
         gbc.gridx++;
         gbc.weightx = 0.8;
         gbc.insets.top = 2;
         gbc.insets.bottom = 2;
-        gbc.insets.left = 0;
         gbc.insets.right = 2;
         gbc.fill = GridBagConstraints.BOTH;
         toolsPanel.add(maxRowCountField, gbc);
 
         splitPane.setBorder(BorderFactory.createEmptyBorder(0,3,3,3));
-        
+
         JPanel base = new JPanel(new BorderLayout());
         base.add(toolsPanel, BorderLayout.NORTH);
         base.add(splitPane, BorderLayout.CENTER);
-        
+
         gbc.gridy = 1;
         gbc.gridx = 1;
         gbc.weightx = 1.0;
@@ -303,16 +322,22 @@ public class QueryEditor extends DefaultTabView
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.SOUTHEAST;
         add(base, gbc);
-        
+
         // register for connection and keyword events
         EventMediator.registerListener(this);
 
         addDeleteLineActionMapping();
-        
+
         setEditorPreferences();
-        
+
         statusBar.setCaretPosition(1,1);
         statusBar.setInsertionMode("INS");
+    }
+
+    private void maxRowCountCheckBoxSelected() {
+
+        maxRowCountField.setEnabled(maxRowCountCheckBox.isSelected());
+        maxRowCountField.requestFocus();
     }
 
     public void addConnectionChangeListener(
@@ -325,40 +350,40 @@ public class QueryEditor extends DefaultTabView
                 connectionChangeListener.connectionChanged(getSelectedConnection());
             }
         });
-        
+
         if (connectionChangeListeners == null) {
-            
+
             connectionChangeListeners = new ArrayList<ConnectionChangeListener>();
         }
 
         connectionChangeListeners.add(connectionChangeListener);
     }
-    
+
     public void removePopupComponent(JComponent component) {
 
         GUIUtilities.getFrameLayeredPane().remove(component);
         GUIUtilities.getFrameLayeredPane().repaint();
     }
-    
+
     public void addPopupComponent(JComponent component) {
-        
+
         GUIUtilities.getFrameLayeredPane().add(component, JLayeredPane.POPUP_LAYER);
         GUIUtilities.getFrameLayeredPane().repaint();
     }
-    
+
     private void addDeleteLineActionMapping() {
-        
+
         Action action = new AbstractAction() {
-            
+
             public void actionPerformed(ActionEvent e) {
-                
+
                 deleteLine();
             }
         };
 
         KeyStroke keyStroke = KeyStroke.getKeyStroke("control D");
 
-        ActionMap textPaneActionMap = editorPanel.getTextPaneActionMap(); 
+        ActionMap textPaneActionMap = editorPanel.getTextPaneActionMap();
         InputMap textPaneInputMap = editorPanel.getTextPaneInputMap();
 
         String actionMapKey = "editor-delete-line";
@@ -366,7 +391,7 @@ public class QueryEditor extends DefaultTabView
         textPaneActionMap.put(actionMapKey, action);
         textPaneInputMap.put(keyStroke, actionMapKey);
     }
-    
+
     private JLabel createLabel(String text, char mnemonic) {
 
         final JLabel label = new JLabel(text);
@@ -390,9 +415,9 @@ public class QueryEditor extends DefaultTabView
             splitPane.setDividerLocation(lastDividerLocation);
         }
     }
-    
+
     /**
-     * Enters the specified text at the editor's current 
+     * Enters the specified text at the editor's current
      * insertion point.
      *
      * @param text - the text to insert
@@ -400,7 +425,7 @@ public class QueryEditor extends DefaultTabView
     public void insertTextAtCaret(String text) {
         editorPanel.insertTextAtCaret(text);
     }
-    
+
     /**
      * Returns the default focus component, the query text
      * editor component.
@@ -410,79 +435,75 @@ public class QueryEditor extends DefaultTabView
     public Component getDefaultFocusComponent() {
         return editorPanel.getQueryArea();
     }
-    
+
     /**
      * Sets the editor user preferences.
      */
     public void setEditorPreferences() {
 
         setPanelBackgrounds();
-        
         statusBar.setVisible(isStatusBarVisible());
-
         editorPanel.showLineNumbers(isLineNumbersVisible());
-        
         editorPanel.preferencesChanged();
-        
         delegate.preferencesChanged();
-        
         delegate.setCommitMode(isAutoCommit());
-        
         popup.setCommitMode(isAutoCommit());
-        
         resultsPanel.setTableProperties();
-        
+
         if (isAutoCompleteOn()) {
-            
+
             editorPanel.registerAutoCompletePopup(
                     new QueryEditorAutoCompletePopupProvider(this));
 
         } else {
-            
+
             editorPanel.deregisterAutoCompletePopup();
         }
-        
+
+        int maxRecords = SystemProperties.getIntProperty("user", "editor.max.records");
+        maxRowCountCheckBox.setSelected((maxRecords > 0));
+        maxRowCountCheckBoxSelected();
     }
 
     private boolean isAutoCompleteOn() {
-        
+
         return userProperties().getBooleanProperty("editor.autocomplete.on");
     }
-    
+
     private boolean isAutoCommit() {
-        
+
         return userProperties().getBooleanProperty("editor.connection.commit");
     }
 
     private boolean isLineNumbersVisible() {
-        
+
         return userProperties().getBooleanProperty("editor.display.linenums");
     }
 
     private boolean isStatusBarVisible() {
-        
+
         return userProperties().getBooleanProperty("editor.display.statusbar");
     }
-    
+
     private UserProperties userProperties() {
-        
+
         return UserProperties.getInstance();
     }
-    
+
     /**
      * Called to inform this component of a change/update
      * to the user defined key words.
      */
     public void updateSQLKeywords() {
-        
+
         editorPanel.setSQLKeywords(true);
     }
-    
+
     /**
      * Notification of a new keyword added to the list.
      */
     public void keywordsAdded(KeywordEvent e) {
-        
+
         editorPanel.setSQLKeywords(true);
     }
 
@@ -490,12 +511,12 @@ public class QueryEditor extends DefaultTabView
      * Notification of a keyword removed from the list.
      */
     public void keywordsRemoved(KeywordEvent e) {
-        
+
         editorPanel.setSQLKeywords(true);
     }
 
     /**
-     * Sets the activity status bar label text to 
+     * Sets the activity status bar label text to
      * that specified.
      *
      * @param the activity label text
@@ -503,9 +524,9 @@ public class QueryEditor extends DefaultTabView
     public void executing() {
 
         popup.statementExecuting();
-        
+
         setStopButtonEnabled(true);
-        
+
         statusBar.startProgressBar();
         statusBar.setExecutionTime(" Executing.. ");
     }
@@ -516,53 +537,53 @@ public class QueryEditor extends DefaultTabView
     public void finished(String message) {
 
         popup.statementFinished();
-        
+
         resultsPanel.finished();
-        
+
         statusBar.stopProgressBar();
-        
+
         setStopButtonEnabled(false);
-        
+
         statusBar.setExecutionTime(message);
     }
 
     /**
-     * Sets the right status bar label text to 
+     * Sets the right status bar label text to
      * that specified.
      *
      * @param the right label text
      */
     public void commitModeChanged(boolean autoCommit) {
-        
+
         statusBar.setCommitStatus(autoCommit);
     }
-    
+
     /**
      * Sets the text of the left status label.
      *
      * @param the text to be set
      */
     public void setLeftStatusText(String s) {
-        
+
         statusBar.setStatus(s);
     }
-    
+
     /**
      * Propagates the call to interrupt an executing process.
      */
     public void interrupt() {
-        
+
         resultsPanel.interrupt();
     }
-    
+
     /**
      * Sets the result set object.
      *
      * @param the executed result set
      * @param whether to return the result set row count
      */
-    public int setResultSet(ResultSet rset, boolean showRowNumber) throws SQLException {  
-        
+    public int setResultSet(ResultSet rset, boolean showRowNumber) throws SQLException {
+
         return setResultSet(rset, showRowNumber, null);
     }
 
@@ -572,26 +593,30 @@ public class QueryEditor extends DefaultTabView
      * @return the max row count to be shown
      */
     public int getMaxRecords() {
-        
-        int maxRecords = maxRowCountField.getValue();
-        
-        if (maxRecords <= 0) {
-            
-            maxRecords = -1;
-            maxRowCountField.setValue(-1);
+
+        if (maxRowCountCheckBox.isSelected()) {
+
+            int maxRecords = maxRowCountField.getValue();
+            if (maxRecords <= 0) {
+
+                maxRecords = -1;
+                maxRowCountField.setValue(-1);
+            }
+
+            return maxRecords;
         }
-        
-        return maxRecords;
+
+        return -1;
     }
-    
+
     /**
      * Requests focus on connection combo
      */
     public void selectConnectionCombo() {
-        
+
         connectionsCombo.attemptToFocus();
     }
-    
+
     /**
      * Sets the result set object.
      *
@@ -601,19 +626,19 @@ public class QueryEditor extends DefaultTabView
      */
     public int setResultSet(ResultSet rset, boolean showRowNumber, String query)
         throws SQLException {
-        
+
         int rowCount = resultsPanel.setResultSet(rset, showRowNumber, getMaxRecords());
         revalidate();
         return rowCount;
     }
-    
+
     /**
      * Sets the result set object.
      *
      * @param rset the executed result set
      */
     public void setResultSet(ResultSet rset) throws SQLException {
-        
+
         resultsPanel.setResultSet(rset, true, getMaxRecords());
         revalidate();
     }
@@ -625,12 +650,12 @@ public class QueryEditor extends DefaultTabView
      * @param the executed query of the result set
      */
     public void setResultSet(ResultSet rset, String query) throws SQLException {
-        
+
         resultsPanel.setResultSet(rset, true, getMaxRecords(), query);
     }
 
     public void destroyTable() {
-        
+
         resultsPanel.destroyTable();
     }
 
@@ -639,25 +664,25 @@ public class QueryEditor extends DefaultTabView
      * currently selected result set tab.
      */
     public void displayResultSetMetaData() {
-        
+
         resultsPanel.displayResultSetMetaData();
     }
-    
+
     /**
      * Returns the editor status bar.
      *
      * @return the editor's status bar panel
      */
     public QueryEditorStatusBar getStatusBar() {
-        
+
         return statusBar;
     }
-    
+
     /**
      * Disables/enables the listener updates as specified.
      */
     public void disableUpdates(boolean disable) {
-        
+
         editorPanel.disableUpdates(disable);
     }
 
@@ -665,28 +690,28 @@ public class QueryEditor extends DefaultTabView
      * Returns true that a search can be performed on the editor.
      */
     public boolean canSearch() {
-        
+
         return true;
     }
-    
+
     /**
      * Disables/enables the caret update as specified.
      */
     public void disableCaretUpdate(boolean disable) {
-        
+
         editorPanel.disableCaretUpdate(disable);
     }
-    
+
     public ResultSetTableModel getResultSetTableModel() {
-        
+
         return resultsPanel.getResultSetTableModel();
     }
-    
+
     public void setResultText(int updateCount, int type) {
-        
+
         resultsPanel.setResultText(updateCount, type);
     }
-    
+
     /**
      * Returns whether a result set panel is selected and that
      * that panel has a result set row count > 0.
@@ -694,12 +719,12 @@ public class QueryEditor extends DefaultTabView
      * @return true | false
      */
     public boolean isResultSetSelected() {
-        
+
         return resultsPanel.isResultSetSelected();
     }
 
     /**
-     * Sets the respective panel background colours within 
+     * Sets the respective panel background colours within
      * the editor as specified by the user defined properties.
      */
     public void setPanelBackgrounds() {
@@ -721,7 +746,7 @@ public class QueryEditor extends DefaultTabView
             GUIUtilities.showWaitCursor();
             String query = delegate.getPreviousQuery();
             setEditorText(query);
-            
+
         } finally {
 
             GUIUtilities.showNormalCursor();
@@ -736,21 +761,21 @@ public class QueryEditor extends DefaultTabView
     public void selectNextQuery() {
 
         try {
-        
+
             String query = delegate.getNextQuery();
             setEditorText(query);
 
         } finally {
-          
+
             GUIUtilities.showNormalCursor();
         }
     }
-    
+
     /**
      * Enables/disables the show meta data button.
      */
     public void setMetaDataButtonEnabled(boolean enable) {
-        
+
         if (retainMetaData()) {
 
             getTools().setMetaDataButtonEnabled(enable);
@@ -760,12 +785,12 @@ public class QueryEditor extends DefaultTabView
             getTools().setMetaDataButtonEnabled(false);
         }
     }
-    
+
     /**
      * Sets the history next button enabled as specified.
      */
     public void setHasNextStatement(boolean enabled) {
-        
+
         getTools().setNextButtonEnabled(enabled);
     }
 
@@ -773,7 +798,7 @@ public class QueryEditor extends DefaultTabView
      * Sets the history previous button enabled as specified.
      */
     public void setHasPreviousStatement(boolean enabled) {
-        
+
         getTools().setPreviousButtonEnabled(enabled);
     }
 
@@ -781,7 +806,7 @@ public class QueryEditor extends DefaultTabView
      * Enables/disables the transaction related buttons.
      */
     public void setCommitsEnabled(boolean enable) {
-        
+
         getTools().setCommitsEnabled(enable);
     }
 
@@ -789,34 +814,34 @@ public class QueryEditor extends DefaultTabView
      * Enables/disables the export result set button.
      */
     public void setExportButtonEnabled(boolean enable) {
-        
+
         getTools().setExportButtonEnabled(enable);
     }
-    
+
     /**
      * Enables/disables the query execution stop button.
      */
-    public void setStopButtonEnabled(boolean enable) {        
-        
+    public void setStopButtonEnabled(boolean enable) {
+
         getTools().setStopButtonEnabled(enable);
     }
 
-    public void resetCaretPositionToLast() {        
-        
+    public void resetCaretPositionToLast() {
+
         editorPanel.setTextFocus();
     }
-    
+
     /**
-     * Updates the interface and any system buttons as 
+     * Updates the interface and any system buttons as
      * required on a focus gain.
      */
     public void focusGained() {
 
         QueryEditorToolBar tools = getTools();
-        
+
         tools.setMetaDataButtonEnabled(
                 resultsPanel.hasResultSetMetaData() && retainMetaData());
-        
+
         tools.setCommitsEnabled(!delegate.getCommitMode());
         tools.setNextButtonEnabled(delegate.hasNextStatement());
         tools.setPreviousButtonEnabled(delegate.hasPreviousStatement());
@@ -836,25 +861,25 @@ public class QueryEditor extends DefaultTabView
     }
 
     private QueryEditorToolBar getTools() {
-     
+
         return toolBar;
     }
-    
+
     public void destroyConnection() {
-        
+
         delegate.destroyConnection();
     }
-    
+
     public void toggleCommitMode() {
-        
+
         boolean mode = !delegate.getCommitMode();
 
         delegate.setCommitMode(mode);
         popup.setCommitMode(mode);
         getTools().setCommitsEnabled(!mode);
     }
-    
-    
+
+
     // --------------------------------------------
     // TabView implementation
     // --------------------------------------------
@@ -863,9 +888,9 @@ public class QueryEditor extends DefaultTabView
      * Indicates the panel is being removed from the pane
      */
     public boolean tabViewClosing() {
-        
+
         UserProperties properties = UserProperties.getInstance();
-        
+
         if (properties.getBooleanProperty("general.save.prompt") && contentChanged) {
 
             if (!GUIUtilities.saveOpenChanges(this)) {
@@ -884,9 +909,9 @@ public class QueryEditor extends DefaultTabView
      * Indicates the panel is being selected in the pane
      */
     public boolean tabViewSelected() {
-        
+
         focusGained();
-        
+
         return true;
     }
 
@@ -894,7 +919,7 @@ public class QueryEditor extends DefaultTabView
      * Indicates the panel is being de-selected in the pane
      */
     public boolean tabViewDeselected() {
-        
+
         return true;
     }
 
@@ -904,31 +929,35 @@ public class QueryEditor extends DefaultTabView
      * Performs any resource clean up for a pending removal.
      */
     public void cleanup() {
-        
+
         /* ------------------------------------------------
-         * profiling found the popup keeps the 
+         * profiling found the popup keeps the
          * editor from being garbage collected at all!!
          * a call to removeAll() is a work around for now.
-         * ------------------------------------------------ 
+         * ------------------------------------------------
          */
         popup.removeAll();
 
         editorPanel.closingEditor();
         resultsPanel.cleanup();
         statusBar.cleanup();
-        
+
         resultsPanel = null;
         statusBar = null;
         toolBar = null;
         editorPanel = null;
 
         delegate.disconnected(getSelectedConnection());
-        
-        for (ConnectionChangeListener listener : connectionChangeListeners) {
-            
-            listener.connectionChanged(null);
+
+        if (connectionChangeListeners != null) {
+
+            for (ConnectionChangeListener listener : connectionChangeListeners) {
+
+                listener.connectionChanged(null);
+            }
+
         }
-        
+
         removeAll();
         EventMediator.deregisterListener(this);
         GUIUtilities.registerUndoRedoComponent(null);
@@ -945,48 +974,48 @@ public class QueryEditor extends DefaultTabView
     }
 
     public void clearOutputPane() {
-        
-        if (!delegate.isExecuting()) { 
-        
+
+        if (!delegate.isExecuting()) {
+
             resultsPanel.clearOutputPane();
         }
 
     }
-    
+
     public void selectAll() {
-        
+
         editorPanel.selectAll();
     }
-    
+
     public void goToRow(int row) {
-        
+
         editorPanel.goToRow(row);
     }
-    
+
     public void selectNone() {
-        
+
         editorPanel.selectNone();
     }
-    
+
     public Vector<String> getHistoryList() {
-        
+
         return delegate.getHistoryList();
     }
-    
+
     /**
      * Executes the currently selected query text.
      */
     public void executeSelection() {
-        
+
         String query = editorPanel.getSelectedText();
-        
+
         if (query != null) {
 
             executeSQLQuery(query);
         }
 
     }
-    
+
     /**
      * Returns the currently selcted connection properties object.
      *
@@ -1003,22 +1032,22 @@ public class QueryEditor extends DefaultTabView
     public void setSelectedConnection(DatabaseConnection databaseConnection) {
         connectionsCombo.setSelectedItem(databaseConnection);
     }
-    
+
     public void preExecute() {
-        
+
         resultsPanel.preExecute();
     }
-    
+
     public String getWordToCursor() {
-        
+
         return editorPanel.getWordToCursor();
     }
-    
+
     public String getCompleteWordEndingAtCursor() {
-        
+
         return editorPanel.getCompleteWordEndingAtCursor();
     }
-    
+
     /**
      * Executes the specified query.
      *
@@ -1027,7 +1056,7 @@ public class QueryEditor extends DefaultTabView
     public void executeSQLQuery(String query) {
 
         preExecute();
-        
+
         if (query == null) {
 
             query = editorPanel.getQueryAreaText();
@@ -1041,13 +1070,13 @@ public class QueryEditor extends DefaultTabView
     public void executeSQLAtCursor() {
 
         preExecute();
-        
+
         String query = getQueryAtCursor();
-        
+
         if (StringUtils.isNotBlank(query)) {
 
             editorPanel.setExecutingQuery(query);
-            
+
             delegate.executeQuery(query);
         }
     }
@@ -1058,16 +1087,16 @@ public class QueryEditor extends DefaultTabView
     }
 
     public JTextComponent getEditorTextComponent() {
-        
+
         return editorPanel.getQueryArea();
     }
-    
+
     /**
      * Adds a comment tag to the beginning of the current line
      * or selected lines.
      */
     public void commentLines() {
-        
+
         editorPanel.commentLines();
     }
 
@@ -1076,7 +1105,7 @@ public class QueryEditor extends DefaultTabView
      * selected text to the right one TAB.
      */
     public void shiftTextRight() {
-        
+
         editorPanel.shiftTextRight();
     }
 
@@ -1085,7 +1114,7 @@ public class QueryEditor extends DefaultTabView
      * selected text to the left one TAB.
      */
     public void shiftTextLeft() {
-        
+
         editorPanel.shiftTextLeft();
     }
 
@@ -1095,17 +1124,17 @@ public class QueryEditor extends DefaultTabView
      * @param s - the text to be set
      */
     public void setEditorText(String s) {
-        
+
         editorPanel.setQueryAreaText(s);
     }
-    
+
     /**
      * Moves the caret to the beginning of the specified query.
      *
      * @param query - the query to move the cursor to
      */
     public void caretToQuery(String query) {
-        
+
         editorPanel.caretToQuery(query);
     }
 
@@ -1114,16 +1143,16 @@ public class QueryEditor extends DefaultTabView
      * before switching to the SQL document.
      */
     public void loadText(String text) {
-        
+
         editorPanel.loadText(text);
     }
-    
+
     public void insertTextAtEnd(String text) {
         int end = getEditorText().length();
         insertTextAfter(end - 1, text);
         caretToQuery(text);
     }
-    
+
     public void insertTextAfter(int after, String text) {
         editorPanel.insertTextAfter(after, text);
     }
@@ -1131,7 +1160,7 @@ public class QueryEditor extends DefaultTabView
     public boolean hasText() {
         return !(MiscUtils.isNull(getEditorText()));
     }
-    
+
     public String getEditorText() {
         return editorPanel.getQueryAreaText();
     }
@@ -1142,7 +1171,7 @@ public class QueryEditor extends DefaultTabView
 
     public void setOutputMessage(int type, String text, boolean selectTab) {
         resultsPanel.setOutputMessage(type, text, selectTab);
-        //revalidate();        
+        //revalidate();
     }
 
     /**
@@ -1153,7 +1182,7 @@ public class QueryEditor extends DefaultTabView
     public void setOpenFilePath(String absolutePath) {
         scriptFile.setAbsolutePath(absolutePath);
     }
-    
+
     /**
      * Returns whether the text component is in a printable state.
      *
@@ -1162,27 +1191,27 @@ public class QueryEditor extends DefaultTabView
     public boolean canPrint() {
         return true;
     }
-    
+
     public Printable getPrintable() {
 
         return getPrintableForResultSet();
     }
-    
+
     public Printable getPrintableForResultSet() {
 
         return new TablePrinter(resultsPanel.getResultsTable(),
                 "Query: " + editorPanel.getQueryAreaText());
     }
-    
+
     public Printable getPrintableForQueryArea() {
 
         return new TextPrinter(editorPanel.getQueryAreaText());
     }
-    
+
     public String getPrintJobName() {
         return "Execute Query - editor";
     }
-    
+
     // ---------------------------------------------
     // TextEditor implementation
     // ---------------------------------------------
@@ -1190,65 +1219,65 @@ public class QueryEditor extends DefaultTabView
     public void paste() {
         editorPanel.paste();
     }
-    
+
     public void copy() {
         editorPanel.copy();
     }
-    
+
     public void cut() {
         editorPanel.cut();
     }
-    
+
     public void deleteLine() {
         editorPanel.deleteLine();
     }
-    
+
     public void deleteWord() {
         editorPanel.deleteWord();
     }
-    
+
     public void deleteSelection() {
         editorPanel.deleteSelection();
     }
-    
+
     public void insertFromFile() {
         editorPanel.insertFromFile();
     }
-    
+
     public void insertLineAfter() {
         editorPanel.insertLineAfter();
     }
-    
+
     public void insertLineBefore() {
         editorPanel.insertLineBefore();
     }
-    
+
     public void changeSelectionCase(boolean upper) {
         editorPanel.changeSelectionCase(upper);
     }
-    
+
     // ---------------------------------------------
-    
+
     // ---------------------------------------------
     // SaveFunction implementation
     // ---------------------------------------------
-    
+
     public String getDisplayName() {
         return toString();
     }
-    
+
     public boolean contentCanBeSaved() {
         return contentChanged;
     }
-    
+
     public int save(boolean saveAs) {
-        
+
         String text = editorPanel.getQueryAreaText();
 
         QueryEditorFileWriter writer = new QueryEditorFileWriter();
-        
+
         boolean saved = writer.write(text, scriptFile, saveAs);
-        
+
         if (saved) {
 
             GUIUtilities.setTabTitleForComponent(this, getDisplayName());
@@ -1259,9 +1288,9 @@ public class QueryEditor extends DefaultTabView
 
         return SaveFunction.SAVE_COMPLETE;
     }
-    
+
     // ---------------------------------------------
-    
+
     /**
      * Returns the display name of this panel. This may
      * include the path of any open file.
@@ -1274,7 +1303,7 @@ public class QueryEditor extends DefaultTabView
     }
 
     /**
-     * Returns whether the content has changed for a 
+     * Returns whether the content has changed for a
      * possible document save.
      *
      * @return true if text content changed, false otherwise
@@ -1282,7 +1311,7 @@ public class QueryEditor extends DefaultTabView
     public boolean isContentChanged() {
         return contentChanged;
     }
-    
+
     /**
      * Sets that the text content of the editor has changed from
      * the original or previously saved state.
@@ -1296,10 +1325,10 @@ public class QueryEditor extends DefaultTabView
     // ---------------------------------------------
     // ConnectionListener implementation
     // ---------------------------------------------
-    
+
     /**
      * Indicates a connection has been established.
-     * 
+     *
      * @param the encapsulating event
      */
     public void connected(ConnectionEvent connectionEvent) {
@@ -1308,18 +1337,18 @@ public class QueryEditor extends DefaultTabView
 
     /**
      * Indicates a connection has been closed.
-     * 
+     *
      * @param the encapsulating event
      */
     public void disconnected(ConnectionEvent connectionEvent) {
         connectionsCombo.removeElement(connectionEvent.getDatabaseConnection());
-        // TODO: NEED TO CHECK OPEN CONN        
+        // TODO: NEED TO CHECK OPEN CONN
     }
 
     // ---------------------------------------------
 
     public boolean canHandleEvent(ApplicationEvent event) {
-        return (event instanceof ConnectionEvent) 
+        return (event instanceof ConnectionEvent)
             || (event instanceof KeywordEvent)
             || (event instanceof UserPreferenceEvent)
             || (event instanceof QueryShortcutEvent)
@@ -1339,14 +1368,14 @@ public class QueryEditor extends DefaultTabView
     }
 
     public void formatSQLtext() {
-        
+
         String text = getSelectedText();
-        
+
         if (text == null) {
 
             text = getEditorText();
         }
-        
+
         String formattedText = formatter.format(text);
         setEditorText(formattedText);
     }
@@ -1362,10 +1391,10 @@ public class QueryEditor extends DefaultTabView
 
         if (event.getEventType() == UserPreferenceEvent.QUERY_EDITOR
                 ||event.getEventType() == UserPreferenceEvent.ALL) {
-            
+
             setEditorPreferences();
         }
-        
+
     }
 
     public void queryShortcutAdded(QueryShortcutEvent e) {
