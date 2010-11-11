@@ -31,10 +31,9 @@ import javax.swing.JTextArea;
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
 import org.executequery.GUIUtilities;
+import org.executequery.components.BasicPopupMenuListener;
 import org.executequery.components.TextAreaLogAppender;
 import org.executequery.log.Log;
-
-// TODO: NEW STUFF
 
 /**
  *
@@ -43,7 +42,7 @@ import org.executequery.log.Log;
  * @date     $Date: 2009-09-07 23:20:31 +1000 (Mon, 07 Sep 2009) $
  */
 public class SystemOutputPanel extends AbstractDockedTabPanel {
-    
+
     /** This panel's title */
     public static final String TITLE = "Output Console";
 
@@ -52,7 +51,7 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
 
     public SystemOutputPanel() {
 
-        super(new BorderLayout());        
+        super(new BorderLayout());
 
         try {
 
@@ -64,13 +63,16 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
         }
 
     }
-    
+
     private void init() throws Exception {
-        
+
         textArea = new JTextArea();
         textArea.setFont(new Font("dialog", 0, 11));
         textArea.setEditable(false);
-        
+
+        SystemOutputPanelPopUpMenu systemOutputPanelPopUpMenu = new SystemOutputPanelPopUpMenu(this);
+        textArea.addMouseListener(new BasicPopupMenuListener(systemOutputPanelPopUpMenu));
+
         Appender appender = new TextAreaLogAppender(textArea);
         appender.setLayout(new PatternLayout(Log.PATTERN));
         Log.addAppender(appender);
@@ -86,18 +88,18 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
 
         return GUIUtilities.loadIcon("SystemOutput.png");
     }
-    
+
     public String toString() {
-        
+
         return "Output Console";
     }
-    
+
     // ----------------------------------------
     // DockedTabView Implementation
     // ----------------------------------------
 
     public static final String MENU_ITEM_KEY = "viewConsole";
-    
+
     public static final String PROPERTY_KEY = "system.display.console";
 
     /**
@@ -116,7 +118,7 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
      * @return the key
      */
     public String getPropertyKey() {
-        
+
         return PROPERTY_KEY;
     }
 
@@ -127,14 +129,29 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
      * @return the preferences key
      */
     public String getMenuItemKey() {
-        
+
         return MENU_ITEM_KEY;
     }
 
+    public void clear() {
+
+        textArea.setText("");
+    }
+
+    public void copy() {
+
+        textArea.copy();
+    }
+
+    public void selectAll() {
+
+        textArea.selectAll();
+
+    }
+
+    public String getOutputPaneText() {
+
+        return textArea.getText();
+    }
+
 }
-
-
-
-
-
-

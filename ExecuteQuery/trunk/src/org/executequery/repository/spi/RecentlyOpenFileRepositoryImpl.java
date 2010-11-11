@@ -34,7 +34,7 @@ import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
 
-public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsRepository 
+public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsRepository
                                             implements RecentlyOpenFileRepository {
 
     private static final String RECENT_FILE_LIST_FILE = "recent.files";
@@ -48,7 +48,7 @@ public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsReposito
             moveToTop(file);
 
         } else {
-            
+
             appendToFront(file);
         }
 
@@ -56,18 +56,18 @@ public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsReposito
     }
 
     public void clear() throws RepositoryException {
-        
-        ensureFilesLoaded();        
+
+        ensureFilesLoaded();
         files.clear();
 
         write();
     }
-    
+
     public String[] getFiles() {
-        
+
         ensureFilesLoaded();
-        
-        return (String[])files.toArray(new String[files.size()]);        
+
+        return (String[])files.toArray(new String[files.size()]);
     }
 
     public String getId() {
@@ -76,37 +76,36 @@ public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsReposito
     }
 
     private synchronized void write() throws RepositoryException {
-        
+
         StringBuilder sb = new StringBuilder();
 
         for (String file : filesAsList()) {
-            
+
             sb.append(file);
             sb.append(Constants.NEW_LINE_STRING);
         }
 
         try {
-            
+
             FileUtils.writeFile(getRecentFileListFilePath(), sb.toString());
 
-            EventMediator.fireEvent(
-                    new DefaultRecentOpenFileEvent(
+            EventMediator.fireEvent(new DefaultRecentOpenFileEvent(
                             this, RecentOpenFileEvent.RECENT_FILES_UPDATED));
-            
+
         } catch (IOException e) {
 
             throw new RepositoryException(e);
         }
-       
+
     }
-    
+
     private void appendToFront(String file) {
 
         filesAsList().add(0, file);
-        
+
         if (filesAsList().size() > getMaxRecentFileCount()) {
-            
-            trimToCapacity(); 
+
+            trimToCapacity();
         }
 
     }
@@ -117,109 +116,109 @@ public class RecentlyOpenFileRepositoryImpl extends AbstractUserSettingsReposito
     }
 
     private void moveToTop(String file) {
-        
+
         int index = indexOfFile(file);
-        
+
         if (index != -1) {
 
             filesAsList().remove(index);
-        } 
-        
+        }
+
         appendToFront(file);
     }
 
-    
-    
+
+
     private int indexOfFile(String file) {
 
         for (int i = 0, n = filesAsList().size(); i < n; i++) {
-            
+
             if (filesAsList().get(i).equals(file)) {
-                
+
                 return i;
             }
 
         }
-        
+
         return -1;
     }
 
     private boolean containsFile(String file) {
 
-        return MiscUtils.containsValue(getFiles(), file);        
+        return MiscUtils.containsValue(getFiles(), file);
     }
 
     private List<String> filesAsList() {
 
         ensureFilesLoaded();
-        
-        return files;        
+
+        return files;
     }
 
     private void ensureFilesLoaded() {
 
         if (files != null) {
-            
+
             return;
         }
-        
+
         try {
-            
+
             String recentFiles = loadFile();
-            
+
             if (MiscUtils.isNull(recentFiles)) {
 
                 files = new ArrayList<String>(0);
 
             } else {
 
-                String[] recentFilesArray = 
+                String[] recentFilesArray =
                     MiscUtils.splitSeparatedValues(recentFiles, "\n");
 
                 files = new ArrayList<String>(recentFilesArray.length);
-                
+
                 for (String file : recentFilesArray) {
-                    
+
                     files.add(file);
                 }
-                    
+
             }
 
         } catch (IOException e) {
 
             files = new ArrayList<String>(0);
         }
-        
+
     }
 
     private String loadFile() throws IOException {
 
         String filesString = FileUtils.loadFile(getRecentFileListFilePath());
-        
+
         if (filesString != null) {
-            
+
             filesString = filesString.trim();
-            
+
             if (filesString.endsWith("\n")) {
 
                 filesString = filesString.substring(0, filesString.length() - 1);
             }
 
         }
-        
+
         return filesString;
     }
 
     private void trimToCapacity() {
-        
+
         files = filesAsList().subList(0, getMaxRecentFileCount() - 1);
     }
 
     private String getRecentFileListFilePath() {
-        
+
         return getUserSettingsHomePath().concat(RECENT_FILE_LIST_FILE);
     }
-    
+
 }
 
 

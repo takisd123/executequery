@@ -35,11 +35,11 @@ import org.executequery.util.ThreadUtils;
 public class QueryEditorDelegate implements QueryDelegate {
 
     private int currentStatementHistoryIndex = -1;
-    
+
     private final QueryDispatcher dispatcher;
 
     private final QueryEditor queryEditor;
-    
+
     public QueryEditorDelegate(QueryEditor queryEditor) {
 
         super();
@@ -52,6 +52,16 @@ public class QueryEditorDelegate implements QueryDelegate {
     public void destroyConnection() {
 
         dispatcher.destroyConnection();
+    }
+
+    public void pauseExecution() {
+
+        dispatcher.pauseExecution();
+    }
+
+    public void resumeExecution() {
+
+        dispatcher.resumeExecution();
     }
 
     /**
@@ -81,13 +91,13 @@ public class QueryEditorDelegate implements QueryDelegate {
     }
 
     public void preferencesChanged() {
-        
-        dispatcher.preferencesChanged(); 
+
+        dispatcher.preferencesChanged();
     }
 
     /**
      * Indicates a connection has been closed.
-     * 
+     *
      * @param the connection thats been closed
      */
     public void disconnected(DatabaseConnection dc) {
@@ -96,18 +106,18 @@ public class QueryEditorDelegate implements QueryDelegate {
     }
 
     public void close() {
-        
+
         interrupt();
         dispatcher.closeConnection();
     }
-    
+
     public void commit() {
 
         executeQuery("commit");
     }
 
     public void rollback() {
-        
+
         executeQuery("rollback");
     }
 
@@ -124,7 +134,7 @@ public class QueryEditorDelegate implements QueryDelegate {
     public void executeQuery(String query, boolean executeAsBlock) {
 
         queryEditor.preExecute();
-        
+
         executeQuery(queryEditor.getSelectedConnection(), query, executeAsBlock);
     }
 
@@ -132,7 +142,7 @@ public class QueryEditorDelegate implements QueryDelegate {
             String query, boolean executeAsBlock) {
 
         if (dispatcher.isExecuting()) {
-         
+
             return;
         }
 
@@ -140,15 +150,15 @@ public class QueryEditorDelegate implements QueryDelegate {
 
             query = queryEditor.getEditorText();
         }
-        
+
         if (StringUtils.isNotBlank(query)) {
-            
+
             currentStatementHistoryIndex = -1;
             queryEditor.setHasPreviousStatement(true);
             queryEditor.setHasNextStatement(false);
             dispatcher.executeSQLQuery(selectedConnection, query, executeAsBlock);
         }
-        
+
     }
 
     public void executing() {
@@ -174,9 +184,9 @@ public class QueryEditorDelegate implements QueryDelegate {
     public void log(String message) {
 
         if (isLogEnabled()) {
-            
+
             OutputLogger.info(message);
-        }        
+        }
     }
 
     public void setOutputMessage(int type, String text) {
@@ -185,7 +195,7 @@ public class QueryEditorDelegate implements QueryDelegate {
     }
 
     public void setOutputMessage(int type, String text, boolean selectTab) {
-        
+
         queryEditor.setOutputMessage(type, text, selectTab);
     }
 
@@ -209,7 +219,7 @@ public class QueryEditorDelegate implements QueryDelegate {
         String _query = statement.toUpperCase();
 
         for (int i = 0; i < HISTORY_IGNORE.length; i++) {
-        
+
             if (HISTORY_IGNORE[i].compareTo(_query) == 0) {
 
                 return;
@@ -225,15 +235,15 @@ public class QueryEditorDelegate implements QueryDelegate {
      * query text into the editor.
      */
     public String getNextQuery() {
-        
+
         int index = decrementHistoryNum();
-        
+
         if (index >= 0) {
-        
+
             return getSqlCommandHistory().get(index);
         }
-        
-        return ""; 
+
+        return "";
     }
 
     /**
@@ -243,16 +253,16 @@ public class QueryEditorDelegate implements QueryDelegate {
     public String getPreviousQuery() {
 
         int index = incrementHistoryNum();
-        
+
         if (index >= 0) {
-        
+
             return getSqlCommandHistory().get(index);
         }
         return "";
     }
 
     private void addSqlCommandToHistory(final String query) {
-        
+
         ThreadUtils.startWorker(new Runnable() {
             public void run() {
 
@@ -261,7 +271,7 @@ public class QueryEditorDelegate implements QueryDelegate {
         });
 
     }
-    
+
     /**
      * Increments the history index value.
      */
@@ -273,21 +283,21 @@ public class QueryEditorDelegate implements QueryDelegate {
         if (!history.isEmpty()) {
 
             int historyCount = history.size();
-            
+
             if (currentStatementHistoryIndex < historyCount - 1) {
-    
+
                 currentStatementHistoryIndex++;
             }
-    
+
             queryEditor.setHasNextStatement(true);
-            
+
             if (currentStatementHistoryIndex == historyCount - 1) {
-    
+
                 queryEditor.setHasPreviousStatement(false);
             }
         }
 
-        return currentStatementHistoryIndex;        
+        return currentStatementHistoryIndex;
     }
 
     private Vector<String> getSqlCommandHistory() {
@@ -301,31 +311,31 @@ public class QueryEditorDelegate implements QueryDelegate {
     private int decrementHistoryNum() {
 
         if (!getSqlCommandHistory().isEmpty()) {
-        
+
             if (currentStatementHistoryIndex > 0) {
-    
+
                 currentStatementHistoryIndex--;
             }
-            
+
             queryEditor.setHasPreviousStatement(true);
-            
+
             if (currentStatementHistoryIndex == 0) {
-                
+
                 queryEditor.setHasNextStatement(false);
             }
         }
         return currentStatementHistoryIndex;
     }
-    
+
     /** ignored statements for the history list */
     private final String[] HISTORY_IGNORE = {"COMMIT", "ROLLBACK"};
-    
+
     private SqlCommandHistoryRepository sqlCommandHistoryRepository() {
 
         return (SqlCommandHistoryRepository)RepositoryCache.load(
-                SqlCommandHistoryRepository.REPOSITORY_ID);        
+                SqlCommandHistoryRepository.REPOSITORY_ID);
     }
-    
+
     /**
      * Returns whether a call to previous history would be successful.
      */
@@ -338,15 +348,15 @@ public class QueryEditorDelegate implements QueryDelegate {
      * Returns whether a call to next history would be successful.
      */
     public boolean hasNextStatement() {
-        
+
         return currentStatementHistoryIndex > 0;
     }
-    
+
     /**
      * Returns the executed query history list.
      */
     public Vector<String> getHistoryList() {
-        
+
         return getSqlCommandHistory();
     }
 

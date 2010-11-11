@@ -37,41 +37,42 @@ import org.underworldlabs.swing.menu.SimpleTextComponentPopUpMenu;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class SimpleTextArea extends JPanel {
-    
+
     private JTextArea textArea;
-    
+
     public SimpleTextArea() {
         super(new BorderLayout());
-        
+
         try {
             jbInit();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
-    
+
     private void jbInit() throws Exception {
+
         textArea = new JTextArea();
-        
+
         SimpleTextComponentPopUpMenu popup = new SimpleTextComponentPopUpMenu();
         popup.registerTextComponent(textArea);
-        
+
         textArea.setFont(new Font("monospaced",0,12));
         textArea.setMargin(new Insets(3,3,3,3));
         textArea.setCaretPosition(0);
         textArea.setDragEnabled(true);
-        
+
         JScrollPane scroller = new JScrollPane(textArea);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         this.add(scroller, BorderLayout.CENTER);
     }
-    
+
     public JTextArea getTextAreaComponent() {
         return textArea;
     }
-    
+
 }
 
 

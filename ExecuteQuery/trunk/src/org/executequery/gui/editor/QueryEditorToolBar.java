@@ -40,7 +40,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 
-/** 
+/**
  * The Query Editor's tool bar.
  *
  *  @author   Takis Diakoumis
@@ -48,7 +48,7 @@ import org.underworldlabs.swing.toolbar.PanelToolBar;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 class QueryEditorToolBar extends PanelToolBar {
-    
+
     private static final String QUERY_BOOKMARKS = "query-bookmarks";
 
     private static final String QUERY_SHORTCUTS = "manage-shortcuts-command";
@@ -56,7 +56,7 @@ class QueryEditorToolBar extends PanelToolBar {
     private static final String EDITOR_HELP_COMMAND = "editor-help-command";
 
     private static final String FORMAT_SQL_COMMAND = "editor-format-sql-command";
-    
+
 //    private static final String REMOVE_COMMENT_LINES_COMMAND = "remove-comment-lines-command";
 
     private static final String COMMENT_LINES_COMMAND = "comment-lines-command";
@@ -96,51 +96,51 @@ class QueryEditorToolBar extends PanelToolBar {
     private static final String EXECUTE_COMMAND = "execute-command";
 
     public static final String NAME = "Query Editor Tool Bar";
-    
+
     /** button access map */
     private Map<String, RolloverButton> buttons;
 
     private final ActionMap queryEditorActionMap;
 
     private final InputMap queryEditorInputMap;
-    
+
     public QueryEditorToolBar(ActionMap queryEditorActionMap, InputMap queryEditorInputMap) {
 
         this.queryEditorActionMap = queryEditorActionMap;
         this.queryEditorInputMap = queryEditorInputMap;
 
         try {
-            
+
             init();
 
         } catch (Exception e) {
 
             e.printStackTrace();
-        }   
+        }
 
     }
-    
-    /** 
-     * Initializes the state of this instance. 
+
+    /**
+     * Initializes the state of this instance.
      */
     private void init() throws Exception {
         buttons = new HashMap<String,RolloverButton>();
 
-        addButton(createButton(EXECUTE_COMMAND, 
+        addButton(createButton(EXECUTE_COMMAND,
                      "Execute the contents of the query editor"));
 
-        addButton(createButton(EXECUTE_AT_CURSOR_COMMAND, 
+        addButton(createButton(EXECUTE_AT_CURSOR_COMMAND,
                      "Execute query at cursor"));
-        
-        addButton(createButton(EXECUTE_SELECTION_COMMAND, 
+
+        addButton(createButton(EXECUTE_SELECTION_COMMAND,
                      "Execute the current text selection"));
-        
-        addButton(createButton(EDITOR_STOP_COMMAND, 
+
+        addButton(createButton(EDITOR_STOP_COMMAND,
                      "Cancel Current Statement"));
-        
+
         addSeparator();
 
-        addButton(createButton(CLEAR_EDITOR_OUTPUT_COMMAND, 
+        addButton(createButton(CLEAR_EDITOR_OUTPUT_COMMAND,
                      "Clear the editor's output log panel"));
 
         addButton(createButton(SQL_HISTORY_COMMAND, "SQL command history"));
@@ -154,55 +154,55 @@ class QueryEditorToolBar extends PanelToolBar {
         addButton(createButton(EDITOR_NEXT_COMMAND, "Next Statement"));
 
         addSeparator();
-        
-        addButton(createButton(COMMIT_COMMAND, 
+
+        addButton(createButton(COMMIT_COMMAND,
                      "Commit all changes since last commit/rollback"));
-        
-        addButton(createButton(ROLLBACK_COMMAND, 
+
+        addButton(createButton(ROLLBACK_COMMAND,
                      "Rollback all changes since last commit/rollback"));
-  
-        addButton(createButton(TOGGLE_AUTOCOMMIT_COMMAND, 
+
+        addButton(createButton(TOGGLE_AUTOCOMMIT_COMMAND,
                      "Toggle auto-commit on/off"));
 
-        addButton(createButton(EDITOR_CONN_CHANGE_COMMAND, 
+        addButton(createButton(EDITOR_CONN_CHANGE_COMMAND,
                      "Closes the editor's connection and retrieves another from the pool"));
 
         addSeparator();
 
-        addButton(createButton(EDITOR_RS_METADATA_COMMAND, 
+        addButton(createButton(EDITOR_RS_METADATA_COMMAND,
                      "Display this result set's meta data"));
 
-        addButton(createButton(EDITOR_EXPORT_COMMAND, 
+        addButton(createButton(EDITOR_EXPORT_COMMAND,
                      "Export the selected result set to file"));
 
         addSeparator();
 
-        addButton(createButton(TOGGLE_EDITOR_OUTPUT_COMMAND, 
+        addButton(createButton(TOGGLE_EDITOR_OUTPUT_COMMAND,
                      "Show/hide the output pane"));
 
         addSeparator();
-        
-        addButton(createButton(SHIFT_TEXT_LEFT_COMMAND, 
+
+        addButton(createButton(SHIFT_TEXT_LEFT_COMMAND,
                      "Shift line/selection left"));
 
-        addButton(createButton(SHIFT_TEXT_RIGHT_COMMAND, 
+        addButton(createButton(SHIFT_TEXT_RIGHT_COMMAND,
                      "Shift line/selection right"));
-        
+
         addSeparator();
-        
+
         addButton(createButton(COMMENT_LINES_COMMAND, "Comment/Uncomment"));
 
-//        addButton(createButton(REMOVE_COMMENT_LINES_COMMAND, 
+//        addButton(createButton(REMOVE_COMMENT_LINES_COMMAND,
 //                     "Uncomment"));
 
         addButton(createButton(FORMAT_SQL_COMMAND, "Format SQL"));
-        
+
         addSeparator();
-        
+
         addButton(createButton(EDITOR_HELP_COMMAND, "Query Editor help"));
-        
+
     }
-    
+
     private JButton createQueryBookmarkButton() {
 
         PopupMenuButton button = new PopupMenuButton(
@@ -210,25 +210,25 @@ class QueryEditorToolBar extends PanelToolBar {
         button.setText(null);
 
         // TODO: configurable shortcut keys for bookmark actions
-        
+
         String actionMapKey = "bookmarks-button";
         KeyStroke keyStroke = KeyStroke.getKeyStroke("control B");
 
         button.setKeyStroke(keyStroke);
-        
+
         queryEditorActionMap.put(actionMapKey, button.getAction());
         queryEditorInputMap.put(keyStroke, actionMapKey);
 
         actionMapKey = "add-bookmark-command";
         keyStroke = KeyStroke.getKeyStroke("control shift B");
-        
+
         queryEditorActionMap.put(actionMapKey, ActionBuilder.get(actionMapKey));
         queryEditorInputMap.put(keyStroke, actionMapKey);
-        
+
         createQueryBookmarkMenuItems(button);
 
         buttons.put(QUERY_BOOKMARKS, button);
-        
+
         return button;
     }
 
@@ -238,7 +238,7 @@ class QueryEditorToolBar extends PanelToolBar {
      * @param true | false
      */
     public void enableAllButtons(boolean enable) {
-        
+
         for (String key : buttons.keySet()) {
 
             buttons.get(key).setEnabled(enable);
@@ -258,11 +258,11 @@ class QueryEditorToolBar extends PanelToolBar {
             button.setEnabled(enable);
         }
     }
-    
+
     public void setMetaDataButtonEnabled(boolean enable) {
         buttons.get(EDITOR_RS_METADATA_COMMAND).setEnabled(enable);
     }
-    
+
     public void setPreviousButtonEnabled(boolean enable) {
         buttons.get(EDITOR_PREVIOUS_COMMAND).setEnabled(enable);
     }
@@ -277,22 +277,22 @@ class QueryEditorToolBar extends PanelToolBar {
         buttons.get(EXECUTE_AT_CURSOR_COMMAND).setEnabled(!enable);
         buttons.get(EXECUTE_SELECTION_COMMAND).setEnabled(!enable);
     }
-    
+
     public void setCommitsEnabled(boolean enable) {
         buttons.get(COMMIT_COMMAND).setEnabled(enable);
         buttons.get(ROLLBACK_COMMAND).setEnabled(enable);
     }
-    
+
     public void setExportButtonEnabled(boolean enable) {
         buttons.get(EDITOR_EXPORT_COMMAND).setEnabled(enable);
     }
-    
+
     public String toString() {
         return NAME;
     }
-    
+
     protected void reloadBookmarkItems() {
-        
+
         PopupMenuButton button = (PopupMenuButton)buttons.get(QUERY_BOOKMARKS);
         button.removeMenuItems();
 
@@ -303,12 +303,12 @@ class QueryEditorToolBar extends PanelToolBar {
 
         button.addMenuItem(createMenuItemFromCommand("add-bookmark-command"));
         button.addMenuItem(createMenuItemFromCommand("manage-bookmarks-command"));
-        
+
         if (QueryBookmarks.getInstance().hasQueryBookmarks()) {
-            
+
             button.addSeparator();
 
-            List<QueryBookmark> bookmarks = 
+            List<QueryBookmark> bookmarks =
                 QueryBookmarks.getInstance().getQueryBookmarks();
 
             for (QueryBookmark bookmark : bookmarks) {
@@ -332,13 +332,13 @@ class QueryEditorToolBar extends PanelToolBar {
      * and with the specified tool tip text.
      */
     private RolloverButton createButton(String actionId, String toolTipText) {
-        RolloverButton button = 
-                new RolloverButton(ActionBuilder.get(actionId), toolTipText);
+
+        RolloverButton button = new RolloverButton(ActionBuilder.get(actionId), toolTipText);
         button.setText(Constants.EMPTY);
         buttons.put(actionId, button);
         return button;
     }
-    
+
 }
 
 

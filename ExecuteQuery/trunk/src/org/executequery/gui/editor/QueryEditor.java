@@ -276,7 +276,7 @@ public class QueryEditor extends DefaultTabView
         gbc.gridy++;
         gbc.weightx = 0;
         gbc.gridwidth = 1;
-        gbc.insets.top = 5;
+        gbc.insets.top = 7;
         gbc.insets.left = 5;
         gbc.insets.right = 10;
         toolsPanel.add(createLabel("Connection:", 'C'), gbc);
@@ -295,6 +295,7 @@ public class QueryEditor extends DefaultTabView
         toolsPanel.add(maxRowCountCheckBox, gbc);
         gbc.gridx++;
         gbc.insets.left = 0;
+        gbc.insets.top = 7;
         gbc.insets.right = 10;
         toolsPanel.add(createLabel("Max Rows:", 'R'), gbc);
         gbc.gridx++;
@@ -889,6 +890,17 @@ public class QueryEditor extends DefaultTabView
      */
     public boolean tabViewClosing() {
 
+        if (isExecuting()) {
+
+            if (MiscUtils.isMinJavaVersion(1, 6)) {
+
+                GUIUtilities.displayWarningMessage(
+                        "Editor is currently executing.\nPlease wait until " +
+                        "finished or attempt to cancel the running query.");
+            }
+            return false;
+        }
+
         UserProperties properties = UserProperties.getInstance();
 
         if (properties.getBooleanProperty("general.save.prompt") && contentChanged) {
@@ -1048,6 +1060,11 @@ public class QueryEditor extends DefaultTabView
         return editorPanel.getCompleteWordEndingAtCursor();
     }
 
+    private boolean isExecuting() {
+
+        return delegate.isExecuting();
+    }
+
     /**
      * Executes the specified query.
      *
@@ -1116,6 +1133,22 @@ public class QueryEditor extends DefaultTabView
     public void shiftTextLeft() {
 
         editorPanel.shiftTextLeft();
+    }
+
+    /**
+     * Duplicates the cursor current row up
+     */
+    public void duplicateRowUp() {
+
+        editorPanel.duplicateRowUp();
+    }
+
+    /**
+     * Duplicates the cursor current row down
+     */
+    public void duplicateRowDown() {
+
+        editorPanel.duplicateRowDown();
     }
 
     /**

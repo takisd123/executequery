@@ -44,13 +44,13 @@ import org.underworldlabs.swing.GlassPanePanel;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class BaseDialog extends AbstractBaseDialog 
+public class BaseDialog extends AbstractBaseDialog
                         implements FocusListener,
                                    ActionContainer {
-    
+
     /** the content panel */
     private JPanel contentPanel;
-    
+
     /** Creates a new instance of BaseDialog */
     public BaseDialog(String name, boolean modal) {
         this(name, modal, null);
@@ -88,7 +88,7 @@ public class BaseDialog extends AbstractBaseDialog
     }
 
     /**
-     * Indicates that a [long-running] process has ended. 
+     * Indicates that a [long-running] process has ended.
      * This triggers the glass pane off and sets the cursor appropriately.
      */
     public void unblock() {
@@ -113,18 +113,18 @@ public class BaseDialog extends AbstractBaseDialog
 
     // ------------------------------------------
     // FocusListener implementation
-    
+
     public void focusGained(FocusEvent e) {
         dialogFocusChanged(true);
     }
-    
+
     public void focusLost(FocusEvent e) {
         dialogFocusChanged(false);
     }
 
     // ------------------------------------------
-    
-    /** 
+
+    /**
      *  Removes this dialog from the application
      *  controller <code>GUIUtilities</code> object before
      *  a call to <code>super.dispose()</code>.
@@ -147,7 +147,7 @@ public class BaseDialog extends AbstractBaseDialog
     private void superDispose() {
         super.dispose();
     }
-    
+
     /**
      * Indicates the process has completed.
      */
@@ -164,7 +164,7 @@ public class BaseDialog extends AbstractBaseDialog
         return true;
     }
 
-    /** 
+    /**
      *  Called for a change in focus as specified. This
      *  method will pass this object into <code>GUIUtilities</code>
      *  methods <code>setFocusedDialog(JDialog)</code> and
@@ -192,7 +192,7 @@ public class BaseDialog extends AbstractBaseDialog
         }
         contentPanel = panel;
         getContentPane().setLayout(new GridBagLayout());
-        getContentPane().add(panel, 
+        getContentPane().add(panel,
                 new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.SOUTHEAST, GridBagConstraints.BOTH,
                 new Insets(5, 5, 5, 5), 0, 0));
@@ -220,7 +220,7 @@ public class BaseDialog extends AbstractBaseDialog
     public JPanel getContentPanel() {
         return contentPanel;
     }
-    
+
     /**
      * Packs, positions and displays the dialog.
      */
@@ -228,17 +228,17 @@ public class BaseDialog extends AbstractBaseDialog
 
         // check for multiple calls
         if (isVisible()) {
-            
+
             return;
         }
-        
+
         pack();
         setLocation(GUIUtilities.getLocationForDialog(getSize()));
         GUIUtilities.registerDialog(this);
         setVisible(true);
-        
+
         if (contentPanel instanceof FocusComponentPanel) {
-        
+
             GUIUtils.requestFocusInWindow(
                     ((FocusComponentPanel)contentPanel).getDefaultFocusComponent());
         }

@@ -46,7 +46,7 @@ import org.underworldlabs.jdbc.DataSourceException;
  * @date     $Date: 2009-04-11 01:46:19 +1000 (Sat, 11 Apr 2009) $
  */
 public class DefaultDatabaseTable extends DefaultDatabaseObject implements DatabaseTable {
-    
+
     /** the table columns */
     private List<DatabaseColumn> columns;
 
@@ -55,10 +55,10 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
     /** the table indexed columns */
     private List<TableColumnIndex> indexes;
-    
+
     /** the user modified SQL text for changes */
     private String modifiedSQLText;
-    
+
     /** Creates a new instance of DatabaseTable */
     public DefaultDatabaseTable(DatabaseObject object) {
 
@@ -74,36 +74,36 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public DefaultDatabaseTable(DatabaseHost host) {
         super(host, "TABLE");
     }
-    
+
     /**
      * Propagates the call to getColumns().
      */
     public List<NamedObject> getObjects() throws DataSourceException {
-        
+
         List<DatabaseColumn> _columns = getColumns();
         if (_columns == null) {
-            
+
             return null;
         }
 
         List<NamedObject> objects = new ArrayList<NamedObject>(_columns.size());
         for (DatabaseColumn i : _columns) {
-            
+
             objects.add(i);
         }
-        
+
         return objects;
     }
 
     public List<DatabaseColumn> getExportedKeys() throws DataSourceException {
-        
+
         if (!isMarkedForReload() && exportedColumns != null) {
-            
+
             return exportedColumns;
         }
 
         if (exportedColumns != null) {
-            
+
             exportedColumns.clear();
             exportedColumns = null;
         }
@@ -111,37 +111,37 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         DatabaseHost host = getHost();
         if (host != null) {
 
-            exportedColumns = host.getExportedKeys(getCatalogName(), 
+            exportedColumns = host.getExportedKeys(getCatalogName(),
                                                    getSchemaName(),
                                                    getName());
         }
 
         return exportedColumns;
     }
-    
+
     public boolean hasReferenceTo(DatabaseTable anotherTable) {
 
         /*
         try {
-        
+
             DatabaseMetaData metaData = getHost().getDatabaseMetaData();
-            
+
             int FKTABLE_NAME_INDEX = 3;
-            
+
             ResultSet rs = metaData.getImportedKeys(getCatalogName(), getSchemaName(), getName());
 
             try {
-            
+
                 String anotherTableName = anotherTable.getName();
-                
+
                 while (rs.next()) {
-                    
-                    System.out.println("table: " + getName() + 
+
+                    System.out.println("table: " + getName() +
                             " fktable: "+rs.getString(FKTABLE_NAME_INDEX));
-                    
+
                     if (anotherTableName.equalsIgnoreCase(
                             rs.getString(FKTABLE_NAME_INDEX))) {
-                        
+
                         return true;
                     }
 
@@ -153,24 +153,24 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                     rs.close();
                 }
-                
+
             }
 
             return false;
 
         } catch (SQLException e) {
-            
+
             throw new DataSourceException(e);
         }
 
         */
-            
+
         List<ColumnConstraint> constraints = getConstraints();
 
         String anotherTableName = anotherTable.getName();
-        
+
         for (ColumnConstraint constraint : constraints) {
-            
+
             if (constraint.isForeignKey()) {
 
                 if (constraint.getReferencedTable().equals(anotherTableName)) {
@@ -179,11 +179,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 }
 
             }
-            
+
         }
-        
+
         return false;
-    
+
     }
 
     /**
@@ -195,22 +195,22 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return getColumns().size();
     }
-        
+
     /**
      * Returns the columns of this table.
      *
      * @return the columns
      */
     public List<DatabaseColumn> getColumns() throws DataSourceException {
-        
+
         if (!isMarkedForReload() && columns != null) {
-            
+
             return columns;
         }
 
         // otherwise cleanup existing references
         if (columns != null) {
-            
+
             columns.clear();
             columns = null;
         }
@@ -220,9 +220,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
             ResultSet rs = null;
             try {
-                
-                List<DatabaseColumn> _columns = 
-                        host.getColumns(getCatalogName(), 
+
+                List<DatabaseColumn> _columns =
+                        host.getColumns(getCatalogName(),
                                         getSchemaName(),
                                         getName());
 
@@ -230,7 +230,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                     columns = new ArrayList<DatabaseColumn>(_columns.size());
                     for (DatabaseColumn i : _columns) {
-                        
+
                         columns.add(new DatabaseTableColumn(this, i));
                     }
 
@@ -241,12 +241,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                     // check that the db supports catalog and schema names
                     if (!dmd.supportsCatalogsInTableDefinitions()) {
-                        
+
                         _catalog = null;
                     }
 
                     if (!dmd.supportsSchemasInTableDefinitions()) {
-                        
+
                         _schema = null;
                     }
 
@@ -256,30 +256,30 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                         String pkColumn = rs.getString(4);
 
                         for (DatabaseColumn i : columns) {
-                            
+
                             if (i.getName().equalsIgnoreCase(pkColumn)) {
-                        
+
                                 DatabaseTableColumn column = (DatabaseTableColumn)i;
-                                TableColumnConstraint constraint = 
+                                TableColumnConstraint constraint =
                                         new TableColumnConstraint(
                                             column, ColumnConstraint.PRIMARY_KEY);
 
                                 constraint.setName(rs.getString(6));
                                 column.addConstraint(constraint);
                                 break;
-                                
+
                             }
                         }
                     }
                     rs.close();
 
                     try {
-                        
+
                     // TODO: XXX
-                        
+
                     // sapdb amd maxdb dump on imported/exported keys
                     // surround with try/catch hack to get at least a columns list
-                    
+
                     rs = dmd.getImportedKeys(_catalog, _schema, getName());
                     while (rs.next()) {
 
@@ -290,7 +290,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                             if (i.getName().equalsIgnoreCase(fkColumn)) {
 
                                 DatabaseTableColumn column = (DatabaseTableColumn)i;
-                                TableColumnConstraint constraint = 
+                                TableColumnConstraint constraint =
                                         new TableColumnConstraint(
                                             column, ColumnConstraint.FOREIGN_KEY);
 
@@ -305,10 +305,10 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                             }
                         }
                     }
-                    
+
                     } catch (SQLException e) {}
                 }
-            
+
             } catch (DataSourceException e) {
 
                 // catch and re-throw here to create
@@ -316,7 +316,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 // keep hitting the same error
                 columns = new ArrayList<DatabaseColumn>(0);
                 throw e;
-            
+
             } catch (SQLException e) {
 
                 // catch and re-throw here to create
@@ -324,7 +324,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 // keep hitting the same error
                 columns = new ArrayList<DatabaseColumn>(0);
                 throw new DataSourceException(e);
-            
+
             } finally {
 
                 releaseResources(rs);
@@ -334,7 +334,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
         return columns;
     }
-    
+
     /**
      * Returns the columns of this table.
      *
@@ -346,29 +346,29 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
             List<ColumnConstraint> constraints =
                     new ArrayList<ColumnConstraint>();
-            
+
             for (DatabaseColumn i : columns) {
 
                 DatabaseTableColumn column = (DatabaseTableColumn)i;
 
                 if (column.hasConstraints()) {
-                
+
                     List<ColumnConstraint> columnConstraints =
                             column.getConstraints();
-    
+
                     for (ColumnConstraint j : columnConstraints) {
 
                         constraints.add(j);
                     }
-    
+
                 }
 
             }
-            
+
             return constraints;
 
         } else {
-          
+
             return new ArrayList<ColumnConstraint>(0);
         }
     }
@@ -379,9 +379,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      * @return the indexes
      */
     public List<TableColumnIndex> getIndexes() throws DataSourceException {
-        
+
         if (!isMarkedForReload() && indexes != null) {
-        
+
             return indexes;
         }
 
@@ -397,7 +397,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 String name = rs.getString(6);
 
                 if (StringUtils.isBlank(name)) {
-                
+
                     continue;
                 }
 
@@ -409,25 +409,25 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
             return indexes;
-        
+
         } catch (DataSourceException e) {
-          
+
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
             indexes = new ArrayList<TableColumnIndex>(0);
             throw e;
-        
+
         } catch (SQLException e) {
-          
+
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
             indexes = new ArrayList<TableColumnIndex>(0);
             throw new DataSourceException(e);
-        
+
         } finally {
-          
+
             releaseResources(rs);
             setMarkedForReload(false);
         }
@@ -458,7 +458,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             throw new DataSourceException(e);
         }
     }
-    
+
     /**
      * Returns the database object type.
      *
@@ -476,7 +476,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public String getMetaDataKey() {
         return "TABLE";
     }
-    
+
     /**
      * Override to clear the columns.
      */
@@ -486,45 +486,45 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         clearColumns();
         clearIndexes();
     }
-    
+
     private void clearColumns() {
         if (columns != null) {
             columns.clear();
         }
-        columns = null;        
+        columns = null;
     }
-    
+
     private void clearIndexes() {
         if (indexes != null) {
             indexes.clear();
         }
-        indexes = null;        
+        indexes = null;
     }
-    
+
     /**
      * Reverts any changes made to this table and associated elements.
      */
     public void revert() {
 
-        List<DatabaseColumn> newColumns = new ArrayList<DatabaseColumn>(); 
-        
+        List<DatabaseColumn> newColumns = new ArrayList<DatabaseColumn>();
+
         for (DatabaseColumn i : columns) {
 
             DatabaseTableColumn column = (DatabaseTableColumn)i;
-        
+
             if (!column.isNewColumn()) {
 
                 column.revert();
-                
+
             } else {
-                
+
                 newColumns.add(column);
             }
-            
+
         }
 
         for (DatabaseColumn column : newColumns) {
-            
+
             columns.remove(column);
         }
 
@@ -538,17 +538,17 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public int applyChanges() throws DataSourceException {
 
         Statement stmnt = null;
-        
+
         try {
-        
+
             String changes = getModifiedSQLText();
             if (StringUtils.isBlank(changes)) {
-            
+
                 // bail if we're empty here
-                
+
                 return 1;
             }
-            
+
             int result = 0;
             String[] queries = changes.split(StatementGenerator.END_DELIMITER);
 
@@ -557,14 +557,14 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (int i = 0; i < queries.length; i++) {
 
                 String query = queries[i].trim();
-                
+
                 if (StringUtils.isNotBlank(query)) {
 
-                    result += stmnt.executeUpdate(query);                    
+                    result += stmnt.executeUpdate(query);
                 }
 
             }
-            
+
             if (!getHost().getConnection().getAutoCommit()) {
 
                 getHost().getConnection().commit();
@@ -584,21 +584,21 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     }
 
     /**
-     * Indicates whether this table or any of its columns 
+     * Indicates whether this table or any of its columns
      * or constraints have pending modifications to be applied.
      *
      * @return true | false
      */
     public boolean isAltered() throws DataSourceException {
-        
+
         List<DatabaseColumn> _columns = getColumns();
-        
+
         if (_columns != null) {
-            
+
             for (DatabaseColumn i : _columns) {
-            
+
                 DatabaseTableColumn column = (DatabaseTableColumn)i;
-                
+
                 if (column.hasChanges()) {
 
                     return true;
@@ -606,7 +606,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
             }
         }
-        
+
         List<ColumnConstraint> constraints = getConstraints();
 
         if (constraints != null) {
@@ -614,7 +614,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (ColumnConstraint i : constraints) {
 
                 if (i.isNewConstraint() || i.isAltered()) {
-                
+
                     return true;
                 }
 
@@ -629,19 +629,19 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      * Returns the ALTER TABLE statement to modify this constraint.
      */
     public String getAlteredSQLText() throws DataSourceException {
-        
+
         StringBuilder sb = new StringBuilder();
 
         // retrieve column alter changes
         List<DatabaseColumn> _columns = getColumns();
 
         if (_columns != null) {
-            
-            StatementGenerator statementGenerator = createStatementGenerator();            
+
+            StatementGenerator statementGenerator = createStatementGenerator();
             String columnsAlter = statementGenerator.alterTable(databaseProductName(), this);
             sb.append(columnsAlter);
         }
-        
+
         // retrieve constraint changes
         /*
         List<ColumnConstraint> constraints = getConstraints();
@@ -654,7 +654,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
         }
         */
-        
+
         return sb.toString();
     }
 
@@ -664,37 +664,37 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     }
 
     public String getDropSQLText(boolean cascadeConstraints) {
-        
+
         StatementGenerator statementGenerator = createStatementGenerator();
-        
+
         String databaseProductName = databaseProductName();
 
         String dropStatement = null;
-        
+
         if (cascadeConstraints) {
 
             dropStatement = statementGenerator.dropTableCascade(databaseProductName, this);
 
         } else {
-            
+
             dropStatement = statementGenerator.dropTable(databaseProductName, this);
         }
-        
+
         return dropStatement;
     }
-    
+
     public List<ColumnConstraint> getPrimaryKeys() {
 
         List<ColumnConstraint> primaryKeys = new ArrayList<ColumnConstraint>();
-        
+
         List<ColumnConstraint> _constraints = getConstraints();
-        
+
         for (int i = 0, n = _constraints.size(); i < n; i++) {
-            
+
             ColumnConstraint columnConstraint = _constraints.get(i);
 
             if (columnConstraint.isPrimaryKey()) {
-                
+
                 primaryKeys.add(columnConstraint);
             }
 
@@ -702,19 +702,19 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return primaryKeys;
     }
-    
+
     public List<ColumnConstraint> getForeignKeys() {
 
         List<ColumnConstraint> foreignKeys = new ArrayList<ColumnConstraint>();
-        
+
         List<ColumnConstraint> _constraints = getConstraints();
-        
+
         for (int i = 0, n = _constraints.size(); i < n; i++) {
-            
+
             ColumnConstraint columnConstraint = _constraints.get(i);
 
             if (columnConstraint.isForeignKey()) {
-                
+
                 foreignKeys.add(columnConstraint);
             }
 
@@ -722,19 +722,19 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return foreignKeys;
     }
-    
+
     public List<ColumnConstraint> getUniqueKeys() {
 
         List<ColumnConstraint> uniqueKeys = new ArrayList<ColumnConstraint>();
-        
+
         List<ColumnConstraint> _constraints = getConstraints();
-        
+
         for (int i = 0, n = _constraints.size(); i < n; i++) {
-            
+
             ColumnConstraint columnConstraint = _constraints.get(i);
 
             if (columnConstraint.isUniqueKey()) {
-                
+
                 uniqueKeys.add(columnConstraint);
             }
 
@@ -742,28 +742,28 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return uniqueKeys;
     }
-    
+
     public String getAlterSQLTextForUniqueKeys() {
-        
+
         StatementGenerator statementGenerator = createStatementGenerator();
 
         return statementGenerator.createUniqueKeyChange(databaseProductName(), this);
     }
-    
+
     public String getAlterSQLTextForForeignKeys() {
-        
+
         StatementGenerator statementGenerator = createStatementGenerator();
 
         return statementGenerator.createForeignKeyChange(databaseProductName(), this);
     }
-    
+
     public String getAlterSQLTextForPrimaryKeys() {
-        
+
         StatementGenerator statementGenerator = createStatementGenerator();
 
         return statementGenerator.createPrimaryKeyChange(databaseProductName(), this);
     }
-    
+
     public String getCreateConstraintsSQLText() throws DataSourceException {
 
         StatementGenerator statementGenerator = createStatementGenerator();
@@ -772,7 +772,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return statementGenerator.tableConstraintsAsAlter(databaseProductName, this);
     }
-    
+
     /**
      * Returns the CREATE TABLE statement for this database table.
      * This will be table column (plus data type) definitions only,
@@ -785,18 +785,18 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         String databaseProductName = databaseProductName();
 
         if (style == STYLE_CONSTRAINTS_DEFAULT) {
-            
-            String createStatement = 
+
+            String createStatement =
                 statementGenerator.createTableWithConstraints(databaseProductName, this);
 
             return formatSqlText(createStatement);
 
         } else if (style == STYLE_CONSTRAINTS_ALTER) {
-            
+
             String createStatement = statementGenerator.createTable(databaseProductName, this);
-            
+
             StringBuilder sb = new StringBuilder();
-            
+
             sb.append(formatSqlText(createStatement));
             sb.append("\n\n");
             sb.append(statementGenerator.tableConstraintsAsAlter(databaseProductName, this));
@@ -804,19 +804,19 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             return sb.toString();
 
         } else {
-            
+
             String createStatement = statementGenerator.createTable(databaseProductName, this);
 
             return formatSqlText(createStatement);
         }
-        
+
     }
 
     private String formatSqlText(String text) {
-        
-        return new SQLFormatter(text).format();        
+
+        return new SQLFormatter(text).format();
     }
-    
+
     private String databaseProductName() {
 
         return getHost().getDatabaseProductName();
@@ -833,16 +833,16 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      * this does not include constraint meta data.
      */
     public String getCreateSQLTextX(int style) throws DataSourceException {
-        
+
         StringBuilder sb = new StringBuilder();
-        
+
         sb.append("CREATE TABLE ");
         sb.append(getName());
         sb.append(" (");
-        
+
         // determine the spaces from the left side to each column name
         String firstIndent = getSpacesForLength(sb.length());
-        
+
         // determine the spaces from the column name to the data type
         int maxLength = 0;
         for (DatabaseColumn i : columns) {
@@ -851,11 +851,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
         // add another 5 spaces from the max
         maxLength += 5;
-        
+
         int secondIndentLength = 0;
         for (int i = 0, n = columns.size(); i < n; i++) {
             DatabaseTableColumn column = (DatabaseTableColumn)columns.get(i);
-            
+
             if (i > 0) {
                 sb.append(firstIndent);
             }
@@ -867,14 +867,14 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             for (int j = 0; j < secondIndentLength; j++) {
                 sb.append(" ");
             }
-            
+
             sb.append(column.getFormattedDataType());
-            
+
             if (StringUtils.isNotBlank(column.getDefaultValue())) {
                 sb.append(" DEFAULT ");
                 sb.append(column.getDefaultValue());
             }
-            
+
             if (column.isRequired()) {
                 sb.append(" NOT NULL");
             }
@@ -884,12 +884,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
         }
-        
+
         if (style == STYLE_CONSTRAINTS_DEFAULT) {
             sb.append(",\n");
             List<ColumnConstraint> constraints = getConstraints();
             for (int i = 0, n = constraints.size(); i < n; i++) {
-                TableColumnConstraint constraint = 
+                TableColumnConstraint constraint =
                         (TableColumnConstraint)constraints.get(i);
                 sb.append(firstIndent);
                 sb.append(constraint.getConstraintSQLText());
@@ -902,7 +902,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             sb.append(");\n");
         }
         else if (style == STYLE_CONSTRAINTS_ALTER) {
-            
+
             sb.append(");\n\n");
             List<ColumnConstraint> constraints = getConstraints();
 
@@ -915,17 +915,17 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
         } else {
-          
+
             // finish off the statement as is
             sb.append(");\n");
         }
-        
+
         return sb.toString();
     }
 
     /**
-     * Returns the user modified SQL text to apply 
-     * any pending changes. If this has not been set (no 
+     * Returns the user modified SQL text to apply
+     * any pending changes. If this has not been set (no
      * changes were made) then a call to getAlteredSQLText()
      * is made.
      *
@@ -941,9 +941,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public void setModifiedSQLText(String modifiedSQLText) {
         this.modifiedSQLText = modifiedSQLText;
     }
-    
+
     public String getInsertSQLText() {
+
         try {
+
             StringBuilder sb = new StringBuilder();
             sb.append("INSERT INTO ");
             sb.append(getNameForQuery());
@@ -954,6 +956,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             List<DatabaseColumn> _columns = getColumns();
 
             for (int i = 0, n = _columns.size(); i < n; i++) {
+
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
 
                 sb.append(column.getNameForQuery());
@@ -966,12 +969,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             }
 
             sb.append(")\n");
-            
+
             String valuesString = "VALUES (";
             sb.append(valuesString);
 
             indent = getSpacesForLength(valuesString.length());
-            
+
             for (int i = 0, n = _columns.size(); i < n; i++) {
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
 
@@ -987,19 +990,20 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             sb.append(");\n");
 
             return sb.toString();
-        }
-        catch (DataSourceException e) {
+
+        } catch (DataSourceException e) {
+
             e.printStackTrace();
             return "";
         }
     }
-    
+
     public String getUpdateSQLText() {
         try {
             StringBuilder sb = new StringBuilder();
             sb.append("UPDATE ");
             sb.append(getNameForQuery());
-            
+
             String setString = "SET ";
             sb.append("\n");
             sb.append(setString);
@@ -1066,12 +1070,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
 
     }
-    
+
     private String columnAsValueString(String column) {
-        
+
         return toCamelCase(column);
     }
-    
+
     private String getSpacesForLength(int length) {
         StringBuilder sb = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
@@ -1081,25 +1085,25 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     }
 
     public DatabaseSource getDatabaseSource() {
-        
+
         if (getParent() != null) {
-            
+
             return (DatabaseSource) getParent().getParent();
         }
-        
+
         return null;
     }
-    
+
     public String getParentNameForStatement() {
 
         if (getParent() != null && getParent().getParent() != null) {
-            
+
             return getParent().getParent().getName();
         }
 
         return null;
     }
-        
+
 }
 
 

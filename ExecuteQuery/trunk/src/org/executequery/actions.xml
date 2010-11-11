@@ -30,7 +30,7 @@
           accel-key="control O"
           accel-editable="true"
           execute-class="org.executequery.actions.filecommands.OpenCommand"/>
-          
+
   <action id="close-selected-tab-1"
           name="Close Selected Tab"
           accel-key="control W"
@@ -155,7 +155,7 @@
           accel-key="control shift L"
           accel-editable="true"
           execute-class="org.executequery.actions.editcommands.ToLowerCaseCommand"/>
-          
+
   <action id="cut-command"
           name="Cut"
           mnemonic="T"
@@ -378,6 +378,18 @@
           accel-editable="true"
           small-icon="/org/executequery/icons/ShiftTextLeft16.png"
           execute-class="org.executequery.actions.queryeditor.ShiftTextLeftCommand"/>
+
+  <action id="duplicate-row-up-command"
+          name="Duplicate text up"
+          accel-key="control alt UP"
+          accel-editable="true"
+          execute-class="org.executequery.actions.queryeditor.DuplicateTextUpCommand"/>
+
+  <action id="duplicate-row-down-command"
+          name="Duplicate text down"
+          accel-key="control alt DOWN"
+          accel-editable="true"
+          execute-class="org.executequery.actions.queryeditor.DuplicateTextDownCommand"/>
 
   <action id="toggle-autocommit-command"
           name="Toggle Auto-Commit"

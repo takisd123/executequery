@@ -16,7 +16,9 @@
       <id>1</id>
       <name>Oracle</name>
       <url-patterns>
+          <url>jdbc:oracle:thin:@[host]:[source]</url>
           <url>jdbc:oracle:thin:@[host]:[port]:[source]</url>
+          <url>jdbc:oracle:oci:@[host]:[source]</url>
           <url>jdbc:oracle:oci:@[host]:[port]:[source]</url>
       </url-patterns>
    </database>
@@ -29,7 +31,7 @@
           <url>jdbc:sybase:Tds:[host]:[port]/[source]</url>
       </url-patterns>
    </database>
-   
+
    <database>
       <id>3</id>
       <name>DB2</name>
@@ -54,6 +56,7 @@
       <id>5</id>
       <name>MySQL</name>
       <url-patterns>
+          <url>jdbc:mysql://[host]/[source]</url>
           <url>jdbc:mysql://[host]:[port]/[source]</url>
       </url-patterns>
    </database>
@@ -62,6 +65,7 @@
       <id>6</id>
       <name>PostgreSQL</name>
       <url-patterns>
+          <url>jdbc:postgresql://[host]/[source]</url>
           <url>jdbc:postgresql://[host]:[port]/[source]</url>
       </url-patterns>
    </database>
@@ -78,6 +82,7 @@
       <id>10</id>
       <name>HSQL DB</name>
       <url-patterns>
+          <url>jdbc:hsqldb:.</url>
           <url>jdbc:hsqldb:[source]</url>
           <url>jdbc:hsqldb:hsql://[host]:[port]</url>
       </url-patterns>
@@ -113,6 +118,7 @@
       <name>Pointbase</name>
       <url-patterns>
           <url>jdbc:pointbase:server://[host]:[port]/[source]</url>
+          <url>jdbc:pointbase:embedded:[source]</url>
       </url-patterns>
    </database>
 
@@ -130,6 +136,42 @@
       <url-patterns>
           <url>jdbc:derby://[host]/[source]</url>
           <url>jdbc:derby://[host]:[port]/[source]</url>
+      </url-patterns>
+   </database>
+
+   <database>
+      <id>17</id>
+      <name>FrontBase</name>
+      <url-patterns>
+          <url>jdbc:FrontBase://[host]/[source]</url>
+      </url-patterns>
+   </database>
+
+   <database>
+      <id>18</id>
+      <name>jTDS</name>
+      <url-patterns>
+          <url>jdbc:jtds:sqlserver://[host]/[source]</url>
+          <url>jdbc:jtds:sqlserver://[host]:[port]/[source]</url>
+          <url>jdbc:jtds:sybase://[host]/[source]</url>
+          <url>jdbc:jtds:sybase://[host]:[port]/[source]</url>
+      </url-patterns>
+   </database>
+
+   <database>
+      <id>19</id>
+      <name>MckoiDDB</name>
+      <url-patterns>
+          <url>jdbc:mckoi://[host]/[source]/</url>
+          <url>jdbc:mckoi://[host]:[port][/[source]/</url>
+      </url-patterns>
+   </database>
+
+   <database>
+      <id>20</id>
+      <name>ThinkSQL</name>
+      <url-patterns>
+          <url>jdbc:thinksql://[host]:[port]</url>
       </url-patterns>
    </database>
 

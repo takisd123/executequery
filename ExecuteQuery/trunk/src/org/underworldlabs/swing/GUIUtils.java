@@ -49,7 +49,7 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @date     $Date: 2009-05-17 12:44:34 +1000 (Sun, 17 May 2009) $
  */
 public class GUIUtils {
-    
+
     /** Prevent instantiation */
     private GUIUtils() {}
 
@@ -76,7 +76,7 @@ public class GUIUtils {
         new ExceptionErrorDialog(owner, message, e);
     }
 
-    /** 
+    /**
      * Returns the specified component's visible bounds within the screen.
      *
      *  @return the component's visible bounds as a <code>Rectangle</code>
@@ -89,8 +89,8 @@ public class GUIUtils {
         return visibleRect;
     }
 
-    /** 
-     * Calculates and returns the centered position of a dialog with 
+    /**
+     * Calculates and returns the centered position of a dialog with
      * the specified size to be added to the desktop area.
      *
      * @param the component to center to
@@ -99,48 +99,48 @@ public class GUIUtils {
      * @return the <code>Point</code> at which to add the dialog
      */
     public static Point getLocationForDialog(Component component, Dimension dialogDim) {
-        
+
         if (component == null) {
-            
+
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            
+
             if (dialogDim.height > screenSize.height) {
                 dialogDim.height = screenSize.height;
             }
-            
+
             if (dialogDim.width > screenSize.width) {
                 dialogDim.width = screenSize.width;
             }
-            
+
             return new Point((screenSize.width - dialogDim.width) / 2,
                              (screenSize.height - dialogDim.height) / 2);
-        } 
-        
+        }
+
         //Rectangle dRec = getVisibleBoundsOnScreen(desktop.getDesktopPane());
         Dimension frameDim = component.getSize();
-        Rectangle dRec = new Rectangle(component.getX(), 
-                                       component.getY(), 
-                                       (int)frameDim.getWidth(), 
+        Rectangle dRec = new Rectangle(component.getX(),
+                                       component.getY(),
+                                       (int)frameDim.getWidth(),
                                        (int)frameDim.getHeight());
-        
+
         int dialogX = dRec.x + ((dRec.width - dialogDim.width) / 2);
         int dialogY = dRec.y + ((dRec.height - dialogDim.height) / 2);
-        
+
         if (dialogX < 0 || dialogY < 0) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            
+
             if (dialogDim.height > screenSize.height) {
                 dialogDim.height = screenSize.height;
             }
-            
+
             if (dialogDim.width > screenSize.width) {
                 dialogDim.width = screenSize.width;
             }
-            
+
             dialogX = (screenSize.width - dialogDim.width) / 2;
             dialogY = (screenSize.height - dialogDim.height) / 2;
-        } 
-        
+        }
+
         return new Point(dialogX, dialogY);
     }
 
@@ -152,36 +152,36 @@ public class GUIUtils {
     public static Vector<String> getSystemFonts() {
         GraphicsEnvironment gEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Font[] tempFonts = gEnv.getAllFonts();
-        
+
         char dot = '.';
         int dotIndex = 0;
-        
+
         char[] fontNameChars = null;
         String fontName = null;
         Vector<String> fontNames = new Vector<String>();
-        
+
         for (int i = 0; i < tempFonts.length; i++) {
-            
+
             fontName = tempFonts[i].getFontName();
             dotIndex = fontName.indexOf(dot);
-            
+
             if (dotIndex == -1) {
                 fontNames.add(fontName);
             }
             else {
                 fontNameChars = fontName.substring(0, dotIndex).toCharArray();
                 fontNameChars[0] = Character.toUpperCase(fontNameChars[0]);
-                
+
                 fontName = new String(fontNameChars);
-                
+
                 if (!fontNames.contains(fontName)) {
                     fontNames.add(fontName);
                 }
-                
-            } 
-            
-        } 
-        
+
+            }
+
+        }
+
         Collections.sort(fontNames);
         return fontNames;
     }
@@ -199,8 +199,8 @@ public class GUIUtils {
             }
         });
     }
-    
-    /** 
+
+    /**
      * Sets the specified cursor on the primary frame.
      *
      * @param the cursor to set
@@ -211,18 +211,18 @@ public class GUIUtils {
         }
     }
 
-    /** 
+    /**
      * Sets the application cursor to the system normal cursor
      * the specified component.
      *
-     * @param component - the component to set the cursor onto 
+     * @param component - the component to set the cursor onto
      */
     public static void showNormalCursor(Component component) {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR), component);
     }
-    
+
     /**
-     * Executes the specified runnable using the 
+     * Executes the specified runnable using the
      * <code>SwingWorker</code>.
      *
      * @param runnable - the runnable to be executed
@@ -235,10 +235,10 @@ public class GUIUtils {
                      runnable.run();
 
                  } catch (final Exception e) {
-                   
+
                      invokeAndWait(new Runnable() {
                          public void run() {
-                            displayExceptionErrorDialog(null, 
+                            displayExceptionErrorDialog(null,
                                     "Error in EDT thread execution: " + e.getMessage(), e);
                          }
                      });
@@ -249,9 +249,9 @@ public class GUIUtils {
          };
          worker.start();
      }
-    
+
     /**
-     * Runs the specified runnable in the EDT using 
+     * Runs the specified runnable in the EDT using
      * <code>SwingUtilities.invokeLater(...)</code>.
      *
      * @param runnable - the runnable to be executed
@@ -265,9 +265,9 @@ public class GUIUtils {
     }
 
     /**
-     * Runs the specified runnable in the EDT using 
+     * Runs the specified runnable in the EDT using
      * <code>SwingUtilities.invokeAndWait(...)</code>.
-     * Note: This method 'supresses' the method's 
+     * Note: This method 'supresses' the method's
      * thrown exceptions - InvocationTargetException and
      * InterruptedException.
      *
@@ -276,7 +276,7 @@ public class GUIUtils {
     public static void invokeAndWait(Runnable runnable) {
         if (!SwingUtilities.isEventDispatchThread()) {
             try {
-                //System.err.println("Not EDT");
+//                System.err.println("Not EDT");
                 SwingUtilities.invokeAndWait(runnable);
             }
             catch (InterruptedException e) {}
@@ -286,7 +286,7 @@ public class GUIUtils {
         }
     }
 
-    /** 
+    /**
      * Sets the application cursor to the system wait cursor on
      * the specified component.
      *
@@ -299,52 +299,52 @@ public class GUIUtils {
     // -------------------------------------------------------
     // ------ Helper methods for various option dialogs ------
     // -------------------------------------------------------
-    
+
     // These have been revised to use JDialog as the wrapper to
     // ensure the dialog is centered within the dektop pane and not
     // within the entire screen as you get with JOptionPane.showXXX()
-    
+
     public static final void displayInformationMessage(Component parent, Object message) {
         displayDialog(parent,
-                      JOptionPane.DEFAULT_OPTION, 
-                      JOptionPane.INFORMATION_MESSAGE, 
+                      JOptionPane.DEFAULT_OPTION,
+                      JOptionPane.INFORMATION_MESSAGE,
                       false,
-                      "OptionPane.informationIcon", 
-                      "Message", 
+                      "OptionPane.informationIcon",
+                      "Message",
                       message);
     }
-    
+
     public static final String displayInputMessage(Component parent, String title, Object message) {
         return displayDialog(parent,
-                             JOptionPane.OK_CANCEL_OPTION, 
-                             JOptionPane.QUESTION_MESSAGE, 
+                             JOptionPane.OK_CANCEL_OPTION,
+                             JOptionPane.QUESTION_MESSAGE,
                              true,
-                             "OptionPane.questionIcon", 
-                             title, 
+                             "OptionPane.questionIcon",
+                             title,
                              message).toString();
     }
-    
+
     public static final void displayWarningMessage(Component parent, Object message) {
         displayDialog(parent,
-                      JOptionPane.DEFAULT_OPTION, 
-                      JOptionPane.WARNING_MESSAGE, 
+                      JOptionPane.DEFAULT_OPTION,
+                      JOptionPane.WARNING_MESSAGE,
                       false,
-                      "OptionPane.warningIcon", 
-                      "Warning", 
+                      "OptionPane.warningIcon",
+                      "Warning",
                       message);
     }
-    
+
     /** The dialog return value - where applicable */
     private static Object dialogReturnValue;
-    
-    private static Object displayDialog(final Component parent, 
-                                        final int optionType, 
+
+    private static Object displayDialog(final Component parent,
+                                        final int optionType,
                                         final int messageType,
-                                        final boolean wantsInput, 
+                                        final boolean wantsInput,
                                         final String icon,
-                                        final String title, 
+                                        final String title,
                                         final Object message) {
-        
+
         dialogReturnValue = null;
 
         Runnable runnable = new Runnable() {
@@ -355,12 +355,12 @@ public class GUIUtils {
                 pane.setWantsInput(wantsInput);
 
                 JDialog dialog = pane.createDialog(parent, title);
-                
+
                 if (message instanceof DialogMessageContent) {
-                    
+
                     ((DialogMessageContent) message).setDialog(dialog);
                 }
-                
+
                 dialog.setLocation(getLocationForDialog(parent, dialog.getSize()));
                 dialog.setVisible(true);
                 dialog.dispose();
@@ -370,21 +370,21 @@ public class GUIUtils {
                 } else {
                     dialogReturnValue = pane.getValue();
                 }
-                
+
             }
         };
         invokeAndWait(runnable);
 
-        return dialogReturnValue;        
+        return dialogReturnValue;
     }
-    
+
     public static final void displayErrorMessage(Component parent, Object message) {
         displayDialog(parent,
-                      JOptionPane.DEFAULT_OPTION, 
+                      JOptionPane.DEFAULT_OPTION,
                       JOptionPane.ERROR_MESSAGE,
-                      false, 
+                      false,
                       "OptionPane.errorIcon",
-                      "Error Message", 
+                      "Error Message",
                       message);
     }
 
@@ -393,54 +393,54 @@ public class GUIUtils {
                                 parent,
                                 JOptionPane.OK_CANCEL_OPTION,
                                 JOptionPane.ERROR_MESSAGE,
-                                false, 
+                                false,
                                 "OptionPane.errorIcon",
-                                "Error Message", 
-                                message));        
+                                "Error Message",
+                                message));
     }
 
     public static final int displayYesNoDialog(Component parent, Object message, String title) {
         return formatDialogReturnValue(displayDialog(parent,
                                 JOptionPane.YES_NO_OPTION,
-                                JOptionPane.QUESTION_MESSAGE, 
+                                JOptionPane.QUESTION_MESSAGE,
                                 false,
-                                "OptionPane.questionIcon", 
-                                title, 
+                                "OptionPane.questionIcon",
+                                title,
                                 message));
     }
-    
+
     public static final int displayConfirmCancelDialog(Component parent, Object message) {
         return formatDialogReturnValue(displayDialog(parent,
                                 JOptionPane.YES_NO_CANCEL_OPTION,
-                                JOptionPane.QUESTION_MESSAGE, 
+                                JOptionPane.QUESTION_MESSAGE,
                                 false,
-                                "OptionPane.questionIcon", 
-                                "Confirmation", 
+                                "OptionPane.questionIcon",
+                                "Confirmation",
                                 message));
     }
-    
+
     public static final int displayConfirmDialog(Component parent, Object message) {
         return formatDialogReturnValue(displayDialog(parent,
                                 JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE, 
+                                JOptionPane.WARNING_MESSAGE,
                                 false,
-                                "OptionPane.questionIcon", 
-                                "Confirmation", 
+                                "OptionPane.questionIcon",
+                                "Confirmation",
                                 message));
     }
 
     private static int formatDialogReturnValue(Object returnValue) {
-        
+
         if (returnValue instanceof Integer) {
 
             return ((Integer) returnValue).intValue();
         }
-         
+
         return -1;
     }
-    
-    /** 
-     * Schedules the garbage collector to run 
+
+    /**
+     * Schedules the garbage collector to run
      */
     public static void scheduleGC() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -478,7 +478,7 @@ public class GUIUtils {
     public static boolean isMetalLookAndFeel() {
         return UIUtils.isMetalLookAndFeel();
     }
-    
+
 }
 
 

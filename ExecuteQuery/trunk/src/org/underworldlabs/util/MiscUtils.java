@@ -56,29 +56,29 @@ import javax.swing.KeyStroke;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public final class MiscUtils {
-    
+
     public static final String ACTION_DELIMETER = "+";
-    
+
     private static DecimalFormat oneDigitFormat;
     private static DecimalFormat twoDigitFormat;
 
     private MiscUtils() {}
-    
+
     public static double bytesToKiloBytes(long bytes) {
-        
+
         return ((double) bytes / 1024);
     }
-    
+
     public static double bytesToMegaBytes(long bytes) {
-        
+
         return ((double) bytes / 1048576);
     }
-    
+
     public static double bytesToGigaBytes(long bytes) {
 
         return ((double) bytes / 1073741824);
     }
-    
+
     /**
      * Checks if the specified value is <code>null</code>.
      * This will also return <code>true</code> if the length
@@ -90,7 +90,7 @@ public final class MiscUtils {
     public static boolean isNull(String value) {
         return value == null || value.trim().length() == 0;
     }
-    
+
     /**
      * Tests if the specified value contains the specified
      * word as a WHOLE word.
@@ -100,22 +100,22 @@ public final class MiscUtils {
      * @return <code>true</code> if found, <code>false</code> otherwise
      */
     public static boolean containsWholeWord(String value, String word) {
-        
+
         int index = value.indexOf(word);
-        
+
         if (index == -1) {
             return false;
         }
-        
+
         int valueLength = value.length();
         int wordLength = word.length();
         int indexLength = index + wordLength;
-        
+
         if (indexLength == valueLength) // same word
             return true;
-        
+
         if (indexLength != valueLength) { // check for embedded word
-            
+
             if (index > 0) {
                 return Character.isWhitespace(value.charAt(indexLength)) &&
                         Character.isWhitespace(value.charAt(index - 1));
@@ -124,13 +124,13 @@ public final class MiscUtils {
                 return Character.isWhitespace(value.charAt(indexLength));
             }
 
-        }        
+        }
         else {
             return true;
         }
-        
+
     }
-    
+
     public static String getExceptionName(Throwable e) {
         String exceptionName = "";
         if (e.getCause() != null) {
@@ -139,43 +139,44 @@ public final class MiscUtils {
         } else {
             exceptionName = e.getClass().getName();
         }
-        
+
         int index = exceptionName.lastIndexOf('.');
         if (index != -1) {
             exceptionName = exceptionName.substring(index+1);
         }
         return exceptionName;
     }
-    
+
     public static String firstLetterToUpper(String value) {
+
         boolean nextUpper = false;
         char[] chars = value.toCharArray();
         StringBuffer sb = new StringBuffer(chars.length);
-        
+
         for (int i = 0; i < chars.length; i++) {
-            
+
             if (i == 0 || nextUpper) {
                 sb.append(Character.toUpperCase(chars[i]));
                 nextUpper = false;
                 continue;
             }
-            
+
             if (Character.isWhitespace(chars[i])) {
                 nextUpper = true;
                 sb.append(chars[i]);
                 continue;
             }
-            
+
             sb.append(Character.toLowerCase(chars[i]));
             nextUpper = false;
-            
+
         }
         return sb.toString();
     }
-    
+
     /**
      * Formats the specified the SQL exception object
-     * displaying the error message, error code and 
+     * displaying the error message, error code and
      * the SQL state code.
      *
      * @param e - the SQL exception
@@ -195,7 +196,7 @@ public final class MiscUtils {
         sb.append("\n");
         return sb.toString();
     }
-    
+
     /**
      * Returns a <code>String</code> array of the the CSV value
      * specified with the specfied delimiter.
@@ -207,25 +208,25 @@ public final class MiscUtils {
     public static String[] splitSeparatedValues(String csvString, String delim) {
         StringTokenizer st = new StringTokenizer(csvString, delim);
         List<String> list = new ArrayList<String>(st.countTokens());
-        
+
         while (st.hasMoreTokens()) {
             list.add(st.nextToken());
         }
-        
+
         String[] values = (String[])list.toArray(new String[list.size()]);
         return values;
     }
-    
+
     public static boolean containsValue(String[] values, String value) {
-        
+
         for (int i = 0; i < values.length; i++) {
-            
+
             if (values[i].compareTo(value) == 0) {
                 return true;
             }
-            
+
         }
-        
+
         return false;
 
     }
@@ -234,15 +235,15 @@ public final class MiscUtils {
         if (isNull(number)) {
             return false;
         }
-        char[] chars = number.toCharArray();        
+        char[] chars = number.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             if (!Character.isDigit(chars[i])) {
                 return false;
-            }            
+            }
         }
-        return true;        
+        return true;
     }
-    
+
     public static String getClassName(String path) {
 
         int index = path.indexOf(".class");
@@ -255,9 +256,9 @@ public final class MiscUtils {
         char pathSeparator = '/';
         char[] chars = path.toCharArray();
         StringBuffer sb = new StringBuffer(chars.length);
-        
+
         for (int i = 0; i < chars.length; i++) {
-            
+
             if (i == index) {
                 break;
             }
@@ -277,9 +278,9 @@ public final class MiscUtils {
             String interfaceName, String paths) throws MalformedURLException, IOException {
         return findImplementingClasses(interfaceName, paths, true);
     }
-    
+
     public static String[] findImplementingClasses(
-            String interfaceName, String paths, boolean interfaceOnly) 
+            String interfaceName, String paths, boolean interfaceOnly)
             throws MalformedURLException, IOException {
 
         URL[] urls = loadURLs(paths);
@@ -290,11 +291,11 @@ public final class MiscUtils {
         String className = null;
         String[] files = splitSeparatedValues(paths, ";");
         List<String> clazzes = new ArrayList<String>();
-        
+
         for (int i = 0; i < files.length; i++) {
 
             File file = new File(files[i]);
-            
+
             if (!file.isFile()) {
 
                 continue;
@@ -331,7 +332,7 @@ public final class MiscUtils {
                     if (!interfaceOnly) {
                         String name = null;
                         Class<?> _clazz = clazz;
-                        Class<?> superClazz = null;                        
+                        Class<?> superClazz = null;
                         while ((superClazz = _clazz.getSuperclass()) != null) {
                             name = superClazz.getName();
                             if (interfaceName.compareTo(name) == 0) {
@@ -340,19 +341,19 @@ public final class MiscUtils {
                             }
                             _clazz = superClazz;
                         }
-                        
+
                     }
-                    
+
                 }
                 // ignore - noticed with oracle 10g driver only
-                //catch (NoClassDefFoundError e) {} 
+                //catch (NoClassDefFoundError e) {}
                 // ignore noticed with db2 driver - no serialVersionUID
-                //catch (ClassFormatError e) {} 
+                //catch (ClassFormatError e) {}
                 // ignore and continue
                 catch (Throwable e) {}
 
             }
-            
+
         }
         return (String[])clazzes.toArray(new String[clazzes.size()]);
     }
@@ -374,7 +375,7 @@ public final class MiscUtils {
         }
 
         Class<?> superClazz = clazz.getSuperclass();
-        if (superClazz != null && !superClazz.isInterface() 
+        if (superClazz != null && !superClazz.isInterface()
                 && implementsClass(superClazz, implementation)) {
             return true;
         }
@@ -382,7 +383,7 @@ public final class MiscUtils {
         return false;
     }
 
-    
+
     public static String getImplementedClass(Class<?> clazz, String implementation) {
         Class<?>[] interfaces = clazz.getInterfaces();
         if (interfaces == null || interfaces.length == 0) {
@@ -390,7 +391,7 @@ public final class MiscUtils {
         }
 
         for (int k = 0; k < interfaces.length; k++) {
-            String name = interfaces[k].getName();            
+            String name = interfaces[k].getName();
             if (name.compareTo(implementation) == 0) {
                 return clazz.getName();
             }
@@ -406,7 +407,7 @@ public final class MiscUtils {
         }
         return null;
     }
-    
+
     public static URL[] loadURLs(String paths) throws MalformedURLException {
         String token = ";";
         Vector<String> pathsVector = new Vector<String>();
@@ -416,7 +417,7 @@ public final class MiscUtils {
             while (st.hasMoreTokens()) {
                 pathsVector.add(st.nextToken());
             }
-        } 
+        }
         else {
             pathsVector.add(paths);
         }
@@ -425,37 +426,37 @@ public final class MiscUtils {
         for (int i = 0; i < urls.length; i++) {
             File f = new File((String)pathsVector.elementAt(i));
             urls[i] = f.toURI().toURL();
-        } 
+        }
         return urls;
     }
-    
+
     public static String formatNumber(long number, String pattern) {
         NumberFormat nf = NumberFormat.getNumberInstance();
         DecimalFormat df = (DecimalFormat)nf;
         df.applyPattern(pattern);
         return df.format(number);
     }
-    
+
     public static String keyStrokeToString(KeyStroke keyStroke) {
         String value = null;
         if (keyStroke != null) {
             int mod = keyStroke.getModifiers();
             value = KeyEvent.getKeyModifiersText(mod);
-            
+
             if (!MiscUtils.isNull(value)) {
                 value += ACTION_DELIMETER;
             }
-            
+
             String keyText = KeyEvent.getKeyText(keyStroke.getKeyCode());
-            
+
             if (!MiscUtils.isNull(keyText)) {
                 value += keyText;
             }
-            
+
         }
         return value;
     }
-    
+
     /**
      * Returns the system properties from <code>System.getProperties()</code>
      * as a 2 dimensional array of key/name.
@@ -463,10 +464,10 @@ public final class MiscUtils {
     public static String[][] getSystemProperties() {
         Properties sysProps = System.getProperties();
         String[] keys = new String[sysProps.size()];
-        
+
         int count = 0;
         for (Enumeration<?> i = sysProps.propertyNames(); i.hasMoreElements();) {
-            keys[count++] = (String)i.nextElement();            
+            keys[count++] = (String)i.nextElement();
         }
 
         Arrays.sort(keys);
@@ -477,8 +478,8 @@ public final class MiscUtils {
         }
         return properties;
     }
-    
-    /** 
+
+    /**
      * Prints the system properties as [key: name].
      */
     public static void printSystemProperties() {
@@ -487,7 +488,7 @@ public final class MiscUtils {
             System.out.println(properties[i][0] + ":\t" + properties[i][1]);
         }
     }
-    
+
     public static void printActionMap(JComponent component) {
         printActionMap(component.getActionMap(), component.getClass().getName());
     }
@@ -526,9 +527,9 @@ public final class MiscUtils {
             }
         }
     }
-    
+
     public static String formatDuration(long value) {
-       
+
         if (twoDigitFormat == null || oneDigitFormat == null) {
             oneDigitFormat = new DecimalFormat("0");
             twoDigitFormat = new DecimalFormat("00");
@@ -547,7 +548,7 @@ public final class MiscUtils {
        String[] labels = {"milliseconds","seconds","minutes","hours"};
        for(int i = divisors.length-1;i >= 0;i--) {
           System.out.print(" " + result[i] + " " + labels[i]);
-       } 
+       }
        System.out.println();
        */
 
@@ -567,7 +568,7 @@ public final class MiscUtils {
     public static boolean getBooleanValue(String value) {
         return Boolean.valueOf(value).booleanValue();
     }
-    
+
     public static String charsToString(char[] chars) {
         StringBuffer sb = new StringBuffer(chars.length);
         for (int i = 0; i < chars.length; i++) {
@@ -575,9 +576,9 @@ public final class MiscUtils {
         }
         return sb.toString();
     }
- 
+
     /**
-     * Returns whether the current version of the JVM is at least 
+     * Returns whether the current version of the JVM is at least
      * that specified for major and minor version numbers. For example,
      * with a minium required of 1.4, the major version is 1 and minor is 4.
      *
@@ -596,18 +597,18 @@ public final class MiscUtils {
         }
 
         String[] installed = splitSeparatedValues(installedVersion, ".");
-        
+
         // expect to get something like x.x.x - need at least x.x
         if (installed.length < 2) {
             return false;
         }
-        
+
         // major at position 0
         int _version = Integer.parseInt(installed[0]);
         if (_version < major) {
             return false;
         }
-        
+
         _version = Integer.parseInt(installed[1]);
         if (_version < minor) {
             return false;
@@ -615,7 +616,7 @@ public final class MiscUtils {
 
         return true;
     }
-    
+
     /**
      * Returns the running Java VM version in full format using
      * <code>System.getProperty("java.version")</code>.
@@ -627,7 +628,7 @@ public final class MiscUtils {
     }
 
     /**
-     * Returns the running Java VM version in short format (major versio only) 
+     * Returns the running Java VM version in short format (major versio only)
      * using <code>System.getProperty("java.version")</code>.
      *
      * @return the Java VM version
