@@ -44,6 +44,7 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.components.LineNumber;
@@ -58,7 +59,7 @@ import org.executequery.sql.SqlMessages;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.util.MiscUtils;
 
-/** 
+/**
  * The SQL text area for the Query Editor.
  *
  * @author   Takis Diakoumis
@@ -70,14 +71,14 @@ public class QueryEditorTextPane extends SQLTextPane
                                             CaretListener,
                                             FocusListener,
                                             DocumentListener {
-    
+
     private static final int DEFAULT_CARET_BLINK_RATE = 500;
 
     private static final Insets INSETS = new Insets(2, 2, 2, 2);
 
     /** The editor panel containing this text component */
     private QueryEditorTextPanel editorPanel;
-    
+
     /** To display line numbers */
     private LineNumber lineBorder;
 
@@ -85,21 +86,21 @@ public class QueryEditorTextPane extends SQLTextPane
     protected TextUndoManager undoManager;
 
     private Map<String, EditorSQLShortcut> editorShortcuts;
-    
+
     public QueryEditorTextPane(QueryEditorTextPanel editorPanel) {
 
         this.editorPanel = editorPanel;
 
         try {
-        
+
             init();
 
         } catch (Exception e) {
-        
+
             e.printStackTrace();
         }
     }
-    
+
     private void init() throws Exception {
 
         setMargin(INSETS);
@@ -122,19 +123,19 @@ public class QueryEditorTextPane extends SQLTextPane
 
         setDragEnabled(true);
         setRequestFocusEnabled(true);
-        setFocusable(true);        
+        setFocusable(true);
 
         // set the caret
         createCaret();
 
         // set to insert mode
         document.setInsertMode(SqlMessages.INSERT_MODE);
-        
+
         loadEditorShortcuts();
     }
 
     private void createCaret() {
-        
+
         EditorCaret caret = new EditorCaret();
 
         int blinkRate = UIManager.getInt("TextPane.caretBlinkRate");
@@ -156,7 +157,7 @@ public class QueryEditorTextPane extends SQLTextPane
     public void showLineNumbers(boolean show) {
         lineBorder.getParent().setVisible(show);
     }
-    
+
     public void disableUpdates(boolean disable) {
 
         String text = getText();
@@ -173,9 +174,9 @@ public class QueryEditorTextPane extends SQLTextPane
         }
 
     }
-    
+
     public void disableCaretUpdate(boolean disable) {
-        
+
         if (disable) {
 
             removeCaretListener(this);
@@ -184,25 +185,25 @@ public class QueryEditorTextPane extends SQLTextPane
 
             boolean hasListener = false;
             CaretListener[] caretListners = getCaretListeners();
-            
+
             for (int i = 0; i < caretListners.length; i++) {
-                
+
                 if (caretListners[i] == this) {
                     hasListener = true;
                     break;
                 }
-                
+
             }
-            
+
             if (!hasListener) {
                 addCaretListener(this);
                 caretUpdate(null);
             }
-            
+
         }
-        
+
     }
-    
+
     /**
      * Clears the undo managers stored edits
      */
@@ -212,7 +213,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
     /**
      * Removes (designed to be temporary) listeners attached
-     * to this text pane including the caret updates and 
+     * to this text pane including the caret updates and
      * undo/redo listener objects.
      */
     protected void uninstallListeners() {
@@ -222,7 +223,7 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     /**
-     * Reinstates listeners attached to this text pane 
+     * Reinstates listeners attached to this text pane
      * including the caret updates and undo/redo listener objects.
      */
     protected void reinstallListeners() {
@@ -234,7 +235,7 @@ public class QueryEditorTextPane extends SQLTextPane
     private void loadDummyDocument() {
         setDocument(new DefaultStyledDocument());
     }
-    
+
     /**
      * Inserts the specified text at the offset.
      *
@@ -245,11 +246,11 @@ public class QueryEditorTextPane extends SQLTextPane
         try {
             fireTextUpdateStarting();
             loadDummyDocument();
-            
+
             try {
                 // clear the contents of we have any
                 int length = document.getLength();
-                
+
                 if (offset > length || offset < 0) {
                     offset = 0;
                 }
@@ -265,7 +266,7 @@ public class QueryEditorTextPane extends SQLTextPane
             setCaretPosition(offset);
         }
     }
-    
+
     /**
      * Loads the specified text into a blank 'offscreen' document
      * before switching to the SQL document. This is most effective
@@ -276,33 +277,33 @@ public class QueryEditorTextPane extends SQLTextPane
         try {
 
             fireTextUpdateStarting();
-            
+
             // clear the current held edits
             clearEdits();
-            
+
             // create a dummy document to load the text into
             loadDummyDocument();
-            
+
             try {
                 // clear the contents of we have any
                 int length = document.getLength();
                 if (length > 0) {
-            
+
                     // replace the existing text
                     document.replace(0, length, text, null);
 
                 } else {
-                
+
                     // set the new text
                     document.insertString(0, text, null);
                 }
-                
+
             }
             catch (BadLocationException e) {}
 
             // reset the SQL document
             setDocument(document);
-        
+
         } finally {
 
             fireTextUpdateFinished();
@@ -310,18 +311,18 @@ public class QueryEditorTextPane extends SQLTextPane
         }
 
     }
-    
+
     private void fireTextUpdateStarting() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         uninstallListeners();
     }
-    
+
     private void fireTextUpdateFinished() {
         updateLineBorder();
         reinstallListeners();
-        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));        
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
-    
+
     /**
      * Override to update the line border.
      */
@@ -346,7 +347,7 @@ public class QueryEditorTextPane extends SQLTextPane
     public void paintComponent(Graphics g) {
         int height = getHeight();
         int width = getWidth();
-        
+
         g.setColor(getBackground());
         g.fillRect(0, 0, width, height);
 
@@ -356,14 +357,14 @@ public class QueryEditorTextPane extends SQLTextPane
             g.setColor(QueryEditorSettings.getLineHighlightColour());
             g.fillRect(1, (currentRow * fontHeight) + 2, width - 1, fontHeight);
         }
-        
+
         // paint the right-hand margin
         if (QueryEditorSettings.isDisplayRightMargin()) {
             int xPosn = fontWidth * QueryEditorSettings.getRightMarginSize();
             g.setColor(QueryEditorSettings.getRightMarginColour());
             g.drawLine(xPosn, 0, xPosn, height);
         }
-        
+
         super.paintComponent(g);
     }
 
@@ -384,7 +385,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
     /**
      * Shifts the text at position start to the right.
-     * This will usually be the start position of any 
+     * This will usually be the start position of any
      * particular row.
      *
      * @param start - the start offset
@@ -393,38 +394,38 @@ public class QueryEditorTextPane extends SQLTextPane
         addUndoEdit();
         insertTextAtOffset(offset, "\t");
     }
-    
+
     public void insertTextAfter(int after, String text) {
         if (getDocument().getLength() > 0) {
             text = "\n" + text;
         }
         insertTextAtOffset(after, text);
     }
-    
+
     public JTextPane getQueryArea() {
         return this;
     }
-    
+
     public JComponent getLineBorder() {
         return lineBorder;
     }
-    
+
     public void goToRow(int row) {
         int goToRow = getRowPosition(row-1);
         if (goToRow < 0) {
-            GUIUtilities.displayErrorMessage("The line number entered is invalid.");
+            GUIUtilities.displayErrorMessage("The line number enterinsertTextAftered is invalid.");
             return;
         }
         setCaretPosition(goToRow);
     }
-    
+
     protected void setEditorPreferences() {
         // call to super class
         super.setEditorPreferences();
         // set the pane background
         setBackground(QueryEditorSettings.getEditorBackground());
     }
-    
+
     public void setSQLKeywords(boolean reset) {
 
         document.setSQLKeywords(keywords().getSQLKeywords(), reset);
@@ -444,7 +445,7 @@ public class QueryEditorTextPane extends SQLTextPane
         setText(text);
     }
 
-    /** 
+    /**
      * Returns the query around the specified (cursor) position.
      *
      * @param the position
@@ -453,17 +454,17 @@ public class QueryEditorTextPane extends SQLTextPane
     private String getQueryAt(int position) {
 
         String text = getText();
-        
+
         if (MiscUtils.isNull(text)) {
             return Constants.EMPTY;
         }
-        
+
         char[] chars = text.toCharArray();
 
         if (position == chars.length) {
             position--;
         }
-        
+
         int start = -1;
         int end = -1;
         boolean wasSpaceChar = false;
@@ -474,17 +475,17 @@ public class QueryEditorTextPane extends SQLTextPane
             if (chars[i] == Constants.NEW_LINE_CHAR) {
 
                 if (i == 0 || wasSpaceChar) {
-                
+
                     break;
-            
+
                 } else if (start != -1) {
-                  
+
                     if(chars[i - 1] == Constants.NEW_LINE_CHAR) {
-                      
+
                         break;
-                    
+
                     } else if (Character.isSpaceChar(chars[i - 1])) {
-                        
+
                         wasSpaceChar = true;
                         i--;
                     }
@@ -492,7 +493,7 @@ public class QueryEditorTextPane extends SQLTextPane
                 }
 
             } else if (!Character.isSpaceChar(chars[i])) {
-              
+
                 wasSpaceChar = false;
                 start = i;
             }
@@ -508,7 +509,7 @@ public class QueryEditorTextPane extends SQLTextPane
             }
         }
 
-        // determine the end point 
+        // determine the end point
         for (int i = start; i < chars.length; i++) {
 
             if (chars[i] == Constants.NEW_LINE_CHAR) {
@@ -518,7 +519,7 @@ public class QueryEditorTextPane extends SQLTextPane
                         end = i;
                     }
                     break;
-                }                
+                }
                 else if (end != -1) {
                     if(chars[i + 1] == Constants.NEW_LINE_CHAR) {
                         break;
@@ -537,7 +538,7 @@ public class QueryEditorTextPane extends SQLTextPane
         }
 
         //Log.debug("start: " + start + " end: " + end);
-        
+
         String query = text.substring(start, end + 1);
         //Log.debug(query);
 
@@ -545,14 +546,14 @@ public class QueryEditorTextPane extends SQLTextPane
 
             return getQueryAt(start);
         }
-        
+
         return query;
     }
 
     // ----------------------------------------
     // DocumentListener implementation
     // ----------------------------------------
-    
+
     /**
      * Does nothing.
      */
@@ -580,58 +581,58 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     // ----------------------------------------
-    
+
     /**
-     * Resets the executing line within the line 
+     * Resets the executing line within the line
      * number border panel.
      */
     public void resetExecutingLine() {
         lineBorder.resetExecutingLine();
     }
-    
+
     public String getQueryAtCursor() {
-        
+
         return getQueryAt(getCaretPosition());
     }
-    
+
     public String getWordEndingAtCursor() {
-        
+
         return getWordEndingAt(getCaretPosition());
     }
-    
+
     public String getCompleteWordEndingAtCursor() {
-        
+
         String text = getText();
         if (MiscUtils.isNull(text)) {
 
             return Constants.EMPTY;
         }
-        
-        int start = indexOfWordStartFromIndex(getCaretPosition()); 
+
+        int start = indexOfWordStartFromIndex(getCaretPosition());
         int end = indexOfWordEndFromIndex();
-        
+
         if (start < 0) {
-            
+
             start = 0;
         }
-        
+
         if (end < 0) {
-            
+
             end = getText().length();
         }
 
         return text.substring(start, end).trim();
     }
-    
+
     private int indexOfWordStartFromIndex(int index) {
-        
+
         int start = -1;
         int end = index;
 
         char[] chars = getText().toCharArray();
         for (int i = end - 1; i >= 0; i--) {
 
-            if (!Character.isLetterOrDigit(chars[i]) 
+            if (!Character.isLetterOrDigit(chars[i])
                     && chars[i] != '_' && chars[i] != '.') {
 
                 start = i;
@@ -642,41 +643,41 @@ public class QueryEditorTextPane extends SQLTextPane
 
         return start;
     }
-    
+
     private int indexOfWordEndFromIndex() {
-        
+
         int start = getCaretPosition();
         char[] chars = getText().toCharArray();
 
         for (int i = start; i < chars.length; i++) {
 
             if (Character.isWhitespace(chars[i])) {
-                
+
                 return i;
             }
-            
+
         }
 
         return -1;
     }
-    
+
     private String getWordEndingAt(int position) {
-        
+
         String text = getText();
-        
+
         if (MiscUtils.isNull(text)) {
 
             return Constants.EMPTY;
         }
-        
+
         char[] chars = text.toCharArray();
-        
+
         int start = -1;
         int end = position;
-        
+
         for (int i = end - 1; i >= 0; i--) {
 
-            if (!Character.isLetterOrDigit(chars[i]) 
+            if (!Character.isLetterOrDigit(chars[i])
                     && chars[i] != '_' && chars[i] != '.') {
 
                 start = i;
@@ -686,13 +687,13 @@ public class QueryEditorTextPane extends SQLTextPane
         }
 
         if (start < 0) {
-            
+
             start = 0;
         }
 
         return text.substring(start, end).trim();
     }
-    
+
     protected void setExecutingQuery(String query) {
 
         int index = getText().indexOf(query);
@@ -704,9 +705,9 @@ public class QueryEditorTextPane extends SQLTextPane
         lineBorder.setExecutingLine(getRowAt(index));
         lineBorder.repaint();
     }
-    
+
     public String getTextAtRow(int rowNumber) throws BadLocationException {
-        
+
         Element line = getElementMap().getElement(rowNumber);
 
         int startOffset = line.getStartOffset();
@@ -714,12 +715,12 @@ public class QueryEditorTextPane extends SQLTextPane
 
         return getText(startOffset, (endOffset - startOffset));
     }
-    
-    /** 
-     * Overrides <code>processKeyEvent</code> to additional process events. 
+
+    /**
+     * Overrides <code>processKeyEvent</code> to additional process events.
      */
     protected void processKeyEvent(KeyEvent e) {
-        
+
         if (e.getID() == KeyEvent.KEY_PRESSED) {
 
             int keyCode = e.getKeyCode();
@@ -728,41 +729,49 @@ public class QueryEditorTextPane extends SQLTextPane
             if (e.isShiftDown() && keyCode == KeyEvent.VK_TAB) {
 
                 addUndoEdit();
-                int currentPosition = getCurrentPosition();
+
+//                int currentPosition = getCurrentPosition();
                 int selectionStart = getSelectionStart();
                 int selectionEnd = getSelectionEnd();
-                
+
                 if (selectionStart == selectionEnd) {
-                    
+
+                    int start = getCurrentRowStart();
+                    int end = getCurrentRowEnd();
+
+                    shiftTextLeft(start, end);
+
+                    /*
                     int newPosition = currentPosition - QueryEditorSettings.getTabSize();
                     int currentRowPosition = getCurrentRowStart();
 
                     if (!isAtStartOfRow()) {
-                        
+
                         if (newPosition < 0) {
-                        
+
                             setCaretPosition(0);
-                        
+
                         } else if (newPosition < currentRowPosition) {
-                            
+
                             setCaretPosition(currentRowPosition);
 
                         } else {
-                            
+
                             setCaretPosition(newPosition);
                         }
 
                     }
+                    */
 
                 } else {
-                  
+
                     document.shiftTabEvent(selectionStart, selectionEnd);
                 }
-                
+
             } else if (keyCode == KeyEvent.VK_INSERT) {
-                
+
                 // toggle insert mode on the document
-                
+
                 int insertMode = document.getInsertMode();
                 if (insertMode == SqlMessages.INSERT_MODE) {
 
@@ -770,21 +779,21 @@ public class QueryEditorTextPane extends SQLTextPane
                     editorPanel.getStatusBar().setInsertionMode("OVR");
 
                 } else {
-                  
+
                     document.setInsertMode(SqlMessages.INSERT_MODE);
-                    editorPanel.getStatusBar().setInsertionMode("INS");                    
+                    editorPanel.getStatusBar().setInsertionMode("INS");
                 }
 
                 ((EditorCaret)getCaret()).modeChanged();
-            
+
             } else if (keyCode == KeyEvent.VK_SPACE) {
-                
+
                 checkForShortcutText();
             }
 
         }
 
-        super.processKeyEvent(e);        
+        super.processKeyEvent(e);
         updateLineBorder();
     }
 
@@ -804,7 +813,7 @@ public class QueryEditorTextPane extends SQLTextPane
                 e.printStackTrace();
             }
         }
-        
+
     }
 
     private String removeBracesAtStart(String word) {
@@ -814,9 +823,9 @@ public class QueryEditorTextPane extends SQLTextPane
         char[] chars = word.toCharArray();
 
         for (char c : chars) {
-            
+
             if (braces.indexOf(c) != -1) {
-                
+
                 index++;
 
             } else {
@@ -825,7 +834,7 @@ public class QueryEditorTextPane extends SQLTextPane
             }
 
         }
-        
+
         return word.substring(index);
     }
 
@@ -836,21 +845,21 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     private void loadEditorShortcuts() {
-        
+
         if (editorShortcuts == null) {
 
             editorShortcuts = new HashMap<String, EditorSQLShortcut>();
         }
-        
+
         List<EditorSQLShortcut> shortcuts = EditorSQLShortcuts.getInstance().getEditorShortcuts();
 
         for (EditorSQLShortcut editorSQLShortcut : shortcuts) {
-            
+
             editorShortcuts.put(editorSQLShortcut.getShortcut(), editorSQLShortcut);
-        }        
+        }
     }
-    
-    
+
+
     /** the last element count for line border updates */
     private int lastElementCount;
 
@@ -862,9 +871,9 @@ public class QueryEditorTextPane extends SQLTextPane
         if (elementCount != lastElementCount) {
             lineBorder.setRowCount(elementCount);
             lastElementCount = elementCount;
-        }        
+        }
     }
-    
+
     /**
      * Cuts the editor's selected text.
      */
@@ -872,19 +881,19 @@ public class QueryEditorTextPane extends SQLTextPane
         addUndoEdit();
         super.cut();
     }
-    
+
     /**
-     * Pastes any previously copied/cut text into the 
+     * Pastes any previously copied/cut text into the
      * editor at the cursor or mouse pointer position.
      */
-    public void paste() {        
+    public void paste() {
         addUndoEdit();
         super.paste();
     }
-    
-    
+
+
     /**
-     * Returns true if an undo operation would be 
+     * Returns true if an undo operation would be
      * successful now, false otherwise.
      */
     protected boolean canUndo() {
@@ -892,13 +901,13 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     /**
-     * Completes a compound edit and adds an 
+     * Completes a compound edit and adds an
      * undoable edit to the undo manager.
      */
     protected void addUndoEdit() {
         undoManager.addUndoEdit();
     }
-    
+
     /**
      * Executes the undo action.
      */
@@ -906,7 +915,7 @@ public class QueryEditorTextPane extends SQLTextPane
         undoManager.undo();
         updateLineBorder();
     }
-    
+
     /**
      * Executes the redo action.
      */
@@ -918,7 +927,7 @@ public class QueryEditorTextPane extends SQLTextPane
     // ----------------------------------------
     // FocusListener implementation
     // ----------------------------------------
-    
+
     /**
      * Updates the state of undo/redo ona focus gain.
      */
@@ -938,7 +947,7 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     // ----------------------------------------
-    
+
     private int currentRow = 0;
     private int currentPosition = 0;
 
@@ -949,7 +958,7 @@ public class QueryEditorTextPane extends SQLTextPane
      */
     protected int getRowAt(int position) {
         Element map = getElementMap();
-        return map.getElementIndex(position);        
+        return map.getElementIndex(position);
     }
 
     /**
@@ -974,6 +983,126 @@ public class QueryEditorTextPane extends SQLTextPane
         editorPanel.getStatusBar().setCaretPosition(row + 1, col + 1);
 
         repaint();
+    }
+
+    private static final int DIRECTION_UP = 1;
+    private static final int DIRECTION_DOWN = 2;
+
+    public void moveSelectionUp() {
+
+        moveSelectedTextOrCurrentRow(DIRECTION_UP);
+    }
+
+    // TODO: selection movements
+
+    public void moveSelectionDown() {
+
+        moveSelectedTextOrCurrentRow(DIRECTION_DOWN);
+    }
+
+    private void moveSelectedTextOrCurrentRow(int direction) {
+
+        getSelectedTextOrCurrentRow();
+    }
+
+    private String getSelectedTextOrCurrentRow() {
+
+        try {
+
+            String text = getSelectedText();
+            if (StringUtils.isBlank(text) ||
+                    ((getSelectionStart() != getCurrentRowStart()
+                            || getSelectionEnd() != getCurrentRowEnd()) && !text.contains("\n") ) ) {
+
+                text = getCurrentRowText();
+            }
+
+            return StringUtils.trim(text);
+
+        } catch (BadLocationException e) {}
+
+        return "";
+    }
+
+    public void duplicateTextUp() {
+
+        duplicateSelectionOrRowToOffset(DIRECTION_UP);
+    }
+
+    public void duplicateTextDown() {
+
+        duplicateSelectionOrRowToOffset(DIRECTION_DOWN);
+    }
+
+    private void duplicateSelectionOrRowToOffset(int direction) {
+
+        try {
+
+            addUndoEdit();
+            String text = getSelectedTextOrCurrentRow();
+
+            int offset = 0;
+            int selectionOffset = 0;
+            String insertText = null;
+
+            if (direction == DIRECTION_UP) {
+
+                insertText = text + "\n";
+
+                if (hasTextSelected()) {
+
+                    offset = getSelectionStart();
+                    if (insertText.endsWith("\n\n")) {
+
+                        insertText = insertText.substring(0, insertText.lastIndexOf('\n'));
+                    }
+
+                } else {
+
+                    offset = getCurrentRowStart();
+                }
+
+                selectionOffset = offset;
+
+            } else {
+
+                insertText = "\n" + text;
+
+                if (hasTextSelected()) {
+
+                    offset = getSelectionEnd();
+                    if ("\n".equals(getText(offset - 1, 1))) {
+
+                        offset--;
+                    }
+
+                } else {
+
+                    offset = getCurrentRowEnd() - 1;
+                }
+
+                selectionOffset = offset + 1;
+            }
+
+            insertTextAtOffset(offset, insertText);
+            setCaretPosition(offset + insertText.length());
+            moveCaretPosition(selectionOffset);
+
+        } catch (Exception e) {}
+
+    }
+
+    private boolean hasTextSelected() {
+
+        return getSelectionStart() != getSelectionEnd();
+    }
+
+    private String getCurrentRowText() throws BadLocationException {
+
+        int start = getCurrentRowStart();
+        int end = getCurrentRowEnd();
+
+        return document.getText(start, end - start);
     }
 
     protected boolean isAtStartOfRow() {
@@ -1025,7 +1154,7 @@ public class QueryEditorTextPane extends SQLTextPane
             return -1;
         }
     }
-    
+
     /**
      * Returns the start offset of the specified row.
      *
@@ -1064,13 +1193,13 @@ public class QueryEditorTextPane extends SQLTextPane
         return currentRow;
     }
 
-    
+
     class EditorCaret extends DefaultCaret {
 
         void modeChanged() {
             repaint();
         }
-        
+
         public void paint(Graphics g) {
             if(document.getInsertMode() == SqlMessages.INSERT_MODE) {
                 super.paint(g);
@@ -1087,7 +1216,7 @@ public class QueryEditorTextPane extends SQLTextPane
                    return;
                 }
                 c = comp.getText(dot, 1).charAt(0);
-            } 
+            }
             catch(BadLocationException e) {
                 return;
             }
@@ -1116,7 +1245,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
     }
 
-    
+
 }
 
 

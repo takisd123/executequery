@@ -103,7 +103,7 @@ import org.underworldlabs.swing.toolbar.ToolBarProperties;
 import org.underworldlabs.swing.util.IconUtilities;
 import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * <p>The GUIUtilities is the primary 'controller' class for all
  * Execute Query GUI components. It provides access to resources
  * in addition to many utility helper methods such as displaying
@@ -121,28 +121,28 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
 public final class GUIUtilities {
-    
+
     /** The tool bar manager instance */
     private static ToolBarManager toolBar;
-    
+
     /** The window status bar */
     private static StatusBarPanel statusBar;
-    
+
     /** The open dialog in focus */
     private static JDialog focusedDialog;
-    
+
     /** register for all open components - dialogs, tabs etc. */
     private static OpenComponentRegister register;
-    
+
     /** the application frame */
     private static JFrame frame;
-    
+
     /** panel and desktop mediator object */
     private static DesktopMediator desktopMediator;
-    
+
     /** the layout properties controller */
     private static UserLayoutProperties layoutProperties;
-    
+
     /** docked panel cache of non-central pane tabs */
     private static Map<String, JPanel> dockedTabComponents;
 
@@ -158,30 +158,32 @@ public final class GUIUtilities {
     /** System.out logger */
     private static SystemErrLogger outLogger;
 
+    private static SystemOutputPanel systemOutputPanel;
+
     /** private constructor */
     private GUIUtilities() {}
 
     static {
-        
+
         dockedTabComponents = new HashMap<String, JPanel>();
-        
+
         errLogger = new SystemErrLogger(
-                SystemProperties.getBooleanProperty("user", "system.log.err"), 
+                SystemProperties.getBooleanProperty("user", "system.log.err"),
                 SystemErrLogger.SYSTEM_ERR);
 
         outLogger = new SystemErrLogger(
-                SystemProperties.getBooleanProperty("user", "system.log.out"), 
+                SystemProperties.getBooleanProperty("user", "system.log.out"),
                 SystemErrLogger.SYSTEM_OUT);
 
     }
-    
+
     public static void initDesktop(JFrame aFrame) {
-        
+
         frame = aFrame;
-        
+
         // create the mediator object
         desktopMediator = new DesktopMediator(frame);
-        
+
         // initialise and add the status bar
         statusBar = new StatusBarPanel(" Not Connected", Constants.EMPTY);
         statusBar.setFourthLabelText(
@@ -192,11 +194,11 @@ public final class GUIUtilities {
                 "user", "system.display.statusbar"));
 
         frame.add(statusBar, BorderLayout.SOUTH);
-        
+
         // init the layout properties
         layoutProperties = new UserLayoutProperties();
-        
-        
+
+
         EventMediator.registerListener(new DefaultConnectionListener());
         EventMediator.registerListener(new ConnectionRepositoryChangeListener());
         EventMediator.registerListener(new DefaultUserPreferenceListener());
@@ -206,7 +208,7 @@ public final class GUIUtilities {
         EventMediator.registerListener(new HttpProxyUserPreferenceListener());
         EventMediator.registerListener(new LogUserPreferenceListener(errLogger, outLogger));
         EventMediator.registerListener(new KeyboardShortcutsUserPreferenceListener());
-        
+
     }
 
     public static void initPanels() {
@@ -214,12 +216,12 @@ public final class GUIUtilities {
         register = new OpenComponentRegister();
         desktopMediator.addDockedTabListener(register);
 
-        // setup the default docked tabs and their positions        
+        // setup the default docked tabs and their positions
         setDockedTabViews(false);
-        
+
         // add a query editor
         addCentralPane(QueryEditor.TITLE,
-                       QueryEditor.FRAME_ICON, 
+                       QueryEditor.FRAME_ICON,
                        new QueryEditor(),
                        null,
                        false);
@@ -231,7 +233,7 @@ public final class GUIUtilities {
         desktopMediator.addPropertyChangeListener(layoutProperties);
         desktopMediator.addDockedTabDragListener(layoutProperties);
         desktopMediator.addDockedTabListener(layoutProperties);
-        
+
         // select the first main panel
         desktopMediator.setSelectedPane(SwingConstants.CENTER, 0);
     }
@@ -242,18 +244,18 @@ public final class GUIUtilities {
     protected static void setDividerLocations() {
         String[] keys = DesktopMediator.DIVIDER_LOCATION_KEYS;
         for (int i = 0; i < keys.length; i++) {
-            
+
             String key = keys[i];
 
             int location = SystemProperties.getIntProperty("user", key);
             if (location > 0) {
-        
+
                 desktopMediator.setSplitPaneDividerLocation(key, location);
             }
-        
+
         }
     }
-    
+
     /**
      * Removes the specified docked tab listener.
      *
@@ -261,7 +263,7 @@ public final class GUIUtilities {
      */
     public void removeDockedTabListener(DockedTabListener listener) {
         desktopMediator.removeDockedTabListener(listener);
-    }    
+    }
 
     /**
      * Adds the specified docked tab listener.
@@ -281,9 +283,9 @@ public final class GUIUtilities {
      * @param the component
      * @param the tab's tool tip
      */
-    public static void addCentralPane(String title, 
-                                      Icon icon, 
-                                      Component component, 
+    public static void addCentralPane(String title,
+                                      Icon icon,
+                                      Component component,
                                       String tip,
                                       boolean selected) {
         addDockedTab(title, icon, component, tip, SwingConstants.CENTER, selected);
@@ -298,15 +300,15 @@ public final class GUIUtilities {
      * @param the component
      * @param the tab's tool tip
      */
-    public static void addCentralPane(String title, 
-                                      String icon, 
-                                      Component component, 
+    public static void addCentralPane(String title,
+                                      String icon,
+                                      Component component,
                                       String tip,
                                       boolean selected) {
-        addDockedTab(title, 
+        addDockedTab(title,
                      loadIcon(icon, true),
-                     component, 
-                     tip, 
+                     component,
+                     tip,
                      SwingConstants.CENTER,
                      selected);
     }
@@ -319,8 +321,8 @@ public final class GUIUtilities {
      * @param the component
      * @param the position
      */
-    public static void addDockedTab(String title, 
-                                    Component component, 
+    public static void addDockedTab(String title,
+                                    Component component,
                                     int position,
                                     boolean selected) {
         addDockedTab(title, null, component, null, position, selected);
@@ -336,9 +338,9 @@ public final class GUIUtilities {
      * @param the component
      * @param the position
      */
-    public static void addDockedTab(String title, 
-                                    Icon icon, 
-                                    Component component, 
+    public static void addDockedTab(String title,
+                                    Icon icon,
+                                    Component component,
                                     int position,
                                     boolean selected) {
         addDockedTab(title, icon, component, null, position, selected);
@@ -354,13 +356,13 @@ public final class GUIUtilities {
      * @param the tab's tool tip
      * @param the position
      */
-    public static void addDockedTab(String title, 
-                                    Icon icon, 
-                                    Component component, 
-                                    String tip, 
+    public static void addDockedTab(String title,
+                                    Icon icon,
+                                    Component component,
+                                    String tip,
                                     int position,
                                     boolean selected) {
-        
+
         // change the title if a save function
         if (component instanceof NamedView) {
 
@@ -368,7 +370,7 @@ public final class GUIUtilities {
             String _title = mpi.getDisplayName();
 
             if (_title.length() > 0) {
-            
+
                 title = _title;
                 tip = _title;
             }
@@ -384,46 +386,46 @@ public final class GUIUtilities {
         desktopMediator.addDockedTab(title, icon, component, tip, position, selected);
         GUIUtils.scheduleGC();
     }
-    
+
     public static void closeSelectedCentralPane() {
 
         TabComponent tabComponent = desktopMediator.getSelectedComponent(SwingConstants.CENTER);
-            
+
         if (tabComponent != null) {
 
             closeDockedComponent(tabComponent.getTitle(), SwingConstants.CENTER);
         }
-        
+
     }
 
     public static void closeAllTabs() {
-        
+
         desktopMediator.closeAllTabs();
     }
-    
+
     public static void closeAllTabsInSelectedContainer() {
-        
+
         desktopMediator.closeAllTabsInSelectedContainer();
     }
-    
+
     public static void closeSelectedTab() {
 
         desktopMediator.closeSelectedTab();
     }
-    
+
     /**
      * Closed the specfied docked component with name at the specified position.
-     * 
+     *
      * @param the name of the tab component
      * @param the position
      */
     public static void closeDockedComponent(String name, int position) {
         desktopMediator.closeTabComponent(name, position);
     }
-    
+
     // -------------------------------------------------------
-    
-    
+
+
     /** <p>Retrieves the parent frame of the application.
      *
      *  @return the parent frame
@@ -431,35 +433,35 @@ public final class GUIUtilities {
     public static Frame getParentFrame() {
         return frame;
     }
-    
+
     public static Component getInFocusDialogOrWindow() {
-        
+
         if (getFocusedDialog() != null) {
-            
+
             return getFocusedDialog();
 
         } else {
-            
+
             if (register.getOpenDialogCount() > 0) {
-                
+
                 List<JDialog> list = register.getOpenDialogs();
-                
+
                 for (int i = 0, k = list.size(); i < k; i++) {
-                
+
                     JDialog dialog = list.get(i);
                     if (dialog.isFocused()) {
 
                         return dialog;
                     }
-                    
+
                 }
 
             }
         }
-        
+
         return getParentFrame();
     }
-    
+
     /**
      * Selects the next tab from the current selection.
      */
@@ -486,13 +488,13 @@ public final class GUIUtilities {
         toolBar = new ToolBarManager();
         frame.add(toolBar.getToolBarBasePanel(), BorderLayout.NORTH);
     }
-    
+
     /**
      * <p>Determines whether upon selection of the print
      *  action, the currently open and in focus frame does
      *  have a printable area - is an instance of a <code>
      *  BrowserPanel</code> or <code>TextEditor</code>.
-     * 
+     *
      * @return whether printing may be performed from the
      *          open frame
      */
@@ -500,26 +502,26 @@ public final class GUIUtilities {
 
         // check the dialog in focus first
         if (focusedDialog != null) {
-            
+
             if (focusedDialog instanceof PrintFunction) {
 
                 return ((PrintFunction)focusedDialog).canPrint();
             }
-            
-        } 
-        
+
+        }
+
         Object object = getSelectedCentralPane();
         if (!(object instanceof PrintFunction)) {
 
             return false;
         }
-        
+
         PrintFunction printFunction = (PrintFunction)object;
 
         return printFunction.canPrint();
-        
+
     }
-    
+
     /** <p>Returns the <code>PrintFunction</code> object
      *  from the currently in-focus frame. If the in-focus
      *  frame is not an instance of <code>PrintFunction</code>,
@@ -559,16 +561,16 @@ public final class GUIUtilities {
 
         return null;
 /*
-        
+
         // check the dialog in focus first
         if (focusedDialog != null) {
-            
+
             if (focusedDialog instanceof PrintFunction) {
                 return (PrintFunction)focusedDialog;
             }
-            
-        } 
-        
+
+        }
+
         Object object = getSelectedCentralPane();
         if (object instanceof PrintFunction) {
             return (PrintFunction)object;
@@ -578,7 +580,7 @@ public final class GUIUtilities {
         }
         */
     }
-    
+
     /**
      * Sets the selected tab in the central pane as the tab
      * component with the specified name.
@@ -588,11 +590,11 @@ public final class GUIUtilities {
     public static void setSelectedCentralPane(String name) {
         desktopMediator.setSelectedPane(SwingConstants.CENTER, name);
     }
-    
+
     public static JPanel getCentralPane(String name) {
         return (JPanel)register.getOpenPanel(name);
         /*
-        TabComponent tabComponent = 
+        TabComponent tabComponent =
                 desktopMediator.getTabComponent(SwingConstants.CENTER, name);
         if (tabComponent != null) {
             return ((JPanel)tabComponent.getComponent());
@@ -610,11 +612,11 @@ public final class GUIUtilities {
     public static TabComponent getTabComponent(int position, String name) {
         return desktopMediator.getTabComponent(position, name);
     }
-    
+
     public static JPanel getSelectedCentralPane(String name) {
         return (JPanel)register.getSelectedComponent();
         /*
-        TabComponent tabComponent = 
+        TabComponent tabComponent =
                 desktopMediator.getSelectedComponent(SwingConstants.CENTER);
         //JInternalFrame frame = desktop.getSelectedFrame();
         if (tabComponent != null) {
@@ -625,19 +627,19 @@ public final class GUIUtilities {
                     //return ((BaseInternalFrame)frame).getFrameContents();
                 }
             }
-            return (JPanel)tabComponent.getComponent();            
+            return (JPanel)tabComponent.getComponent();
         }
         return null;
          */
     }
-    
+
     /**
      * Registers the specified dialog with the cache.
      *
      * @param the dialog to be registered
      */
     public static void registerDialog(JDialog dialog) {
-        
+
         register.addDialog(dialog);
     }
 
@@ -647,33 +649,33 @@ public final class GUIUtilities {
      * @param the dialog to be registered
      */
     public static void deregisterDialog(JDialog dialog) {
-        
+
         register.removeDialog(dialog);
     }
 
     public static void setFocusedDialog(JDialog _focusedDialog) {
-        
+
         focusedDialog = _focusedDialog;
     }
 
     public static JDialog getFocusedDialog() {
-     
+
         return focusedDialog;
     }
-    
+
     public static void removeFocusedDialog(JDialog _focusedDialog) {
-        
+
         if (focusedDialog == _focusedDialog) {
-            
+
             focusedDialog = null;
         }
-        
+
     }
-    
+
     /**
      * Retrieves the <code>TextEditor</code> instance
      * that currently has focus or NULL if none exists.
-     * 
+     *
      * @return that instance of <code>TeTextEditorcode>
      */
     public static TextEditor getTextEditorInFocus() {
@@ -718,7 +720,7 @@ public final class GUIUtilities {
         }
         return null;
     }
-    
+
     /** <p>Retrieves the contents of the in-focus
      *  internal frame as a <code>JPanel</code>.
      *
@@ -727,7 +729,7 @@ public final class GUIUtilities {
     public static JPanel getSelectedCentralPane() {
         return getSelectedCentralPane(null);
     }
-    
+
     /** <p>Retrieves the <code>SaveFunction</code> in focus.
      *
      *  @return the <code>SaveFunction</code> in focus
@@ -765,7 +767,7 @@ public final class GUIUtilities {
         }
         return null;
     }
-    
+
     public static UndoableComponent getUndoableInFocus() {
         // check the open dialogs first
         if (register.getOpenDialogCount() > 0) {
@@ -797,7 +799,7 @@ public final class GUIUtilities {
                 return (UndoableComponent)focusedDialog;
             }
 
-        } 
+        }
         else {
             JPanel panel = getSelectedCentralPane();
 
@@ -807,7 +809,7 @@ public final class GUIUtilities {
                 return null;
             }
 
-        } 
+        }
         return null;
          */
     }
@@ -828,7 +830,7 @@ public final class GUIUtilities {
         _undo.setUndoableComponent(undoable);
         _redo.setUndoableComponent(undoable);
     }
-     
+
     /** <p>Retrieves the applications <code>InputMap</code>.
      *
      *  @return the <code>InputMap</code>
@@ -837,7 +839,7 @@ public final class GUIUtilities {
 
         return desktopMediator.getInputMap(condition);
     }
-    
+
     /** <p>Retrieves the applications <code>ActionMap</code>.
      *
      *  @return the <code>ActionMap</code>
@@ -846,17 +848,16 @@ public final class GUIUtilities {
         // TODO: ACTION MAP
         return  desktopMediator.getActionMap();
     }
-    
-    /** 
+
+    /**
      * Initialises and starts the system logger.
      * The logger's stream is also registered for
      * <code>System.err</code> and <code>System.out</code>.
      */
     public static void startLogger() {
 
-        // add the output panel to the cache
-        SystemOutputPanel panel = new SystemOutputPanel();
-        dockedTabComponents.put(SystemOutputPanel.PROPERTY_KEY, panel);
+        systemOutputPanel = new SystemOutputPanel();
+        dockedTabComponents.put(SystemOutputPanel.PROPERTY_KEY, systemOutputPanel);
 
         // set system error stream to the output panel
         PrintStream errStream = new PrintStream(errLogger, true);
@@ -867,7 +868,12 @@ public final class GUIUtilities {
         System.setOut(outStream);
 
     }
-    
+
+    public static void clearSystemOutputPanel() {
+
+        systemOutputPanel.clear();
+    }
+
     /** <p>Calculates and returns the centered position
      *  of a dialog with the specified size to be added
      *  to the desktop area - ie. taking into account the
@@ -877,26 +883,26 @@ public final class GUIUtilities {
      *         <code>Dimension</code> object
      *  @return the <code>Point</code> at which to add the dialog
      */
-    public static Point getLocationForDialog(Dimension dialogDim) {        
-        return GUIUtils.getLocationForDialog(frame, dialogDim);       
+    public static Point getLocationForDialog(Dimension dialogDim) {
+        return GUIUtils.getLocationForDialog(frame, dialogDim);
     }
-    
+
     public static void copyToClipBoard(String text) {
-        
+
         StringSelection stringSelection  = new StringSelection(text);
 
         Clipboard clipBoard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipBoard.setContents(stringSelection, stringSelection);
     }
-    
-    /** 
-     * Propagates the call to GUIUtils and schedules 
+
+    /**
+     * Propagates the call to GUIUtils and schedules
      * the garbage collector to run.
      */
     public static void scheduleGC() {
         GUIUtils.scheduleGC();
     }
-    
+
     /**
      * Returns whether the frame's glass pane is visible or not.
      *
@@ -905,7 +911,7 @@ public final class GUIUtilities {
     public static boolean isGlassPaneVisible() {
         return frame.getRootPane().getGlassPane().isVisible();
     }
-    
+
     /**
      * Shows/hides the frame's glass pane as specified.
      *
@@ -921,9 +927,9 @@ public final class GUIUtilities {
             }
         });
     }
-    
-    /** 
-     * Sets the application cursor to the system normal cursor 
+
+    /**
+     * Sets the application cursor to the system normal cursor
      */
     public static void showNormalCursor() {
         ThreadUtils.invokeAndWait(new Runnable() {
@@ -933,9 +939,9 @@ public final class GUIUtilities {
         });
         //GUIUtils.showNormalCursor(frame);
     }
-    
-    /** 
-     * Sets the application cursor to the system wait cursor 
+
+    /**
+     * Sets the application cursor to the system wait cursor
      */
     public static void showWaitCursor() {
         ThreadUtils.invokeAndWait(new Runnable() {
@@ -945,8 +951,8 @@ public final class GUIUtilities {
         });
     }
 
-    /** 
-     * Sets the application cursor to the system wait cursor 
+    /**
+     * Sets the application cursor to the system wait cursor
      * on the specified component.
      */
     public static void showWaitCursor(final Component component) {
@@ -957,8 +963,8 @@ public final class GUIUtilities {
         });
     }
 
-    /** 
-     * Sets the application cursor to the system normal cursor 
+    /**
+     * Sets the application cursor to the system normal cursor
      * on the specified component.
      */
     public static void showNormalCursor(final Component component) {
@@ -994,7 +1000,7 @@ public final class GUIUtilities {
     public static ImageIcon loadImage(String name) {
         return IconUtilities.loadImage(IMAGE_PATH + name);
     }
-    
+
     /**
      * Loads and returns the specified icon with the specified name.
      * The default path to the icon dir appended to the start of
@@ -1002,7 +1008,7 @@ public final class GUIUtilities {
      *
      * @param name - the icon file name to load
      * @return the loaded icon image
-     */    
+     */
     public static ImageIcon loadIcon(String name) {
         return loadIcon(name, false);
     }
@@ -1013,10 +1019,10 @@ public final class GUIUtilities {
      * the name is /org/executequery/icons.
      *
      * @param name - the icon file name to load
-     * @param store - whether to store the icon in the icon cache 
+     * @param store - whether to store the icon in the icon cache
      *                for future use after loading
      * @return the loaded icon image
-     */ 
+     */
     public static ImageIcon loadIcon(String name, boolean store) {
         return IconUtilities.loadIcon(ICON_PATH + name, store);
     }
@@ -1031,7 +1037,7 @@ public final class GUIUtilities {
     public static String getAbsoluteIconPath(String name) {
         return ICON_PATH + name;
     }
-    
+
     /**
      * Convenience method for consistent border colour.
      *
@@ -1040,7 +1046,7 @@ public final class GUIUtilities {
     public static Color getDefaultBorderColour() {
         return UIManager.getColor("controlShadow");
     }
-    
+
     /**
      * Returns the docked component (non-central pane) with
      * the specified name.
@@ -1049,8 +1055,8 @@ public final class GUIUtilities {
      * @return the panel component
      */
     public static JPanel getDockedTabComponent(String key) {
-        if (dockedTabComponents == null || 
-                dockedTabComponents.isEmpty() || 
+        if (dockedTabComponents == null ||
+                dockedTabComponents.isEmpty() ||
                 !dockedTabComponents.containsKey(key)) {
             return null;
         }
@@ -1073,22 +1079,22 @@ public final class GUIUtilities {
         if (key.equals(ConnectionsTreePanel.PROPERTY_KEY)) {
 
             panel = new ConnectionsTreePanel();
-        
+
         } else if (key.equals(DriversTreePanel.PROPERTY_KEY)) {
-          
+
             panel = new DriversTreePanel();
 
         } else if (key.equals(SystemPropertiesDockedTab.PROPERTY_KEY)) {
-            
+
             panel = new SystemPropertiesDockedTab();
 
         } else if (key.equals(NotepadDockedPanel.PROPERTY_KEY)) {
-            
+
             panel = new NotepadDockedPanel();
 
         } else if (key.equals(SystemOutputPanel.PROPERTY_KEY)) {
-          
-            // init the logger 
+
+            // init the logger
             // this method will add the output panel
             startLogger();
 
@@ -1097,31 +1103,31 @@ public final class GUIUtilities {
             panel = new KeywordsDockedPanel();
 
         } else if (key.equals(SQLStateCodesDockedPanel.PROPERTY_KEY)) {
-          
+
             panel = new SQLStateCodesDockedPanel();
         }
-        
+
         if (panel != null) {
-        
+
             dockedTabComponents.put(key, panel);
         }
-        
+
     }
-    
+
     /**
      * Ensures the docked tab with the specified key is visible.
      *
      * @param key - the property key of the component
      */
     public static void ensureDockedTabVisible(String key) {
-        
+
         JPanel panel = getDockedTabComponent(key);
 
         if (panel instanceof DockedTabView) {
 
             DockedTabView _panel = (DockedTabView)panel;
             String title = _panel.getTitle();
-            
+
             // check if its visible already
             int position = getDockedComponentPosition(key);
             TabComponent tab = getTabComponent(position, title);
@@ -1130,7 +1136,7 @@ public final class GUIUtilities {
 
                 // check if its minimised
                 if (desktopMediator.isMinimised(position, title)) {
-                    
+
                     desktopMediator.restore(position, title);
 
                 } else { // add the component to the view
@@ -1139,7 +1145,7 @@ public final class GUIUtilities {
                 }
 
             } else { // make sure its selected
-                
+
                 desktopMediator.setSelectedPane(position, title);
             }
 
@@ -1178,7 +1184,7 @@ public final class GUIUtilities {
      * @param show/hide the view
      */
     public static void displayDockedComponent(String key, boolean visible) {
-        
+
         setDockedComponentVisible(key, visible);
 
         layoutProperties.setDockedPaneVisible(key, visible);
@@ -1192,7 +1198,7 @@ public final class GUIUtilities {
     }
 
     private static void setDockedComponentVisible(String key, boolean visible) {
-        
+
         if (visible) {
 
             ensureDockedTabVisible(key);
@@ -1203,14 +1209,14 @@ public final class GUIUtilities {
         }
 
     }
-    
+
     /**
      * Displays the docked tab component of the specified type.
      *
      * @param the property key of the component
      */
     public static void hideDockedComponent(String key) {
-        
+
         JPanel panel = getDockedTabComponent(key);
 
         if (panel instanceof DockedTabView) {
@@ -1223,8 +1229,8 @@ public final class GUIUtilities {
         }
 
     }
-    
-    /** 
+
+    /**
      * Closes the dialog with the specified title.
      */
     public static void closeDialog(String title) {
@@ -1240,8 +1246,8 @@ public final class GUIUtilities {
         }
     }
 
-    /** 
-     * Closes the currently in-focus dialog. 
+    /**
+     * Closes the currently in-focus dialog.
      */
     public static void closeSelectedDialog() {
         if (register.getOpenDialogCount() > 0) {
@@ -1257,18 +1263,18 @@ public final class GUIUtilities {
             }
         }
     }
-    
-    /** 
+
+    /**
      * Displays or hides the main application status bar.
      *
      * @param <code>true</code> to display | <code>false</code> to hide
      */
     public static void displayStatusBar(boolean display) {
         statusBar.setVisible(display);
-        SystemProperties.setBooleanProperty("user", 
+        SystemProperties.setBooleanProperty("user",
                             "system.display.statusbar", display);
     }
-    
+
     /** <p>Retrieves the main frame's layered pane object.
      *
      *  @return the frame's <code>JLayeredPane</code>
@@ -1276,7 +1282,7 @@ public final class GUIUtilities {
     public static JLayeredPane getFrameLayeredPane() {
         return ((JFrame)getParentFrame()).getLayeredPane();
     }
-    
+
     /** <p>Retrieves the application's status bar as
      *  registered with this class.
      *
@@ -1285,7 +1291,7 @@ public final class GUIUtilities {
     public static final StatusBarPanel getStatusBar() {
         return statusBar;
     }
-    
+
     /**
      * Returns the current look and feel value.
      */
@@ -1293,7 +1299,7 @@ public final class GUIUtilities {
 
         return UserProperties.getInstance().getIntProperty("startup.display.lookandfeel");
     }
-    
+
     /**
      * Saves the user preferences to file.
      */
@@ -1306,7 +1312,7 @@ public final class GUIUtilities {
         });
     }
 
-    
+
     /**
      * Sets the docked tab views according to user preference.
      */
@@ -1315,10 +1321,10 @@ public final class GUIUtilities {
         List<UserLayoutObject> list = layoutProperties.getLayoutObjectsSorted();
 
         for (int i = 0, n = list.size(); i < n; i++) {
-        
+
             UserLayoutObject object = list.get(i);
             String key = object.getKey();
-            
+
             if (object.isVisible()) {
 
                 initDockedTabView(key);
@@ -1328,19 +1334,19 @@ public final class GUIUtilities {
 
                 String title = tab.getTitle();
                 int position = object.getPosition();
-                
+
                 // first check if its already displayed
                 if (desktopMediator.getTabComponent(position, title) == null) {
-                
+
                     // add the component to the view
                     addDockedTab(title, panel, position, false);
 
                     // check if its minimised
                     if (object.isMinimised()) {
-                    
+
                         desktopMediator.minimiseDockedTab(position, title);
                     }
-                    
+
                 }
 
             } else {
@@ -1365,7 +1371,7 @@ public final class GUIUtilities {
         List<SaveFunction> saveFunctions = new ArrayList<SaveFunction>();
 
         List<ComponentPanel> panels = register.getOpenPanels();
-        
+
         for (int i = 0, k = panels.size(); i < k; i++) {
 
             Component c = panels.get(i).getComponent();
@@ -1402,10 +1408,10 @@ public final class GUIUtilities {
         return count;
     }
 
-    
+
     public static void closeSelectedConnection() {
-        
-        // grab the selected connection from the 
+
+        // grab the selected connection from the
         // connections tree docked panel and close it
         JPanel panel = getDockedTabComponent(ConnectionsTreePanel.PROPERTY_KEY);
 
@@ -1421,7 +1427,7 @@ public final class GUIUtilities {
                     ConnectionMediator.getInstance().disconnect(dc);
 
                 } catch (DataSourceException e) {
-                
+
                     displayErrorMessage(
                             "Error disconnecting selected data source:\n"+
                             e.getMessage());
@@ -1435,15 +1441,15 @@ public final class GUIUtilities {
 
         Properties properties = UserProperties.getInstance().getProperties();
         SystemResources.setUserPreferences(properties);
-        
+
         ((DatabaseConnectionRepository)RepositoryCache.load(
                 DatabaseConnectionRepository.REPOSITORY_ID)).save();
 
         ToolBarProperties.saveTools();
-        
+
         Log.info("System exiting...");
     }
-    
+
     /**
      * Sets the title for the specified component to the newTitle
      * within central tab pane.
@@ -1480,7 +1486,7 @@ public final class GUIUtilities {
     }
 
     /**
-     * Sets the tool tip for the specified component within the 
+     * Sets the tool tip for the specified component within the
      * central main pane to title.
      *
      * @param the component where the tool tip should be set
@@ -1491,7 +1497,7 @@ public final class GUIUtilities {
     }
 
     /**
-     * Sets the title for the specified component within the 
+     * Sets the title for the specified component within the
      * central main pane to toolTipText.
      *
      * @param the component where the tool tip should be set
@@ -1525,7 +1531,7 @@ public final class GUIUtilities {
             }
         }
     }
-    
+
     /**
      * Checks if an actionable dialog is currently open.
      *
@@ -1551,16 +1557,16 @@ public final class GUIUtilities {
         }
         return false;
     }
-    
+
     public static boolean hasValidSaveFunction() {
 
         // check the open panels register first
         if (register.getOpenPanelCount() > 0) {
 
             List<ComponentPanel> list = register.getOpenPanels();
-            
+
             for (int i = 0, k = list.size(); i < k; i++) {
-            
+
                 Component component = list.get(i).getComponent();
                 if (component instanceof SaveFunction) {
 
@@ -1568,21 +1574,21 @@ public final class GUIUtilities {
                     if (saveFunction.contentCanBeSaved()) {
 
                         return true;
-                    } 
+                    }
 
                 }
 
             }
-        
+
         }
-        
+
         // check the open dialogs
         if (register.getOpenDialogCount() > 0) {
 
             List<JDialog> list = register.getOpenDialogs();
 
             for (int i = 0, k = list.size(); i < k; i++) {
-            
+
                 JDialog dialog = list.get(i);
                 if (dialog instanceof SaveFunction) {
 
@@ -1590,19 +1596,19 @@ public final class GUIUtilities {
                     if (saveFunction.contentCanBeSaved()) {
 
                         return true;
-                    } 
+                    }
 
                 }
-            
+
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Checks if the panel with the specified title is open.
-     * 
+     *
      * @return true | false
      */
     public static boolean isPanelOpen(String title) {
@@ -1613,7 +1619,7 @@ public final class GUIUtilities {
 
     /**
      * Checks if the dialog with the specified title is open.
-     * 
+     *
      * @return true | false
      */
     public static boolean isDialogOpen(String title) {
@@ -1622,7 +1628,7 @@ public final class GUIUtilities {
 
     /**
      * Checks if the dialog with the specified title is open.
-     * 
+     *
      * @return true | false
      */
     public static void setSelectedDialog(String title) {
@@ -1658,8 +1664,8 @@ public final class GUIUtilities {
 
         return true;
     }
-    
-    
+
+
     /**
      * Displays the error dialog displaying the stack trace from a
      * throws/caught exception.
@@ -1675,24 +1681,24 @@ public final class GUIUtilities {
             }
         });
     }
-    
-    
+
+
     // -------------------------------------------------------
     // ------ Helper methods for various option dialogs ------
     // -------------------------------------------------------
-    
+
     // These have been revised to use JDialog as the wrapper to
     // ensure the dialog is centered within the dektop pane and not
     // within the entire screen as you get with JOptionPane.showXXX()
-    
+
     public static final void displayInformationMessage(Object message) {
         GUIUtils.displayInformationMessage(getInFocusDialogOrWindow(), message);
     }
-    
+
     public static final void displayWarningMessage(Object message) {
         GUIUtils.displayWarningMessage(getInFocusDialogOrWindow(), message);
     }
-    
+
     public static final void displayErrorMessage(Object message) {
         GUIUtils.displayErrorMessage(getInFocusDialogOrWindow(), message);
     }
@@ -1705,18 +1711,18 @@ public final class GUIUtilities {
         return GUIUtils.displayConfirmCancelErrorMessage(getInFocusDialogOrWindow(), message);
     }
 
-    public static final int displayYesNoDialog(Object message, String title) {        
+    public static final int displayYesNoDialog(Object message, String title) {
         return GUIUtils.displayYesNoDialog(getInFocusDialogOrWindow(), message, title);
     }
-    
+
     public static final int displayConfirmCancelDialog(Object message) {
         return GUIUtils.displayConfirmCancelDialog(getInFocusDialogOrWindow(), message);
     }
-    
+
     public static final int displayConfirmDialog(Object message) {
         return GUIUtils.displayConfirmDialog(getInFocusDialogOrWindow(), message);
     }
-    
+
 }
 
 

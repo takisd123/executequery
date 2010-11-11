@@ -33,6 +33,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.UserPreferencesManager;
 import org.executequery.sql.QueryDelegate;
@@ -41,18 +42,18 @@ import org.underworldlabs.swing.actions.ReflectiveAction;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.util.SystemProperties;
 
-public class QueryEditorPopupMenu extends JPopupMenu 
+public class QueryEditorPopupMenu extends JPopupMenu
                                   implements MouseListener {
 
     private final QueryDelegate queryDelegate;
-    
+
     public QueryEditorPopupMenu(QueryDelegate queryDelegate) {
 
         this.queryDelegate = queryDelegate;
 
         init();
     }
-    
+
     private void init() {
 
         add(createCutMenuItem());
@@ -60,7 +61,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createPasteMenuItem());
 
         addSeparator();
-        
+
         add(createExecuteMenuItem());
         add(createPartialExecuteMenuItem());
         add(createExecuteSelectionMenuItem());
@@ -75,52 +76,56 @@ public class QueryEditorPopupMenu extends JPopupMenu
         addSeparator();
 
         add(createFormatSqlMenuItem());
+        add(createDuplicateRowUpMenuItem());
+        add(createDuplicateRowDownMenuItem());
+        addSeparator();
+
         add(createClearOutputMenuItem());
         add(createAddToUserDefinedKeywordsMenuItem());
         add(createRemoveCommentsForQueryMenuItem());
         add(createRecycleResultSetTabMenuItem());
-        
+
         addSeparator();
-        
+
         add(createHelpMenuItem());
     }
 
     public void statementExecuting() {
 
         setExecuteActionButtonsEnabled(false);
-        
+
         setExecutingButtonsEnabled(true);
     }
-    
+
     public void statementFinished() {
 
         setExecuteActionButtonsEnabled(true);
-        
+
         setExecutingButtonsEnabled(false);
     }
-    
+
     public void setCommitMode(boolean autoCommit) {
-        
+
         setTransactionButtonsEnabled(!autoCommit);
     }
-    
+
     public void execute(ActionEvent e) {
 
         queryDelegate.executeQuery(null);
     }
 
     public void executeAsBlock(ActionEvent e) {
-        
+
         queryDelegate.executeQuery(null, true);
     }
 
     public void cancelQuery(ActionEvent e) {
-        
+
         queryDelegate.interrupt();
     }
 
     public void recycleResultSetTabs(ActionEvent e) {
-        
+
         JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 
         SystemProperties.setBooleanProperty(
@@ -128,9 +133,9 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         UserPreferencesManager.fireUserPreferencesChanged();
     }
-    
+
     public void removeCommentsPriorToQueryExecution(ActionEvent e) {
-        
+
         JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
 
         SystemProperties.setBooleanProperty(
@@ -138,19 +143,19 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         UserPreferencesManager.fireUserPreferencesChanged();
     }
-    
+
     public void commit(ActionEvent e) {
-        
+
         queryDelegate.commit();
     }
 
     public void rollback(ActionEvent e) {
-        
+
         queryDelegate.rollback();
     }
 
     public void mousePressed(MouseEvent e) {
-        
+
         maybeShowPopup(e);
     }
 
@@ -177,25 +182,20 @@ public class QueryEditorPopupMenu extends JPopupMenu
         executingButtons().clear();
         executeActionButtons().clear();
         transactionButtons().clear();
-        
+
         super.removeAll();
     }
-    
+
     private JMenuItem createHelpMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(ActionBuilder.get("help-command"));
-        menuItem.setIcon(null);
+
+        JMenuItem menuItem = createExecuteActionMenuItem("help-command", "Help");
         menuItem.setActionCommand("qedit");
-        menuItem.setText("Help");
         return menuItem;
     }
 
     private JMenuItem createClearOutputMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(
-                ActionBuilder.get("clear-editor-output-command"));
-        menuItem.setIcon(null);
-        menuItem.setText("Clear Output Log");
-        executeActionButtons().add(menuItem);
-        return menuItem;
+
+        return createExecuteActionMenuItem("clear-editor-output-command", "Clear Output Log");
     }
 
     private JMenuItem createRecycleResultSetTabMenuItem() {
@@ -218,19 +218,23 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createFormatSqlMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(
-                ActionBuilder.get("editor-format-sql-command"));
-        menuItem.setIcon(null);
-        executeActionButtons().add(menuItem);
-        return menuItem;
+
+        return createExecuteActionMenuItem("editor-format-sql-command", null);
+    }
+
+    private JMenuItem createDuplicateRowUpMenuItem() {
+
+        return createExecuteActionMenuItem("duplicate-row-up-command", null);
+    }
+
+    private JMenuItem createDuplicateRowDownMenuItem() {
+
+        return createExecuteActionMenuItem("duplicate-row-down-command", null);
     }
 
     private JMenuItem createAddToUserDefinedKeywordsMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(
-                ActionBuilder.get("editor-add-user-keyword"));
-        menuItem.setIcon(null);
-        executeActionButtons().add(menuItem);
-        return menuItem;
+
+        return createExecuteActionMenuItem("editor-add-user-keyword", null);
     }
 
     private JMenuItem createRollbackMenuItem() {
@@ -269,21 +273,13 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createExecuteSelectionMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(
-                ActionBuilder.get("execute-selection-command"));
-        menuItem.setText("Execute Selected Query Text");
-        menuItem.setIcon(null);
-        executeActionButtons().add(menuItem);
-        return menuItem;
+
+        return createExecuteActionMenuItem("execute-selection-command", "Execute Selected Query Text");
     }
 
     private JMenuItem createPartialExecuteMenuItem() {
-        JMenuItem menuItem = MenuItemFactory.createMenuItem(
-                ActionBuilder.get("execute-at-cursor-command"));
-        menuItem.setText("Execute Query at Cursor");
-        menuItem.setIcon(null);
-        executeActionButtons().add(menuItem);
-        return menuItem;
+
+        return createExecuteActionMenuItem("execute-at-cursor-command", "Execute Query at Cursor");
     }
 
     private JMenuItem createExecuteMenuItem() {
@@ -294,101 +290,118 @@ public class QueryEditorPopupMenu extends JPopupMenu
         executeActionButtons().add(menuItem);
         return menuItem;
     }
-    
+
     private JMenuItem createPasteMenuItem() {
-        JMenuItem paste = MenuItemFactory.createMenuItem(ActionBuilder.get("paste-command"));
-        paste.setText("Paste");
-        paste.setIcon(null);
-        return paste;
+
+        return createMenuItem("paste-command", "Paste");
     }
 
     private JMenuItem createCopyMenuItem() {
-        JMenuItem copy = MenuItemFactory.createMenuItem(ActionBuilder.get("copy-command"));
-        copy.setText("Copy");
-        copy.setIcon(null);
-        return copy;
+
+        return createMenuItem("copy-command", "Copy");
     }
 
     private JMenuItem createCutMenuItem() {
-        JMenuItem cut = MenuItemFactory.createMenuItem(ActionBuilder.get("cut-command"));
-        cut.setText("Cut");
-        cut.setIcon(null);
-        return cut;
+
+        return createMenuItem("cut-command", "Cut");
     }
 
+    private JMenuItem createExecuteActionMenuItem(String actionName, String text) {
+
+        JMenuItem menuItem = createMenuItem(actionName, text);
+        executeActionButtons().add(menuItem);
+
+        return menuItem;
+    }
+
+    private JMenuItem createMenuItem(String actionName, String text) {
+
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(ActionBuilder.get(actionName));
+        menuItem.setIcon(null);
+
+        if (StringUtils.isNotBlank(text)) {
+
+            menuItem.setText(text);
+        }
+
+        return menuItem;
+    }
+
+
+
     private void setTransactionButtonsEnabled(boolean enable) {
-        
+
         for (JMenuItem menuItem : transactionButtons()) {
-            
+
             menuItem.setEnabled(enable);
         }
 
     }
 
     private void setExecutingButtonsEnabled(boolean enable) {
-        
+
         for (JMenuItem menuItem : executingButtons()) {
-            
+
             menuItem.setEnabled(enable);
         }
 
     }
 
     private void setExecuteActionButtonsEnabled(boolean enable) {
-        
+
         for (JMenuItem menuItem : executeActionButtons()) {
-            
+
             menuItem.setEnabled(enable);
         }
 
     }
-    
+
     private List<JMenuItem> executeActionButtons() {
-        
+
         if (executeActionButtons == null) {
-            
+
             executeActionButtons = new ArrayList<JMenuItem>();
         }
-        
+
         return executeActionButtons;
     }
 
     private List<JMenuItem> executingButtons() {
-        
+
         if (executingButtons == null) {
-            
+
             executingButtons = new ArrayList<JMenuItem>();
         }
-        
+
         return executingButtons;
     }
 
     private List<JMenuItem> transactionButtons() {
-        
+
         if (transactionButtons == null) {
-            
+
             transactionButtons = new ArrayList<JMenuItem>();
         }
-        
+
         return transactionButtons;
     }
 
     private Action action() {
-        
+
         if (action == null) {
-            
+
             action = new ReflectiveAction(this);
         }
-        
+
         return action;
     }
 
     private ReflectiveAction action;
-    
+
     private List<JMenuItem> executeActionButtons;
-    
+
     private List<JMenuItem> executingButtons;
-    
+
     private List<JMenuItem> transactionButtons;
 
 }

@@ -44,22 +44,22 @@ public class GenerateScriptsPanelOne extends JPanel implements GenerateScriptsPa
 
     /** create table script radio button */
     private JRadioButton createTableButton;
-    
+
     /** drop table script radio button */
     private JRadioButton dropTableButton;
-    
+
     /** The connection combo selection */
-    private JComboBox connectionsCombo; 
+    private JComboBox connectionsCombo;
 
     /** Creates a new instance of GenerateScriptsPanelOne */
     public GenerateScriptsPanelOne(GenerateScriptsWizard parent) {
 
         super(new GridBagLayout());
-        
+
         try {
-            
+
             init();
-            
+
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -68,16 +68,16 @@ public class GenerateScriptsPanelOne extends JPanel implements GenerateScriptsPa
     }
 
     private void init() throws Exception {
-        
-        createTableButton = new JRadioButton("CREATE TABLE script", true);
-        dropTableButton = new JRadioButton("DROP TABLE script");
-        
+
+        createTableButton = new JRadioButton("CREATE TABLE/OBJECT script", true);
+        dropTableButton = new JRadioButton("DROP TABLE/OBJECT script");
+
         ButtonGroup bg = new ButtonGroup();
         bg.add(createTableButton);
         bg.add(dropTableButton);
-        
+
         connectionsCombo = WidgetFactory.createComboBox();
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy = 0;
         gbc.gridx = 0;
@@ -102,17 +102,17 @@ public class GenerateScriptsPanelOne extends JPanel implements GenerateScriptsPa
         gbc.gridy++;
         gbc.weighty = 1.0;
         add(dropTableButton, gbc);
-        
+
         setPreferredSize(GenerateScriptsWizard.CHILD_DIMENSION);
     }
 
     public void panelSelected() {}
-    
+
     protected JComboBox getConnectionsCombo() {
 
         return connectionsCombo;
     }
-    
+
     /**
      * Returns the selected database connection properties object.
      *
@@ -135,7 +135,7 @@ public class GenerateScriptsPanelOne extends JPanel implements GenerateScriptsPa
             return GenerateScriptsWizard.CREATE_TABLES;
 
         } else {
-        
+
             return GenerateScriptsWizard.DROP_TABLES;
         }
 

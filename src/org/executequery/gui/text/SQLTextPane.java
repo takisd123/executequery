@@ -50,10 +50,10 @@ import org.executequery.repository.RepositoryCache;
  */
 public class SQLTextPane extends JTextPane
                          implements CaretListener {
-    
+
     /** The SQL syntax document */
     protected SQLSyntaxDocument document;
-    
+
     /** whether a caretUpdate will be called */
     private boolean doCaretUpdate;
 
@@ -65,7 +65,7 @@ public class SQLTextPane extends JTextPane
 
     /** Creates a new instance of SQLTextPane */
     public SQLTextPane() {
-        
+
         KeywordRepository keywordRepository =
             (KeywordRepository)RepositoryCache.load(KeywordRepository.REPOSITORY_ID);
 
@@ -82,19 +82,19 @@ public class SQLTextPane extends JTextPane
         super.setText(text);
         setCaretPosition(0);
     }
-    
+
     /**
      * Returns the SQL syntax document associated with this component.
      *
      * @return the SQL document
      */
     public SQLSyntaxDocument getSQLSyntaxDocument() {
-        
+
         return document;
     }
-    
+
     public void setSQLKeywords(boolean reset) {
-        
+
         document.setSQLKeywords(keywords().getSQLKeywords(), reset);
     }
 
@@ -103,11 +103,11 @@ public class SQLTextPane extends JTextPane
         return (KeywordRepository)RepositoryCache.load(KeywordRepository.REPOSITORY_ID);
     }
 
-    /** 
-     * Overrides <code>processKeyEvent</code> to check for a caret update. 
+    /**
+     * Overrides <code>processKeyEvent</code> to check for a caret update.
      */
     protected void processKeyEvent(KeyEvent e) {
-        
+
         doCaretUpdate = (e.getID() != KeyEvent.KEY_TYPED);
         super.processKeyEvent(e);
     }
@@ -116,20 +116,20 @@ public class SQLTextPane extends JTextPane
      * Clears all the text in the text pane.
      */
     public void deleteAll() {
-        
+
         try {
-            
+
             document.replace(0, document.getLength(), "", null);
-            
+
         } catch (BadLocationException badLoc) {}
-        
+
     }
-    
+
     /**
      * Sets the user defined preferences on the text pane.
      */
     protected void setEditorPreferences() {
-        
+
         setSelectionColor(QueryEditorSettings.getSelectionColour());
         setSelectedTextColor(QueryEditorSettings.getSelectedTextColour());
 
@@ -142,9 +142,9 @@ public class SQLTextPane extends JTextPane
 
         boolean tabsToSpaces = QueryEditorSettings.isTabsToSpaces();
         int tabSize = QueryEditorSettings.getTabSize();
-        
+
         if (!tabsToSpaces) {
-            
+
             setTabs(tabSize);
         }
 
@@ -178,10 +178,10 @@ public class SQLTextPane extends JTextPane
 
         }
     }
-    
+
     public void disableUpdates(boolean disable) {
 
-        if (disable) { 
+        if (disable) {
 
             String text = getText();
             setDocument(new DefaultStyledDocument());
@@ -199,7 +199,7 @@ public class SQLTextPane extends JTextPane
      * Override to ensure no wrap of text.
      */
     public boolean getScrollableTracksViewportWidth() {
-        
+
         return getSize().width < getParent().getSize().width;
     }
 
@@ -207,12 +207,12 @@ public class SQLTextPane extends JTextPane
      * Override to ensure no wrap of text.
      */
     public void setSize(Dimension d) {
-        
+
         if (d.width < getParent().getSize().width) {
-            
+
             d.width = getParent().getSize().width;
         }
-        
+
         super.setSize(d);
     }
 
@@ -220,25 +220,25 @@ public class SQLTextPane extends JTextPane
      * Sets the size of a TAB as specified.
      */
     private void setTabs(int charactersPerTab) {
-       
+
         int tabWidth = fontWidth * charactersPerTab;
-        
+
         TabStop[] tabs = new TabStop[10];
-        
+
         for (int j = 0; j < tabs.length; j++) {
-            
+
             int tab = j + 1;
             tabs[j] = new TabStop(tab * tabWidth);
         }
-        
+
         TabSet tabSet = new TabSet(tabs);
-        
+
         SimpleAttributeSet attributes = new SimpleAttributeSet();
         StyleConstants.setTabSet(attributes, tabSet);
-        
+
         document.setParagraphAttributes(0, document.getLength(), attributes, true);
     }
-    
+
 }
 
 

@@ -52,7 +52,7 @@ import org.executequery.gui.text.TextUtilities;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.GUIUtils;
 
-/** 
+/**
  * This object is the primary mediator between the parent
  * <code>QueryEditor</code> object and the actual Query Editor's
  * text pane - the <code>QueryEditorTextPane</code>. All text commands for the
@@ -63,28 +63,28 @@ import org.underworldlabs.swing.GUIUtils;
  * @date     $Date: 2009-03-16 01:18:05 +1100 (Mon, 16 Mar 2009) $
  */
 public class QueryEditorTextPanel extends JPanel {
-    
+
     private static final String SQL_COMMENT_REGEX = "^\\s*--";
 
     private static final String SQL_COMMENT = "--";
 
     /** The SQL text pane */
     private QueryEditorTextPane queryPane;
-    
+
     /** The editor's controller */
     private QueryEditor queryEditor;
 
     private static final String AUTO_COMPLETE_POPUP_ACTION_KEY = "autoCompletePopupActionKey";
 
     private AutoCompletePopupProvider autoCompletePopup;
-    
+
     /** Constructs a new instance. */
     public QueryEditorTextPanel(QueryEditor queryEditor) {
 
         super(new BorderLayout());
-        
+
         this.queryEditor = queryEditor;
-        
+
         try  {
 
             init();
@@ -93,15 +93,15 @@ public class QueryEditorTextPanel extends JPanel {
 
             e.printStackTrace();
         }
-        
+
     }
-    
+
     /** Initializes the state of this instance. */
     private void init() throws Exception {
 
         // setup the query text panel and associated scroller
         queryPane = new QueryEditorTextPane(this);
-        
+
         JScrollPane queryScroller = new JScrollPane();
         queryScroller.getViewport().add(queryPane, BorderLayout.CENTER);
         queryScroller.setRowHeaderView(queryPane.getLineBorder());
@@ -112,37 +112,37 @@ public class QueryEditorTextPanel extends JPanel {
     }
 
     public void deregisterAutoCompletePopup() {
-        
+
         if (autoCompletePopup != null) {
-        
+
             Action autoCompletePopupAction = autoCompletePopup.getPopupAction();
-            
+
             queryPane.getActionMap().remove(AUTO_COMPLETE_POPUP_ACTION_KEY);
-            queryPane.getInputMap().remove((KeyStroke) 
+            queryPane.getInputMap().remove((KeyStroke)
                     autoCompletePopupAction.getValue(Action.ACCELERATOR_KEY));
-    
+
             autoCompletePopup = null;
         }
 
     }
-    
+
     public void registerAutoCompletePopup(AutoCompletePopupProvider autoCompletePopup) {
-        
+
         this.autoCompletePopup = autoCompletePopup;
 
         Action autoCompletePopupAction = autoCompletePopup.getPopupAction();
-        
+
         queryPane.getActionMap().put(AUTO_COMPLETE_POPUP_ACTION_KEY, autoCompletePopupAction);
-        queryPane.getInputMap().put((KeyStroke) 
-                autoCompletePopupAction.getValue(Action.ACCELERATOR_KEY), 
+        queryPane.getInputMap().put((KeyStroke)
+                autoCompletePopupAction.getValue(Action.ACCELERATOR_KEY),
                 AUTO_COMPLETE_POPUP_ACTION_KEY);
     }
-    
+
     public void addEditorPaneMouseListener(MouseListener listener) {
-        
+
         queryPane.addMouseListener(listener);
     }
-    
+
     public boolean isLogEnabled() {
 
         return OutputLogger.isLogEnabled();
@@ -151,56 +151,56 @@ public class QueryEditorTextPanel extends JPanel {
     public void log(String message) {
 
         if (isLogEnabled()) {
-            
+
             OutputLogger.info(message);
         }
 
     }
 
     public void setTextPaneBackground(Color c) {
-        
+
         queryPane.setBackground(c);
     }
-    
+
     public void setSQLKeywords(boolean reset) {
-        
+
         queryPane.setSQLKeywords(reset);
     }
 
     protected ActionMap getTextPaneActionMap() {
-        
+
         return queryPane.getActionMap();
     }
 
     protected InputMap getTextPaneInputMap() {
-        
+
         return queryPane.getInputMap();
     }
-    
+
     /**
      * Indicates that the editor is closing and performs some cleanup.
      */
     protected void closingEditor() {
-        
-        queryEditor = null;        
+
+        queryEditor = null;
     }
-    
+
     public void showLineNumbers(boolean show) {
-        
+
         queryPane.showLineNumbers(show);
     }
 
     protected void setTextFocus() {
-        
+
         GUIUtils.requestFocusInWindow(queryPane);
     }
 
     /**
-     * Resets the executing line within the line 
+     * Resets the executing line within the line
      * number border panel.
      */
     public void resetExecutingLine() {
-        
+
         queryPane.resetExecutingLine();
     }
 
@@ -208,60 +208,60 @@ public class QueryEditorTextPanel extends JPanel {
      * Resets the text pane's caret position to zero.
      */
     public void resetCaretPosition() {
-        
+
         queryPane.setCaretPosition(0);
     }
 
     /**
-     * Enters the specified text at the editor's current 
+     * Enters the specified text at the editor's current
      * insertion point.
      *
      * @param text - the text to insert
      */
     public void insertTextAtCaret(String text) {
-        
+
         queryPane.replaceSelection(text);
         setTextFocus();
     }
-    
+
     public JTextPane getQueryArea() {
-        
+
         return queryPane;
     }
 
     public void selectAll() {
-        
+
         TextUtilities.selectAll(queryPane);
     }
-    
+
     public void selectNone() {
-        
+
         TextUtilities.selectNone(queryPane);
 
         queryEditor.focusGained();
     }
 
     public void focusLost() {
-        
+
         if (queryEditor != null) {
-            
+
             queryEditor.focusLost();
         }
     }
 
     public void focusGained() {
-        
+
         if (queryEditor != null) {
-            
+
             queryEditor.focusGained();
         }
     }
 
     public void commitModeChanged(boolean autoCommit) {
-        
+
         queryEditor.commitModeChanged(autoCommit);
     }
-    
+
     /**
      * Sets the editor's text content that specified.
      *
@@ -286,35 +286,35 @@ public class QueryEditorTextPanel extends JPanel {
             queryPane.reinstallListeners();
         }
     }
-    
+
     public void insertTextAfter(int after, String text) {
         queryPane.insertTextAfter(after, text);
     }
-    
+
     /**
      * Loads the specified text into a blank 'offscreen' document
      * before switching to the SQL document.
      */
     public void loadText(String text) {
-        
+
         queryPane.loadText(text);
     }
 
     public QueryEditorStatusBar getStatusBar() {
-        
+
         return queryEditor.getStatusBar();
     }
-    
+
     public void disableUpdates(boolean disable) {
-        
+
         queryPane.disableUpdates(disable);
     }
-    
+
     public void disableCaretUpdate(boolean disable) {
-        
+
         queryPane.disableCaretUpdate(disable);
     }
-    
+
     public void preferencesChanged() {
 
         queryPane.resetAttributeSets();
@@ -325,11 +325,11 @@ public class QueryEditorTextPanel extends JPanel {
     // -----------------------------------
 
     private static final String[] REGEX_CHARS = {
-        "\\*", "\\^", "\\.", "\\[", "\\]", "\\(", "\\)", 
+        "\\*", "\\^", "\\.", "\\[", "\\]", "\\(", "\\)",
         "\\?", "\\&", "\\{", "\\}", "\\+"};
 
     private static final String[] REGEX_SUBS = {
-        "\\\\*", "\\\\^", "\\\\.", "\\\\[", "\\\\]", "\\\\(", "\\\\)", 
+        "\\\\*", "\\\\^", "\\\\.", "\\\\[", "\\\\]", "\\\\(", "\\\\)",
         "\\\\?", "\\\\&", "\\\\{", "\\\\}", "\\\\+"};
 
     /**
@@ -338,7 +338,7 @@ public class QueryEditorTextPanel extends JPanel {
      * @param query - the query to move the cursor to
      */
     public void caretToQuery(String query) {
-        
+
         // replace any regex control chars
         for (int i = 0; i < REGEX_CHARS.length; i++) {
 
@@ -364,7 +364,7 @@ public class QueryEditorTextPanel extends JPanel {
     }
 
     /**
-     * Returns the currently selected text, or null if not text 
+     * Returns the currently selected text, or null if not text
      * is currently selected.
      *
      * @return selected text
@@ -380,24 +380,24 @@ public class QueryEditorTextPanel extends JPanel {
 
         return null;
     }
-    
+
     public String getCompleteWordEndingAtCursor() {
-        
+
         return queryPane.getCompleteWordEndingAtCursor();
     }
 
     protected String getWordToCursor() {
-        
+
         return queryPane.getWordEndingAtCursor();
     }
 
     protected String getQueryAtCursor() {
-        
+
         return queryPane.getQueryAtCursor();
     }
-    
+
     protected void setExecutingQuery(String query) {
-        
+
         queryPane.setExecutingQuery(query);
     }
 
@@ -405,13 +405,13 @@ public class QueryEditorTextPanel extends JPanel {
 
         queryPane.goToRow(row);
     }
-    
+
     public void destroyTable() {
-        
+
         queryEditor.destroyTable();
     }
-    
-    /** 
+
+    /**
      * Sets the table results to the specified
      * <code>ResultSet</code> object for display.
      *
@@ -419,25 +419,25 @@ public class QueryEditorTextPanel extends JPanel {
      * @param the executed query of the result set
      */
     public void setResultSet(ResultSet rset, String query) throws SQLException {
-        
+
         queryEditor.setResultSet(rset, query);
     }
 
     public void setResult(int updateCount, int type) {
-        
+
         queryEditor.setResultText(updateCount, type);
     }
-    
+
     public String getQueryAreaText() {
-        
+
         return queryPane.getText();
     }
-    
-    private void addCommentToRows(int startRow, int endRow) 
+
+    private void addCommentToRows(int startRow, int endRow)
         throws BadLocationException {
 
         Matcher matcher = sqlCommentMatcher();
-        
+
         for (int i = startRow; i <= endRow; i++) {
 
             String text = queryPane.getTextAtRow(i);
@@ -445,7 +445,7 @@ public class QueryEditorTextPanel extends JPanel {
             matcher.reset(text);
 
             if (!matcher.find()) {
-           
+
                 int index = queryPane.getRowStartOffset(i);
                 queryPane.insertTextAtOffset(index, SQL_COMMENT);
             }
@@ -459,7 +459,7 @@ public class QueryEditorTextPanel extends JPanel {
         Document document = queryPane.getDocument();
 
         Matcher matcher = sqlCommentMatcher();
-        
+
         for (int i = startRow; i <= endRow; i++) {
 
             String text = queryPane.getTextAtRow(i);
@@ -468,7 +468,7 @@ public class QueryEditorTextPanel extends JPanel {
 
             if (matcher.find()) {
 
-                // retrieve the exact index of '--' since 
+                // retrieve the exact index of '--' since
                 // matcher will return first whitespace
 
                 int index = text.indexOf(SQL_COMMENT);
@@ -488,7 +488,7 @@ public class QueryEditorTextPanel extends JPanel {
     public void commentLines() {
 
         queryPane.addUndoEdit();
-        
+
         int selectionStart = queryPane.getSelectionStart();
         int selectionEnd = queryPane.getSelectionEnd();
 
@@ -502,34 +502,34 @@ public class QueryEditorTextPanel extends JPanel {
 
             endRow--;
         }
-        
+
         try {
-            
+
             if (rowsHaveComments(startRow, endRow, true)) {
-                
+
                 removeCommentFromRows(startRow, endRow);
-                
+
             } else if (rowsHaveComments(startRow, endRow, false)) {
-                
+
                 if (singleRow) {
-                    
+
                     removeCommentFromRows(startRow, endRow);
-                    
-                } else { 
+
+                } else {
 
                     // if any one row of a multi-row selection has
                     // a comment, comment the rest also
-                    
+
                     addCommentToRows(startRow, endRow);
                 }
-                
+
             } else {
-                
+
                 addCommentToRows(startRow, endRow);
             }
 
             ensureUndo(); // add this as an edit if its not
-            
+
         } catch (BadLocationException e) {
 
             // nothing we can do here
@@ -547,23 +547,23 @@ public class QueryEditorTextPanel extends JPanel {
 
     /** pattern matcher to check for comments to be removed */
     private Matcher sqlCommentMatcher;
-    
+
     private Matcher sqlCommentMatcher() {
-        
+
         if (sqlCommentMatcher == null) {
-            
+
             sqlCommentMatcher = Pattern.compile(
                     SQL_COMMENT_REGEX).matcher("");
         }
 
         return sqlCommentMatcher;
     }
-    
-    private boolean rowsHaveComments(int startRow, int endRow, boolean allRows) 
+
+    private boolean rowsHaveComments(int startRow, int endRow, boolean allRows)
         throws BadLocationException {
-        
+
         Matcher matcher = sqlCommentMatcher();
-        
+
         for (int i = startRow; i <= endRow; i++) {
 
             String text = queryPane.getTextAtRow(i);
@@ -573,13 +573,13 @@ public class QueryEditorTextPanel extends JPanel {
             if (matcher.find()) {
 
                 if (!allRows) {
-                    
+
                     return true;
-                    
+
                 }
 
             } else if (allRows) {
-                
+
                 return false;
             }
 
@@ -613,9 +613,9 @@ public class QueryEditorTextPanel extends JPanel {
             queryPane.shiftTextRight(start);
 
         } else { // simulate a tab key for selected text
-          
+
             try {
-            
+
                 Robot robot = new Robot();
                 robot.keyPress(KeyEvent.VK_TAB);
                 robot.keyRelease(KeyEvent.VK_TAB);
@@ -626,6 +626,16 @@ public class QueryEditorTextPanel extends JPanel {
             }
 
         }
+    }
+
+    public void duplicateRowUp() {
+
+        queryPane.duplicateTextUp();
+    }
+
+    public void duplicateRowDown() {
+
+        queryPane.duplicateTextDown();
     }
 
     /**
@@ -659,62 +669,62 @@ public class QueryEditorTextPanel extends JPanel {
 
             }
 
-        }        
+        }
     }
 
     // ---------------------------------------------
     // TextFunction implementation
     // ---------------------------------------------
-    
+
     public void paste() {
         queryPane.paste();
     }
-    
+
     public void copy() {
         queryPane.copy();
     }
-    
+
     public void cut() {
         queryPane.cut();
     }
-    
+
     public void changeSelectionCase(boolean upper) {
         queryPane.addUndoEdit();
         TextUtilities.changeSelectionCase(queryPane, upper);
     }
-    
+
     public void deleteLine() {
         queryPane.addUndoEdit();
         TextUtilities.deleteLine(queryPane);
     }
-    
+
     public void deleteWord() {
         queryPane.addUndoEdit();
         TextUtilities.deleteWord(queryPane);
     }
-    
+
     public void deleteSelection() {
         queryPane.addUndoEdit();
         TextUtilities.deleteSelection(queryPane);
     }
-    
+
     public void insertFromFile() {
         queryPane.addUndoEdit();
         TextUtilities.insertFromFile(queryPane);
     }
-    
+
     public void insertLineAfter() {
         queryPane.addUndoEdit();
         TextUtilities.insertLineAfter(queryPane);
     }
-    
+
     public void insertLineBefore() {
         queryPane.addUndoEdit();
         TextUtilities.insertLineBefore(queryPane);
     }
-    
+
     // ---------------------------------------------
-    
+
     /**
      * Propagates the call to the parent QueryEditor object
      * that the text content has been altered from the original
@@ -728,9 +738,9 @@ public class QueryEditorTextPanel extends JPanel {
 
     private static Insets borderInsets;
     private static Color borderColour;
-    
+
     private class EditorScrollerBorder implements Border {
-        
+
         protected EditorScrollerBorder() {
             if (borderInsets == null) {
                 borderInsets = new Insets(0, 0, 0, 0);
@@ -739,20 +749,20 @@ public class QueryEditorTextPanel extends JPanel {
                 borderColour = GUIUtilities.getDefaultBorderColour();
             }
         }
-        
+
         public Insets getBorderInsets(Component c) {
             return borderInsets;
         }
-        
+
         public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
             g.setColor(borderColour);
             g.drawLine(x, height-1, width, height-1);
         }
-        
+
         public boolean isBorderOpaque() {
             return false;
         }
-        
+
     }
 
     public void editorShortcutsUpdated() {
