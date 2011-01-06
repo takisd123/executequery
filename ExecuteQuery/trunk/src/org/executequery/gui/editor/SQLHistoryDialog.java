@@ -128,6 +128,8 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         JButton cancelButton = createButton("Cancel", null);       
         JButton selectButton = createButton("Select", 
                 "Pastes the selected query into the Query Editor");
+        JButton copyButton = createButton("Copy", 
+                "Copies the selected query to the system clipboard");
         JButton clearButton = createButton("Clear", 
                 "Clears and resets ALL SQL history");
 
@@ -186,18 +188,20 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         gbc.insets.bottom = 7;
         gbc.gridwidth = 1;
         gbc.gridy++;
-        gbc.gridx = 3;
+        gbc.gridx = 4;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.EAST;
         c.add(cancelButton, gbc);
-        gbc.gridx = 2;
+        gbc.gridx--;
         gbc.insets.right = 0;
         c.add(clearButton, gbc);
-        gbc.gridx = 1;
+        gbc.gridx--;
+        gbc.insets.right = 0;
+        c.add(copyButton, gbc);
+        gbc.gridx--;
         gbc.weightx = 1.0;
         c.add(selectButton, gbc);
-        gbc.gridx = 1;
         gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.WEST;
         c.add(newEditorCheck, gbc);
@@ -271,6 +275,10 @@ public class SQLHistoryDialog extends AbstractBaseDialog
             
             selectSQLCommand();
             
+        } else if (command.equals("Copy")) {
+            
+            copySQLCommand();
+                
         } else if (command.equals("Search") || e.getSource() == searchField) {
 
             String text = searchField.getText();
@@ -334,30 +342,56 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         historyList.ensureIndexIsVisible(i);
     }
 
-    private void selectSQLCommand() {
+    private boolean validateSelection() {
+        
         if (data.isEmpty()) {
-            return;
+            
+            return false;
         }
 
         if (historyList.isSelectionEmpty()) {
+
             GUIUtilities.displayErrorMessage("No selection made.");
-            return;
+            return false;
         }
 
-        String query = queryForIndex(historyList.getSelectedIndex());
+        return true;
+    }
+    
+    private void copySQLCommand() {
+
+        if (validateSelection()) {
         
-        if (newEditorCheck.isSelected()) {
-            QueryEditor editor = new QueryEditor(query);
-            GUIUtilities.addCentralPane(QueryEditor.TITLE,
-                                        QueryEditor.FRAME_ICON, 
-                                        editor,
-                                        null,
-                                        true);
+            String query = queryForIndex(historyList.getSelectedIndex());
+            GUIUtilities.copyToClipBoard(query.trim());
+         
+            dispose();
         }
-        else if (queryEditor != null) {
-            queryEditor.setEditorText(query);
+        
+    }
+    
+    private void selectSQLCommand() {
+
+        if (validateSelection()) {
+        
+            String query = queryForIndex(historyList.getSelectedIndex());
+            
+            if (newEditorCheck.isSelected()) {
+
+                QueryEditor editor = new QueryEditor(query);
+                GUIUtilities.addCentralPane(QueryEditor.TITLE,
+                                            QueryEditor.FRAME_ICON, 
+                                            editor,
+                                            null,
+                                            true);
+
+            } else if (queryEditor != null) {
+              
+                queryEditor.setEditorText(query);
+            }
+
+            dispose();
         }
-        dispose();
     }
 
     private String queryForIndex(int index) {

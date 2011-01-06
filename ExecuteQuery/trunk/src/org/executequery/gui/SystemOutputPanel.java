@@ -41,7 +41,7 @@ import org.executequery.log.Log;
  * @version  $Revision: 1561 $
  * @date     $Date: 2009-09-07 23:20:31 +1000 (Mon, 07 Sep 2009) $
  */
-public class SystemOutputPanel extends AbstractDockedTabPanel {
+public class SystemOutputPanel extends AbstractDockedTabPanel implements ReadOnlyTextPane {
 
     /** This panel's title */
     public static final String TITLE = "Output Console";
@@ -149,7 +149,7 @@ public class SystemOutputPanel extends AbstractDockedTabPanel {
 
     }
 
-    public String getOutputPaneText() {
+    public String getText() {
 
         return textArea.getText();
     }
