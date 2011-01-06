@@ -379,6 +379,18 @@
           small-icon="/org/executequery/icons/ShiftTextLeft16.png"
           execute-class="org.executequery.actions.queryeditor.ShiftTextLeftCommand"/>
 
+  <action id="move-row-up-command"
+          name="Move text up"
+          accel-key="alt UP"
+          accel-editable="true"
+          execute-class="org.executequery.actions.queryeditor.MoveTextUpCommand"/>
+
+  <action id="move-row-down-command"
+          name="Move text down"
+          accel-key="alt DOWN"
+          accel-editable="true"
+          execute-class="org.executequery.actions.queryeditor.MoveTextDownCommand"/>
+
   <action id="duplicate-row-up-command"
           name="Duplicate text up"
           accel-key="control alt UP"

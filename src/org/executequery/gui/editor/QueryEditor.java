@@ -1135,6 +1135,16 @@ public class QueryEditor extends DefaultTabView
         editorPanel.shiftTextLeft();
     }
 
+    public void moveSelectionUp() {
+        
+        editorPanel.moveSelectionUp();
+    }
+    
+    public void moveSelectionDown() {
+        
+        editorPanel.moveSelectionDown();
+    }
+
     /**
      * Duplicates the cursor current row up
      */

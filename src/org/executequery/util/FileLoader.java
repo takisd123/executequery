@@ -44,9 +44,6 @@ import org.underworldlabs.util.FileUtils;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class FileLoader {
-    
-    /** Creates a new instance of FileLoader */
-    public FileLoader() {}
 
     public void openFile(String file, int openWith) {
 
@@ -56,15 +53,15 @@ public class FileLoader {
     public void openFile(final File file, final int openWith) {
 
         SwingWorker worker = new SwingWorker() {
-        
+
             public Object construct() {
-            
+
                 GUIUtilities.getStatusBar().setSecondLabelText(
                         "Loading file: " + file.getName());
                 GUIUtilities.showWaitCursor();
-                
+
                 load(file, openWith);
-                
+
                 return "done";
             }
 
@@ -72,7 +69,7 @@ public class FileLoader {
 
                 GUIUtilities.getStatusBar().
                         setSecondLabelText("I/O process complete");
-                
+
                 GUIUtilities.showNormalCursor();
             }
 
@@ -80,15 +77,15 @@ public class FileLoader {
 
         worker.start();
     }
-    
+
     private void load(File file, int openWith) {
-        
+
         if (file == null || !file.exists()) {
-        
+
             GUIUtilities.displayErrorMessage("Invalid file name");
             return;
         }
-        
+
         try {
             String fileName = file.getName();
 
@@ -99,7 +96,7 @@ public class FileLoader {
                     openWith = OpenFileDialog.NEW_EDITOR;
 
                 } else {
-                  
+
                     openWith = OpenFileDialog.SCRATCH_PAD;
                 }
 
@@ -114,30 +111,40 @@ public class FileLoader {
                     return;
                 }
 
-                ErdSaveFileFormat erd = (ErdSaveFileFormat)object;                
-                JPanel panel = GUIUtilities.getOpenFrame(ErdViewerPanel.TITLE);
+                ErdSaveFileFormat erd = (ErdSaveFileFormat)object;
 
+                ErdViewerPanel erdPanel = new ErdViewerPanel(erd, file.getAbsolutePath());
+                GUIUtilities.addCentralPane(ErdViewerPanel.TITLE,
+                                            ErdViewerPanel.FRAME_ICON,
+                                            erdPanel,
+                                            null,
+                                            true);
+                erdPanel.setSavedErd(erd, file.getAbsolutePath());
+
+                /*
+                JPanel panel = GUIUtilities.getOpenFrame(ErdViewerPanel.TITLE);
                 if (panel != null && panel instanceof ErdViewerPanel) {
 
                     ErdViewerPanel erdPanel = (ErdViewerPanel)panel;
                     erdPanel.setSavedErd(erd, file.getAbsolutePath());
 
                 } else {
-                  
+
                     ErdViewerPanel erdPanel = new ErdViewerPanel(erd, file.getAbsolutePath());
                     GUIUtilities.addCentralPane(ErdViewerPanel.TITLE,
-                                                ErdViewerPanel.FRAME_ICON, 
+                                                ErdViewerPanel.FRAME_ICON,
                                                 erdPanel,
                                                 null,
                                                 true);
                     erdPanel.setSavedErd(erd, file.getAbsolutePath());
                 }
+                */
 
                 fireFileOpened(file);
 
                 return;
             }
-            
+
             String contents = FileUtils.loadFile(file);
 
             if (openWith == OpenFileDialog.NEW_EDITOR) {
@@ -156,7 +163,7 @@ public class FileLoader {
 
                     editor.loadText(contents);
                     editor.setOpenFilePath(file.getAbsolutePath());
-                    
+
                     GUIUtilities.setTabTitleForComponent(
                                     panel, editor.getDisplayName());
 
@@ -182,13 +189,12 @@ public class FileLoader {
 
             fireFileOpened(file);
 
-        } catch(IOException e) {
+        } catch (IOException e) {
 
             e.printStackTrace();
-
             GUIUtilities.displayErrorMessage(
                     "I/O error opening selected file.\n" + e.getMessage());
-        } 
+        }
 
     }
 
@@ -198,11 +204,11 @@ public class FileLoader {
                 new DefaultFileIOEvent(this, FileIOEvent.INPUT_COMPLETE,
                         file.getAbsolutePath()));
     }
-    
+
     private void openNewScratchPad(File file, String contents) {
 
         GUIUtilities.addCentralPane(ScratchPadPanel.TITLE,
-                                    ScratchPadPanel.FRAME_ICON, 
+                                    ScratchPadPanel.FRAME_ICON,
                                     new ScratchPadPanel(contents),
                                     null,
                                     true);
@@ -212,7 +218,7 @@ public class FileLoader {
 
         QueryEditor editor = new QueryEditor(contents, file.getAbsolutePath());
         GUIUtilities.addCentralPane(QueryEditor.TITLE,
-                                    QueryEditor.FRAME_ICON, 
+                                    QueryEditor.FRAME_ICON,
                                     editor,
                                     null,
                                     true);

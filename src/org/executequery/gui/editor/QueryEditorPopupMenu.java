@@ -78,6 +78,8 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createFormatSqlMenuItem());
         add(createDuplicateRowUpMenuItem());
         add(createDuplicateRowDownMenuItem());
+        add(createMoveRowUpMenuItem());
+        add(createMoveRowDownMenuItem());
         addSeparator();
 
         add(createClearOutputMenuItem());
@@ -220,6 +222,16 @@ public class QueryEditorPopupMenu extends JPopupMenu
     private JMenuItem createFormatSqlMenuItem() {
 
         return createExecuteActionMenuItem("editor-format-sql-command", null);
+    }
+
+    private JMenuItem createMoveRowUpMenuItem() {
+
+        return createExecuteActionMenuItem("move-row-up-command", null);
+    }
+
+    private JMenuItem createMoveRowDownMenuItem() {
+
+        return createExecuteActionMenuItem("move-row-down-command", null);
     }
 
     private JMenuItem createDuplicateRowUpMenuItem() {
