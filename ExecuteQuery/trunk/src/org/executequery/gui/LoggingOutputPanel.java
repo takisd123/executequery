@@ -33,6 +33,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 import org.executequery.UserPreferencesManager;
+import org.executequery.components.BasicPopupMenuListener;
 import org.executequery.components.LoggingOutputPane;
 import org.underworldlabs.swing.plaf.UIUtils;
 
@@ -42,18 +43,19 @@ import org.underworldlabs.swing.plaf.UIUtils;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
 */
-public class LoggingOutputPanel extends JPanel 
-                                implements DocumentListener {
+public class LoggingOutputPanel extends JPanel
+                                implements DocumentListener, ReadOnlyTextPane {
 
     private LoggingOutputPane outputPane;
 
     public LoggingOutputPanel() {
 
         super(new BorderLayout());
+
         outputPane = new LoggingOutputPane();
         outputPane.setMargin(new Insets(5, 5, 5, 5));
         outputPane.setDisabledTextColor(Color.black);
-        
+
         Color bg = UserPreferencesManager.getOutputPaneBackground();
         outputPane.setBackground(bg);
 
@@ -66,6 +68,9 @@ public class LoggingOutputPanel extends JPanel
 
         add(textOutputScroller, BorderLayout.CENTER);
         addDocumentListener(this);
+
+        ReadOnlyTextPanePopUpMenu readOnlyTextPanePopUpMenu = new ReadOnlyTextPanePopUpMenu(this);
+        outputPane.addMouseListener(new BasicPopupMenuListener(readOnlyTextPanePopUpMenu));
     }
 
     @Override
@@ -73,88 +78,88 @@ public class LoggingOutputPanel extends JPanel
 
         super.setBackground(bg);
         if (outputPane != null) {
-         
+
             outputPane.setBackground(bg);
         }
     }
-    
+
     public void append(String text) {
-        
+
         outputPane.append(text);
     }
-    
+
     public void append(int type, String text) {
-        
+
         outputPane.append(type, text);
     }
 
     public void appendError(String text) {
-     
+
         outputPane.appendError(text);
     }
 
     public void appendWarning(String text) {
-        
+
         outputPane.appendWarning(text);
     }
 
     public void appendPlain(String text) {
-        
+
         outputPane.appendPlain(text);
     }
 
     public void appendAction(String text) {
-        
+
         outputPane.appendAction(text);
     }
 
     public void appendErrorFixedWidth(String text) {
-        
+
         outputPane.appendErrorFixedWidth(text);
     }
 
     public void appendWarningFixedWidth(String text) {
-        
+
         outputPane.appendWarningFixedWidth(text);
     }
 
     public void appendPlainFixedWidth(String text) {
-        
+
         outputPane.appendPlainFixedWidth(text);
     }
 
     public void appendActionFixedWidth(String text) {
-        
+
         outputPane.appendActionFixedWidth(text);
     }
 
     public Document getDocument() {
-        
+
         return outputPane.getDocument();
     }
-    
+
     public void addDocumentListener(DocumentListener listener) {
-        
+
         outputPane.getDocument().addDocumentListener(listener);
     }
 
     public JTextPane getTextPane() {
-        
+
         return outputPane;
     }
-    
+
     public void changedUpdate(DocumentEvent e) {
 
         documentChanged();
     }
 
     public void insertUpdate(DocumentEvent e) {
-        
+
         documentChanged();
     }
 
     public void removeUpdate(DocumentEvent e) {
-        
+
         documentChanged();
     }
 
@@ -167,6 +172,21 @@ public class LoggingOutputPanel extends JPanel
 
         outputPane.setText("");
         outputPane.setCaretPosition(0);
+    }
+
+    public void selectAll() {
+
+        outputPane.selectAll();
+    }
+
+    public String getText() {
+
+        return outputPane.getText();
+    }
+
+    public void copy() {
+
+        outputPane.copy();
     }
 
 }

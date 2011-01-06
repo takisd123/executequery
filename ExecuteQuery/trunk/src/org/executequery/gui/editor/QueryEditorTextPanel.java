@@ -628,6 +628,16 @@ public class QueryEditorTextPanel extends JPanel {
         }
     }
 
+    public void moveSelectionUp() {
+        
+        queryPane.moveSelectionUp();
+    }
+    
+    public void moveSelectionDown() {
+        
+        queryPane.moveSelectionDown();
+    }
+    
     public void duplicateRowUp() {
 
         queryPane.duplicateTextUp();
