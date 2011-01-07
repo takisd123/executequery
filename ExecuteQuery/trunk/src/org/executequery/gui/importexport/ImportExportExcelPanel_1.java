@@ -123,7 +123,7 @@ public class ImportExportExcelPanel_1 extends JPanel  {
         singleRadio.addActionListener(radioListener);
         multipleRadio.addActionListener(radioListener);
         
-        StringBuffer sb = new StringBuffer(500);
+        StringBuilder sb = new StringBuilder(500);
         
         int type = parent.getTransferType();
         if (type == ImportExportProcess.EXPORT) {

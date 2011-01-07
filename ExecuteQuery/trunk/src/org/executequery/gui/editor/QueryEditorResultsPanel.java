@@ -193,8 +193,11 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     }
 
     public void cleanup() {
-        queryEditor = null;
-        destroyTable();
+        try {
+            destroyTable();
+        } finally {
+            queryEditor = null;
+        }
     }
 
     private void addTextOutputTab() {

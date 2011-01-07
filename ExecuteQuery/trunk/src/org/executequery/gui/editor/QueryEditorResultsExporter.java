@@ -532,9 +532,10 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
 
         if (value instanceof RecordDataItem) {
             
-            if (!((RecordDataItem) value).isValueNull()) {
+            RecordDataItem recordDataItem = (RecordDataItem) value;
+            if (!recordDataItem.isValueNull()) {
 
-                return value.toString();
+                return recordDataItem.getDisplayValue().toString();
             
             } else {
                 

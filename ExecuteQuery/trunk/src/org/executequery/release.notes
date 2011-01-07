@@ -12,6 +12,8 @@ Summary of changes - v3.2.3 Build 5163:
   is executing. The tab will now not close and suggest further action.
 - Added a checkbox to enable/disable the max rows for a result set in the Query
   Editor.
+- Fixed XLS export from result set panel in editor to display correctly read 
+  CLOB values. 
 - Fixed feedback dialog issue when cancel button selected on the progress dialog
   and the dialog and text fields remain blocked.
 - Added output console popup menu for text selection, copy, clear, reset and

@@ -965,12 +965,7 @@ public class MetaDataValues implements ConnectionListener {
                 }
                 connection = null;
             }
-            /*
-            if (connection != null) {
-                connection.close();
-            }
-            connection = null;
-             */
+            connections.clear();
         } 
         catch (SQLException sqlExc) {
             sqlExc.printStackTrace();
