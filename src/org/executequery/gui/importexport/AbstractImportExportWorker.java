@@ -233,6 +233,9 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         
         conn = getConnection();
         stmnt = conn.createStatement();
+        
+        System.out.println(query);
+        
         return stmnt.executeQuery(query.toString());
     }
     
