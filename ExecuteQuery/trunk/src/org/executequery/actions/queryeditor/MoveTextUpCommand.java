@@ -35,7 +35,7 @@ public class MoveTextUpCommand extends AbstractQueryEditorCommand {
 
         if (isQueryEditorTheCentralPanel()) {
 
-//            queryEditor().moveSelectionUp();
+            queryEditor().moveSelectionUp();
         }
 
     }
