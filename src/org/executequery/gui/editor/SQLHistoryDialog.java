@@ -396,7 +396,11 @@ public class SQLHistoryDialog extends AbstractBaseDialog
 
     private String queryForIndex(int index) {
 
-        return data.get(index);
+        if (index != -1) {
+        
+            return data.get(index);
+        }
+        return "";
     }
 
     /** <p>Initiates the action on the history list after
