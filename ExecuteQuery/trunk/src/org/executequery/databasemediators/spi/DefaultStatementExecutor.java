@@ -1056,21 +1056,33 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         try {
 
-            if (conn.getAutoCommit()) {
-                statementResult.setSqlWarning(new SQLWarning("Auto-Commit is set true"));
-                return statementResult;
-            }
+            if (!conn.isClosed()) {
+                
+                
+                if (conn.getAutoCommit()) {
+                    
+                    statementResult.setSqlWarning(new SQLWarning("Auto-Commit is set true"));
+                    return statementResult;
+                }
+    
+                if (commit) {
+                    
+                    conn.commit();
+                    Log.info("Commit complete.");
+                    statementResult.setMessage("Commit complete.");
+                    closeMaxedConn();
 
-            if (commit) {
-                conn.commit();
-                Log.info("Commit complete.");
-                statementResult.setMessage("Commit complete.");
-                closeMaxedConn();
+                } else {
+
+                    conn.rollback();
+                    Log.info("Rollback complete.");
+                    statementResult.setMessage("Rollback complete.");
+                    closeMaxedConn();
+                }
+                
             } else {
-                conn.rollback();
-                Log.info("Rollback complete.");
-                statementResult.setMessage("Rollback complete.");
-                closeMaxedConn();
+                
+                statementResult.setSqlException(new SQLException("Connection is closed"));
             }
             
         } 
