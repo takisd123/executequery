@@ -1074,7 +1074,8 @@ public class QueryEditorTextPane extends SQLTextPane
         int start = getRowStartOffset(row);
         int end = getRowEndOffset(row) - 1;
 
-        if (end != getDocument().getLength()) {
+        int length = getDocument().getLength();
+        if (end != length) {
 
             end++;
         }
@@ -1088,7 +1089,7 @@ public class QueryEditorTextPane extends SQLTextPane
         start = getSelectionStart();
         end = getSelectionEnd();
         
-        if (end >= getDocument().getLength()) {
+        if (end >= length) {
             
             return;
         }
@@ -1114,9 +1115,10 @@ public class QueryEditorTextPane extends SQLTextPane
         text = StringUtils.removeEnd(text, "\n");
 
         int offset = getRowStartOffset(getRowAt(start) + 1) - 1;
-        if (end >= getDocument().getLength()) {
+        length = getDocument().getLength();
+        if (end >= length) {
 
-            offset = getDocument().getLength();
+            offset = length;
         }
         
         insertTextAfter(offset, text);

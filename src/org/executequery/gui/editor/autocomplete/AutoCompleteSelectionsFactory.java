@@ -183,20 +183,24 @@ public class AutoCompleteSelectionsFactory {
 
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
         
-        for (AutoCompleteListItem table : tables) {
-
-            List<String> columns = databaseHost.getColumnNames(
-                    defaultCatalogForHost(databaseHost), 
-                    defaultSchemaForHost(databaseHost), table.getValue());
-            
-            for (String columnName : columns) {
+        if (databaseHost.isConnected()) {
+        
+            for (AutoCompleteListItem table : tables) {
+    
+                List<String> columns = databaseHost.getColumnNames(
+                        defaultCatalogForHost(databaseHost), 
+                        defaultSchemaForHost(databaseHost), table.getValue());
                 
-                list.add(new AutoCompleteListItem(
-                        columnName, 
-                        table.getValue(),
-                        formatColumnName(table.getValue(), columnName), 
-                        DATABASE_COLUMN_DESCRIPTION, 
-                        AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
+                for (String columnName : columns) {
+                    
+                    list.add(new AutoCompleteListItem(
+                            columnName, 
+                            table.getValue(),
+                            formatColumnName(table.getValue(), columnName), 
+                            DATABASE_COLUMN_DESCRIPTION, 
+                            AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
+                }
+                
             }
             
         }
