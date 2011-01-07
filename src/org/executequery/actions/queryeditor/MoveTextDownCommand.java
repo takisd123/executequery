@@ -35,7 +35,7 @@ public class MoveTextDownCommand extends AbstractQueryEditorCommand {
 
         if (isQueryEditorTheCentralPanel()) {
 
-//            queryEditor().moveSelectionDown();
+            queryEditor().moveSelectionDown();
         }
 
     }

@@ -256,12 +256,13 @@ public class QueryEditorTextPane extends SQLTextPane
                 }
 
                 document.insertString(offset, text, null);
-            }
-            catch (BadLocationException e) {}
+
+            } catch (BadLocationException e) {}
 
             setDocument(document);
-        }
-        finally {
+        
+        } finally {
+          
             fireTextUpdateFinished();
             setCaretPosition(offset);
         }
@@ -1012,7 +1013,7 @@ public class QueryEditorTextPane extends SQLTextPane
         int caret = getCaretPosition();
         int row = getRowAt(caret);
         int start = getRowStartOffset(row);
-        int end = getRowEndOffset(row);
+        int end = getRowEndOffset(row) - 1;
 
         if (end != getDocument().getLength()) {
 
@@ -1031,33 +1032,97 @@ public class QueryEditorTextPane extends SQLTextPane
             return;
         }
         end = getSelectionEnd();
-
+        
         String text = getSelectedText();
         if (StringUtils.isBlank(text)) {
 
             return;
         }
 
-        addUndoEdit();
+        addUndoEdit();        
         replaceSelection("");
 
-        text = StringUtils.removeEnd(text, "\n");
+        try {
 
+            if ("\n".equals(getText(start, 1))) { 
+             
+                getDocument().remove(start, 1);
+            }
+
+        } catch (BadLocationException e) {}
+
+        text = StringUtils.removeEnd(text, "\n");
         int offset = getRowStartOffset(getRowAt(start - 1)) - 1;
-        insertTextAfter(offset, text);
+        if (offset < 0) {
+
+            insertTextAtOffset(0, text + "\n");
+        
+        } else {
+            
+            insertTextAfter(offset, text);
+        }
 
         setCaretPosition(offset + 1);
         moveCaretPosition(offset + text.length() + 1);
+
     }
 
     public void moveSelectionDown() {
 
-        moveSelectedTextOrCurrentRow(DIRECTION_DOWN);
-    }
+        int caret = getCaretPosition();
+        int row = getRowAt(caret);
+        int start = getRowStartOffset(row);
+        int end = getRowEndOffset(row) - 1;
 
-    private void moveSelectedTextOrCurrentRow(int direction) {
+        if (end != getDocument().getLength()) {
 
-        getSelectedTextOrCurrentRow();
+            end++;
+        }
+
+        if (!hasTextSelected()) {
+
+            setSelectionStart(start);
+            setSelectionEnd(end);
+        }
+
+        start = getSelectionStart();
+        end = getSelectionEnd();
+        
+        if (end >= getDocument().getLength()) {
+            
+            return;
+        }
+        
+        String text = getSelectedText();
+        if (StringUtils.isBlank(text)) {
+
+            return;
+        }
+
+        addUndoEdit();        
+        replaceSelection("");
+
+        try {
+
+            if ("\n".equals(getText(start, 1))) { 
+             
+                getDocument().remove(start, 1);
+            }
+
+        } catch (BadLocationException e) {}
+
+        text = StringUtils.removeEnd(text, "\n");
+
+        int offset = getRowStartOffset(getRowAt(start) + 1) - 1;
+        if (end >= getDocument().getLength()) {
+
+            offset = getDocument().getLength();
+        }
+        
+        insertTextAfter(offset, text);
+
+        setCaretPosition(offset + 1);
+        moveCaretPosition(offset + text.length() + 1);
     }
 
     public void duplicateTextUp() {
