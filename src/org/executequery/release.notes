@@ -1,11 +1,8 @@
---- RELEASE NOTES ---
+--- Execute Query - RELEASE NOTES ---
 
-Date: 18 November 2010
+Date: 10 January 2011
 
-Execute Query Version 3.2.3 Build 5163
-----------------------------------------
-
-Summary of changes from 3.2.2 Build 5148:
+Summary of changes - v3.2.3 Build 5163:
 ----------------------------------------
 
 - Fixed occassional error (NullPointerException) when opening a script from file
@@ -24,7 +21,7 @@ Summary of changes from 3.2.2 Build 5148:
   move row/selection up/down etc.
 
 
-Summary of changes from 3.2.1 Build 5146:
+Summary of changes - v3.2.2 Build 5148:
 ----------------------------------------
 
 - Fixed table editing in browser when deleting a column and restoring/cancelling
@@ -47,7 +44,7 @@ Summary of changes from 3.2.1 Build 5146:
   abbreviations and autocorrect.
 
 
-Summary of changes from 3.2.1 Build 5146:
+Summary of changes - v3.2.1 Build 5146:
 ----------------------------------------
 
 - Minor help doc update.
@@ -76,7 +73,7 @@ Summary of changes from 3.2.1 Build 5146:
   without loading the script in the editor first.
 
 
-Summary of changes from 3.1.6 Build 5132:
+Summary of changes - v3.2.0 Build 5140:
 ----------------------------------------
 
 - Fixed result set exporter printing 'null' string for null values.
@@ -95,7 +92,7 @@ Summary of changes from 3.1.6 Build 5132:
 - Fixed dialog popups off open dialogs being hidden behind current modal views.
 
 
-Summary of changes from 3.1.5 Build 5124:
+Summary of changes - v3.1.6 Build 5132:
 ----------------------------------------
 
 - Improved support for table and column names with spaces.
@@ -108,7 +105,7 @@ Summary of changes from 3.1.5 Build 5124:
 - Artwork update stage 1.
 
 
-Summary of changes from 3.1.4 Build 5121:
+Summary of changes - v3.1.5 Build 5124:
 ----------------------------------------
 
 - Updated dependancy libraries.
@@ -122,7 +119,7 @@ Summary of changes from 3.1.4 Build 5121:
 - Added ability to define a custom delimiter for import/export data.
 
 
-Summary of changes from 3.1.3 Build 5117:
+Summary of changes - v3.1.4 Build 5121:
 ----------------------------------------
 
 - Fixed query execution where insert/update char values have line breaks.
@@ -137,7 +134,7 @@ Summary of changes from 3.1.3 Build 5117:
 - Minor UI tweaks.
 
 
-Summary of changes from 3.1.2 Build 5111:
+Summary of changes - v3.1.3 Build 5117:
 ----------------------------------------
 
 - Fixed proxy configuration for external http calls including update checks
@@ -153,7 +150,7 @@ Summary of changes from 3.1.2 Build 5111:
 - Added window nav menu and shortcuts
 
 
-Summary of changes from 3.1.1 Build 5107:
+Summary of changes - v3.1.2 Build 5111:
 ----------------------------------------
 
 - Added [close/close others/close all] popup menu on editor's result set tabs.
@@ -170,7 +167,7 @@ Summary of changes from 3.1.1 Build 5107:
 - Modified SQL statement generation and ordering of constraints
 
 
-Summary of changes from 3.1.0 Build 5101:
+Summary of changes - v3.1.1 Build 5107:
 ----------------------------------------
 
 - Modified result set tab pane of the Query Editor to not close tabs when a
@@ -188,30 +185,8 @@ Summary of changes from 3.1.0 Build 5101:
 - Improved Mac installation and configuration support.
 - Improved support for non Metal look and feel extensions.
 
-Summary of changes from 3.1.0 Build 5099:
-----------------------------------------
-
-- Fixed error dialog popup following query execution in editor where existing
-  history file was not available.
-- Added 'New Driver' button to connection fields to the right of the jdbc combo.
-
-
-Summary of changes from 3.1.0 Build 5098:
-----------------------------------------
-
-- Fixed exception where selection of the SQL tab from the table view in the
-  browser caused an error when a new column was added but not defined
-- Fixed exception where removal of a new column caused an error from the table
-  view in the schema browser.
-- Modified build environment to Java version 1.5.0_15
-
 
 --------
-
-This releases continues the second stage of planned source code refactoring and
-has been lighter on the feature addition list beyond critical bug fixes. There
-remains much more to do here, but with most core design changes now in place the
-upcoming release changes will focus on feature enhancements and additions.
 
 Thanks to those who submitted bugs and suggestions. Keep them coming!
 
@@ -229,7 +204,7 @@ At present the recommended Java 2 Runtime Environment (JRE) version is at least
 This program has been tested under JRE version 1.5.0 (and 1.6.0) on the
 following platforms:
 
-   -- Windows versions 2000, XP and Vista
+   -- Windows versions 2000, XP and Vista, 7
    -- Solaris8, Solaris9, Solaris10 and OpenSolaris
    -- Various flavours of Linux
 
@@ -283,4 +258,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-12 July 2010
+10 January 2011
