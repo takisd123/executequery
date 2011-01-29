@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,30 +41,30 @@ import org.underworldlabs.jdbc.DataSourceException;
  * @version  $Revision: 1508 $
  * @date     $Date: 2009-04-07 21:02:56 +1000 (Tue, 07 Apr 2009) $
  */
-public abstract class AbstractDatabaseObject extends AbstractNamedObject 
+public abstract class AbstractDatabaseObject extends AbstractNamedObject
                                              implements DatabaseObject {
-   
+
     /** the host parent object */
     private DatabaseHost host;
 
     /** the catalog name */
     private String catalogName;
-    
+
     /** the schema name */
     private String schemaName;
 
     /** the object's remarks */
     private String remarks;
-    
+
     /** this objects columns */
     private List<DatabaseColumn> columns;
-    
+
     /** the data row count */
     private int dataRowCount = -1;
 
     /** statement object for open queries */
     private Statement statement;
-    
+
     /**
      * Returns the catalog name parent to this database object.
      *
@@ -72,7 +73,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     public String getCatalogName() {
         return catalogName;
     }
-    
+
     /**
      * Sets the parent catalog name to that specified.
      *
@@ -81,16 +82,16 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     public void setCatalogName(String catalog) {
         this.catalogName = catalog;
     }
-    
+
     /**
      * Returns the schema name parent to this database object.
      *
      * @return the schema name
      */
-    public String getSchemaName() {        
+    public String getSchemaName() {
         return schemaName;
     }
-    
+
     /**
      * Sets the parent schema name to that specified.
      *
@@ -101,7 +102,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     }
 
     public String getNamePrefix() {
-    	
+
         String _schema = getSchemaName();
 
         if (StringUtils.isNotBlank(_schema)) {
@@ -111,8 +112,8 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         return getCatalogName(); // may still be null
     }
-    
-    
+
+
     /**
      * Returns the column from this table witt the specified name,
      * or null if the column does not exist.
@@ -120,17 +121,17 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
      * @return the table column
      */
     public DatabaseColumn getColumn(String name) throws DataSourceException {
-        
+
         List<DatabaseColumn> columns = getColumns();
         for (DatabaseColumn column : columns) {
-            
+
             if (column.getName().equalsIgnoreCase(name)) {
-            
+
                 return column;
             }
-            
+
         }
-     
+
         return null;
     }
 
@@ -147,7 +148,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         try {
             DatabaseHost host = getHost();
             if (host != null) {
-                columns = host.getColumns(getCatalogName(), 
+                columns = host.getColumns(getCatalogName(),
                                           getSchemaName(),
                                           getName());
 
@@ -156,9 +157,9 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                         i.setParent(this);
                     }
                 }
-                
+
             }
-        } 
+        }
         finally {
             setMarkedForReload(false);
         }
@@ -173,7 +174,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     public List<TablePrivilege> getPrivileges() throws DataSourceException {
         DatabaseHost host = getHost();
         if (host != null) {
-            return host.getPrivileges(getCatalogName(), 
+            return host.getPrivileges(getCatalogName(),
                                       getSchemaName(),
                                       getName());
         }
@@ -265,20 +266,28 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                 throw new DataSourceException(
                         "Dropping objects of this type is not currently supported");
         }
-        
+
         Statement stmnt = null;
 
         try {
 
-            stmnt = getHost().getConnection().createStatement();
-            return stmnt.executeUpdate(queryStart + getName());
+            Connection connection = getHost().getConnection();
+            stmnt = connection.createStatement();
+
+            int result = stmnt.executeUpdate(queryStart + getNameWithPrefixForQuery());
+            if (!connection.getAutoCommit()) {
+
+                connection.commit();
+            }
+
+            return result;
 
         } catch (SQLException e) {
-          
+
             throw new DataSourceException(e);
 
         } finally {
-          
+
             releaseResources(stmnt);
         }
 
@@ -286,13 +295,13 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
     /**
      * Retrieves the data row count for this object (where applicable).
-     * 
+     *
      * @return the data row count for this object
      */
     public int getDataRowCount() throws DataSourceException {
-         
+
         if (dataRowCount != -1) {
-         
+
             return dataRowCount;
         }
 
@@ -305,7 +314,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
            rs = stmnt.executeQuery(recordCountQueryString());
 
            if (rs.next()) {
-            
+
                dataRowCount = rs.getInt(1);
            }
 
@@ -316,7 +325,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
            throw new DataSourceException(e);
 
         }  finally {
-           
+
             releaseResources(stmnt, rs);
         }
 
@@ -324,25 +333,25 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
     /**
      * Retrieves the data for this object (where applicable).
-     * 
+     *
      * @return the data for this object
      */
     public ResultSet getData() throws DataSourceException {
-         
+
         ResultSet rs = null;
 
         try {
 
             if (statement != null) {
-                
+
                 try {
-                    
+
                     statement.close();
 
                 } catch (SQLException e) {}
-                
+
             }
-            
+
             statement = getHost().getConnection().createStatement();
             rs = statement.executeQuery(recordsQueryString());
 
@@ -358,13 +367,13 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     public void cancelStatement() {
 
         if (statement != null) {
-            
+
             try {
 
                 statement.cancel();
                 statement.close();
                 statement = null;
-         
+
             } catch (SQLException e) {
 
                 if (Log.isDebugEnabled()) {
@@ -374,9 +383,9 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             }
 
         }
-        
+
     }
-    
+
     private String recordCountQueryString() {
 
         return "SELECT COUNT(*) FROM " + getNameWithPrefixForQuery();
@@ -388,7 +397,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     }
 
     protected final String getNameWithPrefixForQuery() {
-        
+
         String prefix = getNamePrefix();
 
         if (StringUtils.isNotBlank(prefix)) {
@@ -398,18 +407,41 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         return getNameForQuery();
     }
-    
-    protected final String getNameForQuery() {
-        
-        String name = getName();
-        
-        if (name.contains(" ")) { // eg. access db allows this
 
-            return "\"" + name + "\"";
+    public final String getNameForQuery() {
+
+        String name = getName();
+        if (name.contains(" ") // eg. access db allows this
+                || (isLowerCase(name) && host.storesLowerCaseQuotedIdentifiers())
+                || (isUpperCase(name) && host.storesUpperCaseQuotedIdentifiers())
+                || (isMixedCase(name) && (host.storesMixedCaseQuotedIdentifiers()
+                        || host.supportsMixedCaseQuotedIdentifiers()))) {
+
+            return quotedDatabaseObjectName(name);
         }
 
         return name;
     }
-    
+
+    private String quotedDatabaseObjectName(String name) {
+
+        return "\"" + name + "\"";
+    }
+
+    protected boolean isMixedCase(String value) {
+
+        return value.matches(".*[A-Z].*") && value.matches(".*[a-z].*");
+    }
+
+    protected boolean isLowerCase(String value) {
+
+        return value.matches("[^A-Z]*");
+    }
+
+    protected boolean isUpperCase(String value) {
+
+        return value.matches("[^a-z]*");
+    }
+
 }
 

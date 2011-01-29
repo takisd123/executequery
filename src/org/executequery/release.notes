@@ -21,6 +21,10 @@ Summary of changes - v3.2.3 Build 5163:
 - Added FrontBase, jTDS, MckoiDDB and ThinkSQL to database name list.
 - Added new text editor functions including duplicate rows/selections up/down,
   move row/selection up/down etc.
+- Fixed different case identifier detection and use for executed queries (ie.
+  row counts in the database browser that would throw an error if not quoted
+  when required).
+- Added customisable coloured results table cells for data types.
 
 
 Summary of changes - v3.2.2 Build 5148:

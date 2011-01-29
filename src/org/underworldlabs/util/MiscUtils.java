@@ -151,7 +151,7 @@ public final class MiscUtils {
 
         boolean nextUpper = false;
         char[] chars = value.toCharArray();
-        StringBuffer sb = new StringBuffer(chars.length);
+        StringBuilder sb = new StringBuilder(chars.length);
 
         for (int i = 0; i < chars.length; i++) {
 
@@ -185,7 +185,7 @@ public final class MiscUtils {
         if (e == null) {
             return "";
         }
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append(e.getMessage());
         sb.append("\nError Code: " + e.getErrorCode());
 
@@ -255,7 +255,7 @@ public final class MiscUtils {
         char dot = '.';
         char pathSeparator = '/';
         char[] chars = path.toCharArray();
-        StringBuffer sb = new StringBuffer(chars.length);
+        StringBuilder sb = new StringBuilder(chars.length);
 
         for (int i = 0; i < chars.length; i++) {
 
@@ -553,7 +553,7 @@ public final class MiscUtils {
        */
 
         //build "hh:mm:ss.SSS"
-        StringBuffer buffer = new StringBuffer(" ");
+        StringBuilder buffer = new StringBuilder(" ");
         buffer.append(oneDigitFormat.format(result[3]));
         buffer.append(':');
         buffer.append(twoDigitFormat.format(result[2]));
@@ -570,7 +570,7 @@ public final class MiscUtils {
     }
 
     public static String charsToString(char[] chars) {
-        StringBuffer sb = new StringBuffer(chars.length);
+        StringBuilder sb = new StringBuilder(chars.length);
         for (int i = 0; i < chars.length; i++) {
             sb.append(chars[i]);
         }

@@ -88,7 +88,8 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createRecycleResultSetTabMenuItem());
 
         addSeparator();
-
+        add(createOptionsMenuItem());
+        addSeparator();
         add(createHelpMenuItem());
     }
 
@@ -193,6 +194,11 @@ public class QueryEditorPopupMenu extends JPopupMenu
         JMenuItem menuItem = createExecuteActionMenuItem("help-command", "Help");
         menuItem.setActionCommand("qedit");
         return menuItem;
+    }
+
+    private JMenuItem createOptionsMenuItem() {
+
+        return createExecuteActionMenuItem("customise-query-editor-command", "Preferences...");
     }
 
     private JMenuItem createClearOutputMenuItem() {

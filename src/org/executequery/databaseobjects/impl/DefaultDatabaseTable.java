@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -344,8 +345,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         if (getColumns() != null) {
 
-            List<ColumnConstraint> constraints =
-                    new ArrayList<ColumnConstraint>();
+            List<ColumnConstraint> constraints = new ArrayList<ColumnConstraint>();
 
             for (DatabaseColumn i : columns) {
 
@@ -353,9 +353,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                 if (column.hasConstraints()) {
 
-                    List<ColumnConstraint> columnConstraints =
-                            column.getConstraints();
-
+                    List<ColumnConstraint> columnConstraints = column.getConstraints();
                     for (ColumnConstraint j : columnConstraints) {
 
                         constraints.add(j);
@@ -552,12 +550,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             int result = 0;
             String[] queries = changes.split(StatementGenerator.END_DELIMITER);
 
-            stmnt = getHost().getConnection().createStatement();
+            Connection connection = getHost().getConnection();
+            stmnt = connection.createStatement();
 
             for (int i = 0; i < queries.length; i++) {
 
                 String query = queries[i].trim();
-
                 if (StringUtils.isNotBlank(query)) {
 
                     result += stmnt.executeUpdate(query);
@@ -565,9 +563,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
             }
 
-            if (!getHost().getConnection().getAutoCommit()) {
+            if (!connection.getAutoCommit()) {
 
-                getHost().getConnection().commit();
+                connection.commit();
             }
 
             // set to reset for the next call

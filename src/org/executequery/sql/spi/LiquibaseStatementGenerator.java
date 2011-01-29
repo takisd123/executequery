@@ -63,11 +63,11 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         Database database = databaseFromName(
                 connectionFromTable(tableColumn.getTable()), tableColumn.getTable().getHost().getDatabaseProductName());
-        
+
         return database.escapeColumnName(tableColumn.getSchemaName(),
                 tableColumn.getTable().getName(), tableColumn.getName());
     }
-    
+
     public String dropTable(String databaseName, DatabaseTable table) {
 
         return dropTable(databaseName, table, false);
@@ -79,7 +79,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     }
 
     public String alterTable(String databaseName, DatabaseTable table) {
-        
+
         StringBuilder sb = new StringBuilder();
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
@@ -92,7 +92,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         for (ColumnConstraint constraint : table.getConstraints()) {
 
             if (constraint.isMarkedDeleted()) {
-                
+
                 sb.append(dropConstraint(constraint, database));
 
             } else if (constraint.isNewConstraint()) {
@@ -101,12 +101,12 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             }
 
         }
-        
+
         return sb.toString();
     }
 
     public String tableConstraintsAsAlter(String databaseName, DatabaseTable table) {
-        
+
         StringBuilder sb = new StringBuilder();
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
@@ -116,11 +116,11 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         for (ColumnConstraint constraint : table.getConstraints()) {
 
             if (!constraint.isPrimaryKey()) {
-            
+
                 sb.append(addConstraint(constraint, database));
             }
         }
-        
+
         return sb.toString();
     }
 
@@ -137,10 +137,10 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             change.setTableName(constraint.getTableName());
             change.setColumnNames(constraint.getColumnName());
             change.setConstraintName(constraint.getName());
-            
-            sb.append(generateStatements(change, database));            
+
+            sb.append(generateStatements(change, database));
         }
-        
+
         return sb.toString();
     }
 
@@ -150,7 +150,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         List<ColumnConstraint> foreignKeys = table.getForeignKeys();
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
-        
+
         for (ColumnConstraint constraint : foreignKeys) {
 
             AddForeignKeyConstraintChange change = new AddForeignKeyConstraintChange();
@@ -159,49 +159,49 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             change.setConstraintName(constraint.getName());
             change.setReferencedTableName(constraint.getReferencedTable());
             change.setReferencedColumnNames(constraint.getReferencedColumn());
-            
-            sb.append(generateStatements(change, database));            
+
+            sb.append(generateStatements(change, database));
         }
-        
+
         return sb.toString();
     }
 
     public String createPrimaryKeyChange(String databaseName, DatabaseTable table) {
-    
+
         List<ColumnConstraint> primaryKeys = table.getPrimaryKeys();
 
         if (primaryKeys.isEmpty()) {
-            
+
             return "";
         }
-        
+
         AddPrimaryKeyChange primaryKeyChange = new AddPrimaryKeyChange();
         primaryKeyChange.setTableName(table.getName());
 
         StringBuilder sb = new StringBuilder();
-        
+
         for (int i = 0, n = primaryKeys.size(); i < n; i++) {
-        
+
             ColumnConstraint columnConstraint = primaryKeys.get(i);
             sb.append(columnConstraint.getColumnName());
-            
+
             if (i < (n - 1)) {
-                
+
                 sb.append(",");
             }
-            
-            primaryKeyChange.setConstraintName(columnConstraint.getName());            
+
+            primaryKeyChange.setConstraintName(columnConstraint.getName());
         }
-        
+
         primaryKeyChange.setColumnNames(sb.toString());
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
-        
+
         return generateStatements(primaryKeyChange, database);
     }
 
     public String createTableWithConstraints(String databaseName, DatabaseTable table) {
-        
+
         CreateTableChange tableChange = createTableChange(table);
 
         List<DatabaseColumn> columns = table.getColumns();
@@ -211,27 +211,27 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             if (column.hasConstraints()) {
 
                 ColumnConfig columnConfig = columnConfigForColumn(tableChange, column);
-                
+
                 ConstraintsConfig constraintConfig = new ConstraintsConfig();
-                
+
                 for (ColumnConstraint constraint : column.getConstraints()) {
-                    
+
                     if (constraint.isPrimaryKey()) {
 
                         constraintConfig.setPrimaryKey(Boolean.TRUE);
                     }
-                    
+
                     if (constraint.isForeignKey()) {
-                    
+
                         constraintConfig.setForeignKeyName(constraint.getName());
-                        
+
                         constraintConfig.setReferences(
-                                constraint.getReferencedTable() 
-                                + "(" + 
+                                constraint.getReferencedTable()
+                                + "(" +
                                 constraint.getReferencedColumn()
                                 + ")");
                     }
-                    
+
                     if (constraint.isUniqueKey()) {
 
                         constraintConfig.setUnique(Boolean.TRUE);
@@ -242,34 +242,34 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
                 columnConfig.setConstraints(constraintConfig);
             }
-            
+
         }
-        
+
         Database database = databaseFromName(connectionFromTable(table), databaseName);
-        
+
         return generateStatements(tableChange, database);
     }
 
     public String createTable(String databaseName, DatabaseTable table) {
-        
+
         CreateTableChange tableChange = createTableChange(table);
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
-        
+
         return generateStatements(tableChange, database);
     }
 
-    private String dropTable(String databaseName, 
+    private String dropTable(String databaseName,
             DatabaseTable table, boolean cascadeConstraints) {
-        
+
         DropTableChange tableChange = dropTableChange(table);
         tableChange.setCascadeConstraints(Boolean.valueOf(cascadeConstraints));
 
         Database database = databaseFromName(connectionFromTable(table), databaseName);
-        
+
         return generateStatements(tableChange, database).trim();
     }
-    
+
     private ColumnConfig columnConfigForColumn(
             CreateTableChange tableChange, DatabaseColumn column) {
 
@@ -278,7 +278,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         List<ColumnConfig> columns = tableChange.getColumns();
 
         for (ColumnConfig columnConfig : columns) {
-            
+
             if (columnConfig.getName().equalsIgnoreCase(name)) {
 
                 return columnConfig;
@@ -290,21 +290,21 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     }
 
     private Connection connectionFromTable(DatabaseTable table) {
-        
+
         return table.getHost().getConnection();
     }
-    
+
     private DropTableChange dropTableChange(DatabaseTable table) {
-        
+
         DropTableChange tableChange = new DropTableChange();
         tableChange.setTableName(table.getName());
-        
+
         return tableChange;
     }
-    
+
     private CreateTableChange createTableChange(DatabaseTable table) {
 
-        CreateTableChange tableChange = new CreateTableChange();      
+        CreateTableChange tableChange = new CreateTableChange();
         //tableChange.setSchemaName(table.getSchemaName());
         tableChange.setTableName(table.getName());
 
@@ -319,14 +319,14 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private String addConstraint(ColumnConstraint constraint, Database database) {
 
         StringBuilder sb = new StringBuilder();
-        
+
         if (constraint.isPrimaryKey()) {
-            
+
             sb.append(addPrimaryKey(constraint, database));
         }
 
         if (constraint.isForeignKey()) {
-            
+
             sb.append(addForeignKey(constraint, database));
         }
 
@@ -334,7 +334,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
             sb.append(addUniqueKey(constraint, database));
         }
-        
+
         return sb.toString();
     }
 
@@ -366,37 +366,37 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         change.setTableName(constraint.getTableName());
         change.setColumnNames(constraint.getColumnName());
         change.setConstraintName(constraint.getName());
-        
+
         return generateStatements(change, database);
     }
 
     private String addPrimaryKeys(List<ColumnConstraint> primaryKeys, Database database) {
 
         if (primaryKeys == null || primaryKeys.isEmpty()) {
-            
+
             return "";
         }
-        
+
         if (primaryKeys.size() == 1) {
-            
+
             return addPrimaryKey(primaryKeys.get(0), database);
         }
-        
+
         StringBuilder sb = new StringBuilder();
-        
+
         String tableName = null;
         String constraintName = null;
 
         for (int i = 0, n = primaryKeys.size(); i < n; i++) {
-            
+
             ColumnConstraint primaryKey = primaryKeys.get(i);
-            
+
             if (i > 0) {
-                
+
                 sb.append(",");
-                
+
             } else {
-                
+
                 tableName = primaryKey.getTableName();
                 constraintName = primaryKey.getName();
             }
@@ -408,21 +408,21 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         change.setTableName(tableName);
         change.setColumnNames(sb.toString());
         change.setConstraintName(constraintName);
-        
+
         return generateStatements(change, database);
     }
 
     private String dropConstraint(ColumnConstraint constraint, Database database) {
 
         StringBuilder sb = new StringBuilder();
-        
+
         if (constraint.isPrimaryKey()) {
-            
+
             sb.append(dropPrimaryKey(constraint, database));
         }
 
         if (constraint.isForeignKey()) {
-            
+
             sb.append(dropForeignKey(constraint, database));
         }
 
@@ -430,7 +430,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
             sb.append(dropUniqueKey(constraint, database));
         }
-        
+
         return sb.toString();
     }
 
@@ -439,7 +439,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         DropUniqueConstraintChange change = new DropUniqueConstraintChange();
         change.setTableName(constraint.getTableName());
         change.setConstraintName(constraint.getName());
-        
+
         return generateStatements(change, database);
     }
 
@@ -457,106 +457,106 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         DropPrimaryKeyChange change = new DropPrimaryKeyChange();
         change.setTableName(constraint.getTableName());
         change.setConstraintName(constraint.getName());
-        
+
         return generateStatements(change, database);
     }
 
     private String alterColumn(DatabaseColumn column, Database database) {
 
         DatabaseTableColumn tableColumn = (DatabaseTableColumn)column;
-        
+
         StringBuilder sb = new StringBuilder();
 
         boolean isNewOrDeleted = true;
-        
+
         if (tableColumn.isNewColumn()) {
-            
-            sb.append(addColumnChange(tableColumn, database));     
-            
+
+            sb.append(addColumnChange(tableColumn, database));
+
         } else if (tableColumn.isMarkedDeleted()) {
 
             sb.append(dropColumnChange(tableColumn, database));
 
         } else {
-            
+
             isNewOrDeleted = false;
         }
-        
+
         if (isNewOrDeleted) {
-            
+
             return sb.toString();
         }
-        
+
         if (tableColumn.isNameChanged()) {
-            
+
             sb.append(renameColumnChange(tableColumn, database));
-        } 
-        
+        }
+
         if (tableColumn.isDataTypeChanged()) {
-        
+
             sb.append(modifyColumnChange(tableColumn, database));
         }
 
         if (tableColumn.isRequiredChanged()) {
-            
+
             sb.append(addNotNullConstraintChange(tableColumn, database));
         }
-        
+
         if (tableColumn.isDefaultValueChanged()) {
-            
+
             sb.append(addDefaultValueChange(tableColumn, database));
         }
-         
+
         return sb.toString();
     }
 
     private List<ColumnConstraint> primaryKeysForTable(DatabaseTable table) {
 
         List<ColumnConstraint> primaryKeys = new ArrayList<ColumnConstraint>();
-        
+
         for (ColumnConstraint constraint : table.getConstraints()) {
-            
+
             if (constraint.isPrimaryKey()) {
-                
+
                 primaryKeys.add(constraint);
             }
-            
+
         }
-        
+
         return primaryKeys;
     }
 
     private String addNotNullConstraintChange(DatabaseTableColumn tableColumn, Database database) {
 
         AddNotNullConstraintChange columnChange = new AddNotNullConstraintChange();
-        
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.setColumnName(tableColumn.getName());
         columnChange.setColumnDataType(tableColumn.getFormattedDataType());
 
-        return generateStatements(columnChange, database);        
+        return generateStatements(columnChange, database);
     }
 
     private String addDefaultValueChange(DatabaseTableColumn tableColumn, Database database) {
 
         AddDefaultValueChange columnChange = new AddDefaultValueChange();
-        
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.setColumnName(tableColumn.getName());
         columnChange.setDefaultValue(tableColumn.getDefaultValue());
 
-        return generateStatements(columnChange, database);        
+        return generateStatements(columnChange, database);
     }
 
     private String modifyColumnChange(DatabaseTableColumn tableColumn, Database database) {
 
-        ModifyColumnChange columnChange = new ModifyColumnChange();      
-        
+        ModifyColumnChange columnChange = new ModifyColumnChange();
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
-        columnChange.addColumn(createColumn(tableColumn));     
+        columnChange.addColumn(createColumn(tableColumn));
 
         return generateStatements(columnChange, database);
     }
@@ -564,44 +564,44 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private String addColumnChange(DatabaseTableColumn tableColumn, Database database) {
 
         AddColumnChange columnChange = new AddColumnChange();
-        
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.addColumn(createColumn(tableColumn));
 
         return generateStatements(columnChange, database);
     }
-    
+
     private String dropColumnChange(DatabaseTableColumn tableColumn, Database database) {
 
         DropColumnChange columnChange = new DropColumnChange();
-        
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
-        columnChange.setColumnName(tableColumn.getName());     
+        columnChange.setColumnName(tableColumn.getName());
 
         return generateStatements(columnChange, database);
     }
-    
+
     private String renameColumnChange(DatabaseTableColumn tableColumn, Database database) {
 
         RenameColumnChange columnChange = new RenameColumnChange();
-        
+
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.setNewColumnName(tableColumn.getName());
         columnChange.setOldColumnName(tableColumn.getOriginalColumn().getName());
         columnChange.setColumnDataType(tableColumn.getFormattedDataType());
-        
+
         return generateStatements(columnChange, database);
     }
-    
+
     private String generateStatements(Change change, Database database) {
 
         StringBuilder sb = new StringBuilder();
 
         try {
-         
+
             SqlStatement[] statements = change.generateStatements(database);
 
             for (SqlStatement statement : statements) {
@@ -614,63 +614,63 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         } catch (UnsupportedChangeException e) {
 
             handleAndRethrowException(e);
-            
+
         } catch (StatementNotSupportedOnDatabaseException e) {
 
             handleAndRethrowException(e);
         }
-        
+
         return sb.toString();
     }
 
     private ColumnConfig createColumn(DatabaseColumn column) {
 
         ColumnConfig columnConfig = new EqColumnConfig();
-        
+
         columnConfig.setName(column.getName() == null ? "" : column.getName());
         columnConfig.setType(column.getFormattedDataType());
         columnConfig.setDefaultValue(column.getDefaultValue());
-        
+
         if (column.isRequired()) {
 
             ConstraintsConfig constraintConfig = new ConstraintsConfig();
             constraintConfig.setNullable(Boolean.FALSE);
             columnConfig.setConstraints(constraintConfig);
         }
-        
+
         return columnConfig;
     }
 
     private Database databaseFromName(Connection connection, String databaseName) {
 
         LogFactory.setLoggingLevel("warning");
-        
+
         Database database = databaseFactory().createDatabase(databaseName);
         database.setConnection(connection);
 
-        return database;        
+        return database;
     }
-    
+
     private LiquibaseDatabaseFactory databaseFactory() {
 
         if (databaseFactory == null) {
 
             databaseFactory = new LiquibaseDatabaseFactory();
         }
-        
+
         return databaseFactory;
     }
 
     private void handleAndRethrowException(Throwable e) {
 
         if (Log.isDebugEnabled()) {
-            
+
             Log.error("Error generating SQL statement", e);
         }
-        
+
         throw new ApplicationException(e);
     }
-    
+
 }
 
 

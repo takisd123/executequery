@@ -25,7 +25,7 @@ import java.util.List;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
- * Defines a real database object - ie. a table, procedure, 
+ * Defines a real database object - ie. a table, procedure,
  * function, index, etc.
  *
  * @author   Takis Diakoumis
@@ -47,35 +47,35 @@ public interface DatabaseObject extends NamedObject {
      * @return the catalog name
      */
     String getCatalogName();
-    
+
     /**
      * Sets the parent catalog name to that specified.
      *
      * @param catalog the catalog name
      */
     void setCatalogName(String catalog);
-    
+
     /**
      * Returns the schema name parent to this database object.
      *
      * @return the schema name
      */
     String getSchemaName();
-    
+
     /**
      * Sets the parent schema name to that specified.
      *
      * @param schema the schema name
      */
     void setSchemaName(String schema);
-    
+
     /**
      * Returns the name prefix [ schema or catalog ] for this object
      *
      * @return schema if not null, otherwise the catalog (may be null)
      */
     String getNamePrefix();
-    
+
     /**
      * Returns the columns (if any) of this object.
      *
@@ -96,7 +96,7 @@ public interface DatabaseObject extends NamedObject {
      * @return database object remarks
      */
     String getRemarks();
-    
+
     /**
      * Sets the parent object to that specified.
      *
@@ -106,14 +106,14 @@ public interface DatabaseObject extends NamedObject {
 
     /**
      * Retrieves the data row count for this object (where applicable).
-     * 
+     *
      * @return the data row count for this object
      */
     int getDataRowCount() throws DataSourceException;
 
     /**
      * Retrieves the data for this object (where applicable).
-     * 
+     *
      * @return the data for this object
      */
     ResultSet getData() throws DataSourceException;
@@ -122,6 +122,8 @@ public interface DatabaseObject extends NamedObject {
      * Cancels any open running statement against this object.
      */
     void cancelStatement();
-    
+
+    String getNameForQuery();
+
 }
 
