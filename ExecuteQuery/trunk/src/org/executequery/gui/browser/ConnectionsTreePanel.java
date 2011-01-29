@@ -73,29 +73,29 @@ import org.underworldlabs.util.SystemProperties;
 public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                                   implements ConnectionListener,
                                              UserPreferenceListener {
-    
+
     public static final String TITLE = "Connections";
-    
+
     private SchemaTree tree;
-    
+
     private List<DatabaseConnection> connections;
-    
+
     private SwingWorker worker;
-    
+
     private BrowserController controller;
-    
+
     private TreePath oldSelectionPath;
-    
+
     private BrowserTreePopupMenu popupMenu;
-    
-    /** indicates whether to reselect the connection 
+
+    /** indicates whether to reselect the connection
      * properties node following a disconnection event. */
     private boolean rootSelectOnDisconnect;
 
     private DatabaseConnectionFactory databaseConnectionFactory;
 
     private DatabaseObjectFactoryImpl databaseObjectFactory;
-    
+
     private ConnectionsTreeToolBar toolBar;
 
     private DatabaseHostNodeSorter hostNodeSorter;
@@ -108,18 +108,18 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         init();
     }
-    
+
     private void init() {
         // default to not select the root node after a disconnection
         rootSelectOnDisconnect = false;
 
         // initialise the controller
         controller = new BrowserController(this);
-        
+
         RootDatabaseObjectNode root = new RootDatabaseObjectNode();
-        
+
         DatabaseObjectFactory factory = databaseObjectFactory();
-        
+
         // loop through available connections and add as leaf objects
         int count = 0;
         connections = connections();
@@ -132,7 +132,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             root.add(child);
         }
-        
+
         tree = new SchemaTree(root, this);
 
         MouseHandler mouseHandler = new MouseHandler();
@@ -147,7 +147,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         // register with the event listener
         EventMediator.registerListener(this);
-        
+
         enableButtons(false, false, false, false);
         tree.setSelectionRow(0);
         tree.setToggleClickCount(2);
@@ -158,23 +158,23 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         return treeFindAction;
     }
-    
+
     private List<DatabaseConnection> connections() {
-        
+
         return ((DatabaseConnectionRepository)RepositoryCache.load(
                 DatabaseConnectionRepository.REPOSITORY_ID)).findAll();
     }
 
     private DatabaseConnectionFactory databaseConnectionFactory() {
-        
+
         if (databaseConnectionFactory == null) {
 
             databaseConnectionFactory = new DatabaseConnectionFactoryImpl();
         }
 
-        return databaseConnectionFactory;        
+        return databaseConnectionFactory;
     }
-    
+
     private DatabaseObjectFactory databaseObjectFactory() {
 
         if (databaseObjectFactory == null) {
@@ -186,57 +186,57 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     private PanelToolBar createToolBar() {
-        
+
         toolBar = new ConnectionsTreeToolBar(this);
 
         return toolBar;
     }
-    
-    private void enableButtons(boolean enableUpButton, 
+
+    private void enableButtons(boolean enableUpButton,
                                boolean enableDownButton,
                                boolean enableReloadButton,
                                boolean enableDeleteButton) {
-        
-        toolBar.enableButtons(enableUpButton, enableDownButton, 
+
+        toolBar.enableButtons(enableUpButton, enableDownButton,
                 enableReloadButton, enableDeleteButton);
     }
-    
+
     /**
      * Moves the selected connection (host node) up in the list.
      */
     public void moveConnectionUp() {
-        
+
         try {
-        
+
             removeTreeSelectionListener();
             tree.moveSelectionUp();
 
             // adjust the position of the connection
             Object object = tree.getLastPathComponent();
             if (object instanceof DatabaseHostNode) {
-            
+
                 moveNode((DatabaseHostNode)object, DynamicTree.MOVE_UP);
             }
 
         } finally {
-            
+
             addTreeSelectionListener();
         }
     }
 
     public void sortConnections() {
-        
+
         if (hostNodeSorter == null) {
-        
+
             hostNodeSorter = new DatabaseHostNodeSorter();
         }
 
         DefaultMutableTreeNode rootNode = tree.getRootNode();
         hostNodeSorter.sort(rootNode);
-        
+
         tree.nodeStructureChanged(rootNode);
     }
-    
+
     /**
      * Selectes and scrolls the tree to the specified path.
      *
@@ -257,9 +257,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
     }
-    
-    /** 
-     * Sets the selected connection tree node to the 
+
+    /**
+     * Sets the selected connection tree node to the
      * specified database connection.
      *
      * @param dc - the database connection to select
@@ -267,13 +267,13 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void setSelectedConnection(DatabaseConnection dc) {
 
         DefaultMutableTreeNode node = null;
-        
+
         DefaultMutableTreeNode root = tree.getRootNode();
 
         for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
 
             DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
-            
+
             Object userObject = _node.getUserObject();
 
             // make sure its a connection object
@@ -290,7 +290,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
 
         }
-        
+
         // select the node path
         if (node != null) {
 
@@ -337,7 +337,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         // check that we're not connected
         if (dc.isConnected()) {
 
-            try { 
+            try {
 
                 ConnectionMediator.getInstance().disconnect(dc);
 
@@ -345,7 +345,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         }
 
-        // the next selection index will be the index of 
+        // the next selection index will be the index of
         // the one being removed - (index - 1)
         int index = connections.indexOf(dc);
         if (index == -1) {
@@ -370,7 +370,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(this,
                 ConnectionRepositoryEvent.CONNECTION_MODIFIED, dc));
-        
+
     }
 
     /**
@@ -421,7 +421,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
     }
 
-    
+
     /**
      * Removes the selected tree node (database object) from the tree.
      */
@@ -447,12 +447,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
         }
     }
-    
+
     /**
      * Creates a new connection and adds it to the bottom of the list.
      */
     public void newConnection() {
-        
+
         String name = buildConnectionName("New Connection");
 
         newConnection(databaseConnectionFactory().create(name));
@@ -465,18 +465,18 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     public void newConnection(DatabaseConnection dc) {
 
-        DatabaseHost host = databaseObjectFactory().createDatabaseHost(dc);        
+        DatabaseHost host = databaseObjectFactory().createDatabaseHost(dc);
 
         connections.add(dc);
 
         tree.addToRoot(new DatabaseHostNode(host));
-        
+
         EventMediator.fireEvent(
                 new DefaultConnectionRepositoryEvent(
                         this, ConnectionRepositoryEvent.CONNECTION_ADDED, dc));
-        
+
     }
-    
+
     /**
      * Moves the selected connection (host node) down in the list.
      */
@@ -495,21 +495,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
     }
 
-    public void nodeMoved(DatabaseHostNode node, int newIndex) { 
-        DatabaseConnection dc = node.getDatabaseConnection();        
+    public void nodeMoved(DatabaseHostNode node, int newIndex) {
+        DatabaseConnection dc = node.getDatabaseConnection();
         connections.remove(dc);
         connections.add(newIndex, dc);
     }
-    
+
     private void moveNode(DatabaseHostNode node, int direction) {
-        
+
         DatabaseConnection dc = node.getDatabaseConnection();
 
         int currentIndex = connections.indexOf(dc);
         if (currentIndex == 0 && direction == DynamicTree.MOVE_UP) {
             return;
         }
-        
+
         int newIndex = -1;
         if (direction == DynamicTree.MOVE_UP) {
             newIndex = currentIndex - 1;
@@ -523,7 +523,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         connections.remove(currentIndex);
         connections.add(newIndex, dc);
     }
-    
+
     /**
      * Indicates that a node name has changed and fires a call
      * to repaint the tree display.
@@ -534,12 +534,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             tree.nodeChanged(node);
         }
     }
-    
+
     /**
      * Returns the currently selected node's user object where the
      * node is a BrowserTreeNode and the user object is a BaseDatabaseObject.
      * If the above is not met, null is returned.
-     * 
+     *
      * @return the user object of the selected node where the
      *         user object is a DBaseDatabaseObject
      */
@@ -559,11 +559,11 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     /**
-     * Returns the whether the currently selected node's user object 
-     * is a parent type where the node is a BrowserTreeNode and the 
-     * user object is a BaseDatabaseObject. If the above is not met, false is 
+     * Returns the whether the currently selected node's user object
+     * is a parent type where the node is a BrowserTreeNode and the
+     * user object is a BaseDatabaseObject. If the above is not met, false is
      * returned, otherwise the object is evaluated.
-     * 
+     *
      * @return true | false
      */
     protected boolean isTypeParentSelected() {
@@ -577,7 +577,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (!(object instanceof BrowserTreeNode)) {
             return false;
         }
-        
+
         // return the parent connection meta object
         return ((BrowserTreeNode)object).isTypeParent();
     }
@@ -586,7 +586,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      * Returns the currently selected node's user object where the
      * node is a BrowserTreeNode and the user object is a BaseDatabaseObject.
      * If the above is not met, null is returned.
-     * 
+     *
      * @return the user object of the selected node where the
      *         user object is a DBaseDatabaseObject
      */
@@ -605,7 +605,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         DatabaseObjectNode node = (DatabaseObjectNode)object;
         return node.getDatabaseObject();
     }
-    
+
     /**
      * Returns the selected meta object host node.
      *
@@ -628,7 +628,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         DatabaseObjectNode parent = getParentNode(node);
         return ((DatabaseHost)parent.getDatabaseObject());
     }
-    
+
     /**
      * Returns the selected database connection.
      *
@@ -641,14 +641,14 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
         return null;
     }
-    
+
     // ------------------------------------------
     // ConnectionListner implementation
     // ------------------------------------------
-    
+
     /**
      * Indicates a connection has been established.
-     * 
+     *
      * @param the encapsulating event
      */
     public void connected(ConnectionEvent connectionEvent) {
@@ -667,16 +667,16 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     /**
      * Indicates a connection has been closed.
-     * 
+     *
      * @param the encapsulating event
      */
     public void disconnected(ConnectionEvent connectionEvent) {
-        
+
         DatabaseConnection dc = connectionEvent.getDatabaseConnection();
-        
+
         DatabaseHostNode host = (DatabaseHostNode)getHostNode(dc);
         host.disconnected();
-        
+
         // check if we select the root node
         if (rootSelectOnDisconnect) {
 
@@ -686,7 +686,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         else {
 
             if (tree.getSelectionPath().getLastPathComponent() != host) {
-            
+
                 tree.setSelectionPath(new TreePath(host.getPath()));
             }
             enableButtons(true, true, false, true);
@@ -696,7 +696,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     public boolean canHandleEvent(ApplicationEvent event) {
-        return (event instanceof ConnectionEvent) || 
+        return (event instanceof ConnectionEvent) ||
             (event instanceof UserPreferenceEvent);
     }
 
@@ -713,7 +713,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     /**
-     * Returns the previously selected browse node before the 
+     * Returns the previously selected browse node before the
      * current selection.
      *
      * @return the previous node selection
@@ -729,23 +729,23 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     protected BrowserTreeNode getParentConnectionNode(DatabaseConnection dc) {
         return null;
     }
-    
+
     protected DatabaseObjectNode getHostNode(DatabaseConnection dc) {
-        
+
         for (Enumeration<?> i = tree.getRootNode().children(); i.hasMoreElements();) {
-        
+
             Object object = i.nextElement();
-            
+
             if (object instanceof DatabaseObjectNode) {
-            
+
                 DatabaseObjectNode node = (DatabaseObjectNode)object;
-                
+
                 if (node.getType() == NamedObject.HOST) {
-                
+
                     DatabaseHost host = (DatabaseHost)node.getDatabaseObject();
-                    
+
                     if (host.getDatabaseConnection() == dc) {
-                    
+
                         return node;
                     }
 
@@ -755,7 +755,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         return null;
     }
-    
+
     /**
      * Notification that the currently selected node (a host)
      * has had their associated db connection closed.
@@ -766,7 +766,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             return;
         }
 
-        // remove all choldren from the host node 
+        // remove all choldren from the host node
         // of the current path
         DatabaseObjectNode node = (DatabaseObjectNode)object;
         if (!(node.getUserObject() instanceof DatabaseHost)) {
@@ -792,7 +792,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         Object object = tree.getLastPathComponent();
         if (!(object instanceof DatabaseObjectNode)) {
-    
+
             return;
         }
 
@@ -809,7 +809,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void pathChanged(TreePath newPath) {
         pathChanged(oldSelectionPath, newPath);
     }
-    
+
     /**
      * Called whenever the value of the selection changes.
      * This will store the current path selection.
@@ -817,7 +817,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      * @param the event that characterizes the change
      */
     public void pathChanged(TreePath oldPath, TreePath newPath) {
-        
+
         // store the last position
         oldSelectionPath = oldPath;
 
@@ -827,16 +827,16 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             Object lastObject = oldSelectionPath.getLastPathComponent();
 
             if (lastObject instanceof DatabaseObjectNode) {
-            
+
                 DatabaseObjectNode dbObject = (DatabaseObjectNode)lastObject;
-                
-                boolean modified = false;                
+
+                boolean modified = false;
                 try {
-                    
+
                     modified = dbObject.isObjectModified();
 
                 } catch (DataSourceException dse) {
-                  
+
                     StringBuilder sb = new StringBuilder();
                     sb.append("An error occurred examining any changes.").
                        append("\n\nThe system returned:\n").
@@ -859,7 +859,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                         dbObject.revert();
 
                     } else if (yesNo == JOptionPane.CANCEL_OPTION) {
-                        
+
                         tree.setSelectionPath(oldSelectionPath);
                         return;
 
@@ -868,17 +868,17 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                         try {
 
                             dbObject.applyChanges();
-                            
+
                         } catch (DataSourceException dse) {
-                          
+
                             StringBuilder sb = new StringBuilder();
                             sb.append("An error occurred applying the specified changes.").
                                append("\n\nThe system returned:\n").
                                append(dse.getExtendedMessage());
-                            
+
                             GUIUtilities.displayExceptionErrorDialog(sb.toString(), dse);
                             tree.setSelectionPath(oldSelectionPath);
-                            
+
                             return;
                         }
 
@@ -886,7 +886,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 }
             }
         }
-        
+
         /*
         // check that we don't have any alter tables
         if (!reselecting && controller.hasAlterTable()) {
@@ -897,13 +897,13 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         Object object = newPath.getLastPathComponent();
         if (object == null) {
-            
+
             return;
         }
 
         //System.out.println("parent: "+e.getPath().getParentPath());
         //System.out.println("node: "+newPath);
-        
+
         controller.selectionChanging();
 
         if (object == tree.getRootNode()) { // root node
@@ -950,9 +950,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 treeExpanding = false;
             }
         };
-        worker.start();        
+        worker.start();
     }
-    
+
     private synchronized void doNodeExpansion(DatabaseObjectNode node) {
         try {
             node.populateChildren();
@@ -961,11 +961,11 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             controller.handleException(e);
         }
     }
-    
+
     private synchronized void valueChanged(DatabaseObjectNode node) {
         controller.valueChanged_(node);
     }
-    
+
     /** Reloads the currently selected node. */
     public void reloadSelection() {
         reloadPath(tree.getSelectionPath());
@@ -975,7 +975,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void reloadPath(TreePath path) {
 
         try {
-        
+
             if (treeExpanding || path == null) {
 
                 return;
@@ -983,29 +983,29 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             Object object = path.getLastPathComponent();
             if (!(object instanceof DatabaseObjectNode)) {
-                
+
                 return;
             }
 
             GUIUtilities.showWaitCursor();
-            
+
             boolean expanded = tree.isExpanded(path);
             if (expanded) {
 
                 tree.collapsePath(path);
             }
-            
+
             DatabaseObjectNode node = (DatabaseObjectNode)object;
             node.reset();
-    
+
             nodeStructureChanged(node);
             pathExpanded(path);
-            
+
             if (expanded) {
-            
+
                 tree.expandPath(path);
             }
-    
+
             pathChanged(oldSelectionPath, path);
 
         } finally {
@@ -1017,7 +1017,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     protected void nodeStructureChanged(TreeNode node) {
         tree.nodeStructureChanged(node);
     }
-    
+
     public void pathExpanded(TreePath path) {
 
         Object object = path.getLastPathComponent();
@@ -1025,7 +1025,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (!(object instanceof DatabaseObjectNode)) {
             return;
         }
-        
+
         final DatabaseObjectNode node = (DatabaseObjectNode)object;
         worker = new SwingWorker() {
             public Object construct() {
@@ -1036,11 +1036,11 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             public void finished() {
                 GUIUtilities.showNormalCursor();
             }
-            
+
         };
         worker.start();
     }
-    
+
     /** provides an indicator that an expansion is in progress */
     private boolean treeExpanding = false;
 
@@ -1072,7 +1072,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     /**
-     * Selects the node that matches the specified prefix forward 
+     * Selects the node that matches the specified prefix forward
      * from the currently selected node.
      *
      * @param prefix - the prefix of the node to select
@@ -1085,8 +1085,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (node.getChildCount() == 0) {
             doNodeExpansion((DatabaseObjectNode)node);
         }
-        
-        
+
+
 //        SwingUtilities.invokeLater(new Runnable() {
 //            public void run() {
                 tree.expandSelectedRow();
@@ -1100,14 +1100,14 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      * the specified child node.
      */
     protected DatabaseConnection getDatabaseConnection(DatabaseObjectNode child) {
-        
+
         DatabaseHost databaseHost = getConnectionObject(child);
 
         if (databaseHost != null) {
 
             return databaseHost.getDatabaseConnection();
         }
-        
+
         return null;
     }
 
@@ -1120,7 +1120,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         DatabaseObjectNode parent = getParentNode(child);
         if (parent != null) {
             return (DatabaseHost)parent.getDatabaseObject();
-        } 
+        }
         return null;
     }
 
@@ -1136,21 +1136,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (selection != null) {
 
             Object object = selection.getLastPathComponent();
-            
+
             if (object instanceof DatabaseObjectNode) {
-            
+
                 DatabaseObjectNode dbObject = (DatabaseObjectNode)object;
-                
+
                 if (!dbObject.isDroppable()) {
-                    
+
                     return;
                 }
-                
+
                 int yesNo = GUIUtilities.displayConfirmDialog(
                                    "Are you sure you want to drop " + dbObject + "?");
-                
+
                 if (yesNo == JOptionPane.NO_OPTION) {
-                    
+
                     return;
                 }
 
@@ -1159,11 +1159,10 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
                 try {
 
-                    dbObject.drop();
+                    dbObject.drop(); // quoted cases
                     tree.removeNode(dbObject);
 
-                }
-                catch (DataSourceException e) {
+                } catch (DataSourceException e) {
 
                     StringBuilder sb = new StringBuilder();
                     sb.append("An error occurred removing the selected object.").
@@ -1171,11 +1170,11 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                        append(e.getExtendedMessage());
 
                     GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
-                }
-                finally {
+                
+                } finally {
 
                     addTreeSelectionListener();
-                
+
                     if (row >= 0) {
                         row = (row == 0 ? 1 : row - 1);
                         tree.setSelectionRow(row);
@@ -1186,7 +1185,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
 
         }
-        
+
     }
 
     /**
@@ -1210,7 +1209,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
         return name;
     }
-    
+
     public boolean isRootSelectOnDisconnect() {
         return rootSelectOnDisconnect;
     }
@@ -1222,15 +1221,15 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public String toString() {
         return TITLE;
     }
-    
+
     public static final String MENU_ITEM_KEY = "viewConnections";
-    
+
     public static final String PROPERTY_KEY = "system.display.connections";
-    
+
     // ----------------------------------------
     // DockedTabView Implementation
     // ----------------------------------------
-    
+
     /**
      * Returns the display title for this view.
      *
@@ -1263,7 +1262,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     protected void handleException(Throwable e) {
         controller.handleException(e);
     }
-    
+
     protected void disconnect(DatabaseConnection dc) {
         controller.disconnect(dc);
     }
@@ -1271,15 +1270,15 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     protected void connect(DatabaseConnection dc) {
         controller.connect(dc);
     }
-    
+
     protected void setTreeSelectionPath(TreePath treePath) {
         tree.setSelectionPath(treePath);
     }
-    
+
     protected TreePath getTreeSelectionPath() {
         return tree.getSelectionPath();
     }
-    
+
     protected TreePath getTreePathForLocation(int x, int y) {
         return tree.getPathForLocation(x, y);
     }
@@ -1291,9 +1290,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
         return popupMenu;
     }
-    
+
     private class MouseHandler extends MouseAdapter {
-        
+
         public MouseHandler() {}
 
         public void mouseClicked(MouseEvent e) {
@@ -1315,11 +1314,11 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         public void mousePressed(MouseEvent e) {
 
             if (e.getClickCount() < 2) {
-                
+
                 maybeShowPopup(e);
                 return;
             }
-            
+
             TreePath path = pathFromMouseEvent(e);
             if (path != null && path == getTreeSelectionPath()) {
 
@@ -1335,24 +1334,24 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         private void maybeShowPopup(MouseEvent e) {
             if (e.isPopupTrigger()) {
-                
+
                 BrowserTreePopupMenu popup = getBrowserTreePopupMenu();
 
                 Point point = new Point(e.getX(), e.getY());
                 popup.setCurrentPath(getTreePathForLocation(point.x, point.y));
-                
+
                 DatabaseConnection connection = getConnectionAt(point);
-                
+
                 if (connection == null) {
                     return;
                 }
-                
+
                 popup.setCurrentSelection(connection);
 
                 if (popup.hasCurrentSelection()) {
 
                     try {
-                    
+
                         removeTreeSelectionListener();
                         setTreeSelectionPath(popup.getCurrentPath());
 
@@ -1375,7 +1374,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         private void connectOnDoubleClick(TreePath path) {
 
             if (doubleClickHostToConnect()) {
-            
+
                 Object node = path.getLastPathComponent();
                 if (node instanceof DatabaseHostNode) {
 
@@ -1395,25 +1394,25 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             return SystemProperties.getBooleanProperty("user", "browser.double-click.to.connect");
         }
-        
+
     }
 
     public void preferencesChanged(UserPreferenceEvent event) {
 
         if (event.getEventType() == UserPreferenceEvent.ALL) {
-            
+
             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
             List<DatabaseHostNode> hosts = root.getHostNodes();
 
             for (DatabaseHostNode host : hosts) {
-                
+
                 host.applyUserPreferences();
             }
-                
+
         }
-        
+
     }
-    
+
 }
 
 

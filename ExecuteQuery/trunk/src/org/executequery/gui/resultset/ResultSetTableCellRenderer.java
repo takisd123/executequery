@@ -22,6 +22,7 @@ package org.executequery.gui.resultset;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.sql.Types;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -46,28 +47,35 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-04-05 23:00:46 +1000 (Sun, 05 Apr 2009) $
  */
 class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
-    
+
     private Color background;
     private Color foreground;
-    
+
     private Color selectionForeground;
     private Color selectionBackground;
-    
+
     private Color tableForeground;
     private Color tableBackground;
-    
+
     private Color editableForeground;
     private Color editableBackground;
-    
+
     private Border focusBorder;
-    
+
     private SimpleDateFormat dateFormat;
 
     private String nullValueDisplayString;
+
     private Color nullValueDisplayColor;
-    
+    private Color numericValueDisplayColor;
+    private Color otherValueDisplayColor;
+    private Color booleanValueDisplayColor;
+    private Color dateValueDisplayColor;
+    private Color charValueDisplayColor;
+    private Color blobValueDisplayColor;
+
     ResultSetTableCellRenderer() {
-        
+
         focusBorder = loadUIBorder("Table.focusCellHighlightBorder");
         editableForeground = loadUIColour("Table.focusCellForeground");
         editableBackground = loadUIColour("Table.focusCellBackground");
@@ -85,45 +93,45 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     private Color loadUIColour(String key) {
         return UIManager.getColor(key);
     }
-    
+
     public Component getTableCellRendererComponent(
 				JTable table, Object value,
 				boolean isSelected, boolean hasFocus,
 				int row, int column) {
-        
+
         if (isSelected) {
-            
+
             setForeground(selectionForeground);
             setBackground(selectionBackground);
 
         } else {
-            
+
             if (tableBackground == null) {
-                
+
                 tableBackground = table.getBackground();
             }
 
             setForeground(tableForeground);
             setBackground(tableBackground);
         }
-        
+
         if (hasFocus) {
-            
+
             setBorder(focusBorder);
-            
+
             if (table.isCellEditable(row, column)) {
-                
+
                 setForeground(editableForeground);
                 setBackground(editableBackground);
             }
-            
+
         } else {
-            
+
             setBorder(noFocusBorder);
         }
 
         formatValueForDisplay(value, isSelected);
-        
+
         return this;
     }
 
@@ -132,47 +140,120 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         if (value != null) {
 
         	if (value instanceof RecordDataItem) {
-        		
+
         		RecordDataItem recordDataItem = (RecordDataItem) value;
 
         		if (recordDataItem.isValueNull()) {
-        			
-        			formatValueForDisplay(null, isSelected);
+
+        		    formatForNullValue(isSelected);
         			return;
 
         		} else {
-        			
-        			formatValueForDisplay(recordDataItem.getDisplayValue(), isSelected);
+
+        			formatForDataItem(recordDataItem, isSelected);
         			return;
         		}
-        		
+
+        	} else {
+
+        	    formatForOther(value, isSelected);
+
         	}
-        	
-            if (!isDateValue(value)) {
-
-                setValue(value);
-
-            } else {
-
-                setValue(dateFormatted((Date)value));
-            }
-            
 
         } else {
 
-            setValue(nullValueDisplayString);
-            if (!isSelected) {
-            
-                setBackground(nullValueDisplayColor);
-            }
-
+            formatForNullValue(isSelected);
         }
 
     }
-    
-    private boolean isDateValue(Object value) {
 
-        return (value instanceof Date);
+    private void formatForOther(Object value, boolean isSelected) {
+
+        if (!isSelected) {
+
+            setBackground(otherValueDisplayColor);
+        }
+
+        setValue(value);
+
+    }
+
+    private void formatForDataItem(RecordDataItem recordDataItem, boolean isSelected) {
+
+        boolean isDateValue = false;
+        Color color = Color.WHITE;
+        int sqlType = recordDataItem.getDataType();
+
+        switch (sqlType) {
+
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.LONGVARCHAR:
+            case Types.CLOB:
+                color = charValueDisplayColor;
+                break;
+
+            case Types.BIT:
+            case Types.BOOLEAN:
+                color = booleanValueDisplayColor;
+                break;
+
+            case Types.BIGINT:
+            case Types.REAL:
+            case Types.INTEGER:
+            case Types.DECIMAL:
+            case Types.NUMERIC:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                color = numericValueDisplayColor;
+                break;
+
+            case Types.DATE:
+            case Types.TIMESTAMP:
+            case Types.TIME:
+                color = dateValueDisplayColor;
+                isDateValue = true;
+                break;
+
+            case Types.BLOB:
+            case Types.BINARY:
+            case Types.VARBINARY:
+            case Types.LONGVARBINARY:
+                color = blobValueDisplayColor;
+
+            default:
+                color = otherValueDisplayColor;
+
+        }
+
+        Object value = recordDataItem.getDisplayValue();
+
+        if (!isDateValue) {
+
+            setValue(value);
+
+        } else {
+
+            setValue(dateFormatted((Date)value));
+        }
+
+        if (!isSelected) {
+
+            setBackground(color);
+        }
+
+    }
+
+    private void formatForNullValue(boolean isSelected) {
+
+        setValue(nullValueDisplayString);
+        if (!isSelected) {
+
+            setBackground(nullValueDisplayColor);
+        }
+
     }
 
     public void applyUserPreferences() {
@@ -185,12 +266,30 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
             dateFormat = new SimpleDateFormat(datePattern);
 
         } else {
-            
+
             dateFormat = null;
         }
-        
+
         nullValueDisplayColor = SystemProperties.getColourProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.cell.null.background.colour");
+
+        blobValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.blob.background.colour");
+
+        charValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.char.background.colour");
+
+        dateValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.date.background.colour");
+
+        booleanValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.boolean.background.colour");
+
+        otherValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.other.background.colour");
+
+        numericValueDisplayColor = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.cell.numeric.background.colour");
 
         nullValueDisplayString = SystemProperties.getStringProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.cell.null.text");
@@ -203,51 +302,51 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
             return dateFormat.format(date);
 
         } else {
-            
+
             return date.toString();
         }
     }
 
     public void setTableBackground(Color c) {
-        
+
         this.tableBackground = c;
     }
-    
+
     public void setBackground(Color c) {
-        
+
         this.background = c;
     }
-    
+
     public Color getBackground() {
-        
+
         return background;
     }
-    
+
     public void setForeground(Color c) {
-        
+
         this.foreground = c;
     }
-    
+
     public Color getForeground() {
-        
+
         return foreground;
     }
-    
+
     public boolean isOpaque() {
-        
+
         return background != null;
     }
-    
+
     public void invalidate() {}
-    
+
     public void repaint() {}
-    
+
     public void firePropertyChange(
             String propertyName, boolean oldValue, boolean newValue) {}
-    
+
     protected void firePropertyChange(
             String propertyName, Object oldValue, Object newValue) {}
-    
+
 }
 
 

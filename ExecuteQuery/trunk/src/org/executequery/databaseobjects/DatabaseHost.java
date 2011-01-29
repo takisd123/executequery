@@ -50,7 +50,7 @@ public interface DatabaseHost extends NamedObject {
      * @return the database connection wrapper
      */
     DatabaseConnection getDatabaseConnection();
-    
+
     /**
      * Returns the sql connection for this host.
      *
@@ -77,7 +77,7 @@ public interface DatabaseHost extends NamedObject {
      *
      * @return the meta type objects
      */
-    List<DatabaseMetaTag> getMetaObjects(DatabaseCatalog catalog, 
+    List<DatabaseMetaTag> getMetaObjects(DatabaseCatalog catalog,
             DatabaseSchema schema) throws DataSourceException;
 
     /**
@@ -95,7 +95,7 @@ public interface DatabaseHost extends NamedObject {
     List<DatabaseSchema> getSchemas() throws DataSourceException;
 
     /**
-     * Returns the tables hosted by this host of the specified type and 
+     * Returns the tables hosted by this host of the specified type and
      * belonging to the specified catalog and schema.
      *
      * @param catalog the table catalog name
@@ -103,9 +103,9 @@ public interface DatabaseHost extends NamedObject {
      * @param type the table type
      * @return the hosted tables
      */
-    List<NamedObject> getTables(String catalog, String schema, String type) 
+    List<NamedObject> getTables(String catalog, String schema, String type)
         throws DataSourceException;
-    
+
     /**
      * Returns the columns of the specified database object.
      *
@@ -114,7 +114,7 @@ public interface DatabaseHost extends NamedObject {
      * @param table the database object name
      * @return the columns
      */
-    List<DatabaseColumn> getColumns(String catalog, String schema, String table) 
+    List<DatabaseColumn> getColumns(String catalog, String schema, String table)
         throws DataSourceException;
 
     /**
@@ -125,7 +125,7 @@ public interface DatabaseHost extends NamedObject {
      * @param table the database object name
      * @return the exported keys
      */
-    List<DatabaseColumn> getExportedKeys(String catalog, String schema, String table) 
+    List<DatabaseColumn> getExportedKeys(String catalog, String schema, String table)
         throws DataSourceException;
 
     /**
@@ -135,19 +135,19 @@ public interface DatabaseHost extends NamedObject {
      * @param schema the table schema name
      * @param table the database object name
      */
-    List<TablePrivilege> getPrivileges(String catalog, String schema, String table) 
+    List<TablePrivilege> getPrivileges(String catalog, String schema, String table)
         throws DataSourceException;
 
     /**
      * Retrieves key/value pair database properties.
      */
     Map<Object, Object> getDatabaseProperties() throws DataSourceException;
-    
+
     /**
      * Get database product name.
      */
     String getDatabaseProductName();
-    
+
     /**
      * Retrieves the database keywords associated with this host.
      */
@@ -157,17 +157,17 @@ public interface DatabaseHost extends NamedObject {
      * Retrieves the data types associated with this host.
      */
     ResultSet getDataTypeInfo() throws DataSourceException;
-    
+
     /**
      * Recycles the open database connection.
      */
     void recycleConnection() throws DataSourceException;
-    
+
     /**
      * Attempts to establish a connection using this host.
      */
     boolean connect() throws DataSourceException;
-    
+
     /**
      * Disconnects this host.
      */
@@ -185,7 +185,7 @@ public interface DatabaseHost extends NamedObject {
             throws DataSourceException;
 
     /**
-     * Returns the table names hosted by this host of the specified type and 
+     * Returns the table names hosted by this host of the specified type and
      * belonging to the specified catalog and schema.
      *
      * @param catalog the table catalog name
@@ -199,7 +199,7 @@ public interface DatabaseHost extends NamedObject {
     /**
      * Returns the default connected to catalog or null if there isn't one
      * or it can not be determined.
-     * 
+     *
      * @return the default catalog
      */
     DatabaseSource getDefaultCatalog();
@@ -207,14 +207,14 @@ public interface DatabaseHost extends NamedObject {
     /**
      * Returns the default connected to schema or null if there isn't one
      * or it can not be determined.
-     * 
+     *
      * @return the default schema
      */
     DatabaseSource getDefaultSchema();
 
     /**
      * Returns whethere a current and valiud connection exists for this host.
-     * 
+     *
      * @return true | false
      */
     boolean isConnected();
@@ -232,31 +232,39 @@ public interface DatabaseHost extends NamedObject {
     /**
      * Returns the default prefix name value for objects from this host.
      * ie. default catalog or schema name - with schema taking precedence.
-     * 
+     *
      *  @return the default database object prefix
      */
     String getDefaultNamePrefix();
 
     /**
-     * Returns the default database source object - schema or catalog with 
+     * Returns the default database source object - schema or catalog with
      * schema taking precedence.
-     * 
+     *
      *  @return the default database object prefix
      */
     DatabaseSource getDefaultDatabaseSource();
 
     /**
-     * Returns the database source object with the specified name - schema or 
+     * Returns the database source object with the specified name - schema or
      * catalog with schema taking precedence.
-     * 
+     *
      *  @param name
      *  @return the default database object prefix
      */
     DatabaseSource getDatabaseSource(String name);
 
     boolean supportsSchemasInTableDefinitions();
-    
+
     boolean supportsCatalogsInTableDefinitions();
-    
+
+    boolean storesMixedCaseQuotedIdentifiers();
+
+    boolean storesUpperCaseQuotedIdentifiers();
+
+    boolean storesLowerCaseQuotedIdentifiers();
+
+    boolean supportsMixedCaseQuotedIdentifiers();
+
 }
 

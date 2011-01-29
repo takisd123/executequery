@@ -26,18 +26,18 @@ import java.util.List;
 
 import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * The properties for the editor's results panel
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1521 $
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
-public class PropertiesResultSetTable extends PropertiesBasePanel {
-    
+public class PropertiesResultSetTableGeneral extends PropertiesBasePanel {
+
     private SimplePreferencesPanel preferencesPanel;
-    
-    public PropertiesResultSetTable() {
+
+    public PropertiesResultSetTableGeneral() {
         try  {
             init();
         }
@@ -45,7 +45,7 @@ public class PropertiesResultSetTable extends PropertiesBasePanel {
             e.printStackTrace();
         }
     }
-    
+
     private void init() throws Exception {
 
         List<UserPreference> list = new ArrayList<UserPreference>();
@@ -106,13 +106,6 @@ public class PropertiesResultSetTable extends PropertiesBasePanel {
                 key,
                 "Save column width state between queries",
                 Boolean.valueOf(stringUserProperty(key))));
-        
-        key = "results.table.cell.background.colour";
-        list.add(new UserPreference(
-                    UserPreference.COLOUR_TYPE,
-                    key,
-                    "Cell background",
-                    SystemProperties.getColourProperty("user", key)));
 
         key = "resuts.date.pattern";
         list.add(new UserPreference(
@@ -128,13 +121,6 @@ public class PropertiesResultSetTable extends PropertiesBasePanel {
                     key,
                     "Null value cell text",
                     SystemProperties.getStringProperty("user", key)));
-
-        key = "results.table.cell.null.background.colour";
-        list.add(new UserPreference(
-                    UserPreference.COLOUR_TYPE,
-                    key,
-                    "Null value cell background",
-                    SystemProperties.getColourProperty("user", key)));
 
         key = "results.table.clob.length";
         list.add(new UserPreference(
@@ -158,17 +144,17 @@ public class PropertiesResultSetTable extends PropertiesBasePanel {
                     "Transpose when single row result",
                     Boolean.valueOf(stringUserProperty(key))));
 
-        UserPreference[] preferences = 
+        UserPreference[] preferences =
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
-        
+
     }
-    
+
     public void restoreDefaults() {
         preferencesPanel.restoreDefaults();
     }
-    
+
     public void save() {
         preferencesPanel.savePreferences();
     }

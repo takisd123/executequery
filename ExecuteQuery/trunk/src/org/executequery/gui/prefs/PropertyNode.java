@@ -23,13 +23,6 @@ package org.executequery.gui.prefs;
 import java.util.ArrayList;
 import java.util.List;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -55,7 +48,7 @@ public class PropertyNode {
         }
         children.add(node);
     }
-    
+
     public boolean hasChildren() {
         return children != null && children.size() > 0;
     }
@@ -63,23 +56,17 @@ public class PropertyNode {
     public List<PropertyNode> getChildren() {
         return children;
     }
-    
+
     public int getNodeId() {
         return nodeID;
     }
-    
+
     public String getLabel() {
         return label;
     }
-    
+
     public String toString() {
         return label;
     }
-    
+
 }
-
-
-
-
-
-

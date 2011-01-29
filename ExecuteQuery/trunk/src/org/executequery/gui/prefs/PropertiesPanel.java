@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,13 +66,13 @@ public class PropertiesPanel extends JPanel
                              implements ActiveComponent,
                                         ActionListener,
                                         TreeSelectionListener {
-    
+
     public static final String TITLE = "Preferences";
     public static final String FRAME_ICON = "Preferences16.png";
 
     /** the property selection tree */
     private JTree tree;
-    
+
     /** the right-hand property display panel */
     private JPanel rightPanel;
 
@@ -79,8 +80,8 @@ public class PropertiesPanel extends JPanel
     private CardLayout cardLayout;
 
     /** map of panels within the layout */
-    private Map<String, UserPreferenceFunction> panelMap;
-    
+    private Map<Integer, UserPreferenceFunction> panelMap;
+
     /** the parent container */
     private ActionContainer parent;
 
@@ -89,7 +90,7 @@ public class PropertiesPanel extends JPanel
         this(parent, -1);
     }
 
-    /** 
+    /**
      * Constructs a new instance seleting the specified node.
      *
      * @param the node to select
@@ -105,11 +106,12 @@ public class PropertiesPanel extends JPanel
         }
 
         if (openRow != -1) {
-            tree.setSelectionRow(6);
+
+            selectOpenRow(openRow);
+//            tree.setSelectionRow(6);
         }
     }
-    
-    /** <p>Initializes the state of this instance. */
+
     private void init() throws Exception {
 
         JSplitPane splitPane = null;
@@ -124,17 +126,17 @@ public class PropertiesPanel extends JPanel
         int panelWidth = 660;
         int panelHeight = 450;
         setPreferredSize(new Dimension(panelWidth, panelHeight));
-        
+
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setPreferredSize(new Dimension(panelWidth, panelHeight - 50));
-        
+
         cardLayout = new CardLayout();
         rightPanel = new JPanel(cardLayout);
         splitPane.setRightComponent(rightPanel);
-        
+
         // ----------------------------------
         // initialise branches
-        
+
         List<PropertyNode> branches = new ArrayList<PropertyNode>();
         PropertyNode node = new PropertyNode(PropertyTypes.GENERAL, "General");
         branches.add(node);
@@ -148,7 +150,7 @@ public class PropertiesPanel extends JPanel
         branches.add(node);
         node = new PropertyNode(PropertyTypes.LOOK_PLUGIN, "Look & Feel Plugins");
         branches.add(node);
-        
+
         node = new PropertyNode(PropertyTypes.TOOLBAR_GENERAL, "Tool Bar");
         node.addChild(new PropertyNode(PropertyTypes.TOOLBAR_FILE, "File Tools"));
         node.addChild(new PropertyNode(PropertyTypes.TOOLBAR_EDIT, "Edit Tools"));
@@ -166,20 +168,22 @@ public class PropertiesPanel extends JPanel
         branches.add(node);
 
         node = new PropertyNode(PropertyTypes.RESULTS, "Result Set Table");
+        node.addChild(new PropertyNode(PropertyTypes.RESULT_SET_CELL_COLOURS, "Colours"));
         branches.add(node);
         node = new PropertyNode(PropertyTypes.CONNECTIONS, "Connection");
         branches.add(node);
         node = new PropertyNode(PropertyTypes.BROWSER_GENERAL, "Database Browser");
         branches.add(node);
-        
-        DefaultMutableTreeNode root = 
+
+        DefaultMutableTreeNode root =
                 new DefaultMutableTreeNode(new PropertyNode(PropertyTypes.SYSTEM, "Preferences"));
 
         List<PropertyNode> children = null;
         DefaultMutableTreeNode treeNode = null;
-        
+
         for (int i = 0, k = branches.size(); i < k; i++) {
-            node = (PropertyNode)branches.get(i);
+
+            node = (PropertyNode) branches.get(i);
             treeNode = new DefaultMutableTreeNode(node);
             root.add(treeNode);
 
@@ -192,18 +196,19 @@ public class PropertiesPanel extends JPanel
                 }
 
             }
-            
+
         }
 
         tree = new DynamicTree(root);
         tree.putClientProperty("JTree.lineStyle", "Angled");
         tree.setCellRenderer(new PropsTreeCellRenderer());
-        
+
         // expand all rows
         for (int i = 0; i < tree.getRowCount(); i++) {
+
             tree.expandRow(i);
         }
-        
+
         Dimension leftPanelDim = new Dimension(180, 350);
         JScrollPane js = new JScrollPane(tree);
         js.setPreferredSize(leftPanelDim);
@@ -213,35 +218,47 @@ public class PropertiesPanel extends JPanel
         leftPanel.setMinimumSize(leftPanelDim);
         leftPanel.setMaximumSize(leftPanelDim);
         leftPanel.add(js, BorderLayout.CENTER);
-        splitPane.setLeftComponent(leftPanel); 
+        splitPane.setLeftComponent(leftPanel);
 
         mainPanel.add(splitPane, BorderLayout.CENTER);
         mainPanel.add(new BottomButtonPanel(
                             this, null, "prefs", parent.isDialog()), BorderLayout.SOUTH);
 
         add(mainPanel, BorderLayout.CENTER);
-        
-        /*
-        add(mainPanel, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                                        GridBagConstraints.SOUTHEAST, 
-                                        GridBagConstraints.BOTH,
-                                        new Insets(5, 5, 5, 5), 0, 0));
-         */
-        panelMap = new HashMap<String, UserPreferenceFunction>();
+        panelMap = new HashMap<Integer, UserPreferenceFunction>();
         tree.addTreeSelectionListener(this);
-        
+
         // setup the first panel
         PropertiesRootPanel panel = new PropertiesRootPanel();
-        
-        PropertyNode rootObject = (PropertyNode)root.getUserObject();
-        
-        String label = rootObject.getLabel();
-        panelMap.put(label, panel);
-        
-        rightPanel.add(panel, label);
-        cardLayout.show(rightPanel, label);
+
+        Integer id = PropertyTypes.SYSTEM;
+        panelMap.put(id, panel);
+
+        rightPanel.add(panel, String.valueOf(id));
+        cardLayout.show(rightPanel, String.valueOf(id));
 
         tree.setSelectionRow(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void selectOpenRow(int openRow) {
+
+        DefaultMutableTreeNode node = null;
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+
+        Enumeration enumeration = root.depthFirstEnumeration();
+        while(enumeration.hasMoreElements()) {
+
+            node = (DefaultMutableTreeNode) enumeration.nextElement();
+            PropertyNode propertyNode = (PropertyNode) node.getUserObject();
+
+            if (propertyNode.getNodeId() == openRow) {
+
+                tree.setSelectionPath(new TreePath(node.getPath()));
+                break;
+            }
+
+        }
     }
 
     public void valueChanged(TreeSelectionEvent e) {
@@ -256,16 +273,15 @@ public class PropertiesPanel extends JPanel
     private void getProperties(Object[] selection) {
         DefaultMutableTreeNode n = (DefaultMutableTreeNode)selection[selection.length-1];
         PropertyNode node = (PropertyNode)n.getUserObject();
-        
-        JPanel panel = null;
-        int id = node.getNodeId();
-        String label = node.getLabel();
 
-        if (panelMap.containsKey(label)) {
-            cardLayout.show(rightPanel, label);
+        JPanel panel = null;
+        Integer id = node.getNodeId();
+
+        if (panelMap.containsKey(id)) {
+            cardLayout.show(rightPanel, String.valueOf(id));
             return;
         }
-        
+
         switch (id) {
             case PropertyTypes.SYSTEM:
                 panel = new PropertiesRootPanel();
@@ -332,7 +348,7 @@ public class PropertiesPanel extends JPanel
                 panel = new PropertiesEditorSyntax();
                 break;
             case PropertyTypes.RESULTS:
-                panel = new PropertiesResultSetTable();
+                panel = new PropertiesResultSetTableGeneral();
                 break;
             case PropertyTypes.CONNECTIONS:
                 panel = new PropertiesConns();
@@ -340,55 +356,61 @@ public class PropertiesPanel extends JPanel
             case PropertyTypes.BROWSER_GENERAL:
                 panel = new PropertiesBrowserGeneral();
                 break;
+            case PropertyTypes.RESULT_SET_CELL_COLOURS:
+                panel = new PropertiesResultSetTableColours();
+                break;
         }
-        
-        panelMap.put(label, (UserPreferenceFunction)panel);
-        rightPanel.add(panel, label);
-        cardLayout.show(rightPanel, label);
+
+        panelMap.put(id, (UserPreferenceFunction)panel);
+        rightPanel.add(panel, String.valueOf(id));
+        cardLayout.show(rightPanel, String.valueOf(id));
 
     }
 
     public void actionPerformed(ActionEvent e) {
-        
+
         try {
-            
+
             GUIUtilities.showWaitCursor();
-            
-            for (String key : panelMap.keySet()) {
-    
+
+            for (Integer key : panelMap.keySet()) {
+
                 panelMap.get(key).save();
             }
 
             ThreadUtils.invokeLater(new Runnable() {
-                
+
                 public void run() {
-                    
+
                     EventMediator.fireEvent(createUserPreferenceEvent());
                 }
-               
+
             });
-            
+
         } finally {
-            
+
             GUIUtilities.showNormalCursor();
         }
-        
+
         parent.finished();
     }
 
     private UserPreferenceEvent createUserPreferenceEvent() {
-        
+
         return new DefaultUserPreferenceEvent(this, null, UserPreferenceEvent.ALL);
     }
-    
+
     public void cleanup() {
-        if (panelMap.containsKey("Colours")) {
-            PropertiesEditorBackground panel = 
-                    (PropertiesEditorBackground)panelMap.get("Colours");
+
+        if (panelMap.containsKey("Colours") && panelMap.get("Colours") instanceof PropertiesEditorBackground) {
+
+            PropertiesEditorBackground panel =
+                    (PropertiesEditorBackground) panelMap.get("Colours");
             panel.stopCaretDisplayTimer();
         }
+
     }
-    
+
 }
 
 

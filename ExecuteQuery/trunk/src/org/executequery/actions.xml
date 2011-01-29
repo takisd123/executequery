@@ -769,6 +769,12 @@
           mnemonic="S"
           execute-class="org.executequery.actions.viewcommands.CustomiseToolBarsCommand"/>
 
+  <action id="customise-query-editor-command"
+          name="Query Editor Options"
+          accel-editable="false"
+          mnemonic="O"
+          execute-class="org.executequery.actions.queryeditor.CustomiseQueryEditorCommand"/>
+
   <action id="feedback-command"
           name="Feedback"
           accel-editable="false"

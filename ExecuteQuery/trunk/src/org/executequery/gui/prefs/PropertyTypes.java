@@ -20,13 +20,6 @@
 
 package org.executequery.gui.prefs;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -34,7 +27,7 @@ package org.executequery.gui.prefs;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class PropertyTypes {
-    
+
     public static final int SYSTEM = 0;
     public static final int GENERAL = 1;
     public static final int EDITOR = 2;
@@ -60,10 +53,11 @@ public class PropertyTypes {
     public static final int SHORTCUTS = 22;
     public static final int TOOLBAR_IMPORT_EXPORT = 23;
     public static final int TOOLBAR_BROWSER = 24;
+    public static final int RESULT_SET_CELL_COLOURS = 25;
 
     /** Creates a new instance of PropertyTypes */
     private PropertyTypes() {}
-    
+
 }
 
 

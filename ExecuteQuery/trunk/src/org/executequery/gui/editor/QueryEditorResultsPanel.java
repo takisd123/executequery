@@ -184,12 +184,18 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     protected void removePopupComponent(JComponent component) {
 
-        queryEditor.removePopupComponent(component);
+        if (queryEditor != null) {
+
+            queryEditor.removePopupComponent(component);
+        }
     }
 
     protected void addPopupComponent(JComponent component) {
 
-        queryEditor.addPopupComponent(component);
+        if (queryEditor != null) {
+
+            queryEditor.addPopupComponent(component);
+        }
     }
 
     public void cleanup() {
