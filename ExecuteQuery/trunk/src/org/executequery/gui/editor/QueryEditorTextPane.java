@@ -260,9 +260,9 @@ public class QueryEditorTextPane extends SQLTextPane
             } catch (BadLocationException e) {}
 
             setDocument(document);
-        
+
         } finally {
-          
+
             fireTextUpdateFinished();
             setCaretPosition(offset);
         }
@@ -1032,20 +1032,20 @@ public class QueryEditorTextPane extends SQLTextPane
             return;
         }
         end = getSelectionEnd();
-        
+
         String text = getSelectedText();
         if (StringUtils.isBlank(text)) {
 
             return;
         }
 
-        addUndoEdit();        
+        addUndoEdit();
         replaceSelection("");
 
         try {
 
-            if ("\n".equals(getText(start, 1))) { 
-             
+            if ("\n".equals(getText(start, 1))) {
+
                 getDocument().remove(start, 1);
             }
 
@@ -1056,9 +1056,9 @@ public class QueryEditorTextPane extends SQLTextPane
         if (offset < 0) {
 
             insertTextAtOffset(0, text + "\n");
-        
+
         } else {
-            
+
             insertTextAfter(offset, text);
         }
 
@@ -1088,25 +1088,25 @@ public class QueryEditorTextPane extends SQLTextPane
 
         start = getSelectionStart();
         end = getSelectionEnd();
-        
+
         if (end >= length) {
-            
+
             return;
         }
-        
+
         String text = getSelectedText();
         if (StringUtils.isBlank(text)) {
 
             return;
         }
 
-        addUndoEdit();        
+        addUndoEdit();
         replaceSelection("");
 
         try {
 
-            if ("\n".equals(getText(start, 1))) { 
-             
+            if ("\n".equals(getText(start, 1))) {
+
                 getDocument().remove(start, 1);
             }
 
@@ -1120,7 +1120,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
             offset = length;
         }
-        
+
         insertTextAfter(offset, text);
 
         setCaretPosition(offset + 1);
