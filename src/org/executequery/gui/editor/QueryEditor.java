@@ -403,6 +403,7 @@ public class QueryEditor extends DefaultTabView
 
     /** the last divider location before a output hide */
     private int lastDividerLocation;
+    private QueryEditorAutoCompletePopupProvider queryEditorAutoCompletePopupProvider;
 
     /**
      * Toggles the output pane visible or not.
@@ -453,8 +454,8 @@ public class QueryEditor extends DefaultTabView
 
         if (isAutoCompleteOn()) {
 
-            editorPanel.registerAutoCompletePopup(
-                    new QueryEditorAutoCompletePopupProvider(this));
+            queryEditorAutoCompletePopupProvider = new QueryEditorAutoCompletePopupProvider(this);
+            editorPanel.registerAutoCompletePopup(queryEditorAutoCompletePopupProvider);
 
         } else {
 
@@ -468,7 +469,22 @@ public class QueryEditor extends DefaultTabView
 
     private boolean isAutoCompleteOn() {
 
-        return userProperties().getBooleanProperty("editor.autocomplete.on");
+        UserProperties userProperties = userProperties();
+        if (userProperties.containsKey("editor.autocomplete.on")) {
+
+            // old property key            
+            boolean allOn = true;
+            if (!userProperties.getBooleanProperty("editor.autocomplete.on")) {
+
+                allOn = false;
+            }
+            userProperties.setBooleanProperty("editor.autocomplete.keywords.on", allOn);
+            userProperties.setBooleanProperty("editor.autocomplete.schema.on", allOn);
+            
+        }
+        
+        return userProperties.getBooleanProperty("editor.autocomplete.keywords.on")
+            || userProperties.getBooleanProperty("editor.autocomplete.schema.on");
     }
 
     private boolean isAutoCommit() {

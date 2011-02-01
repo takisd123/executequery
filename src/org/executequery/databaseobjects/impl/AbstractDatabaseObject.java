@@ -31,7 +31,6 @@ import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.TablePrivilege;
-import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -376,10 +375,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
             } catch (SQLException e) {
 
-                if (Log.isDebugEnabled()) {
-
-                    e.printStackTrace();
-                }
+                logThrowable(e);
             }
 
         }
@@ -452,10 +448,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         } catch (SQLException e) {
 
-            if (Log.isDebugEnabled()) {
-
-                e.printStackTrace();
-            }
+            logThrowable(e);
             return "\"";
         }
     }

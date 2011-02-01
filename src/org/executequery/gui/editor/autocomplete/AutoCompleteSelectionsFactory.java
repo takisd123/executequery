@@ -37,22 +37,33 @@ public class AutoCompleteSelectionsFactory {
     
     private static final String DATABASE_COLUMN_DESCRIPTION = "Database Column";
     
-    public List<AutoCompleteListItem> build(DatabaseHost databaseHost) {
+    public List<AutoCompleteListItem> build(DatabaseHost databaseHost,
+            boolean autoCompleteKeywords, boolean autoCompleteSchema) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
         
-        addSQL92Keywords(listSelections);
-        addUserDefinedKeywords(listSelections);
+        if (autoCompleteKeywords) {
+        
+            addSQL92Keywords(listSelections);
+            addUserDefinedKeywords(listSelections);
+        }
 
         if (databaseHost != null && databaseHost.isConnected()) {
 
-            addDatabaseDefinedKeywords(databaseHost, listSelections);
-
-            List<AutoCompleteListItem> tables = databaseTablesForHost(databaseHost);
-            listSelections.addAll(tables);
+            if (autoCompleteKeywords) {
             
-            List<AutoCompleteListItem> columns = databaseColumnsForTables(databaseHost, tables);
-            listSelections.addAll(columns);
+                addDatabaseDefinedKeywords(databaseHost, listSelections);
+            }
+
+            if (autoCompleteSchema) {
+             
+                List<AutoCompleteListItem> tables = databaseTablesForHost(databaseHost);
+                listSelections.addAll(tables);
+                
+                List<AutoCompleteListItem> columns = databaseColumnsForTables(databaseHost, tables);
+                listSelections.addAll(columns);
+            }
+
         }
 
         Collections.sort(listSelections, new AutoCompleteListItemComparator());
@@ -60,19 +71,23 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
-    public List<AutoCompleteListItem> buildKeywords(DatabaseHost databaseHost) {
+    public List<AutoCompleteListItem> buildKeywords(DatabaseHost databaseHost, 
+            boolean autoCompleteKeywords) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
+ 
+        if (autoCompleteKeywords) {
         
-        addSQL92Keywords(listSelections);
-        addUserDefinedKeywords(listSelections);
-
-        if (databaseHost != null && databaseHost.isConnected()) {
-
-            addDatabaseDefinedKeywords(databaseHost, listSelections);
+            addSQL92Keywords(listSelections);
+            addUserDefinedKeywords(listSelections);
+    
+            if (databaseHost != null && databaseHost.isConnected()) {
+    
+                addDatabaseDefinedKeywords(databaseHost, listSelections);
+            }
+    
+            Collections.sort(listSelections, new AutoCompleteListItemComparator());
         }
-
-        Collections.sort(listSelections, new AutoCompleteListItemComparator());
 
         return listSelections;
     }

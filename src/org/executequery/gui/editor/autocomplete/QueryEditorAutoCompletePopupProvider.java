@@ -56,6 +56,7 @@ import org.executequery.gui.editor.QueryEditor;
 import org.executequery.log.Log;
 import org.executequery.sql.DerivedQuery;
 import org.executequery.sql.QueryTable;
+import org.executequery.util.UserProperties;
 import org.underworldlabs.swing.util.SwingWorker;
 
 public class QueryEditorAutoCompletePopupProvider
@@ -100,6 +101,10 @@ public class QueryEditorAutoCompletePopupProvider
 
     private List<AutoCompleteListItem> autoCompleteListItems;
 
+    private boolean autoCompleteKeywords;
+
+    private boolean autoCompleteSchema;
+    
     public QueryEditorAutoCompletePopupProvider(QueryEditor queryEditor) {
 
         super();
@@ -108,9 +113,18 @@ public class QueryEditorAutoCompletePopupProvider
         selectionsBuilder = new AutoCompleteSelectionsFactory();
         databaseObjectFactory = new DatabaseObjectFactoryImpl();
 
+        setAutoCompleteOptionFlags();
+
         queryEditor.addConnectionChangeListener(this);
         queryEditorTextComponent().addFocusListener(this);
     }
+
+    public void setAutoCompleteOptionFlags() {
+
+        UserProperties userProperties = UserProperties.getInstance();
+        autoCompleteKeywords = userProperties.getBooleanProperty("editor.autocomplete.keywords.on");
+        autoCompleteSchema = userProperties.getBooleanProperty("editor.autocomplete.schema.on");
+    }    
 
     public Action getPopupAction() {
 
@@ -303,7 +317,7 @@ public class QueryEditorAutoCompletePopupProvider
             databaseHost = databaseObjectFactory.createDatabaseHost(selectedConnection);
         }
 
-        autoCompleteListItems = selectionsBuilder.build(databaseHost);
+        autoCompleteListItems = selectionsBuilder.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
     }
 
     private void captureAndResetListValues() {
@@ -312,8 +326,6 @@ public class QueryEditorAutoCompletePopupProvider
 
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
-
-
 
         ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
     }
@@ -329,7 +341,7 @@ public class QueryEditorAutoCompletePopupProvider
         boolean hasTables = hasTables(tables);
         if (StringUtils.isBlank(prefix) && !hasTables) {
 
-            return selectionsBuilder.buildKeywords(databaseHost);
+            return selectionsBuilder.buildKeywords(databaseHost, autoCompleteKeywords);
         }
 
         String wordPrefix = prefix.trim().toUpperCase();
@@ -344,7 +356,7 @@ public class QueryEditorAutoCompletePopupProvider
         } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
 
             return buildItemsStartingWithForList(
-                    selectionsBuilder.buildKeywords(databaseHost), tables, wordPrefix, false);
+                    selectionsBuilder.buildKeywords(databaseHost, autoCompleteKeywords), tables, wordPrefix, false);
         }
 
         List<AutoCompleteListItem> itemsStartingWith =

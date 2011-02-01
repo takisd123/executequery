@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.util.List;
 
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -192,6 +193,39 @@ public abstract class AbstractNamedObject implements NamedObject,
 
     public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
+    }
+    
+    protected final void logThrowable(Throwable e) {
+        
+        if (Log.isDebugEnabled()) {
+
+            if (e instanceof SQLException) {
+            
+                logSQLException((SQLException) e);
+
+            } else if (e.getCause() != null && e.getCause() instanceof SQLException) {
+                
+                logSQLException((SQLException) e.getCause());
+                
+            } else {
+                
+                e.printStackTrace();
+            }
+            
+        }
+
+    }
+    
+    protected final void logSQLException(SQLException e) {
+
+        e.printStackTrace();
+        SQLException nextException = e; 
+        
+        while ((nextException = nextException.getNextException()) != null) {
+            
+            nextException.printStackTrace();
+        }
+
     }
     
 }

@@ -460,10 +460,9 @@ public class SystemResources {
 
             return created;
             
-        }
-        
-        catch (IOException exc) {
-            exc.printStackTrace();
+        } catch (IOException e) {
+          
+            e.printStackTrace();
             GUIUtilities.displayErrorMessage(
                  "Error creating profile in user's home directory.\nExiting.");
             return false;

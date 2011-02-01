@@ -228,9 +228,13 @@ public class SimplePreferencesPanel extends JPanel
         table.setGridColor(GRID_COLOR);
         TableColumnModel tcm = table.getColumnModel();
 
+        int secondColumnWidth = 160;
         TableColumn column = tcm.getColumn(2);
         column.setCellRenderer(rowRendererValues);
         column.setCellEditor(rowEditor);
+        column.setPreferredWidth(secondColumnWidth);
+        column.setMaxWidth(secondColumnWidth);
+        column.setMinWidth(secondColumnWidth);
 
         column = tcm.getColumn(1);
         column.setCellRenderer(rowRendererKeys);

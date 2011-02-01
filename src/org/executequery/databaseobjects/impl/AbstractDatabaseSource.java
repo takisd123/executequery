@@ -161,11 +161,11 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 
                 } catch (SQLException e) {
 
-                    e.printStackTrace();
+                    logThrowable(e);
 
                 } catch (DataSourceException e) {
 
-                    e.printStackTrace();
+                    logThrowable(e);
                 }
 
                 if (value != null) {

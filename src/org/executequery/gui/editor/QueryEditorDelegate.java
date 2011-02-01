@@ -43,9 +43,7 @@ public class QueryEditorDelegate implements QueryDelegate {
     public QueryEditorDelegate(QueryEditor queryEditor) {
 
         super();
-
         this.queryEditor = queryEditor;
-
         dispatcher = new QueryDispatcher(this);
     }
 
