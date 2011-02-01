@@ -176,8 +176,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
         try {
    
-            String procTerm = getHost().
-                    getDatabaseMetaData().getProcedureTerm();
+            String procTerm = getHost().getDatabaseMetaData().getProcedureTerm();
    
             if (procTerm != null && getName().equalsIgnoreCase(procTerm)) {
    
@@ -194,7 +193,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
             }
    
         } catch (SQLException e) {
-          
+
             throw new DataSourceException(e);
         }
         
@@ -202,23 +201,9 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     }
 
     public boolean hasChildObjects() throws DataSourceException {
+
         return (getObjects() != null && getObjects().size() > 0);
     }
-
-    /*
-    private boolean isDefaultConnection() {
-        DatabaseSchema _schema = getSchema();
-        if (_schema != null) {
-            return _schema.isDefaultConnection();
-        }
-
-        DatabaseCatalog _catalog = getCatalog();
-        if (_catalog != null) {
-            return _catalog.isDefaultConnection();
-        }
-        return false;
-    }
-    */
 
     /**
      * Loads the database functions.
@@ -245,11 +230,14 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
             }
             return list;
-        }
-        catch (SQLException e) {
-            throw new DataSourceException(e);
-        }
-        finally {
+        
+        } catch (SQLException e) {
+          
+            logThrowable(e);
+            return new ArrayList<NamedObject>(0);
+
+        } finally {
+
             releaseResources(rs);
         }
     }
@@ -283,7 +271,8 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
         } catch (SQLException e) {
           
-            throw new DataSourceException(e);
+            logThrowable(e);
+            return new ArrayList<NamedObject>(0);
 
         } finally {
 

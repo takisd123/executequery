@@ -71,13 +71,20 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     "Tab size",
                     stringUserProperty(key)));
 
-        key = "editor.autocomplete.on";
+        key = "editor.autocomplete.keywords.on";
         list.add(new UserPreference(
-                    UserPreference.BOOLEAN_TYPE,
-                    key,
-                    "Auto-complete on",
-                    Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
-
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Auto-complete keywords on",
+                Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
+        
+        key = "editor.autocomplete.schema.on";
+        list.add(new UserPreference(
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Auto-complete database objects on",
+                Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
+        
         key = "editor.undo.count";
         list.add(new UserPreference(
                     UserPreference.INTEGER_TYPE,

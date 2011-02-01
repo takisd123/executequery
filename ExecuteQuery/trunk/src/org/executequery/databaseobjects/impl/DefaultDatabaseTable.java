@@ -572,11 +572,13 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             reset();
 
             return result;
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
+            
             throw new DataSourceException(e);
-        }
-        finally {
+
+        } finally {
+            
             releaseResources(stmnt);
         }
     }
@@ -991,7 +993,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         } catch (DataSourceException e) {
 
-            e.printStackTrace();
+            logThrowable(e);
             return "";
         }
     }
@@ -1029,7 +1031,8 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             return sb.toString();
         }
         catch (DataSourceException e) {
-            e.printStackTrace();
+            
+            logThrowable(e);
             return "";
         }
     }
@@ -1063,7 +1066,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         } catch (DataSourceException e) {
 
-            e.printStackTrace();
+            logThrowable(e);
             return "";
         }
 

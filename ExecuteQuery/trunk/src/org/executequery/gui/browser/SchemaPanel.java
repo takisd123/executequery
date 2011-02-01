@@ -20,9 +20,7 @@
 
 package org.executequery.gui.browser;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -48,9 +46,6 @@ public class SchemaPanel extends BrowserNodeBasePanel {
     
     private SchemaModel model;
     
-    private Map<?, ?> cache;
-    
-    /** the browser's control object */
     private BrowserController controller;
 
     public SchemaPanel(BrowserController controller) {
@@ -71,17 +66,15 @@ public class SchemaPanel extends BrowserNodeBasePanel {
         noResultsLabel = new JLabel("No information for this object is available.",
                                     JLabel.CENTER);
 
+        JTable table = table();
         model = new SchemaModel();
-        table().setModel(model);
-        
-        table().getColumnModel().getColumn(2).setPreferredWidth(150);
-        table().getColumnModel().getColumn(3).setPreferredWidth(100);
+        table.setModel(model);        
+        table.getColumnModel().getColumn(2).setPreferredWidth(150);
+        table.getColumnModel().getColumn(3).setPreferredWidth(100);
         
         tablePanel().setBorder(BorderFactory.createTitledBorder("Available Objects"));
         setHeaderText("Database Schema");
         setHeaderIcon(GUIUtilities.loadIcon("User24.png"));
-        
-        cache = new HashMap();
     }
     
     protected String getPrintablePrefixLabel() {
@@ -93,10 +86,7 @@ public class SchemaPanel extends BrowserNodeBasePanel {
         return NAME;
     }
     
-    public void refresh() {
-        cache.clear();
-    }
-    
+    public void refresh() {}
     public void cleanup() {}
     
     public JTable getTable() {
@@ -115,7 +105,7 @@ public class SchemaPanel extends BrowserNodeBasePanel {
         }
         model.setValues(values);
 
-        if (values == null || values.size() == 0) {
+        if (values == null || values.isEmpty()) {
             tablePanel().remove(scroller());
             tablePanel().add(noResultsLabel, getPanelConstraints());
             tablePanel().validate();

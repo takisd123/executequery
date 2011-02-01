@@ -84,6 +84,8 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
         add(createClearOutputMenuItem());
         add(createAddToUserDefinedKeywordsMenuItem());
+        add(createUseKeywordAutoComplete());
+        add(createUseSchemaAutoComplete());
         add(createRemoveCommentsForQueryMenuItem());
         add(createRecycleResultSetTabMenuItem());
 
@@ -93,6 +95,28 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createHelpMenuItem());
     }
 
+    private JMenuItem createUseKeywordAutoComplete() {
+        
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
+        menuItem.setText("Auto-complete keywords");
+        menuItem.setSelected(SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "editor.autocomplete.keywords.on"));
+        menuItem.setActionCommand("updateAutoCompleteKeywordUsage");
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+
+    private JMenuItem createUseSchemaAutoComplete() {
+        
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
+        menuItem.setText("Auto-complete database objects");
+        menuItem.setSelected(SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "editor.autocomplete.schema.on"));
+        menuItem.setActionCommand("updateAutoCompleteSchemaUsage");
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+    
     public void statementExecuting() {
 
         setExecuteActionButtonsEnabled(false);
@@ -122,6 +146,22 @@ public class QueryEditorPopupMenu extends JPopupMenu
         queryDelegate.executeQuery(null, true);
     }
 
+    public void updateAutoCompleteKeywordUsage(ActionEvent e) {
+
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.autocomplete.keywords.on");
+    }
+    
+    public void updateAutoCompleteSchemaUsage(ActionEvent e) {
+        
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.autocomplete.schema.on");
+    }
+
+    private void checkboxPreferenceChanged(JCheckBoxMenuItem item, String key) {
+        
+        SystemProperties.setBooleanProperty(Constants.USER_PROPERTIES_KEY, key, item.isSelected());
+        UserPreferencesManager.fireUserPreferencesChanged();        
+    }
+    
     public void cancelQuery(ActionEvent e) {
 
         queryDelegate.interrupt();
@@ -129,22 +169,12 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
     public void recycleResultSetTabs(ActionEvent e) {
 
-        JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-
-        SystemProperties.setBooleanProperty(
-                Constants.USER_PROPERTIES_KEY, "editor.results.tabs.single", item.isSelected());
-
-        UserPreferencesManager.fireUserPreferencesChanged();
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.results.tabs.single");
     }
 
     public void removeCommentsPriorToQueryExecution(ActionEvent e) {
 
-        JCheckBoxMenuItem item = (JCheckBoxMenuItem) e.getSource();
-
-        SystemProperties.setBooleanProperty(
-                Constants.USER_PROPERTIES_KEY, "editor.execute.remove.comments", item.isSelected());
-
-        UserPreferencesManager.fireUserPreferencesChanged();
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.execute.remove.comments");
     }
 
     public void commit(ActionEvent e) {

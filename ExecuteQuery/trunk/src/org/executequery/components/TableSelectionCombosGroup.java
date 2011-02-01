@@ -536,8 +536,7 @@ public class TableSelectionCombosGroup implements ItemListener {
 
     }
 
-    public List<NamedObject> tablesForSchema(DatabaseSource schema) 
-        throws DataSourceException {
+    public List<NamedObject> tablesForSchema(DatabaseSource schema) {
     
         DatabaseMetaTag databaseMetaTag = schema.getDatabaseMetaTag("TABLE");
         
