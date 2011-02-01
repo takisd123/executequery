@@ -425,7 +425,8 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
     private String quotedDatabaseObjectName(String name) {
 
-        return "\"" + name + "\"";
+        String quoteString = getIdentifierQuoteString();
+        return quoteString + name + quoteString;
     }
 
     protected boolean isMixedCase(String value) {
@@ -443,5 +444,21 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         return value.matches("[^a-z]*");
     }
 
+    protected String getIdentifierQuoteString() {
+        
+        try {
+
+            return getHost().getDatabaseMetaData().getIdentifierQuoteString();
+
+        } catch (SQLException e) {
+
+            if (Log.isDebugEnabled()) {
+
+                e.printStackTrace();
+            }
+            return "\"";
+        }
+    }
+    
 }
 
