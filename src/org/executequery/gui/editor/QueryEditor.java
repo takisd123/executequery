@@ -470,9 +470,11 @@ public class QueryEditor extends DefaultTabView
     private boolean isAutoCompleteOn() {
 
         UserProperties userProperties = userProperties();
-        if (userProperties.containsKey("editor.autocomplete.on")) {
+        if (userProperties.containsKey("editor.autocomplete.on")
+                && (!userProperties.containsKey("editor.autocomplete.keywords.on"))
+                        && !userProperties.containsKey("editor.autocomplete.schema.on")) {
 
-            // old property key            
+            // old property key
             boolean allOn = true;
             if (!userProperties.getBooleanProperty("editor.autocomplete.on")) {
 
@@ -480,9 +482,9 @@ public class QueryEditor extends DefaultTabView
             }
             userProperties.setBooleanProperty("editor.autocomplete.keywords.on", allOn);
             userProperties.setBooleanProperty("editor.autocomplete.schema.on", allOn);
-            
+
         }
-        
+
         return userProperties.getBooleanProperty("editor.autocomplete.keywords.on")
             || userProperties.getBooleanProperty("editor.autocomplete.schema.on");
     }
@@ -554,13 +556,9 @@ public class QueryEditor extends DefaultTabView
     public void finished(String message) {
 
         popup.statementFinished();
-
         resultsPanel.finished();
-
         statusBar.stopProgressBar();
-
         setStopButtonEnabled(false);
-
         statusBar.setExecutionTime(message);
     }
 
@@ -1152,12 +1150,12 @@ public class QueryEditor extends DefaultTabView
     }
 
     public void moveSelectionUp() {
-        
+
         editorPanel.moveSelectionUp();
     }
-    
+
     public void moveSelectionDown() {
-        
+
         editorPanel.moveSelectionDown();
     }
 

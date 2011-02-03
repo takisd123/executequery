@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * Query Editor general preferences panel.
  *
  * @author   Takis Diakoumis
@@ -33,7 +33,7 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
 public class PropertiesEditorGeneral extends PropertiesBasePanel {
-    
+
     private SimplePreferencesPanel preferencesPanel;
 
     public PropertiesEditorGeneral() {
@@ -44,10 +44,10 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
             e.printStackTrace();
         }
     }
-    
+
     /** <p>Initializes the state of this instance. */
     private void init() throws Exception {
-        
+
     	List<UserPreference> list = new ArrayList<UserPreference>();
 
         list.add(new UserPreference(
@@ -77,14 +77,14 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                 key,
                 "Auto-complete keywords on",
                 Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
-        
+
         key = "editor.autocomplete.schema.on";
         list.add(new UserPreference(
                 UserPreference.BOOLEAN_TYPE,
                 key,
                 "Auto-complete database objects on",
                 Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
-        
+
         key = "editor.undo.count";
         list.add(new UserPreference(
                     UserPreference.INTEGER_TYPE,
@@ -121,14 +121,14 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     key,
                     "Recycle result set tabs",
                     Boolean.valueOf(stringUserProperty(key))));
-        
+
         key = "editor.execute.remove.comments";
         list.add(new UserPreference(
                 UserPreference.BOOLEAN_TYPE,
                 key,
                 "Remove comments for execution",
                 Boolean.valueOf(stringUserProperty(key))));
-        
+
         key = "editor.max.records";
         list.add(new UserPreference(
                     UserPreference.INTEGER_TYPE,
@@ -222,13 +222,13 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     "Right margin colour",
                     SystemProperties.getColourProperty("user", key)));
 
-        UserPreference[] preferences = 
+        UserPreference[] preferences =
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
 
     }
-        
+
     public void restoreDefaults() {
         preferencesPanel.restoreDefaults();
     }
@@ -240,15 +240,5 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
     public void save() {
         preferencesPanel.savePreferences();
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-

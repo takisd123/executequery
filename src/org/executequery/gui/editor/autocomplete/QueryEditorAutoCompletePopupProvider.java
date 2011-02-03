@@ -104,7 +104,7 @@ public class QueryEditorAutoCompletePopupProvider
     private boolean autoCompleteKeywords;
 
     private boolean autoCompleteSchema;
-    
+
     public QueryEditorAutoCompletePopupProvider(QueryEditor queryEditor) {
 
         super();
@@ -124,7 +124,7 @@ public class QueryEditorAutoCompletePopupProvider
         UserProperties userProperties = UserProperties.getInstance();
         autoCompleteKeywords = userProperties.getBooleanProperty("editor.autocomplete.keywords.on");
         autoCompleteSchema = userProperties.getBooleanProperty("editor.autocomplete.schema.on");
-    }    
+    }
 
     public Action getPopupAction() {
 
@@ -327,7 +327,13 @@ public class QueryEditorAutoCompletePopupProvider
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
 
-        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith(tables, wordAtCursor));
+        List<AutoCompleteListItem> itemsStartingWith = itemsStartingWith(tables, wordAtCursor);
+        if (itemsStartingWith.isEmpty()) {
+
+            itemsStartingWith.add(noProposalsListItem());
+        }
+
+        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith);
     }
 
     // TODO: determine query being executed and suggest based on that
