@@ -1039,8 +1039,16 @@ public class QueryEditorTextPane extends SQLTextPane
             return;
         }
 
+        boolean removeLastChar = end == getText().length(); // line break if at end
+
         addUndoEdit();
         replaceSelection("");
+
+        if (removeLastChar) {
+            try {
+                getDocument().remove(getText().length() - 1, 1);
+            } catch (BadLocationException e) {}
+        }
 
         try {
 
@@ -1064,7 +1072,6 @@ public class QueryEditorTextPane extends SQLTextPane
 
         setCaretPosition(offset + 1);
         moveCaretPosition(offset + text.length() + 1);
-
     }
 
     public void moveSelectionDown() {
