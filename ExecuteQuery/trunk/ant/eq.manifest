@@ -11,8 +11,8 @@ Class-Path: docs/eqhelp.jar \
             lib/batik-dom.jar \
             lib/batik-xml.jar \
             lib/batik-awt-util.jar \
-            lib/log4j-1.2.13.jar \
-            lib/liquibase-1.9.1.jar \
+            lib/log4j-1.2.16.jar \
+            lib/liquibase-1.9.5.jar \
             lib/commons-lang-2.3.jar \
             lib/poi-2.5-final-20040302.jar \
             lib/commons-logging-1.1.1.jar \

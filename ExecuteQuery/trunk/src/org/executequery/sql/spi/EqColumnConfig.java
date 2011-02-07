@@ -32,14 +32,14 @@ class EqColumnConfig extends ColumnConfig {
         String columnDefaultValue = getDefaultValue();
 
         if (columnDefaultValue != null) {
-            
+
             if ("null".equalsIgnoreCase(columnDefaultValue)) {
 
                 return "NULL";
             }
 
             if (shouldQuoteDefaultValue(database)) {
-                
+
                 if (!database.shouldQuoteValue(columnDefaultValue)) {
 
                     return columnDefaultValue;
@@ -64,9 +64,3 @@ class EqColumnConfig extends ColumnConfig {
     }
 
 }
-
-
-
-
-
-

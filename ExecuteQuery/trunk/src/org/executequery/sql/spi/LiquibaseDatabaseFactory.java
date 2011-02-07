@@ -43,25 +43,25 @@ class LiquibaseDatabaseFactory {
         if (name.contains("POSTGRESQL")) {
 
             return postgresDatabase();
-            
+
         } else if (name.contains("MYSQL")) {
-            
+
             return mysqlDatabase();
 
         } else if (name.contains("ORACLE")) {
-        
+
             return oracleDatabase();
 
         } else if (name.contains("HSQL")) {
-            
+
             return hsqlDatabase();
 
         } else if (name.contains("H2")) {
-            
+
             return h2Database();
 
         } else if (name.contains("DERBY")) {
-            
+
             return derbyDatabase();
 
         } else if (name.contains("MAXDB")
@@ -69,7 +69,7 @@ class LiquibaseDatabaseFactory {
 
             return maxDbDatabase();
 
-        } else if (name.contains("ADAPTIVE SERVER") 
+        } else if (name.contains("ADAPTIVE SERVER")
                 || name.contains("SYBASE")) {
 
             return sybaseDatabase();
@@ -83,71 +83,71 @@ class LiquibaseDatabaseFactory {
             return msSqlDatabase();
 
         } else if (name.contains("DB2")) {
-            
+
             return db2Database();
 
-        } 
+        }
 
         return unsupportedDatabase();
     }
 
     private Database unsupportedDatabase() {
-        
+
         return new UnsupportedDatabase();
     }
 
     private Database db2Database() {
-        
+
         return new DB2Database();
     }
 
     private Database msSqlDatabase() {
-        
+
         return new MSSQLDatabase();
     }
 
     private Database firebirdDatabase() {
-        
+
         return new FirebirdDatabase();
     }
 
     private Database sybaseDatabase() {
-        
+
         return new SybaseDatabase();
     }
 
     private Database maxDbDatabase() {
-        
+
         return new MaxDBDatabase();
     }
 
     private Database derbyDatabase() {
-        
+
         return new DerbyDatabase();
     }
 
     private Database h2Database() {
-        
+
         return new H2Database();
     }
 
     private Database hsqlDatabase() {
-        
+
         return new HsqlDatabase();
     }
 
     private Database oracleDatabase() {
-        
+
         return new OracleDatabase();
     }
 
     private Database mysqlDatabase() {
-        
+
         return new MySQLDatabase();
     }
 
     private Database postgresDatabase() {
-        
+
         return new PostgresDatabase();
     }
 

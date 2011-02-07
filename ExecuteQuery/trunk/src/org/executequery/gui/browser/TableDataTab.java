@@ -49,17 +49,17 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
 public class TableDataTab extends JPanel implements ResultSetTableContainer {
-    
+
     private ResultSetTableModel tableModel;
-    
+
     private ResultSetTable table;
-    
+
     private JScrollPane scroller;
-    
+
     private DatabaseObject databaseObject;
 
-    private boolean executing;
-    
+    private boolean executing = false;
+
     public TableDataTab() {
 
         super(new GridBagLayout());
@@ -69,19 +69,17 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
             init();
 
         } catch (Exception e) {
-            
+
             e.printStackTrace();
-        }   
+        }
 
     }
-    
+
     private void init() throws Exception {
 
-        executing = false;
         scroller = new JScrollPane();
-
         add(scroller, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                                GridBagConstraints.SOUTHEAST, 
+                                GridBagConstraints.SOUTHEAST,
                                 GridBagConstraints.BOTH,
                                 new Insets(5, 5, 5, 5), 0, 0));
     }
@@ -100,7 +98,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 } catch (Exception e) {
 
                     GUIUtilities.displayExceptionErrorDialog(
-                                        "An error occured retrieving the table data.\n" + 
+                                        "An error occured retrieving the table data.\n" +
                                         e.getMessage(), e);
                     return "done";
                 }
@@ -111,12 +109,12 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 showNormalCursor();
             }
 
-        };        
+        };
         worker.start();
     }
-    
+
     /**
-     * Contsructs and displays the specified <code>ResultSet</code> 
+     * Contsructs and displays the specified <code>ResultSet</code>
      * object within the results table.
      *
      * @param the <code>ResultSet</code> data object
@@ -152,10 +150,10 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
             scroller.getViewport().add(table);
 
         } catch (DataSourceException e) {
-          
+
             GUIUtilities.displayExceptionErrorDialog("Error retrieving table data.", e);
         }
-        
+
         validate();
         repaint();
 
@@ -170,25 +168,25 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
         setTableProperties();
     }
 
-    /** 
+    /**
      * Whether a SQL SELECT statement is currently being executed by this class.
      *
      * @return <code>true</code> | <code>false</code>
      */
     public boolean isExecuting() {
-        
+
         return executing;
     }
-    
+
     /** Cancels the currently executing statement. */
     public void cancelStatement() {
 
         databaseObject.cancelStatement();
     }
-    
+
     /** Sets default table display properties. */
     public void setTableProperties() {
-        
+
         if (table == null) {
 
             return;
@@ -196,21 +194,21 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
         table.applyUserPreferences();
         table.setCellSelectionEnabled(false);
-        
+
         tableModel.setMaxRecords(
                 SystemProperties.getIntProperty("user", "browser.max.records"));
     }
-    
+
     private void showNormalCursor() {
 
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
-    
+
     private void showWaitCursor() {
-        
+
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
-    
+
     public JTable getTable() {
 
         return table;
@@ -222,9 +220,9 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
     }
 
     public void transposeRow(TableModel tableModel, int row) {
-        
+
         // do nothing
     }
-    
+
 }
 

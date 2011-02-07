@@ -18,10 +18,10 @@
 	<classpathentry kind="lib" path="lib/commons-lang-2.4.jar" sourcepath="/home/takisd/.m2/repository/commons-lang/commons-lang/2.4/commons-lang-2.4-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jh.jar"/>
-	<classpathentry kind="lib" path="lib/liquibase-1.9.2.jar" sourcepath="/home/takisd/softdev/dev-env/libs/liquibase-1.9.2/src/java"/>
-	<classpathentry kind="lib" path="lib/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib/poi-3.2-FINAL-20081019.jar"/>
 	<classpathentry kind="lib" path="lib/xml-apis.jar"/>
 	<classpathentry kind="lib" path="lib/c3p0-0.9.1.2.jar" sourcepath="/home/takisd/softdev/dev-env/libs/c3p0-0.9.1.2/c3p0-0.9.1.2.src/src/classes"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="lib/liquibase-core-1.9.5.jar" sourcepath="/home/takisd/.m2/repository/org/liquibase/liquibase-core/1.9.5/liquibase-core-1.9.5-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

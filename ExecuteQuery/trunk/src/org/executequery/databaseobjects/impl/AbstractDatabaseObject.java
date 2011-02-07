@@ -337,7 +337,9 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
      */
     public ResultSet getData() throws DataSourceException {
 
+        Connection connection = null;
         ResultSet rs = null;
+        boolean originalAutoCommit = false;
 
         try {
 
@@ -351,7 +353,11 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
             }
 
-            statement = getHost().getConnection().createStatement();
+            connection = getHost().getConnection();
+            originalAutoCommit = connection.getAutoCommit();
+            connection.setAutoCommit(true);
+
+            statement = connection.createStatement();
             rs = statement.executeQuery(recordsQueryString());
 
             return rs;
@@ -359,6 +365,16 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         } catch (SQLException e) {
 
             throw new DataSourceException(e);
+
+        } finally {
+
+            if (connection != null) {
+                try {
+                    connection.setAutoCommit(originalAutoCommit);
+                } catch (SQLException e) {
+                    logSQLException(e);
+                }
+            }
         }
 
     }
@@ -441,7 +457,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
     }
 
     protected String getIdentifierQuoteString() {
-        
+
         try {
 
             return getHost().getDatabaseMetaData().getIdentifierQuoteString();
@@ -452,6 +468,6 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             return "\"";
         }
     }
-    
+
 }
 
