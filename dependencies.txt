@@ -69,16 +69,16 @@ Licence: GPL
 
 Liquibase
 -----------------------
-Lib jar file: liquibase-1.9.2.jar
-Version: 1.9.2 (works with >= v1.8.0)
+Lib jar file: liquibase-1.9.5.jar
+Version: 1.9.5 (works with >= v1.8.0)
 URL: http://www.liquibase.org/
 Used in: Selected SQL statement generation
 Licence: LGPL
 
 Log4j
 -----------------------
-Lib jar file: log4j-1.2.13.jar
-Version: 1.2.13 (works with >= v1.2.9)
+Lib jar file: log4j-1.2.16.jar
+Version: 1.2.16 (works with >= v1.2.9)
 URL: http://logging.apache.org/log4j/
 Used in: Application logging.
 Licence: Apache License v2.0
