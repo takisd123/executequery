@@ -38,7 +38,6 @@ import org.executequery.databaseobjects.NamedObject;
 import org.executequery.sql.SQLFormatter;
 import org.executequery.sql.StatementGenerator;
 import org.executequery.sql.StatementGeneratorFactory;
-import org.executequery.sql.spi.LiquibaseStatementGenerator;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
