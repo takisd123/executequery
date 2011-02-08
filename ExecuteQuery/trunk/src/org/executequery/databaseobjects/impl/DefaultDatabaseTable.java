@@ -37,6 +37,7 @@ import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.sql.SQLFormatter;
 import org.executequery.sql.StatementGenerator;
+import org.executequery.sql.StatementGeneratorFactory;
 import org.executequery.sql.spi.LiquibaseStatementGenerator;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -824,7 +825,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
     private StatementGenerator createStatementGenerator() {
 
-        return new LiquibaseStatementGenerator();
+        return StatementGeneratorFactory.create();
     }
 
     /**
