@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 10 January 2011
+Date: 10 February 2011
 
 Summary of changes - v3.2.3 Build 5163:
 ----------------------------------------
@@ -27,6 +27,8 @@ Summary of changes - v3.2.3 Build 5163:
 - Added customisable coloured results table cells for data types.
 - Split out autocomplete option into keywords and database objects - added these
   to the editor popup menu.
+- Updated libraries Log4j, Liquibase, Commons Lang and Commons Codec.
+
 
 
 Summary of changes - v3.2.2 Build 5148:
@@ -266,4 +268,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-10 January 2011
+10 February 2011
