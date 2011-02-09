@@ -45,17 +45,17 @@ public class TextAreaLogAppender extends AppenderSkeleton {
 
     /** space string for new line replacement */
     private static final String SPACE = " ";
-    
+
     /** Creates a new instance of TextAreaLogAppender */
     public TextAreaLogAppender(JTextArea textArea) {
         this.textArea = textArea;
         newLineMatcher = Pattern.compile("[\n\r]+").matcher("");
     }
-    
+
     public boolean requiresLayout() {
         return true;
     }
-    
+
     public synchronized void append(LoggingEvent event) {
         String text = null;
         Object message = event.getMessage();
@@ -81,20 +81,10 @@ public class TextAreaLogAppender extends AppenderSkeleton {
                 textArea.append(Layout.LINE_SEP);
             }
         }
-        
+
         textArea.setCaretPosition(textArea.getText().length());
     }
-    
+
     public void close() {}
 
 }
-
-
-
-
-
-
-
-
-
-

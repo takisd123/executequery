@@ -2,7 +2,7 @@
 
 Date: 10 February 2011
 
-Summary of changes - v3.2.3 Build 5163:
+Summary of changes - v3.2.3 Build 5164:
 ----------------------------------------
 
 - Fixed occassional error (NullPointerException) when opening a script from file
