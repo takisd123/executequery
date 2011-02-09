@@ -57,7 +57,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.util.FileUtils;
 import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * System About panel.
  *
  * @author   Takis Diakoumis
@@ -67,46 +67,46 @@ import org.underworldlabs.util.SystemProperties;
 public class AboutPanel extends BaseDialog
                         implements ActiveComponent,
                                    ActionListener {
-   
+
     public static final String TITLE = "About";
     public static final String FRAME_ICON = "Information16.png";
-    
+
     private JTabbedPane tabPane;
     private HeapMemoryPanel heapPanel;
     private AboutImagePanel imagePanel;
     private ScrollingCreditsPanel creditsPanel;
-    
+
     public AboutPanel() {
 
         super(TITLE, true);
-        
+
         try {
             jbInit();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void jbInit() throws Exception {
         tabPane = new JTabbedPane();
         tabPane.add("System", systemDetails());
         tabPane.add("Resources", systemResources());
         tabPane.add("License", license());
         tabPane.add("Credits", credits());
-        
+
         imagePanel = new AboutImagePanel();
-        
+
         JPanel basePanel = new JPanel(new BorderLayout());
         basePanel.setPreferredSize(new Dimension(400, 480));
         basePanel.add(imagePanel, BorderLayout.NORTH);
         basePanel.add(tabPane, BorderLayout.CENTER);
         basePanel.add(addButtonPanel(), BorderLayout.SOUTH);
-        
+
         addDisplayComponentWithEmptyBorder(basePanel);
         setResizable(false);
         display();
     }
-    
+
     private GridBagConstraints resetConstraints(GridBagConstraints gbc) {
         gbc.gridy = 1;
         gbc.gridx = 1;
@@ -121,26 +121,26 @@ public class AboutPanel extends BaseDialog
         gbc.anchor = GridBagConstraints.SOUTHEAST;
         return gbc;
     }
-    
+
     private JPanel credits() {
         creditsPanel = new ScrollingCreditsPanel();
         JPanel main = new JPanel(new GridBagLayout());
         main.add(creditsPanel, resetConstraints(new GridBagConstraints()));
         return main;
     }
-    
+
     private JPanel addButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setPreferredSize(new Dimension(350, 50));
-        
+
         JButton okButton = new DefaultPanelButton("OK");
         okButton.setMnemonic('O');
 
         GridBagConstraints gbc = new GridBagConstraints();
         Insets ins = new Insets(7,0,0,0);
         gbc.insets = ins;
-        
-        buttonPanel.add(okButton, gbc);        
+
+        buttonPanel.add(okButton, gbc);
         okButton.addActionListener(this);
 
         return buttonPanel;
@@ -150,7 +150,7 @@ public class AboutPanel extends BaseDialog
         cleanup();
         super.dispose();
     }
-    
+
     public void actionPerformed(ActionEvent e) {
         dispose();
     }
@@ -165,19 +165,19 @@ public class AboutPanel extends BaseDialog
             creditsPanel.stopTimer();
         }
         creditsPanel = null;
-        
+
         if (heapPanel != null) {
             heapPanel.stopTimer();
         }
         heapPanel = null;
     }
-    
+
     private JPanel license() {
 
         JPanel base = new JPanel(new GridBagLayout());
-        
+
         String labelText = null;
-        
+
         try {
 
             labelText = FileUtils.loadResource(
@@ -186,20 +186,20 @@ public class AboutPanel extends BaseDialog
         } catch (IOException e) {
 
             if (Log.isDebugEnabled()) {
-                
+
                 Log.debug("Error loading license panel text", e);
             }
 
         }
-        
+
         JButton button = new JButton(ActionBuilder.get("license-command"));
         button.setText("View License");
         button.setIcon(null);
-        
+
         base.setBorder(BorderFactory.createEtchedBorder());
-        
+
         GridBagConstraints gbc = new GridBagConstraints();
-        
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.insets = new Insets(5,5,5,5);
@@ -215,26 +215,26 @@ public class AboutPanel extends BaseDialog
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0;
         base.add(button, gbc);
-        
+
         JPanel main = new JPanel(new GridBagLayout());
         main.add(base, resetConstraints(gbc));
-        
+
         return main;
     }
-    
-    
+
+
     private JPanel systemResources() {
         heapPanel = new HeapMemoryPanel();
         return heapPanel;
     }
-    
+
     private JPanel systemDetails() {
 
         return new SystemPropertiesPanel();
     }
-    
+
     private void renderingHintsForText(Graphics2D g2d) {
-        
+
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
@@ -243,48 +243,48 @@ public class AboutPanel extends BaseDialog
     }
 
     class ScrollingCreditsPanel extends JPanel {
-        
+
         private Timer timer;
-        
+
         private Font nameFont;
-        
+
         private Font titleFont;
-        
+
         private String[] names;
 
         private String[] titles;
-        
+
         protected ScrollingCreditsPanel() {
             setBorder(BorderFactory.createEtchedBorder());
-            
+
             nameFont = new Font("dialog", Font.BOLD, 12);
             titleFont = new Font("dialog", Font.PLAIN, 12);
-            
+
             loadNamesAndTitles();
-            
+
             startTimer();
         }
-        
+
         private void loadNamesAndTitles() {
-            
+
             String namesAndTitles = SystemProperties.getStringProperty(
                     "system", "about.panel.credits");
 
             String[] namesAndTitlesAsArray = namesAndTitles.split(",");
             names = new String[namesAndTitlesAsArray.length];
             titles = new String[namesAndTitlesAsArray.length];
-            
+
             for (int i = 0; i < namesAndTitlesAsArray.length; i++) {
-                
+
                 String nameAndTitle = namesAndTitlesAsArray[i];
                 int pipeIndex = nameAndTitle.indexOf('|');
-                
+
                 names[i] = nameAndTitle.substring(0, pipeIndex);
                 titles[i] = nameAndTitle.substring(pipeIndex + 1);
             }
-            
+
         }
-        
+
         protected void startTimer() {
             final Runnable scroller = new Runnable() {
                 public void run() {
@@ -292,7 +292,7 @@ public class AboutPanel extends BaseDialog
                     ScrollingCreditsPanel.this.repaint();
                 }
             };
-            
+
             TimerTask paintCredits = new TimerTask() {
                 public void run() {
                     EventQueue.invokeLater(scroller);
@@ -301,27 +301,27 @@ public class AboutPanel extends BaseDialog
             timer = new Timer();
             timer.schedule(paintCredits, 500, 40);
         }
-        
+
         protected void ensureTimerRunning() {
             if (timer == null) {
                 startTimer();
             }
         }
-        
+
         private int yOffset;
         int count = 0;
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             int width = getWidth();
             int height = getHeight();
-            
+
             g.setColor(Color.WHITE);
             g.fillRect(0, 0, width, height);
 
             Graphics2D g2d = (Graphics2D)g;
 
             renderingHintsForText(g2d);
-            
+
             g2d.setPaint(new GradientPaint(0, 0, Color.LIGHT_GRAY, width / 2,
                     0, Color.WHITE, true));
 
@@ -330,13 +330,13 @@ public class AboutPanel extends BaseDialog
             int x = 0;
             int y = 0;
             int stringWidth = 0;
-            
+
             //g.setColor(Color.GRAY.brighter());
             //g.drawLine(width / 6, 0, width / 6, height);
-            
+
             g2d.setColor(Color.BLACK);
 
-            for (int i = 0; i < names.length; i++) {                
+            for (int i = 0; i < names.length; i++) {
                 g2d.setFont(nameFont);
                 FontMetrics fm = g2d.getFontMetrics();
                 stringWidth = fm.stringWidth(names[i]);
@@ -361,7 +361,7 @@ public class AboutPanel extends BaseDialog
             }
 
         }
-        
+
         public void stopTimer() {
             if (timer != null) {
                 timer.cancel();
@@ -370,9 +370,9 @@ public class AboutPanel extends BaseDialog
         }
 
     }
-    
+
     class AboutImagePanel extends JPanel {
-        
+
         private static final int HEIGHT = 206;
         private static final int WIDTH = 400;
 
@@ -381,63 +381,63 @@ public class AboutPanel extends BaseDialog
         private Timer timer;
         private Image eqImage;
         private Image background;
-        
+
         private Font versionFont;
         private String versionText;
 
         // background and logo fade
         boolean stageOneComplete;
-        
+
         // version text
         boolean stageTwoComplete;
-        
+
         int leftOffsetImage;
         int leftOffsetText;
         int bottomOffsetVersion;
-        
+
         private float alpha;
-        
+
         protected AboutImagePanel() {
 
-            versionText = "version " + 
-                          System.getProperty("executequery.major.version");
+            versionText = "version " +
+                          System.getProperty("executequery.minor.version");
             versionFont = new Font("dialog", Font.BOLD, 12);
 
             ImageIcon icon = GUIUtilities.loadImage("AboutText.png");
             eqImage = icon.getImage();
-            
+
             ImageIcon backgroundIcon = GUIUtilities.loadImage("AboutBackground.png");
             background = backgroundIcon.getImage();
 
             final Runnable fader = new Runnable() {
                 public void run() {
-                    
+
                     if (!stageOneComplete) {
-                        
+
                         if (alpha >= 0.999f) {
-                         
+
                             stageOneComplete = true;
-                            
+
                             try {
 
                                 Thread.sleep(500);
 
                             } catch (InterruptedException e) {}
-                            
+
                         } else {
-                            
+
                             alpha += 0.020f;
                         }
-                            
+
 
                     }
-                    
+
                     if (stageOneComplete && !stageTwoComplete) {
-                        
+
                         if (bottomOffsetVersion >= 45) {
-                            
+
                             stageTwoComplete = true;
-                            
+
                             timer.cancel();
                             GUIUtils.scheduleGC();
                             return;
@@ -446,10 +446,10 @@ public class AboutPanel extends BaseDialog
 
                             bottomOffsetVersion += 1;
                         }
-                        
+
                     }
 
-                    AboutImagePanel.this.repaint();                    
+                    AboutImagePanel.this.repaint();
                 }
             };
 
@@ -462,40 +462,40 @@ public class AboutPanel extends BaseDialog
             timer = new Timer();
             timer.schedule(paintImage, 500, 70);
         }
-        
+
         public void stopTimer() {
             if (timer != null) {
                 timer.cancel();
             }
         }
-        
+
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
-            
+
             Graphics2D g2d = (Graphics2D)g;
-            
+
             int imageWidth = eqImage.getWidth(this);
             int imageHeight = eqImage.getHeight(this);
 
             int imageX = (WIDTH - imageWidth) / 2;
             int imageY = (HEIGHT - imageHeight) / 2;
-            
+
             renderingHintsForText(g2d);
-            
+
             AlphaComposite ac = AlphaComposite.getInstance(
                                             AlphaComposite.SRC_OVER, alpha);
             g2d.setComposite(ac);
-            
+
             g2d.drawImage(background, 0, 0, WIDTH, HEIGHT, this);
-            
+
             g2d.drawImage(eqImage, imageX - 1, imageY - 1, this);
-            
+
             if (stageOneComplete) {
 
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                         RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-                    RenderingHints.VALUE_RENDER_QUALITY);                 
+                    RenderingHints.VALUE_RENDER_QUALITY);
                 g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
                     RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
@@ -505,7 +505,7 @@ public class AboutPanel extends BaseDialog
                 FontMetrics fm = g.getFontMetrics(versionFont);
                 int textLength = fm.stringWidth(versionText);
                 imageX = imageX + ((imageWidth - textLength) / 2);
-                
+
                 g2d.setClip(imageX, 100, textLength, HEIGHT - 100);
                 g2d.drawString(versionText, imageX, HEIGHT - bottomOffsetVersion);
             }
@@ -513,15 +513,15 @@ public class AboutPanel extends BaseDialog
             g2d.setClip(0, 0, WIDTH, HEIGHT);
             g2d.setColor(Color.DARK_GRAY);
             g2d.drawRect(0, 0, WIDTH - 1, HEIGHT - 1);
-            
+
         }
-        
+
         public Dimension getPreferredSize() {
             return new Dimension(WIDTH, HEIGHT);
         }
-        
+
     } // class AboutImagePanel
-    
+
 }
 
 
