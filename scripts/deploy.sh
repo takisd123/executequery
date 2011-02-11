@@ -13,7 +13,7 @@ print_progress() {
 }
 
 JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk1.5.0_18
-#JAVA_HOME=/home/takisd/softdev/java/jdk1.5.0_18
+#JAVA_HOME=/home/takisd/softdev/java/jdk5
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
@@ -106,6 +106,12 @@ echo "copying new release notes to the Java installer and source dirs"
 cp $RELEASE_NOTES $INSTALLER_TEMPLATE/conf
 cp $RELEASE_NOTES $ANT_DIR/template-build/src/README.txt
 cp $RELEASE_NOTES $ANT_BUILDS/src/README.txt
+
+echo
+echo "copying third-party libraries to template build dir"
+rm -f $ANT_DIR/template-build/src/lib/*
+cp $EQ_DIR/lib/* $ANT_DIR/template-build/src/lib
+
 
 # start ant
 cd $ANT_BUILDS
@@ -224,6 +230,9 @@ print_progress
 cp $INSTALLER_TEMPLATE/conf/gnu.license $INSTALLER_TEMPLATE/build/org/executequery/installer/conf
 print_progress
 cp $INSTALLER_TEMPLATE/conf/release.notes $INSTALLER_TEMPLATE/build/org/executequery/installer/conf
+print_progress
+cp $INSTALLER_TEMPLATE/conf/release.notes $EQ_DEPLOY_DIR
+mv $EQ_DEPLOY_DIR/release.notes $EQ_DEPLOY_DIR/release-notes.txt
 print_progress
 
 # modify the installer properties for this release
