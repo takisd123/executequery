@@ -41,7 +41,7 @@ public class ApplicationLog {
     private Logger logger;
 
     private Appender appender;
-    
+
     private final String loggerName;
     private final int maxBackupIndex;
     private final String pattern;
@@ -49,8 +49,8 @@ public class ApplicationLog {
     private final String maxFileSize;
     private final String logFilePath;
 
-    public ApplicationLog(String logFilePath, String loggerName, 
-            String pattern, String level, 
+    public ApplicationLog(String logFilePath, String loggerName,
+            String pattern, String level,
             int maxBackupIndex, String maxFileSize) {
 
         this.logFilePath = logFilePath;
@@ -70,7 +70,7 @@ public class ApplicationLog {
 
         logger().addAppender(appender);
     }
-    
+
     /**
      * Returns whether the log level is set to DEBUG.
      */
@@ -78,7 +78,7 @@ public class ApplicationLog {
 
         return logger().isDebugEnabled();
     }
-    
+
     /**
      * Sets the logger level to that specified.
      *
@@ -88,7 +88,7 @@ public class ApplicationLog {
     public void setLevel(String level) {
 
         if (level == null) {
-        
+
             return;
         }
 
@@ -103,7 +103,7 @@ public class ApplicationLog {
      * @param throwable the throwable.
      */
     public void info(Object message, Throwable throwable) {
-        
+
         logger().info(message, throwable);
     }
 
@@ -129,7 +129,7 @@ public class ApplicationLog {
 
             logger().debug(message);
         }
-        
+
     }
 
     /**
@@ -139,9 +139,9 @@ public class ApplicationLog {
      * @param throwable the throwable.
      */
     public void debug(Object message, Throwable throwable) {
-        
+
         if (logger().isDebugEnabled()) {
-        
+
             logger().debug(message, throwable);
         }
 
@@ -154,7 +154,7 @@ public class ApplicationLog {
      * @param e the throwable.
      */
     public void error(Object message, Throwable e) {
-        
+
         logger().error(message, e);
     }
 
@@ -164,7 +164,7 @@ public class ApplicationLog {
      * @param message  the log message.
      */
     public void info(Object message) {
-        
+
         logger().info(message);
     }
 
@@ -195,17 +195,17 @@ public class ApplicationLog {
      *         <code>false</code> otherwise
      */
     public boolean isLogEnabled() {
-        
+
         return logger != null;
     }
 
     private void init() {
-        
+
         init(level);
     }
 
     private void init(String level) {
-        
+
         logger = Logger.getLogger(loggerName);
 
         if (level != null) {
@@ -213,17 +213,18 @@ public class ApplicationLog {
             setLevel(level);
 
         } else { // default to INFO
-        
+
             setLevel("INFO");
         }
 
+        Logger.getRootLogger().addAppender(appender());
         logger.addAppender(appender());
         initOthers();
     }
 
     private void initOthers() {
-        
-        String[] others = {"org.apache.commons.httpclient", "httpclient.wire.header"};
+
+        String[] others = {"org.apache.commons.httpclient", "httpclient.wire"};
 
         for (String name : others) {
 
@@ -231,15 +232,15 @@ public class ApplicationLog {
             logger.addAppender(appender());
             logger.setLevel(Level.ERROR);
         }
-        
+
     }
-    
+
     private Appender appender() {
 
         if (appender == null) {
-        
+
             try {
-            
+
                 RollingFileAppender fileAppender = new RollingFileAppender(
                         new PatternLayout(pattern), logFilePath, true);
 
@@ -247,61 +248,61 @@ public class ApplicationLog {
                 fileAppender.setMaxFileSize(maxFileSize);
 
                 appender = fileAppender;
-                
+
             } catch (IOException e) {
 
                 e.printStackTrace();
             }
-    
+
         }
- 
+
         return appender;
     }
-    
+
     private Logger logger() {
-        
+
         if (!isLogEnabled()) {
-            
+
             init();
         }
-        
+
         return logger;
     }
-    
+
     private Level levelFromString(String level) {
-        
+
         if (level.equals("INFO")) {
 
             return Level.INFO;
 
         } else if (level.equals("WARN")) {
-        
+
             return Level.WARN;
 
         } else if (level.equals("DEBUG")) {
 
             return Level.DEBUG;
-            
+
         } else if (level.equals("ERROR")) {
-            
+
             return Level.ERROR;
-            
+
         } else if (level.equals("FATAL")) {
-            
+
             return Level.FATAL;
-            
+
         } else if (level.equals("TRACE")) {
-            
+
             return Level.TRACE;
-            
+
         } else if (level.equals("ALL")) {
-            
+
             return Level.ALL;
         }
 
         return Level.INFO; // default
     }
-    
+
 }
 
 

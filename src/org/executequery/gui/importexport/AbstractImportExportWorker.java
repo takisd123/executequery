@@ -65,10 +65,10 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
     /** The progress dialog for this process */
     protected ImportExportProgressPanel progress;
-    
+
     /** the parent process controller */
     protected ImportExportProcess parent;
-    
+
     /** the start time of this process */
     protected long startTime;
 
@@ -77,10 +77,10 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
     /** The database connection for data retrieval */
     protected Connection conn;
-    
+
     /** The database statement */
     protected Statement stmnt;
-    
+
     /** The database prepared statement */
     protected PreparedStatement prepStmnt;
 
@@ -95,37 +95,37 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
     /** the total records processed */
     private int recordCount;
-    
+
     /** the total records processed successfully */
     private int recordCountProcessed;
-    
+
     /** the number of errors */
     private int errorCount;
-    
+
     /** the table count */
     protected int tableCount;
-    
+
     /** the process result */
     private String result;
-    
+
     /** temp output logging buffer */
     protected StringBuilder outputBuffer;
-    
+
     /** Indicates a bound column value */
     protected final String VARIABLE_BOUND = "variableBound";
-    
+
     /** Indicates a not bound column value */
     protected final String VARIABLE_NOT_BOUND = "variableNotBound";
 
     /** Indicates an ignored column */
     protected final String IGNORED_COLUMN = "ignoredColumn";
-    
+
     /** Indicates an included column */
     protected final String INCLUDED_COLUMN = "includedColumn";
-    
+
     /** string resource loader */
     private StringBundle bundle;
-    
+
     public AbstractImportExportWorker(ImportExportProcess parent,
                                       ImportExportProgressPanel progress) {
         this.parent = parent;
@@ -133,7 +133,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         bundle = SystemResources.loadBundle(AbstractImportExportWorker.class);
         outputBuffer = new StringBuilder();
     }
-    
+
     /**
      * Resets the progress panel.
      */
@@ -141,7 +141,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         progress.reset();
     }
 
-    protected int getTableRecordCount(String tableName) 
+    protected int getTableRecordCount(String tableName)
         throws DataSourceException,
                SQLException {
 
@@ -153,7 +153,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             if (!MiscUtils.isNull(schema)) {
                 query.append(schema).append('.');
             }
-            
+
             String _tableName = tableName;
             if (_tableName.contains(" ")) {
                 _tableName = "\"" + tableName + "\"";
@@ -175,41 +175,41 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             if (stmnt != null) {
                 stmnt.close();
             }
-        }            
+        }
     }
-    
+
     /**
      * Returns a data result set for the specified table.
      *
      * @param table - the database table
      */
-    protected ResultSet getResultSet(String table) 
+    protected ResultSet getResultSet(String table)
         throws DataSourceException,
                SQLException {
         return getResultSet(table, null);
     }
-    
+
     /**
-     * Returns a data result set for the specified table and the 
-     * specified columns. If the columns collection is null, 
-     * this will assume a multi-table export and expor all the 
+     * Returns a data result set for the specified table and the
+     * specified columns. If the columns collection is null,
+     * this will assume a multi-table export and expor all the
      * database columns of the table.
      *
      * @param table - the database table name
      * @param columns - the columns to select from the table
      */
-    protected ResultSet getResultSet(String table, Vector<?> columns) 
+    protected ResultSet getResultSet(String table, Vector<?> columns)
         throws DataSourceException,
                SQLException {
-        
+
         // check the columns and retrieve if null
         if (columns == null) {
             columns = getColumns(table);
         }
-        
+
         // build the SQL statement
         StringBuilder query = new StringBuilder("SELECT ");
-        
+
         int columnCount = columns.size();
         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
             query.append(formatColumnName(columns.get(i).toString()));
@@ -218,7 +218,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             }
         }
         query.append(" FROM ");
-        
+
         String schema = parent.getSchemaName();
         if (!MiscUtils.isNull(schema)) {
             query.append(schema).append('.');
@@ -230,17 +230,17 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                 stmnt.close();
             } catch (SQLException e) {}
         }
-        
+
         conn = getConnection();
         stmnt = conn.createStatement();
-        
+
         System.out.println(query);
-        
+
         return stmnt.executeQuery(query.toString());
     }
-    
+
     private String formatColumnName(String columnName) {
-        
+
         if (columnName.contains(" ")) {
 
             return "\"" + columnName + "\"";
@@ -248,22 +248,22 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
         return columnName;
     }
-    
+
     /**
      * Prepares the statement for an import process.
      *
      * @param table - the database table name
      * @param columns - the columns to select from the table
      */
-    protected void prepareStatement(String table, Vector<?> columns) 
+    protected void prepareStatement(String table, Vector<?> columns)
         throws DataSourceException,
                SQLException {
-        
+
         // check the columns and retrieve if null
         if (columns == null) {
             columns = getColumns(table);
         }
-        
+
         String schema = parent.getSchemaName();
         StringBuffer query = new StringBuffer();
         query.append("INSERT INTO ");
@@ -273,7 +273,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         }
         query.append(table);
         query.append(" (");
-        
+
         // add the column names to the query
         int columnCount = columns.size();
         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
@@ -292,7 +292,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             }
         }
         query.append(")");
-        
+
         // make sure it was closed from a possible previous run
         if (prepStmnt != null) {
             try {
@@ -304,14 +304,14 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         conn.setAutoCommit(false);
         prepStmnt = conn.prepareStatement(query.toString());
     }
-    
+
     /**
      * Returns the columns to be exported for the specified table.
-     * 
+     *
      * @param table - the table to be dumped
      */
     @SuppressWarnings("unchecked")
-    protected Vector<ColumnData> getColumns(String table) 
+    protected Vector<ColumnData> getColumns(String table)
         throws SQLException {
         Vector<ColumnData> columns = parent.getSelectedColumns();
         if (columns == null) {
@@ -332,7 +332,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         }
         return columns;
     }
-    
+
     /**
      * Returns the connection to be used with this process.
      *
@@ -344,7 +344,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         }
         return conn;
     }
-    
+
     /**
      * Sets the specified value in the specified position for the
      * specified java.sql.Type within the prepared statement.
@@ -355,14 +355,15 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      * @param trim - whether to trim the whitespace from the value
      * @param df - the DataFormat object for date values
      */
-    protected void setValue(String value, int index, 
-                            int sqlType, boolean trim, DateFormat df) 
+    protected void setValue(String value, int index,
+                            int sqlType, boolean trim, DateFormat df)
         throws Exception {
-        
+
         if (value == null) {
+
             prepStmnt.setNull(index, sqlType);
-        }
-        else {
+
+        } else {
 
             switch (sqlType) {
 
@@ -419,7 +420,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                 case Types.TIMESTAMP:
                 case Types.TIME:
                     // if the date format is null, insert as a char value
-                    if (df != null) { 
+                    if (df != null) {
                         java.util.Date j_datetime = df.parse(value);
                         prepStmnt.setDate(index,
                               new java.sql.Date(j_datetime.getTime()));
@@ -429,29 +430,29 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                             prepStmnt.setObject(index,value,sqlType);
                             /*
                             if (sqlType == Types.TIMESTAMP) {
-                                prepStmnt.setTimestamp(index, 
+                                prepStmnt.setTimestamp(index,
                                         java.sql.Timestamp.valueOf(value));
                             }
                             else if (sqlType == Types.TIME) {
-                                prepStmnt.setTime(index, 
+                                prepStmnt.setTime(index,
                                         java.sql.Time.valueOf(value));
                             }
                             else {
-                                prepStmnt.setDate(index, 
+                                prepStmnt.setDate(index,
                                         java.sql.Date.valueOf(value));
                             }
                              */
                         }
                         // want a more useful message here than what will likely
-                        // be returned due to internal driver code on formatting 
-                        // a SQL date value from string 
+                        // be returned due to internal driver code on formatting
+                        // a SQL date value from string
                         // (ie. could be parsing error, number format etc...)
                         catch (Exception e) {
                             throw new IllegalArgumentException(
                                     "[ " + MiscUtils.getExceptionName(e) + " ] " +
                                     getBundle().getString("AbstractImportExportWorker.dateConversionError"));
                         }
-                            
+
                     }
                     break;
 
@@ -468,15 +469,15 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             }
         }
     }
-    
-    /** 
+
+    /**
      * Displays an error dialog with the specified message.
      */
     protected void displayErrorDialog(String message) {
         GUIUtilities.displayErrorMessage(message);
     }
 
-    /** 
+    /**
      * Displays an input dialog to enter the date format mask.
      *
      * @return the mask entered
@@ -484,11 +485,11 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     protected String displayDateFormatDialog() {
         return GUIUtilities.displayInputMessage(
                 getBundle().getString(
-                    "AbstractImportExportWorker.dateFormatDialogTitle"), 
+                    "AbstractImportExportWorker.dateFormatDialogTitle"),
                 getBundle().getString(
                     "AbstractImportExportWorker.dateFormatDialog"));
     }
-    
+
     /**
      * Verifies the date format where applicable.
      *
@@ -497,12 +498,12 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     protected String verifyDate() {
 
         String format = displayDateFormatDialog();
-        
+
         if (format == null || format.length() == 0) {
-            
+
             int yesNo = GUIUtilities.displayConfirmDialog(
                     getBundle().getString("AsbtractImportExportWorker.cancelProcessConfirm"));
-            
+
             if (yesNo == JOptionPane.YES_OPTION) {
                 cancelTransfer();
                 return null;
@@ -510,10 +511,10 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             else {
                 format = displayDateFormatDialog();
             }
-            
+
         }
-        
-        return format;        
+
+        return format;
     }
 
     /**
@@ -575,7 +576,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     protected void setIndeterminateProgress(boolean indeterminate) {
         progress.setIndeterminate(indeterminate);
     }
-    
+
     /**
      * Sets the maximum value for the progess bar.
      *
@@ -584,8 +585,8 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     protected void setProgressBarMaximum(int value) {
         progress.setMaximum(value);
     }
-    
-    /** 
+
+    /**
      * Sets the progress bar's position during the process.
      *
      * @param the new process status
@@ -599,12 +600,12 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      */
     protected void releaseResources(DatabaseConnection dc) {
         try {
-            
+
             if (stmnt != null) {
                 stmnt.close();
                 stmnt = null;
             }
-            
+
             if (prepStmnt != null) {
                 prepStmnt.close();
                 prepStmnt = null;
@@ -616,10 +617,10 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                 conn = null;
             }
 
-        } 
+        }
         catch (DataSourceException e) {
             System.err.println(
-                    "Exception releasing resources at: " + e.getMessage());            
+                    "Exception releasing resources at: " + e.getMessage());
         }
         catch (SQLException e) {
             System.err.println(
@@ -634,7 +635,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         outputBuffer.append("\n[ ");
         outputBuffer.append(MiscUtils.getExceptionName(e));
         outputBuffer.append(" ] ");
-        
+
         if (e instanceof DataSourceException) {
             outputBuffer.append(e.getMessage());
             outputBuffer.append(((DataSourceException)e).getExtendedMessage());
@@ -643,7 +644,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             outputBuffer.append(e.getMessage());
             SQLException _e = (SQLException)e;
             outputBuffer.append(getBundle().getString(
-                    "AbstractImportExportWorker.errorCode", 
+                    "AbstractImportExportWorker.errorCode",
                     String.valueOf(_e.getErrorCode())));
 
             String state = _e.getSQLState();
@@ -654,12 +655,15 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
         }
         else {
-            outputBuffer.append(e.getMessage());
+            String exceptionMessage = e.getMessage();
+            if (StringUtils.isNotBlank(exceptionMessage)) {
+                outputBuffer.append(exceptionMessage);
+            }
         }
 
         appendProgressErrorText(outputBuffer);
     }
-    
+
     /**
      * Appends the final process results to the output pane.
      */
@@ -689,41 +693,41 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         sb.append(errorCount);
 
         appendProgressText(sb.toString());
-        
+
         // log the output to file
         GUIUtils.startWorker(new Runnable() {
             public void run() {
                 logOutputToFile();
             }
         });
-        
+
     }
-    
+
     /**
      * Returns the controlling parent process object.
      */
     protected ImportExportProcess getParent() {
         return parent;
     }
-    
-    /** 
-     * Cancels the current data transfer process. 
+
+    /**
+     * Cancels the current data transfer process.
      */
     public abstract void cancelTransfer();
-    
+
     /**
      * Indicates a data transfer process has completed
      * and clean-up can be performed.
      */
     public abstract void finished();
-    
+
     /**
      * Logs the start time of this process.
      */
     protected void start() {
         startTime = System.currentTimeMillis();
     }
-    
+
     /**
      * Logs the finish time of this process.
      */
@@ -731,7 +735,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         finishTime = System.currentTimeMillis();
         progress.setStopButtonEnabled(false);
     }
-    
+
     /**
      * Logs the contents of the output pane to file.
      */
@@ -740,7 +744,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         try {
             String logHeader = null;
             String path = logFileDirectory();
-            
+
             int transferType = parent.getTransferType();
             if (transferType == ImportExportProcess.EXPORT) {
                 logHeader = "[ Data Export Process - ";
@@ -762,7 +766,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             writer = new PrintWriter(new FileWriter(path, true), true);
             writer.println(sb.toString());
             sb = null;
-        } 
+        }
         catch (IOException io) {}
         finally {
             if (writer != null) {
@@ -771,13 +775,13 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             writer = null;
         }
     }
-    
+
     private String logFileDirectory() {
-        
+
         return ((LogRepository)RepositoryCache.load(
                 LogRepository.REPOSITORY_ID)).getLogFileDirectory();
     }
-    
+
     /**
      * Returns the start time of the import/export process.
      *
@@ -786,7 +790,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     public long getStartTime() {
         return startTime;
     }
-    
+
     /**
      * Returns the start time of the import/export process.
      *
@@ -875,22 +879,22 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     }
 
     protected final DateFormat createDateFormatter(String pattern) {
-        
+
         if (StringUtils.isNotBlank(pattern)) {
-            
+
             return new SimpleDateFormat(getDateFormatPattern());
         }
 
-        return new SimpleDateFormat();            
+        return new SimpleDateFormat();
     }
-    
+
     protected final String getDateFormatPattern() {
-        
+
         return getParent().getDateFormat();
     }
-    
+
     protected final boolean parseDateValues() {
-        
+
         return getParent().parseDateValues();
     }
 
@@ -898,21 +902,21 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     private static final String ORACLE = "ORACLE";
 
     protected boolean isOracle() throws SQLException {
-        
+
         if (databaseProductName == null) {
-            
+
             DatabaseMetaData metaData = conn.getMetaData();
             databaseProductName = metaData.getDatabaseProductName().toUpperCase();
-        
+
         } else {
-        
+
             return databaseProductName.contains(ORACLE);
         }
-        
+
         return false;
     }
 
-    
+
 }
 
 

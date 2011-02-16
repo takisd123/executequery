@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.sql.BatchUpdateException;
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -40,8 +39,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
-import org.executequery.datasource.ConnectionDataSource;
-import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.browser.ColumnData;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.util.SwingWorker;
@@ -54,15 +51,15 @@ import org.underworldlabs.util.MiscUtils;
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
 public class ImportDelimitedWorker extends AbstractImportExportWorker {
-    
+
     /** The <code>SwingWorker</code> object for this process */
     private SwingWorker worker;
-    
+
     /** Whether we are halting on errors */
     private boolean haltOnError;
-    
-    /** 
-     * Constructs a new instance with the specified parent object - an 
+
+    /**
+     * Constructs a new instance with the specified parent object - an
      * instance of <code>ImportExportDelimitedPanel</code>.
      *
      * @param the parent for this process
@@ -72,7 +69,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         super(parent, importingDialog);
         transferData();
     }
-    
+
     private void transferData() {
         reset();
         worker = new SwingWorker() {
@@ -90,25 +87,25 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         };
         worker.start();
     }
-    
+
     private Object doWork() {
-        
+
         // the process result
         String processResult = null;
-        
+
         // are we halting on any error
         int onError = getParent().getOnError();
         haltOnError = (onError == ImportExportProcess.STOP_TRANSFER);
-        
+
         boolean isBatch = getParent().runAsBatchProcess();
 
         appendProgressText("Beginning import from delimited file process...");
-        appendProgressText("Using connection: " + 
+        appendProgressText("Using connection: " +
                 getParent().getDatabaseConnection().getName());
 
         // ---------------------------------------
         // table specific counters
-        
+
         // the table statement result
         int tableInsertCount = 0;
 
@@ -132,17 +129,17 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
         // the error count
         int errorCount = 0;
-        
+
         // the current line number
         int lineNumber = 0;
-        
+
         int rollbackSize = getParent().getRollbackSize();
         int rollbackCount = 0;
-        
+
         FileReader fileReader = null;
         BufferedReader reader = null;
         DateFormat dateFormat = null;
-        
+
         try {
             // retrieve the import files
             Vector files = getParent().getDataFileVector();
@@ -150,19 +147,19 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
             // whether to trim whitespace
             boolean trimWhitespace = getParent().trimWhitespace();
-            
+
             // whether this table has a date/time field
             boolean hasDate = false;
 
             // whether we are parsing date formats
             boolean parsingDates = parseDateValues();
-            
+
             // column names are first row
             boolean hasColumnNames = getParent().includeColumnNames();
 
             // currently bound variables in the prepared statement
             Map<ColumnData,String> boundVariables = null;
-            
+
             // ignored indexes of columns from the file
             List<Integer> ignoredIndexes = null;
 
@@ -178,14 +175,14 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
             // whether the data format failed (switch structure)
             boolean failed = false;
-            
+
             // define the delimiter
             String delim = getParent().getDelimiter();
 
             // ---------------------------
             // --- initialise counters ---
             // ---------------------------
-            
+
             // the table's column count
             int columnCount = -1;
 
@@ -200,37 +197,37 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
             // the import file size
             long fileSize = -1;
-            
+
             // set the date format
-            
+
             if (parseDateValues()) {
 
                 try {
-                
+
                     dateFormat = createDateFormatter();
-                    
+
                 } catch (IllegalArgumentException e) {
-                    
+
                     errorCount++;
                     outputExceptionError("Error applying date mask", e);
 
-                    return FAILED;                    
+                    return FAILED;
                 }
-                
+
             }
-            
+
             // record the start time
             start();
 
             // setup the regex matcher for delims
-            
+
             // ----------------------------------------------------------------
             // below was the original pattern from oreilly book.
-            // discovered issues when parsing values with quotes 
+            // discovered issues when parsing values with quotes
             // in them - not only around them.
             /*
-            String regex = 
-                    "(?:^|\\" + 
+            String regex =
+                    "(?:^|\\" +
                     delim +
                     ") (?: \" ( (?> [^\"]*+ ) (?> \"\" [^\"]*+ )*+ ) \" | ( [^\"\\" +
                     delim + "]*+ ) )";
@@ -242,13 +239,13 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
             // modified above to regex below
             // added the look-ahead after the close quote
             // and removed the quote from the last regex pattern
-            
+
             String escapedDelim = escapeDelim(delim);
 
-            String regex = 
-                    "(?:^|" + 
+            String regex =
+                    "(?:^|" +
                     escapedDelim +
-                    ") (?: \" ( (?> [^\"]*+ ) (?> \"\" [^\"]*+ )*+ ) \"(?=" + 
+                    ") (?: \" ( (?> [^\"]*+ ) (?> \"\" [^\"]*+ )*+ ) \"(?=" +
                     escapedDelim +
                     "?) | ( [^" +
                     escapedDelim + "]*+ ) )";
@@ -260,14 +257,14 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
             //
             // fixed oreilly one - not running this one
             // ----------------------------------------------------------------
-            
+
             Matcher matcher = Pattern.compile(regex, Pattern.COMMENTS).matcher("");
             Matcher qMatcher = Pattern.compile("\"\"", Pattern.COMMENTS).matcher("");
-            
+
             // ----------------------------------------
             // --- begin looping through the tables ---
             // ----------------------------------------
-            
+
             // ensure the connection has auto-commit to false
             conn = getConnection();
             conn.setAutoCommit(false);
@@ -277,7 +274,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
             // the number of columns actually available in the file
             int filesColumnCount = 0;
-            
+
             for (int i = 0; i < fileCount; i++) {
 
                 lineNumber = 0;
@@ -293,12 +290,12 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                 }
 
                 tableCount++;
-                
+
                 DataTransferObject dto = (DataTransferObject)files.elementAt(i);
 
                 // initialise the file object
                 File inputFile = new File(dto.getFileName());
-                
+
                 outputBuffer.append("---------------------------\nTable: ");
                 outputBuffer.append(dto.getTableName());
                 outputBuffer.append("\nImport File: ");
@@ -322,17 +319,17 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                 // the ignored column count
                 int ignoredCount = 0;
-                
+
                 // clear the file columns cache
                 fileImportedColumns.clear();
-                
+
                 // if the first row in the file has the column
                 // names compare these with the columns selected
                 if (hasColumnNames) {
 
                     // init the bound vars cache with the selected columns
                     boundVariables.clear();
-                    
+
                     for (int k = 0; k < columnCount; k++) {
 
                         boundVariables.put(columns.get(k), VARIABLE_NOT_BOUND);
@@ -345,19 +342,19 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     if (_columns != null && _columns.length > 0) {
 
                         filesColumnCount = _columns.length;
-                        
+
                         // --------------------------------------
                         // first determine if we have any columns in the
                         // input file that were not selected for import
 
                         // reset the ignored columns
                         ignoredIndexes.clear();
-                        
+
                         // set up another list to re-add the columns in
                         // the order in which they appear in the file.
                         // all other columns will be added to the end
                         Vector<ColumnData> temp = new Vector<ColumnData>(columnCount);
-                        
+
                         ColumnData cd = null;
                         int ignoredIndex = -1;
                         for (int j = 0; j < _columns.length; j++) {
@@ -376,7 +373,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                                 }
 
                             }
-                            
+
                             if (ignoredIndex != -1) {
 
                                 ignoredIndexes.add(Integer.valueOf(ignoredIndex));
@@ -384,7 +381,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                         }
                         ignoredCount = ignoredIndexes.size();
-                        
+
                         // if we didn't find any columns at all, show warning
                         if (temp.isEmpty()) {
 
@@ -406,7 +403,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             }
 
                         } else {
-                          
+
                             // add any other selected columns to the
                             // end of the temp list with the columns
                             // available in the file
@@ -421,7 +418,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                                         break;
                                     }
                                 }
-                                
+
                                 if (addColumn) {
                                     temp.add(cd);
                                 }
@@ -429,7 +426,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             }
                             columns = temp; // note: size should not have changed
                         }
-                       
+
                     }
                 }
                 // otherwise just populate the columns in the file
@@ -456,7 +453,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                 // prepare the statement
                 prepareStatement(dto.getTableName(), columns);
-                
+
                 if (parsingDates && dateFormat == null) {
 
                     // check for a date data type
@@ -478,7 +475,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                         }
                     }
-                    
+
                     if (hasDate && dateFormat == null) {
 
                         String pattern = verifyDate();
@@ -494,9 +491,9 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     }
 
                 }
-                
+
                 rowLength = 0;
-                
+
                 while ((row = reader.readLine()) != null) {
 
                     insertLine = true;
@@ -507,15 +504,15 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     if (Thread.interrupted()) {
 
                         fileReader.close();
-                        printTableResult(tableRowCount, 
+                        printTableResult(tableRowCount,
                                 tableCommitCount, dto.getTableName());
-                        
+
                         setProgressStatus(100);
                         throw new InterruptedException();
                     }
 
                     currentRowLength = row.length();
-                    
+
                     if (currentRowLength == 0) {
 
                         outputBuffer.append("Line ");
@@ -535,7 +532,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             throw new InterruptedException();
                         }
                     }
-                    
+
                     rowLength += currentRowLength;
                     if (progressCheck < rowLength) {
 
@@ -560,7 +557,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             String first = matcher.group(2);
 
                             if (first != null) {
-                                
+
                                 value = first;
 
                             } else {
@@ -570,7 +567,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             }
 
                             index = matcher.end();
-                            
+
                             // check if its an ignored column
                             if (ignoredCount > 0) {
 
@@ -581,13 +578,13 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                                 }
 
                             }
-                            
+
                         } else {
-                            
+
                             // not enough delims check
-                            if (j < (filesColumnCount - 1) 
+                            if (j < (filesColumnCount - 1)
                                     && index > (currentRowLength - 1)) {
-                                
+
                                 outputBuffer.append("Insufficient number of column ");
                                 outputBuffer.append("values provided at line ");
                                 outputBuffer.append(lineNumber);
@@ -603,18 +600,18 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                                     insertLine = false;
                                     break;
-                                
+
                                 } else {
-                                
+
                                     throw new InterruptedException();
                                 }
 
                             } else {
-                              
+
                                 // check if we're on a delim the matcher didn't pick up
-                                
+
                                 int delimLength = delim.length();
-                                
+
                                 if (row.substring(index, index + delimLength).equals(delim)) {
 
                                     // increment index
@@ -636,35 +633,39 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                         if (value != null && value.trim().length() == 0) {
                             value = null;
                         }
-                        
+
                         try {
-                            ColumnData cd = columns.get(j - loopIgnoredCount);                        
-                            setValue(value, 
+                            ColumnData cd = columns.get(j - loopIgnoredCount);
+                            setValue(value,
                                      getIndexOfColumn(columns, cd) + 1,
                                      cd.getSQLType(),
                                      trimWhitespace,
                                      dateFormat);
-                            
+
                             if (hasColumnNames) {
                                 boundVariables.put(cd, VARIABLE_BOUND);
                             }
 
                         } catch (ParseException e) {
-                       
+
                             errorCount++;
                             failed = true;
-                            outputBuffer.append("Error parsing date value on line ");
+                            outputBuffer.append("Error parsing date value - ");
+                            outputBuffer.append(value);
+                            outputBuffer.append(" - on line ");
                             outputBuffer.append(lineNumber);
                             outputBuffer.append(" at position ");
                             outputBuffer.append(j);
                             outputExceptionError(null, e);
                             break;
-                       
+
                         } catch (NumberFormatException e) {
-                            
+
                             errorCount++;
                             failed = true;
-                            outputBuffer.append("Error parsing value on line ");
+                            outputBuffer.append("Error parsing value - ");
+                            outputBuffer.append(value);
+                            outputBuffer.append(" - on line ");
                             outputBuffer.append(lineNumber);
                             outputBuffer.append(" at position ");
                             outputBuffer.append(j);
@@ -673,31 +674,31 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                         }
 
                     }
-                    
+
                     if (!insertLine) {
 
                         prepStmnt.clearParameters();
                         continue;
                     }
-                    
+
                     if (failed && haltOnError) {
 
                         processResult = FAILED;
                         break;
                     }
-                    
+
                     // execute the statement
                     try {
 
                         // check all variables are bound if we used
                         // the column names from the first row
                         if (hasColumnNames) {
-                            
+
                             index = 0;
                             // check all variables are bound - insert NULL otherwise
-                            
+
                             for (Map.Entry<ColumnData, String> entry : boundVariables.entrySet()) {
-                            
+
                                 ColumnData cd = entry.getKey();
 
                                 if (VARIABLE_NOT_BOUND.equals(entry.getValue())) {
@@ -709,7 +710,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             }
 
                         }
-                        
+
                         if (isBatch) {
                             prepStmnt.addBatch();
                         } else {
@@ -769,11 +770,11 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                 // ----------------------------
                 // file/table has ended here
-                
+
                 if (isBatch) {
-                    
+
                     int[] batchResult = null;
-                    
+
                     try {
                         batchResult = getBatchResult(prepStmnt.executeBatch());
                         int result = batchResult[0];
@@ -792,46 +793,46 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
                         outputBuffer.append("An error occured during the batch process: ");
                         outputBuffer.append(e.getMessage());
-                        
+
                         SQLException _e = e.getNextException();
                         while (_e != null) {
                             outputBuffer.append("\nNext Exception: ");
                             outputBuffer.append(_e.getMessage());
                             _e = _e.getNextException();
                         }
-                        
+
                         outputBuffer.append("\n\nRecords processed to the point ");
                         outputBuffer.append("where this error occurred: ");
                         outputBuffer.append(updateCounts.length);
                         appendProgressErrorText(outputBuffer);
                         processResult = FAILED;
                     }
-                    
-                    //  Log.debug("commitCount: " + commitCount + 
+
+                    //  Log.debug("commitCount: " + commitCount +
                     //                      " batch: " + batchResult[0]);
-                    
+
                     if (tableRowCount != tableInsertCount) {
                         conn.rollback();
-                        
+
                         if (onError == ImportExportProcess.STOP_TRANSFER) {
                             getParent().cancelTransfer();
                             processResult = FAILED;
                             throw new InterruptedException();
                         }
-                        
+
                     }
-                    
+
                 }
 
                 boolean doCommit = true;
-                if (failed && !isBatch && 
+                if (failed && !isBatch &&
                         rollbackSize != ImportExportProcess.COMMIT_END_OF_ALL_FILES) {
-                    
+
                     int yesNo = GUIUtilities.displayYesNoDialog(
                                     "The process completed with errors.\n" +
                                     "Do you wish to commit the last block?",
                                     "Confirm commit");
-                    
+
                     doCommit = (yesNo == JOptionPane.YES_OPTION);
                 }
 
@@ -847,23 +848,23 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                         conn.rollback();
                     }
                 }
-                
+
                 reader.close();
                 fileReader.close();
                 prepStmnt.close();
-                
+
                 // update the progress display
-                printTableResult(tableRowCount, 
+                printTableResult(tableRowCount,
                         tableInsertCount, dto.getTableName());
                 setProgressStatus(100);
-                
+
                 // reset the checks
                 hasDate = false;
                 failed = false;
-                
+
             }
-            
-            // commit the last remaining block or where 
+
+            // commit the last remaining block or where
             // set to commit at the end of all files
             if (rollbackSize != ImportExportProcess.COMMIT_END_OF_FILE) {
                 setProgressStatus(100);
@@ -875,20 +876,20 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                                     "Confirm commit");
                     doCommit = (yesNo == JOptionPane.YES_OPTION);
                 }
-                
+
                 if (doCommit) {
                     conn.commit();
                     totalInsertCount += commitCount;
                 } else {
                     conn.rollback();
                 }
-                
+
             }
 
             processResult = SUCCESS;
         }
         catch (InterruptedException e) {
-            
+
             if (processResult != FAILED) {
                 processResult = CANCELLED;
             }
@@ -916,7 +917,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                             "Do you wish to commit the last transaction block?",
                             "Confirm commit");
             boolean doCommit = (yesNo == JOptionPane.YES_OPTION);
-            
+
             try {
                 if (doCommit) {
                     conn.commit();
@@ -934,33 +935,33 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         finally {
             finish();
             releaseResources(getParent().getDatabaseConnection());
-            
+
             if (totalRecordCount == 0 || errorCount > 0) {
                 processResult = FAILED;
             }
-            
+
             setTableCount(tableCount);
             setRecordCount(totalRecordCount);
             setRecordCountProcessed(totalInsertCount);
             setErrorCount(errorCount);
-            
+
             setProgressStatus(100);
             GUIUtilities.scheduleGC();
         }
 
-        return processResult;        
+        return processResult;
     }
-    
+
     private String escapeDelim(String delim) {
 
         String escape = "\\";
-        
+
         StringBuilder sb = new StringBuilder();
         for (char i : delim.toCharArray()) {
-            
+
             sb.append(escape).append(i);
         }
-        
+
         return sb.toString();
     }
 
@@ -978,7 +979,7 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         }
         return false;
     }
-    
+
     private int getIndexOfColumn(Vector<ColumnData> columns, ColumnData cd) {
         for (int i = 0, n = columns.size(); i < n; i++) {
             if (columns.get(i) == cd) {
@@ -987,12 +988,12 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         }
         return -1;
     }
-    
+
     /**
      * Prints the table specific execution results to the output buffer.
      */
-    private void printTableResult(int tableRowCount, 
-                                  int tableInsertCount, 
+    private void printTableResult(int tableRowCount,
+                                  int tableInsertCount,
                                   String tableName) {
         // update the progress display
         outputBuffer.append("Records processed: ");
@@ -1004,25 +1005,25 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
         appendProgressText(outputBuffer);
     }
 
-    
+
     private int[] getBatchResult(int[] updateCount) throws SQLException {
         int insert = 0;
         int success = 0;
         int errors = 0;
-        
+
         // annoying as becoming a little db specific,
         // but Oracle returns -2 on a successful batch
         // execution using prepared statement (-3 on error)
 
         if (isOracle()) {
-        
+
             success = -2;
 
         } else {
-            
+
             success = 1;
         }
-        
+
         for (int i = 0; i < updateCount.length; i++) {
             if (updateCount[i] == success) {
                 insert++;
@@ -1030,23 +1031,23 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                 errors++;
             }
         }
-        
+
         int[] result = {insert, errors};
         return result;
     }
-    
+
     /**
-     * Cancels the current in-process transfer. 
+     * Cancels the current in-process transfer.
      */
     public void cancelTransfer() {
         worker.interrupt();
         getParent().cancelTransfer();
     }
-    
-    /** 
-     * Indicates that the process has completed. 
+
+    /**
+     * Indicates that the process has completed.
      */
     public void finished() {}
-    
+
 }
 
