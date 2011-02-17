@@ -54,9 +54,10 @@ import org.underworldlabs.util.SystemProperties;
 public class ApplicationLauncher {
 
     public void startup() {
-        
+
         try {
 
+            aaFonts();
             applySystemProperties();
 
             boolean dirsCreated = SystemResources.createUserHomeDirSettings();
@@ -77,7 +78,7 @@ public class ApplicationLauncher {
             }
 
             advanceSplash(splash);
-            
+
             // set the version number to display on the splash panel
             System.setProperty("executequery.major.version",
                     stringApplicationProperty("eq.major.version"));
@@ -94,7 +95,7 @@ public class ApplicationLauncher {
 
             applyKeyboardFocusManager();
 
-            
+
             if (hasLocaleSettings()) {
 
                 setSystemLocaleProperties();
@@ -105,13 +106,13 @@ public class ApplicationLauncher {
 
                     Log.debug("User locale settings not available - resetting");
                 }
-                
+
                 storeSystemLocaleProperties();
 
             }
 
             advanceSplash(splash);
-            
+
             // set the look and feel
             LookAndFeelLoader lookAndFeelLoader = new LookAndFeelLoader();
 
@@ -122,27 +123,27 @@ public class ApplicationLauncher {
                     booleanUserProperty("decorate.frame.look"));
 
             advanceSplash(splash);
-            
+
             // initialise the custom text UI
             CustomTextAreaUI.initialize();
             CustomTextPaneUI.initialize();
-            
+
             GUIUtilities.startLogger();
 
             advanceSplash(splash);
-            
+
             // initialise the frame
             final ExecuteQueryFrame frame =  createFrame();
 
             GUIUtilities.initDesktop(frame);
-            
+
             // initialise the actions from actions.xml
             ActionBuilder.build(GUIUtilities.getActionMap(),
                     GUIUtilities.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW),
                     Constants.ACTION_CONF_PATH);
 
             advanceSplash(splash);
-            
+
             // build the tool bar
             GUIUtilities.createToolBar();
 
@@ -150,16 +151,16 @@ public class ApplicationLauncher {
             frame.setJMenuBar(menuBar);
 
             advanceSplash(splash);
-                        
-            boolean openConnection = 
+
+            boolean openConnection =
                 booleanUserProperty("startup.connection.connect");
 
             advanceSplash(splash);
-            
+
             printVersionInfo();
-            
+
             advanceSplash(splash);
-            
+
             frame.position();
 
             // set proxy server settings
@@ -172,7 +173,7 @@ public class ApplicationLauncher {
             GUIUtilities.initPanels();
 
             advanceSplash(splash);
-            
+
             // kill the splash panel
             if (splash != null) {
 
@@ -195,7 +196,7 @@ public class ApplicationLauncher {
             }
 
             doCheckForUpdate();
-            
+
         } catch(Exception e) {
 
             e.printStackTrace();
@@ -210,10 +211,10 @@ public class ApplicationLauncher {
         File settingsHome = new File(settings.getUserSettingsBaseHome());
 
         if (settingsHome.exists()) {
-            
+
             return booleanUserProperty("startup.display.splash");
         }
-        
+
         return true;
     }
 
@@ -223,8 +224,8 @@ public class ApplicationLauncher {
         String country = userProperties().getStringProperty("locale.country");
         String timezone = userProperties().getStringProperty("locale.timezone");
 
-        return !(MiscUtils.isNull(language)) 
-                && !(MiscUtils.isNull(country)) 
+        return !(MiscUtils.isNull(language))
+                && !(MiscUtils.isNull(country))
                 && !(MiscUtils.isNull(timezone));
     }
 
@@ -239,10 +240,10 @@ public class ApplicationLauncher {
         } catch (ApplicationException e) {
 
             if (Log.isDebugEnabled()) {
-                
+
                 Log.debug("Error loading look and feel", e);
             }
-            
+
             loadDefaultLookAndFeel(loader);
         }
 
@@ -256,11 +257,11 @@ public class ApplicationLauncher {
 
             userProperties().setIntProperty(
                     "startup.display.lookandfeel", Constants.EQ_DEFAULT_LAF);
-            
+
         } catch (ApplicationException e) {
 
             if (Log.isDebugEnabled()) {
-                
+
                 Log.debug("Error loading default EQ look and feel", e);
             }
 
@@ -268,7 +269,7 @@ public class ApplicationLauncher {
         }
 
     }
-    
+
     private void applySystemProperties() {
 
         String settingDirName = stringApplicationProperty("eq.user.home.dir");
@@ -278,6 +279,12 @@ public class ApplicationLauncher {
         String build = stringApplicationProperty("eq.build");
         System.setProperty("executequery.build", build);
         ApplicationContext.getInstance().setBuild(build);
+    }
+
+    private void aaFonts() {
+
+        System.setProperty("awt.useSystemAAFontSettings", "on");
+        System.setProperty("swing.aatext", "true");
     }
 
     private void applyKeyboardFocusManager() {
@@ -312,10 +319,10 @@ public class ApplicationLauncher {
 
         Log.info("Using Java version " +
                 System.getProperty("java.version"));
-        Log.info("Execute Query version: " + 
+        Log.info("Execute Query version: " +
                 System.getProperty("executequery.minor.version") +
                 "-" + System.getProperty("executequery.build"));
-        Log.info("Operating System: " + 
+        Log.info("Operating System: " +
                 System.getProperty("os.name") +
                 " [ " + System.getProperty("os.version") + " ]");
 
@@ -325,7 +332,7 @@ public class ApplicationLauncher {
     private void advanceSplash(SplashPanel splash) {
 
         if (splash != null) {
-        
+
             splash.advance();
         }
 
@@ -349,23 +356,23 @@ public class ApplicationLauncher {
 
     private String versionString() {
 
-        return "version " + System.getProperty("executequery.minor.version"); 
+        return "version " + System.getProperty("executequery.minor.version");
     }
 
     private Color progressBarColour() {
 
         return new Color(120, 120, 180);
     }
-    
+
     public ExecuteQueryFrame createFrame() {
-        
+
         return new ExecuteQueryFrame();
     }
 
     private void doCheckForUpdate() {
 
         boolean doUpdateCheck = booleanUserProperty("startup.version.check");
-        
+
         if (doUpdateCheck) {
 
             new CheckForUpdateNotifier().startupCheck();
@@ -374,30 +381,30 @@ public class ApplicationLauncher {
     }
 
     private boolean booleanUserProperty(String key) {
-        
+
         return userProperties().getBooleanProperty(key);
     }
 
     private String stringUserProperty(String key) {
-        
+
         return userProperties().getProperty(key);
     }
 
     private String stringApplicationProperty(String key) {
-        
+
         return applicationProperties().getProperty(key);
     }
 
     private UserProperties userProperties() {
-        
+
         return UserProperties.getInstance();
     }
 
     private ApplicationProperties applicationProperties() {
-        
+
         return ApplicationProperties.getInstance();
     }
- 
+
     private void openStartupConnection() {
 
         final String name = stringUserProperty("startup.connection.name");
@@ -418,7 +425,7 @@ public class ApplicationLauncher {
     private DatabaseConnectionRepository databaseConnectionRepository() {
 
         return (DatabaseConnectionRepository)RepositoryCache.load(
-                    DatabaseConnectionRepository.REPOSITORY_ID);        
+                    DatabaseConnectionRepository.REPOSITORY_ID);
     }
 
     private void openConnection(DatabaseConnection dc) {
@@ -427,13 +434,13 @@ public class ApplicationLauncher {
 
             return;
         }
-        
+
         if (!dc.isPasswordStored()) {
 
             PasswordDialog pd = new PasswordDialog(null,
                     "Password",
                     "Enter password");
-            
+
             int result = pd.getResult();
             String pwd = pd.getValue();
 
@@ -444,16 +451,16 @@ public class ApplicationLauncher {
 
                 return;
             }
-            
+
             dc.setPassword(pwd);
         }
-        
+
         try {
 
             ConnectionMediator.getInstance().connect(dc);
 
         } catch (DataSourceException e) {
-          
+
             GUIUtilities.displayErrorMessage(e.getMessage());
         }
 

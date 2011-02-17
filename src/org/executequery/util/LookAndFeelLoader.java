@@ -85,7 +85,7 @@ public final class LookAndFeelLoader {
         } catch (UnsupportedLookAndFeelException e) {
 
             throw new ApplicationException(e);
-            
+
         } catch (ClassNotFoundException e) {
 
             throw new ApplicationException(e);
@@ -99,11 +99,6 @@ public final class LookAndFeelLoader {
             throw new ApplicationException(e);
         }
 
-        // http://mindprod.com/jgloss/antialiasing.html
-        
-        System.setProperty("awt.useSystemAAFontSettings", "on");
-//        System.setProperty("awt.useSystemAAFontSettings", "lcd");
-        
         return lookAndFeel;
     }
 
@@ -139,9 +134,9 @@ public final class LookAndFeelLoader {
             UIManager.setLookAndFeel(new MetalLookAndFeel());
 
         } catch (UnsupportedLookAndFeelException e) {
-            
+
             throw new ApplicationException(e);
-        } 
+        }
 
     }
 
@@ -151,9 +146,9 @@ public final class LookAndFeelLoader {
     private void loadDefaultLookAndFeelTheme() {
 
         try {
-            
+
             MetalLookAndFeel.setCurrentTheme(new ExecuteQueryTheme());
-            
+
             UIManager.setLookAndFeel(new MetalLookAndFeel());
 
         } catch (UnsupportedLookAndFeelException e) {
@@ -163,13 +158,13 @@ public final class LookAndFeelLoader {
 
     }
 
-    /** 
+    /**
      * Sets the default 'Execute Query' look and feel.
      */
     public void loadDefaultLookAndFeel() {
 
         try {
-            org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel metal = 
+            org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel metal =
                     new org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel();
 
             UIManager.setLookAndFeel(metal);
@@ -180,7 +175,7 @@ public final class LookAndFeelLoader {
         }
 
     }
-    
+
     public void loadNativeLookAndFeel() {
         try {
 
@@ -192,7 +187,7 @@ public final class LookAndFeelLoader {
             throw new ApplicationException(e);
         }
     }
-    
+
     public void loadCrossPlatformLookAndFeel() {
         try {
 
@@ -207,7 +202,7 @@ public final class LookAndFeelLoader {
 
     public void decorateDialogsAndFrames(boolean decorateDialogs, boolean decorateFrames) {
 
-        JDialog.setDefaultLookAndFeelDecorated(decorateDialogs);        
+        JDialog.setDefaultLookAndFeelDecorated(decorateDialogs);
         JFrame.setDefaultLookAndFeelDecorated(decorateFrames);
     }
 
