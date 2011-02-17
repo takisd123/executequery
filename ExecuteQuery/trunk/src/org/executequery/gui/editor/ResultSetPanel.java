@@ -41,33 +41,33 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
 public class ResultSetPanel extends JPanel {
-    
+
     /** the table display */
     private ResultSetTable table;
-    
+
     /** the table model */
     private ResultSetTableModel model;
-    
+
     /** the table scroll pane */
     private JScrollPane scroller;
-    
+
     /** the table sorter */
     private TableSorter sorter;
-    
+
     /** whether to display the row header */
     private boolean showRowHeader;
-    
+
     /** the associated meta data panel */
     private ResultSetMetaDataPanel metaDataPanel;
-    
+
     /** table pop-up menu */
     private ResultSetTablePopupMenu popupMenu;
-    
+
     /** the row number header */
     private RowNumberHeader rowNumberHeader;
 
     private final ResultSetTableContainer resultSetTableContainer;
-    
+
     /** Creates a new instance of ResultSetPanel */
     public ResultSetPanel(ResultSetTableContainer resultSetTableContainer) {
 
@@ -77,17 +77,17 @@ public class ResultSetPanel extends JPanel {
 
         init();
     }
-    
+
     private void init() {
 
         Color bg = SystemProperties.getColourProperty("user",
                 "editor.results.background.colour");
         table = new ResultSetTable();
-        
-        // this is set for the bg of any remaining 
+
+        // this is set for the bg of any remaining
         // header region outside the cells themselves
         table.getTableHeader().setBackground(bg);
-        
+
         scroller = new JScrollPane(table,
                                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                    JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -97,7 +97,7 @@ public class ResultSetPanel extends JPanel {
 
         add(scroller, BorderLayout.CENTER);
         setTableProperties();
-        
+
         table.addMouseListener(new ResultSetTablePopupMenu(table, resultSetTableContainer));
     }
 
@@ -127,7 +127,7 @@ public class ResultSetPanel extends JPanel {
             model.interrupt();
         }
     }
-    
+
     public int setResultSet(ResultSetTableModel model, boolean showRowNumber) {
 
         this.model = model;
@@ -135,7 +135,7 @@ public class ResultSetPanel extends JPanel {
         int rowCount = model.getRowCount();
         if (rowCount > 0) {
 
-            buildTable(rowCount);            
+            buildTable(rowCount);
         }
 
         return rowCount;
@@ -147,19 +147,19 @@ public class ResultSetPanel extends JPanel {
      * @param the row count
      */
     private void buildTable(int rowCount) {
-        
+
         boolean sorterWasNull = false;
-        
+
         if (sorter == null) {
 
             sorterWasNull = true;
             sorter = new TableSorter(model);
 
         } else {
-          
+
             sorter.setTableModel(model);
         }
-        
+
         if (table == null) {
 
             table = new ResultSetTable(sorter);
@@ -169,13 +169,13 @@ public class ResultSetPanel extends JPanel {
 
             table.setModel(sorter);
         }
-        
+
         // reset the table header
         if (sorterWasNull) {
-        
+
             sorter.setTableHeader(table.getTableHeader());
         }
-        
+
         table.resetTableColumnWidth();
 
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -190,9 +190,9 @@ public class ResultSetPanel extends JPanel {
     protected void tableDataChanged() {
         if (showRowHeader) {
             addRowNumberHeader();
-        }        
+        }
     }
-    
+
     private void addRowNumberHeader() {
 
         if (rowNumberHeader == null) {
@@ -205,7 +205,7 @@ public class ResultSetPanel extends JPanel {
         }
         scroller.setRowHeaderView(rowNumberHeader);
     }
-    
+
     /**
      * Sets the user defined (preferences) table properties.
      */
@@ -221,7 +221,7 @@ public class ResultSetPanel extends JPanel {
 
         } else {
 
-            if (rowNumberHeader != null) { 
+            if (rowNumberHeader != null) {
 
                 // remove the row header if its there now
                 scroller.setRowHeaderView(null);
@@ -229,7 +229,7 @@ public class ResultSetPanel extends JPanel {
 
             rowNumberHeader = null;
         }
-        
+
         if (model != null) {
 
             model.setHoldMetaData(SystemProperties.getBooleanProperty(
@@ -247,7 +247,7 @@ public class ResultSetPanel extends JPanel {
 
         return model.getRowCount();
     }
-    
+
     /**
      * Indicates whether the model has retained the ResultSetMetaData.
      *
@@ -255,7 +255,7 @@ public class ResultSetPanel extends JPanel {
      */
     public boolean hasResultSetMetaData() {
         if (model == null) {
-            return false;        
+            return false;
         } else {
             return model.hasResultSetMetaData();
         }
@@ -292,9 +292,9 @@ public class ResultSetPanel extends JPanel {
         return metaDataPanel;
     }
 
-    /** 
+    /**
      * Returns the result set table model.
-     * 
+     *
      * @return the table model
      */
     public ResultSetTableModel getResultSetTableModel() {
