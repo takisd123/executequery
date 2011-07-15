@@ -81,6 +81,7 @@ import org.executequery.listeners.DefaultUserPreferenceListener;
 import org.executequery.listeners.HttpProxyUserPreferenceListener;
 import org.executequery.listeners.KeyboardShortcutsUserPreferenceListener;
 import org.executequery.listeners.LogUserPreferenceListener;
+import org.executequery.listeners.OpenEditorConnectionListener;
 import org.executequery.listeners.PreferencesChangesListener;
 import org.executequery.listeners.ToolBarVisibilityListener;
 import org.executequery.log.Log;
@@ -198,8 +199,8 @@ public final class GUIUtilities {
         // init the layout properties
         layoutProperties = new UserLayoutProperties();
 
-
         EventMediator.registerListener(new DefaultConnectionListener());
+        EventMediator.registerListener(new OpenEditorConnectionListener());
         EventMediator.registerListener(new ConnectionRepositoryChangeListener());
         EventMediator.registerListener(new DefaultUserPreferenceListener());
         EventMediator.registerListener(new RecentFileIOListener());
@@ -208,7 +209,6 @@ public final class GUIUtilities {
         EventMediator.registerListener(new HttpProxyUserPreferenceListener());
         EventMediator.registerListener(new LogUserPreferenceListener(errLogger, outLogger));
         EventMediator.registerListener(new KeyboardShortcutsUserPreferenceListener());
-
     }
 
     public static void initPanels() {
@@ -219,12 +219,16 @@ public final class GUIUtilities {
         // setup the default docked tabs and their positions
         setDockedTabViews(false);
 
-        // add a query editor
-        addCentralPane(QueryEditor.TITLE,
-                       QueryEditor.FRAME_ICON,
-                       new QueryEditor(),
-                       null,
-                       false);
+        if (SystemProperties.getBooleanProperty("user", "startup.connection.connect")
+             && !SystemProperties.getBooleanProperty("user", "editor.open.on-connect")) {
+        
+            // add a query editor
+            addCentralPane(QueryEditor.TITLE,
+                           QueryEditor.FRAME_ICON,
+                           new QueryEditor(),
+                           null,
+                           false);
+        }
 
         // divider locations
         setDividerLocations();
