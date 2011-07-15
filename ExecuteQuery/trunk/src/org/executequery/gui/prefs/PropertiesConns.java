@@ -39,17 +39,7 @@ import org.underworldlabs.util.SystemProperties;
 public class PropertiesConns extends PropertiesBasePanel {
     
     private SimplePreferencesPanel preferencesPanel;
-    /*
-    private JCheckBox reuseCheck;
-    private JCheckBox startupCheck;
-    private JComboBox useCountCombo;
-    private JComboBox schemeCombo;
-    private JComboBox numberCombo;
-    private JComboBox connStartCombo;
-    private JLabel useCountLabel;
-    
-    private Vector dca;
-    */
+
     public PropertiesConns() {
         try {
             init();
@@ -132,9 +122,7 @@ public class PropertiesConns extends PropertiesBasePanel {
     private String[] connectionNames() {
 
         List<DatabaseConnection> connections = connections();
-        
         String[] connectionNames = new String[connections.size()];
-        
         for (int i = 0; i < connectionNames.length; i++) {
 
             connectionNames[i] = connections.get(i).getName();

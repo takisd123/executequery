@@ -404,6 +404,7 @@ public class QueryEditor extends DefaultTabView
     /** the last divider location before a output hide */
     private int lastDividerLocation;
     private QueryEditorAutoCompletePopupProvider queryEditorAutoCompletePopupProvider;
+    private DatabaseConnection selectConnection;
 
     /**
      * Toggles the output pane visible or not.
@@ -1056,7 +1057,16 @@ public class QueryEditor extends DefaultTabView
     }
 
     public void setSelectedConnection(DatabaseConnection databaseConnection) {
-        connectionsCombo.setSelectedItem(databaseConnection);
+        
+        if (connectionsCombo.contains(databaseConnection)) {
+            
+            connectionsCombo.getModel().setSelectedItem(databaseConnection);
+
+        } else {
+            
+            selectConnection = databaseConnection;
+        }
+        
     }
 
     public void preExecute() {
@@ -1389,7 +1399,16 @@ public class QueryEditor extends DefaultTabView
      * @param the encapsulating event
      */
     public void connected(ConnectionEvent connectionEvent) {
+        
         connectionsCombo.addElement(connectionEvent.getDatabaseConnection());
+        
+        DatabaseConnection databaseConnection = connectionEvent.getDatabaseConnection();
+        if (databaseConnection == selectConnection) {
+
+            connectionsCombo.getModel().setSelectedItem(databaseConnection);
+            selectConnection = null;
+        }
+
     }
 
     /**

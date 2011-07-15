@@ -54,6 +54,11 @@ final class OpenConnectionsComboBox extends JComboBox {
 
     }
 
+    public boolean contains(DatabaseConnection databaseConnection) {
+        
+        return connectionsModel.contains(databaseConnection);
+    }
+    
     public void processKeyEvent(KeyEvent e) {
 
         super.processKeyEvent(e);
@@ -86,9 +91,3 @@ final class OpenConnectionsComboBox extends JComboBox {
     }
     
 }
-
-
-
-
-
-

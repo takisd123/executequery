@@ -166,6 +166,14 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     "Output log file path",
                     stringUserProperty(key)));
 
+        key = "editor.open.on-connect";
+        list.add(new UserPreference(
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Open a new editor for new open connection",
+                Boolean.valueOf(SystemProperties.getBooleanProperty("user", key))));
+
+        
         list.add(new UserPreference(
                     UserPreference.CATEGORY_TYPE,
                     null,
