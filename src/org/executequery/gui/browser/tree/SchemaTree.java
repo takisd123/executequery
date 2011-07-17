@@ -65,18 +65,18 @@ public class SchemaTree extends DynamicTree
                                    MouseListener {
 
     private boolean mouseDragging;
-    
+
     private ConnectionsTreePanel panel;
-    
+
     /** Creates a new instance of SchemaTree */
     public SchemaTree(DefaultMutableTreeNode root, ConnectionsTreePanel panel) {
 
         super(root);
         this.panel = panel;
-        
+
         addTreeSelectionListener(this);
         addTreeExpansionListener(this);
-        
+
 //        addMouseListener(this);
 //        addMouseMotionListener(this);
 
@@ -88,19 +88,19 @@ public class SchemaTree extends DynamicTree
         setShowsRootHandles(true);
 
         setDragEnabled(true);
-        
+
         TransferHandler handler = new NodeMoveTransferHandler();
         setTransferHandler(handler);
         //setDropTarget(new TreeDropTarget(handler));
 
         //setEditable(true);
-        
+
         setRowHeight(20);
-        
+
     }
 
     private Map<String, Icon> loadIcons() {
-        
+
         Map<String, Icon> icons = new HashMap<String, Icon>();
         for (int i = 0; i < BrowserConstants.NODE_ICONS.length; i++) {
             icons.put(BrowserConstants.NODE_ICONS[i],
@@ -112,18 +112,18 @@ public class SchemaTree extends DynamicTree
 
         return icons;
     }
-    
+
     private int lastPointY = 0;
 
     protected void _paintComponent(Graphics g) {
-        
+
         super.paintComponent(g);
 
         if (mouseDragging) {
 
             Point mousePoint = getMousePosition();
             if (mousePoint != null) {
-                TreePath draggingPath = 
+                TreePath draggingPath =
                         getClosestPathForLocation(mousePoint.x, mousePoint.y);
 
                 if (draggingPath != null &&
@@ -133,7 +133,7 @@ public class SchemaTree extends DynamicTree
 
                     int xOffsetLeft = -5;
                     int xOffsetRight = -35;
-                    
+
                     g.setColor(Color.RED);
                     g.fillRect(r.x + xOffsetLeft, r.y, getWidth() + xOffsetRight, 2);
 
@@ -146,24 +146,24 @@ public class SchemaTree extends DynamicTree
                             row = row + 1;
                         } else {
 
-                            row = row - 1;                            
+                            row = row - 1;
                         }
-                        
+
                         scrollRowToVisible(row);
 
                         lastPointY = mousePoint.y;
                     }
 
                 }
-                
+
             }
-   
+
         }
-        
+
     }
-    
+
     private boolean canMoveNode() {
-        
+
         return (getLastPathComponent() instanceof DatabaseHostNode);
     }
 
@@ -171,7 +171,7 @@ public class SchemaTree extends DynamicTree
      * Removes the tree listener.
      */
     public void removeTreeSelectionListener() {
-        
+
         removeTreeSelectionListener(this);
     }
 
@@ -186,7 +186,7 @@ public class SchemaTree extends DynamicTree
     // --------------------------------------------------
     // ------- TreeSelectionListener implementation
     // --------------------------------------------------
-    
+
     /**
      * Called whenever the value of the selection changes.
      * This will store the current path selection.
@@ -194,29 +194,29 @@ public class SchemaTree extends DynamicTree
      * @param the event that characterizes the change
      */
     public void valueChanged(TreeSelectionEvent e) {
-        
+
         if (mouseDragging) {
-         
+
             return;
         }
 
         panel.pathChanged(e.getOldLeadSelectionPath(), e.getPath());
     }
-    
+
 
     // --------------------------------------------------
     // ------- TreeExpansionListener implementation
     // --------------------------------------------------
 
     public void treeExpanded(TreeExpansionEvent e) {
-        
+
         panel.pathExpanded(e.getPath());
     }
-    
+
     public void treeCollapsed(TreeExpansionEvent e) {
-        
+
         // do nothing
-    } 
+    }
 
     // --------------------------------------------------
 
@@ -226,9 +226,9 @@ public class SchemaTree extends DynamicTree
     }
 
     private MutableTreeNode movingNode;
-    
+
     public void mouseDragged(MouseEvent e) {
-        
+
         /*
         if (!mouseDragging  && canMoveNode()) {
 
@@ -242,17 +242,17 @@ public class SchemaTree extends DynamicTree
 
         repaint(); */
     }
-    
+
     public void mouseReleased(MouseEvent e) { /*
 
         if (mouseDragging) {
 
             try {
-            
+
                 repaint();
                 setCursor(Cursor.getDefaultCursor());
 
-                TreePath draggingPath = 
+                TreePath draggingPath =
                         getClosestPathForLocation(e.getX(), e.getY());
 
                 if (draggingPath != null &&
@@ -269,7 +269,7 @@ public class SchemaTree extends DynamicTree
                     int newRow = getRowForPath(draggingPath);
 
                     System.out.println("prev: "+previousRow + " new: "+newRow);
-                    
+
                     if (newRow != previousRow) {
 
                         if (newRow < previousRow) {
@@ -283,14 +283,14 @@ public class SchemaTree extends DynamicTree
                         System.out.println("row count: "+ getRowCount());
 
                         String state = getExpansionState(this, 0);
-                        
+
                         rootNode.remove(movingNode);
-                        
+
                         rootNode.insert(movingNode, newRow);
 
                         restoreExpanstionState(this, 0, state);
-                        
-                        
+
+
                         panel.nodeMoved((DatabaseHostNode)movingNode, newRow);
                         nodeStructureChanged(rootNode);
 
@@ -303,12 +303,12 @@ public class SchemaTree extends DynamicTree
                 mouseDragging = false;
             }
 
-            
-        }            
+
+        }
 */
     }
 
-    
+
     public boolean isDescendant(TreePath path1, TreePath path2){
         int count1 = path1.getPathCount();
         int count2 = path2.getPathCount();
@@ -320,7 +320,7 @@ public class SchemaTree extends DynamicTree
         }
         return path1.equals(path2);
     }
- 
+
     public String getExpansionState(JTree tree, int row){
         TreePath rowPath = tree.getPathForRow(row);
         StringBuilder buf = new StringBuilder();
@@ -330,7 +330,7 @@ public class SchemaTree extends DynamicTree
             TreePath path = tree.getPathForRow(i);
 
             if (i == row || isDescendant(path, rowPath)) {
-                
+
                 if (tree.isExpanded(path)) {
 
                     buf.append(',');
@@ -345,11 +345,11 @@ public class SchemaTree extends DynamicTree
         }
         return buf.toString();
     }
- 
+
     public void restoreExpanstionState(JTree tree, int row, String expansionState) {
-        
+
         //System.out.println("state: " + expansionState);
-        
+
         StringTokenizer stok = new StringTokenizer(expansionState, ",");
 
         while(stok.hasMoreTokens()) {
@@ -359,12 +359,12 @@ public class SchemaTree extends DynamicTree
         }
     }
 
-    
+
     private Enumeration<TreePath> saveExpansionState() {
 
         return getExpandedDescendants(new TreePath(getModel().getRoot()));
     }
-    
+
     private void loadExpansionState(Enumeration enumeration) {
 
         if (enumeration != null) {
@@ -394,7 +394,7 @@ public class TreeUtil{
         }
         return path1.equals(path2);
     }
- 
+
     public static String getExpansionState(JTree tree, int row){
         TreePath rowPath = tree.getPathForRow(row);
         StringBuilder buf = new StringBuilder();
@@ -411,7 +411,7 @@ public class TreeUtil{
         }
         return buf.toString();
     }
- 
+
     public static void restoreExpanstionState(JTree tree, int row, String expansionState){
         StringTokenizer stok = new StringTokenizer(expansionState, ",");
         while(stok.hasMoreTokens()){
@@ -422,36 +422,36 @@ public class TreeUtil{
 }
 
 
- */                        
+ */
 
     public void mouseMoved(MouseEvent e) {
-        
+
         // do nothing
     }
 
     public void mouseEntered(MouseEvent e) {
-        
+
         // do nothing
     }
 
     public void mouseExited(MouseEvent e) {
-        
+
         // do nothing
     }
-    
+
     public void mouseClicked(MouseEvent e) {
 
         // do nothing
     }
-    
+
     public void mousePressed(MouseEvent e) {
 
         //System.out.println("A");
-    
+
         JComponent c = (JComponent)e.getSource();
         TransferHandler handler = c.getTransferHandler();
         handler.exportAsDrag(c, e, TransferHandler.COPY);
-        
+
 // do nothing
     }
 

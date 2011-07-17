@@ -33,38 +33,39 @@ import org.underworldlabs.util.SystemProperties;
 public class OpenEditorConnectionListener implements ConnectionListener {
 
     public void connected(ConnectionEvent connectionEvent) {
-        
+
         if (openEditorOnConnect()) {
-            
+
             QueryEditor queryEditor = null;
             DatabaseConnection databaseConnection = connectionEvent.getDatabaseConnection();
 
             if (isQueryEditorTheCentralPanel()) {
-                
+
                 queryEditor = queryEditor();
-            
+
             } else {
 
                 queryEditor = new QueryEditor();
                 GUIUtilities.addCentralPane(QueryEditor.TITLE,
-                        QueryEditor.FRAME_ICON, 
+                        QueryEditor.FRAME_ICON,
                         queryEditor,
                         null,
                         true);
             }
-            
+
             queryEditor.setSelectedConnection(databaseConnection);
+            queryEditor.focusGained();
         }
     }
 
     private boolean isQueryEditorTheCentralPanel() {
-        
+
         JPanel panel = GUIUtilities.getSelectedCentralPane();
         return (panel instanceof QueryEditor);
     }
 
     private QueryEditor queryEditor() {
-        
+
         return (QueryEditor) GUIUtilities.getSelectedCentralPane();
     }
 
