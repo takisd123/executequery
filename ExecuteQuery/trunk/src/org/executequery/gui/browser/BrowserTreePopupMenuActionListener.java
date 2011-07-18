@@ -117,7 +117,6 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         if (currentSelection != null) {
 
             DatabaseConnection dc = currentSelection.copy();
-
             String name = treePanel.buildConnectionName(
                             currentSelection.getName() + " (Copy") + ")";
             dc.setName(name);

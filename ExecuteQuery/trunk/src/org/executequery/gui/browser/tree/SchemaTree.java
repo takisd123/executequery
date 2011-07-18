@@ -113,6 +113,13 @@ public class SchemaTree extends DynamicTree
         return icons;
     }
 
+    @Override
+    protected void processMouseEvent(MouseEvent e) {
+
+        panel.schemaTreeMouseEvent(e);
+        super.processMouseEvent(e);
+    }
+    
     private int lastPointY = 0;
 
     protected void _paintComponent(Graphics g) {
