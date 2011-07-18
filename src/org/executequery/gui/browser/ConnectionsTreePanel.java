@@ -813,10 +813,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     public void pathChanged(TreePath oldPath, TreePath newPath) {
 
-//        if (oldPath == null || !doubleClickHostToConnect()) {
-
-            doPathChanged(oldPath, newPath);
-//        }
+        /*
+        System.out.println("pathChanged");
+        
+        try {
+        
+            if (oldPath == null || shouldChangeView) {
+    
+            }
+            
+        } finally {
+            
+            shouldChangeView = true;
+        }
+        */
+        doPathChanged(oldPath, newPath);
     }
 
     /**
@@ -1290,6 +1301,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         public void mouseClicked(MouseEvent e) {
 
+//            int clickCount = e.getClickCount();
+//            System.out.println("mouseClicked clicks : " + clickCount);
+            
             if (e.getClickCount() < 2) {
 
                 return;
@@ -1299,6 +1313,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
         public void mousePressed(MouseEvent e) {
+
+//            int clickCount = e.getClickCount();
+//            System.out.println("mousePressed clicks : " + clickCount);
 
             if (e.getClickCount() < 2) {
 
@@ -1320,10 +1337,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
         public void mouseReleased(MouseEvent e) {
+         
             maybeShowPopup(e);
         }
 
         private void maybeShowPopup(MouseEvent e) {
+
             if (e.isPopupTrigger()) {
 
                 BrowserTreePopupMenu popup = getBrowserTreePopupMenu();
@@ -1352,7 +1371,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                     }
 
                     popupMenu.show(e.getComponent(), point.x, point.y);
-
                 }
             }
         }
@@ -1390,7 +1408,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     public void preferencesChanged(UserPreferenceEvent event) {
-
+        
         if (event.getEventType() == UserPreferenceEvent.ALL) {
 
             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
@@ -1403,6 +1421,24 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         }
 
+    }
+
+    private boolean shouldChangeView = true;
+
+    public void schemaTreeMouseEvent(MouseEvent e) {
+
+        /*
+        
+        shouldChangeView = true;
+        int clickCount = e.getClickCount();
+        
+        System.out.println("schemaTreeMouseEvent clicks : " + clickCount);
+        
+        if (clickCount >= 2 && doubleClickHostToConnect()) {
+
+            shouldChangeView = false;
+        }
+        */
     }
 
 }
