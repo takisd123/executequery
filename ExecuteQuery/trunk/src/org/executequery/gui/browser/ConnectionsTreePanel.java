@@ -59,6 +59,7 @@ import org.executequery.gui.browser.tree.SchemaTree;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 import org.underworldlabs.swing.tree.DynamicTree;
 import org.underworldlabs.swing.util.SwingWorker;
@@ -265,7 +266,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void setSelectedConnection(DatabaseConnection dc) {
 
         DefaultMutableTreeNode node = null;
-
         DefaultMutableTreeNode root = tree.getRootNode();
 
         for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
@@ -357,17 +357,31 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             nextIndex = index - 1;
         }
 
-        setSelectedConnection(connections.get(nextIndex));
+        boolean selectRoot = true;
+        if (nextIndex >= 0) {
+
+            selectRoot = false;
+            setSelectedConnection(connections.get(nextIndex));
+        }
 
         // remove the node from the tree
         tree.removeNode(node);
 
         // remove from the connections
         connections.remove(index);
-
+        
         EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(this,
                 ConnectionRepositoryEvent.CONNECTION_MODIFIED, dc));
 
+        if (selectRoot) {
+            GUIUtils.invokeLater(new Runnable() {
+                public void run() {
+                    enableButtons(false, false, false, false);
+                    tree.setSelectionRow(0);
+                }
+            });
+        }
+        
     }
 
     /**
@@ -1423,7 +1437,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     }
 
-    private boolean shouldChangeView = true;
+//    private boolean shouldChangeView = true;
 
     public void schemaTreeMouseEvent(MouseEvent e) {
 

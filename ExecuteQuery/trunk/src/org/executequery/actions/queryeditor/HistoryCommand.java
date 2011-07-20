@@ -49,7 +49,7 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
                     Vector<String> history = 
                         sqlCommandHistoryRepository().getSqlCommandHistory();
 
-                    if (history == null || history.size() == 0) {
+                    if (history == null || history.isEmpty()) {
                         
                         GUIUtilities.displayInformationMessage(
                                 "No SQL command history available");

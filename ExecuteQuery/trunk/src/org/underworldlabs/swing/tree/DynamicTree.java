@@ -340,8 +340,7 @@ public class DynamicTree extends JTree {
 
         scrollPathToVisible(path);
         setSelectionPath(path);
-            //fireValueChanged(new TreeSelectionEvent(this, path, true, null, path));
-
+        //fireValueChanged(new TreeSelectionEvent(this, path, true, null, path));
     }
     
     /**
@@ -447,10 +446,6 @@ public class DynamicTree extends JTree {
         treeModel.removeNodeFromParent(node);
     }
 
+    
+    
 }
-
-
-
-
-
-
