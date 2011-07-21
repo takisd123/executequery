@@ -357,10 +357,10 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             nextIndex = index - 1;
         }
 
-        boolean selectRoot = true;
+        boolean noConnectionsAvailable = true;
         if (nextIndex >= 0) {
 
-            selectRoot = false;
+            noConnectionsAvailable = false;
             setSelectedConnection(connections.get(nextIndex));
         }
 
@@ -373,11 +373,13 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(this,
                 ConnectionRepositoryEvent.CONNECTION_MODIFIED, dc));
 
-        if (selectRoot) {
+        if (noConnectionsAvailable) {
+            GUIUtilities.closeSelectedCentralPane();
             GUIUtils.invokeLater(new Runnable() {
                 public void run() {
                     enableButtons(false, false, false, false);
                     tree.setSelectionRow(0);
+//                    controller.displayRootPanel();
                 }
             });
         }
