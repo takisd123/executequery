@@ -32,8 +32,8 @@ import javax.swing.JPanel;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class FormObjectViewContainer extends JPanel {
-    
-    
+
+
     /** panel map */
     private Map<String,FormObjectView> panels;
 
@@ -42,18 +42,18 @@ public class FormObjectViewContainer extends JPanel {
 
     /** The current panel view */
     protected FormObjectView currentView;
-    
+
     /**
-     * Creates a new instance of FormObjectViewContainer 
+     * Creates a new instance of FormObjectViewContainer
      */
     public FormObjectViewContainer() {
-        super();        
+        super();
         // setup the panel and layout manager and apply
         cardLayout = new CardLayout();
         setLayout(cardLayout);
         panels = new HashMap<String,FormObjectView>();
     }
-    
+
     /**
      * Returns the current panel view object.
      *
@@ -62,7 +62,7 @@ public class FormObjectViewContainer extends JPanel {
     public FormObjectView getCurrentView() {
         return currentView;
     }
-    
+
     /**
      * Sets the current view to the specified panel.
      *
@@ -79,7 +79,7 @@ public class FormObjectViewContainer extends JPanel {
         panel.validate();
         panel.repaint();
     }
-    
+
     /**
      * Adds the specified component to the layout.
      *
@@ -93,7 +93,7 @@ public class FormObjectViewContainer extends JPanel {
             JPanel _panel = (JPanel)panel;
             add(_panel, title);
             cardLayout.addLayoutComponent(_panel, title);
-            
+
             // add to the cache if its not there
             if (!panels.containsKey(title)) {
                 panels.put(title, panel);
@@ -113,7 +113,7 @@ public class FormObjectViewContainer extends JPanel {
     public boolean isEmpty() {
         return panels == null || panels.isEmpty();
     }
-    
+
     /**
      * Returns the panel with the specified name from the layout.
      *
@@ -123,7 +123,7 @@ public class FormObjectViewContainer extends JPanel {
     public FormObjectView getFormObjectView(String name) {
         return panels.get(name);
     }
-    
+
     /**
      * Returns with the panel cache contains the panel
      * with the specified name.
@@ -137,7 +137,7 @@ public class FormObjectViewContainer extends JPanel {
         }
         return panels.containsKey(name);
     }
-    
+
 }
 
 

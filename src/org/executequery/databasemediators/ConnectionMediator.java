@@ -38,52 +38,47 @@ import org.underworldlabs.swing.GUIUtils;
 public final class ConnectionMediator {
 
     private static ConnectionMediator connectionMediator = new ConnectionMediator();
-    
+
     private ConnectionMediator() {}
-    
+
     public static synchronized ConnectionMediator getInstance() {
-        
+
         return connectionMediator;
     }
-    
+
     public void disconnect(DatabaseConnection dc) throws DataSourceException {
 
         ConnectionManager.closeConnection(dc);
-
-        fireConnectionClosed(dc);  
+        fireConnectionClosed(dc);
     }
 
     public boolean connect(DatabaseConnection dc) throws DataSourceException {
 
         DefaultConnectionBuilder builder = new DefaultConnectionBuilder(dc);
-
         builder.connect();
-        
+
         if (builder.isCancelled()) {
 
             return false;
-        } 
+        }
 
         boolean connected = builder.isConnected();
 
         if (!connected) {
 
             DataSourceException exception = builder.getException();
-
             if (exception != null) {
 
                 throw exception;
 
             } else {
 
-                throw new ApplicationException(
-                        "Unknown error establishing connection.");
+                throw new ApplicationException("Unknown error establishing connection.");
             }
 
         }
 
         fireConnectionOpened(dc);
-
         GUIUtils.scheduleGC();
 
         return true;
@@ -91,21 +86,19 @@ public final class ConnectionMediator {
 
     private void fireConnectionOpened(DatabaseConnection dc) {
 
-        fireConnectionEvent(new DefaultConnectionEvent(
-                dc, DefaultConnectionEvent.CONNECTED));
+        fireConnectionEvent(new DefaultConnectionEvent(dc, DefaultConnectionEvent.CONNECTED));
     }
 
     private void fireConnectionClosed(DatabaseConnection dc) {
 
-        fireConnectionEvent(new DefaultConnectionEvent(
-                dc, DefaultConnectionEvent.DISCONNECTED));
+        fireConnectionEvent(new DefaultConnectionEvent(dc, DefaultConnectionEvent.DISCONNECTED));
     }
 
     private void fireConnectionEvent(ConnectionEvent event) {
-        
+
         EventMediator.fireEvent(event);
     }
-    
+
 }
 
 

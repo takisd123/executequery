@@ -50,19 +50,19 @@ import org.underworldlabs.swing.actions.ReflectiveAction;
  * @date     $Date: 2009-04-07 21:02:56 +1000 (Tue, 07 Apr 2009) $
  */
 public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
-    
+
     private ConnectionsTreePanel treePanel;
-    
+
     private StatementToEditorWriter statementWriter;
-    
+
     private DatabaseConnection currentSelection;
-    
+
     private TreePath currentPath;
-    
+
     BrowserTreePopupMenuActionListener(ConnectionsTreePanel treePanel) {
         this.treePanel = treePanel;
     }
-    
+
     protected void postActionPerformed(ActionEvent e) {
         currentSelection = null;
         currentPath = null;
@@ -76,16 +76,16 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
 
         JCheckBoxMenuItem check = (JCheckBoxMenuItem)e.getSource();
 
-        DatabaseHostNode node = 
+        DatabaseHostNode node =
             (DatabaseHostNode)currentPath.getLastPathComponent();
         node.setDefaultCatalogsAndSchemasOnly(check.isSelected());
-        
+
         treePanel.nodeStructureChanged(node);
     }
 
     public void delete(ActionEvent e) {
         if (currentPath != null) {
-            DatabaseHostNode node = 
+            DatabaseHostNode node =
                     (DatabaseHostNode)currentPath.getLastPathComponent();
             treePanel.deleteConnection(node);
         }
@@ -109,7 +109,6 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
 
     public void disconnect(ActionEvent e) {
         treePanel.disconnect(currentSelection);
-        treePanel.setSelectedConnection(currentSelection);
     }
 
     public void duplicate(ActionEvent e) {
@@ -147,13 +146,13 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
     }
 
     public void exportSQL(ActionEvent e) {
-        
+
         NamedObject object = treePanel.getSelectedNamedObject();
-        
+
         if (object != null && (object instanceof DatabaseTable)) {
-            
+
             Action action = ActionBuilder.get("export-sql-command");
-            action.actionPerformed(new ActionEvent(object, e.getID(), e.getActionCommand()));    
+            action.actionPerformed(new ActionEvent(object, e.getID(), e.getActionCommand()));
         }
     }
 
@@ -185,46 +184,46 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         try {
             GUIUtilities.showWaitCursor();
             switch (transferType) {
-            
+
                 case ImportExportProcess.EXPORT_DELIMITED:
                     dialog = new BaseDialog("Export Data", false, false);
                     panel = new ImportExportDelimitedPanel(
-                                    dialog, ImportExportProcess.EXPORT, 
+                                    dialog, ImportExportProcess.EXPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportProcess.IMPORT_DELIMITED:
                     dialog = new BaseDialog("Import Data", false, false);
                     panel = new ImportExportDelimitedPanel(
-                                    dialog, ImportExportProcess.IMPORT, 
+                                    dialog, ImportExportProcess.IMPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportProcess.EXPORT_XML:
                     dialog = new BaseDialog("Export XML", false, false);
                     panel = new ImportExportXMLPanel(
-                                    dialog, ImportExportProcess.EXPORT, 
+                                    dialog, ImportExportProcess.EXPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportProcess.IMPORT_XML:
                     dialog = new BaseDialog("Import XML", false, false);
                     panel = new ImportExportXMLPanel(
-                                    dialog, ImportExportProcess.IMPORT, 
+                                    dialog, ImportExportProcess.IMPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportProcess.EXCEL:
                     dialog = new BaseDialog("Export Excel Spreadsheet", false, false);
                     panel = new ImportExportExcelPanel(
-                                    dialog, ImportExportProcess.EXPORT, 
+                                    dialog, ImportExportProcess.EXPORT,
                                     dc, schemaName, tableName);
                     break;
 
             }
 
             dialog.addDisplayComponent(panel);
-            dialog.display();            
+            dialog.display();
         }
         finally {
             GUIUtilities.showNormalCursor();
@@ -234,18 +233,18 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
     private DatabaseTable getSelectedTable() {
         return (DatabaseTable)treePanel.getSelectedNamedObject();
     }
-    
+
     private StatementToEditorWriter getStatementWriter() {
         if (statementWriter == null) {
             statementWriter = new StatementToEditorWriter();
         }
         return statementWriter;
     }
-    
+
     private void statementToEditor(DatabaseConnection databaseConnection, String statement) {
         getStatementWriter().writeToOpenEditor(databaseConnection, statement);
     }
-    
+
     public void selectStatement(ActionEvent e) {
         statementToEditor(treePanel.getSelectedDatabaseConnection(), getSelectedTable().getSelectSQLText());
     }
@@ -265,18 +264,18 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
             handleException(dse);
         }
     }
-    
+
     private void handleException(Throwable e) {
         treePanel.handleException(e);
     }
-    
+
     protected Object getCurrentPathComponent() {
         if (hasCurrentPath()) {
             return currentPath.getLastPathComponent();
         }
         return null;
     }
-    
+
     protected boolean hasCurrentPath() {
         return (currentPath != null);
     }
@@ -288,7 +287,7 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
     protected DatabaseConnection getCurrentSelection() {
         return currentSelection;
     }
-    
+
     protected void setCurrentSelection(DatabaseConnection currentSelection) {
         this.currentSelection = currentSelection;
     }
