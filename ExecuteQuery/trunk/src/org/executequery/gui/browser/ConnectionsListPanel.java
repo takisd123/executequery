@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.print.Printable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -69,30 +70,30 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
                                   implements MouseListener,
                                              ActionListener,
                                              ConnectionListener {
-    
+
     public static final String NAME = "ConnectionsListPanel";
-    
+
     /** the table display */
     private JTable table;
-    
+
     /** the table model */
     private ConnectionsTableModel model;
-    
+
     /** the browser's control object */
     private BrowserController controller;
 
     /** the pop-up menu */
     private PopMenu popupMenu;
-    
+
     /** Creates a new instance of ConnectionsListPanel */
     public ConnectionsListPanel(BrowserController controller) {
         super();
         this.controller = controller;
         init();
     }
-    
+
     private void init() {
-        
+
         model = new ConnectionsTableModel(connections());
         table = new SortableColumnsTable(model);
         table.setColumnSelectionAllowed(false);
@@ -100,7 +101,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
 
         // add the mouse listener for selection clicks
         table.addMouseListener(this);
-        
+
         TableColumnModel tcm = table.getColumnModel();
         tcm.getColumn(0).setPreferredWidth(30);
         tcm.getColumn(0).setMaxWidth(30);
@@ -108,19 +109,17 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         tcm.getColumn(2).setPreferredWidth(60);
         tcm.getColumn(3).setPreferredWidth(60);
         tcm.getColumn(4).setPreferredWidth(60);
-        //tcm.getColumn(5).setPreferredWidth(60);
-        //tcm.getColumn(5).setMaxWidth(60);
-        
+
         tcm.getColumn(0).setCellRenderer(new ConnectCellRenderer());
-        
+
         // new connection button
         JButton button = WidgetFactory.createButton("New Connection");
         button.addActionListener(this);
-        
+
         JPanel tablePanel = new JPanel(new GridBagLayout());
         tablePanel.add(new JScrollPane(table), getPanelConstraints());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Available Connections"));
-        
+
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridy++;
@@ -148,7 +147,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         panel.add(tablePanel, gbc);
-        
+
         setHeaderText("Database Connections");
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseConnect24.png"));
         setContentPanel(panel);
@@ -156,9 +155,9 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         // register with the event listener
         EventMediator.registerListener(this);
     }
-    
+
     private List<DatabaseConnection> connections() {
-        
+
         return ((DatabaseConnectionRepository)RepositoryCache.load(
                 DatabaseConnectionRepository.REPOSITORY_ID)).findAll();
     }
@@ -167,84 +166,136 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         GUIUtilities.ensureDockedTabVisible(ConnectionsTreePanel.PROPERTY_KEY);
         controller.addNewConnection();
     }
-    
-    /*
-    private void showConnection(DatabaseConnection dc) {
-        GUIUtilities.ensureDockedTabVisible(ConnectionsTreePanel.PROPERTY_KEY);
-        controller.setSelectedConnection(dc);
-    }
-    */
-    
-    /** the selected/hovered connection */
-    private DatabaseConnection databaseConnection;
-    
-    private DatabaseConnection getConnectionAt(Point point) {
+
+    private List<DatabaseConnection> getConnectionsAt(Point point) {
+
         int row = table.rowAtPoint(point);
         if (row == -1) {
+
             return null;
         }
-        return model.getConnectionAt(row);
+
+        boolean selectionsContainPoint = false;
+        int[] selectedRows = table.getSelectedRows();
+        for (int selectedRow : selectedRows) {
+
+            if (selectedRow == row) {
+
+                selectionsContainPoint = true;
+                break;
+            }
+
+        }
+
+        List<DatabaseConnection> selectedConnections = new ArrayList<DatabaseConnection>();
+        if (!selectionsContainPoint) {
+
+            selectedConnections.add(model.getConnectionAt(row));
+
+        } else {
+
+            for (int i = 0; i < selectedRows.length; i++) {
+
+                selectedConnections.add(model.getConnectionAt(selectedRows[i]));
+            }
+
+        }
+
+        return selectedConnections;
     }
-    
+
+    private List<DatabaseConnection> getSelectedConnections() {
+
+        int[] selectedRows = table.getSelectedRows();
+        List<DatabaseConnection> selectedConnections = new ArrayList<DatabaseConnection>();
+        for (int i = 0; i < selectedRows.length; i++) {
+
+            selectedConnections.add(model.getConnectionAt(selectedRows[i]));
+        }
+        return selectedConnections;
+    }
+
+
     // ----------------------------------
     // MouseListener implementation
     // ----------------------------------
-    
-    public void mouseClicked(MouseEvent e) {
-
-        // only interested in double clicks
-        if (e.getClickCount() < 2) {
-            return;
-        } 
-        
-        Point point = new Point(e.getX(), e.getY());
-        DatabaseConnection dc = getConnectionAt(point);
-        if (dc == null) {
-            return;
-        }
-
-        int col = table.columnAtPoint(point);
-        if (col == 0) {
-            controller.connect(dc);
-            return;
-        }
-        
-        // select the connection in the tree
-        if (model.indexOf(dc) < model.getRowCount()) {
-            controller.setSelectedConnection(dc);
-        }
-
-        databaseConnection = null;        
-    }
 
     public void mousePressed(MouseEvent e) {
+
         maybeShowPopup(e);
     }
 
     public void mouseReleased(MouseEvent e) {
+
         maybeShowPopup(e);
     }
 
+    public void mouseClicked(MouseEvent e) {
+
+        // only interested in double clicks
+        if (e.getClickCount() < 2) {
+
+            return;
+        }
+
+        Point point = new Point(e.getX(), e.getY());
+        List<DatabaseConnection> list = getConnectionsAt(point);
+        if (list.isEmpty()) {
+
+            return;
+        }
+
+        DatabaseConnection dc = list.get(0);
+        int col = table.columnAtPoint(point);
+        if (col == 0) {
+
+            controller.connect(dc);
+            return;
+        }
+
+        if (list.size() == 1) {
+
+            // select the connection in the tree
+            if (model.indexOf(dc) < model.getRowCount()) {
+
+                controller.setSelectedConnection(dc);
+            }
+
+        }
+
+    }
+
     private void maybeShowPopup(MouseEvent e) {
+
         if (e.isPopupTrigger()) {
-            Point point = new Point(e.getX(), e.getY());            
-            // get the connection at this point
-            databaseConnection = getConnectionAt(point);
-            if (databaseConnection != null) {
-                if (popupMenu == null) {
-                    popupMenu = new PopMenu();
+
+            Point point = new Point(e.getX(), e.getY());
+
+            // get the connections at this point
+            List<DatabaseConnection> list = getConnectionsAt(point);
+            if (!list.isEmpty()) {
+
+                if (list.size() == 1) {
+
+                    int row = model.indexOf(list.get(0));
+                    table.clearSelection();
+                    table.addRowSelectionInterval(row, row);
                 }
-                // remove the current row selection
-                table.clearSelection();
-                
-                // set the popup row as selected
-                int row = model.indexOf(databaseConnection);
-                table.addRowSelectionInterval(row, row);
-                
-                // enable/disable items
-                popupMenu.setToConnect(!databaseConnection.isConnected());
+
+                popupMenu();
+                popupMenu.setToConnect(list);
                 popupMenu.show(e.getComponent(), point.x, point.y);
             }
+
+        }
+
+    }
+
+    private void popupMenu() {
+
+        if (popupMenu == null) {
+
+            popupMenu = new PopMenu();
         }
 
     }
@@ -252,10 +303,10 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     public void mouseEntered(MouseEvent e) {}
     public void mouseExited(MouseEvent e) {}
 
-    
+
     /**
      * Indicates a connection has been established.
-     * 
+     *
      * @param the encapsulating event
      */
     public void connected(ConnectionEvent connectionEvent) {
@@ -268,7 +319,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
 
     /**
      * Indicates a connection has been closed.
-     * 
+     *
      * @param the encapsulating event
      */
     public void disconnected(ConnectionEvent connectionEvent) {
@@ -282,25 +333,25 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     public boolean canHandleEvent(ApplicationEvent event) {
         return (event instanceof ConnectionEvent);
     }
-    
+
     public String getLayoutName() {
         return NAME;
     }
-    
-    public void refresh() {}    
+
+    public void refresh() {}
     public void cleanup() {}
-    
+
     public Printable getPrintable() {
         return new TablePrinter(table, "Database Connections", false);
     }
 
     /** The table's popup menu function */
     private class PopMenu extends JPopupMenu implements ActionListener {
-        
+
         private JMenuItem connect;
         private JMenuItem disconnect;
         private JMenuItem properties;
-        
+
         public PopMenu() {
             connect = MenuItemFactory.createMenuItem("Connect");
             connect.addActionListener(this);
@@ -317,60 +368,90 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
             add(properties);
         }
 
-        public void setToConnect(boolean canConnect) {
+        public void setToConnect(List<DatabaseConnection> list) {
+
+            boolean canConnect = false;
+            boolean canDisconnect = false;
+            for (DatabaseConnection databaseConnection : list) {
+
+                if (databaseConnection.isConnected()) {
+
+                    canDisconnect = true;
+
+                } else {
+
+                    canConnect = true;
+                }
+
+            }
+
             connect.setEnabled(canConnect);
-            disconnect.setEnabled(!canConnect);
-        }
-        
-        public void actionPerformed(ActionEvent e) {
-            try {
-                Object source = e.getSource();
-                if (source == connect) {
-                    controller.connect(databaseConnection);
-                }
-                else if (source == disconnect) {
-                    controller.disconnect(databaseConnection);
-                }
-                else if (source == properties) {
-                    controller.setSelectedConnection(databaseConnection);
-                }
-            } finally {
-                databaseConnection = null;
+            disconnect.setEnabled(canDisconnect);
+
+            if (list.size() > 1) {
+
+                properties.setEnabled(false);
             }
 
         }
+
+        public void actionPerformed(ActionEvent e) {
+
+            Object source = e.getSource();
+            List<DatabaseConnection> selectedConnections = getSelectedConnections();
+            if (source == connect) {
+
+                for (DatabaseConnection databaseConnection : selectedConnections) {
+
+                    controller.connect(databaseConnection);
+                }
+
+            } else if (source == disconnect) {
+
+                for (DatabaseConnection databaseConnection : selectedConnections) {
+
+                    controller.disconnect(databaseConnection);
+                }
+
+            } else if (source == properties) {
+
+                controller.setSelectedConnection(selectedConnections.get(0));
+            }
+
+        }
+
     }
 
     private class ConnectionsTableModel extends AbstractSortableTableModel {
-        
+
         private List<DatabaseConnection> values;
-        private String[] header = {"", "Connection Name", "Host", 
+        private String[] header = {"", "Connection Name", "Host",
                                    "Data Source", "User", "Driver"};
-        
+
         public ConnectionsTableModel(List<DatabaseConnection> values) {
             this.values = values;
         }
-        
+
         public DatabaseConnection getConnectionAt(int row) {
             return values.get(row);
         }
-        
+
         public int indexOf(DatabaseConnection dc) {
             return values.indexOf(dc);
         }
-                
+
         public int getRowCount() {
             return values.size();
         }
-        
+
         public int getColumnCount() {
             return header.length;
         }
-        
+
         public String getColumnName(int col) {
             return header[col];
         }
-        
+
         public Object getValueAt(int row, int col) {
 
             switch (col) {
@@ -390,11 +471,11 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
 
             return values.get(row);
         }
-        
+
     }
 
-    
-    private class ConnectCellRenderer extends JLabel 
+
+    private class ConnectCellRenderer extends JLabel
                                       implements TableCellRenderer {
 
         // connection icons
@@ -411,7 +492,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
                                     int row, int column) {
 
             Boolean connected = (Boolean) value;
-            
+
             setHorizontalAlignment(JLabel.CENTER);
 
             if (connected != null && connected) {

@@ -22,6 +22,7 @@ package org.executequery.gui.browser;
 
 import java.awt.BorderLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Enumeration;
@@ -369,21 +370,22 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         // remove from the connections
         connections.remove(index);
-        
+
         EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(this,
                 ConnectionRepositoryEvent.CONNECTION_MODIFIED, dc));
 
         if (noConnectionsAvailable) {
-            GUIUtilities.closeSelectedCentralPane();
+//            GUIUtilities.closeSelectedCentralPane();
             GUIUtils.invokeLater(new Runnable() {
                 public void run() {
+                    controller.selectionChanging();
                     enableButtons(false, false, false, false);
                     tree.setSelectionRow(0);
-//                    controller.displayRootPanel();
+                    //controller.displayRootPanel();
                 }
             });
         }
-        
+
     }
 
     /**
@@ -459,6 +461,20 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 tree.setSelectionRow(row);
             }
         }
+    }
+
+    public void connectAll() {
+
+
+    }
+
+    public void disconnectAll() {
+
+    }
+
+    public void searchNodes() {
+
+        getTreeFindAction().actionPerformed(new ActionEvent(this, 0, "searchNodes"));
     }
 
     /**
@@ -697,15 +713,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (rootSelectOnDisconnect) {
 
             tree.setSelectionRow(0);
-        }
-        // otherwise select the host node if not already selected
-        else {
 
-            if (tree.getSelectionPath().getLastPathComponent() != host) {
+        } else { // otherwise select the host node if not already selected
 
-                tree.setSelectionPath(new TreePath(host.getPath()));
+//            if (tree.getSelectionPath().getLastPathComponent() != host) {
+//
+//                // change below to not reselect after disconnect
+//
+//                tree.setSelectionPath(new TreePath(host.getPath()));
+//            }
+
+            if (tree.getSelectionPath().getLastPathComponent() == host) {
+
+                enableButtons(true, true, false, true);
             }
-            enableButtons(true, true, false, true);
+
         }
 
         nodeStructureChanged(host);
@@ -831,15 +853,15 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         /*
         System.out.println("pathChanged");
-        
+
         try {
-        
+
             if (oldPath == null || shouldChangeView) {
-    
+
             }
-            
+
         } finally {
-            
+
             shouldChangeView = true;
         }
         */
@@ -1071,6 +1093,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     /** provides an indicator that an expansion is in progress */
     private boolean treeExpanding = false;
+
+    private BrowserTreeRootPopopMenu rootPopupMenu;
 
     protected DatabaseObjectNode getParentNode(DatabaseObjectNode child) {
 
@@ -1311,6 +1335,13 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         return popupMenu;
     }
 
+    private BrowserTreeRootPopopMenu getBrowserRootTreePopupMenu() {
+        if (rootPopupMenu == null) {
+            rootPopupMenu = new BrowserTreeRootPopopMenu(this);
+        }
+        return rootPopupMenu;
+    }
+
     private class MouseHandler extends MouseAdapter {
 
         public MouseHandler() {}
@@ -1319,7 +1350,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
 //            int clickCount = e.getClickCount();
 //            System.out.println("mouseClicked clicks : " + clickCount);
-            
+
             if (e.getClickCount() < 2) {
 
                 return;
@@ -1353,7 +1384,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
         public void mouseReleased(MouseEvent e) {
-         
+
             maybeShowPopup(e);
         }
 
@@ -1361,10 +1392,18 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             if (e.isPopupTrigger()) {
 
-                BrowserTreePopupMenu popup = getBrowserTreePopupMenu();
-
                 Point point = new Point(e.getX(), e.getY());
-                popup.setCurrentPath(getTreePathForLocation(point.x, point.y));
+                TreePath treePathForLocation = getTreePathForLocation(point.x, point.y);
+
+                if (tree.getRowForPath(treePathForLocation) == 0) {
+
+                    BrowserTreeRootPopopMenu popup = getBrowserRootTreePopupMenu();
+                    popup.show(e.getComponent(), point.x, point.y);
+                    return;
+                }
+
+                BrowserTreePopupMenu popup = getBrowserTreePopupMenu();
+                popup.setCurrentPath(treePathForLocation);
 
                 DatabaseConnection connection = getConnectionAt(point);
 
@@ -1424,7 +1463,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     public void preferencesChanged(UserPreferenceEvent event) {
-        
+
         if (event.getEventType() == UserPreferenceEvent.ALL) {
 
             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
@@ -1444,12 +1483,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void schemaTreeMouseEvent(MouseEvent e) {
 
         /*
-        
+
         shouldChangeView = true;
         int clickCount = e.getClickCount();
-        
+
         System.out.println("schemaTreeMouseEvent clicks : " + clickCount);
-        
+
         if (clickCount >= 2 && doubleClickHostToConnect()) {
 
             shouldChangeView = false;

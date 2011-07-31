@@ -55,18 +55,18 @@ import org.underworldlabs.util.MiscUtils;
  * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
  */
 public class BrowserController {
-    
+
     public static final int UPDATE_CANCELLED = 99;
-    
+
     /** the meta data retrieval object */
     private MetaDataValues metaData;
 
     /** query sender object */
     private StatementExecutor querySender;
-    
+
     /** the connections tree panel */
     private ConnectionsTreePanel treePanel;
-    
+
     /** the databse viewer panel */
     private BrowserViewPanel viewPanel;
 
@@ -82,11 +82,12 @@ public class BrowserController {
      */
     protected void connect(DatabaseConnection dc) {
         try {
-            ((DatabaseHost)treePanel.
-                    getHostNode(dc).getDatabaseObject()).connect();
-        } 
-        catch (DataSourceException e) {
-            StringBuffer sb = new StringBuffer();
+
+            ((DatabaseHost)treePanel.getHostNode(dc).getDatabaseObject()).connect();
+
+        } catch (DataSourceException e) {
+
+            StringBuilder sb = new StringBuilder();
             sb.append("The connection to the database could not be established.");
             sb.append("\nPlease ensure all required fields have been entered ");
             sb.append("correctly and try again.\n\nThe system returned:\n");
@@ -104,7 +105,7 @@ public class BrowserController {
         try {
             ((DatabaseHost)treePanel.
                     getHostNode(dc).getDatabaseObject()).disconnect();
-        } 
+        }
         catch (DataSourceException e) {
             Log.warning("Error on disconnection: " + e.getMessage());
             if (Log.isDebugEnabled()) {
@@ -168,7 +169,7 @@ public class BrowserController {
         if (_viewPanel == null) {
 
             GUIUtilities.addCentralPane(BrowserViewPanel.TITLE,
-                                        BrowserViewPanel.FRAME_ICON, 
+                                        BrowserViewPanel.FRAME_ICON,
                                         viewPanel,
                                         BrowserViewPanel.TITLE,
                                         true);
@@ -192,8 +193,8 @@ public class BrowserController {
 
     }
 
-    /** 
-     * Sets the selected connection tree node to the 
+    /**
+     * Sets the selected connection tree node to the
      * specified database connection.
      *
      * @param dc - the database connection to select
@@ -218,7 +219,7 @@ public class BrowserController {
 
     }
 
-    /** 
+    /**
      * Adds a new connection.
      */
     protected void addNewConnection() {
@@ -279,7 +280,7 @@ public class BrowserController {
             NamedObject databaseObject = node.getDatabaseObject();
 
 //            System.out.println("selected object type: " + databaseObject.getClass().getName());
-            
+
             int type = node.getType();
             //Log.debug("Node type selected: " + type);
             switch (type) {
@@ -288,7 +289,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(HostPanel.NAME)) {
                         hostPanel = new HostPanel(this);
                         viewPanel.addToLayout(hostPanel);
-                    } 
+                    }
                     else {
                         hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
                     }
@@ -303,7 +304,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(CatalogPanel.NAME)) {
                         catalogPanel = new CatalogPanel(this);
                         viewPanel.addToLayout(catalogPanel);
-                    } 
+                    }
                     else {
                         catalogPanel = (CatalogPanel)viewPanel.
                                 getFormObjectView(CatalogPanel.NAME);
@@ -317,7 +318,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(SchemaPanel.NAME)) {
                         schemaPanel = new SchemaPanel(this);
                         viewPanel.addToLayout(schemaPanel);
-                    } 
+                    }
                     else {
                         schemaPanel = (SchemaPanel)viewPanel.
                                 getFormObjectView(SchemaPanel.NAME);
@@ -339,10 +340,10 @@ public class BrowserController {
                         metaKeyPanel = (MetaKeyPanel)viewPanel.
                                 getFormObjectView(MetaKeyPanel.NAME);
                     }
-                    
+
                     metaKeyPanel.setValues((NamedObject)databaseObject);
                     return metaKeyPanel;
-                    
+
                 case NamedObject.FUNCTION:
                 case NamedObject.PROCEDURE:
                 case NamedObject.SYSTEM_FUNCTION:
@@ -350,7 +351,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(BrowserProcedurePanel.NAME)) {
                         procsPanel = new BrowserProcedurePanel(this);
                         viewPanel.addToLayout(procsPanel);
-                    } 
+                    }
                     else {
                         procsPanel = (BrowserProcedurePanel)viewPanel.
                                 getFormObjectView(BrowserProcedurePanel.NAME);
@@ -358,7 +359,7 @@ public class BrowserController {
 
                     procsPanel.setValues((DatabaseExecutable)databaseObject);
                     return procsPanel;
-                    
+
                 case NamedObject.TABLE:
                     BrowserTableEditingPanel editingPanel = viewPanel.getEditingPanel();
                     editingPanel.setValues((DatabaseTable)databaseObject);
@@ -369,7 +370,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(TableColumnPanel.NAME)) {
                         columnPanel = new TableColumnPanel(this);
                         viewPanel.addToLayout(columnPanel);
-                    } 
+                    }
                     else {
                         columnPanel =
                             (TableColumnPanel)viewPanel.getFormObjectView(TableColumnPanel.NAME);
@@ -382,7 +383,7 @@ public class BrowserController {
                     if (!viewPanel.containsPanel(ObjectDefinitionPanel.NAME)) {
                         objectDefnPanel = new ObjectDefinitionPanel(this);
                         viewPanel.addToLayout(objectDefnPanel);
-                    } 
+                    }
                     else {
                         objectDefnPanel = (ObjectDefinitionPanel)viewPanel.
                                 getFormObjectView(ObjectDefinitionPanel.NAME);
@@ -402,7 +403,7 @@ public class BrowserController {
     }
 
     /**
-     * Selects the node that matches the specified prefix forward 
+     * Selects the node that matches the specified prefix forward
      * from the currently selected node.
      *
      * @param prefix - the prefix of the node to select
@@ -410,7 +411,7 @@ public class BrowserController {
     protected void selectBrowserNode(String prefix) {
         treePanel.selectBrowserNode(prefix);
     }
-    
+
     /**
      * Displays the root main view panel.
      */
@@ -418,14 +419,14 @@ public class BrowserController {
         checkBrowserPanel();
         viewPanel.displayRootPanel();
     }
-    
+
     /**
      * Applies the table alteration changes.
      */
     protected void applyTableChange(boolean valueChange) {
-        
+
         BrowserTableEditingPanel editingPanel = viewPanel.getEditingPanel();
-        
+
         // check we actually have something to apply
         if (!editingPanel.hasSQLText()) {
             return;
@@ -440,10 +441,10 @@ public class BrowserController {
             // otherwise get the current selection
             node = treePanel.getSelectedBrowserNode();
         }
-        
+
         try {
             treePanel.removeTreeSelectionListener();
-            
+
             // if specified, ask the user again
             if (valueChange) {
                 int yesNo = GUIUtilities.displayConfirmCancelDialog(
@@ -482,7 +483,7 @@ public class BrowserController {
                                append("\n\nThe system returned:\n").
                                append(MiscUtils.formatSQLError(e));
                             GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
-                        } 
+                        }
                         else {
                             GUIUtilities.displayErrorMessage(result.getErrorMessage());
                         }
@@ -491,7 +492,7 @@ public class BrowserController {
                     }
                 }
                 querySender.execute(QueryTypes.COMMIT, null);
-            } 
+            }
             catch (SQLException e) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("An error occurred applying the specified changes.").
@@ -511,9 +512,9 @@ public class BrowserController {
             treePanel.addTreeSelectionListener();
         }
     }
-    
+
     /**
-     * Returns whether a table alteration has occurred and 
+     * Returns whether a table alteration has occurred and
      * is actionable.
      *
      * @return true | false
@@ -528,7 +529,7 @@ public class BrowserController {
     // --------------------------------------------
     // Meta data propagation methods
     // --------------------------------------------
-    
+
     /**
      * Generic exception handler.
      */
@@ -537,25 +538,25 @@ public class BrowserController {
             e.printStackTrace();
             Log.debug("Error retrieving data.", e);
         }
-        
+
         boolean isDataSourceException = (e instanceof DataSourceException);
         GUIUtilities.displayExceptionErrorDialog(
                 "Error retrieving the selected database " +
-                "object.\n\nThe system returned:\n" + 
-                (isDataSourceException ? 
+                "object.\n\nThe system returned:\n" +
+                (isDataSourceException ?
                     ((DataSourceException)e).getExtendedMessage() : e.getMessage()), e);
-        
-        
+
+
         // TODO: WTF is this!!!
         if (isDataSourceException) {
             if (((DataSourceException)e).wasConnectionClosed()) {
                 connect(treePanel.getSelectedDatabaseConnection());
             }
         }
-        
+
     }
-    
-    /** 
+
+    /**
      * Propagates the call to the meta data object.
      */
     protected Vector<String> getHostedSchemas(DatabaseConnection dc) {
@@ -570,10 +571,10 @@ public class BrowserController {
         }
     }
 
-    /** 
+    /**
      * Propagates the call to the meta data object.
      */
-    protected Vector<String> getColumnNamesVector(DatabaseConnection dc, 
+    protected Vector<String> getColumnNamesVector(DatabaseConnection dc,
                                                   String table, String schema) {
         try {
             checkMetaDataObject();
@@ -586,28 +587,28 @@ public class BrowserController {
         }
     }
 
-    /** 
+    /**
      * Propagates the call to the meta data object.
      */
     protected Vector<String> getColumnNamesVector(String table, String schema) {
         return getColumnNamesVector(getDatabaseConnection(), table, schema);
     }
 
-    /** 
+    /**
      * Propagates the call to the meta data object.
      */
     protected Vector<String> getHostedSchemas() {
         return getHostedSchemas(getDatabaseConnection());
     }
 
-    /** 
+    /**
      * Propagates the call to the meta data object.
      */
     protected Vector<String> getTables(String schema) {
         return getTables(getDatabaseConnection(), schema);
     }
 
-    /** 
+    /**
      * Propagates the call to the meta data object.
      */
     protected Vector<String> getTables(DatabaseConnection dc, String schema) {
@@ -649,7 +650,7 @@ public class BrowserController {
             handleException(e);
         }
     }
-    
+
     /**
      * Ensures the meta data object is initialised.
      */
@@ -658,7 +659,7 @@ public class BrowserController {
             metaData = new MetaDataValues(true);
         }
     }
-    
+
     /**
      * Returns true if the currently selected connection is using
      * catalogs in meta data retrieval.
@@ -669,7 +670,7 @@ public class BrowserController {
 
         return false;
     }
-    
+
     /**
      * Retrieves the selected database connection properties object.
      */
@@ -684,9 +685,9 @@ public class BrowserController {
      * @param dc - the database connection
      * @param object - the object to be dropped
      */
-    
+
     /*
-    public int dropObject(DatabaseConnection dc, NamedObject object) 
+    public int dropObject(DatabaseConnection dc, NamedObject object)
         throws SQLException {
 
         String queryStart = null;
