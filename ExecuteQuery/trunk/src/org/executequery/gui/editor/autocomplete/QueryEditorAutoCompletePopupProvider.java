@@ -357,7 +357,6 @@ public class QueryEditorAutoCompletePopupProvider
         if (hasDotIndex) {
 
             wordPrefix = wordPrefix.substring(dotIndex + 1);
-//            return itemsStartingWith(tables, wordPrefix);
 
         } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
 
@@ -370,8 +369,23 @@ public class QueryEditorAutoCompletePopupProvider
 
         if (itemsStartingWith.isEmpty()) {
 
-            itemsStartingWith.add(noProposalsListItem());
+            // do it one more time without the tables...
+            itemsStartingWith = buildItemsStartingWithForList(
+                    autoCompleteListItems, null, wordPrefix, hasDotIndex);
+
+            if (itemsStartingWith.isEmpty()) { // now bail...
+
+                itemsStartingWith.add(noProposalsListItem());
+            }
+
         }
+        /* ----- might be a little sluggish right now ...
+        else { // add other entities starting with at the end of the list (??)
+
+            itemsStartingWith.addAll(buildItemsStartingWithForList(
+                    autoCompleteListItems, null, wordPrefix, hasDotIndex));
+        }
+        */
 
         return itemsStartingWith;
     }

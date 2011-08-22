@@ -33,63 +33,63 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class DefaultConnectionBuilder implements ConnectionBuilder {
-    
+
     /** The worker thread to establish the connection */
     private SwingWorker worker;
-    
+
     /** The connection progress dialog */
     private ConnectionProgressDialog progressDialog;
-    
+
     /** Indicates whether the process was cancelled */
     private boolean cancelled;
 
     /** The database connection object */
     private DatabaseConnection databaseConnection;
-    
+
     /** The exception on error */
     private DataSourceException dataSourceException;
-    
+
     public DefaultConnectionBuilder(DatabaseConnection databaseConnection) {
 
         this.databaseConnection = databaseConnection;
     }
-    
+
     public void cancel() {
 
         cancelled = true;
         worker.interrupt();
     }
-    
+
     public String getConnectionName() {
 
         return databaseConnection.getName();
     }
-    
+
     public DataSourceException getException() {
-        
+
         return dataSourceException;
     }
-    
+
     public String getErrorMessage() {
 
         if (dataSourceException != null) {
-        
+
             return dataSourceException.getMessage();
         }
-        
+
         return "";
     }
-    
+
     public boolean isCancelled() {
-        
+
         return cancelled;
     }
-    
+
     public boolean isConnected() {
-        
+
         return databaseConnection.isConnected();
     }
-    
+
     public void connect() {
 
         progressDialog = new ConnectionProgressDialog(this);
@@ -98,7 +98,6 @@ public class DefaultConnectionBuilder implements ConnectionBuilder {
             public Object construct() {
 
                 createDataSource();
-                
                 return null;
             }
             public void finished() {
@@ -115,9 +114,9 @@ public class DefaultConnectionBuilder implements ConnectionBuilder {
         progressDialog.run();
 
     }
-    
+
     private void createDataSource() {
-        
+
         try {
 
             ConnectionManager.createDataSource(databaseConnection);
@@ -128,11 +127,5 @@ public class DefaultConnectionBuilder implements ConnectionBuilder {
         }
 
     }
-    
+
 }
-
-
-
-
-
-

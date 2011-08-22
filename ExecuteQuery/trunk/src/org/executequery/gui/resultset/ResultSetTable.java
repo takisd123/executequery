@@ -50,11 +50,11 @@ import org.underworldlabs.util.SystemProperties;
 public class ResultSetTable extends JTable {
 
     private DefaultCellEditor cellEditor;
-    
+
     private ResultsTableColumnModel columnModel;
-    
+
     private ResultSetTableCellRenderer cellRenderer;
-    
+
     private TableColumn dummyColumn = new TableColumn();
 
     public ResultSetTable() {
@@ -69,9 +69,9 @@ public class ResultSetTable extends JTable {
             public Object getCellEditorValue() {
                 return stringCellEditor.getValue(); }
         };
-        
+
     }
-    
+
     public ResultSetTable(TableModel model) {
 
         super(model);
@@ -83,24 +83,24 @@ public class ResultSetTable extends JTable {
         setColumnSelectionAllowed(true);
         columnModel = new ResultsTableColumnModel();
         setColumnModel(columnModel);
-        
+
         cellRenderer = new ResultSetTableCellRenderer();
         cellRenderer.setFont(getFont());
-        
+
         applyUserPreferences();
     }
-    
+
     public void selectCellAtPoint(Point point) {
-        
+
         int row = rowAtPoint(point);
-        int col = columnAtPoint(point); 
+        int col = columnAtPoint(point);
 
         setColumnSelectionInterval(col, col);
         setRowSelectionInterval(row, row);
     }
 
     public boolean hasMultipleColumnAndRowSelections() {
-        
+
         int cols = getSelectedColumnCount();
         int rows = getSelectedRowCount();
 
@@ -108,15 +108,25 @@ public class ResultSetTable extends JTable {
     }
 
     public void selectRow(Point point) {
-        
+
         if (point != null) {
 
-            clearSelection();
-            
-            int row = rowAtPoint(point);
             setColumnSelectionAllowed(false);
             setRowSelectionAllowed(true);
-            setRowSelectionInterval(row, row);
+
+            int selectedRowCount = getSelectedRowCount();
+            if (selectedRowCount > 1) {
+
+                int[] selectedRows = getSelectedRows();
+                setRowSelectionInterval(selectedRows[0], selectedRows[selectedRows.length - 1]);
+
+            } else {
+
+                clearSelection();
+                int row = rowAtPoint(point);
+                setRowSelectionInterval(row, row);
+            }
+
         }
 
     }
@@ -125,12 +135,22 @@ public class ResultSetTable extends JTable {
 
         if (point != null) {
 
-            clearSelection();
-            
-            int column = columnAtPoint(point);
             setColumnSelectionAllowed(true);
             setRowSelectionAllowed(false);
-            setColumnSelectionInterval(column, column);
+
+            int columnCount = getSelectedColumnCount();
+            if (columnCount > 1) {
+
+                int[] selectedColumns = getSelectedColumns();
+                setColumnSelectionInterval(selectedColumns[0], selectedColumns[selectedColumns.length - 1]);
+
+            } else {
+
+                clearSelection();
+                int column = columnAtPoint(point);
+                setColumnSelectionInterval(column, column);
+            }
+
         }
 
     }
@@ -141,7 +161,7 @@ public class ResultSetTable extends JTable {
 
         int cols = getSelectedColumnCount();
         int rows = getSelectedRowCount();
-        
+
         if (cols == 0 && rows == 0) {
 
             return;
@@ -153,18 +173,18 @@ public class ResultSetTable extends JTable {
         for (int i = 0; i < rows; i++) {
 
             for (int j = 0; j < cols; j++) {
-            
+
                 sb.append(getValueAt(selectedRows[i], selectedCols[j]));
-               
+
                 if (j < cols - 1) {
-                
+
                     sb.append('\t');
                 }
 
             }
 
             if (i < rows - 1) {
-            
+
                 sb.append('\n');
             }
 
@@ -176,7 +196,7 @@ public class ResultSetTable extends JTable {
     public Object valueAtPoint(Point point) {
 
         int row = rowAtPoint(point);
-        int col = columnAtPoint(point); 
+        int col = columnAtPoint(point);
 
         return getValueAt(row, col);
     }
@@ -186,7 +206,7 @@ public class ResultSetTable extends JTable {
 
         int cols = getSelectedColumnCount();
         int rows = getSelectedRowCount();
-        
+
         if (cols == 0 && rows == 0) {
             return null;
         }
@@ -200,38 +220,38 @@ public class ResultSetTable extends JTable {
         for (int i = 0; i < rows; i++) {
 
             Vector rowVector = new Vector(cols);
-            
+
             for (int j = 0; j < cols; j++) {
-            
+
                 rowVector.add(getValueAt(selectedRows[i], selectedCols[j]));
-                
+
                 if (i == 0) {
-                
+
                     columns.add(getColumnName(selectedCols[j]));
                 }
-                
+
             }
-            
+
             data.add(rowVector);
          }
-        
+
         return new DefaultTableModel(data, columns);
     }
 
     public void applyUserPreferences() {
-        
+
         setDragEnabled(true);
         setCellSelectionEnabled(true);
 
         setBackground(SystemProperties.getColourProperty(
                 "user", "results.table.cell.background.colour"));
-        
+
         setRowHeight(SystemProperties.getIntProperty(
                 "user", "results.table.column.height"));
-        
+
         setRowSelectionAllowed(SystemProperties.getBooleanProperty(
                 "user", "results.table.row.select"));
-        
+
         getTableHeader().setResizingAllowed(SystemProperties.getBooleanProperty(
                 "user", "results.table.column.resize"));
 
@@ -239,42 +259,42 @@ public class ResultSetTable extends JTable {
                 "user", "results.table.column.reorder"));
 
         setTableColumnWidth(getUserPreferredColumnWidth());
-        
+
         cellRenderer.applyUserPreferences();
     }
-    
+
     public void resetTableColumnWidth() {
         setTableColumnWidth(getUserPreferredColumnWidth());
     }
-    
+
     public void setBackground(Color background) {
         if (cellRenderer != null) {
             cellRenderer.setTableBackground(background);
         }
         super.setBackground(background);
     }
-    
+
     public void setFont(Font font) {
         super.setFont(font);
         if (cellRenderer != null) {
             cellRenderer.setFont(font);
-        }        
+        }
     }
-    
+
     public TableCellRenderer getCellRenderer(int row, int column) {
         return cellRenderer;
     }
-    
+
     public TableCellEditor getCellEditor(int row, int column) {
         return cellEditor;
     }
-    
+
     private int getUserPreferredColumnWidth() {
         return SystemProperties.getIntProperty("user", "results.table.column.width");
     }
 
     private void setTableColumnWidth(int columnWidth) {
-        TableColumnModel tcm = getColumnModel();        
+        TableColumnModel tcm = getColumnModel();
         if (columnWidth != 75) {
             TableColumn col = null;
             for (Enumeration<TableColumn> i = tcm.getColumns(); i.hasMoreElements();) {
@@ -285,7 +305,7 @@ public class ResultSetTable extends JTable {
     }
 
     class ResultsTableColumnModel extends DefaultTableColumnModel {
-        
+
         // dumb work-around for update issue noted
         public TableColumn getColumn(int columnIndex) {
             try {
@@ -294,8 +314,8 @@ public class ResultSetTable extends JTable {
                 return dummyColumn;
             }
         }
-        
+
     } // class ResultsTableColumnModel
-    
+
 }
 

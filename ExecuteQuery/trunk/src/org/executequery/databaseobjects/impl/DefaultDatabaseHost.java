@@ -87,7 +87,12 @@ public class DefaultDatabaseHost extends AbstractNamedObject
      */
     public boolean connect() throws DataSourceException {
 
-        return connectionMediator().connect(getDatabaseConnection());
+        if (!isConnected()) {
+
+            return connectionMediator().connect(getDatabaseConnection());
+        }
+
+        return true;
     }
 
     /**

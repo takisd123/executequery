@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -73,6 +74,8 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     private Color dateValueDisplayColor;
     private Color charValueDisplayColor;
     private Color blobValueDisplayColor;
+
+    private boolean rightAlignNumeric;
 
     ResultSetTableCellRenderer() {
 
@@ -132,7 +135,42 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
 
         formatValueForDisplay(value, isSelected);
 
+        if (rightAlignNumeric) {
+
+            alignNumeric(value);
+        }
+
         return this;
+    }
+
+    private void alignNumeric(Object value) {
+
+        RecordDataItem recordDataItem = (RecordDataItem) value;
+        if (recordDataItem.isValueNull()) {
+
+            return;
+        }
+
+        int sqlType = recordDataItem.getDataType();
+        switch (sqlType) {
+
+            case Types.BIGINT:
+            case Types.REAL:
+            case Types.INTEGER:
+            case Types.DECIMAL:
+            case Types.NUMERIC:
+            case Types.TINYINT:
+            case Types.SMALLINT:
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                setHorizontalAlignment(SwingConstants.RIGHT);
+                break;
+
+            default:
+                setHorizontalAlignment(SwingConstants.LEFT);
+                break;
+        }
+
     }
 
     private void formatValueForDisplay(Object value, boolean isSelected) {
@@ -269,6 +307,9 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
 
             dateFormat = null;
         }
+
+        rightAlignNumeric = SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.right.align.numeric");
 
         nullValueDisplayColor = SystemProperties.getColourProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.cell.null.background.colour");

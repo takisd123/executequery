@@ -1,6 +1,17 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 11 February 2011
+Date: 29 August 2011
+
+Summary of changes - v3.2.4 Build 5168:
+----------------------------------------
+
+- Moved build to Java 1.6.
+- Added right-alignment for numeric values option for result set table views.
+- Fixed unrecoverable location exception on Query Editor when attempting to
+  define a table alias for auto-completion.
+- Added multiple connection connect and disconnect.
+- Added additional schema objects shown for Query Editor auto-complete popup.
+
 
 Summary of changes - v3.2.3 Build 5164:
 ----------------------------------------
@@ -28,7 +39,6 @@ Summary of changes - v3.2.3 Build 5164:
 - Split out autocomplete option into keywords and database objects - added these
   to the editor popup menu.
 - Updated libraries Log4j, Liquibase, Commons Lang and Commons Codec.
-
 
 
 Summary of changes - v3.2.2 Build 5148:

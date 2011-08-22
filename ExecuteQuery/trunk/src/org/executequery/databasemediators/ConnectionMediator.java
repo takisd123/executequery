@@ -20,6 +20,8 @@
 
 package org.executequery.databasemediators;
 
+import java.util.List;
+
 import org.executequery.ApplicationException;
 import org.executequery.EventMediator;
 import org.executequery.databasemediators.spi.DefaultConnectionBuilder;
@@ -50,6 +52,11 @@ public final class ConnectionMediator {
 
         ConnectionManager.closeConnection(dc);
         fireConnectionClosed(dc);
+    }
+
+    public void connect(List<DatabaseConnection> databaseConnections) {
+
+
     }
 
     public boolean connect(DatabaseConnection dc) throws DataSourceException {

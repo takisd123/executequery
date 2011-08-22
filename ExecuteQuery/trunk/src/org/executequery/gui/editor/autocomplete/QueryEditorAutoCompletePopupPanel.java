@@ -35,20 +35,20 @@ import org.executequery.gui.editor.TypeAheadList;
 import org.executequery.gui.editor.TypeAheadListProvider;
 import org.underworldlabs.swing.plaf.UIUtils;
 
-public class QueryEditorAutoCompletePopupPanel extends JPopupMenu 
+public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
                 implements TypeAheadListProvider {
 
     /*
     private static final String POPUP_CANCELLED_KEY = "popupCancelledAction";
-    
+
     private static final String LIST_SELECTION_CANCELLED_KEY = "listSelectionCancelledAction";
 
     private static final KeyStroke KEY_STROKE_ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-    
+
     private static final KeyStroke KEY_STROKE_SPACE = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
-    
+
     private static final KeyStroke KEY_STROKE_BACKSPACE = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
-    
+
     private static final KeyStroke KEY_STROKE_SHIFT_TAB = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_MASK);
     */
 
@@ -57,9 +57,9 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     private TypeAheadList list;
 
     private List<AutoCompletePopupListener> listeners;
-    
+
     public QueryEditorAutoCompletePopupPanel() {
-    
+
         init();
     }
 
@@ -92,123 +92,122 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
         add(scrollPane, BorderLayout.CENTER);
         setPreferredSize(PREFERRED_SIZE);
     }
-    
+
     public String getSelectedValue() {
-        
+
         Object selectedValue = list.getSelectedValue();
         if (selectedValue != null) {
-        
+
             return selectedValue.toString();
         }
-        
+
         return "";
     }
-    
+
     public Object getSelectedItem() {
-        
+
         return list.getSelectedValue();
     }
-    
+
     public void addAutoCompletePopupListener(AutoCompletePopupListener autoCompletePopupListener) {
 
         if (listeners == null) {
-            
+
             listeners = new ArrayList<AutoCompletePopupListener>();
         }
-        
+
         listeners.add(autoCompletePopupListener);
     }
 
     protected void resetValues(List<AutoCompleteListItem> values) {
-        
-        list.resetValues(values);
 
+        list.resetValues(values);
         if (values != null && !values.isEmpty()) {
-            
+
             selectListIndex(0);
         }
-        
+
     }
-    
+
     protected void scrollSelectedIndexUp() {
-        
+
         int selectedIndex = list.getSelectedIndex();
-        
+
         if (selectedIndex > 0) {
-            
+
             selectListIndex(selectedIndex - 1);
         }
-        
+
     }
-    
+
     protected void scrollSelectedIndexDown() {
 
         int selectedIndex = list.getSelectedIndex();
-        
+
         if (selectedIndex < list.getModel().getSize() - 1) {
-            
+
             selectListIndex(selectedIndex + 1);
         }
 
     }
 
     private static final int PAGE_SCROLL_SIZE = 5;
-    
+
     protected void scrollSelectedIndexPageUp() {
-        
+
         int selectedIndex = list.getSelectedIndex();
-        
+
         if (selectedIndex > 0) {
-        
+
             int newIndex = selectedIndex - PAGE_SCROLL_SIZE;
-            
+
             if (newIndex > 0) {
 
                 selectListIndex(newIndex);
-            
+
             } else {
-                
+
                 selectListIndex(0);
             }
-            
+
         }
-        
+
     }
-    
+
     protected void scrollSelectedIndexPageDown() {
 
         int selectedIndex = list.getSelectedIndex();
-        
+
         int modelSize = list.getModel().getSize();
 
         if (selectedIndex < modelSize - 1) {
-    
+
             int newIndex = selectedIndex + PAGE_SCROLL_SIZE;
-            
+
             if (newIndex < modelSize) {
 
                 selectListIndex(newIndex);
-                
+
             } else {
-                
+
                 selectListIndex(modelSize - 1);
             }
-            
+
         }
 
     }
 
     private void selectListIndex(int index) {
-        
+
         list.setSelectedIndex(index);
-        list.scrollRectToVisible(list.getCellBounds(index, index));        
+        list.scrollRectToVisible(list.getCellBounds(index, index));
     }
-    
+
     public void focusAndSelectList() {
-        
+
         list.setListItemSelectedAndFocus(0);
     }
-    
+
     public void listValueSelected(Object selectedValue) {
 
         firePopupSelectionMade();
@@ -216,11 +215,11 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     }
 
     public void refocus() {}
-    
+
     protected void hidePopup() {
-        
+
         if (isVisible()) {
-        
+
             setVisible(false);
         }
 
@@ -230,32 +229,32 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     private void firePopupClosed() {
 
         for (AutoCompletePopupListener listener : listeners) {
-            
+
             listener.popupClosed();
         }
-        
+
     }
 
     private void firePopupSelectionMade() {
-        
+
         for (AutoCompletePopupListener listener : listeners) {
-            
+
             listener.popupSelectionMade();
         }
-        
+
     }
-    
+
     private void firePopupSelectionCancelled() {
-        
+
         for (AutoCompletePopupListener listener : listeners) {
-            
+
             listener.popupSelectionCancelled();
         }
-        
+
     }
-    
+
     class ListSelectionCancelledAction extends AbstractAction {
-        
+
         public void actionPerformed(ActionEvent e) {
 
             hidePopup();
@@ -264,15 +263,15 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
 
     } // ListSelectionCancelledAction
 
-    
+
     class PopupCancelledAction extends AbstractAction {
-        
+
         public void actionPerformed(ActionEvent e) {
 
             hidePopup();
             firePopupSelectionCancelled();
         }
-        
+
     } // PopupCancelledAction
 
 }

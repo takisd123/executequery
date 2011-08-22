@@ -144,6 +144,13 @@ public class PropertiesResultSetTableGeneral extends PropertiesBasePanel {
                     "Transpose when single row result",
                     Boolean.valueOf(stringUserProperty(key))));
 
+        key = "results.table.right.align.numeric";
+        list.add(new UserPreference(
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Right-align numeric values",
+                Boolean.valueOf(stringUserProperty(key))));
+
         UserPreference[] preferences =
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);
