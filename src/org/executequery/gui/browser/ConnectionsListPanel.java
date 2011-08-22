@@ -245,20 +245,28 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
             return;
         }
 
-        DatabaseConnection dc = list.get(0);
+        DatabaseConnection databaseConnection = list.get(0);
         int col = table.columnAtPoint(point);
         if (col == 0) {
 
-            controller.connect(dc);
+            if (!databaseConnection.isConnected()) {
+
+                controller.connect(databaseConnection);
+
+            } else {
+
+                controller.disconnect(databaseConnection);
+            }
+
             return;
         }
 
         if (list.size() == 1) {
 
             // select the connection in the tree
-            if (model.indexOf(dc) < model.getRowCount()) {
+            if (model.indexOf(databaseConnection) < model.getRowCount()) {
 
-                controller.setSelectedConnection(dc);
+                controller.setSelectedConnection(databaseConnection);
             }
 
         }

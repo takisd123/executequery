@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
@@ -465,16 +466,54 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     public void connectAll() {
 
+        List<DatabaseHost> hosts = databaseHosts();
+        for (DatabaseHost databaseHost : hosts) {
+
+            if (!databaseHost.isConnected()) {
+
+                databaseHost.connect();
+            }
+
+        }
 
     }
 
     public void disconnectAll() {
+
+        List<DatabaseHost> hosts = databaseHosts();
+        for (DatabaseHost databaseHost : hosts) {
+
+            if (databaseHost.isConnected()) {
+
+                databaseHost.disconnect();
+            }
+
+        }
 
     }
 
     public void searchNodes() {
 
         getTreeFindAction().actionPerformed(new ActionEvent(this, 0, "searchNodes"));
+    }
+
+    private List<DatabaseHost> databaseHosts() {
+
+        DefaultMutableTreeNode root = tree.getRootNode();
+        List<DatabaseHost> hosts = new ArrayList<DatabaseHost>();
+        for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
+
+            DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
+
+            Object userObject = _node.getUserObject();
+            if (userObject instanceof DatabaseHost) {
+
+                hosts.add((DatabaseHost) userObject);
+            }
+
+        }
+
+        return hosts;
     }
 
     /**
@@ -494,15 +533,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void newConnection(DatabaseConnection dc) {
 
         DatabaseHost host = databaseObjectFactory().createDatabaseHost(dc);
-
         connections.add(dc);
 
         tree.addToRoot(new DatabaseHostNode(host));
-
         EventMediator.fireEvent(
                 new DefaultConnectionRepositoryEvent(
                         this, ConnectionRepositoryEvent.CONNECTION_ADDED, dc));
-
     }
 
     /**

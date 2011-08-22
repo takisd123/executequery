@@ -29,19 +29,11 @@ public class SelectDerivedTableStrategy extends AbstractDerivedTableStrategy {
         int fromIndex = query.indexOf(FROM);
         int whereIndex = query.indexOf(WHERE);
 
-        if (whereIndex != -1 && fromIndex != -1) {
-            
-            if (whereIndex != -1) {
-            
-                tables = query.substring(fromIndex + FROM.length(), whereIndex);
-                
-            } else {
-            
-                tables = query.substring(fromIndex + FROM.length());
-            }
-        
+        if (whereIndex != -1 && fromIndex != -1 && whereIndex > fromIndex) {
+
+            tables = query.substring(fromIndex + FROM.length(), whereIndex);
         }
-        
+
         return tables;
     }
 

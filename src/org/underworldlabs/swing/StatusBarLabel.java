@@ -24,13 +24,6 @@ import java.awt.Graphics;
 
 import javax.swing.JLabel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Status bar panel label.
  *
@@ -42,25 +35,25 @@ public class StatusBarLabel extends JLabel {
 
     /** Indicates to paint the left border */
     private boolean paintLeft;
-    
+
     /** Indicates to paint the right border */
     private boolean paintRight;
-    
+
     /** Indicates to paint the top border */
     private boolean paintTop;
-    
+
     /** Indicates to paint the bottom border */
     private boolean paintBottom;
 
     /** the label height */
     private int height;
-    
-    public StatusBarLabel(boolean paintTop, boolean paintLeft, 
+
+    public StatusBarLabel(boolean paintTop, boolean paintLeft,
                           boolean paintBottom, boolean paintRight) {
         this(paintTop, paintLeft, paintBottom, paintRight, 20);
     }
 
-    public StatusBarLabel(boolean paintTop, boolean paintLeft, 
+    public StatusBarLabel(boolean paintTop, boolean paintLeft,
                           boolean paintBottom, boolean paintRight, int height) {
         this.paintTop = paintTop;
         this.paintLeft = paintLeft;
@@ -94,13 +87,3 @@ public class StatusBarLabel extends JLabel {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
