@@ -40,16 +40,16 @@ import org.underworldlabs.jdbc.DataSourceException;
  * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
  */
 public abstract class AbstractDatabaseSource extends AbstractNamedObject {
-    
+
     /** the host object for this catalog */
     private DatabaseHost host;
-    
+
     /** the meta tag objects of this schema */
     private List<DatabaseMetaTag> metaObjects;
-    
+
     /** Creates a new instance of AbstractDatabaseSource */
     public AbstractDatabaseSource(DatabaseHost host) {
-        
+
         this.host = host;
     }
 
@@ -60,54 +60,58 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
      * @return the meta tag object
      */
     public DatabaseMetaTag getDatabaseMetaTag(String name) {
-        
+
         name = name.toUpperCase();
-        
+
         List<DatabaseMetaTag> _metaObjects = getMetaObjects();
 
         for (DatabaseMetaTag object : _metaObjects) {
 
             if (name.equals(object.getName().toUpperCase())) {
-                
+
                 return object;
             }
-            
+
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns the procedure or function if procedure does not exist with
      * the specified name.
-     * 
+     *
      * @param name
      * @return the named procedure or function
      */
     public DatabaseProcedure getProcedure(String name) {
-        
+
         DatabaseMetaTag metaTag = getDatabaseMetaTag(META_TYPES[PROCEDURE]);
+        if (metaTag == null) {
+
+            return null;
+        }
+
         List<NamedObject> objects = metaTag.getObjects();
-        
         for (NamedObject namedObject: objects) {
-            
+
             if (name.equalsIgnoreCase(namedObject.getName())) {
 
                 return (DatabaseProcedure) namedObject;
             }
-            
+
         }
-        
+
         return null;
     }
-    
+
     /**
      * Returns the meta type objects from this schema
      *
      * @return the meta type objects
      */
     public List<DatabaseMetaTag> getMetaObjects() throws DataSourceException {
-        
+
         if (!isMarkedForReload() && metaObjects != null) {
 
             return metaObjects;
@@ -144,15 +148,15 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
      * Returns whether this is the default source connection.
      */
     public boolean isDefault() {
-        
+
         DatabaseHost _host = getHost();
-        
+
         if (_host != null) {
 
             String value = null;
-        
+
             String myName = getName();
-            
+
             if (isCatalog()) {
 
                 try {
@@ -169,12 +173,12 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
                 }
 
                 if (value != null) {
-                    
+
                     return value.equalsIgnoreCase(myName);
                 }
-                
+
             }
-            
+
             DatabaseConnection dc = _host.getDatabaseConnection();
 
             // test if the login name matches
@@ -195,7 +199,7 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 
         return false;
     }
-    
+
     private boolean isCatalog() {
 
         return (getType() == CATALOG);
@@ -210,14 +214,14 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 
         return host;
     }
-    
+
     /**
      * Returns the parent catalog object.
      *
      * @return the parent catalog object
      */
     public DatabaseCatalog getCatalog() {
-        
+
         return null;
     }
 
@@ -227,11 +231,11 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
      * @return the parent schema object
      */
     public DatabaseSchema getSchema() {
-        
+
         return null;
     }
 
-    
+
 }
 
 
