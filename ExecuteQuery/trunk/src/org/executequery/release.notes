@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 29 August 2011
+Date: 2 September 2011
 
 Summary of changes - v3.2.4 Build 5168:
 ----------------------------------------
@@ -11,6 +11,9 @@ Summary of changes - v3.2.4 Build 5168:
   define a table alias for auto-completion.
 - Added multiple connection connect and disconnect.
 - Added additional schema objects shown for Query Editor auto-complete popup.
+- Modified procedure execution from the Query Editor to execute 'as-is' when the
+  provided procedure can not be located using the driver meta data.
+- Added anti-alias font option
 
 
 Summary of changes - v3.2.3 Build 5164:

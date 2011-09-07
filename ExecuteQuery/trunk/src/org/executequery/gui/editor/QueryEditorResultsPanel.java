@@ -76,6 +76,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     private static final String SUCCESS = " Statement executed successfully";
     private static final String NO_ROWS = "No rows selected";
+    private static final String SUCCESSFULL_NO_ROWS = SUCCESS + "\n" + NO_ROWS;
     private static final String ZERO_ROWS = " 0 rows returned";
     private static final String SPACE = " ";
     private static final String ROW_RETURNED = " row returned";
@@ -484,7 +485,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         int rowCount = model.getRowCount();
         if (rowCount == 0) {
             if (showRowNumber) {
-                setOutputMessage(SqlMessages.PLAIN_MESSAGE, NO_ROWS, true);
+                setOutputMessage(SqlMessages.PLAIN_MESSAGE, SUCCESSFULL_NO_ROWS.trim(), true);
                 resetEditorRowCount(rowCount);
                 queryEditor.setMetaDataButtonEnabled(false);
             }

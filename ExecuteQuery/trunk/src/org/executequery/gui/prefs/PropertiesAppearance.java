@@ -26,7 +26,7 @@ import java.util.List;
 import org.executequery.Constants;
 import org.underworldlabs.util.SystemProperties;
 
-/** 
+/**
  * System preferences appearance panel.
  *
  * @author   Takis Diakoumis
@@ -34,9 +34,9 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class PropertiesAppearance extends PropertiesBasePanel {
-    
+
     private SimplePreferencesPanel preferencesPanel;
-    
+
     /** <p>Constructs a new instance. */
     public PropertiesAppearance() {
         try  {
@@ -46,10 +46,10 @@ public class PropertiesAppearance extends PropertiesBasePanel {
             e.printStackTrace();
         }
     }
-    
+
     /** Initializes the state of this instance. */
     private void init() throws Exception {
-        
+
     	List<UserPreference> list = new ArrayList<UserPreference>();
 
         list.add(new UserPreference(
@@ -57,7 +57,7 @@ public class PropertiesAppearance extends PropertiesBasePanel {
                     null,
                     "General",
                     null));
-        
+
         String key = "system.display.statusbar";
         list.add(new UserPreference(
                     UserPreference.BOOLEAN_TYPE,
@@ -121,6 +121,13 @@ public class PropertiesAppearance extends PropertiesBasePanel {
                     stringUserProperty(key),
                     Constants.LOOK_AND_FEELS));
 
+        key = "display.aa.fonts";
+        list.add(new UserPreference(
+                    UserPreference.BOOLEAN_TYPE,
+                    key,
+                    "Use anti-alias fonts (requires restart)",
+                    Boolean.valueOf(stringUserProperty(key))));
+
         key = "desktop.background.custom.colour";
         list.add(new UserPreference(
                     UserPreference.COLOUR_TYPE,
@@ -142,21 +149,21 @@ public class PropertiesAppearance extends PropertiesBasePanel {
                     "Decorate frame",
                     Boolean.valueOf(stringUserProperty(key))));
 
-        UserPreference[] preferences = 
+        UserPreference[] preferences =
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
 
     }
-    
+
     public void restoreDefaults() {
         preferencesPanel.savePreferences();
     }
-    
+
     public void save() {
         preferencesPanel.savePreferences();
     }
-    
+
 }
 
 

@@ -57,11 +57,10 @@ public class ApplicationLauncher {
 
         try {
 
-            aaFonts();
             applySystemProperties();
+            aaFonts();
 
             boolean dirsCreated = SystemResources.createUserHomeDirSettings();
-
             if (!dirsCreated) {
 
                 System.exit(0);
@@ -283,8 +282,16 @@ public class ApplicationLauncher {
 
     private void aaFonts() {
 
-        System.setProperty("awt.useSystemAAFontSettings", "on");
-        System.setProperty("swing.aatext", "true");
+        String value1 = "on";
+        String value2 = "true";
+        if (!booleanUserProperty("display.aa.fonts")) {
+
+            value1 = "off";
+            value2 = "false";
+        }
+
+        System.setProperty("awt.useSystemAAFontSettings", value1);
+        System.setProperty("swing.aatext", value2);
     }
 
     private void applyKeyboardFocusManager() {
