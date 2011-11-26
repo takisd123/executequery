@@ -42,7 +42,7 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class EditableDatabaseTable extends DefaultDatabaseObjectTable
                                    implements KeyListener {
-    
+
     /** Creates a new instance of EditableDatabaseTable */
     public EditableDatabaseTable() {
         super();
@@ -50,7 +50,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
         setCellEditorListeners();
         addMouseListener(new MouseHandler());
     }
-    
+
     /** Sets listeners on respective column cell editors. */
     protected void setCellEditorListeners() {
 
@@ -64,7 +64,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
 
                 DefaultCellEditor defaultCellEditor = (DefaultCellEditor) cellEditor;
                 if (defaultCellEditor.getComponent() instanceof JTextField) {
-        
+
                     ((JTextField)defaultCellEditor.getComponent()).addKeyListener(this);
                 }
 
@@ -84,7 +84,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
             setColumnData(null);
         }
     }
-    
+
     /**
      * Appends the specified column to end of the list.
      *
@@ -94,12 +94,14 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
         // stop any editing
         editingStopped(null);
         if (isEditing()) {
+
             removeEditor();
         }
-        
+
         int toIndex = -1;
         int selectedRow = getSelectedRow();
         if (selectedRow != -1) {
+
             toIndex = selectedRow + 1;
         }
 
@@ -115,34 +117,34 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
     }
 
     /**
-     * Deletes or marks to delete the currently selected 
+     * Deletes or marks to delete the currently selected
      * database table column (JTable row).
      */
     public void deleteSelectedColumn() {
 
         int selectedRow = getSelectedRow();
         if (selectedRow == -1) {
-        
+
             return;
         }
-        
+
         DatabaseObjectTableModel _model = getDatabaseTableModel();
         DatabaseTableColumn column = (DatabaseTableColumn)_model.getValueAt(selectedRow, 0);
 
         // if its a new column - just remove it
         if (column.isNewColumn()) {
-            
+
             _model.deleteDatabaseColumnAt(selectedRow);
 
         } else { // otherwise mark to drop
-            
+
             column.makeCopy();
             column.setMarkedDeleted(true);
             _model.fireTableRowsUpdated(selectedRow, selectedRow);
         }
-        
+
     }
-    
+
     /**
      * Resets and clears the currently displayed table.
      */
@@ -158,8 +160,8 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
     public void keyReleased(KeyEvent e) {
 
         Object source = e.getSource();
-        
         if (source instanceof JTextField) {
+
             int row = getEditingRow();
             int col = getEditingColumn();
 
@@ -174,12 +176,11 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
                     tableChanged(row, col, new Integer(value));
                 }
 
-            }
-            // if not an int must be a string
-            else {
+            } else { // if not an int must be a string
 
                 tableChanged(row, col, value);
             }
+
         }
 
     }
@@ -196,7 +197,7 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
     public void tableChanged(int row, int col, Object value) {
         getModel().setValueAt(value, row, col);
     }
-    
+
     /**
      * Invoked when a key has been typed.
      * This event occurs when a key press is followed by a key release.
@@ -215,27 +216,28 @@ public class EditableDatabaseTable extends DefaultDatabaseObjectTable
     private class MouseHandler extends MouseAdapter {
 
         public void mouseClicked(MouseEvent e) {
+
             int mouseX = e.getX();
             int mouseY = e.getY();
-            
+
             int col = columnAtPoint(new Point(mouseX, mouseY));
             if (col != 0) {
+
                 return;
             }
 
             int row = rowAtPoint(new Point(mouseX, mouseY));
             DatabaseObjectTableModel _model = getDatabaseTableModel();
-            DatabaseTableColumn column = 
-                    (DatabaseTableColumn)_model.getValueAt(row, 0);
-
+            DatabaseTableColumn column = (DatabaseTableColumn)_model.getValueAt(row, 0);
             if (column.isMarkedDeleted()) {
+
                 column.setMarkedDeleted(false);
                 _model.fireTableRowsUpdated(row, row);
             }
 
         }
-        
+
     } // class MouseHandler
-    
+
 }
 

@@ -21,7 +21,7 @@
 	<classpathentry kind="lib" path="lib/c3p0-0.9.1.2.jar" sourcepath="/home/takisd/softdev/dev-env/libs/c3p0-0.9.1.2/c3p0-0.9.1.2.src/src/classes"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="lib/liquibase-core-1.9.5.jar" sourcepath="/home/takisd/.m2/repository/org/liquibase/liquibase-core/1.9.5/liquibase-core-1.9.5-sources.jar"/>
-	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar" sourcepath="/home/takisd/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -36,12 +36,5 @@ public class DefaultDatabaseObjectTable extends AbstractDatabaseObjectTable {
         initDefaultTableModel();
         initDefaultCellRenderer();
     }
-    
+
 }
-
-
-
-
-
-
-
