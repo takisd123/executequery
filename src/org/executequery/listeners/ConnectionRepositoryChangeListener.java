@@ -29,38 +29,35 @@ import org.executequery.util.ThreadUtils;
 
 public final class ConnectionRepositoryChangeListener implements ConnectionRepositoryListener {
 
-    public void connectionAdded(
-            ConnectionRepositoryEvent connectionRepositoryEvent) {
+    public void connectionAdded(ConnectionRepositoryEvent connectionRepositoryEvent) {
 
         saveConnections();
     }
 
-    public void connectionRemoved(
-            ConnectionRepositoryEvent connectionRepositoryEvent) {
+    public void connectionRemoved(ConnectionRepositoryEvent connectionRepositoryEvent) {
 
         saveConnections();
     }
 
-    public void connectionModified(
-            ConnectionRepositoryEvent connectionRepositoryEvent) {
+    public void connectionModified(ConnectionRepositoryEvent connectionRepositoryEvent) {
 
         saveConnections();
     }
 
     public boolean canHandleEvent(ApplicationEvent event) {
-        
+
         return (event instanceof ConnectionRepositoryEvent);
     }
 
     private void saveConnections() {
 
         ThreadUtils.startWorker(new Runnable() {
-           
+
             public void run() {
 
                 databaseConnectionRepository().save();
             }
-            
+
         });
 
     }
@@ -68,13 +65,7 @@ public final class ConnectionRepositoryChangeListener implements ConnectionRepos
     private DatabaseConnectionRepository databaseConnectionRepository() {
 
         return (DatabaseConnectionRepository)RepositoryCache.load(
-                    DatabaseConnectionRepository.REPOSITORY_ID);        
+                    DatabaseConnectionRepository.REPOSITORY_ID);
     }
 
 }
-
-
-
-
-
-

@@ -36,7 +36,7 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
     private final DriverViewPanel parent;
 
     public TabViewDriverPanel(DriverViewPanel parent) {
-        
+
         this.parent = parent;
 
         panel = new DriverFieldsPanel();
@@ -45,20 +45,19 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseDriver24.png"));
         setContentPanel(panel);
     }
-    
+
     // --------------------------------------------
     // DockedTabView implementation
     // --------------------------------------------
 
     private boolean panelSelected = true;
-    
+
     /**
      * Indicates the panel is being removed from the pane
      */
     public boolean tabViewClosing() {
-        
-        panelSelected = false;
 
+        panelSelected = false;
         return populateAndSave();
     }
 
@@ -66,7 +65,7 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
      * Indicates the panel is being selected in the pane
      */
     public boolean tabViewSelected() {
-        
+
         panelSelected = true;
         return true;
     }
@@ -75,14 +74,14 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
      * Indicates the panel is being selected in the pane
      */
     public boolean tabViewDeselected() {
-        
+
         return tabViewClosing();
     }
 
     // --------------------------------------------
 
     public void setDriver(DatabaseDriver driver) {
-        
+
         if (populateAndSave()) {
 
             panel.setDriver(driver);
@@ -97,23 +96,21 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
     private boolean populateAndSave() {
 
         panel.populateDriverObject();
-
         DatabaseDriver driver = panel.getDriver();
 
         if (driver != null) {
-        
+
             if (driverNameExists(driver)) {
 
                 String message = String.format(
                         "The driver name %s already exists.", driver.getName());
-    
                 GUIUtilities.displayErrorMessage(message);
-    
+
                 return false;
             }
-    
+
             parent.nodeNameValueChanged(driver);
-            
+
             return panel.saveDrivers();
         }
 
@@ -132,32 +129,32 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
     }
 
     public void cleanup() {
-        
+
         // nothing to do here
     }
 
     public String getLayoutName() {
-        
+
         return DriverPanel.TITLE;
     }
 
     public Printable getPrintable() {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
-    
+
     public class DriverFieldsPanel extends AbstractDriverPanel {
 
         private DriverFieldsPanel() {}
-        
+
         public void driverNameChanged() {
-            
+
             if (panelSelected) {
 
                 populateAndSave();
             }
-            
+
         }
 
         public boolean saveDrivers() {
@@ -165,7 +162,6 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
             try {
 
                 databaseDriverRepository().save();
-
                 return true;
 
             } catch (RepositoryException e) {
@@ -176,9 +172,9 @@ public class TabViewDriverPanel extends AbstractFormObjectViewPanel {
             }
 
         }
-        
+
     }
-    
+
 }
 
 

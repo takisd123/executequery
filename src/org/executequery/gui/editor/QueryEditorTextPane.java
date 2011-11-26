@@ -24,6 +24,7 @@ import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JTextPane;
 import javax.swing.UIManager;
@@ -40,9 +42,13 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.DefaultStyledDocument;
+import javax.swing.text.Document;
 import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
+import javax.swing.text.TextAction;
+import javax.swing.text.Utilities;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
@@ -93,12 +99,333 @@ public class QueryEditorTextPane extends SQLTextPane
 
         try {
 
+            /*
+            Action actions[] = getActions();
+            Comparator<Action> comparator = new Comparator<Action>() {
+              public int compare(Action a1, Action a2) {
+                String firstName = (String) a1.getValue(Action.NAME);
+                String secondName = (String) a2.getValue(Action.NAME);
+                return firstName.compareTo(secondName);
+              }
+            };
+            Arrays.sort(actions, comparator);
+
+            int count = actions.length;
+            System.out.println("Count: " + count);
+            for (int i = 0; i < count; i++) {
+
+                System.out.printf("%28s : %s\n",
+                        actions[i].getValue(Action.NAME),
+                        actions[i].getClass().getName());
+            }
+            */
+
+            /*
+            ActionMap actionMap = getActionMap();
+            actionMap.put(DefaultEditorKit.selectWordAction,
+                    new QueryEditorSelectWordAction(DefaultEditorKit.selectWordAction, false));
+
+            // **** ctrl-right
+            actionMap.put(DefaultEditorKit.nextWordAction,
+                    new QueryEditorBeginWordAction(DefaultEditorKit.nextWordAction,
+                            actionMap.get(DefaultEditorKit.nextWordAction)));
+
+            // **** ctrl-left
+            actionMap.put(DefaultEditorKit.previousWordAction,
+                    new QueryEditorPreviousWordAction(DefaultEditorKit.previousWordAction,
+                            actionMap.get(DefaultEditorKit.previousWordAction)));
+            */
+
             init();
 
         } catch (Exception e) {
 
             e.printStackTrace();
         }
+    }
+
+    // ctrl-left
+    static class QueryEditorPreviousWordAction extends TextAction {
+
+        private final Action originalAction;
+
+        QueryEditorPreviousWordAction(String nm, Action originalAction) {
+
+            super(nm);
+            this.originalAction = originalAction;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            JTextComponent target = getTextComponent(e);
+
+            if (target != null) {
+
+                try {
+
+                    int offset = target.getCaretPosition();
+                    int begOffs = Utilities.getWordStart(target, offset);
+                    int endOffs = Utilities.getWordEnd(target, offset);
+
+                    int caretPositionInWord = offset - begOffs;
+                    Document document = target.getDocument();
+                    String wordAtCursor = document.getText(begOffs, (endOffs - begOffs));
+
+                    System.out.println("A - " + wordAtCursor);
+
+                    if (StringUtils.isBlank(wordAtCursor)) {
+
+                        originalAction.actionPerformed(e);
+                        return;
+                    }
+
+                    if (caretPositionInWord == 0) {
+
+                        if (offset > 0 && !Character.isWhitespace(document.getText(offset - 1, 1).charAt(0))) {
+
+                            System.out.println("B - " + wordAtCursor);
+                        }
+
+//                        originalAction.actionPerformed(e);
+//                        return;
+                    }
+
+                    String[] strings = StringUtils.splitByCharacterTypeCamelCase(wordAtCursor);
+                    if (strings.length == 1) {
+
+                        originalAction.actionPerformed(e);
+                        return;
+                    }
+
+                    int movingOffset = 0;
+                    for (String string : strings) {
+
+                        int length = string.length();
+                        movingOffset += length;
+
+                        if (movingOffset >= caretPositionInWord) {
+
+                            begOffs += (movingOffset - length);
+                            break;
+                        }
+
+                    }
+
+                    target.setCaretPosition(begOffs);
+
+                } catch (BadLocationException bl) {
+
+                    originalAction.actionPerformed(e);
+                }
+
+            }
+
+        }
+
+    }
+
+
+    // ctrl-right
+    static class QueryEditorBeginWordAction extends TextAction {
+
+        private final Action originalAction;
+
+        public QueryEditorBeginWordAction(String nm, Action originalAction) {
+            super(nm);
+            this.originalAction = originalAction;
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            JTextComponent target = getTextComponent(e);
+            if (target != null) {
+
+                try {
+
+                    int offset = target.getCaretPosition();
+                    int begOffs = Utilities.getWordStart(target, offset);
+                    int endOffs = Utilities.getWordEnd(target, offset);
+
+                    int caretPositionInWord = offset - begOffs;
+                    String wordAtCursor = target.getDocument().getText(begOffs, (endOffs - begOffs));
+
+                    if (caretPositionInWord == wordAtCursor.length()) {
+
+                        originalAction.actionPerformed(e);
+                        return;
+                    }
+
+                    String[] strings = StringUtils.splitByCharacterTypeCamelCase(wordAtCursor);
+                    if (strings.length == 1) {
+
+                        originalAction.actionPerformed(e);
+                        return;
+                    }
+
+                    int movingOffset = 0;
+                    for (String string : strings) {
+
+                        int length = string.length();
+                        movingOffset += length;
+
+                        if (movingOffset > caretPositionInWord) {
+
+                            if (begOffs > 0) {
+
+                                begOffs += movingOffset;
+
+                            } else {
+
+                                begOffs = movingOffset;
+                            }
+                            break;
+                        }
+
+                    }
+
+                    target.setCaretPosition(begOffs);
+
+                } catch (BadLocationException bl) {
+
+                    UIManager.getLookAndFeel().provideErrorFeedback(target);
+                }
+
+            }
+
+        }
+
+    }
+
+    private static final String separatorChars = ".(){}{},:;_-+/<>*&$";
+
+    // word selection start
+    static class QueryEditorBeginWordSelectionAction extends TextAction {
+
+        public QueryEditorBeginWordSelectionAction(String nm) {
+
+            super(nm);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            JTextComponent target = getTextComponent(e);
+            if (target != null) {
+
+                try {
+
+                    int offset = target.getCaretPosition();
+                    int begOffs = Utilities.getWordStart(target, offset);
+                    int endOffs = Utilities.getWordEnd(target, offset);
+
+                    int wordOffset = offset - begOffs;
+
+                    String wordAtCursor = target.getDocument().getText(begOffs, (endOffs-begOffs));
+
+                    int movingOffset = 0;
+                    String[] strings = StringUtils.splitPreserveAllTokens(wordAtCursor, separatorChars, -1);
+
+                    /*
+                    if (strings.length == 1) {
+
+                        // use original action
+                    }
+                    */
+
+                    int count = 0;
+                    for (String string : strings) {
+
+                        int length = string.length();
+                        movingOffset += length;
+                        if (movingOffset > wordOffset) {
+
+                            begOffs += (movingOffset - length);
+                            break;
+                        }
+                        count++;
+
+                    }
+
+                    begOffs += count;
+                    target.setCaretPosition(begOffs);
+
+                } catch (BadLocationException bl) {
+
+                    UIManager.getLookAndFeel().provideErrorFeedback(target);
+                }
+
+            }
+
+        }
+
+    }
+
+    // word selection end
+    static class QueryEditorEndWordSelectionAction extends TextAction {
+
+        public QueryEditorEndWordSelectionAction(String name) {
+
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            JTextComponent target = getTextComponent(e);
+            if (target != null) {
+                try {
+                    int offset = target.getCaretPosition();
+                    int begOffs = Utilities.getWordStart(target, offset);
+                    int endOffs = Utilities.getWordEnd(target, offset);
+
+                    int wordOffset = offset - begOffs;
+
+                    String wordAtCursor = target.getDocument().getText(begOffs, (endOffs-begOffs));
+
+                    int count = 0;
+                    int movingOffset = 0;
+                    String[] strings = StringUtils.splitPreserveAllTokens(wordAtCursor, separatorChars, -1);
+                    for (String string : strings) {
+
+                        int length = string.length();
+                        movingOffset += length;
+                        if (movingOffset > wordOffset) {
+
+                            endOffs = begOffs + movingOffset;
+                            break;
+                        }
+                        count++;
+
+                    }
+
+                    endOffs += count;
+                    target.moveCaretPosition(endOffs);
+
+                } catch (BadLocationException bl) {
+
+                    UIManager.getLookAndFeel().provideErrorFeedback(target);
+                }
+
+            }
+
+        }
+
+    }
+
+    static class QueryEditorSelectWordAction extends TextAction {
+
+        private Action start;
+        private Action end;
+
+        public QueryEditorSelectWordAction(String nm, boolean select) {
+            super(DefaultEditorKit.selectWordAction);
+            start = new QueryEditorBeginWordSelectionAction("beginWord");
+            end = new QueryEditorEndWordSelectionAction("endWord");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            start.actionPerformed(e);
+            end.actionPerformed(e);
+        }
+
     }
 
     private void init() throws Exception {

@@ -225,6 +225,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void sortConnections() {
 
         if (hostNodeSorter == null) {
@@ -236,6 +237,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         hostNodeSorter.sort(rootNode);
 
         tree.nodeStructureChanged(rootNode);
+
+        int count = 0;
+        for (Enumeration i = rootNode.children(); i.hasMoreElements();) {
+
+            DatabaseHostNode node = (DatabaseHostNode) i.nextElement();
+            DatabaseConnection databaseConnection = node.getDatabaseConnection();
+            connections.remove(databaseConnection);
+            connections.add(count, databaseConnection);
+
+            count++;
+        }
+
+        EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
+                        this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, null));
+
     }
 
     /**

@@ -41,50 +41,54 @@ import org.executequery.gui.browser.nodes.DatabaseHostNode;
 class DatabaseHostNodeSorter {
 
     public static final String SORT_A_Z = "sortAtoZ";
-    
+
     public static final String SORT_Z_A = "sortZtoA";
-    
+
     public static final String SORT_RESTORE = "sortRestore";
-    
+
     private String lastSort = SORT_RESTORE;
 
-    private Map<String, Comparator<DatabaseHostNode>> comparators; 
-    
+    private Map<String, Comparator<DatabaseHostNode>> comparators;
+
     public DatabaseHostNodeSorter() {
 
         comparators = new HashMap<String, Comparator<DatabaseHostNode>>(3);
-        
+
         comparators.put(SORT_A_Z, new AtoZComparator());
         comparators.put(SORT_Z_A, new ZtoAComparator());
         comparators.put(SORT_RESTORE, new RestoreComparator());
     }
 
+    public Comparator<DatabaseHostNode> getLastComparator() {
+
+        return comparators.get(lastSort);
+    }
+
     @SuppressWarnings("unchecked")
     public void sort(DefaultMutableTreeNode rootNode) {
-        
-        List<DatabaseHostNode> children = 
+
+        List<DatabaseHostNode> children =
             new ArrayList<DatabaseHostNode>(rootNode.getChildCount());
 
         for (Enumeration i = rootNode.children(); i.hasMoreElements();) {
 
-            children.add((DatabaseHostNode) i.nextElement());            
+            children.add((DatabaseHostNode) i.nextElement());
         }
-        
+
         Collections.sort(children, nextComparator());
-        
         rootNode.removeAllChildren();
-        
+
         for (DatabaseHostNode treeNode : children) {
 
             rootNode.add(treeNode);
         }
-        
+
     }
-    
+
     private Comparator<DatabaseHostNode> nextComparator() {
 
         if (SORT_A_Z.equals(lastSort)) {
-            
+
             lastSort = SORT_Z_A;
 
         } else if (SORT_Z_A.equals(lastSort)) {
@@ -92,7 +96,7 @@ class DatabaseHostNodeSorter {
             lastSort = SORT_RESTORE;
 
         } else {
-            
+
             lastSort = SORT_A_Z;
         }
 
@@ -104,21 +108,21 @@ class DatabaseHostNodeSorter {
         public int compare(DatabaseHostNode node1, DatabaseHostNode node2) {
 
             return node1.getDatabaseConnection().getName().compareToIgnoreCase(
-                    node2.getDatabaseConnection().getName());        
+                    node2.getDatabaseConnection().getName());
         }
-    
+
     }
-    
+
     private class ZtoAComparator implements Comparator<DatabaseHostNode> {
 
         public int compare(DatabaseHostNode node1, DatabaseHostNode node2) {
 
             return (node1.getDatabaseConnection().getName().compareToIgnoreCase(
-                    node2.getDatabaseConnection().getName())) * -1;        
+                    node2.getDatabaseConnection().getName())) * -1;
         }
-    
+
     }
-    
+
     private class RestoreComparator implements Comparator<DatabaseHostNode> {
 
         public int compare(DatabaseHostNode node1, DatabaseHostNode node2) {
@@ -127,20 +131,20 @@ class DatabaseHostNodeSorter {
             int node2Order = node2.getOrder();
 
             if (node1Order < node2Order) {
-                
+
                 return -1;
-                
+
             } else if (node2Order < node1Order) {
-            
+
                 return 1;
-                
+
             } else {
-                
+
                 return 0;
             }
 
         }
-    
+
     }
 
 }

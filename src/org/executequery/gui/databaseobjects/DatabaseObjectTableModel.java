@@ -37,16 +37,16 @@ import org.underworldlabs.swing.print.AbstractPrintableTableModel;
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
 public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
-    
+
     protected String[] header = {
             "", "Name", "Datatype", "Size", "Scale", "Required", "Default" };
 
     /** the database table columns */
     protected List<DatabaseColumn> columns;
-    
+
     /** indicates whether this model is editable */
     private boolean editable;
-    
+
     /** Creates a new instance of DatabaseObjectTableModel */
     public DatabaseObjectTableModel() {
         this(null);
@@ -72,7 +72,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         this.columns = columns;
         fireTableDataChanged();
     }
-    
+
     public int getColumnCount() {
         return header.length;
     }
@@ -90,16 +90,16 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         }
         return columns.indexOf(column);
     }
-    
+
     public Object getValueAt(int row, int col) {
 
         if (row >= getRowCount()) {
-        
+
             return null;
         }
 
         DatabaseColumn column = columns.get(row);
-        
+
         switch(col) {
             case 0:
                 return column;
@@ -122,17 +122,17 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
     }
 
     private String stringValueToUpper(String value) {
-        
+
         if (StringUtils.isNotBlank(value)) {
-            
+
             return value.toUpperCase();
         }
-        
+
         return "";
     }
-    
+
     public void setValueAt(Object value, int row, int col) {
-        
+
         // bail if we're not editable
         if (!isEditable()) {
 
@@ -140,28 +140,28 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         }
 
         DatabaseColumn column = columns.get(row);
-        
+
         // only the DefaultDatabaseColumn implementations are editable
         if (!(column instanceof DefaultDatabaseColumn)) {
-            
+
             return;
         }
 
         if (column instanceof DatabaseTableColumn) {
 
             DatabaseTableColumn tableColumn = (DatabaseTableColumn)column;
-            
+
             // if its not currently modified or isn't new
-            // ensure a copy is made for later comparison 
+            // ensure a copy is made for later comparison
             // and SQL text generation.
-            
+
             if (!tableColumn.isNewColumn() && !tableColumn.isMarkedDeleted()) {
-            
+
                 tableColumn.makeCopy();
             }
 
         }
-        
+
         DefaultDatabaseColumn defaultDatabaseColumn = (DefaultDatabaseColumn) column;
 
         switch(col) {
@@ -205,7 +205,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
             fireTableRowsDeleted(index, index);
         }
     }
-    
+
     public void addNewDatabaseColumn(DatabaseColumn column, int toIndex) {
 
         if (!isEditable()) {
@@ -215,7 +215,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         if (columns == null) {
             columns = new ArrayList<DatabaseColumn>();
         }
-        
+
         int row = -1;
         if (toIndex != -1) {
             columns.add(toIndex, column);
@@ -239,11 +239,11 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
             return Boolean.class;
 
         } else if (col == 3 || col == 4) {
-            
+
             return Integer.class;
 
         } else {
-            
+
             return String.class;
         }
     }
@@ -268,7 +268,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
                         return "PFK";
                     }
                     return "PK";
-                } 
+                }
                 else if (dc.isForeignKey()) {
                     return "FK";
                 }
