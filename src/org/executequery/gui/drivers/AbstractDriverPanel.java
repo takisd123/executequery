@@ -116,10 +116,7 @@ public abstract class AbstractDriverPanel extends JPanel
 
         jarPathList = new JList(jarPathListModel);
         jarPathList.setToolTipText(getString("AbstractDriverPanel.pathToolTip"));
-        JScrollPane jarPathListScrollPane = new JScrollPane(jarPathList);
-
-        /*{
-
+        JScrollPane jarPathListScrollPane = new JScrollPane(jarPathList) {
             private int height = 120;
             @Override
             public Dimension getPreferredSize() {
@@ -128,9 +125,15 @@ public abstract class AbstractDriverPanel extends JPanel
                 size.height = height;
                 return size;
             }
+            @Override
+            public Dimension getMinimumSize() {
 
+                Dimension size = super.getMinimumSize();
+                size.height = height;
+                return size;
+            }
         };
-*/
+
         nameField.addFocusListener(new DriverNameFieldListener(this));
 
         databaseNameCombo = WidgetFactory.createComboBox(createDatabaseComboValues());
