@@ -58,9 +58,10 @@ public class ApplicationLauncher {
         try {
 
             applySystemProperties();
-            aaFonts();
 
             boolean dirsCreated = SystemResources.createUserHomeDirSettings();
+            aaFonts();
+
             if (!dirsCreated) {
 
                 System.exit(0);
