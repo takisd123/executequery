@@ -1,6 +1,13 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 28 November 2011
+Date: 13 December 2011
+
+Summary of changes - v3.2.5 Build 5172:
+----------------------------------------
+
+- Fixed transaction issue noted on data tab when connection auto commit mode is
+  reset before the result set is closed (noted for SolidDB).
+
 
 Summary of changes - v3.2.4 Build 5169:
 ----------------------------------------
@@ -13,8 +20,8 @@ Summary of changes - v3.2.4 Build 5169:
 - Added additional schema objects shown for Query Editor auto-complete popup.
 - Modified procedure execution from the Query Editor to execute 'as-is' when the
   provided procedure can not be located using the driver meta data.
-- Added anti-alias font option
-- Modified to save connections after a sort
+- Added anti-alias font option.
+- Modified to save connections after a sort.
 
 
 Summary of changes - v3.2.3 Build 5164:
@@ -279,4 +286,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-28 November 2011
+13 December 2011

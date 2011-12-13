@@ -360,22 +360,12 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             statement = connection.createStatement();
             rs = statement.executeQuery(recordsQueryString());
 
-            return rs;
+            return new TransactionAgnosticResultSet(connection, rs, originalAutoCommit);
 
         } catch (SQLException e) {
 
             throw new DataSourceException(e);
-
-        } finally {
-
-            if (connection != null) {
-                try {
-                    connection.setAutoCommit(originalAutoCommit);
-                } catch (SQLException e) {
-                    logSQLException(e);
-                }
-            }
-        }
+        } 
 
     }
 
