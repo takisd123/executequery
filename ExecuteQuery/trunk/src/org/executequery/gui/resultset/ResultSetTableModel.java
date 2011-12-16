@@ -539,7 +539,13 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public Class<?> getColumnClass(int col) {
 
         List<RecordDataItem> rowData = tableData.get(0);
-        int columnType = rowData.get(col).getDataType();
+        RecordDataItem recordDataItem = rowData.get(col);
+        
+        int columnType = recordDataItem.getDataType();
+        if (recordDataItem.isValueNull()) {
+            
+            return String.class;
+        }
         
         //switch (columnTypes[col]) {
         switch (columnType) {
