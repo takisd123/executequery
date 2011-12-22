@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -593,6 +594,19 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             // retrieve the base column info
             rs = dmd.getColumns(_catalog, _schema, table, null);
+            
+            if (Log.isDebugEnabled()) {
+
+                Log.debug("Meta data on columns for table - " + table);
+                
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                for (int i = 0; i < columnCount; i++) {
+                    
+                    Log.debug("Column: [ " + (i + 1) + " ] " + metaData.getColumnName(i + 1));                    
+                }
+            }
+
             while (rs.next()) {
 
                 DefaultDatabaseColumn column = new DefaultDatabaseColumn();
@@ -655,8 +669,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             }
 
             return columns;
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
 
             if (Log.isDebugEnabled()) {
 
@@ -666,8 +680,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             return columns;
 
 //            throw new DataSourceException(e);
-        }
-        finally {
+        
+        } finally {
+          
             releaseResources(rs);
         }
 
