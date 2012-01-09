@@ -1,13 +1,13 @@
 #!/bin/bash
 
-JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk6
+JAVA_HOME=/home/takisd/Development/tools/java/jdk6
 export JAVA_HOME
 
 EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
 BUILD_DIR=$EQ_DIR/scripts/ExecuteQuery
 OUTPUT_JAR=$BUILD_DIR/build/eq.jar
 
-IDE_DIR=/home/takisd/softdev/dev-env/ide/executequery
+IDE_DIR=/home/takisd/Development/tools/ide/executequery
 
 echo $BUILD_DIR
 
@@ -18,7 +18,7 @@ if [ -d $BUILD_DIR ]; then
     echo
 fi
 
-ant
+/home/takisd/Development/tools/ide/apache-ant-1.7.1/bin/ant
 
 if [ -f $OUTPUT_JAR ]; then
 
