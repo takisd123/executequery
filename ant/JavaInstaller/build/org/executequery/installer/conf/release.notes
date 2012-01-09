@@ -1,6 +1,21 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 11 February 2011
+Date: 28 November 2011
+
+Summary of changes - v3.2.4 Build 5168:
+----------------------------------------
+
+- Moved build to Java 1.6.
+- Added right-alignment for numeric values option for result set table views.
+- Fixed unrecoverable location exception on Query Editor when attempting to
+  define a table alias for auto-completion.
+- Added multiple connection connect and disconnect.
+- Added additional schema objects shown for Query Editor auto-complete popup.
+- Modified procedure execution from the Query Editor to execute 'as-is' when the
+  provided procedure can not be located using the driver meta data.
+- Added anti-alias font option
+- Modified to save connections after a sort
+
 
 Summary of changes - v3.2.3 Build 5164:
 ----------------------------------------
@@ -28,7 +43,6 @@ Summary of changes - v3.2.3 Build 5164:
 - Split out autocomplete option into keywords and database objects - added these
   to the editor popup menu.
 - Updated libraries Log4j, Liquibase, Commons Lang and Commons Codec.
-
 
 
 Summary of changes - v3.2.2 Build 5148:
@@ -209,9 +223,9 @@ certain conditions. See the GNU General Public License for details.
 Deployment Environment:
 -----------------------
 At present the recommended Java 2 Runtime Environment (JRE) version is at least
-1.5.0.
+1.6.0.
 
-This program has been tested under JRE version 1.5.0 (and 1.6.0) on the
+This program has been tested under JRE version 1.6.0 on the
 following platforms:
 
    -- Windows versions 2000, XP and Vista, 7
@@ -225,7 +239,7 @@ The application may be started by using the executable file eq.exe (Windows
 only) or the Unix shell scripts eq.sh.
 
 Alternatively you may simply execute the Java archive eq.jar from the
-installation directory using your installed Java 1.5 runtime environment.
+installation directory using your installed Java 1.6 runtime environment.
 
 
 Source Code:
@@ -240,10 +254,7 @@ checked out using svn as shown below:
 
 svn co https://executequery.svn.sourceforge.net/svnroot/executequery/trunk executequery
 
-The source requires Java version 1.5 to build successfully. If building under
-Java version 1.6 or later you will need to uncomment the new java.sql.Connection
-implementation methods in the class org.executequery.datasource.PooledConnection
-otherwise it will not build under v1.6+.
+The source requires Java version 1.6 to build successfully.
 
 If you are interested in a particular feature but can not locate it within the
 code, please contact myself at the above address and you will be pointed in the
@@ -268,4 +279,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-11 February 2011
+28 November 2011

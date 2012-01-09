@@ -12,8 +12,8 @@ print_progress() {
   echo -n "."
 }
 
-JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk1.5.0_18
-JAVA_HOME=/home/takisd/softdev/java/jdk6
+#JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk1.5.0_18
+JAVA_HOME=/home/takisd/softdev/dev-env/java/jdk6
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
