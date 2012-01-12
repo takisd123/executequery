@@ -305,13 +305,9 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         }
 
         ResultSet rs = null;
-        Statement stmnt = null;
-
         try {
 
-           stmnt = getHost().getConnection().createStatement();
-           rs = stmnt.executeQuery(recordCountQueryString());
-
+           rs = executeQuery(recordCountQueryString());
            if (rs.next()) {
 
                dataRowCount = rs.getInt(1);
@@ -325,11 +321,15 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         }  finally {
 
-            releaseResources(stmnt, rs);
+            try {
+                releaseResources(rs.getStatement(), rs);
+            } catch (SQLException e) {}
+
         }
 
     }
-
+        
+    
     /**
      * Retrieves the data for this object (where applicable).
      *
@@ -337,6 +337,12 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
      */
     public ResultSet getData() throws DataSourceException {
 
+        return executeQuery(recordsQueryString());        
+    }
+        
+    private ResultSet executeQuery(String query) throws DataSourceException {
+        
+        
         Connection connection = null;
         ResultSet rs = null;
         boolean originalAutoCommit = false;
@@ -358,7 +364,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             connection.setAutoCommit(true);
 
             statement = connection.createStatement();
-            rs = statement.executeQuery(recordsQueryString());
+            rs = statement.executeQuery(query);
 
             return new TransactionAgnosticResultSet(connection, rs, originalAutoCommit);
 
@@ -368,7 +374,8 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         } 
 
     }
-
+    
+    
     public void cancelStatement() {
 
         if (statement != null) {

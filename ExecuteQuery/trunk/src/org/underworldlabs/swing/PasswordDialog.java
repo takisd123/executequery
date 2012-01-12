@@ -166,7 +166,7 @@ public class PasswordDialog extends JDialog {
     
     private void display() {
         pack();
-        setLocation(GUIUtils.getLocationForDialog(getOwner(), getSize()));
+        setLocation(GUIUtils.getPointToCenter(getOwner(), getSize()));
         setVisible(true);
     }
     

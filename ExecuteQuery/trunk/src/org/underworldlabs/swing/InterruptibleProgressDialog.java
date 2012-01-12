@@ -105,7 +105,7 @@ public class InterruptibleProgressDialog extends JDialog
 
     public void run() {
         pack();
-        setLocation(GUIUtils.getLocationForDialog(parentFrame, getSize()));
+        setLocation(GUIUtils.getPointToCenter(parentFrame, getSize()));
         progressBar.start();
         setVisible(true);
     }

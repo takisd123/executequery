@@ -92,7 +92,7 @@ public class HeapMemoryDialog extends JDialog
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         
         pack();
-        setLocation(GUIUtils.getLocationForDialog(getOwner(), getSize()));
+        setLocation(GUIUtils.getPointToCenter(getOwner(), getSize()));
         setVisible(true);
     }
 

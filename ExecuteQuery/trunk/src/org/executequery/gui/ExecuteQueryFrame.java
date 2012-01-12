@@ -22,7 +22,6 @@ package org.executequery.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
@@ -35,6 +34,7 @@ import javax.swing.WindowConstants;
 import org.executequery.Application;
 import org.executequery.GUIUtilities;
 import org.executequery.util.UserProperties;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.GlassPanePanel;
 import org.underworldlabs.util.MiscUtils;
 
@@ -48,7 +48,7 @@ import org.underworldlabs.util.MiscUtils;
 public class ExecuteQueryFrame extends JFrame 
                                implements ComponentListener {
 
-	private static final String APPLICATION_ICON = "ApplicationIcon32.png";
+	private static final String APPLICATION_ICON = "ApplicationIcon128.png";
 
     private static final String WINDOW_POSITION_KEY = "window.position";
 
@@ -62,7 +62,24 @@ public class ExecuteQueryFrame extends JFrame
     public ExecuteQueryFrame() {
 
         super("Execute Query");
-
+/*
+        String[] icons = {
+                "ApplicationIcon256.png",
+                "ApplicationIcon128.png",
+                "ApplicationIcon48.png",
+                "ApplicationIcon32.png",
+                "ApplicationIcon24.png",
+                "ApplicationIcon16.png"
+        };
+        
+        List<Image> images = new ArrayList<Image>();
+        for (String icon : icons) {
+            
+            images.add(GUIUtilities.loadIcon(icon).getImage());
+        }
+        setIconImages(images);
+*/
+        
         ImageIcon frameIcon = GUIUtilities.loadIcon(APPLICATION_ICON);
         setIconImage(frameIcon.getImage());
 
@@ -131,10 +148,8 @@ public class ExecuteQueryFrame extends JFrame
     }
 
     public void position() {
-        
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
-        
+
+        Dimension screenSize = GUIUtils.getDefaultDeviceScreenSize();
         Dimension frameDim = new Dimension(screenSize.width - 200,
                                            screenSize.height - 150);
 
@@ -238,9 +253,3 @@ public class ExecuteQueryFrame extends JFrame
     public void componentShown(ComponentEvent e) {}
 
 }
-
-
-
-
-
-

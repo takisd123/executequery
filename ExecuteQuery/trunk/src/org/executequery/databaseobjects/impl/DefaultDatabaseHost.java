@@ -154,11 +154,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
                     && getDatabaseConnection().isConnected()) {
 
                 connection = ConnectionManager.getConnection(getDatabaseConnection());
-//                if (connection != null) {
-//
-//                    connection.setAutoCommit(true);
-//                }
-
             }
         } catch (SQLException e) {
 

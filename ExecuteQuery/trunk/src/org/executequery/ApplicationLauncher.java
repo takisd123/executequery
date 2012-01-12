@@ -70,6 +70,9 @@ public class ApplicationLauncher {
             System.setProperty("executequery.minor.version",
                     stringApplicationProperty("eq.minor.version"));
 
+            System.setProperty("executequery.minor.version",
+                    stringApplicationProperty("eq.minor.version"));
+            
             SplashPanel splash = null;
 
             if (displaySplash()) {
