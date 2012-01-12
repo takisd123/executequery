@@ -40,12 +40,12 @@ public final class ExecuteQuery {
     }
     
     public static void main(String[] args) {
-
-        // make sure the installed java version is at least 1.5
-        if (!MiscUtils.isMinJavaVersion(1, 5)) {
+        
+        // make sure the installed java version is at least 1.6
+        if (!MiscUtils.isMinJavaVersion(1, 6)) {
 
             JOptionPane.showMessageDialog(null, 
-                    "The minimum required Java version is 1.5.\n" +
+                    "The minimum required Java version is 1.6.\n" +
                     "The reported version is " + 
                     System.getProperty("java.vm.version") +
                     ".\n\nPlease download and install the latest Java " +

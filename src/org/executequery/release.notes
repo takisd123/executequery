@@ -2,11 +2,15 @@
 
 Date: 16 December 2011
 
-Summary of changes - v3.2.5 Build 5174:
+Summary of changes - v3.2.5 Build 5176:
 ----------------------------------------
 
 - Fixed transaction issue noted on data tab when connection auto commit mode is
   reset before the result set is closed (noted for SolidDB).
+- Fixed lurking transaction isolation issue within the browser tabs holding open
+  locks and preventing query execution elsewhere.
+- Modified GUI to use the default screen for positioning where multiple screens
+  exist.
 
 
 Summary of changes - v3.2.4 Build 5169:

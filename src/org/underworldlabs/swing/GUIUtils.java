@@ -26,18 +26,20 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
 import java.util.Vector;
+
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 
@@ -94,54 +96,61 @@ public class GUIUtils {
      * the specified size to be added to the desktop area.
      *
      * @param the component to center to
-     * @param the size of the dialog to be added as a
+     * @param the size of the componennt to be added as a
      *        <code>Dimension</code> object
      * @return the <code>Point</code> at which to add the dialog
      */
-    public static Point getLocationForDialog(Component component, Dimension dialogDim) {
+    public static Point getPointToCenter(Component component, Dimension dimension) {
+
+        Dimension screenSize = getDefaultDeviceScreenSize();
 
         if (component == null) {
 
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-            if (dialogDim.height > screenSize.height) {
-                dialogDim.height = screenSize.height;
+            if (dimension.height > screenSize.height) {
+                dimension.height = screenSize.height;
             }
 
-            if (dialogDim.width > screenSize.width) {
-                dialogDim.width = screenSize.width;
+            if (dimension.width > screenSize.width) {
+                dimension.width = screenSize.width;
             }
 
-            return new Point((screenSize.width - dialogDim.width) / 2,
-                             (screenSize.height - dialogDim.height) / 2);
+            return new Point((screenSize.width - dimension.width) / 2,
+                             (screenSize.height - dimension.height) / 2);
         }
 
-        //Rectangle dRec = getVisibleBoundsOnScreen(desktop.getDesktopPane());
         Dimension frameDim = component.getSize();
         Rectangle dRec = new Rectangle(component.getX(),
                                        component.getY(),
                                        (int)frameDim.getWidth(),
                                        (int)frameDim.getHeight());
 
-        int dialogX = dRec.x + ((dRec.width - dialogDim.width) / 2);
-        int dialogY = dRec.y + ((dRec.height - dialogDim.height) / 2);
+        int dialogX = dRec.x + ((dRec.width - dimension.width) / 2);
+        int dialogY = dRec.y + ((dRec.height - dimension.height) / 2);
 
-        if (dialogX < 0 || dialogY < 0) {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        if (dialogX <= 0 || dialogY <= 0) {
 
-            if (dialogDim.height > screenSize.height) {
-                dialogDim.height = screenSize.height;
+            if (dimension.height > screenSize.height) {
+                dimension.height = screenSize.height;
             }
 
-            if (dialogDim.width > screenSize.width) {
-                dialogDim.width = screenSize.width;
+            if (dimension.width > screenSize.width) {
+                dimension.width = screenSize.width;
             }
 
-            dialogX = (screenSize.width - dialogDim.width) / 2;
-            dialogY = (screenSize.height - dialogDim.height) / 2;
+            dialogX = (screenSize.width - dimension.width) / 2;
+            dialogY = (screenSize.height - dimension.height) / 2;
         }
 
         return new Point(dialogX, dialogY);
+    }
+
+    public static Dimension getDefaultDeviceScreenSize() {
+
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gs = ge.getScreenDevices()[0];        
+        Dimension screenSize = gs.getDefaultConfiguration().getBounds().getSize();
+
+        return screenSize;
     }
 
     /**
@@ -361,7 +370,7 @@ public class GUIUtils {
                     ((DialogMessageContent) message).setDialog(dialog);
                 }
 
-                dialog.setLocation(getLocationForDialog(parent, dialog.getSize()));
+                dialog.setLocation(getPointToCenter(parent, dialog.getSize()));
                 dialog.setVisible(true);
                 dialog.dispose();
 

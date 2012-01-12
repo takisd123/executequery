@@ -888,7 +888,7 @@ public final class GUIUtilities {
      *  @return the <code>Point</code> at which to add the dialog
      */
     public static Point getLocationForDialog(Dimension dialogDim) {
-        return GUIUtils.getLocationForDialog(frame, dialogDim);
+        return GUIUtils.getPointToCenter(frame, dialogDim);
     }
 
     public static void copyToClipBoard(String text) {

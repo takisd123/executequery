@@ -712,7 +712,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             }
         };
         worker.start();
-
     }
     
     /**

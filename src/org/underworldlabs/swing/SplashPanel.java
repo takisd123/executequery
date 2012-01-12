@@ -150,17 +150,13 @@ public class SplashPanel extends Canvas {
         
         window = new Window(new Frame());
         
-        Dimension screen = getToolkit().getScreenSize();
         Dimension size = new Dimension(image.getWidth(this), image.getHeight(this));
         window.setSize(size);
         
         window.setLayout(new BorderLayout());
         window.add(BorderLayout.CENTER, this);
 
-        window.setLocation((screen.width - size.width) / 2, 
-                (screen.height - size.height) / 2);
-        
-//        window.setLocation(500, 300);
+        window.setLocation(GUIUtils.getPointToCenter(window, size));
         
         window.validate();
         window.setVisible(true);

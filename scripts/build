@@ -3,7 +3,7 @@
 JAVA_HOME=/home/takisd/Development/tools/java/jdk6
 export JAVA_HOME
 
-EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+EQ_DIR=/home/takisd/Development/workspace/eclipse/ExecuteQuery
 BUILD_DIR=$EQ_DIR/scripts/ExecuteQuery
 OUTPUT_JAR=$BUILD_DIR/build/eq.jar
 
@@ -24,7 +24,7 @@ if [ -f $OUTPUT_JAR ]; then
 
     cp $IDE_DIR/eq.jar $IDE_DIR/eq.jar.1
     cp $OUTPUT_JAR $IDE_DIR
-    cp $OUTPUT_JAR /home/takisd/transfers/public
+#    cp $OUTPUT_JAR /home/takisd/transfers/public
     rm -Rf $BUILD_DIR
 
 fi

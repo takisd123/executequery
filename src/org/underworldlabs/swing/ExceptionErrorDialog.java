@@ -228,7 +228,7 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
         
         // get the absolute center position and adjust 
         // for possible dialog expansion on stack trace
-        Point location = GUIUtils.getLocationForDialog(getOwner(), size);
+        Point location = GUIUtils.getPointToCenter(getOwner(), size);
         location.y -= (STACK_HEIGHT/2);
         setLocation(location);
 
