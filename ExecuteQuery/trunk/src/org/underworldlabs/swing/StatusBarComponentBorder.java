@@ -26,13 +26,6 @@ import java.awt.Insets;
 
 import javax.swing.border.Border;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Simple border for status bar panels.
  *

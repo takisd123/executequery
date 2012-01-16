@@ -20,14 +20,10 @@
 
 package org.underworldlabs.swing;
 
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Insets;
 
-import javax.swing.JLabel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
 
 /** 
  * A convenience class providing a simple component
@@ -48,9 +44,11 @@ import javax.swing.border.LineBorder;
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
-public class DisabledField extends JLabel {
+public class DisabledField extends JTextField {
     
-    protected static Border border;    
+    private static final int HEIGHT = 24;
+    
+//    protected static Border border;
     protected static Insets insets;
 
     public DisabledField() {
@@ -61,15 +59,38 @@ public class DisabledField extends JLabel {
 
         super(text);
         
-        if (insets == null || border == null) {
+        if (insets == null) {// || border == null) {
             insets = new Insets(4, 3, 4, 3);
-            border = new DisabledBorder(
-                        UIManager.getColor("TextField.inactiveForeground"));
+//            border = new DisabledBorder(
+//                        UIManager.getColor("TextField.inactiveForeground"));
         }
         
-        setBorder(border);
+        setMargin(insets);
+//        setBorder(border);
+
+        setBackground(UIManager.getColor("Label.background"));
+        setForeground(UIManager.getColor("Label.foreground"));
     }
 
+    @Override
+    public Insets getInsets() {
+
+        return insets;
+    }
+    
+    @Override
+    public boolean isEditable() {
+
+        return false;
+    }
+    
+    @Override
+    public int getHeight() {
+     
+        return HEIGHT;
+    }
+    
+/*
     class DisabledBorder extends LineBorder {
 
         public DisabledBorder(Color color) {
@@ -85,6 +106,7 @@ public class DisabledField extends JLabel {
         }
 
     } // class DisabledBorder
+*/
 
 }
 

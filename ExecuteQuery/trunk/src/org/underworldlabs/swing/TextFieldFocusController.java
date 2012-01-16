@@ -20,13 +20,6 @@
 
 package org.underworldlabs.swing;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Defines those containers with text field components
  * would like the text selected when that field is traversed to.
@@ -39,14 +32,3 @@ package org.underworldlabs.swing;
 public interface TextFieldFocusController {
 
 }
-
-
-
-
-
-
-
-
-
-
-

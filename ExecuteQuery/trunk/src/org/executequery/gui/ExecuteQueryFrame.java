@@ -71,7 +71,7 @@ public class ExecuteQueryFrame extends JFrame
                 "ApplicationIcon24.png",
                 "ApplicationIcon16.png"
         };
-        
+            
         List<Image> images = new ArrayList<Image>();
         for (String icon : icons) {
             
