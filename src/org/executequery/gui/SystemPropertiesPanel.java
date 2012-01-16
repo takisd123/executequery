@@ -41,13 +41,14 @@ import org.underworldlabs.swing.table.PropertyWrapperModel;
  */
 public class SystemPropertiesPanel extends JPanel {
     
-    /** Creates a new instance of SystemPropertiesPanel */
     public SystemPropertiesPanel() {
+
         super(new GridBagLayout());
         PropertyWrapperModel model = new PropertyWrapperModel(
                                             System.getProperties(), 
                                             PropertyWrapperModel.SORT_BY_KEY);
-        JTable table = new DefaultTable(model);
+        
+        JTable table = new SortableColumnsTable(model);
         table.getTableHeader().setReorderingAllowed(false);
         table.getColumnModel().getColumn(0).setCellRenderer(new PropertiesTableCellRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(new PropertiesTableCellRenderer());
@@ -73,28 +74,21 @@ public class SystemPropertiesPanel extends JPanel {
  
     
     private class PropertiesTableCellRenderer extends DefaultTableCellRenderer {
+
         public PropertiesTableCellRenderer() {}
+        
         public Component getTableCellRendererComponent(JTable table, 
                                                        Object value, 
                                                        boolean isSelected, 
                                                        boolean hasFocus, 
                                                        int row, 
                                                        int column) {
+            
             String toolTip = value.toString();
             setToolTipText(toolTip);
-            return super.getTableCellRendererComponent(
-                            table, value, isSelected, hasFocus, row, column);
+
+            return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }
     
 }
-
-
-
-
-
-
-
-
-
-

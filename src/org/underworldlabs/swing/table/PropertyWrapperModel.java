@@ -135,11 +135,9 @@ public class PropertyWrapperModel extends AbstractSortableTableModel {
     }
 
 
-    class KeyValuePairSorter implements Comparator {
+    class KeyValuePairSorter implements Comparator<KeyValuePair> {
 
-        public int compare(Object obj1, Object obj2) {
-            KeyValuePair pair1 = (KeyValuePair)obj1;
-            KeyValuePair pair2 = (KeyValuePair)obj2;
+        public int compare(KeyValuePair pair1, KeyValuePair pair2) {
 
             String value1 = null;
             String value2 = null;

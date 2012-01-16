@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 16 December 2011
+Date: 16 January 2012
 
 Summary of changes - v3.2.5 Build 5176:
 ----------------------------------------
@@ -11,6 +11,9 @@ Summary of changes - v3.2.5 Build 5176:
   locks and preventing query execution elsewhere.
 - Modified GUI to use the default screen for positioning where multiple screens
   exist.
+- Changed system properties tables to use sortable models.
+- Selective layout changes for row heights in tables and trees.
+- Modified entity labels to be text-selectable. 
 
 
 Summary of changes - v3.2.4 Build 5169:
@@ -290,4 +293,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-16 December 2011
+16 January 2012

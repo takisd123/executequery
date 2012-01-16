@@ -23,26 +23,17 @@ package org.underworldlabs.swing;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
  * @version  $Revision: 1460 $
  * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
  */
+@SuppressWarnings("unchecked")
 public class UpdatableComboBoxModel extends DefaultComboBoxModel {
     
     private Vector values;
     
-    private Object selectedObject;
-    
-    /** Creates a new instance of UpdatableComboBoxModel */
     public UpdatableComboBoxModel(Object[] _values) {
         values = new Vector(_values.length);
         for (int i = 0; i < _values.length; i++) {
@@ -54,19 +45,5 @@ public class UpdatableComboBoxModel extends DefaultComboBoxModel {
     public UpdatableComboBoxModel(Vector values) {
         this.values = values;
     }
-/*
-    public Object getElementAt(int index) {
-        //return 
-    }
-  */  
+
 }
-
-
-
-
-
-
-
-
-
-

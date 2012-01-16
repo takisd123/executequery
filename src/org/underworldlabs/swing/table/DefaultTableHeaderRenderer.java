@@ -59,8 +59,8 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
     /** whether to fill a gradient background */
     private boolean fillGradient;
 
-    /** the default height - 20 */
-    protected static final int DEFAULT_HEIGHT = 20;
+    /** the default height - 22 */
+    protected static final int DEFAULT_HEIGHT = 22;
     
     /** Creates a new instance of DefaultTableHeaderRenderer */
     public DefaultTableHeaderRenderer() {

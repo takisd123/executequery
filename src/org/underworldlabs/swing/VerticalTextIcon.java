@@ -33,13 +33,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Vertical text icon derived from the original by
  * Santhosh Kumar http://jroller.com/pages/santhosh.
@@ -98,13 +91,3 @@ public class VerticalTextIcon implements Icon, SwingConstants {
         return width;
     }
 }
-
-
-
-
-
-
-
-
-
-

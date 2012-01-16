@@ -163,9 +163,3 @@ public abstract class AbstractStatusBarPanel extends JPanel {
     }
     
 }
-
-
-
-
-
-

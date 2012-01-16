@@ -39,14 +39,12 @@ public class SortableColumnsTable extends DefaultTable {
     public SortableColumnsTable(SortableTableModel model) {
 
         super();
-        
         setModel(model);
     }
 
     public final void setModel(SortableTableModel dataModel) {
 
         TableSorter sorter = new TableSorter(dataModel, getTableHeader());
-        
         super.setModel(sorter);
     }
     

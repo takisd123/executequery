@@ -40,7 +40,7 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
     private IndeterminateProgressBar progressBar;
     
     /** the status bar panel fixed height */
-    private static final int HEIGHT = 21;
+    private static final int HEIGHT = 22;
     
     public QueryEditorStatusBar() {
         super(HEIGHT);

@@ -64,6 +64,8 @@ public class SchemaTree extends DynamicTree
                                    MouseMotionListener,
                                    MouseListener {
 
+    private static final int ROW_HEIGHT = 22;
+    
     private boolean mouseDragging;
 
     private ConnectionsTreePanel panel;
@@ -95,8 +97,7 @@ public class SchemaTree extends DynamicTree
 
         //setEditable(true);
 
-        setRowHeight(20);
-
+        setRowHeight(ROW_HEIGHT);
     }
 
     private Map<String, Icon> loadIcons() {
