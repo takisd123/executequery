@@ -307,16 +307,22 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         ResultSet rs = null;
         Statement stmnt = null;
         try {
-
+System.out.println("A " +getName());
             Connection connection = getHost().getConnection();
+System.out.println("B");
             stmnt = connection.createStatement();
+            System.out.println("C");
             rs = stmnt.executeQuery(recordCountQueryString());
+            System.out.println("D");
             if (rs.next()) {
-
+                System.out.println("E");
                 dataRowCount = rs.getInt(1);
             }
 
-            connection.commit();
+//            connection.commit();
+            
+            System.out.println("F");
+            
             return dataRowCount;
 
         } catch (SQLException e) {
@@ -325,7 +331,11 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         }  finally {
 
+            System.out.println("G");
+            
             releaseResources(stmnt, rs);
+            
+            System.out.println("H");
         }
 
     }
