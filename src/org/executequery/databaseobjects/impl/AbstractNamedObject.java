@@ -102,10 +102,10 @@ public abstract class AbstractNamedObject implements NamedObject,
     protected void releaseResources(ResultSet rs) {
         try {
             if (rs != null) {
+
                 rs.close();
             }
-        }
-        catch (SQLException sqlExc) {}
+        } catch (SQLException sqlExc) {}
     }
 
     /**
@@ -127,10 +127,10 @@ public abstract class AbstractNamedObject implements NamedObject,
     protected void releaseResources(Statement stmnt) {
         try {
             if (stmnt != null) {
+                
                 stmnt.close();
             }
-        }
-        catch (SQLException sqlExc) {}
+        } catch (SQLException sqlExc) {}
     }
 
     /**

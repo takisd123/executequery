@@ -61,7 +61,7 @@ import java.util.Map;
  * @author Dirk Verbeeck
  * @version $Revision: 883941 $ $Date: 2009-11-24 19:58:50 -0500 (Tue, 24 Nov 2009) $
  */
-public class DelegatingResultSet implements ResultSet {
+class DelegatingResultSet implements ResultSet {
 
     /** My delegate. **/
     private ResultSet _res;
@@ -80,11 +80,25 @@ public class DelegatingResultSet implements ResultSet {
      * @param stmt Statement which created this ResultSet
      * @param res ResultSet to wrap
      */
-    public DelegatingResultSet(Statement stmt, ResultSet res) {
+    public DelegatingResultSet(Connection conn, Statement stmt, ResultSet res) {
+        this._conn = conn;
         this._stmt = stmt;
         this._res = res;
     }
 
+    /**
+     * Create a wrapper for the ResultSet which traces this
+     * ResultSet to the Statement which created it and the
+     * code which created it.
+     *
+     * @param stmt Statement which created this ResultSet
+     * @param res ResultSet to wrap
+     */
+    public DelegatingResultSet(Statement stmt, ResultSet res) {
+        this._stmt = stmt;
+        this._res = res;
+    }
+    
     /**
      * Create a wrapper for the ResultSet which traces this
      * ResultSet to the Connection which created it (via, for
@@ -1060,6 +1074,22 @@ public class DelegatingResultSet implements ResultSet {
         }
         catch (SQLException e) {
             handleException(e);
+        }
+    }
+
+    public static ResultSet wrapResultSet(Statement stmt, ResultSet rset) {
+        if(null == rset) {
+            return null;
+        } else {
+            return new DelegatingResultSet(stmt,rset);
+        }
+    }
+
+    public static ResultSet wrapResultSet(Connection conn, ResultSet rset) {
+        if(null == rset) {
+            return null;
+        } else {
+            return new DelegatingResultSet(conn,rset);
         }
     }
 

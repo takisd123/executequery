@@ -29,13 +29,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.RollingFileAppender;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *  <p>Logger wrapper class.<br>
  *  Provides static methods to the Log4J logging methods.
@@ -90,6 +83,7 @@ public class Log implements Serializable {
             appender.setMaxBackupIndex(MAX_BACKUP_INDEX);
             appender.setMaxFileSize("1MB");
             logger.addAppender(appender);
+
         }
         catch (IOException ioExc) {
             ioExc.printStackTrace();

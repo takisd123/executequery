@@ -111,9 +111,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         try {
 
             resetMetaData();
-
             ResultSetMetaData rsmd = resultSet.getMetaData();
-
             int count = rsmd.getColumnCount();
 
             if (columnHeaders != null) {
@@ -280,7 +278,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                     
                     Statement statement = resultSet.getStatement();
                     if (statement != null) {
-                        
+
                         statement.close();
                     }
 
