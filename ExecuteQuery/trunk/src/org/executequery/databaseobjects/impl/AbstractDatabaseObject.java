@@ -305,15 +305,19 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         }
 
         ResultSet rs = null;
+        Statement stmnt = null;
         try {
 
-           rs = executeQuery(recordCountQueryString());
-           if (rs.next()) {
+            Connection connection = getHost().getConnection();
+            stmnt = connection.createStatement();
+            rs = stmnt.executeQuery(recordCountQueryString());
+            if (rs.next()) {
 
-               dataRowCount = rs.getInt(1);
-           }
+                dataRowCount = rs.getInt(1);
+            }
 
-           return dataRowCount;
+            connection.commit();
+            return dataRowCount;
 
         } catch (SQLException e) {
 
@@ -321,14 +325,10 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         }  finally {
 
-            try {
-                releaseResources(rs.getStatement(), rs);
-            } catch (SQLException e) {}
-
+            releaseResources(stmnt, rs);
         }
 
     }
-        
     
     /**
      * Retrieves the data for this object (where applicable).
@@ -342,31 +342,26 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         
     private ResultSet executeQuery(String query) throws DataSourceException {
         
-        
         Connection connection = null;
         ResultSet rs = null;
-        boolean originalAutoCommit = false;
 
         try {
 
             if (statement != null) {
-
                 try {
 
                     statement.close();
 
                 } catch (SQLException e) {}
-
             }
 
             connection = getHost().getConnection();
-            originalAutoCommit = connection.getAutoCommit();
-            connection.setAutoCommit(true);
-
             statement = connection.createStatement();
-            rs = statement.executeQuery(query);
 
-            return new TransactionAgnosticResultSet(connection, rs, originalAutoCommit);
+            rs = statement.executeQuery(query);
+            connection.commit();
+            
+            return rs;
 
         } catch (SQLException e) {
 

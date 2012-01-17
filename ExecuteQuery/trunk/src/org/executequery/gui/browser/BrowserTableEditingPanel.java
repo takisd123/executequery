@@ -72,6 +72,7 @@ import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.FlatSplitPane;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 
 /**
