@@ -275,7 +275,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 try {
                 
                     resultSet.close();
-                    
+
                     Statement statement = resultSet.getStatement();
                     if (statement != null) {
 

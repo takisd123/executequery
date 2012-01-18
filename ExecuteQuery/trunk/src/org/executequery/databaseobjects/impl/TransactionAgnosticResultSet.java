@@ -7,12 +7,9 @@ import java.sql.Statement;
 
 public class TransactionAgnosticResultSet extends DelegatingResultSet {
 
-    private final boolean originalAutoCommit;
-    
-    public TransactionAgnosticResultSet(Connection connection, Statement statement, ResultSet delegateResultSet, boolean originalAutoCommit) {
+    public TransactionAgnosticResultSet(Connection connection, Statement statement, ResultSet resultSet) {
 
-        super(connection, statement, delegateResultSet);
-        this.originalAutoCommit = originalAutoCommit;
+        super(connection, statement, resultSet);
     }
 
     @Override
@@ -20,7 +17,6 @@ public class TransactionAgnosticResultSet extends DelegatingResultSet {
 
         try {
 
-            getConnection().commit();
             super.close();
 
             Statement statement = getStatement();
@@ -31,14 +27,14 @@ public class TransactionAgnosticResultSet extends DelegatingResultSet {
             }
 
         } finally {
-        
-            /*
+
             Connection connection = getConnection();
             if (connection != null) {
-    
-                connection.setAutoCommit(originalAutoCommit);
+                try {
+                    connection.commit();
+                } catch (SQLException e) {}
             }
-            */
+
         }
 
     }
