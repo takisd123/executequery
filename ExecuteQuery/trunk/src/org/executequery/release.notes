@@ -13,7 +13,8 @@ Summary of changes - v3.2.5 Build 5176:
   exist.
 - Changed system properties tables to use sortable models.
 - Selective layout changes for row heights in tables and trees.
-- Modified entity labels to be text-selectable. 
+- Modified entity labels to be text-selectable.
+- Added delete button for JDBC advanced property key/value pairs.
 
 
 Summary of changes - v3.2.4 Build 5169:

@@ -21,31 +21,20 @@
 package org.executequery.components;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.DefaultBoundedRangeModel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.event.MouseInputAdapter;
-import org.executequery.Constants;
 
 import org.executequery.GUIUtilities;
 import org.executequery.log.Log;
-import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.HeapMemoryDialog;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  *
@@ -79,7 +68,7 @@ public class HeapMemoryStatusSnippet extends JPanel
         memProgress = new JProgressBar(progModel);
         memProgress.addMouseListener(new ProgressMouseAdapter());
         
-        JButton gcButton = new NoFocusButton();
+        JButton gcButton = new NoFocusButton("GcDelete16.png", "GcDeletePressed16.png");
         gcButton.addActionListener(this);
 
         memProgress.setBorder(null);
@@ -183,67 +172,5 @@ public class HeapMemoryStatusSnippet extends JPanel
         }
         
     } // ProgressModel
-    
-    private class NoFocusButton extends JButton {
-        
-        private Color borderColour;
-        private Color rolloverColour;
-        private boolean rollover;
 
-        public NoFocusButton() {
-            borderColour = GUIUtils.getDefaultBorderColour();
-            rolloverColour = borderColour.darker();
-            setFocusPainted(false);
-            setBorderPainted(false);
-            setMargin(Constants.EMPTY_INSETS);
-            setIcon(GUIUtilities.loadIcon("GcDelete16.png"));
-            setPressedIcon(GUIUtilities.loadIcon("GcDeletePressed16.png"));
-            
-            try {
-                setUI(new javax.swing.plaf.basic.BasicButtonUI());
-            } catch (NullPointerException nullExc) {}
-
-            addMouseListener(new MouseAdapter() {
-                public void mouseEntered(MouseEvent e) {
-                    rollover = true;
-                    repaint();
-                }
-                public void mouseExited(MouseEvent e) {
-                    rollover = false;
-                    repaint();
-                }
-            });
-            
-        }
-        
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            
-            int height = getHeight();
-            int width = getWidth();
-
-            if (rollover) {
-                g.setColor(rolloverColour);
-                g.drawRect(1,0,width-2,height-1);
-            } else {
-                g.setColor(borderColour);
-                g.drawLine(1,0,1,height-1);
-            }
-            
-        }
-
-        public boolean isFocusTraversable() {
-            return false;
-        }
-        
-        public void requestFocus() {};
-        
-    };  // NoFocusButton
-    
 }
-
-
-
-
-
-
