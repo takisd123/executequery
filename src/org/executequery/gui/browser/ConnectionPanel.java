@@ -21,16 +21,20 @@
 package org.executequery.gui.browser;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -44,6 +48,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
@@ -253,8 +260,15 @@ public class ConnectionPanel extends ActionPanel
         JTable table = new DefaultTable(model);
         table.getTableHeader().setReorderingAllowed(false);
         
+        TableColumnModel tcm = table.getColumnModel();
+        
+        TableColumn column = tcm.getColumn(2);
+        column.setCellRenderer(new DeleteButtonRenderer());
+        column.setCellEditor(new DeleteButtonEditor(table, new JCheckBox()));
+        column.setMaxWidth(24);
+        column.setMinWidth(24);
+        
         JScrollPane scroller = new JScrollPane(table);
-        //scroller.setPreferredSize(new Dimension(200, 300));
         
         // advanced jdbc properties
         JPanel advPropsPanel = new JPanel(new GridBagLayout());
@@ -1048,14 +1062,14 @@ public class ConnectionPanel extends ActionPanel
     
     private class JdbcPropertiesTableModel extends AbstractTableModel {
         
-        protected String[] header = {"Name", "Value"};
+        protected String[] header = {"Name", "Value", ""};
         
         public JdbcPropertiesTableModel() {
             advancedProperties = new String[20][2];
         }
         
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
         
         public int getRowCount() {
@@ -1063,12 +1077,22 @@ public class ConnectionPanel extends ActionPanel
         }
         
         public Object getValueAt(int row, int col) {
-            return advancedProperties[row][col];
+            
+            if (col < 2) {
+                
+                return advancedProperties[row][col];
+                
+            } else {
+                
+                return "";
+            }
         }
         
         public void setValueAt(Object value, int row, int col) {
-            advancedProperties[row][col] = (String)value;
-            fireTableRowsUpdated(row, row);
+            if (col < 2) {
+                advancedProperties[row][col] = (String)value;
+                fireTableRowsUpdated(row, row);
+            }
         }
         
         public boolean isCellEditable(int row, int col) {
@@ -1213,6 +1237,91 @@ public class ConnectionPanel extends ActionPanel
         }
         
     }
+    
+    
+    class DeleteButtonEditor extends DefaultCellEditor {
+        
+        private JButton button;
+        private boolean isPushed;
+        private final JTable table;
+        
+        public DeleteButtonEditor(JTable table, JCheckBox checkBox) {
+            
+            super(checkBox);
+            this.table = table;
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                }
+            });
+        }
+        
+        public Component getTableCellEditorComponent(JTable table, 
+                                                     Object value,
+                                                     boolean isSelected, 
+                                                     int row, 
+                                                     int column) {
+            isPushed = true;
+            return button;
+        }
+        
+        public Object getCellEditorValue() {
+            
+            if (isPushed) {
+
+                clearValueAt(table.getEditingRow());
+            }
+            
+            isPushed = false;
+            return Constants.EMPTY;
+        }
+        
+        private void clearValueAt(int row) {
+
+            table.setValueAt("", row, 0);
+            table.setValueAt("", row, 1);
+        }
+
+        public boolean stopCellEditing() {
+
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+        
+        protected void fireEditingStopped() {
+
+            super.fireEditingStopped();
+      }
+
+    } // DeleteButtonEditor
+    
+    class DeleteButtonRenderer extends JButton implements TableCellRenderer {
+        
+        public DeleteButtonRenderer() {
+
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setMargin(Constants.EMPTY_INSETS);
+            setIcon(GUIUtilities.loadIcon("GcDelete16.png"));
+            setPressedIcon(GUIUtilities.loadIcon("GcDeletePressed16.png"));
+            
+            try {
+                setUI(new javax.swing.plaf.basic.BasicButtonUI());
+            } catch (NullPointerException nullExc) {}
+
+            setToolTipText("Clear this key/value pair");
+        }
+        
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+
+            return this;
+        }
+
+    } // DeleteButtonRenderer
+
     
 }
 
