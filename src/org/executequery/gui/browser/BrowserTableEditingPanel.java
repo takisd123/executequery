@@ -654,7 +654,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
 
     private DatabaseTable table; 
-    
+
     public void setValues(DatabaseTable table) {
         this.table = table;
         reloadView();
@@ -696,9 +696,18 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     
     protected void reloadDataRowCount() {
 
+        if (worker != null) {
+
+            worker.interrupt();
+        }
+        
         worker = new SwingWorker() {
             public Object construct() {
                 try {
+
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {}
 
                     return String.valueOf(table.getDataRowCount());
                     
@@ -709,7 +718,11 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             }
             public void finished() {
 
-                rowCountField.setText(get().toString());
+                GUIUtils.invokeLater(new Runnable() {
+                    public void run() {
+                        rowCountField.setText(get().toString());
+                    }
+                });
             }
         };
         worker.start();
