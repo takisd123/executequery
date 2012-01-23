@@ -59,7 +59,7 @@ public abstract class AbstractDockedTabActionPanel extends ActionPanel
      *
      * @param inProcess - true | false
      */
-    public void setInProcess(final boolean inProcess) {
+    public void setInProcess(boolean inProcess) {
         GUIUtilities.setGlassPaneVisible(inProcess);
         if (inProcess) {
             GUIUtilities.showWaitCursor();

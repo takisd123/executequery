@@ -903,20 +903,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     public void pathChanged(TreePath oldPath, TreePath newPath) {
 
-        /*
-        System.out.println("pathChanged");
-
-        try {
-
-            if (oldPath == null || shouldChangeView) {
-
-            }
-
-        } finally {
-
-            shouldChangeView = true;
-        }
-        */
         doPathChanged(oldPath, newPath);
     }
 
@@ -1003,9 +989,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             return;
         }
 
-        //System.out.println("parent: "+e.getPath().getParentPath());
-        //System.out.println("node: "+newPath);
-
         controller.selectionChanging();
 
         if (object == tree.getRootNode()) { // root node
@@ -1016,7 +999,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
         final DatabaseObjectNode node = (DatabaseObjectNode)object;
-
         if (node instanceof DatabaseHostNode) {
 
             DatabaseHostNode hostNode = (DatabaseHostNode)node;
@@ -1032,23 +1014,18 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         worker = new SwingWorker() {
             public Object construct() {
                 try {
+
                     treeExpanding = true;
-                    GUIUtilities.showWaitCursor();
-                    /*
-                    if (node.allowsChildren() && node.isLeaf()) {
-                        doNodeExpansion(node);
-                        //node.populateChildren();
-                    }
-                    */
                     valueChanged(node);
-                }
-                finally {
+
+                } finally {
+
                     treeExpanding = false;
                 }
                 return null;
             }
             public void finished() {
-                GUIUtilities.showNormalCursor();
+
                 treeExpanding = false;
             }
         };

@@ -20,18 +20,18 @@
 
 package org.executequery.gui.browser.tree;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
+import javax.swing.DropMode;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JTree;
@@ -42,14 +42,18 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import org.executequery.GUIUtilities;
 import org.executequery.components.table.BrowserTreeCellRenderer;
+import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.gui.browser.BrowserConstants;
 import org.executequery.gui.browser.ConnectionsTreePanel;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
+import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.underworldlabs.swing.tree.DynamicTree;
 
 /**
@@ -61,16 +65,13 @@ import org.underworldlabs.swing.tree.DynamicTree;
 public class SchemaTree extends DynamicTree
                         implements TreeExpansionListener,
                                    TreeSelectionListener,
-                                   MouseMotionListener,
-                                   MouseListener {
+                                   MouseListener,
+                                   MouseMotionListener {
 
     private static final int ROW_HEIGHT = 22;
     
-    private boolean mouseDragging;
-
     private ConnectionsTreePanel panel;
 
-    /** Creates a new instance of SchemaTree */
     public SchemaTree(DefaultMutableTreeNode root, ConnectionsTreePanel panel) {
 
         super(root);
@@ -79,23 +80,18 @@ public class SchemaTree extends DynamicTree
         addTreeSelectionListener(this);
         addTreeExpansionListener(this);
 
-//        addMouseListener(this);
-//        addMouseMotionListener(this);
-
         DefaultTreeCellRenderer renderer = new BrowserTreeCellRenderer(loadIcons());
         setCellRenderer(renderer);
 
-        //setCellEditor(new ConnectionTreeCellEditor(this, renderer));
-
+        addMouseListener(this);
+        addMouseMotionListener(this);
+        
         setShowsRootHandles(true);
-
         setDragEnabled(true);
 
-        TransferHandler handler = new NodeMoveTransferHandler();
-        setTransferHandler(handler);
-        //setDropTarget(new TreeDropTarget(handler));
-
-        //setEditable(true);
+        setDropMode(DropMode.INSERT);
+        setTransferHandler(new TreeTransferHandler());
+        getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         setRowHeight(ROW_HEIGHT);
     }
@@ -121,71 +117,13 @@ public class SchemaTree extends DynamicTree
         super.processMouseEvent(e);
     }
     
-    private int lastPointY = 0;
-
-    protected void _paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-
-        if (mouseDragging) {
-
-            Point mousePoint = getMousePosition();
-            if (mousePoint != null) {
-                TreePath draggingPath =
-                        getClosestPathForLocation(mousePoint.x, mousePoint.y);
-
-                if (draggingPath != null &&
-                        draggingPath.getLastPathComponent() instanceof DatabaseHostNode) {
-
-                    Rectangle r = getPathBounds(draggingPath);
-
-                    int xOffsetLeft = -5;
-                    int xOffsetRight = -35;
-
-                    g.setColor(Color.RED);
-                    g.fillRect(r.x + xOffsetLeft, r.y, getWidth() + xOffsetRight, 2);
-
-                    int row = getRowForPath(draggingPath);
-
-                    if (row > 0) {
-
-                        if (lastPointY < mousePoint.y) {
-
-                            row = row + 1;
-                        } else {
-
-                            row = row - 1;
-                        }
-
-                        scrollRowToVisible(row);
-
-                        lastPointY = mousePoint.y;
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-    private boolean canMoveNode() {
-
-        return (getLastPathComponent() instanceof DatabaseHostNode);
-    }
-
-    /**
-     * Removes the tree listener.
-     */
+    /** Removes the tree listener. */
     public void removeTreeSelectionListener() {
 
         removeTreeSelectionListener(this);
     }
 
-    /**
-     * Adds the tree listener.
-     */
+    /** Adds the tree listener. */
     public void addTreeSelectionListener() {
 
         addTreeSelectionListener(this);
@@ -195,19 +133,9 @@ public class SchemaTree extends DynamicTree
     // ------- TreeSelectionListener implementation
     // --------------------------------------------------
 
-    /**
-     * Called whenever the value of the selection changes.
-     * This will store the current path selection.
-     *
-     * @param the event that characterizes the change
-     */
     public void valueChanged(TreeSelectionEvent e) {
 
-        if (mouseDragging) {
-
-            return;
-        }
-
+        System.out.println("valueChanged");        
         panel.pathChanged(e.getOldLeadSelectionPath(), e.getPath());
     }
 
@@ -226,247 +154,280 @@ public class SchemaTree extends DynamicTree
         // do nothing
     }
 
-    // --------------------------------------------------
+    // http://www.coderanch.com/t/346509/GUI/java/JTree-drag-drop-inside-one
+    
+    class TreeTransferHandler extends TransferHandler {
 
-    public boolean axgetDragEnabled() {
+        DataFlavor nodesFlavor;
+        DataFlavor[] flavors = new DataFlavor[1];
+        DefaultMutableTreeNode[] nodesToRemove;
 
-        return true;//!canMoveNode();
+        public TreeTransferHandler() {
+            try {
+                String mimeType = DataFlavor.javaJVMLocalObjectMimeType +
+                                  ";class=\"" +
+                    javax.swing.tree.DefaultMutableTreeNode[].class.getName() +
+                                  "\"";
+                nodesFlavor = new DataFlavor(mimeType);
+                flavors[0] = nodesFlavor;
+            } catch(ClassNotFoundException e) {
+                System.out.println("ClassNotFound: " + e.getMessage());
+            }
+        }
+
+        public boolean canImport(TransferHandler.TransferSupport support) {
+
+            if (!support.isDrop()) {
+
+                return false;
+            }
+
+            support.setShowDropLocation(true);
+            if (!support.isDataFlavorSupported(nodesFlavor)) {
+
+                return false;
+            }
+
+            // Do not allow a drop on the drag source selections.
+            JTree.DropLocation dl = (JTree.DropLocation)support.getDropLocation();
+            JTree tree = (JTree) support.getComponent();
+
+            int dropRow = tree.getRowForPath(dl.getPath());
+            int[] selRows = tree.getSelectionRows();
+            for (int i = 0; i < selRows.length; i++) {
+                if (selRows[i] == dropRow) {
+                    return false;
+                }
+            }
+            // Do not allow MOVE-action drops if a non-leaf node is
+            // selected unless all of its children are also selected.
+            int action = support.getDropAction();
+            if (action == MOVE) {
+
+                return haveCompleteNode(tree);
+            }
+
+            // Do not allow a non-leaf node to be copied to a level
+            // which is less than its source level.
+            TreePath dest = dl.getPath();
+            DefaultMutableTreeNode target = (DefaultMutableTreeNode)dest.getLastPathComponent();
+            TreePath path = tree.getPathForRow(selRows[0]);
+            DefaultMutableTreeNode firstNode =
+                (DefaultMutableTreeNode)path.getLastPathComponent();
+
+            if (firstNode.getChildCount() > 0 &&
+                   target.getLevel() < firstNode.getLevel()) {
+                return false;
+            }
+            return true;
+        }
+
+        private boolean haveCompleteNode(JTree tree) {
+            
+            int[] selRows = tree.getSelectionRows();
+            TreePath path = tree.getPathForRow(selRows[0]);
+            DefaultMutableTreeNode first = (DefaultMutableTreeNode)path.getLastPathComponent();
+            
+            int childCount = first.getChildCount();
+
+            // first has children and no children are selected.
+            if (childCount > 0 && selRows.length == 1) {
+             
+                return false;
+            }
+
+            // first may have children.
+            for (int i = 1; i < selRows.length; i++) {
+
+                path = tree.getPathForRow(selRows[i]);
+                DefaultMutableTreeNode next = (DefaultMutableTreeNode)path.getLastPathComponent();
+                if (first.isNodeChild(next)) {
+
+                    // Found a child of first.
+                    if (childCount > selRows.length-1) {
+
+                        // Not all children of first are selected.
+                        return false;
+                    }
+
+                }
+            }
+            return true;
+        }
+
+        protected Transferable createTransferable(JComponent c) {
+
+            JTree tree = (JTree)c;
+            TreePath[] paths = tree.getSelectionPaths();
+
+            if (paths != null) {
+
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)paths[0].getLastPathComponent();
+                if (!(node instanceof DatabaseHostNode) || isExpanded(paths[0])) {
+                    
+                    return null;
+                }
+                
+                // Make up a node array of copies for transfer and
+                // another for/of the nodes that will be removed in
+                // exportDone after a successful drop.
+                List<DefaultMutableTreeNode> copies = new ArrayList<DefaultMutableTreeNode>();
+                List<DefaultMutableTreeNode> toRemove = new ArrayList<DefaultMutableTreeNode>();
+                
+                DefaultMutableTreeNode copy = copy((DatabaseHostNode) node);
+                copies.add(copy);
+                toRemove.add(node);
+
+                for (int i = 1; i < paths.length; i++) {
+
+                    DefaultMutableTreeNode next =
+                        (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+                    
+                    // Do not allow higher level nodes to be added to list.
+                    if (next.getLevel() < node.getLevel()) {
+                    
+                        break;
+
+                    } else if (next.getLevel() > node.getLevel()) {  // child node
+
+                        copy.add(copy(next));
+                        // node already contains child
+
+                    } else {                                        // sibling
+
+                        copies.add(copy(next));
+                        toRemove.add(next);
+                    }
+
+                }
+
+                DefaultMutableTreeNode[] nodes = copies.toArray(new DefaultMutableTreeNode[copies.size()]);
+                nodesToRemove = toRemove.toArray(new DefaultMutableTreeNode[toRemove.size()]);
+            
+                return new NodesTransferable(nodes);
+            }
+
+            return null;
+        }
+
+        /** Defensive copy used in createTransferable. */
+        private DefaultMutableTreeNode copy(TreeNode node) {
+            return new DefaultMutableTreeNode(node);
+        }
+
+        private DefaultMutableTreeNode copy(DatabaseHostNode node) {
+            return new DatabaseHostNode((DatabaseHost) node.getDatabaseObject());
+        }
+        
+        protected void exportDone(JComponent source, Transferable data, int action) {
+            
+            if ((action & MOVE) == MOVE) {
+                
+                try {
+                
+                    JTree tree = (JTree)source;
+                    DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+
+                    // Remove nodes saved in nodesToRemove in createTransferable.
+                    for(int i = 0; i < nodesToRemove.length; i++) {
+
+                        model.removeNodeFromParent(nodesToRemove[i]);
+                    }
+
+                } finally {
+                 
+                    addTreeSelectionListener();
+                }
+
+            }
+        
+        }
+
+        public int getSourceActions(JComponent c) {
+            return COPY_OR_MOVE;
+        }
+
+        public boolean importData(TransferHandler.TransferSupport support) {
+            
+            if (!canImport(support)) {
+                return false;
+            }
+            // Extract transfer data.
+            DefaultMutableTreeNode[] nodes = null;
+            try {
+                Transferable t = support.getTransferable();
+                nodes = (DefaultMutableTreeNode[])t.getTransferData(nodesFlavor);
+            } catch(UnsupportedFlavorException ufe) {
+                System.out.println("UnsupportedFlavor: " + ufe.getMessage());
+            } catch(java.io.IOException ioe) {
+                System.out.println("I/O error: " + ioe.getMessage());
+            }
+            // Get drop location info.
+            JTree.DropLocation dl =
+                    (JTree.DropLocation)support.getDropLocation();
+            int childIndex = dl.getChildIndex();
+            TreePath dest = dl.getPath();
+            DefaultMutableTreeNode parent =
+                (DefaultMutableTreeNode)dest.getLastPathComponent();
+            
+            if (!(parent instanceof RootDatabaseObjectNode)) {
+                return false;
+            }
+            
+            JTree tree = (JTree)support.getComponent();
+            DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+            // Configure for drop mode.
+            int index = childIndex;    // DropMode.INSERT
+            if (childIndex == -1) {     // DropMode.ON
+                index = parent.getChildCount();
+            }
+            // Add data to model.
+            for(int i = 0; i < nodes.length; i++) {
+                model.insertNodeInto(nodes[i], parent, index++);
+            }
+            return true;
+        }
+
+        public String toString() {
+            return getClass().getName();
+        }
+
+        public class NodesTransferable implements Transferable {
+            DefaultMutableTreeNode[] nodes;
+
+            public NodesTransferable(DefaultMutableTreeNode[] nodes) {
+                this.nodes = nodes;
+             }
+
+            public Object getTransferData(DataFlavor flavor)
+                                     throws UnsupportedFlavorException {
+                if (!isDataFlavorSupported(flavor))
+                    throw new UnsupportedFlavorException(flavor);
+                return nodes;
+            }
+
+            public DataFlavor[] getTransferDataFlavors() {
+                return flavors;
+            }
+
+            public boolean isDataFlavorSupported(DataFlavor flavor) {
+                return nodesFlavor.equals(flavor);
+            }
+        }
+    
     }
-
-    private MutableTreeNode movingNode;
 
     public void mouseDragged(MouseEvent e) {
 
-        /*
-        if (!mouseDragging  && canMoveNode()) {
-
-            movingNode = (MutableTreeNode)getLastPathComponent();
-
-            mouseDragging = true;
-
-            setCursor(DragSource.DefaultMoveDrop);
-
-        }
-
-        repaint(); */
+        System.out.println("dragged");
+        removeTreeSelectionListener();
     }
 
-    public void mouseReleased(MouseEvent e) { /*
-
-        if (mouseDragging) {
-
-            try {
-
-                repaint();
-                setCursor(Cursor.getDefaultCursor());
-
-                TreePath draggingPath =
-                        getClosestPathForLocation(e.getX(), e.getY());
-
-                if (draggingPath != null &&
-                        draggingPath.getLastPathComponent() instanceof DatabaseHostNode) {
-
-                    if (draggingPath.getLastPathComponent() == movingNode) {
-
-                        return;
-                    }
-
-                    MutableTreeNode rootNode = getRootNode();
-
-                    int previousRow = rootNode.getIndex(movingNode);
-                    int newRow = getRowForPath(draggingPath);
-
-                    System.out.println("prev: "+previousRow + " new: "+newRow);
-
-                    if (newRow != previousRow) {
-
-                        if (newRow < previousRow) {
-
-                            newRow = newRow - 1;
-                        } else {
-
-                            newRow = newRow - 2;
-                        }
-
-                        System.out.println("row count: "+ getRowCount());
-
-                        String state = getExpansionState(this, 0);
-
-                        rootNode.remove(movingNode);
-
-                        rootNode.insert(movingNode, newRow);
-
-                        restoreExpanstionState(this, 0, state);
-
-
-                        panel.nodeMoved((DatabaseHostNode)movingNode, newRow);
-                        nodeStructureChanged(rootNode);
-
-                    }
-
-                }
-
-            } finally {
-
-                mouseDragging = false;
-            }
-
-
-        }
-*/
-    }
-
-
-    public boolean isDescendant(TreePath path1, TreePath path2){
-        int count1 = path1.getPathCount();
-        int count2 = path2.getPathCount();
-        if(count1<=count2)
-            return false;
-        while(count1!=count2){
-            path1 = path1.getParentPath();
-            count1--;
-        }
-        return path1.equals(path2);
-    }
-
-    public String getExpansionState(JTree tree, int row){
-        TreePath rowPath = tree.getPathForRow(row);
-        StringBuilder buf = new StringBuilder();
-        int rowCount = tree.getRowCount();
-
-        for (int i = row; i < rowCount; i++) {
-            TreePath path = tree.getPathForRow(i);
-
-            if (i == row || isDescendant(path, rowPath)) {
-
-                if (tree.isExpanded(path)) {
-
-                    buf.append(',');
-                    buf.append((i-row));
-                }
-
-            } else {
-
-                break;
-            }
-
-        }
-        return buf.toString();
-    }
-
-    public void restoreExpanstionState(JTree tree, int row, String expansionState) {
-
-        //System.out.println("state: " + expansionState);
-
-        StringTokenizer stok = new StringTokenizer(expansionState, ",");
-
-        while(stok.hasMoreTokens()) {
-
-            int token = row + Integer.parseInt(stok.nextToken());
-            tree.expandRow(token);
-        }
-    }
-
-
-    private Enumeration<TreePath> saveExpansionState() {
-
-        return getExpandedDescendants(new TreePath(getModel().getRoot()));
-    }
-
-    private void loadExpansionState(Enumeration enumeration) {
-
-        if (enumeration != null) {
-
-            while (enumeration.hasMoreElements()) {
-
-                TreePath treePath = (TreePath) enumeration.nextElement();
-                expandPath(treePath);
-            }
-
-        }
-
-    }
-
-/*
-public class TreeUtil{
- http://www.javalobby.org/java/forums/t19857.html
-    // is path1 descendant of path2
-    public static boolean isDescendant(TreePath path1, TreePath path2){
-        int count1 = path1.getPathCount();
-        int count2 = path2.getPathCount();
-        if(count1<=count2)
-            return false;
-        while(count1!=count2){
-            path1 = path1.getParentPath();
-            count1--;
-        }
-        return path1.equals(path2);
-    }
-
-    public static String getExpansionState(JTree tree, int row){
-        TreePath rowPath = tree.getPathForRow(row);
-        StringBuilder buf = new StringBuilder();
-        int rowCount = tree.getRowCount();
-        for(int i=row; i<rowCount; i++){
-            TreePath path = tree.getPathForRow(i);
-            if(i==row || isDescendant(path, rowPath)){
-                if(tree.isExpanded(path)) {
-                    buf.append(',');
-                    buf.append((i-row));
-                    //buf.append(","+String.valueOf(i-row));
-            }else
-                break;
-        }
-        return buf.toString();
-    }
-
-    public static void restoreExpanstionState(JTree tree, int row, String expansionState){
-        StringTokenizer stok = new StringTokenizer(expansionState, ",");
-        while(stok.hasMoreTokens()){
-            int token = row + Integer.parseInt(stok.nextToken());
-            tree.expandRow(token);
-        }
-    }
+    public void mouseReleased(MouseEvent e) {System.out.println("mouseReleased");}
+    public void mouseClicked(MouseEvent e) {System.out.println("mouseClicked");}
+    public void mousePressed(MouseEvent e) {System.out.println("mousePressed");}
+    public void mouseMoved(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    
 }
-
-
- */
-
-    public void mouseMoved(MouseEvent e) {
-
-        // do nothing
-    }
-
-    public void mouseEntered(MouseEvent e) {
-
-        // do nothing
-    }
-
-    public void mouseExited(MouseEvent e) {
-
-        // do nothing
-    }
-
-    public void mouseClicked(MouseEvent e) {
-
-        // do nothing
-    }
-
-    public void mousePressed(MouseEvent e) {
-
-        //System.out.println("A");
-
-        JComponent c = (JComponent)e.getSource();
-        TransferHandler handler = c.getTransferHandler();
-        handler.exportAsDrag(c, e, TransferHandler.COPY);
-
-// do nothing
-    }
-
-}
-
-
-
-
-
-
