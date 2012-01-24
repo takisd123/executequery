@@ -870,7 +870,6 @@ public final class GUIUtilities {
         // set system error stream to the output panel
         PrintStream outStream = new PrintStream(outLogger, true);
         System.setOut(outStream);
-
     }
 
     public static void clearSystemOutputPanel() {

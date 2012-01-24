@@ -100,6 +100,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     }
     
     private void init() throws Exception {
+
         connectionPanel = new ConnectionPanel(controller);
         databasePropertiesPanel = new DatabasePropertiesPanel();
         keyWordsPanel = new KeyWordsPanel();
@@ -120,7 +121,6 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
 
         // register with the event listener
         EventMediator.registerListener(this);
-        
     }
     
     /**
@@ -343,5 +343,3 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     } // class HostModel
     
 } 
-
-

@@ -23,9 +23,8 @@ package org.executequery.gui.browser.tree;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +47,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.executequery.GUIUtilities;
+import org.executequery.SuppressedException;
 import org.executequery.components.table.BrowserTreeCellRenderer;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.gui.browser.BrowserConstants;
@@ -64,9 +64,7 @@ import org.underworldlabs.swing.tree.DynamicTree;
  */
 public class SchemaTree extends DynamicTree
                         implements TreeExpansionListener,
-                                   TreeSelectionListener,
-                                   MouseListener,
-                                   MouseMotionListener {
+                                   TreeSelectionListener {
 
     private static final int ROW_HEIGHT = 22;
     
@@ -83,9 +81,6 @@ public class SchemaTree extends DynamicTree
         DefaultTreeCellRenderer renderer = new BrowserTreeCellRenderer(loadIcons());
         setCellRenderer(renderer);
 
-        addMouseListener(this);
-        addMouseMotionListener(this);
-        
         setShowsRootHandles(true);
         setDragEnabled(true);
 
@@ -135,7 +130,6 @@ public class SchemaTree extends DynamicTree
 
     public void valueChanged(TreeSelectionEvent e) {
 
-        System.out.println("valueChanged");        
         panel.pathChanged(e.getOldLeadSelectionPath(), e.getPath());
     }
 
@@ -176,7 +170,7 @@ public class SchemaTree extends DynamicTree
         }
 
         public boolean canImport(TransferHandler.TransferSupport support) {
-
+            
             if (!support.isDrop()) {
 
                 return false;
@@ -255,6 +249,17 @@ public class SchemaTree extends DynamicTree
             return true;
         }
 
+        @Override
+        public void exportAsDrag(JComponent comp, InputEvent e, int action) {
+            
+            if (loadingNode) {
+                
+                throw new SuppressedException("Node seelction pending before drag");
+            }
+            
+            super.exportAsDrag(comp, e, action);
+        }
+        
         protected Transferable createTransferable(JComponent c) {
 
             JTree tree = (JTree)c;
@@ -320,27 +325,21 @@ public class SchemaTree extends DynamicTree
         }
         
         protected void exportDone(JComponent source, Transferable data, int action) {
-            
+
             if ((action & MOVE) == MOVE) {
                 
-                try {
-                
-                    JTree tree = (JTree)source;
-                    DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+                JTree tree = (JTree)source;
+                DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 
-                    // Remove nodes saved in nodesToRemove in createTransferable.
-                    for(int i = 0; i < nodesToRemove.length; i++) {
+                // Remove nodes saved in nodesToRemove in createTransferable.
+                for(int i = 0; i < nodesToRemove.length; i++) {
 
-                        model.removeNodeFromParent(nodesToRemove[i]);
-                    }
-
-                } finally {
-                 
-                    addTreeSelectionListener();
+                    model.removeNodeFromParent(nodesToRemove[i]);
                 }
-
+         
+                panel.rebuildConnectionsFromTree();
             }
-        
+            
         }
 
         public int getSourceActions(JComponent c) {
@@ -352,6 +351,7 @@ public class SchemaTree extends DynamicTree
             if (!canImport(support)) {
                 return false;
             }
+
             // Extract transfer data.
             DefaultMutableTreeNode[] nodes = null;
             try {
@@ -385,6 +385,7 @@ public class SchemaTree extends DynamicTree
             for(int i = 0; i < nodes.length; i++) {
                 model.insertNodeInto(nodes[i], parent, index++);
             }
+            
             return true;
         }
 
@@ -393,7 +394,8 @@ public class SchemaTree extends DynamicTree
         }
 
         public class NodesTransferable implements Transferable {
-            DefaultMutableTreeNode[] nodes;
+
+            private DefaultMutableTreeNode[] nodes;
 
             public NodesTransferable(DefaultMutableTreeNode[] nodes) {
                 this.nodes = nodes;
@@ -417,17 +419,16 @@ public class SchemaTree extends DynamicTree
     
     }
 
-    public void mouseDragged(MouseEvent e) {
+    private boolean loadingNode;
 
-        System.out.println("dragged");
-        removeTreeSelectionListener();
+    public void startLoadingNode() {
+
+        loadingNode = true;
     }
 
-    public void mouseReleased(MouseEvent e) {System.out.println("mouseReleased");}
-    public void mouseClicked(MouseEvent e) {System.out.println("mouseClicked");}
-    public void mousePressed(MouseEvent e) {System.out.println("mousePressed");}
-    public void mouseMoved(MouseEvent e) {}
-    public void mouseEntered(MouseEvent e) {}
-    public void mouseExited(MouseEvent e) {}
+    public void finishedLoadingNode() {
+
+        loadingNode = false;
+    }
     
 }

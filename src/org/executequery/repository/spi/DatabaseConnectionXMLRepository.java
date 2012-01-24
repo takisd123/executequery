@@ -96,7 +96,7 @@ public class DatabaseConnectionXMLRepository extends AbstractXMLRepository<Datab
     public synchronized void save() {
 
         if (namesValid()) {
-
+            
             write(filePath(), new DatabaseConnectionParser(),
                     new DatabaseConnectionInputSource(connections));
         }

@@ -254,6 +254,28 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     }
 
+    public void rebuildConnectionsFromTree() {
+        
+        DefaultMutableTreeNode root = tree.getRootNode();
+        connections.clear();
+
+        for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
+
+            DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
+            Object userObject = _node.getUserObject();
+            if (userObject instanceof DatabaseHost) {
+
+                DatabaseHost object = (DatabaseHost)userObject;
+                connections.add(object.getDatabaseConnection());
+            }
+            
+        }
+
+//        EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
+//                this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, null));
+
+    }
+    
     /**
      * Selectes and scrolls the tree to the specified path.
      *
@@ -1015,6 +1037,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             public Object construct() {
                 try {
 
+                    tree.startLoadingNode();
                     treeExpanding = true;
                     valueChanged(node);
 
@@ -1025,7 +1048,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 return null;
             }
             public void finished() {
-
+                tree.finishedLoadingNode();
                 treeExpanding = false;
             }
         };
