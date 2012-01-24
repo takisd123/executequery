@@ -73,6 +73,7 @@ public class BrowserController {
     /** Creates a new instance of BorwserQueryExecuter */
     public BrowserController(ConnectionsTreePanel treePanel) {
         this.treePanel = treePanel;
+        viewPanel = new BrowserViewPanel(this);
     }
 
     /**
@@ -158,10 +159,10 @@ public class BrowserController {
     protected void checkBrowserPanel() {
 
         // check we have the browser view panel
-        if (viewPanel == null) {
-
-            viewPanel = new BrowserViewPanel(this);
-        }
+//        if (viewPanel == null) {
+//
+//            viewPanel = new BrowserViewPanel(this);
+//        }
 
         // check the panel is in the pane
         JPanel _viewPanel = GUIUtilities.getCentralPane(BrowserViewPanel.TITLE);
@@ -282,18 +283,20 @@ public class BrowserController {
 //            System.out.println("selected object type: " + databaseObject.getClass().getName());
 
             int type = node.getType();
-            //Log.debug("Node type selected: " + type);
             switch (type) {
                 case NamedObject.HOST:
+                    
                     HostPanel hostPanel = null;
                     if (!viewPanel.containsPanel(HostPanel.NAME)) {
+
                         hostPanel = new HostPanel(this);
                         viewPanel.addToLayout(hostPanel);
-                    }
-                    else {
+
+                    } else {
+                    
                         hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
                     }
-
+                    
                     hostPanel.setValues((DatabaseHost)databaseObject);
                     return hostPanel;
 

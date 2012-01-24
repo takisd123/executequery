@@ -114,9 +114,3 @@ class ConnectionsTreeToolBar extends PanelToolBar {
     }
     
 }
-
-
-
-
-
-

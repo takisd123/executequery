@@ -39,8 +39,7 @@ import org.underworldlabs.swing.util.InterruptibleProcess;
 import org.underworldlabs.swing.util.SwingWorker;
 
 /**
- * Checks to see if a newer version of Execute Query
- * is available. 
+ * Checks to see if a newer version of Execute Query is available. 
  * 
  * @author   Takis Diakoumis
  * @version  $Revision: 1525 $
@@ -144,7 +143,6 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
                     }
 
                 };
-
                 worker.start();
 
             }
@@ -215,7 +213,6 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
                 closeProgressDialog();
                 
                 int yesNo = displayNewVersionMessage();
-                    
                 if (yesNo == JOptionPane.YES_OPTION) {
 
                     return displayReleaseNotes();

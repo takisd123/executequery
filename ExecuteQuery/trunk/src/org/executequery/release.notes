@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 16 January 2012
+Date: 24 January 2012
 
 Summary of changes - v3.2.5 Build 5176:
 ----------------------------------------
@@ -15,6 +15,7 @@ Summary of changes - v3.2.5 Build 5176:
 - Selective layout changes for row heights in tables and trees.
 - Modified entity labels to be text-selectable.
 - Added delete button for JDBC advanced property key/value pairs.
+- Added limited drag support to the saved connections tree.
 
 
 Summary of changes - v3.2.4 Build 5169:
@@ -294,4 +295,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-16 January 2012
+24 January 2012

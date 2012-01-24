@@ -218,7 +218,7 @@ public class ApplicationLog {
         }
 
         Logger.getRootLogger().addAppender(appender());
-        logger.addAppender(appender());
+//        logger.addAppender(appender());
         initOthers();
     }
 

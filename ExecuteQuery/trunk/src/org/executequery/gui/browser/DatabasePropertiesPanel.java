@@ -46,7 +46,6 @@ public class DatabasePropertiesPanel extends ConnectionPropertiesPanel {
     /** the table */
     private JTable table;
     
-    /** Creates a new instance of DatabasePropertiesPanel */
     public DatabasePropertiesPanel() {
         
         super(new GridBagLayout());
@@ -79,9 +78,3 @@ public class DatabasePropertiesPanel extends ConnectionPropertiesPanel {
     }
     
 }
-
-
-
-
-
-

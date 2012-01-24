@@ -33,7 +33,6 @@ import javax.swing.JPanel;
  */
 public class FormObjectViewContainer extends JPanel {
 
-
     /** panel map */
     private Map<String,FormObjectView> panels;
 
@@ -43,9 +42,6 @@ public class FormObjectViewContainer extends JPanel {
     /** The current panel view */
     protected FormObjectView currentView;
 
-    /**
-     * Creates a new instance of FormObjectViewContainer
-     */
     public FormObjectViewContainer() {
         super();
         // setup the panel and layout manager and apply
@@ -88,7 +84,9 @@ public class FormObjectViewContainer extends JPanel {
      *         panel specified is not an instance of <code>JPanel</code>
      */
     public void addToLayout(FormObjectView panel) {
+
         if (panel instanceof JPanel) {
+
             String title = panel.getLayoutName();
             JPanel _panel = (JPanel)panel;
             add(_panel, title);
@@ -96,10 +94,12 @@ public class FormObjectViewContainer extends JPanel {
 
             // add to the cache if its not there
             if (!panels.containsKey(title)) {
+        
                 panels.put(title, panel);
             }
-        }
-        else {
+
+        } else {
+
             throw new IllegalArgumentException(
                     "Panel added to the layout must be an instance of JPanel");
         }
@@ -139,5 +139,3 @@ public class FormObjectViewContainer extends JPanel {
     }
 
 }
-
-
