@@ -39,6 +39,7 @@ import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.Position;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
@@ -54,6 +55,7 @@ import org.executequery.gui.browser.BrowserConstants;
 import org.executequery.gui.browser.ConnectionsTreePanel;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
+import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.tree.DynamicTree;
 
 /**
@@ -81,8 +83,8 @@ public class SchemaTree extends DynamicTree
         DefaultTreeCellRenderer renderer = new BrowserTreeCellRenderer(loadIcons());
         setCellRenderer(renderer);
 
-//        setEditable(true);
-//        setCellEditor(new ConnectionTreeCellEditor(this, renderer));
+        setEditable(true);
+        setCellEditor(new ConnectionTreeCellEditor(this, renderer));
         
         setShowsRootHandles(true);
         setDragEnabled(true);
@@ -151,7 +153,7 @@ public class SchemaTree extends DynamicTree
         // do nothing
     }
 
-    // http://www.coderanch.com/t/346509/GUI/java/JTree-drag-drop-inside-one
+    // nice example: http://www.coderanch.com/t/346509/GUI/java/JTree-drag-drop-inside-one
     
     class TreeTransferHandler extends TransferHandler {
 
@@ -330,8 +332,8 @@ public class SchemaTree extends DynamicTree
         
         protected void exportDone(JComponent source, Transferable data, int action) {
 
-//            TreePath[] paths = getSelectionPaths();
-//            final Object lastPathComponent = paths[0].getLastPathComponent();
+            TreePath[] paths = getSelectionPaths();
+            final Object lastPathComponent = paths[0].getLastPathComponent();
 
             if ((action & MOVE) == MOVE) {
                 
@@ -346,23 +348,49 @@ public class SchemaTree extends DynamicTree
 
                 panel.rebuildConnectionsFromTree();
 
-                /*
                 panel.repaint();
                 ThreadUtils.invokeLater(new Runnable() {
                     public void run() {
                         if (lastPathComponent instanceof DatabaseHostNode) {
-                            DatabaseHostNode node = (DatabaseHostNode) lastPathComponent;
-                            DatabaseConnection selectedConnection = node.getDatabaseConnection();
-                            try {
-                                removeTreeSelectionListener();
-                                panel.setSelectedConnection(selectedConnection);
-                            } finally {
-                                addTreeSelectionListener();
+
+                            String prefix = lastPathComponent.toString();
+                            TreePath path = null;
+
+                            // need to make sure we have the right node since
+                            // nodes with the same prefix but higher will 
+                            // return first 
+                            
+                            int index = 0;
+                            int rowCount = getRowCount();
+                            while (index < rowCount) { 
+
+                                path = getNextMatch(prefix, index, Position.Bias.Forward);
+                                if (prefix.equals(path.getLastPathComponent().toString())) {
+
+                                    break;
+                                }
+
+                                index++;
                             }
+                            
+                            if (path != null) {
+                            
+                                try {
+                                    
+                                    removeTreeSelectionListener();
+                                    scrollPathToVisible(path);
+                                    setSelectionPath(path);
+    
+                                } finally {
+
+                                    addTreeSelectionListener();
+                                }
+
+                            }
+
                         }
                     }    
                 });
-                */
                 
             }
             
@@ -455,6 +483,11 @@ public class SchemaTree extends DynamicTree
     public void finishedLoadingNode() {
 
         loadingNode = false;
+    }
+
+    public void connectionNameChanged(String name) {
+        
+        panel.connectionNameChanged(name);
     }
     
 }

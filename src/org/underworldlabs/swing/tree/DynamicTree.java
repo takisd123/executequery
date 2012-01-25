@@ -321,9 +321,11 @@ public class DynamicTree extends JTree {
         
         TreePath path = null;
         if (node instanceof DefaultMutableTreeNode) {
+
             path = new TreePath(((DefaultMutableTreeNode)node).getPath());
-        }
-        else {
+
+        } else {
+
             String prefix = node.toString();
 
             // reselect that node
@@ -340,7 +342,6 @@ public class DynamicTree extends JTree {
 
         scrollPathToVisible(path);
         setSelectionPath(path);
-        //fireValueChanged(new TreeSelectionEvent(this, path, true, null, path));
     }
     
     /**

@@ -761,11 +761,10 @@ public class BrowserController {
         }
     }
 
+    public void connectionNameChanged(String name) {
+
+        HostPanel hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
+        hostPanel.connectionNameChanged(name);
+    }
+
 }
-
-
-
-
-
-
-

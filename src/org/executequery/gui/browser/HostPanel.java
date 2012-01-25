@@ -141,6 +141,10 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         }
     }
     
+    public void connectionNameChanged(String name) {
+        connectionPanel.connectionNameChanged(name);
+    }
+    
     /**
      * Informs any panels of a new selection being made.
      */

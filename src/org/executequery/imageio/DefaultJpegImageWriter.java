@@ -102,4 +102,51 @@ public class DefaultJpegImageWriter extends AbstractImageWriter {
     
 }
 
+/*
+// using batik - requires batik-transcoder.jar 
 
+public class BatikJpgImageWriter extends AbstractImageWriter {
+
+    public void write(ImageWriterInfo imageWriterInfo) {
+
+        FileOutputStream fos = null;
+        
+        try {
+
+            JPEGTranscoder transcoder = new JPEGTranscoder();
+            transcoder.addTranscodingHint(JPEGTranscoder.KEY_QUALITY, new Float(.8));
+
+            fos = new FileOutputStream(imageWriterInfo.getWriteToFile());
+            BufferedOutputStream bfos = new BufferedOutputStream(fos);
+            
+            TranscoderOutput lOutput = new TranscoderOutput(bfos);
+            transcoder.writeImage(imageWriterInfo.getBufferedImage(), lOutput);
+
+            bfos.flush();
+            
+        } catch (IOException e) {
+
+            handleException(e);
+        
+        } catch (TranscoderException e) {
+
+            handleException(e);
+
+        } finally {
+            
+            if (fos != null) {
+                
+                try {
+                    fos.close();
+                } catch (IOException e) {}
+
+            }
+        }
+
+    }
+    
+}
+
+
+
+*/
