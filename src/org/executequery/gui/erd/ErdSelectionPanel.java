@@ -318,7 +318,6 @@ public class ErdSelectionPanel extends JPanel
     public String getSchema() {
         
         Object schema = schemaCombo.getSelectedItem();
-        
         if (schema != null) {
 
             return schema.toString();

@@ -129,6 +129,8 @@ public class ErdViewerPanel extends DefaultTabView
     /** the connection props object */
     private DatabaseConnection databaseConnection;
 
+    /** flag whether to display reference keys only */
+    private boolean displayKeysOnly = true;
     
     /** The scale values */
     protected static final String[] scaleValues = {"25%", "50%", "75%", "100%",
@@ -607,10 +609,15 @@ public class ErdViewerPanel extends DefaultTabView
         return new ErdPrintable(this);
     }
     
-    public void setDisplayKeysOnly(boolean display) {
+    public boolean isDisplayKeysOnly() {
+        return displayKeysOnly;
+    }
+    
+    public void setDisplayKeysOnly(boolean displayKeysOnly) {
+        this.displayKeysOnly = displayKeysOnly;
         ErdTable[] allTables = getAllComponentsArray();
         for (int i = 0; i < allTables.length; i++) {
-            allTables[i].setDisplayReferencedKeysOnly(display);
+            allTables[i].setDisplayReferencedKeysOnly(displayKeysOnly);
             allTables[i].tableColumnsChanged();
         }
         layeredPane.repaint();

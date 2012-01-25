@@ -110,7 +110,7 @@ public class ErdTable extends ErdMoveableComponent
 
         newTable = false;
         editable = false;
-        displayReferencedKeysOnly = true;
+        displayReferencedKeysOnly = parent.isDisplayKeysOnly();
         tableBackground = Color.WHITE;
         
         try {
