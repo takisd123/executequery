@@ -81,6 +81,9 @@ public class SchemaTree extends DynamicTree
         DefaultTreeCellRenderer renderer = new BrowserTreeCellRenderer(loadIcons());
         setCellRenderer(renderer);
 
+//        setEditable(true);
+//        setCellEditor(new ConnectionTreeCellEditor(this, renderer));
+        
         setShowsRootHandles(true);
         setDragEnabled(true);
 

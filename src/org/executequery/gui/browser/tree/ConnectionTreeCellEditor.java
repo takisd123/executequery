@@ -38,50 +38,33 @@ import org.executequery.gui.browser.nodes.DatabaseHostNode;
  */
 public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
     
-    private DatabaseHost databaseHost;
-    
     public ConnectionTreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
         
         super(tree, renderer);
     }
 
-    public boolean _isCellEditable(EventObject event) {
+    public boolean isCellEditable(EventObject event) {
         
-        boolean cellEditable = super.isCellEditable(event);
+        if (!(tree.getSelectionPath().getLastPathComponent() instanceof DatabaseHostNode)) {
 
-        if (event != null) {
-            
-            System.out.println("event source: "+ event.getSource().getClass().getName());
-            
-            JTree tree = (JTree)event.getSource();
-
-            if (cellEditable) {
-
-                System.out.println(
-                        tree.getSelectionPath().getLastPathComponent());
-                
-                if (!(tree.getSelectionPath().getLastPathComponent() instanceof DatabaseHostNode)) {
-                    return false;
-                }
-            }
-            
+            return false;
         }
 
-        return cellEditable;
+        return true;        
     }
     
     public Object getCellEditorValue() {
-        
+
         Object value = super.getCellEditorValue();
-
-        if(databaseHost == null) {
-        
-            return value;
-        } else {
-
+        Object lastPathComponent = tree.getSelectionPath().getLastPathComponent();
+        if (lastPathComponent instanceof DatabaseHostNode) {
+            
+            DatabaseHostNode databaseHost = (DatabaseHostNode) lastPathComponent;
             databaseHost.getDatabaseConnection().setName((String)value);
-            return databaseHost;
+            
         }
+
+        return value;
     }
     
     public Component getTreeCellEditorComponent(JTree tree,
@@ -96,8 +79,6 @@ public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
             DatabaseHostNode node = (DatabaseHostNode)value;
             DatabaseHost host = (DatabaseHost)node.getDatabaseObject();
 
-            databaseHost = host;
-            
             Object userObject = node.getUserObject();
         }
         
