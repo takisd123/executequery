@@ -253,8 +253,9 @@ public class SchemaTree extends DynamicTree
         public void exportAsDrag(JComponent comp, InputEvent e, int action) {
             
             if (loadingNode) {
-                
-                throw new SuppressedException("Node seelction pending before drag");
+
+                // hack! 
+                throw new SuppressedException("Node selection pending before drag");
             }
             
             super.exportAsDrag(comp, e, action);
@@ -326,6 +327,9 @@ public class SchemaTree extends DynamicTree
         
         protected void exportDone(JComponent source, Transferable data, int action) {
 
+//            TreePath[] paths = getSelectionPaths();
+//            final Object lastPathComponent = paths[0].getLastPathComponent();
+
             if ((action & MOVE) == MOVE) {
                 
                 JTree tree = (JTree)source;
@@ -336,8 +340,27 @@ public class SchemaTree extends DynamicTree
 
                     model.removeNodeFromParent(nodesToRemove[i]);
                 }
-         
+
                 panel.rebuildConnectionsFromTree();
+
+                /*
+                panel.repaint();
+                ThreadUtils.invokeLater(new Runnable() {
+                    public void run() {
+                        if (lastPathComponent instanceof DatabaseHostNode) {
+                            DatabaseHostNode node = (DatabaseHostNode) lastPathComponent;
+                            DatabaseConnection selectedConnection = node.getDatabaseConnection();
+                            try {
+                                removeTreeSelectionListener();
+                                panel.setSelectedConnection(selectedConnection);
+                            } finally {
+                                addTreeSelectionListener();
+                            }
+                        }
+                    }    
+                });
+                */
+                
             }
             
         }

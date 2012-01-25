@@ -101,6 +101,7 @@ public class ErdGenerateProgressDialog extends AbstractBaseDialog {
                                      ErdViewerPanel parent, String schema) {
         
         super(GUIUtilities.getParentFrame(), "Adding Tables", false);
+        this.schema = schema;
         
         databaseConnection = parent.getDatabaseConnection();        
         this.selectedTables = selectedTables;
@@ -113,7 +114,6 @@ public class ErdGenerateProgressDialog extends AbstractBaseDialog {
         }
         
         display();
-        
     }
     
     private void display() {
@@ -243,9 +243,7 @@ public class ErdGenerateProgressDialog extends AbstractBaseDialog {
             GUIUtilities.showNormalCursor();
             selectedTables = null;
             
-        }
-        
-        else {
+        } else {
             
             if (columnData.size() != selectedTables.size()) {
                 dispose();
@@ -256,9 +254,8 @@ public class ErdGenerateProgressDialog extends AbstractBaseDialog {
             metaData = null;
             
             ErdTable table = null;
-            int v_size = selectedTables.size();
-            
-            for (int i = 0; i < v_size; i++) {
+            for (int i = 0, n = selectedTables.size(); i < n; i++) {
+
                 // create the ERD display component
                 table = new ErdTable(
                         (String)selectedTables.elementAt(i),

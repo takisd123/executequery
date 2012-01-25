@@ -127,7 +127,6 @@ public class ErdSelectionDialog extends AbstractBaseDialog {
                                           parent,
                                           selectionPanel.getSchema());
             dispose();
-   
         }
         
     }

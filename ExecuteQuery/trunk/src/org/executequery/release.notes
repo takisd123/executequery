@@ -16,6 +16,8 @@ Summary of changes - v3.2.5 Build 5176:
 - Modified entity labels to be text-selectable.
 - Added delete button for JDBC advanced property key/value pairs.
 - Added limited drag support to the saved connections tree.
+- Fixed ERD add existing schema table where under some DBs (Oracle) the column 
+  names would be repeated for like tables across different schemas. 
 
 
 Summary of changes - v3.2.4 Build 5169:
