@@ -263,6 +263,24 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
         return sb.toString();
     }
 
+    @Override
+    public Icon getClosedIcon() {
+
+        return getIcon();
+    }
+    
+    @Override
+    public Icon getOpenIcon() {
+
+        return getIcon();
+    }
+    
+    @Override
+    public Icon getLeafIcon() {
+
+        return getIcon();
+    }
+    
 }
 
 

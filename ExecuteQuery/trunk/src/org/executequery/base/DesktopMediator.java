@@ -480,8 +480,8 @@ public class DesktopMediator implements DockedTabDragListener {
     }
 
     /**
-     * Adds the specified component as a docked tab component
-     * in the specified position.
+     * Adds the specified component as a docked tab component in the 
+     * specified position.
      *
      * @param the tab title
      * @param the tab icon
@@ -546,8 +546,7 @@ public class DesktopMediator implements DockedTabDragListener {
     }
     
     /**
-     * Returns the open tab components in a list at 
-     * the specified position.
+     * Returns the open tab components in a list at the specified position.
      *
      * @param the tab pane position
      * @return a list of tab components
@@ -555,7 +554,7 @@ public class DesktopMediator implements DockedTabDragListener {
     public List<TabComponent> getOpenTabs(int position) {
         DockedTabContainer container = getContainerAt(position);
         if (container != null) {
-            container.getOpenTabs(position);
+            return container.getOpenTabs(position);
         }
         return null;
     }

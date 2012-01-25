@@ -1548,4 +1548,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         */
     }
 
+    public void connectionNameChanged(String name) {
+
+        controller.connectionNameChanged(name);
+    }
+
 }

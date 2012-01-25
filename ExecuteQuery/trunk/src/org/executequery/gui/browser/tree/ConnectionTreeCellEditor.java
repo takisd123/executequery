@@ -20,14 +20,11 @@
 
 package org.executequery.gui.browser.tree;
 
-import java.awt.Component;
 import java.util.EventObject;
 
-import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 
 /**
@@ -38,9 +35,12 @@ import org.executequery.gui.browser.nodes.DatabaseHostNode;
  */
 public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
     
-    public ConnectionTreeCellEditor(JTree tree, DefaultTreeCellRenderer renderer) {
+    private final SchemaTree schemaTree;
+
+    public ConnectionTreeCellEditor(SchemaTree tree, DefaultTreeCellRenderer renderer) {
         
         super(tree, renderer);
+        schemaTree = tree;
     }
 
     public boolean isCellEditable(EventObject event) {
@@ -58,38 +58,11 @@ public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
         Object value = super.getCellEditorValue();
         Object lastPathComponent = tree.getSelectionPath().getLastPathComponent();
         if (lastPathComponent instanceof DatabaseHostNode) {
-            
-            DatabaseHostNode databaseHost = (DatabaseHostNode) lastPathComponent;
-            databaseHost.getDatabaseConnection().setName((String)value);
-            
+
+            schemaTree.connectionNameChanged((String)value);
         }
 
         return value;
     }
     
-    public Component getTreeCellEditorComponent(JTree tree,
-                                                Object value,
-                                                boolean isSelected,
-                                                boolean expanded,
-                                                boolean leaf,
-                                                int row) {
-        
-        if(value instanceof DatabaseHostNode) {
-            
-            DatabaseHostNode node = (DatabaseHostNode)value;
-            DatabaseHost host = (DatabaseHost)node.getDatabaseObject();
-
-            Object userObject = node.getUserObject();
-        }
-        
-        return super.getTreeCellEditorComponent(tree, value, isSelected, expanded, leaf, row);
-    }
-    
-    
 }
-
-
-
-
-
-

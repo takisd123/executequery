@@ -43,9 +43,3 @@ class ConnectionNameFieldListener extends AbstractFieldFocusLostListener {
     }
     
 }
-
-
-
-
-
-

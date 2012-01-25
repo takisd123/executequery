@@ -407,6 +407,11 @@ public class ConnectionPanel extends ActionPanel
         }
     }
 
+    public void connectionNameChanged(String name) {
+        nameField.setText(name);
+        populateConnectionObject();
+    }
+
     private DatabaseDriverRepository driverRepository() {
 
         return (DatabaseDriverRepository) RepositoryCache.load(
