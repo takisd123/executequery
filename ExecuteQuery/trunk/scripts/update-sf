@@ -1,11 +1,11 @@
 #!/bin/bash
 
-EQ=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+EQ=/home/takisd/Development/workspace/eclipse/ExecuteQuery
 EQ_SRC=$EQ/src
 
-UL_SRC=/home/takisd/softdev/workspaces/eclipse/UnderworldLabs/src
+UL_SRC=/home/takisd/Development/workspace/eclipse/UnderworldLabs/src
 
-SF=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery-SF
+SF=/home/takisd/Development/workspace/eclipse/ExecuteQuery-SF
 TEMP=$SF/temp
 SF_SRC=$SF/java/src
 

@@ -20,12 +20,12 @@ echo
 echo "using java version:"
 java -version
 
-REMOVE_CVS=/home/takisd/bin/remove-cvs
+REMOVE_CVS=/home/takisd/Development/bin/remove-cvs
 
 NEW_VERSION=$1
 BUILD_NUMBER=$2
 
-EQ_DIR=/home/takisd/softdev/workspaces/eclipse/ExecuteQuery
+EQ_DIR=/home/takisd/Development/workspace/eclipse/ExecuteQuery
 #EQ_DIR=/home/takisd/temp/workspace4/ExecuteQuery
 
 DOCS_DIR=$EQ_DIR/docs
