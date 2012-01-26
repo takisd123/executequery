@@ -1,8 +1,27 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 28 November 2011
+Date: 27 January 2012
 
-Summary of changes - v3.2.4 Build 5168:
+Summary of changes - v3.2.5 Build 5176:
+----------------------------------------
+
+- Fixed transaction issue noted on data tab when connection auto commit mode is
+  reset before the result set is closed (noted for SolidDB).
+- Fixed lurking transaction isolation issue within the browser tabs holding open
+  locks and preventing query execution elsewhere.
+- Modified GUI to use the default screen for positioning where multiple screens
+  exist.
+- Changed system properties tables to use sortable models.
+- Selective layout changes for row heights in tables and trees.
+- Modified entity labels to be text-selectable.
+- Added delete button for JDBC advanced property key/value pairs.
+- Added limited drag support to the saved connections tree.
+- Fixed ERD add existing schema table where under some DBs (Oracle) the column 
+  names would be repeated for like tables across different schemas.
+- Added ability to change connection names directly from editing the tree node.
+
+
+Summary of changes - v3.2.4 Build 5169:
 ----------------------------------------
 
 - Moved build to Java 1.6.
@@ -13,8 +32,8 @@ Summary of changes - v3.2.4 Build 5168:
 - Added additional schema objects shown for Query Editor auto-complete popup.
 - Modified procedure execution from the Query Editor to execute 'as-is' when the
   provided procedure can not be located using the driver meta data.
-- Added anti-alias font option
-- Modified to save connections after a sort
+- Added anti-alias font option.
+- Modified to save connections after a sort.
 
 
 Summary of changes - v3.2.3 Build 5164:
@@ -279,4 +298,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-28 November 2011
+27 January 2012
