@@ -34,8 +34,8 @@ import javax.swing.plaf.metal.MetalScrollBarUI;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1484 $
- * @date     $Date: 2009-03-15 16:21:21 +1100 (Sun, 15 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public final class SmoothGradientScrollBarUI extends MetalScrollBarUI {
     

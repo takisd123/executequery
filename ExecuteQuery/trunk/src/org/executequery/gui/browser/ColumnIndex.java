@@ -27,8 +27,8 @@ package org.executequery.gui.browser;
  * as selected within the Database Browser.<br>
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ColumnIndex  {
     

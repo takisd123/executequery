@@ -41,8 +41,8 @@ import java.util.StringTokenizer;
  * from each statement for display.
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ListLineRenderer extends JLabel
                               implements ListCellRenderer {

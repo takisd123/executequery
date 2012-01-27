@@ -91,8 +91,8 @@ import javax.swing.text.View;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1488 $
- * @date     $Date: 2009-03-16 01:18:39 +1100 (Mon, 16 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class FlatTabbedPaneUI extends TabbedPaneUI
         implements SwingConstants {

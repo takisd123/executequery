@@ -47,8 +47,8 @@ import org.underworldlabs.util.FileUtils;
  * Base panel for the generate scripts process.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class GenerateScriptsWizard extends WizardProcessPanel
                                    implements ActiveComponent,

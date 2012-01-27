@@ -37,8 +37,8 @@ import org.underworldlabs.jdbc.DataSourceException;
  * Abstract database object implementation.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1508 $
- * @date     $Date: 2009-04-07 21:02:56 +1000 (Tue, 07 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public abstract class AbstractDatabaseObject extends AbstractNamedObject
                                              implements DatabaseObject {

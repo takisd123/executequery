@@ -30,8 +30,8 @@ import org.underworldlabs.util.SystemProperties;
  * The properties for the editor's results panel
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1521 $
- * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class PropertiesResultSetTableGeneral extends PropertiesBasePanel {
 

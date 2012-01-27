@@ -23,6 +23,12 @@ package org.executequery;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author   Takis Diakoumis
+ * @version  $Revision:1105 $
+ * @date     $Date:2008-02-08 15:05:55 +0000 (Fri, 08 Feb 2008) $
+ */
 public final class ApplicationContext {
 
     private static final String EXECUTEQUERY_BUILD = "executequery.build";

@@ -25,8 +25,8 @@ import org.executequery.databaseobjects.DatabaseHost;
 /** 
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1426 $
- * @date     $Date: 2008-10-20 23:09:39 +1100 (Mon, 20 Oct 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ExportAsSQLDataModel extends DefaultImportExportDataModel {
 

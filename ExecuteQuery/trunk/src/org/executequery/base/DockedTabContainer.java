@@ -51,8 +51,8 @@ import org.underworldlabs.swing.VerticalTextIcon;
  * and tool tip creation.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1461 $
- * @date     $Date: 2009-01-25 11:36:45 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class DockedTabContainer extends JPanel 
                                 implements SwingConstants,

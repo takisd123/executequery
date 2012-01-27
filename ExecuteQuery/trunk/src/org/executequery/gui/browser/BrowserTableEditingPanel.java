@@ -78,8 +78,8 @@ import org.underworldlabs.swing.util.SwingWorker;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1521 $
- * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                                       implements ActionListener,

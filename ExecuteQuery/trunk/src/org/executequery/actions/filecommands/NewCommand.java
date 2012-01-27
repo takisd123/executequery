@@ -27,8 +27,8 @@ import org.executequery.actions.toolscommands.EditorCommand;
  * This will open a new Query Editor frame only.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class NewCommand extends EditorCommand { //OpenFrameCommand
 //                        implements BaseCommand {

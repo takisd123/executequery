@@ -30,8 +30,8 @@ import javax.swing.JPanel;
  * Base panel with default action listener implementation using reflection.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1482 $
- * @date     $Date: 2009-03-14 13:15:13 +1100 (Sat, 14 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public abstract class ActionPanel extends JPanel
                                   implements ActionListener {

@@ -38,8 +38,8 @@ import java.util.regex.Pattern;
  * Dynamic query parser and executor.
  *
  * @author Takis Diakoumis
- * @version $Revision: 14 $
- * @date $Date: 2007-11-05 20:52:05 +1100 (Mon, 05 Nov 2007) $
+ * @version $Revision$
+ * @date $Date$
  */
 public class NamedParameterQuery {
     

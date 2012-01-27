@@ -29,8 +29,8 @@ import org.underworldlabs.jdbc.DataSourceException;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1517 $
- * @date     $Date: 2009-04-11 01:46:19 +1000 (Sat, 11 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public interface ColumnConstraint extends DatabaseObjectElement {
 

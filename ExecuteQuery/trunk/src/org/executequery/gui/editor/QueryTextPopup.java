@@ -56,8 +56,8 @@ import org.underworldlabs.swing.RolloverButton;
  * Popup panel for the results panel tab rollovers.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1472 $
- * @date     $Date: 2009-02-01 22:38:27 +1100 (Sun, 01 Feb 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 class QueryTextPopup extends JPanel
                      implements MouseListener,

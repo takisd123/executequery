@@ -30,8 +30,8 @@ import java.util.StringTokenizer;
 /** 
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 1177 $
- * @date     $Date: 2008-02-27 20:44:50 +1100 (Wed, 27 Feb 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class SQLFormatter {
 

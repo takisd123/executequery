@@ -29,8 +29,8 @@ import org.underworldlabs.jdbc.DataSourceException;
  * function, index, etc.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1508 $
- * @date     $Date: 2009-04-07 21:02:56 +1000 (Tue, 07 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public interface DatabaseObject extends NamedObject {
 

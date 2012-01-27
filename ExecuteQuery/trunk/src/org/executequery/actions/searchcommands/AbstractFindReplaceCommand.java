@@ -29,8 +29,8 @@ import org.underworldlabs.swing.actions.BaseCommand;
 /** 
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1110 $
- * @date     $Date: 2008-02-10 14:22:06 +0000 (Sun, 10 Feb 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 abstract class AbstractFindReplaceCommand extends OpenFrameCommand implements BaseCommand {
 

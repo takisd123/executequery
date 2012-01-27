@@ -63,8 +63,8 @@ import org.underworldlabs.swing.table.AbstractSortableTableModel;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1507 $
- * @date     $Date: 2009-04-07 01:05:15 +1000 (Tue, 07 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ConnectionsListPanel extends AbstractFormObjectViewPanel
                                   implements MouseListener,

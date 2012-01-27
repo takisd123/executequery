@@ -26,8 +26,8 @@ package org.executequery.gui;
  * names - ie. the title plus an incremented number as in 'Query Editor 1' etc.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1525 $
- * @date     $Date: 2009-05-17 12:40:04 +1000 (Sun, 17 May 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public interface NamedView {
     

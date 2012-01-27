@@ -50,8 +50,8 @@ import org.underworldlabs.swing.table.PrintableTableModel;
  * <code>JTable</code>s.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1561 $
- * @date     $Date: 2009-09-07 23:20:31 +1000 (Mon, 07 Sep 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class TablePrinter implements Printable {
                                      //Pageable {

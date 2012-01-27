@@ -69,8 +69,8 @@ import org.underworldlabs.util.MiscUtils;
  * The SQL text area for the Query Editor.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1483 $
- * @date     $Date: 2009-03-15 02:59:59 +1100 (Sun, 15 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class QueryEditorTextPane extends SQLTextPane
                                  implements UndoableComponent,

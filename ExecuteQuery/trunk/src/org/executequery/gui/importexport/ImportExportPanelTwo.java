@@ -41,8 +41,8 @@ import org.underworldlabs.swing.ListSelectionPanel;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1241 $
- * @date     $Date: 2008-03-24 18:19:43 +1100 (Mon, 24 Mar 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ImportExportPanelTwo extends AbstractImportExportPanel {
     

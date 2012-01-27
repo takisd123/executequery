@@ -36,8 +36,8 @@ import org.underworldlabs.jdbc.DataSourceException;
  * Database source object definition (ie. a catalog or schema)
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1521 $
- * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 

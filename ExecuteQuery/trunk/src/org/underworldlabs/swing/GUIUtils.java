@@ -47,8 +47,8 @@ import org.underworldlabs.swing.util.SwingWorker;
  * Simple of collection of GUI utility methods.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1526 $
- * @date     $Date: 2009-05-17 12:44:34 +1000 (Sun, 17 May 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class GUIUtils {
 
