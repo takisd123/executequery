@@ -30,7 +30,7 @@ import org.executequery.gui.browser.nodes.DatabaseHostNode;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Rev:$
+ * @version  $Rev$
  * @date     $Date:$
  */
 public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
