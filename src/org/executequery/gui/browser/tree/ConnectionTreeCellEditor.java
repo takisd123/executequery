@@ -28,7 +28,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 
 /**
- * ID:       $Id$          
  * @author   Takis Diakoumis
  * @version  $Revision$
  * @date     $Date:$
