@@ -37,8 +37,8 @@ import org.underworldlabs.jdbc.DataSourceException;
  * Default database schema object implementation.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1521 $
- * @date     $Date: 2009-04-20 02:49:39 +1000 (Mon, 20 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class DefaultDatabaseSchema extends AbstractDatabaseSource 
                                    implements DatabaseSchema {

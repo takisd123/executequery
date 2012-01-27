@@ -28,8 +28,8 @@ import javax.swing.event.MouseInputListener;
  * Empty non-opaque panel to be used as a glass pane for event capture.
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 1482 $
- * @date     $Date: 2009-03-14 13:15:13 +1100 (Sat, 14 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class GlassPanePanel extends JPanel
                             implements MouseInputListener {

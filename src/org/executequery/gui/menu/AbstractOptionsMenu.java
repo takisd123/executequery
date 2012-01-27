@@ -36,8 +36,8 @@ import org.underworldlabs.util.SystemProperties;
 /** 
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 638 $
- * @date     $Date: 2007-01-03 08:05:33 +0000 (Wed, 03 Jan 2007) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public abstract class AbstractOptionsMenu extends MainMenu {
 

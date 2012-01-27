@@ -29,8 +29,8 @@ import org.executequery.actions.othercommands.AbstractBaseCommand;
  * docked or scrolling tab pane.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1241 $
- * @date     $Date: 2008-03-24 18:19:43 +1100 (Mon, 24 Mar 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class CloseAllTabsInSelectedContainerAction extends AbstractBaseCommand {
 

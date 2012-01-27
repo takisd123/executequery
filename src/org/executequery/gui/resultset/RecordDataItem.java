@@ -25,8 +25,8 @@ import org.underworldlabs.swing.table.TableCellValue;
 /**
  * 
  * @author Takis Diakoumis
- * @version $Revision: 1479 $
- * @date $Date: 2009-03-13 02:18:53 +1100 (Fri, 13 Mar 2009) $
+ * @version $Revision$
+ * @date $Date$
  */
 public interface RecordDataItem extends TableCellValue {
 

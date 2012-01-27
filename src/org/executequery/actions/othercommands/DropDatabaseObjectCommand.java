@@ -29,8 +29,8 @@ import org.executequery.gui.browser.BrowserViewPanel;
  * Performs the drop object command for the browser.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class DropDatabaseObjectCommand extends AbstractBaseCommand {
 

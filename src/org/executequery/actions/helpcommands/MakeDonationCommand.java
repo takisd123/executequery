@@ -27,8 +27,8 @@ import org.executequery.actions.AbstractUrlLauncherCommand;
  * This will open a browser window with URL http://executequery.org.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1514 $
- * @date     $Date: 2009-04-10 15:42:56 +1000 (Fri, 10 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class MakeDonationCommand extends AbstractUrlLauncherCommand {
 

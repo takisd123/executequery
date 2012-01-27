@@ -50,8 +50,8 @@ import org.underworldlabs.util.FileUtils;
  * Utility class aiding printing.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1481 $
- * @date     $Date: 2009-03-14 01:42:16 +1100 (Sat, 14 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class PrintingSupport {
 

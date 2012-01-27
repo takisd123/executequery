@@ -38,8 +38,8 @@ import org.executequery.gui.scriptgenerators.GenerateScriptsWizard;
 /** <p>Execution for CREATE TABLE script generation.
  *
  *  @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class GenerateScriptsCommand extends OpenFrameCommand
                                     implements BaseCommand {

@@ -29,8 +29,8 @@ import org.executequery.util.SystemErrLogger;
  * Logging preference change listener.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1181 $
- * @date     $Date: 2008-02-28 13:41:55 +0000 (Thu, 28 Feb 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class LogUserPreferenceListener extends AbstractUserPreferenceListener
                                        implements UserPreferenceListener {

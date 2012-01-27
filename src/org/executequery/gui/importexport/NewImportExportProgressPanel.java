@@ -45,8 +45,8 @@ import org.executequery.sql.SqlMessages;
  * types - XML or delimited.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1420 $
- * @date     $Date: 2008-10-06 00:50:37 +1100 (Mon, 06 Oct 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class NewImportExportProgressPanel extends AbstractImportExportPanel
                                        implements ActionListener, ImportExportMonitor {

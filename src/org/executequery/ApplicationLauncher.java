@@ -51,6 +51,12 @@ import org.underworldlabs.swing.plaf.base.CustomTextPaneUI;
 import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
 
+/**
+ *
+ * @author   Takis Diakoumis
+ * @version  $Revision:1105 $
+ * @date     $Date:2008-02-08 15:05:55 +0000 (Fri, 08 Feb 2008) $
+ */
 public class ApplicationLauncher {
 
     public void startup() {

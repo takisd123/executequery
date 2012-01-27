@@ -20,6 +20,12 @@
 
 package org.executequery;
 
+/**
+ *
+ * @author   Takis Diakoumis
+ * @version  $Revision:1105 $
+ * @date     $Date:2008-02-08 15:05:55 +0000 (Fri, 08 Feb 2008) $
+ */
 public final class ApplicationVersion {
 
     private final String version;

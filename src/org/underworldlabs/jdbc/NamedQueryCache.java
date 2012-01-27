@@ -43,8 +43,8 @@ import org.xml.sax.helpers.DefaultHandler;
  * Dynamic SQL query loader and cache.
  *
  * @author Takis Diakoumis
- * @version $Revision: 16 $
- * @date $Date: 2007-11-06 00:39:09 +1100 (Tue, 06 Nov 2007) $
+ * @version $Revision$
+ * @date $Date$
  */
 public class NamedQueryCache {
    

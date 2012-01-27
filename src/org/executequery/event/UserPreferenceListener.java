@@ -23,8 +23,8 @@ package org.executequery.event;
 /** 
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1130 $
- * @date     $Date: 2008-02-14 19:54:31 +1100 (Thu, 14 Feb 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public interface UserPreferenceListener extends ApplicationEventListener {
 

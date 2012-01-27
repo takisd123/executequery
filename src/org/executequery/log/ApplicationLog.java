@@ -32,8 +32,8 @@ import org.apache.log4j.RollingFileAppender;
  * Provides methods to the Log4J logging methods.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1042 $
- * @date     $Date: 2007-11-08 10:10:57 +0000 (Thu, 08 Nov 2007) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class ApplicationLog {
 

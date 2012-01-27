@@ -44,8 +44,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1502 $
- * @date     $Date: 2009-04-05 23:00:46 +1000 (Sun, 05 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
 

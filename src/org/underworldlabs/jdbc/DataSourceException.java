@@ -27,8 +27,8 @@ import java.sql.SQLException;
  * Note: this was changed to extend RuntimeException (12 March 2008)
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class DataSourceException extends RuntimeException {
     

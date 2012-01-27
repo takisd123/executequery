@@ -24,8 +24,8 @@ package org.executequery.gui.resultset;
 /**
  * 
  * @author Takis Diakoumis
- * @version $Revision: 1479 $
- * @date $Date: 2009-03-13 02:18:53 +1100 (Fri, 13 Mar 2009) $
+ * @version $Revision$
+ * @date $Date$
  */
 public abstract class AbstractRecordDataItem implements RecordDataItem {
 

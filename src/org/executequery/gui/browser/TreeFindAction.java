@@ -43,8 +43,8 @@ import javax.swing.tree.TreePath;
  * Usage: new TreeFindAction().install(tree);
  *
  * @author   Santhosh Kumar, Takis Diakoumis
- * @version  $Revision: 112 $
- * @date     $Date: 2008-10-29 11:01:08 +1100 (Wed, 29 Oct 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class TreeFindAction extends FindAction<TreePath> {
 

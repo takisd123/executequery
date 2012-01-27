@@ -28,8 +28,8 @@ import java.util.List;
  * Formats tokenized queries so they look 'pretty'.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1473 $
- * @date     $Date: 2009-02-12 22:05:43 +1100 (Thu, 12 Feb 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class TokenizingFormatter {
 

@@ -31,8 +31,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1144 $
- * @date     $Date: 2008-02-19 22:18:15 +1100 (Tue, 19 Feb 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class QueryEditorViewOptionsCommand extends AbstractViewOptionsCommand {
     

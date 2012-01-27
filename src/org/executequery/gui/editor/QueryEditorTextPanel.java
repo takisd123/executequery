@@ -59,8 +59,8 @@ import org.underworldlabs.swing.GUIUtils;
  * text pane are propagated through here.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2009-03-16 01:18:05 +1100 (Mon, 16 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class QueryEditorTextPanel extends JPanel {
 

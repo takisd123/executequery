@@ -30,8 +30,8 @@ import org.underworldlabs.util.SystemProperties;
  * Proposed user preferences manager util for one-stop access.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1481 $
- * @date     $Date: 2009-03-14 01:42:16 +1100 (Sat, 14 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public final class UserPreferencesManager {
 

@@ -46,8 +46,8 @@ import org.underworldlabs.swing.StyledLogPane;
  * Wizard progress bar panel rendering a progress bar and stop button.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1460 $
- * @date     $Date: 2009-01-25 11:06:46 +1100 (Sun, 25 Jan 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class WizardProgressBarPanel extends JPanel 
                                     implements ActionListener {

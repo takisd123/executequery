@@ -45,8 +45,8 @@ import org.underworldlabs.swing.LinkButton;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1514 $
- * @date     $Date: 2009-04-10 15:42:56 +1000 (Fri, 10 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class HelpPopupBase extends JPanel 
                            implements ActionListener,

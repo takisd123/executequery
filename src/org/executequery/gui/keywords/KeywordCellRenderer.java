@@ -33,8 +33,8 @@ import org.executequery.GUIUtilities;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1483 $
- * @date     $Date: 2009-03-15 02:59:59 +1100 (Sun, 15 Mar 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class KeywordCellRenderer extends JLabel 
                                  implements TableCellRenderer {

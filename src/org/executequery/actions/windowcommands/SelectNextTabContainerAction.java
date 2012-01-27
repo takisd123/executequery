@@ -29,8 +29,8 @@ import org.executequery.actions.othercommands.AbstractBaseCommand;
  * docked or scrolling tab pane.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 53 $
- * @date     $Date: 2008-03-24 23:55:17 +1100 (Mon, 24 Mar 2008) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class SelectNextTabContainerAction extends AbstractBaseCommand {
 

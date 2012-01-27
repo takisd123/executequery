@@ -31,8 +31,8 @@ import org.underworldlabs.util.KeyValuePair;
  *  providing table model and sorting by key or value.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1506 $
- * @date     $Date: 2009-04-07 01:03:33 +1000 (Tue, 07 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class PropertyWrapperModel extends AbstractSortableTableModel {
 

@@ -93,8 +93,8 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @author Parwinder Sekhon
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1506 $
- * @date     $Date: 2009-04-07 01:03:33 +1000 (Tue, 07 Apr 2009) $
+ * @version  $Revision$
+ * @date     $Date$
  */
 @SuppressWarnings("unchecked")
 public class TableSorter extends AbstractTableModel {
