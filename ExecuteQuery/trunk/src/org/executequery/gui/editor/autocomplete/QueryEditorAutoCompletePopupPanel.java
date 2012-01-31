@@ -115,7 +115,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
 
             listeners = new ArrayList<AutoCompletePopupListener>();
         }
-
         listeners.add(autoCompletePopupListener);
     }
 
@@ -132,10 +131,13 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     protected void scrollSelectedIndexUp() {
 
         int selectedIndex = list.getSelectedIndex();
-
         if (selectedIndex > 0) {
 
             selectListIndex(selectedIndex - 1);
+        
+        } else if (selectedIndex == 0) {
+            
+            selectListIndex(list.getModel().getSize() - 1);
         }
 
     }
@@ -143,10 +145,13 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     protected void scrollSelectedIndexDown() {
 
         int selectedIndex = list.getSelectedIndex();
-
         if (selectedIndex < list.getModel().getSize() - 1) {
 
             selectListIndex(selectedIndex + 1);
+        
+        } else {
+            
+            selectListIndex(0);
         }
 
     }
@@ -156,11 +161,9 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     protected void scrollSelectedIndexPageUp() {
 
         int selectedIndex = list.getSelectedIndex();
-
         if (selectedIndex > 0) {
 
             int newIndex = selectedIndex - PAGE_SCROLL_SIZE;
-
             if (newIndex > 0) {
 
                 selectListIndex(newIndex);
@@ -177,13 +180,10 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     protected void scrollSelectedIndexPageDown() {
 
         int selectedIndex = list.getSelectedIndex();
-
         int modelSize = list.getModel().getSize();
-
         if (selectedIndex < modelSize - 1) {
 
             int newIndex = selectedIndex + PAGE_SCROLL_SIZE;
-
             if (newIndex < modelSize) {
 
                 selectListIndex(newIndex);
@@ -200,7 +200,7 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     private void selectListIndex(int index) {
 
         list.setSelectedIndex(index);
-        list.scrollRectToVisible(list.getCellBounds(index, index));
+        list.ensureIndexIsVisible(index);
     }
 
     public void focusAndSelectList() {

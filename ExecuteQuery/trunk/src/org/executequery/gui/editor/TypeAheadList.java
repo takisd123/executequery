@@ -37,16 +37,14 @@ public class TypeAheadList extends JList {
     public TypeAheadList(TypeAheadListProvider typeAheadListProvider) {
         
         super();
-
         this.typeAheadListProvider = typeAheadListProvider;
-
         init();
     }
 
     private void init() {
 
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
+
         addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
 
@@ -62,7 +60,6 @@ public class TypeAheadList extends JList {
             public void keyReleased(KeyEvent e) {
 
                 int keyCode = e.getKeyCode();
-                
                 if (keyCode == KeyEvent.VK_ENTER) {                
                 
                     listValueSelected(getSelectedValue());
@@ -75,7 +72,6 @@ public class TypeAheadList extends JList {
             }
 
         });
-
         
     }
 
@@ -84,14 +80,12 @@ public class TypeAheadList extends JList {
 
         Vector listData = new Vector(values.size());
         listData.addAll(values);
-
         setListData(listData);
     }
 
     public void setListItemSelectedAndFocus(int index) {
 
         int size = getModel().getSize();
-
         if (size > 0 && index < size) {
 
             requestFocus();
