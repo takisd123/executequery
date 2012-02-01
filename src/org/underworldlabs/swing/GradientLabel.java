@@ -211,8 +211,9 @@ public class GradientLabel extends JComponent {
         // draw the icon and text
         Insets _insets = getInsets();
         int x = _insets.left + 5;
-        int y = (getHeight() - icon.getIconHeight()) / 2;
+        int y = 0;
         if (icon != null) {
+            y = (getHeight() - icon.getIconHeight()) / 2;
             icon.paintIcon(this, g2, x, y);
             x += icon.getIconWidth() + 10;
         }

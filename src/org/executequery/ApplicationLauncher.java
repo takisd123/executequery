@@ -378,7 +378,8 @@ public class ApplicationLauncher {
 
     private Color progressBarColour() {
 
-        return new Color(120, 120, 180);
+//        return new Color(120, 120, 180);
+        return new Color(107, 148, 200);
     }
 
     public ExecuteQueryFrame createFrame() {

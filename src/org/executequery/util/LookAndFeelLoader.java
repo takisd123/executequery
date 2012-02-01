@@ -148,7 +148,6 @@ public final class LookAndFeelLoader {
         try {
 
             MetalLookAndFeel.setCurrentTheme(new ExecuteQueryTheme());
-
             UIManager.setLookAndFeel(new MetalLookAndFeel());
 
         } catch (UnsupportedLookAndFeelException e) {

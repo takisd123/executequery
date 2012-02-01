@@ -68,7 +68,7 @@ public class SchemaTree extends DynamicTree
                         implements TreeExpansionListener,
                                    TreeSelectionListener {
 
-    private static final int ROW_HEIGHT = 22;
+    private static final int ROW_HEIGHT = 24;
     
     private ConnectionsTreePanel panel;
 
