@@ -607,17 +607,6 @@
           large-icon="/org/executequery/icons/KeyWords24.png"
           execute-class="org.executequery.actions.toolscommands.KeyWordsCommand"/>
 
-<!--
-  <action id="manage-conns-command"
-          name="Manage Connections"
-          mnemonic="M"
-          accel-editable="true"
-          small-icon="/org/executequery/icons/ConnTools16.png"
-          large-icon="/org/executequery/icons/ConnTools24.png"
-          description="Manage your connections and JDBC drivers"
-          execute-class="org.executequery.actions.databasecommands.ManageConnectionsCommand"/>
--->
-
   <action id="heap-memory-command"
           name="Heap Memory Status"
           mnemonic="M"
