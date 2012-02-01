@@ -24,32 +24,29 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.awt.print.Printable;
 import java.sql.DatabaseMetaData;
-
 import java.util.HashMap;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-
 import javax.swing.table.AbstractTableModel;
+
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseExecutable;
 import org.executequery.databaseobjects.NamedObject;
-
-import org.executequery.databaseobjects.impl.DefaultDatabaseProcedure;
 import org.executequery.databaseobjects.ProcedureParameter;
+import org.executequery.databaseobjects.impl.DefaultDatabaseProcedure;
 import org.executequery.databaseobjects.impl.SystemDatabaseFunction;
 import org.executequery.gui.DefaultTable;
-
-import org.executequery.print.TablePrinter;
-import org.underworldlabs.swing.DisabledField;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
+import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.swing.DisabledField;
 
 /**
  *
@@ -234,31 +231,31 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
             case BrowserConstants.FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database Function");
-                setHeaderIcon(GUIUtilities.loadIcon("Function24.png", true));
+                setHeaderIcon("Function24.png");
                 break;
 
             case BrowserConstants.PROCEDURE_NODE:
                 objectNameLabel.setText("Procedure Name:");
                 setHeaderText("Database Procedure");
-                setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
+                setHeaderIcon("Procedure24.png");
                 break;
 
             case BrowserConstants.SYSTEM_STRING_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System String Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
+                setHeaderIcon("SystemFunction24.png");
                 break;
 
             case BrowserConstants.SYSTEM_NUMERIC_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Numeric Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
+                setHeaderIcon("SystemFunction24.png");
                 break;
 
             case BrowserConstants.SYSTEM_DATE_TIME_FUNCTIONS_NODE:
                 objectNameLabel.setText("Function Name:");
                 setHeaderText("Database System Date/Time Function");
-                setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
+                setHeaderIcon("SystemFunction24.png");
                 break;
         }
 
@@ -270,6 +267,11 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         }
 
         //schemaNameField.setText(metaObject.getSchemaName());
+    }
+    
+    private void setHeaderIcon(String icon) {
+
+//        setHeaderIcon(GUIUtilities.loadIcon(icon, true));
     }
     
     class ProcedureTableModel extends AbstractTableModel {
