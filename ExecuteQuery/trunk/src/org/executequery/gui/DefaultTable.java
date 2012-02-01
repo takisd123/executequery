@@ -38,18 +38,16 @@ import org.underworldlabs.swing.table.DefaultTableHeaderRenderer;
  */
 public class DefaultTable extends JTable {
     
-    private static final int DEFAULT_ROW_HEIGHT = 22;
+    private static final int DEFAULT_ROW_HEIGHT = 24;
     
     public DefaultTable() {
 
         this(null);
     }
 
-    /** Creates a new instance of DefaultTable */
     public DefaultTable(TableModel model) {
         
-        super(model);
-        
+        super(model);        
         init();
     }    
     

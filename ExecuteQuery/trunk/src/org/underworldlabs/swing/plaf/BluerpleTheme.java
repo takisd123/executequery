@@ -71,10 +71,10 @@ public class BluerpleTheme extends DefaultMetalTheme {
     private final ColorUIResource primary1 = new ColorUIResource(102, 102, 153);
     
     // --- scroll bars, highlights, menu selection etc ---
-    private final ColorUIResource primary2 = new ColorUIResource(145, 145, 207);
+    private final ColorUIResource primary2 = new ColorUIResource(107, 148, 200);
     
     // --- active internal frame headers ---
-    private final ColorUIResource primary3 = new ColorUIResource(169, 169, 242);
+    private final ColorUIResource primary3 = new ColorUIResource(139, 175, 220);
     
     // --- dark border for 3D for eg buttons ---
     private final ColorUIResource secondary1 = new ColorUIResource(102, 102, 102);

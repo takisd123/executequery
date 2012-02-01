@@ -47,7 +47,7 @@ public class PropertiesRootPanel extends JPanel
         lightColour = new Color(181,184,241);
 
         ImageIcon icon = new ImageIcon(getClass().getResource(
-                        "/org/executequery/images/PreferencesIconImage.gif"));
+                        "/org/executequery/images/AboutText.png"));
         preferencesImage = icon.getImage();
 
         icon = new ImageIcon(getClass().getResource(
@@ -64,9 +64,10 @@ public class PropertiesRootPanel extends JPanel
         g2d.setPaint(new GradientPaint(0, 0, darkColour, width, height, lightColour));
         g2d.fillRect(0, 0, width, height);
 
-        g2d.drawImage(preferencesImage, 30, 20, this);
+        int xOffset = width - preferencesImage.getWidth(this) + 10;
+        g2d.drawImage(preferencesImage, xOffset, 20, this);
 
-        int xOffset = width - textImage.getWidth(this) - 15;
+        xOffset = width - textImage.getWidth(this) - 15;
         int yOffset = height - textImage.getHeight(this) - 20;
         g2d.drawImage(textImage, xOffset, yOffset, this);
     }

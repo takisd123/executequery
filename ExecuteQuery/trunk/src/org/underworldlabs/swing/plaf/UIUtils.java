@@ -197,9 +197,11 @@ public class UIUtils {
                 if (color == null) {
                     color = UIManager.getColor("controlShadow");
                 }
+                
                 defaultActiveBackgroundColour = getBrighter(color, 0.85);
-            }
-            else {
+            
+            } else {
+
                 defaultActiveBackgroundColour = 
                         UIManager.getColor("controlLtHighlight");
             }

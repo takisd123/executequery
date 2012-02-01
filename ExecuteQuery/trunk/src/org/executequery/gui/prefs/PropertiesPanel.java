@@ -200,6 +200,7 @@ public class PropertiesPanel extends JPanel
         }
 
         tree = new DynamicTree(root);
+        tree.setRowHeight(22);
         tree.putClientProperty("JTree.lineStyle", "Angled");
         tree.setCellRenderer(new PropsTreeCellRenderer());
 
