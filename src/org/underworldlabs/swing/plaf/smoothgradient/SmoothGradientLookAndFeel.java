@@ -161,7 +161,12 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
         internalFrameIconArgs[0] = Integer.valueOf(16);
         
         Boolean is3D = Boolean.TRUE;
-        
+
+        Object errorIcon       = makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/dialog-error.png");
+        Object informationIcon = makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/dialog-information.png");
+        Object helpIcon        = makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/dialog-help.png");
+        Object warningIcon     = makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/dialog-warning.png");
+
         Object[] defaults = {
             //"CheckBoxMenuItem.checkIcon",	checkBoxMenuItemIcon,
             "ComboBox.selectionForeground",	getMenuSelectedForeground(),
@@ -169,16 +174,30 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
             "ComboBox.arrowButtonBorder",   SmoothGradientBorders.getComboBoxArrowButtonBorder(),
             "ComboBox.editorBorder",        SmoothGradientBorders.getComboBoxEditorBorder(),
             "Menu.arrowIcon",				SmoothGradientIconFactory.getMenuArrowIcon(),
-            /*
-            "FileView.computerIcon",		makeIcon(getClass(), "icons/Computer.gif"),
-            "FileView.directoryIcon",		makeIcon(getClass(), "icons/TreeClosed.gif"),
-            "FileView.fileIcon", 			makeIcon(getClass(), "icons/File.gif"),
-            "FileView.floppyDriveIcon", 	makeIcon(getClass(), "icons/FloppyDrive.gif"),
-            "FileView.hardDriveIcon", 		makeIcon(getClass(), "icons/HardDrive.gif"),
-            "FileChooser.homeFolderIcon", 	makeIcon(getClass(), "icons/HomeFolder.gif"),
-            "FileChooser.newFolderIcon", 	makeIcon(getClass(), "icons/NewFolder.gif"),
-            "FileChooser.upFolderIcon",		makeIcon(getClass(), "icons/UpFolder.gif"),
-             */
+
+            "OptionPane.errorIcon",         errorIcon,
+            "OptionPane.informationIcon",   informationIcon,
+            "OptionPane.questionIcon",      helpIcon,
+            "OptionPane.warningIcon",       warningIcon,
+
+            "FileView.computerIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/Computer16.png"),
+            "FileView.directoryIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/Folder16.png"),
+            "FileView.fileIcon", 			makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/File16.png"),
+            "FileView.floppyDriveIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/FloppyDisk16.png"),
+            "FileView.hardDriveIcon", 		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/HardDrive16.png"),
+            "FileChooser.homeFolderIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/Home16.png"),
+            "FileChooser.newFolderIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/FolderNew16.png"),
+            "FileChooser.upFolderIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/FolderUp16.png"),
+
+//            "FileView.computerIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/Computer.gif"),
+//            "FileView.directoryIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/TreeClosed.gif"),
+//            "FileView.fileIcon", 			makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/File.gif"),
+//            "FileView.floppyDriveIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/FloppyDrive.gif"),
+//            "FileView.hardDriveIcon", 		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/HardDrive.gif"),
+//            "FileChooser.homeFolderIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/HomeFolder.gif"),
+//            "FileChooser.newFolderIcon", 	makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/NewFolder.gif"),
+//            "FileChooser.upFolderIcon",		makeIcon(getClass(), "/org/underworldlabs/swing/plaf/smoothgradient/icons/UpFolder.gif"),
+
 //            "Tree.closedIcon", 				makeIcon(getClass(), "icons/TreeClosed.gif"),
 //            "Tree.openIcon", 				makeIcon(getClass(), "icons/TreeOpen.gif"),
 //            "Tree.leafIcon", 				makeIcon(getClass(), "icons/TreeLeaf.gif"),
@@ -209,6 +228,12 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
             "RootPane.questionDialogBorder", SmoothGradientBorders.getQuestionDialogBorder(),
             "RootPane.warningDialogBorder", SmoothGradientBorders.getWarningDialogBorder()
              */
+            
+//            Object errorIcon       = makeIcon(getClass(), iconPrefix + "dialog-error.png");
+//            Object informationIcon = makeIcon(getClass(), iconPrefix + "dialog-information.png");
+//            Object helpIcon        = makeIcon(getClass(), iconPrefix + "dialog-help.png");
+//            Object warningIcon     = makeIcon(getClass(), iconPrefix + "dialog-warning.png");
+
 
         };
         

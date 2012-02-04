@@ -26,13 +26,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Icon and image loader and cache.<br>
  * This aims to load images from jar file resources not 

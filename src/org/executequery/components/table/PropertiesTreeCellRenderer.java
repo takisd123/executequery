@@ -23,14 +23,13 @@ package org.executequery.components.table;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.JTree;
 import javax.swing.UIManager;
-import javax.swing.tree.TreeCellRenderer;
 
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.underworldlabs.swing.tree.AbstractTreeCellRenderer;
 
 /**
  * Properties frame tree renderer.
@@ -39,62 +38,53 @@ import org.executequery.GUIUtilities;
  * @version  $Revision$
  * @date     $Date$
  */
-public class PropsTreeCellRenderer extends JLabel
-                                   implements TreeCellRenderer {
+public class PropertiesTreeCellRenderer extends AbstractTreeCellRenderer {
     
-    private static final String BLANK_TREE_NODE = "BlankTreeNode.png";
-
     private Color textBackground;
     private Color textForeground;
     private Color selectionBackground;
     
-    private ImageIcon emptyImage;
-    
-    public PropsTreeCellRenderer() {
+    public PropertiesTreeCellRenderer() {
+
         textBackground = UIManager.getColor("Tree.textBackground");
         textForeground = UIManager.getColor("Tree.textForeground");
-        selectionBackground = UIManager.getColor("Tree.selectionBackground");
-        
-        // smaller font
-        //font = new Font("Dialog", Font.PLAIN, 11);
-        
-        emptyImage = GUIUtilities.loadIcon(BLANK_TREE_NODE, true);
-        setOpaque(true);
+        selectionBackground = UIManager.getColor("Tree.selectionBackground");        
+
+        setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
     }
     
     public Component getTreeCellRendererComponent(JTree tree, 
                                                   Object value,
-                                                  boolean bSelected, 
-                                                  boolean bExpanded,
-                                                  boolean bLeaf, 
-                                                  int iRow, 
-                                                  boolean bHasFocus) {
+                                                  boolean isSelected, 
+                                                  boolean isExpanded,
+                                                  boolean isLeaf, 
+                                                  int row, 
+                                                  boolean hasFocus) {
         
-        String labelText = value.toString();
+        this.selected = isSelected;
+        this.hasFocus = hasFocus;
         
-        setIcon(emptyImage);
-        
-        if(!bSelected) {
+        if (!isSelected) {
+           
             setBackground(textBackground);
             setForeground(textForeground);
-        }
-        else {
+
+        } else {
+          
             setBackground(selectionBackground);
-            
+
             if (GUIUtilities.getLookAndFeel() == Constants.WIN_LAF) {
+
                 setForeground(Color.WHITE);
+
             } else {
+            
                 setForeground(textForeground);
             }
 
         }
 
-        // reset the font
-        //setFont(font);
-        
-        // Add the text to the cell
-        setText(labelText);
-        setIconTextGap(0);
+        setText(value.toString());
         
         return this;
     }

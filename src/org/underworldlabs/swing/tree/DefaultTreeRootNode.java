@@ -22,13 +22,6 @@ package org.underworldlabs.swing.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Simple root node object for tree displays.
  *
@@ -51,13 +44,3 @@ public class DefaultTreeRootNode extends DefaultMutableTreeNode {
     }
     
 }
-
-
-
-
-
-
-
-
-
-

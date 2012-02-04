@@ -194,8 +194,7 @@ public class FileChooserDialog extends JFileChooser {
             LOG_ICON = GUIUtilities.loadIcon("LogFile16.png", true);
             EQ_ICON = GUIUtilities.loadIcon("ApplicationIcon16.png", true);
 
-            if (GUIUtilities.getLookAndFeel() == Constants.SMOOTH_GRADIENT_LAF ||
-                  GUIUtilities.getLookAndFeel() == Constants.EQ_THM) {
+            if (isEQLookAndFeel()) {
                 ZIP_ICON = GUIUtilities.loadIcon("ZipFile16.png", true);
                 TEXT_ICON = GUIUtilities.loadIcon("TextFile16.png", true);
                 JPEG_ICON = GUIUtilities.loadIcon("JpegFile16.png", true);
@@ -281,8 +280,7 @@ public class FileChooserDialog extends JFileChooser {
 
             else {
 
-                if (GUIUtilities.getLookAndFeel() == Constants.SMOOTH_GRADIENT_LAF ||
-                      GUIUtilities.getLookAndFeel() == Constants.EQ_THM) {
+                if (isEQLookAndFeel()) {
 
                     if (name.endsWith(".zip"))
                         icon = ZIP_ICON;
@@ -322,6 +320,15 @@ public class FileChooserDialog extends JFileChooser {
 
         }
 
+        private boolean isEQLookAndFeel() {
+            
+            int lookAndFeel = GUIUtilities.getLookAndFeel();
+            return (lookAndFeel == Constants.SMOOTH_GRADIENT_LAF ||
+                  lookAndFeel == Constants.EQ_THM ||
+                  lookAndFeel == Constants.EQ_DEFAULT_LAF);
+
+        }
+        
         public Boolean isTraversable(File f) {
             return f.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
         }

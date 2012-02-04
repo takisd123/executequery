@@ -24,6 +24,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.Map;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTree;
 import javax.swing.UIManager;
@@ -65,6 +66,9 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
         textForeground = UIManager.getColor("Tree.textForeground");
         selectedTextForeground = UIManager.getColor("Tree.selectionForeground");
 
+        setIconTextGap(10);
+        setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        
         if (UIUtils.isGtkLookAndFeel()) {
 
             // has default black border on selection - ugly and wrong!
@@ -213,7 +217,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
             setToolTipText(label);
         }
 
-        selected = isSelected;
+        this.selected = isSelected;
 
         if(!selected) {
 

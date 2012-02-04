@@ -47,7 +47,7 @@ import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.components.BottomButtonPanel;
-import org.executequery.components.table.PropsTreeCellRenderer;
+import org.executequery.components.table.PropertiesTreeCellRenderer;
 import org.executequery.event.DefaultUserPreferenceEvent;
 import org.executequery.event.UserPreferenceEvent;
 import org.executequery.gui.ActionContainer;
@@ -123,8 +123,8 @@ public class PropertiesPanel extends JPanel
 
         splitPane.setDividerSize(6);
 
-        int panelWidth = 660;
-        int panelHeight = 450;
+        int panelWidth = 760;
+        int panelHeight = 550;
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 
         JPanel mainPanel = new JPanel(new BorderLayout());
@@ -202,15 +202,16 @@ public class PropertiesPanel extends JPanel
         tree = new DynamicTree(root);
         tree.setRowHeight(22);
         tree.putClientProperty("JTree.lineStyle", "Angled");
-        tree.setCellRenderer(new PropsTreeCellRenderer());
-
+        tree.setCellRenderer(new PropertiesTreeCellRenderer());
+        tree.setRootVisible(false);
+        
         // expand all rows
         for (int i = 0; i < tree.getRowCount(); i++) {
 
             tree.expandRow(i);
         }
 
-        Dimension leftPanelDim = new Dimension(180, 350);
+        Dimension leftPanelDim = new Dimension(200, 350);
         JScrollPane js = new JScrollPane(tree);
         js.setPreferredSize(leftPanelDim);
 
@@ -241,7 +242,7 @@ public class PropertiesPanel extends JPanel
         tree.setSelectionRow(0);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     private void selectOpenRow(int openRow) {
 
         DefaultMutableTreeNode node = null;

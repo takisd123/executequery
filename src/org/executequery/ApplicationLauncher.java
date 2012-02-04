@@ -124,7 +124,6 @@ public class ApplicationLauncher {
 
             // set the look and feel
             LookAndFeelLoader lookAndFeelLoader = new LookAndFeelLoader();
-
             loadLookAndFeel(lookAndFeelLoader);
 
             lookAndFeelLoader.decorateDialogsAndFrames(
