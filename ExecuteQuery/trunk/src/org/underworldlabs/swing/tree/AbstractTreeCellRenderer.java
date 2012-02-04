@@ -26,12 +26,6 @@ import javax.swing.Icon;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  * Abstract tree cell renderer with custom paint method.
@@ -65,20 +59,21 @@ public abstract class AbstractTreeCellRenderer extends DefaultTreeCellRenderer {
     public void paintComponent(Graphics g) {
         
         if (selected) {
+            
             int imageOffset = getLabelX();
 
             // paint the background
             if (backgroundSelectionColor != null) {
+            
                 g.setColor(backgroundSelectionColor);
-                g.fillRect(imageOffset, 0, getWidth() - 1 - imageOffset,
-                   getHeight());
+                g.fillRect(imageOffset, 0, getWidth() - 1 - imageOffset, getHeight());
             }
 
             // paint the border
             if (borderSelectionColor != null) {
+                
                 g.setColor(borderSelectionColor);
-                g.drawRect(imageOffset, 0, getWidth() - 1 - imageOffset,
-                       getHeight() - 1);
+                g.drawRect(imageOffset, 0, getWidth() - 1 - imageOffset, getHeight() - 1);
             }
         }
         
@@ -95,13 +90,3 @@ public abstract class AbstractTreeCellRenderer extends DefaultTreeCellRenderer {
     
     
 }
-
-
-
-
-
-
-
-
-
-

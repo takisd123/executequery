@@ -565,11 +565,12 @@ public class DriversTreePanel extends AbstractDockedTabActionPanel
                 boolean bLeaf, int iRow, boolean bHasFocus) {
 
             String labelText = value.toString();
-
             if (value instanceof DefaultTreeRootNode) {
+
                 setIcon(driverRootImage);
-            }
-            else if (value instanceof DatabaseDriverNode) {
+
+            } else if (value instanceof DatabaseDriverNode) {
+              
                 setIcon(driverImage);
             }
 
@@ -579,9 +580,9 @@ public class DriversTreePanel extends AbstractDockedTabActionPanel
             // Add a tool tip displaying the name
             setToolTipText(labelText);
 
-            selected = bSelected;
+            this.selected = bSelected;
 
-            if(!selected) {
+            if (!selected) {
                 setBackground(textBackground);
                 setForeground(textForeground);
             } else {

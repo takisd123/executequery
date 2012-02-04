@@ -43,9 +43,13 @@ public class PropertiesRootPanel extends JPanel
     private Image textImage;
 
     public PropertiesRootPanel() {
-        darkColour = new Color(151,155,235);
-        lightColour = new Color(181,184,241);
 
+//        darkColour = new Color(151,155,235);
+//        lightColour = new Color(181,184,241);
+
+        darkColour = new Color(107,165,237);
+        lightColour = new Color(187,209,236);
+        
         ImageIcon icon = new ImageIcon(getClass().getResource(
                         "/org/executequery/images/AboutText.png"));
         preferencesImage = icon.getImage();
@@ -56,6 +60,7 @@ public class PropertiesRootPanel extends JPanel
     }
 
     public void paintComponent(Graphics g) {
+        
         Graphics2D g2d = (Graphics2D)g;
 
         int width = getWidth();
@@ -64,11 +69,12 @@ public class PropertiesRootPanel extends JPanel
         g2d.setPaint(new GradientPaint(0, 0, darkColour, width, height, lightColour));
         g2d.fillRect(0, 0, width, height);
 
-        int xOffset = width - preferencesImage.getWidth(this) + 10;
-        g2d.drawImage(preferencesImage, xOffset, 20, this);
+        int xOffset = -10;
+        int yOffset = height - preferencesImage.getHeight(this) - 15;
+        g2d.drawImage(preferencesImage, xOffset, yOffset, this);
 
         xOffset = width - textImage.getWidth(this) - 15;
-        int yOffset = height - textImage.getHeight(this) - 20;
+        yOffset = height - textImage.getHeight(this) - 20;
         g2d.drawImage(textImage, xOffset, yOffset, this);
     }
     
