@@ -134,7 +134,6 @@ public class ErdLineStyleDialog extends AbstractBaseDialog {
         }
     }
     
-    /** <p>Initialises the state of this instance. */
     private void jbInit() throws Exception {
         LineStyleRenderer renderer = new LineStyleRenderer();
         
@@ -208,6 +207,8 @@ public class ErdLineStyleDialog extends AbstractBaseDialog {
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         panel.add(new JLabel("Line Colour:"), gbc);
+        
+        
         gbc.gridx = 1;
         gbc.insets.right = 5;
         gbc.ipadx = 25;
@@ -215,6 +216,7 @@ public class ErdLineStyleDialog extends AbstractBaseDialog {
         gbc.insets.top = 5;
         gbc.insets.bottom = 10;
         gbc.weighty = 1.0;
+        gbc.weightx = 1.0;
         gbc.gridy = 4;
         gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
@@ -224,10 +226,11 @@ public class ErdLineStyleDialog extends AbstractBaseDialog {
         gbc.insets.right = 10;
         gbc.insets.left = 0;
         gbc.gridx = 2;
+        gbc.weightx = 0;
         panel.add(cancelButton, gbc);
         
         panel.setBorder(BorderFactory.createEtchedBorder());
-        panel.setPreferredSize(new Dimension(400, 180));
+        panel.setPreferredSize(new Dimension(450, 200));
         
         Container c = this.getContentPane();
         c.setLayout(new GridBagLayout());

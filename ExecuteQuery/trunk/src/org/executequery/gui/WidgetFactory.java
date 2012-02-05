@@ -20,17 +20,22 @@
 
 package org.executequery.gui;
 
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.executequery.gui.browser.DefaultInlineFieldButton;
 import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.DefaultComboBox;
+import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.DefaultPasswordField;
 import org.underworldlabs.swing.DefaultTextField;
 import org.underworldlabs.swing.NumberTextField;
@@ -94,6 +99,44 @@ public final class WidgetFactory {
         
         return new DefaultPasswordField();
     }
+    
+    public static void addLabelFieldPair(JPanel panel, String label, 
+            JComponent field, GridBagConstraints gbc) {
+
+        addLabelFieldPair(panel, label, field, null, gbc);
+    }
+        
+    public static void addLabelFieldPair(JPanel panel, String label, 
+            JComponent field, String toolTip, GridBagConstraints gbc) {
+            
+        gbc.insets = new Insets(10, 10, 5, 10);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+
+        if (panel.getComponentCount() > 0) {
+         
+            gbc.insets.top = 0;
+        }
+
+        gbc.weightx = 0;
+        panel.add(new DefaultFieldLabel(label), gbc);
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.gridx = 1;
+        gbc.insets.left = 5;
+        gbc.weightx = 1.0;
+        panel.add(field, gbc);
+        
+        if (toolTip != null) {
+            
+            field.setToolTipText(toolTip);
+        }
+
+    }
+    
     
 }
 

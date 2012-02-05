@@ -22,11 +22,14 @@ package org.executequery.gui.erd;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -51,6 +54,9 @@ import org.underworldlabs.swing.AbstractBaseDialog;
 public class ErdScriptGenerator extends BaseScriptGeneratorPanel
                                 implements ScriptGenerator {
     
+    private static final int DIALOG_WIDTH = 790;
+    private static final int DIALOG_HEIGHT = 500;
+
     /** The parent process */
     private ErdViewerPanel parent;
     
@@ -83,6 +89,7 @@ public class ErdScriptGenerator extends BaseScriptGeneratorPanel
     }
     
     private void jbInit() throws Exception {
+
         cancelButton = new DefaultPanelButton("Cancel");
         generateButton = new DefaultPanelButton("Generate");
         
@@ -116,11 +123,28 @@ public class ErdScriptGenerator extends BaseScriptGeneratorPanel
         metaData.setDatabaseConnection(parent.getDatabaseConnection());
         
         dialog = new ErdScriptGeneratorDialog(this);
+        dialog.setPreferredSize(new Dimension(DIALOG_WIDTH, DIALOG_HEIGHT));
+        dialog.addComponentListener(new ComponentAdapter() {
+            public void componentResized(ComponentEvent e) {
+
+                int width = getWidth();
+                int height = getHeight();
+                
+                if (width < DIALOG_WIDTH)
+                    width = DIALOG_WIDTH;
+                
+                if (height < DIALOG_HEIGHT)
+                    height = DIALOG_HEIGHT;
+                
+                setSize(width, height);
+            }
+        });
+
         dialog.display();
         
     }
     
-    public void dispose() {
+    public void dispose() {        
         dialog.dispose();
     }
     

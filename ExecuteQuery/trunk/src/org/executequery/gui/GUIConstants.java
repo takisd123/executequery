@@ -26,7 +26,7 @@ public class GUIConstants {
 
     public static final int DEFAULT_FONT_SIZE = 12;
     
-    public static final int DEFAULT_FIELD_HEIGHT = 22;
+    public static final int DEFAULT_FIELD_HEIGHT = 24;
 
     public static final int DEFAULT_BUTTON_HEIGHT = 30;
 

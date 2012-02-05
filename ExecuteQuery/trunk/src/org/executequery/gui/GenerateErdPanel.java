@@ -31,13 +31,6 @@ import org.executequery.gui.erd.ErdGenerateProgressDialog;
 import org.executequery.gui.erd.ErdSelectionPanel;
 import org.executequery.components.BottomButtonPanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -68,6 +61,7 @@ public class GenerateErdPanel extends JPanel
     }
     
     private void jbInit() throws Exception {
+
         selectionPanel = new ErdSelectionPanel();
         JPanel basePanel = new JPanel(new BorderLayout());
         basePanel.add(selectionPanel, BorderLayout.NORTH);
@@ -97,11 +91,13 @@ public class GenerateErdPanel extends JPanel
     public void actionPerformed(ActionEvent e) {
         
         if (selectionPanel.hasSelections()) {
+            
             new ErdGenerateProgressDialog(selectionPanel.getDatabaseConnection(),
                                           selectionPanel.getSelectedValues(),
                                           selectionPanel.getSchema());
-        }
-        else {
+
+        } else {
+        
             GUIUtilities.displayErrorMessage(
                             "You must select at least one table.");
         }
@@ -109,16 +105,3 @@ public class GenerateErdPanel extends JPanel
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

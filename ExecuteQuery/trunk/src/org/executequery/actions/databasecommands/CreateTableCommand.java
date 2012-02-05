@@ -73,12 +73,3 @@ public class CreateTableCommand extends OpenFrameCommand
     }
     
 }
-
-
-
-
-
-
-
-
-

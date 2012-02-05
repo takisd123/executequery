@@ -51,9 +51,3 @@ public class CompareDataTypesCommand extends OpenFrameCommand
     }
     
 }
-
-
-
-
-
-

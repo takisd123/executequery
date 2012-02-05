@@ -32,7 +32,6 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
@@ -165,57 +164,22 @@ public abstract class CreateTableFunctionPanel extends JPanel
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(7,5,5,5);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.fill = GridBagConstraints.NONE;
-        mainPanel.add(new JLabel("Connection:"), gbc);
-        gbc.gridx = 2;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = 1;
-        gbc.insets.left = 0;
-        gbc.insets.top = 5;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(connectionsCombo, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.insets.top = 0;
-        gbc.insets.left = 5;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        mainPanel.add(new JLabel("Schema:"), gbc);
-        gbc.gridx = 2;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = 1;
-        gbc.insets.left = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(schemaCombo, gbc);
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.insets.left = 5;
-        gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        mainPanel.add(new JLabel("Table Name:"), gbc);
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.gridx = 2;
-        gbc.weightx = 1.0;
-        gbc.insets.left = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(nameField, gbc);
+
+        WidgetFactory.addLabelFieldPair(mainPanel, "Connection:", connectionsCombo, gbc);
+        WidgetFactory.addLabelFieldPair(mainPanel, "Schema:", schemaCombo, gbc);
+        WidgetFactory.addLabelFieldPair(mainPanel, "Table Name:", nameField, gbc);
+
+        JPanel definitionPanel = new JPanel(new GridBagLayout());
         gbc.gridwidth = 1;
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
-        gbc.insets.right = 0;
+        gbc.insets.right = 5;
         gbc.insets.left = 5;
         gbc.insets.top = 20;
         gbc.fill = GridBagConstraints.VERTICAL;
-        mainPanel.add(tools, gbc);
+        definitionPanel.add(tools, gbc);
         gbc.insets.left = 0;
         gbc.insets.right = 5;
         gbc.insets.top = 0;
@@ -224,16 +188,22 @@ public abstract class CreateTableFunctionPanel extends JPanel
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
-        mainPanel.add(tableTabs, gbc);
+        definitionPanel.add(tableTabs, gbc);
+        
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.insets.top = 10;
+        mainPanel.add(definitionPanel, gbc);
+
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weighty = 0.6;
         gbc.insets.left = 5;
         gbc.insets.bottom = 5;
-        gbc.insets.top = 10;
+        gbc.insets.top = 5;
         mainPanel.add(sqlText, gbc);
 
-        setBorder(BorderFactory.createEmptyBorder(4,4,4,4));
+        setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         add(mainPanel, BorderLayout.CENTER);
         
         tableTabs.addChangeListener(this);

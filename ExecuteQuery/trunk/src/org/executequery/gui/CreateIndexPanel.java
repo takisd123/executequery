@@ -37,7 +37,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -201,39 +200,14 @@ public class CreateIndexPanel extends ActionPanel
         tablePanel.add(tableScroller, gbc);
         
         // add all components
+        gbc = new GridBagConstraints();
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        gbc.weighty = 0;
-        gbc.weightx = 0;
-        gbc.gridy = 0;
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridheight = 1;
-        gbc.insets.top = 5;
-        gbc.insets.bottom = 5;
-        gbc.insets.right = 5;
-        gbc.insets.left = 5;
-        mainPanel.add(new JLabel("Connection:"), gbc);
-        gbc.insets.top = 2;
-        gbc.insets.bottom = 5;
-        gbc.gridy++;
-        mainPanel.add(new JLabel("Schema:"), gbc);
-        gbc.gridy++;
-        mainPanel.add(new JLabel("Table:"), gbc);
-        gbc.gridy++;
-        mainPanel.add(new JLabel("Index Name:"), gbc);
-        gbc.gridy = 0;
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.insets.top = 5;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainPanel.add(connectionsCombo, gbc);
-        gbc.insets.top = 0;
-        gbc.gridy++;
-        mainPanel.add(schemaCombo, gbc);
-        gbc.gridy++;
-        mainPanel.add(tableCombo, gbc);
-        gbc.gridy++;
-        mainPanel.add(nameField, gbc);
+        
+        WidgetFactory.addLabelFieldPair(mainPanel, "Connection:", connectionsCombo, gbc);
+        WidgetFactory.addLabelFieldPair(mainPanel, "Schema:", schemaCombo, gbc);
+        WidgetFactory.addLabelFieldPair(mainPanel, "Table:", tableCombo, gbc);
+        WidgetFactory.addLabelFieldPair(mainPanel, "Index Name:", nameField, gbc);
+        
         gbc.insets.left = 0;
         gbc.insets.right = 0;
         gbc.insets.top = 0;

@@ -61,13 +61,3 @@ public class ExecuteStoredObjectCommand extends OpenFrameCommand
     }
 
 }
-
-
-
-
-
-
-
-
-
-

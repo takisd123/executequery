@@ -60,7 +60,7 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
     private boolean fillGradient;
 
     /** the default height - 22 */
-    protected static final int DEFAULT_HEIGHT = 22;
+    protected static final int DEFAULT_HEIGHT = 24;
     
     /** Creates a new instance of DefaultTableHeaderRenderer */
     public DefaultTableHeaderRenderer() {

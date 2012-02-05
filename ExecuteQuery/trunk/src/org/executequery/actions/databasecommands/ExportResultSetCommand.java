@@ -70,5 +70,3 @@ public class ExportResultSetCommand extends OpenFrameCommand
     }
     
 }
-
-

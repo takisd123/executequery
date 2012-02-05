@@ -32,13 +32,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -78,12 +71,13 @@ public class HeapMemoryDialog extends JDialog
         c.setLayout(new GridBagLayout());
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(2,2,0,1);
+        gbc.insets = new Insets(5,5,5,5);
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.fill = GridBagConstraints.BOTH;
         c.add(heapPanel, gbc);
         gbc.gridy = 1;
         gbc.fill = GridBagConstraints.NONE;
+        gbc.insets.top = 0;
         gbc.insets.bottom = 10;
         gbc.anchor = GridBagConstraints.CENTER;
         c.add(closeButton, gbc);

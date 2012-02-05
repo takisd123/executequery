@@ -27,13 +27,6 @@ import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.GenerateErdPanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -57,8 +50,7 @@ public class CreateErdFromDatabaseCommand extends OpenFrameCommand
         if (!isDialogOpen(GenerateErdPanel.TITLE)) {
             try {
                 GUIUtilities.showWaitCursor();
-                BaseDialog dialog = 
-                        createDialog(GenerateErdPanel.TITLE, false);
+                BaseDialog dialog = createDialog(GenerateErdPanel.TITLE, false);
                 GenerateErdPanel panel = new GenerateErdPanel(dialog);
                 dialog.addDisplayComponentWithEmptyBorder(panel);
                 dialog.setResizable(false);
