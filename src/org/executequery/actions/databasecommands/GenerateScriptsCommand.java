@@ -28,13 +28,6 @@ import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.scriptgenerators.GenerateScriptsWizard;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Execution for CREATE TABLE script generation.
  *
  *  @author   Takis Diakoumis
@@ -87,18 +80,3 @@ public class GenerateScriptsCommand extends OpenFrameCommand
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

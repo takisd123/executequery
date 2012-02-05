@@ -271,7 +271,6 @@ public class ErdToolBarPalette extends PanelToolBar
             }
             new ErdScriptGenerator(_tables, parent);            
         }
-        
         else if (btnObject == addTableButton) {
             new ErdSelectionDialog(parent);
         }

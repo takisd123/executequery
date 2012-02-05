@@ -133,7 +133,7 @@ public class ErdNewTableDialog extends ErdPrintableDialog {
         
         createPanel = new CreateTablePanel();
         createPanel.addButtonsPanel(btnPanel);
-        createPanel.setPreferredSize(new Dimension(600, 450));
+        createPanel.setPreferredSize(new Dimension(700, 550));
         c.add(createPanel, BorderLayout.CENTER);
         
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);

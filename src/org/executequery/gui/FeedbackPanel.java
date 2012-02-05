@@ -135,12 +135,14 @@ public class FeedbackPanel extends DefaultActionButtonsPanel
         gbc.gridy++;
         gbc.gridwidth = 1;
         gbc.insets.top = 7;
+        gbc.insets.right = 10;
         gbc.fill = GridBagConstraints.NONE;
         basePanel.add(new JLabel("Name:"), gbc);
         gbc.gridx++;
         gbc.insets.left = 0;
         gbc.weightx = 1.0;
         gbc.insets.top = 5;
+        gbc.insets.right = 5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(nameField, gbc);
         gbc.gridy++;
@@ -149,11 +151,13 @@ public class FeedbackPanel extends DefaultActionButtonsPanel
         gbc.insets.top = 2;
         gbc.insets.left = 5;
         gbc.fill = GridBagConstraints.NONE;
+        gbc.insets.right = 10;
         basePanel.add(new JLabel("Email:"), gbc);
         gbc.gridx++;
         gbc.insets.left = 0;
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
+        gbc.insets.right = 5;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         basePanel.add(emailField, gbc);
 
@@ -176,7 +180,7 @@ public class FeedbackPanel extends DefaultActionButtonsPanel
         addActionButton(sendButton);
         addActionButton(cancelButton);
 
-        setPreferredSize(new Dimension(550, 450));
+        setPreferredSize(new Dimension(700, 450));
 
         addContentPanel(basePanel);
     }

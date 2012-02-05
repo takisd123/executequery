@@ -175,7 +175,7 @@ public class ErdFontStyleDialog extends AbstractBaseDialog
         gbc.weightx = 1.0;
         stylesPanel.add(tableNameCombo, gbc);
         gbc.insets.top = 0;
-        gbc.insets.bottom = 0;
+        gbc.insets.bottom = 10;
         gbc.gridy = 1;
         stylesPanel.add(columnNameCombo, gbc);
         gbc.insets.right = 10;
@@ -252,7 +252,7 @@ public class ErdFontStyleDialog extends AbstractBaseDialog
         panel.add(buttonPanel, gbc);
         
         panel.setBorder(BorderFactory.createEtchedBorder());
-        panel.setPreferredSize(new Dimension(340, 350));
+        panel.setPreferredSize(new Dimension(500, 400));
         
         Container c = this.getContentPane();
         c.setLayout(new GridBagLayout());
@@ -325,16 +325,3 @@ public class ErdFontStyleDialog extends AbstractBaseDialog
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

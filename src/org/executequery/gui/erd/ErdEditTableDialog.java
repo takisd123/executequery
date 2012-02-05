@@ -225,7 +225,7 @@ public class ErdEditTableDialog extends ErdPrintableDialog
         gbc.weightx = 1.0;
         mainPanel.add(applyButton, gbc);
         
-        mainPanel.setPreferredSize(new Dimension(520, 375));
+        mainPanel.setPreferredSize(new Dimension(600, 450));
         
         Container c = this.getContentPane();
         c.setLayout(new GridBagLayout());

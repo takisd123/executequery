@@ -83,6 +83,9 @@ public class ErdNewRelationshipDialog extends ErdPrintableDialog {
     /** The literal ');' */
     private static final String CLOSE_END = ");\n";
     
+    private static final int DIALOG_WIDTH = 600;
+    private static final int DIALOG_HEIGHT = 400;
+    
     public ErdNewRelationshipDialog(ErdViewerPanel parent) {
         super("New Table Relationship");
         
@@ -125,13 +128,6 @@ public class ErdNewRelationshipDialog extends ErdPrintableDialog {
         referencingColumnCombo = WidgetFactory.createComboBox();
         referencedColumnCombo = WidgetFactory.createComboBox();
         
-        Dimension fieldDim = new Dimension(50, 20);
-        nameField.setPreferredSize(fieldDim);
-        referencingTableCombo.setPreferredSize(fieldDim);
-        referencedTableCombo.setPreferredSize(fieldDim);
-        referencingColumnCombo.setPreferredSize(fieldDim);
-        referencedColumnCombo.setPreferredSize(fieldDim);
-        
         referencingTableCombo.addActionListener(btnListener);
         referencedTableCombo.addActionListener(btnListener);
         referencingColumnCombo.addActionListener(btnListener);
@@ -141,48 +137,13 @@ public class ErdNewRelationshipDialog extends ErdPrintableDialog {
         panel.setBorder(BorderFactory.createEtchedBorder());
         
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5,5,5,5);
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        panel.add(new JLabel("Constraint Name:"), gbc);
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets.left = 0;
-        gbc.weightx = 1.0;
-        panel.add(nameField, gbc);
-        gbc.insets.top = 0;
-        gbc.gridy = 1;
-        panel.add(referencingTableCombo, gbc);
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 1;
-        gbc.insets.left = 5;
-        gbc.weightx = 0;
-        panel.add(new JLabel("Referencing Table:"), gbc);
-        gbc.gridy = 2;
-        panel.add(new JLabel("Referencing Column:"), gbc);
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.insets.left = 0;
-        panel.add(referencingColumnCombo, gbc);
-        gbc.gridy = 3;
-        panel.add(referencedTableCombo, gbc);
-        gbc.gridx = 0;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.gridwidth = 1;
-        gbc.insets.left = 5;
-        gbc.weightx = 0;
-        panel.add(new JLabel("Referenced Table:"), gbc);
-        gbc.gridy = 4;
-        panel.add(new JLabel("Referenced Column:"), gbc);
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.insets.left = 0;
-        gbc.gridwidth = GridBagConstraints.REMAINDER;
-        gbc.weightx = 1.0;
-        panel.add(referencedColumnCombo, gbc);
+        
+        WidgetFactory.addLabelFieldPair(panel, "Constraint Name:", nameField, gbc);
+        WidgetFactory.addLabelFieldPair(panel, "Referencing Table:", referencingTableCombo, gbc);
+        WidgetFactory.addLabelFieldPair(panel, "Referencing Column:", referencingColumnCombo, gbc);
+        WidgetFactory.addLabelFieldPair(panel, "Referenced Table:", referencedTableCombo, gbc);
+        WidgetFactory.addLabelFieldPair(panel, "Referenced Column:", referencedColumnCombo, gbc);
+
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.weighty = 1.0;
@@ -215,17 +176,17 @@ public class ErdNewRelationshipDialog extends ErdPrintableDialog {
                 int width = getWidth();
                 int height = getHeight();
                 
-                if (width < 456)
-                    width = 456;
+                if (width < DIALOG_WIDTH)
+                    width = DIALOG_WIDTH;
                 
-                if (height < 335)
-                    height = 335;
+                if (height < DIALOG_HEIGHT)
+                    height = DIALOG_HEIGHT;
                 
                 setSize(width, height);
             }
         });
         
-        sqlBuffer = new StringBuffer(75);
+        sqlBuffer = new StringBuffer();
         
         ErdTable table = (ErdTable)referencingTableCombo.getSelectedItem();
         referencingColumnCombo.setModel(new DefaultComboBoxModel(

@@ -20,34 +20,28 @@
 
 package org.executequery.gui.erd;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Vector;
+
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import java.util.Vector;
 import org.executequery.GUIUtilities;
-import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.executequery.databasemediators.DatabaseConnection;
-
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.WidgetFactory;
 import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.ListSelectionPanel;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  *
@@ -112,15 +106,6 @@ public class ErdSelectionPanel extends JPanel
         schemaCombo = WidgetFactory.createComboBox(schemaModel);
         schemaCombo.addItemListener(this);
 
-        /*
-        Vector schemas = metaData.getHostedSchemasVector();
-        
-        if (schemas == null || schemas.size() == 0) {
-            useCatalogs = true;
-            schemas = metaData.getHostedCatalogsVector();
-        }
-        */
-
         setBorder(BorderFactory.createEtchedBorder());
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -138,7 +123,7 @@ public class ErdSelectionPanel extends JPanel
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.weightx = 0;
-        gbc.fill = GridBagConstraints.NONE;        
+        gbc.fill = GridBagConstraints.NONE;
         add(new JLabel(useCatalogs ? "Catalog:" : "Schema:"), gbc);
         gbc.insets.left = 0;
         gbc.gridx = 1;
@@ -153,6 +138,7 @@ public class ErdSelectionPanel extends JPanel
         gbc.insets.left = 10;
         gbc.insets.bottom = 10;
         gbc.insets.right = 10;
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         add(listPanel, gbc);
         
@@ -173,6 +159,7 @@ public class ErdSelectionPanel extends JPanel
             schemaChanged();
         }
         
+        setPreferredSize(new Dimension(700, 380));
     }
     
     public void setInProcess(boolean inProcess) {}

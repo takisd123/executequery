@@ -111,7 +111,7 @@ public class ErdTitlePanelDialog extends AbstractBaseDialog {
     
     private void display() {
         pack();
-        Dimension dialogSize = new Dimension(450, 315);
+        Dimension dialogSize = new Dimension(700, 420);
         setSize(dialogSize);
         this.setLocation(GUIUtilities.getLocationForDialog(dialogSize));
 
@@ -119,15 +119,6 @@ public class ErdTitlePanelDialog extends AbstractBaseDialog {
         nameTextField.selectAll();
 
         setVisible(true);
-
-/*
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                nameTextField.requestFocusInWindow();
-                nameTextField.selectAll();
-            }
-        });
- */
     }
     
     private void jbInit() throws Exception {
