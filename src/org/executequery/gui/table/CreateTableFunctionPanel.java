@@ -209,7 +209,8 @@ public abstract class CreateTableFunctionPanel extends JPanel
         tableTabs.addChangeListener(this);
         nameField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(KeyEvent e) {
-                setSQLText(); }
+                setSQLText(); 
+            }
         });
         
         sqlBuffer = new StringBuffer(CreateTableSQLSyntax.CREATE_TABLE);

@@ -147,20 +147,12 @@ public class ImportExportDelimitedPanel_4 extends JPanel
         add(rollbackLabel, gbc);
         gbc.gridy++;
         gbc.weightx = 1.0;
+        gbc.weighty = 1.0;        
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(dateFormatPanel, gbc);
         
-        /*
-        gbc.gridy++;
-        add(dateFormatLabel, gbc);
-        gbc.gridx = 1;
-        gbc.insets.left = 0;
-        gbc.weightx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        add(dateFormatField, gbc);
-         */
-
+        gbc.weighty = 0;
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;

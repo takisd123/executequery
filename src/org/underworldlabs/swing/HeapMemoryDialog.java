@@ -102,16 +102,3 @@ public class HeapMemoryDialog extends JDialog
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
