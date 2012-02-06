@@ -31,13 +31,6 @@ import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>This class provides a titled border with a component
  *  as the title the border.<br>
  *  Modified example from
@@ -233,14 +226,3 @@ public class ComponentTitledBorder extends TitledBorder {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
