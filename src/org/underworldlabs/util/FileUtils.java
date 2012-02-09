@@ -49,6 +49,29 @@ public class FileUtils {
     
     private FileUtils() {}
 
+    public static boolean deleteDirectory(File path) {
+        
+        if (path.exists()) {
+
+            File[] files = path.listFiles();
+            for (File file : files) {
+                
+                if (file.isDirectory()) {
+                    
+                    deleteDirectory(file);
+                
+                } else {
+                    
+                    file.delete();
+                }
+                
+            }
+            
+        }
+        
+        return path.delete();
+    }
+    
     public static String randomTempFilePath() {
         return System.getProperty("java.io.tmpdir") + 
             System.getProperty("file.separator") +  UUID.randomUUID().toString();

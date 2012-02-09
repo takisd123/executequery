@@ -20,13 +20,6 @@
 
 package org.executequery.gui.browser;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** 
  *  Reuseable constants for construction and reference
  *  to the tree structure within the Database Browser Panel.<br>
@@ -132,7 +125,6 @@ public class BrowserConstants {
     public static final String SOURCE_STRING = "Source";
     /** The String 'Schema' */
     public static final String SCHEMA_STRING = "Schema";
-    /** The String 'Functions' */
     
     // -----------------------------
     // image icons for tree nodes
@@ -189,12 +181,9 @@ public class BrowserConstants {
     
     public static final String FOREIGN_COLUMNS_IMAGE = "TableColumnForeign16.png";
     
-    /** The image icon 'dbNode.png' */
-    //  String TRIGGERS_IMAGE = "Triggers";
-
-    /** The image icon 'Find16.png' */
     public static final String VIEWS_IMAGE = "TableView16.png";
-    
+
+    public static final String SYSTEM_VIEWS_IMAGE = "SystemTableView16.png";
     
     public static final String[] NODE_ICONS = {CONNECTIONS_IMAGE,
                                                CATALOG_IMAGE,
@@ -213,7 +202,8 @@ public class BrowserConstants {
                                                SYSTEM_FUNCTIONS_IMAGE,
                                                COLUMNS_IMAGE,
                                                PRIMARY_COLUMNS_IMAGE,
-                                               FOREIGN_COLUMNS_IMAGE
+                                               FOREIGN_COLUMNS_IMAGE,
+                                               SYSTEM_VIEWS_IMAGE
                                                };
     
 }

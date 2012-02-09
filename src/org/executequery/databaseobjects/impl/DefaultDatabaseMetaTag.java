@@ -202,7 +202,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
     public boolean hasChildObjects() throws DataSourceException {
 
-        return (getObjects() != null && getObjects().size() > 0);
+        return (getObjects() != null && !getObjects().isEmpty());
     }
 
     /**
