@@ -54,6 +54,8 @@ public interface NamedObject extends java.io.Serializable {
     public static final int TABLE = 6;
     public static final int TRIGGER = 7;
     public static final int VIEW = 8;
+
+    public static final int SYSTEM_VIEW = 13;
     
     public static final int SYSTEM_FUNCTION = 9;
     
@@ -73,7 +75,11 @@ public interface NamedObject extends java.io.Serializable {
                                                "TABLE",
                                                "TRIGGER",
                                                "VIEW",
-                                               "SYSTEM FUNCTIONS"};
+                                               "SYSTEM FUNCTIONS",
+                                               "SYSTEM_STRING_FUNCTIONS",
+                                               "SYSTEM_NUMERIC_FUNCTIONS",
+                                               "SYSTEM_DATE_TIME_FUNCTIONS",
+                                               "SYSTEM VIEW"};
 
     /**
      * Marks this object as being 'reset', where for any loaded object

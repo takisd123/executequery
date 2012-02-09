@@ -273,16 +273,3 @@ public class ImportExportDelimitedPanel_4 extends JPanel
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

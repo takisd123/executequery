@@ -83,7 +83,8 @@ class ConnectionsTreeToolBar extends PanelToolBar {
 
         reloadButton = addButton(
                 treePanel, "reloadSelection", 
-                GUIUtilities.getAbsoluteIconPath("Reload16.png"), 
+//                GUIUtilities.getAbsoluteIconPath("Reload16.png"), 
+                GUIUtilities.getAbsoluteIconPath("Refresh16.png"), 
                 "Reload the currently selected node");
 
         addButton(

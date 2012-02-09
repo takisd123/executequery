@@ -165,6 +165,10 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
                 setIcon(icons.get(BrowserConstants.VIEWS_IMAGE));
                 break;
 
+            case NamedObject.SYSTEM_VIEW:
+                setIcon(icons.get(BrowserConstants.SYSTEM_VIEWS_IMAGE));
+                break;
+                
             case NamedObject.SYSTEM_TABLE:
                 setIcon(icons.get(BrowserConstants.SYSTEM_TABLES_IMAGE));
                 break;

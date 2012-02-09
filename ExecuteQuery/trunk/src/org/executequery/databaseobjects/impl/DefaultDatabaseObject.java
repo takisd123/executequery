@@ -95,7 +95,6 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
     public int getType() {
 
         String key = getMetaDataKey();
-
         for (int i = 0; i < META_TYPES.length; i++) {
 
             if (META_TYPES[i].equals(key)) {

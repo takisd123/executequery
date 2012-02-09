@@ -96,7 +96,7 @@ public class SystemLogsViewer extends DefaultTextEditorContainer
         textArea = simpleTextArea.getTextAreaComponent();
         textComponent = textArea;
 
-        reloadButton = new RolloverButton("/org/executequery/icons/Reload16.png",
+        reloadButton = new RolloverButton("/org/executequery/icons/Refresh16.png",
                                       "Reload this log file");
 
         trashButton = new RolloverButton("/org/executequery/icons/Delete16.png",

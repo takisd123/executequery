@@ -22,7 +22,10 @@ package org.executequery.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -30,6 +33,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.ApplicationContext;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
@@ -137,7 +141,7 @@ public class SystemResources {
     }
 
     private static String userActionShortcutsPath() {
-        return userSettingsDirectory() + "eq.shortcuts.properties";
+        return userSettingsDirectoryForCurrentBuild() + "eq.shortcuts.properties";
     }
     
     public static void setUserActionShortcuts(Properties properties) {
@@ -155,7 +159,7 @@ public class SystemResources {
         
         try {
             
-            String path = userSettingsDirectory() + "eq.user.properties";
+            String path = userSettingsDirectoryForCurrentBuild() + "eq.user.properties";
 
             FileUtils.storeProperties(path, properties, 
                     "Execute Query - User Defined System Properties");
@@ -201,7 +205,7 @@ public class SystemResources {
 
     public static Properties getUserProperties() {
         try {
-            String path = userSettingsDirectory() + 
+            String path = userSettingsDirectoryForCurrentBuild() + 
                           "eq.user.properties";
             Properties defaults = getDefaultProperties();
             Properties properties = FileUtils.loadProperties(path, defaults);
@@ -223,14 +227,14 @@ public class SystemResources {
         
         String fileSeparator = System.getProperty("file.separator");
         
-        String eqUserHomeDir = ApplicationContext.getInstance().getUserSettingsHome(); 
-            
+        String eqUserHomeDir = userSettingsHome(); 
+
 //                        System.getProperty("user.home") +
 //                        fileSeparator +
 //                        System.getProperty("executequery.user.home.dir");
 
         File equeryDir = new File(eqUserHomeDir);
-        File confDir = new File(userSettingsDirectory());
+        File confDir = new File(userSettingsDirectoryForCurrentBuild());
         File logsDir = new File(userLogsPath());
 
         try {
@@ -250,6 +254,7 @@ public class SystemResources {
             // -- Check for ~/.executequery
             // -------------------------------------------
             if (!equeryDir.exists()) {
+
                 equeryDirExists = equeryDir.mkdirs();
                 // create the conf directory
                 confDirExists = confDir.mkdirs();
@@ -258,10 +263,12 @@ public class SystemResources {
             // -- Check for ~/.executequery/<build_number>
             // -------------------------------------------
             else if (!confDir.exists()) {
+                
                 confDirExists = confDir.mkdirs();
                 copyOldFiles = true;
-            }
-            else { // they exist
+
+            } else { // they exist
+            
                 equeryDirExists = true;
                 confDirExists = true;
             }
@@ -272,17 +279,21 @@ public class SystemResources {
             if (copyOldFiles) {
 
                 // check for old conf build number dirs
-                int currentBuild = Integer.parseInt(ApplicationContext.getInstance().getBuild());
+                int currentBuild = Integer.parseInt(currentBuild());
                 
                 File[] dirs = equeryDir.listFiles();
                 
                 for (int i = 0; i < dirs.length; i++) {
+                    
                     String name = dirs[i].getName();
                     if (MiscUtils.isValidNumber(name)) {
+                        
                         int buildNumber = Integer.parseInt(name);
                         if (currentBuild > buildNumber) {
+                            
                             lastBuildNumber = Math.max(lastBuildNumber, buildNumber);
                         }
+                        
                     }
                 }
             }
@@ -290,8 +301,11 @@ public class SystemResources {
             // if we have a valid last build dir - use it
             File oldConfDir = null;
             if (lastBuildNumber != -1) {
+                
                 oldConfDir = new File(eqUserHomeDir + lastBuildNumber);
+                
             } else {
+                
                 // otherwise check for old format ~/.executequery/conf
                 oldConfDir = new File(eqUserHomeDir + "conf");
             }
@@ -300,6 +314,7 @@ public class SystemResources {
             // files to the new build number dir
 
             if (copyOldFiles && oldConfDir.exists()) {
+                
                 String oldFromPath = oldConfDir.getAbsolutePath();
                 String[] oldFiles = {"eq.shortcuts.properties",
                                      "eq.user.properties",
@@ -326,10 +341,12 @@ public class SystemResources {
             }
             
             if (!logsDir.exists()) {
+                
                 logsDirExists = logsDir.mkdirs();
             }
             
             if (!equeryDirExists && !confDirExists && !logsDirExists) {
+                
                 GUIUtilities.displayErrorMessage(
                    "Error creating profile in user's home directory.\nExiting.");
                 System.exit(0);
@@ -344,12 +361,16 @@ public class SystemResources {
             
             // create the user defined keywords file
             if (!props.exists()) {
+                
                 created = props.createNewFile();
+                
             } else {
+                
                 created = true;
             }
 
             if (!created) {
+                
                 return false;
             }
             
@@ -359,13 +380,17 @@ public class SystemResources {
             props = new File(confDir, "eq.user.properties");
             
             if (!props.exists()) {
+                
                 Log.debug("Creating user properties file eq.user.properties");
                 created = props.createNewFile();
+                
             } else {
+                
                 created = true;
             }
             
             if (!created) {
+                
                 return false;
             }
             
@@ -374,17 +399,21 @@ public class SystemResources {
             // -------------------------------------------
             props = new File(confDir, "jdbcdrivers.xml");
             if (!props.exists()) {
+            
                 Log.debug("Creating user properties file jdbcdrivers.xml");
                 FileUtils.copyResource(
                         "org/executequery/jdbcdrivers-default.xml",
                         newConfPath + "jdbcdrivers.xml");
                 props = new File(confDir, "jdbcdrivers.xml");
                 created = props.exists();
+
             } else {
+                
                 created = true;
             }
             
             if (!created) {
+            
                 return false;
             }
             
@@ -393,17 +422,21 @@ public class SystemResources {
             // -------------------------------------------
             props = new File(confDir, "lookandfeel.xml");
             if (!props.exists()) {
+
                 Log.debug("Creating user properties file lookandfeel.xml");
                 FileUtils.copyResource(
                             "org/executequery/lookandfeel-default.xml",
                             newConfPath + "lookandfeel.xml");
                 props = new File(confDir, "lookandfeel.xml");
                 created = props.exists();
+
             } else {
+
                 created = true;
             }
             
             if (!created) {
+
                 return false;
             }
             
@@ -412,17 +445,21 @@ public class SystemResources {
             // -------------------------------------------
             props = new File(confDir, "savedconnections.xml");
             if (!props.exists()) {
+
                 Log.debug("Creating user properties file savedconnections.xml");
                 FileUtils.copyResource(
                             "org/executequery/savedconnections-default.xml",
                             newConfPath + "savedconnections.xml");
                 props = new File(confDir, "savedconnections.xml");
                 created = props.exists();
+
             } else {
+
                 created = true;
             }
             
             if (!created) {
+
                 return false;
             }
             
@@ -448,16 +485,21 @@ public class SystemResources {
             props = new File(confDir, "editorsqlshortcuts.xml");
             
             if (!props.exists()) {
+            
                 Log.debug("Creating user properties file editorsqlshortcuts.xml");
                 FileUtils.copyResource(
                             "org/executequery/editor-sql-shortcuts.xml", 
                             newConfPath + "editorsqlshortcuts.xml");
                 props = new File(confDir, "editorsqlshortcuts.xml");
                 created = props.exists();
+
             } else {
+
                 created = true;
             }
 
+            removeOldSettingsDirs();
+            
             return created;
             
         } catch (IOException e) {
@@ -470,23 +512,69 @@ public class SystemResources {
         
     }
 
+    private static String userSettingsHome() {
+
+        return ApplicationContext.getInstance().getUserSettingsHome();
+    }
+
+    private static void removeOldSettingsDirs() {
+
+        int retainBuildNumberCount = 2; // keep current plus previous of the last settings dirs
+        File userSettingsDir = new File(userSettingsHome());
+
+        List<File> dirsToDelete = new ArrayList<File>();
+        
+        File[] files = userSettingsDir.listFiles();
+        for (File file : files) {
+            
+            if (file.isDirectory() && nameIsNumeric(file)) {
+
+                dirsToDelete.add(file);
+            }
+
+        }
+        
+        if (dirsToDelete.size() > retainBuildNumberCount) {
+            
+            String build = currentBuild();
+            Collections.sort(dirsToDelete, new UserSettingsDirectoryBuildNumberComparator());
+            
+            for (int i = 0, n = dirsToDelete.size() - retainBuildNumberCount; i < n; i++) {
+                
+                File file = dirsToDelete.get(i);
+                String name = file.getName();
+                if (!build.equals(name)) {
+
+                    Log.info("Removing old user settings directory for build " + name);
+                    FileUtils.deleteDirectory(file);
+                }
+
+            }
+            
+        }
+        
+    }
+
+    private static boolean nameIsNumeric(File file) {
+
+        return StringUtils.isNumeric(file.getName());
+    }
+
+    private static String currentBuild() {
+
+        return ApplicationContext.getInstance().getBuild();
+    }
+
     private static String userLogsPath() {
         
         return ((LogRepository)RepositoryCache.load(
                 LogRepository.REPOSITORY_ID)).getLogFileDirectory();
     }
 
-    private static String userSettingsDirectory() {
+    private static String userSettingsDirectoryForCurrentBuild() {
 
         UserSettingsProperties settings = new UserSettingsProperties();
-
         return settings.getUserSettingsDirectory();
     }
    
 }
-
-
-
-
-
-
