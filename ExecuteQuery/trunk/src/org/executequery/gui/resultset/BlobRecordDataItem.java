@@ -95,8 +95,7 @@ public class BlobRecordDataItem extends AbstractLobRecordDataItem {
                     binaryStream.close();
                 }
 
-            } catch (IOException e) {
-            }
+            } catch (IOException e) {}
 
         }
 
