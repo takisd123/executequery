@@ -11,7 +11,7 @@ child.panel.height=360
 image.dir.path=/org/executequery/installer/images/
 
 # The frame's icon
-installer.frame.icon=/org/executequery/installer/images/ApplicationIcon32.gif
+installer.frame.icon=/org/executequery/installer/images/ApplicationIcon128.png
 
 # License information
 license.file.path=org/executequery/installer/conf/gnu.license
