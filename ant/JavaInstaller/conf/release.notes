@@ -1,6 +1,15 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 27 January 2012
+Date: 7 February 2012
+
+Summary of changes - v3.3.0 Build 5180:
+----------------------------------------
+
+- Added method to scan and remove old user settings directories from 
+  user.home/.executequery
+- Modified dialog sizes for ERD panels
+- UI tweaks and new icon set from http://www.famfamfam.com/lab/icons/silk/
+
 
 Summary of changes - v3.2.5 Build 5176:
 ----------------------------------------
