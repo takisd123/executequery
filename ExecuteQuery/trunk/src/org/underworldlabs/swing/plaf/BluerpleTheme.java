@@ -124,6 +124,8 @@ public class BluerpleTheme extends DefaultMetalTheme {
             "TabbedPane.tabAreaInsets", new Insets(4, 2, 0, 6),
             "TabbedPane.unselectedBackground", cccccc,
             
+            "ToolTip.border", new BluerpleBorder(),
+            
             "Menu.opaque", Boolean.FALSE,
             "MenuBar.gradient", Arrays.asList(new Object[] {
                      new Float(1f), new Float(0f),

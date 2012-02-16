@@ -251,7 +251,6 @@ public class ApplicationLauncher {
 
                 Log.debug("Error loading look and feel", e);
             }
-
             loadDefaultLookAndFeel(loader);
         }
 
@@ -262,7 +261,6 @@ public class ApplicationLauncher {
         try {
 
             loader.loadLookAndFeel(Constants.EQ_DEFAULT_LAF);
-
             userProperties().setIntProperty(
                     "startup.display.lookandfeel", Constants.EQ_DEFAULT_LAF);
 
@@ -272,7 +270,6 @@ public class ApplicationLauncher {
 
                 Log.debug("Error loading default EQ look and feel", e);
             }
-
             loader.loadCrossPlatformLookAndFeel();
         }
 
