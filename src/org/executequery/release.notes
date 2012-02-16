@@ -6,7 +6,7 @@ Summary of changes - v3.3.0 Build 5180:
 ----------------------------------------
 
 - Added method to scan and remove old user settings directories from 
-  user.home/.executequery
+  <user.home>/.executequery
 - Modified dialog sizes for ERD panels.
 - UI tweaks and new icon set from http://www.famfamfam.com/lab/icons/silk/
 - Modified node tool tips to be more descriptive, table columns in particular.
