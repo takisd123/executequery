@@ -250,10 +250,23 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return generateStatements(tableChange, database);
     }
 
+    public String columnDescription(DatabaseTableColumn tableColumn) {
+        
+        DatabaseTable table = (DatabaseTable) tableColumn.getParent();
+        Database database = databaseFromName(
+                connectionFromTable(table), table.getHost().getDatabaseProductName());
+        ColumnConfig columnConfig = createColumn(tableColumn);
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(database.escapeColumnName(tableColumn.getSchemaName(), table.getName(), tableColumn.getName()));
+        sb.append(" [ ").append(database.getColumnType(columnConfig.getType(), false)).append(" ]");
+
+        return sb.toString();
+    }
+    
     public String createTable(String databaseName, DatabaseTable table) {
 
         CreateTableChange tableChange = createTableChange(table);
-
         Database database = databaseFromName(connectionFromTable(table), databaseName);
 
         return generateStatements(tableChange, database);

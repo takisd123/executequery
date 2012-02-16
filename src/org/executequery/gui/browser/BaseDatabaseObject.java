@@ -24,13 +24,6 @@ import java.util.List;
 import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.jdbc.DataSourceException;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
@@ -128,6 +121,10 @@ public class BaseDatabaseObject implements NamedObject {
     
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return getName();
     }
     
     public String getShortName() {

@@ -169,13 +169,12 @@ public class DefaultDatabaseCatalog extends AbstractDatabaseSource
     /**
      * Does nothing in this case.
      */
-    public void setSchemaName(String schema) {
+    public void setSchemaName(String schema) {}
+
+    @Override
+    public String getDescription() {
+
+        return "CATALOG: " + getName();
     }
-
+    
 }
-
-
-
-
-
-

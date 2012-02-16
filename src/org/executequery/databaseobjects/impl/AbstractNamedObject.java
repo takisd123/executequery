@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -159,6 +160,19 @@ public abstract class AbstractNamedObject implements NamedObject,
         return name;
     }
 
+    public String getDescription() {
+
+        if (getType() != META_TAG) {
+        
+            String metaDataKey = getMetaDataKey();
+            if (StringUtils.isNotBlank(metaDataKey)) {
+
+                return metaDataKey + ": " + getName();
+            }
+        }
+        return getName();
+    }
+    
     /**
      * Sets the name of this database object as specified.
      *

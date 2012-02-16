@@ -152,5 +152,7 @@ public interface NamedObject extends java.io.Serializable {
      */
     int drop() throws DataSourceException;
     
+    String getDescription();
+    
 }
 

@@ -46,11 +46,7 @@ public interface StatementGenerator {
     String createForeignKeyChange(String databaseName, DatabaseTable table);
 
     String createPrimaryKeyChange(String databaseName, DatabaseTable table);
+
+    String columnDescription(DatabaseTableColumn column);
     
 }
-
-
-
-
-
-

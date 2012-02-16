@@ -103,7 +103,9 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
         
         DatabaseObjectNode node = (DatabaseObjectNode)child;
         int type = node.getType();
+        
         String label = node.getDisplayName();
+        NamedObject databaseObject = node.getDatabaseObject();
 
         switch (type) {
 
@@ -179,7 +181,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
 
             case NamedObject.TABLE_COLUMN:
                 
-                DatabaseColumn databaseColumn = (DatabaseColumn) node.getDatabaseObject();
+                DatabaseColumn databaseColumn = (DatabaseColumn) databaseObject;
 
                 if (databaseColumn.isPrimaryKey()) {
 
@@ -213,16 +215,22 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
         if (type == BrowserConstants.HOST_NODE) {
 
             DatabaseConnection connection = 
-                    ((DatabaseHost)node.getDatabaseObject()).getDatabaseConnection();
+                    ((DatabaseHost) databaseObject).getDatabaseConnection();
             setToolTipText(buildToolTip(connection));
 
         } else {
 
-            setToolTipText(label);
+            if (databaseObject != null) {
+            
+                setToolTipText(databaseObject.getDescription());
+            
+            } else {
+                
+                setToolTipText(label);
+            }
         }
 
         this.selected = isSelected;
-
         if(!selected) {
 
             setForeground(textForeground);
@@ -254,7 +262,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
         sb.append(connection.getName());
         sb.append("</b></td></tr>");
         sb.append(Constants.TABLE_TAG_END);
-        sb.append("<hr>");
+        sb.append("<hr noshade>");
         sb.append(Constants.TABLE_TAG_START);
         sb.append("<tr><td>Host:</td><td width='30'></td><td>");
         sb.append(connection.getHost());
