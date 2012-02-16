@@ -28,9 +28,11 @@ import javax.swing.tree.MutableTreeNode;
 import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.jdbc.DataSourceException;
 
-/**
+/** 
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class DefaultDatabaseObjectNode extends DefaultMutableTreeNode {
                                        //implements DatabaseObjectNode {

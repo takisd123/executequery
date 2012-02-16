@@ -264,11 +264,11 @@ public class DefaultDatabaseSchema extends AbstractDatabaseSource
         return this;
     }
 
+    @Override
+    public String getDescription() {
+
+        return "SCHEMA: " + getName();
+    }
+    
+
 }
-
-
-
-
-
-
-

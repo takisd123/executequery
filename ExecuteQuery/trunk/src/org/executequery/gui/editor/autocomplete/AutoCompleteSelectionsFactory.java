@@ -41,7 +41,6 @@ public class AutoCompleteSelectionsFactory {
             boolean autoCompleteKeywords, boolean autoCompleteSchema) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
-        
         if (autoCompleteKeywords) {
         
             addSQL92Keywords(listSelections);
@@ -75,7 +74,6 @@ public class AutoCompleteSelectionsFactory {
             boolean autoCompleteKeywords) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
- 
         if (autoCompleteKeywords) {
         
             addSQL92Keywords(listSelections);
@@ -172,7 +170,6 @@ public class AutoCompleteSelectionsFactory {
     private String defaultSchemaForHost(DatabaseHost databaseHost) {
         
         DatabaseSource schema = databaseHost.getDefaultSchema();
-        
         if (schema != null) {
         
             return schema.getName();
@@ -184,7 +181,6 @@ public class AutoCompleteSelectionsFactory {
     private String defaultCatalogForHost(DatabaseHost databaseHost) {
 
         DatabaseSource catalog = databaseHost.getDefaultCatalog();
-        
         if (catalog != null) {
         
             return catalog.getName();
@@ -197,7 +193,6 @@ public class AutoCompleteSelectionsFactory {
             List<AutoCompleteListItem> tables) {
 
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-        
         if (databaseHost.isConnected()) {
         
             for (AutoCompleteListItem table : tables) {

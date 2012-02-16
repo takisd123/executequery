@@ -92,6 +92,29 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
         setForeignKey(column.isForeignKey());
     }
 
+    @Override
+    public String getDescription() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("TABLE COLUMN: ");
+        sb.append(STATEMENT_GENERATOR.columnDescription(this));
+        
+        if (isPrimaryKey()) {
+            
+            sb.append(" PRIMARY KEY");
+        
+        } else if (isForeignKey()) {
+            
+            sb.append(" FOREIGN KEY");
+
+        } else if (isUnique()) {
+            
+            sb.append(" UNIQUE");
+        }
+        
+        return  sb.toString();
+    }
+    
     public String getNameEscaped() {
         
         return STATEMENT_GENERATOR.columnNameValueEscaped(this);
