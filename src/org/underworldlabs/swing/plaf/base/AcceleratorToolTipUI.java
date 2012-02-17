@@ -20,6 +20,7 @@
 
 package org.underworldlabs.swing.plaf.base;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -35,6 +36,7 @@ import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicToolTipUI;
 
 import org.underworldlabs.Constants;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.util.MiscUtils;
 
 /**
@@ -61,27 +63,38 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
             g.fillRect(0, 0, size.width + 20, size.height);
         }
 
-        g.setColor(c.getForeground());
+        Color foreground = c.getForeground();
+        g.setColor(foreground);
         g.setFont(font);
 
         JToolTip tip = (JToolTip)c;
         String keyText = getAccelerator(tip);
 
         if (!MiscUtils.isNull(keyText)) {
+
             Insets insets = c.getInsets();
             Rectangle paintTextR = new Rectangle(
                 insets.left,
                 insets.top,
                 size.width - (insets.left + insets.right),
                 size.height - (insets.top + insets.bottom));
+
+            Font acceleratorFont = font.deriveFont(font.getSize() - 1);
+            g.setFont(acceleratorFont);
+//            g.setColor(GUIUtils.getSlightlyBrighter(foreground, 1.5f));
+
             g.drawString(keyText, 
                     paintTextR.x + 3,
                     paintTextR.y + metrics.getAscent());
+            
+            g.setFont(font);
+            g.setColor(foreground);
         }
 
     }
 
     public Dimension getPreferredSize(JComponent c) {
+
         Dimension d = super.getPreferredSize(c);
 
         JToolTip tip = (JToolTip)c;
@@ -90,7 +103,11 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
         if (!MiscUtils.isNull(keyText)) {
             Font font = c.getFont();
             FontMetrics fm = c.getFontMetrics(font);	
-            d.width = fm.stringWidth(keyText) + 8;
+            d.width = fm.stringWidth(keyText) + 12;
+        
+        } else {
+            
+            d.width += 10;
         }
         return d;
     }
@@ -132,13 +149,3 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
