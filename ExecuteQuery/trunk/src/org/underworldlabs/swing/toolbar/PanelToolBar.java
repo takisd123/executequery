@@ -44,7 +44,6 @@ import org.underworldlabs.swing.util.IconUtilities;
  */
 public class PanelToolBar extends AbstractToolBarPanel {
    
-    /** Creates a new instance of PanelToolBar */
     public PanelToolBar() {
         
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));

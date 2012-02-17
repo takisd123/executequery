@@ -8,7 +8,7 @@ import javax.swing.border.LineBorder;
 
 public class BluerpleBorder extends LineBorder {
 
-    private static final Insets INSETS = new Insets(4, 4, 4, 4);
+    private static final Insets INSETS = new Insets(5, 5, 5, 5);
     
     public BluerpleBorder() {
 

@@ -488,6 +488,20 @@ public class GUIUtils {
         return UIUtils.isMetalLookAndFeel();
     }
 
+    public static Color getSlightlyBrighter(Color color, float factor) {
+        float[] hsbValues = new float[3];
+        Color.RGBtoHSB(
+            color.getRed(),
+            color.getGreen(),
+            color.getBlue(),
+            hsbValues);
+        float hue = hsbValues[0];
+        float saturation = hsbValues[1];
+        float brightness = hsbValues[2];
+        float newBrightness = Math.min(brightness * factor, 1.0f);
+        return Color.getHSBColor(hue, saturation, newBrightness);
+    }
+
 }
 
 
