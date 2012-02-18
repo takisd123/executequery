@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.JComponent;
@@ -35,6 +36,7 @@ import javax.swing.JToolTip;
 import javax.swing.KeyStroke;
 import javax.swing.plaf.basic.BasicToolTipUI;
 
+import org.apache.commons.lang.StringUtils;
 import org.underworldlabs.Constants;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.util.MiscUtils;
@@ -47,13 +49,10 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class AcceleratorToolTipUI extends BasicToolTipUI {
 
-    private static String delimiter = "+";
-
-    public AcceleratorToolTipUI() {
-        super();
-    }
+    private static final String DELIMITER = "+";
 
     public void paint(Graphics g, JComponent c) {
+
         Font font = c.getFont();
         FontMetrics metrics = c.getFontMetrics(font);
 
@@ -63,15 +62,11 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
             g.fillRect(0, 0, size.width + 20, size.height);
         }
 
-        Color foreground = c.getForeground();
-        g.setColor(foreground);
-        g.setFont(font);
+        JToolTip toolTip = (JToolTip) c;
+        String tipText = getTipText(toolTip);
 
-        JToolTip tip = (JToolTip)c;
-        String keyText = getAccelerator(tip);
-
-        if (!MiscUtils.isNull(keyText)) {
-
+        if (!MiscUtils.isNull(tipText)) {
+            
             Insets insets = c.getInsets();
             Rectangle paintTextR = new Rectangle(
                 insets.left,
@@ -79,73 +74,102 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
                 size.width - (insets.left + insets.right),
                 size.height - (insets.top + insets.bottom));
 
-            Font acceleratorFont = font.deriveFont(font.getSize() - 1);
-            g.setFont(acceleratorFont);
-//            g.setColor(GUIUtils.getSlightlyBrighter(foreground, 1.5f));
+            Color foreground = c.getForeground();
+            g.setColor(foreground);
+            g.setFont(font);
 
-            g.drawString(keyText, 
+            g.drawString(tipText, 
                     paintTextR.x + 3,
                     paintTextR.y + metrics.getAscent());
-            
-            g.setFont(font);
-            g.setColor(foreground);
-        }
 
+            String acceleratorString = getAcceleratorStringForRender(toolTip);
+            if (StringUtils.isNotBlank(acceleratorString)) {
+                
+                Font acceleratorFont = font.deriveFont(font.getSize() - 1f);                
+                g.setFont(acceleratorFont);
+                g.setColor(GUIUtils.getSlightlyBrighter(foreground, 2.0f));
+                
+                g.drawString(acceleratorString, 
+                        paintTextR.x + 6 + metrics.stringWidth(tipText),
+                        paintTextR.y + metrics.getAscent());
+            }
+            
+        }
+        
     }
 
     public Dimension getPreferredSize(JComponent c) {
 
         Dimension d = super.getPreferredSize(c);
 
-        JToolTip tip = (JToolTip)c;
-        String keyText = getAccelerator(tip);
+        JToolTip tip = (JToolTip) c;
+        String tipText = getTipText(tip) + getAcceleratorStringForRender(tip);
 
-        if (!MiscUtils.isNull(keyText)) {
+        if (!MiscUtils.isNull(tipText)) {
+
             Font font = c.getFont();
             FontMetrics fm = c.getFontMetrics(font);	
-            d.width = fm.stringWidth(keyText) + 12;
+            d.width = fm.stringWidth(tipText) + 15;
         
         } else {
             
             d.width += 10;
         }
+
         return d;
     }
 
-    private String getAccelerator(JToolTip tip) {
+    private String getTipText(JToolTip tip) { 
+        
         String text = tip.getTipText();
         if (text == null) {
+        
             text = Constants.EMPTY; 
         }
 
+        return text;
+    }
+    
+    private String getAcceleratorStringForRender(JToolTip tip) {
+        
+        String acceleratorString = getAcceleratorString(tip);
+        if (StringUtils.isNotBlank(acceleratorString)) {
+            
+            return " (" + acceleratorString + ")";
+        }
+
+        return Constants.EMPTY;
+    }
+    
+    private String getAcceleratorString(JToolTip tip) {
+        
+        String acceleratorString = null;
         Action action = ((AbstractButton)tip.getComponent()).getAction();
 
         if (action != null) {
-            String modText = null;
-            KeyStroke keyStroke = (KeyStroke)action.getValue(
-                                                Action.ACCELERATOR_KEY);
 
+            KeyStroke keyStroke = (KeyStroke)action.getValue(Action.ACCELERATOR_KEY);
             if (keyStroke != null) {
+                
                 int mod = keyStroke.getModifiers();
-                modText = KeyEvent.getKeyModifiersText(mod);
+                acceleratorString = KeyEvent.getKeyModifiersText(mod);
 
-                if (!MiscUtils.isNull(modText)) {
-                    modText += delimiter;
+                if (!MiscUtils.isNull(acceleratorString)) {
+
+                    acceleratorString += DELIMITER;
                 }
 
                 String keyText = KeyEvent.getKeyText(keyStroke.getKeyCode());
                 if (!MiscUtils.isNull(keyText)) {
-                    modText += keyText;
+
+                    acceleratorString += keyText;
                 }
 
             }
 
-            if (!MiscUtils.isNull(modText)) {
-                text = text + "  (" + modText + ")";
-            }                    
-
         }
-        return text;
-    }
 
+        return acceleratorString;
+    }
+    
 }
