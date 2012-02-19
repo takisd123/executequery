@@ -286,18 +286,9 @@ public class BrowserController {
             switch (type) {
                 case NamedObject.HOST:
                     
-                    HostPanel hostPanel = null;
-                    if (!viewPanel.containsPanel(HostPanel.NAME)) {
-
-                        hostPanel = new HostPanel(this);
-                        viewPanel.addToLayout(hostPanel);
-
-                    } else {
-                    
-                        hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
-                    }
-                    
+                    HostPanel hostPanel = hostPanel();
                     hostPanel.setValues((DatabaseHost)databaseObject);
+                    
                     return hostPanel;
 
                 // catalog node:
@@ -403,6 +394,20 @@ public class BrowserController {
             return null;
         }
 
+    }
+
+    private HostPanel hostPanel() {
+        HostPanel hostPanel = null;
+        if (!viewPanel.containsPanel(HostPanel.NAME)) {
+
+            hostPanel = new HostPanel(this);
+            viewPanel.addToLayout(hostPanel);
+
+        } else {
+        
+            hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
+        }
+        return hostPanel;
     }
 
     /**
@@ -763,8 +768,7 @@ public class BrowserController {
 
     public void connectionNameChanged(String name) {
 
-        HostPanel hostPanel = (HostPanel)viewPanel.getFormObjectView(HostPanel.NAME);
-        hostPanel.connectionNameChanged(name);
+        hostPanel().connectionNameChanged(name);
     }
 
 }

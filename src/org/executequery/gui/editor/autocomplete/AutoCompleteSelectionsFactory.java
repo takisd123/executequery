@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseSource;
+import org.executequery.databaseobjects.impl.ColumnInformation;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.sql.QueryTable;
@@ -90,6 +91,7 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
+    @Deprecated
     public List<AutoCompleteListItem> loadForTables(DatabaseHost databaseHost, List<QueryTable> queryTables) {
 
         if (tables == null) {
@@ -197,16 +199,17 @@ public class AutoCompleteSelectionsFactory {
         
             for (AutoCompleteListItem table : tables) {
     
-                List<String> columns = databaseHost.getColumnNames(
+                List<ColumnInformation> columns = databaseHost.getColumnInformation(
                         defaultCatalogForHost(databaseHost), 
                         defaultSchemaForHost(databaseHost), table.getValue());
                 
-                for (String columnName : columns) {
+                for (ColumnInformation column : columns) {
                     
                     list.add(new AutoCompleteListItem(
-                            columnName, 
+                            column.getName(), 
                             table.getValue(),
-                            formatColumnName(table.getValue(), columnName), 
+//                            formatColumnName(table.getValue(), columnName), 
+                            column.getDescription(),
                             DATABASE_COLUMN_DESCRIPTION, 
                             AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
                 }

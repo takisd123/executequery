@@ -258,7 +258,8 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         ColumnConfig columnConfig = createColumn(tableColumn);
         
         StringBuilder sb = new StringBuilder();
-        sb.append(database.escapeColumnName(tableColumn.getSchemaName(), table.getName(), tableColumn.getName()));
+//        sb.append(database.escapeColumnName(tableColumn.getSchemaName(), table.getName(), tableColumn.getName()));
+        sb.append(tableColumn.getName());
         sb.append(" [ ").append(database.getColumnType(columnConfig.getType(), false)).append(" ]");
 
         return sb.toString();

@@ -556,6 +556,68 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
     }
 
+    private ColumnInformationFactory columnInformationFactory = new ColumnInformationFactory();
+    
+    /**
+     * Returns the column names of the specified database object.
+     *
+     * @param catalog the table catalog name
+     * @param schema the table schema name
+     * @param table the database object name
+     * @return the column names
+     */
+    public List<ColumnInformation> getColumnInformation(String catalog, String schema, String table)
+        throws DataSourceException {
+
+        ResultSet rs = null;
+        List<ColumnInformation> columns = new ArrayList<ColumnInformation>();
+
+        try {
+            String _catalog = catalog;
+            String _schema = schema;
+            DatabaseMetaData dmd = getDatabaseMetaData();
+
+            // check that the db supports catalog and schema names
+            if (!dmd.supportsCatalogsInTableDefinitions()) {
+                _catalog = null;
+            }
+
+            if (!dmd.supportsSchemasInTableDefinitions()) {
+                _schema = null;
+            }
+            
+            // retrieve the base column info
+            rs = dmd.getColumns(_catalog, _schema, table, null);
+            while (rs.next()) {
+
+                String name = rs.getString(4);
+                columns.add(columnInformationFactory.build(
+                        table, 
+                        name, 
+                        rs.getString(6),
+                        rs.getInt(5),
+                        rs.getInt(7),
+                        rs.getInt(9),
+                        rs.getInt(11) == DatabaseMetaData.columnNoNulls)); 
+            }
+
+            return columns;
+
+        } catch (SQLException e) {
+
+            if (Log.isDebugEnabled()) {
+
+                Log.error("Error retrieving column data for table " + table, e);
+            }
+
+            return columns;
+
+        } finally {
+
+            releaseResources(rs);
+        }
+
+    }
 
     /**
      * Returns the columns of the specified database object.

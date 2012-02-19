@@ -52,7 +52,7 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     private static final KeyStroke KEY_STROKE_SHIFT_TAB = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_MASK);
     */
 
-    private static final Dimension PREFERRED_SIZE = new Dimension(350, 145);
+    private static final Dimension PREFERRED_SIZE = new Dimension(450, 145);
 
     private TypeAheadList list;
 

@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.databaseobjects.impl.ColumnInformation;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -265,6 +266,8 @@ public interface DatabaseHost extends NamedObject {
     boolean storesLowerCaseQuotedIdentifiers();
 
     boolean supportsMixedCaseQuotedIdentifiers();
+
+    List<ColumnInformation> getColumnInformation(String catalog, String schema,String table) throws DataSourceException;
 
 }
 
