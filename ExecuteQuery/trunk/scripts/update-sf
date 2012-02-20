@@ -57,8 +57,8 @@ cp $EQ/dependencies.txt $SF/
 
 TEMPLATE=$EQ/ant/template-build/src
 cp $TEMPLATE/docs/eqhelp.jar $SF/package-files/docs
-cp $TEMPLATE/docs/LICENSE $SF/package-files/docs
-cp $TEMPLATE/docs/README $SF/package-files/docs
+#cp $TEMPLATE/docs/LICENSE $SF/package-files/docs
+#cp $TEMPLATE/docs/README $SF/package-files/docs
 cp $TEMPLATE/apache.LICENSE $SF/package-files
 cp $TEMPLATE/eq.exe $SF/package-files
 cp $TEMPLATE/eq.ico $SF/package-files
