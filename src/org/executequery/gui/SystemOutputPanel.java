@@ -27,6 +27,7 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.text.JTextComponent;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.PatternLayout;
@@ -154,4 +155,9 @@ public class SystemOutputPanel extends AbstractDockedTabPanel implements ReadOnl
         return textArea.getText();
     }
 
+    public JTextComponent getTextComponent() {
+        
+        return textArea;
+    }
+    
 }

@@ -1,5 +1,7 @@
 package org.executequery.gui;
 
+import javax.swing.text.JTextComponent;
+
 public interface ReadOnlyTextPane {
     
     void clear();
@@ -10,4 +12,6 @@ public interface ReadOnlyTextPane {
     
     String getText();
 
+    JTextComponent getTextComponent();
+    
 }

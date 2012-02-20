@@ -21,6 +21,8 @@
 package org.executequery.gui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -53,7 +55,6 @@ public class ReadOnlyTextPanePopUpMenu extends JPopupMenu {
     public ReadOnlyTextPanePopUpMenu(ReadOnlyTextPane readOnlyTextPane) {
 
         this.readOnlyTextArea = readOnlyTextPane;
-
         reflectiveAction = new ReflectiveAction(this);
 
         String[] menuLabels = {"Copy", "Select All", "Save to File", "Clear"};
@@ -64,7 +65,21 @@ public class ReadOnlyTextPanePopUpMenu extends JPopupMenu {
 
             add(createMenuItem(menuLabels[i], actionCommands[i], toolTips[i]));
         }
+        
+        readOnlyTextPane.getTextComponent().addKeyListener(new KeyListener() {
+            
+            public void keyReleased(KeyEvent e) {
 
+                if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                    
+                    clear(null);
+                }
+            }
+            public void keyTyped(KeyEvent e) {}
+            public void keyPressed(KeyEvent e) {}
+            
+        });
+        
     }
 
     public void saveToFile(ActionEvent e) {

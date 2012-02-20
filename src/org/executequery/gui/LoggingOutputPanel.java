@@ -31,6 +31,7 @@ import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
+import javax.swing.text.JTextComponent;
 
 import org.executequery.UserPreferencesManager;
 import org.executequery.components.BasicPopupMenuListener;
@@ -168,6 +169,11 @@ public class LoggingOutputPanel extends JPanel
         outputPane.setCaretPosition(getDocument().getLength());
     }
 
+    public JTextComponent getTextComponent() {
+
+        return outputPane;
+    }
+    
     public void clear() {
 
         outputPane.setText("");
