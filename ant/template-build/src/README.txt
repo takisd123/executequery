@@ -1,14 +1,16 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 7 February 2012
+Date: 21 February 2012
 
-Summary of changes - v3.3.0 Build 5180:
+Summary of changes - v3.3.0 Build 5181:
 ----------------------------------------
 
 - Added method to scan and remove old user settings directories from 
-  user.home/.executequery
-- Modified dialog sizes for ERD panels
+  <user.home>/.executequery
+- Modified dialog sizes for ERD panels.
 - UI tweaks and new icon set from http://www.famfamfam.com/lab/icons/silk/
+- Modified node tool tips to be more descriptive, table columns in particular.
+- Added type, size and nullability to code-completion column values.
 
 
 Summary of changes - v3.2.5 Build 5176:
@@ -307,4 +309,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-27 January 2012
+21 February 2012
