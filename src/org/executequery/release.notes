@@ -1,6 +1,13 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 21 February 2012
+Date: 22 February 2012
+
+Summary of changes - v3.3.1 Build 5185:
+----------------------------------------
+
+- Fixed issue where saving text and selecting 'All Files' would throw an 
+  exception on save. 
+
 
 Summary of changes - v3.3.0 Build 5181:
 ----------------------------------------
