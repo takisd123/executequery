@@ -26,6 +26,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
@@ -56,8 +57,8 @@ public class TextFileWriter {
 
     private boolean showDialog;
     
-    /** <p>Creates a new object with the specified text to
-     *  be saved to the specified path.
+    /** 
+     *  Creates a new object with the specified text to be saved to the specified path.
      *
      *  @param the text to be saved
      *  @param the path to save to
@@ -225,7 +226,6 @@ public class TextFileWriter {
         
         String extension = null;
         FileFilter filter = fileChooser.getFileFilter();
-        
         if (filter == textFiles) {
             
             extension = ".txt";
@@ -235,7 +235,7 @@ public class TextFileWriter {
             extension = ".sql";
         }
 
-        if (!path.endsWith(extension)) {
+        if (StringUtils.isNotBlank(extension) && !path.endsWith(extension)) {
             
             path += extension;
         }
