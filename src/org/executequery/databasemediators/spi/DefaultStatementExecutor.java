@@ -980,7 +980,6 @@ public class DefaultStatementExecutor implements StatementExecutor {
             } else {
 
             	int updateCount = stmnt.getUpdateCount();
-
                 if (updateCount == -1) {
 
                 	updateCount = -10000;
