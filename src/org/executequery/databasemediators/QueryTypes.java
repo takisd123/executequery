@@ -81,6 +81,12 @@ public final class QueryTypes {
     /** A connect statement */
     public static final int CONNECT = 14;
 
+    /** A SQL SELECT ... INTO ... statement */
+    public static final int SELECT_INTO = 17;
+    
+    /** show table */
+    public static final int SHOW_TABLES = 30;
+
     private QueryTypes() {}
 
 }
