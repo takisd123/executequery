@@ -160,10 +160,14 @@ public final class DerivedQuery {
         int type = -1;
         String query = derivedQuery.replaceAll("\n", " ").toUpperCase();
         
-        if (query.indexOf("SELECT ") == 0) {
+        if (query.indexOf("SELECT ") == 0 && query.indexOf(" INTO ") != -1) {
         
-            type = QueryTypes.SELECT;
+            type = QueryTypes.SELECT_INTO;
 
+        } else if (query.indexOf("SELECT ") == 0) {
+            
+            type = QueryTypes.SELECT;
+                
         } else if (query.indexOf("INSERT ") == 0) {
             
             type = QueryTypes.INSERT;
@@ -218,15 +222,21 @@ public final class DerivedQuery {
             type = QueryTypes.COMMIT;
         
         } else if (query.indexOf("ROLLBACK") == 0) {
+            
             type = QueryTypes.ROLLBACK;
 
         } else if(query.indexOf("EXPLAIN ") == 0) {
+
             type = QueryTypes.EXPLAIN;
         
         } else if(query.indexOf("DESC ") == 0 || query.indexOf("DESCRIBE ") == 0) {
             
             type = QueryTypes.DESCRIBE;
-        
+
+        } else if (query.indexOf("SHOW TABLES") == 0) {
+            
+            type = QueryTypes.SHOW_TABLES;
+
         } else {
             
             type = QueryTypes.UNKNOWN;

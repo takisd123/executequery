@@ -43,6 +43,7 @@ import org.executequery.databasemediators.QueryTypes;
 import org.executequery.databaseobjects.DatabaseExecutable;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseProcedure;
+import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.ProcedureParameter;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
@@ -880,6 +881,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
                 return updateRecords(query);
 
             case QueryTypes.UNKNOWN:
+            case QueryTypes.SELECT_INTO:
                 return execute(query);
 
             case QueryTypes.DESCRIBE:
@@ -896,6 +898,9 @@ public class DefaultStatementExecutor implements StatementExecutor {
             case QueryTypes.ROLLBACK:
                 return commitLast(false);
 
+            case QueryTypes.SHOW_TABLES:
+                return showTables();
+                
             /*
             case CONNECT:
                 return establishConnection(query.toUpperCase());
@@ -909,6 +914,50 @@ public class DefaultStatementExecutor implements StatementExecutor {
         return execute(query, true);
     }
 
+    private SqlStatementResult showTables() throws SQLException {
+
+        DatabaseHost host = null;
+        try {
+
+            host = new DatabaseObjectFactoryImpl().createDatabaseHost(databaseConnection);
+
+            DatabaseSource defaultCatalog = host.getDefaultCatalog();
+            DatabaseSource defaultSchema = host.getDefaultSchema();
+
+            String catalog = null;
+            String schema = null;
+
+            if (defaultCatalog != null) {
+                
+                catalog = defaultCatalog.getName();
+            }
+            
+            if (defaultSchema != null) {
+                
+                schema = defaultSchema.getName();
+            }
+
+            DatabaseMetaData metaData = conn.getMetaData();
+            ResultSet resultSet = metaData.getTables(catalog, schema, null, new String[]{"TABLE"});
+            statementResult.setResultSet(resultSet);
+
+        } catch (SQLException e) {
+
+            statementResult.setSqlException(e);
+            finished();
+        
+        } finally {
+
+            if (host != null) {
+
+                host.close();
+            }
+        }
+        
+        return statementResult;
+    }
+
+    
     public SqlStatementResult execute(String query, boolean enableEscapes)
         throws SQLException {
 
@@ -1325,10 +1374,3 @@ public class DefaultStatementExecutor implements StatementExecutor {
     }
 
 }
-
-
-
-
-
-
-
