@@ -501,23 +501,26 @@ public class QueryDispatcher {
                     if (result.getType() != QueryTypes.EXECUTE) {
 
                         int updateCount = result.getUpdateCount();
-
                         if (updateCount == -1) {
+                            
                             setOutputMessage(SqlMessages.ERROR_MESSAGE,
                                     result.getErrorMessage());
                             setStatusMessage(ERROR_EXECUTING);
-                        }
-                        else {
+
+                        } else {
+                        
                             type = result.getType();
                             setResultText(updateCount, type);
 
                             if (type == QueryTypes.COMMIT || type == QueryTypes.ROLLBACK) {
+                            
                                 setStatusMessage(" " + result.getMessage());
                             }
 
                         }
-                    }
-                    else {
+
+                    } else {
+
                         Map results = (Map)result.getOtherResult();
 
                         if (results == null) {
@@ -541,11 +544,9 @@ public class QueryDispatcher {
                             }
 
                             String SPACE = " = ";
-
                             for (Iterator<?> i = results.keySet().iterator(); i.hasNext();) {
 
                                 String key = i.next().toString();
-
                                 setOutputMessage(SqlMessages.PLAIN_MESSAGE,
                                                  key + SPACE + results.get(key));
                             }
