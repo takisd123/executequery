@@ -549,6 +549,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             case QueryTypes.ROLLBACK:
                 rText = "Rollback complete.";
                 break;
+            case QueryTypes.SELECT_INTO:
+                rText = "Statement executed successfully.";
+                break;
             case QueryTypes.UNKNOWN:
             case QueryTypes.EXECUTE:
                 if (result > -1) {
