@@ -46,6 +46,7 @@ import org.underworldlabs.swing.CustomKeyboardFocusManager;
 import org.underworldlabs.swing.PasswordDialog;
 import org.underworldlabs.swing.SplashPanel;
 import org.underworldlabs.swing.actions.ActionBuilder;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.plaf.base.CustomTextAreaUI;
 import org.underworldlabs.swing.plaf.base.CustomTextPaneUI;
 import org.underworldlabs.util.MiscUtils;
@@ -64,7 +65,8 @@ public class ApplicationLauncher {
         try {
 
             applySystemProperties();
-
+            macSettings();
+            
             boolean dirsCreated = SystemResources.createUserHomeDirSettings();
             aaFonts();
 
@@ -484,11 +486,17 @@ public class ApplicationLauncher {
         new HttpProxyConfigurator().configureHttpProxy();
     }
 
+    private void macSettings() {
+
+        if (UIUtils.isMac()) {
+            
+            // could also use: -Xdock:name="Execute Query"
+            
+            System.setProperty("apple.laf.useScreenMenuBar", "true");
+            System.setProperty("com.apple.mrj.application.apple.menu.about.name", ExecuteQueryFrame.TITLE);
+        }
+
+    }
+
+    
 }
-
-
-
-
-
-
-
