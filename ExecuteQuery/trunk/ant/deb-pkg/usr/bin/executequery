@@ -20,6 +20,7 @@ else
 	JAVA="$JAVA_HOME/bin/java"
 fi
 
-exec $JAVA -mx${JAVA_HEAP_SIZE}m -jar "/usr/share/executequery/eq.jar" &
+BASE_PATH=/usr/share/executequery
+exec $JAVA "-javaagent:$BASE_PATH/agent.jar=ExecuteQuery" -mx${JAVA_HEAP_SIZE}m -jar "$BASE_PATH/eq.jar" &
 
 

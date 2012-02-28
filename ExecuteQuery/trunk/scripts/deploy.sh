@@ -201,6 +201,7 @@ print_progress
 
 cd $EQ_DEPLOY_DIR/src
 print_progress
+rm -rf ExecuteQuery/classes
 tar cf ../executequery-src-v$NEW_VERSION.tar ExecuteQuery/
 print_progress
 cd ../
@@ -292,7 +293,7 @@ print_progress
 cp ExecuteQuery/README.txt $DEB_TEMP/usr/share/doc/executequery
 rm -Rf $DEB_TEMP/usr/share/executequery/*
 print_progress
-cp -R ExecuteQuery/eq.jar ExecuteQuery/lib ExecuteQuery/docs $DEB_TEMP/usr/share/executequery
+cp -R ExecuteQuery/eq.jar ExecuteQuery/agent.jar ExecuteQuery/lib ExecuteQuery/docs $DEB_TEMP/usr/share/executequery
 print_progress
 cp ExecuteQuery/eq.png $DEB_TEMP/usr/share/pixmaps/executequery.png
 print_progress

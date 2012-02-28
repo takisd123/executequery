@@ -36,7 +36,6 @@ import org.executequery.GUIUtilities;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.GlassPanePanel;
-import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
 
 /** 
@@ -49,7 +48,7 @@ import org.underworldlabs.util.MiscUtils;
 public class ExecuteQueryFrame extends JFrame 
                                implements ComponentListener {
 
-	private static final String EXECUTE_QUERY = "Execute Query";
+	public static final String TITLE = "Execute Query";
 
     private static final String APPLICATION_ICON = "ApplicationIcon128.png";
 
@@ -64,7 +63,7 @@ public class ExecuteQueryFrame extends JFrame
 
     public ExecuteQueryFrame() {
 
-        super(EXECUTE_QUERY);
+        super(TITLE);
 /*
         String[] icons = {
                 "ApplicationIcon256.png",
@@ -88,7 +87,6 @@ public class ExecuteQueryFrame extends JFrame
         
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        macSettings();
         addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
@@ -104,19 +102,6 @@ public class ExecuteQueryFrame extends JFrame
         getRootPane().setGlassPane(new GlassPanePanel());
     }
 
-    private void macSettings() {
-
-        if (UIUtils.isMac()) {
-            
-            // could also use: -Xdock:name="Execute Query"
-            
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("com.apple.mrj.application.apple.menu.about.name", EXECUTE_QUERY);
-        }
-
-    }
-
-    
     public void setSizeAndPosition(int x, int y, int width, int height) {
 
         lastX = x;

@@ -1,6 +1,14 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 21 February 2012
+Date: 28 February 2012
+
+Summary of changes - v3.3.1 Build 5183:
+----------------------------------------
+
+- Fixed issue where saving text and selecting 'All Files' would throw an 
+  exception on save. 
+- Added support for SELECT...INTO... queries for the Query Editor. 
+
 
 Summary of changes - v3.3.0 Build 5181:
 ----------------------------------------
@@ -309,4 +317,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-21 February 2012
+28 February 2012
