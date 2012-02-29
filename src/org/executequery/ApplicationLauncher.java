@@ -60,6 +60,10 @@ import org.underworldlabs.util.SystemProperties;
  */
 public class ApplicationLauncher {
 
+    // agent.jar
+    // http://blog.dutchworks.nl/2011/01/09/make-intellij-idea-behave-properly-in-linux-docks/
+    // asm license: http://asm.ow2.org/license.html
+    
     public void startup() {
 
         try {
