@@ -134,7 +134,6 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         }
 
         formatValueForDisplay(value, isSelected);
-
         if (rightAlignNumeric) {
 
             alignNumeric(value);
@@ -146,7 +145,7 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     private void alignNumeric(Object value) {
 
         RecordDataItem recordDataItem = (RecordDataItem) value;
-        if (recordDataItem.isValueNull()) {
+        if (recordDataItem == null || recordDataItem.isValueNull()) {
 
             return;
         }
@@ -379,21 +378,8 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     }
 
     public void invalidate() {}
-
     public void repaint() {}
-
-    public void firePropertyChange(
-            String propertyName, boolean oldValue, boolean newValue) {}
-
-    protected void firePropertyChange(
-            String propertyName, Object oldValue, Object newValue) {}
+    public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
+    protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
 
 }
-
-
-
-
-
-
-
-
