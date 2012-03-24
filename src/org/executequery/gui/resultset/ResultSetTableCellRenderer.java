@@ -212,7 +212,6 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         }
 
         setValue(value);
-
     }
 
     private void formatForDataItem(RecordDataItem recordDataItem, boolean isSelected) {
@@ -286,11 +285,12 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     private void formatForNullValue(boolean isSelected) {
 
         setValue(nullValueDisplayString);
+        setHorizontalAlignment(SwingConstants.CENTER);
         if (!isSelected) {
 
             setBackground(nullValueDisplayColor);
         }
-
+        
     }
 
     public void applyUserPreferences() {

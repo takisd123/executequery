@@ -98,7 +98,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 } catch (Exception e) {
 
                     GUIUtilities.displayExceptionErrorDialog(
-                                        "An error occured retrieving the table data.\n" +
+                                        "An error occured retrieving the object data.\n" +
                                         e.getMessage(), e);
                     return "done";
                 }

@@ -51,6 +51,8 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
+import org.executequery.event.ConnectionRepositoryEvent;
+import org.executequery.event.ConnectionRepositoryListener;
 import org.executequery.gui.SortableColumnsTable;
 import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
@@ -69,7 +71,8 @@ import org.underworldlabs.swing.table.AbstractSortableTableModel;
 public class ConnectionsListPanel extends AbstractFormObjectViewPanel
                                   implements MouseListener,
                                              ActionListener,
-                                             ConnectionListener {
+                                             ConnectionListener,
+                                             ConnectionRepositoryListener {
 
     public static final String NAME = "ConnectionsListPanel";
 
@@ -85,7 +88,6 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     /** the pop-up menu */
     private PopMenu popupMenu;
 
-    /** Creates a new instance of ConnectionsListPanel */
     public ConnectionsListPanel(BrowserController controller) {
         super();
         this.controller = controller;
@@ -156,6 +158,23 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         EventMediator.registerListener(this);
     }
 
+    public void connectionAdded(ConnectionRepositoryEvent connectionRepositoryEvent) {
+        connectionsChanged();
+    }
+    
+    public void connectionModified(ConnectionRepositoryEvent connectionRepositoryEvent) {
+        connectionsChanged();
+    }
+    
+    public void connectionRemoved(ConnectionRepositoryEvent connectionRepositoryEvent) {
+        connectionsChanged();
+    }
+    
+    private void connectionsChanged() {
+        model.reload(connections());
+        table.repaint();
+    }
+    
     private List<DatabaseConnection> connections() {
 
         return ((DatabaseConnectionRepository)RepositoryCache.load(
@@ -339,7 +358,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     }
 
     public boolean canHandleEvent(ApplicationEvent event) {
-        return (event instanceof ConnectionEvent);
+        return (event instanceof ConnectionEvent) || (event instanceof ConnectionRepositoryEvent);
     }
 
     public String getLayoutName() {
@@ -440,6 +459,11 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
             this.values = values;
         }
 
+        public void reload(List<DatabaseConnection> values) {
+            this.values = values;
+            fireTableDataChanged();
+        }
+        
         public DatabaseConnection getConnectionAt(int row) {
             return values.get(row);
         }

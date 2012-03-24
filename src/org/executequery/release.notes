@@ -8,6 +8,11 @@ Summary of changes - v3.3.1 Build 5183:
 - Fixed issue where saving text and selecting 'All Files' would throw an 
   exception on save. 
 - Added support for SELECT...INTO... queries for the Query Editor. 
+- Added separate icon for triggers in the database browser. 
+- Fixed issue where new or deleted connections were not being updated in the 
+  connections table list.
+- Added double-click to size column to fit largest value in query editor.
+   
 
 
 Summary of changes - v3.3.0 Build 5181:

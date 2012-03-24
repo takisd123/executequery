@@ -189,7 +189,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     private PanelToolBar createToolBar() {
 
         toolBar = new ConnectionsTreeToolBar(this);
-
         return toolBar;
     }
 
@@ -225,7 +224,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     public void sortConnections() {
 
         if (hostNodeSorter == null) {

@@ -184,6 +184,8 @@ public class BrowserConstants {
     public static final String VIEWS_IMAGE = "TableView16.png";
 
     public static final String SYSTEM_VIEWS_IMAGE = "SystemTableView16.png";
+
+    public static final String TABLE_TRIGGER_IMAGE = "TableTrigger16.png";
     
     public static final String[] NODE_ICONS = {CONNECTIONS_IMAGE,
                                                CATALOG_IMAGE,
@@ -203,7 +205,8 @@ public class BrowserConstants {
                                                COLUMNS_IMAGE,
                                                PRIMARY_COLUMNS_IMAGE,
                                                FOREIGN_COLUMNS_IMAGE,
-                                               SYSTEM_VIEWS_IMAGE
+                                               SYSTEM_VIEWS_IMAGE,
+                                               TABLE_TRIGGER_IMAGE
                                                };
     
 }

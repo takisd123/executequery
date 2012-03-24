@@ -181,6 +181,7 @@ public abstract class AbstractDriverPanel extends JPanel
         gbc.gridwidth = 1;
         gbc.insets.right = 0;
         gbc.gridheight = 2;
+        gbc.insets.top = 5;
         base.add(jarPathListScrollPane, gbc);
         gbc.gridx = 2;
         gbc.weightx = 0;
