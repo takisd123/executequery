@@ -126,7 +126,6 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
             resetLabel();
 
             int yesNo = displayNewVersionMessage();
-
             if (yesNo == JOptionPane.YES_OPTION) {
 
                 worker = new SwingWorker() {
@@ -135,7 +134,6 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
 
                         return displayReleaseNotes();
                     }
-
                     public void finished() {
 
                         closeProgressDialog();
@@ -166,14 +164,12 @@ public class CheckForUpdateNotifier implements InterruptibleProcess {
     public void checkForUpdate(boolean monitorProgress) {
         
         this.monitorProgress = monitorProgress;
-
         worker = new SwingWorker() {
 
             public Object construct() {
 
                 return doWork();
             }
-        
             public void finished() {
 
                 closeProgressDialog();

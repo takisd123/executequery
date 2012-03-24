@@ -20,6 +20,8 @@
 
 package org.underworldlabs.swing.table;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -33,10 +35,12 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.Icon;
+import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
@@ -656,33 +660,91 @@ public class TableSorter extends AbstractTableModel {
                 return;
             }
 
-            column = columnModel.getColumn(viewColumn).getModelIndex();
-
-            if (column != -1 && tableModel.canSortColumn(column)) {
-
-            	status = getSortingStatus(column);
-                
-                if (!e.isControlDown()) {
-
-                	cancelSorting();
+            int x = e.getX();
+            int n = columnModel.getColumnCount(); 
+            
+            int resizeColumn = -1;
+            for(int i = 0; i < n; i++) { 
+                x = x - columnModel.getColumn(i).getWidth(); 
+                if (x > -5 && x < 5) { // within 5px either side
+            
+                    resizeColumn = i;
+                    break;
                 }
+            }
 
-                // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING} or
-                // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is pressed.
-                status = status + (e.isShiftDown() ? -1 : 1);
-                status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
-                
+            if (e.getClickCount() >= 2 && resizeColumn != -1) {
+
+                final int selectedColumn = resizeColumn;
                 SwingWorker worker = new SwingWorker() {
                     public Object construct() {
-                        setSortingStatus(column, status);
+                        resizeColumn(selectedColumn);
                         return "done";
                     }
                 };
-                
                 worker.start();
-                
+                return;
+            
+            } else if (resizeColumn == -1) {
+
+                column = columnModel.getColumn(viewColumn).getModelIndex();
+                if (column != -1 && tableModel.canSortColumn(column)) {
+    
+                	status = getSortingStatus(column);
+                    
+                    if (!e.isControlDown()) {
+    
+                    	cancelSorting();
+                    }
+    
+                    // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING} or
+                    // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is pressed.
+                    status = status + (e.isShiftDown() ? -1 : 1);
+                    status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
+                    
+                    SwingWorker worker = new SwingWorker() {
+                        public Object construct() {
+                            setSortingStatus(column, status);
+                            return "done";
+                        }
+                    };
+                    worker.start();
+                    
+                }
+            
             }
             
+        }
+
+        private void resizeColumn(int selectedColumn) {
+
+            TableColumnModel columnModel = tableHeader.getColumnModel();
+            TableColumn tableColumn = columnModel.getColumn(selectedColumn);
+            int size = sizeToFit(selectedColumn);
+            if (tableColumn.getWidth() < size) {
+                
+                tableColumn.setPreferredWidth(size + 10);
+            }
+
+        }
+        
+        private int sizeToFit(int selectedColumn) {
+
+            JTable table = getTableHeader().getTable();
+            Font font = table.getFont();
+            FontMetrics fontMetrics = table.getFontMetrics(font);
+            
+            int longestValue = 0;
+            for (int i = 0, n = tableModel.getRowCount(); i < n; i++) {
+                
+                Object object = tableModel.getValueAt(i, selectedColumn);
+                if (object != null) {
+                    longestValue = Math.max(longestValue, 
+                            fontMetrics.stringWidth(object.toString()));
+
+                }
+            }
+            return longestValue;
         }
         
     } // class MouseHandler

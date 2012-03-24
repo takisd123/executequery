@@ -84,9 +84,10 @@ public class SystemPropertiesPanel extends JPanel {
                                                        int row, 
                                                        int column) {
             
-            String toolTip = value.toString();
-            setToolTipText(toolTip);
+            if (value != null) {
 
+                setToolTipText(value.toString());
+            }
             return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         }
     }

@@ -37,8 +37,7 @@ import org.underworldlabs.Constants;
 import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
- * Simple header renderer with tool tip text and
- * configurable height.
+ * Simple header renderer with tool tip text and configurable height.
  *
  * @author   Takis Diakoumis
  * @version  $Revision$
@@ -132,14 +131,8 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
         return new Dimension(getWidth(), height);
     }
     
-    /** 
-     * Returns the height of the renderer.
-     */
     public int getHeight() {
         return height;
     }
 
 }
-
-
-
