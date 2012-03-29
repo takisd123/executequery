@@ -71,6 +71,11 @@ public class QueryTokenizer {
                 matcher(Constants.EMPTY);
     }
 
+    public String removeComments(String query) {
+        
+        return removeAllCommentsFromQuery(query);
+    }
+    
     public List<DerivedQuery> tokenize(String query) {
         
         extractQuotedStringTokens(query);

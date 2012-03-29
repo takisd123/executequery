@@ -332,7 +332,6 @@ public class QueryDispatcher {
      * @param the query string
      * @param true to execute in entirety, false otherwise
      */
-    @SuppressWarnings("unchecked")
     private Object executeSQL(String sql, boolean executeAsBlock) {
 
         waiting = false;
@@ -521,6 +520,7 @@ public class QueryDispatcher {
 
                     } else {
 
+                        @SuppressWarnings("rawtypes")
                         Map results = (Map)result.getOtherResult();
 
                         if (results == null) {
@@ -864,9 +864,10 @@ public class QueryDispatcher {
      */
     private boolean isCreateProcedureOrFunction(String query) {
 
-        if (isNotSingleStatementExecution(query)) {
+        String noCommentsQuery = queryTokenizer.removeComments(query);
+        if (isNotSingleStatementExecution(noCommentsQuery)) {
 
-            return isCreateProcedure(query) || isCreateFunction(query);
+            return isCreateProcedure(noCommentsQuery) || isCreateFunction(noCommentsQuery);
         }
 
         return false;

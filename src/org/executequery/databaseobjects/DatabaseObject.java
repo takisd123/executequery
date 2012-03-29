@@ -125,6 +125,8 @@ public interface DatabaseObject extends NamedObject {
 
     String getNameForQuery();
 
+    ResultSet getData(boolean rollbackOnError) throws DataSourceException;
+
 }
 
 

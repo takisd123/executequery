@@ -33,7 +33,9 @@ import org.executequery.gui.DefaultTable;
 
 /**
  *
- * @author takisd
+ * @author   Takis Diakoumis
+ * @version  $Revision$
+ * @date     $Date$
  */
 public class TableIndexPanel extends JPanel {
     
@@ -43,7 +45,6 @@ public class TableIndexPanel extends JPanel {
     /** the table display */
     private JTable table;
     
-    /** Creates a new instance of TableIndexPanel */
     public TableIndexPanel() {
         super(new BorderLayout());
         try {
@@ -77,37 +78,11 @@ public class TableIndexPanel extends JPanel {
         col.setPreferredWidth(90);        
     }
     
-    /** <p>Inserts a row before the selection. */
-    public void insertBefore() {
-        
-    }
-    
-    /** <p>Inserts a row after the selection. */
+    public void insertBefore() {}
     public void insertAfter() {}
-    
-    /** <p>Deletes the selected row. */
-    public void deleteRow() {
-        
-    }
-    
-    /** 
-     * Generates and prints the SQL text. 
-     */
-    public void setSQLText() {
-        
-    }
-    
-    /** 
-     * Generates and prints the SQL text with the
-     * specified values as either column values or
-     * constraints values depending on the type parameter.
-     *
-     * @param the values to add to the SQL
-     * @param the type of values - column or constraint
-     */
-    public void setSQLText(String values, int type) {
-        
-    }
+    public void deleteRow() {}
+    public void setSQLText() {}
+    public void setSQLText(String values, int type) {}
     
     /** 
      * Retrieves the currently selected/created table name.
@@ -118,10 +93,7 @@ public class TableIndexPanel extends JPanel {
         return null;
     }
 
-    /** <p>Moves the selected row up. */
     public void moveColumnUp() {}
-    
-    /** <p>Moves the selected row down. */
     public void moveColumnDown() {}
 
     
@@ -158,11 +130,3 @@ public class TableIndexPanel extends JPanel {
     }
 
 }
-
-
-
-
-
-
-
-
