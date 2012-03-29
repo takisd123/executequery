@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 import org.underworldlabs.jdbc.DataSourceException;
@@ -153,7 +154,7 @@ public interface NamedObject extends java.io.Serializable {
     int drop() throws DataSourceException;
     
     String getDescription();
-    
+
 }
 
 

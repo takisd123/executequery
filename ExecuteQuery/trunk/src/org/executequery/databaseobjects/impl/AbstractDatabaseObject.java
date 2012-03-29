@@ -341,6 +341,30 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         return executeQuery(recordsQueryString());        
     }
         
+    /**
+     * Retrieves the data for this object (where applicable).
+     * 
+     * @param whether to rollback if a DataSourceException is thrown
+     * @return the data for this object
+     */
+    public ResultSet getData(boolean rollbackOnError) throws DataSourceException {
+        
+        try {
+        
+            return executeQuery(recordsQueryString());
+            
+        } catch (DataSourceException e) {
+            
+            if (rollbackOnError) {
+                try {
+                    getHost().getConnection().rollback();
+                } catch (SQLException e1) {}
+            }
+
+            throw e;
+        }
+    }
+    
     private ResultSet executeQuery(String query) throws DataSourceException {
         
         Connection connection = null;

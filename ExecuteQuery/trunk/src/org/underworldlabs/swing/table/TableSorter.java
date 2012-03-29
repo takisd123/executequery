@@ -739,9 +739,11 @@ public class TableSorter extends AbstractTableModel {
                 
                 Object object = tableModel.getValueAt(i, selectedColumn);
                 if (object != null) {
-                    longestValue = Math.max(longestValue, 
-                            fontMetrics.stringWidth(object.toString()));
-
+                    String stringValue = object.toString();
+                    if (stringValue != null) {
+                        longestValue = Math.max(longestValue, 
+                                fontMetrics.stringWidth(stringValue));
+                    }
                 }
             }
             return longestValue;

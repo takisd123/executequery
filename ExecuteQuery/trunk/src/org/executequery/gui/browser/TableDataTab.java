@@ -26,12 +26,13 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.ResultSet;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableModel;
 
-import org.executequery.GUIUtilities;
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.editor.ResultSetTablePopupMenu;
@@ -60,10 +61,13 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
     private boolean executing = false;
 
+    private GridBagConstraints scrollerConstraints;
+
+    private GridBagConstraints errorLabelConstraints;
+
     public TableDataTab() {
 
         super(new GridBagLayout());
-
         try {
 
             init();
@@ -78,10 +82,14 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
     private void init() throws Exception {
 
         scroller = new JScrollPane();
-        add(scroller, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+        scrollerConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                                 GridBagConstraints.SOUTHEAST,
                                 GridBagConstraints.BOTH,
-                                new Insets(5, 5, 5, 5), 0, 0));
+                                new Insets(5, 5, 5, 5), 0, 0);
+        errorLabelConstraints = new GridBagConstraints(1, 1, 1, 1, 0, 1.0,
+                GridBagConstraints.CENTER,
+                GridBagConstraints.BOTH,
+                new Insets(0, 5, 5, 5), 0, 0);
     }
 
     public void loadDataForTable(final DatabaseObject databaseObject) {
@@ -93,13 +101,16 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                     executing = true;
                     showWaitCursor();
 
+                    removeAll();
                     return setTableResultsPanel(databaseObject);
 
                 } catch (Exception e) {
 
-                    GUIUtilities.displayExceptionErrorDialog(
-                                        "An error occured retrieving the object data.\n" +
-                                        e.getMessage(), e);
+                    addErrorLabel(e);
+                    
+//                    GUIUtilities.displayExceptionErrorDialog(
+//                                        "An error occured retrieving the object data.\n" +
+//                                        e.getMessage(), e);
                     return "done";
                 }
             }
@@ -133,7 +144,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 tableModel.setHoldMetaData(false);
             }
 
-            ResultSet resultSet = databaseObject.getData();
+            ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
 
             if (table == null) {
@@ -148,16 +159,33 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
             scroller.getViewport().add(table);
-
+            add(scroller, scrollerConstraints);
+            
         } catch (DataSourceException e) {
 
-            GUIUtilities.displayExceptionErrorDialog("Error retrieving table data.", e);
+            addErrorLabel(e);
+            
+//            GUIUtilities.displayExceptionErrorDialog("Error retrieving table data.", e);
         }
 
         validate();
         repaint();
 
         return "done";
+    }
+
+    private void addErrorLabel(Throwable e) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><body><p><center>Error retrieving object data");
+        String message = e.getMessage();
+        if (StringUtils.isNotBlank(message)) {
+
+            sb.append("<br />").append(message);
+        }
+
+        sb.append("</center></p></body></html>");
+        add(new JLabel(sb.toString()), errorLabelConstraints);
     }
 
     private void createResultSetTable() {
