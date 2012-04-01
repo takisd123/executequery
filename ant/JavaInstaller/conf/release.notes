@@ -8,6 +8,15 @@ Summary of changes - v3.3.1 Build 5183:
 - Fixed issue where saving text and selecting 'All Files' would throw an 
   exception on save. 
 - Added support for SELECT...INTO... queries for the Query Editor. 
+- Added separate icon for triggers in the database browser. 
+- Fixed issue where new or deleted connections were not being updated in the 
+  connections table list.
+- Added double-click to size column to fit largest value in query editor.
+- Changed errors in data tab or any object to display on the panel and not use
+  the exception error dialog.
+- Modified detection and execution of create function or procedure statement 
+  from the Query Editor to strip out any comments.
+   
 
 
 Summary of changes - v3.3.0 Build 5181:
