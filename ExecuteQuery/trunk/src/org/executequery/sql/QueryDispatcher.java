@@ -87,7 +87,7 @@ public class QueryDispatcher {
     private static final String ERROR_EXECUTING = " Error executing statement";
     private static final String DONE = " Done";
     private static final String COMMITTING_LAST = "Committing last transaction block...";
-    private static final String ROLLINGBACK_LAST = "Rolling back last transaction block...";
+    private static final String ROLLING_BACK_LAST = "Rolling back last transaction block...";
 
     // ------------------------------------------------
 
@@ -449,13 +449,12 @@ public class QueryDispatcher {
 
                         setOutputMessage(
                                 SqlMessages.ACTION_MESSAGE,
-                                ROLLINGBACK_LAST);
+                                ROLLING_BACK_LAST);
                     }
 
                 }
 
                 start = System.currentTimeMillis();
-
                 SqlStatementResult result = querySender.execute(type, queryToExecute);
 
                 if (statementCancelled || Thread.interrupted()) {
