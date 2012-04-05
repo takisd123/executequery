@@ -107,6 +107,13 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         }
     }
 
+    public void copyName(ActionEvent e) {
+        if (currentPath != null) {
+            String name = currentPath.getLastPathComponent().toString();
+            GUIUtilities.copyToClipBoard(name);
+        }
+    }
+    
     public void disconnect(ActionEvent e) {
         treePanel.disconnect(currentSelection);
     }

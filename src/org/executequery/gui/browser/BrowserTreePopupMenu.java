@@ -50,6 +50,7 @@ class BrowserTreePopupMenu extends JPopupMenu {
     private JMenuItem duplicate;
     private JMenuItem delete;
     private JMenuItem recycleConnection;
+    private JMenuItem copyName;
     
     private JCheckBoxMenuItem showDefaultCatalogsAndSchemas; 
 
@@ -93,6 +94,9 @@ class BrowserTreePopupMenu extends JPopupMenu {
 
         addSeparator();
 
+        copyName = createMenuItem("Copy Name", "copyName", listener);
+        add(copyName);
+        
         createSqlMenu(listener);
         createExportMenu(listener);
         createImportMenu(listener);
