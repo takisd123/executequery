@@ -310,6 +310,12 @@
           large-icon="/org/executequery/icons/Execute24.png"
           execute-class="org.executequery.actions.queryeditor.ExecuteCommand"/>
 
+  <action id="execute-as-block-command"
+          name="Execute as Single Statement"
+          accel-key="control shift F5"
+          accel-editable="true"
+          execute-class="org.executequery.actions.queryeditor.ExecuteAsBlockCommand"/>
+
   <action id="editor-help-command"
           name=" Query Editor Help"
           accel-key=""
