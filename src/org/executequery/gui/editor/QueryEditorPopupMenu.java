@@ -313,11 +313,19 @@ public class QueryEditorPopupMenu extends JPopupMenu
     }
 
     private JMenuItem createExecuteBlockMenuItem() {
+        
+        JMenuItem menuItem = createExecuteActionMenuItem("execute-as-block-command", "Execute as Single Statement");
+        executeActionButtons().add(menuItem);
+        
+        return menuItem;
+        
+        /*
         JMenuItem menuItem = MenuItemFactory.createMenuItem(action());
         menuItem.setActionCommand("executeAsBlock");
         menuItem.setText("Execute as Single Statement");
         executeActionButtons().add(menuItem);
         return menuItem;
+        */
     }
 
     private JMenuItem createExecuteSelectionMenuItem() {

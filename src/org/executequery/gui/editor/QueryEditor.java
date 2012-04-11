@@ -1035,7 +1035,6 @@ public class QueryEditor extends DefaultTabView
     public void executeSelection() {
 
         String query = editorPanel.getSelectedText();
-
         if (query != null) {
 
             executeSQLQuery(query);
@@ -1089,6 +1088,11 @@ public class QueryEditor extends DefaultTabView
         return delegate.isExecuting();
     }
 
+    public void executeAsBlock() {
+
+        delegate.executeQuery(null, true);
+    }
+    
     /**
      * Executes the specified query.
      *
