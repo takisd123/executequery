@@ -16,7 +16,10 @@ Summary of changes - v3.3.1 Build 5183:
   the exception error dialog.
 - Modified detection and execution of create function or procedure statement 
   from the Query Editor to strip out any comments.
-- Added 'Copy Name' popup menu item for all items in the browser tree.   
+- Added 'Copy Name' popup menu item for all items in the browser tree.
+- Application icons updated.
+- Fixed procedure execution from editor reporting invalid procedure when params
+  have were not loaded by EQ.
 
 
 Summary of changes - v3.3.0 Build 5181:

@@ -181,10 +181,10 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
         String message = e.getMessage();
         if (StringUtils.isNotBlank(message)) {
 
-            sb.append("<br />").append(message);
+            sb.append("<br />[ ").append(message);
         }
 
-        sb.append("</center></p></body></html>");
+        sb.append(" ]</center></p><p><center><i>(Note: Data will not always be available for all object types)</i></center></p></body></html>");
         add(new JLabel(sb.toString()), errorLabelConstraints);
     }
 

@@ -69,7 +69,8 @@ public class DefaultDatabaseExecutable extends AbstractDatabaseObject
      * @return true | false
      */
     public boolean hasParameters() {
-        return parameters != null && parameters.size() > 0;
+        List<ProcedureParameter> _parameters = getParameters();
+        return _parameters != null && !_parameters.isEmpty();
     }
    
     /**
