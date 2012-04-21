@@ -18,6 +18,9 @@ Summary of changes - v3.3.1 Build 5183:
   from the Query Editor to strip out any comments.
 - Added 'Copy Name' popup menu item for all items in the browser tree.
 - Application icons updated.
+- Fixed procedure execution from editor reporting invalid procedure when params
+  have were not loaded by EQ.
+- Added 'Execute as Single Statement' editor action shortcut key.
 
 
 Summary of changes - v3.3.0 Build 5181:
