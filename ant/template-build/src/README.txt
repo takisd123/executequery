@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 28 February 2012
+Date: 24 April 2012
 
-Summary of changes - v3.3.1 Build 5183:
+Summary of changes - v3.5.0 Build 5190:
 ----------------------------------------
 
 - Fixed issue where saving text and selecting 'All Files' would throw an 
@@ -21,6 +21,7 @@ Summary of changes - v3.3.1 Build 5183:
 - Fixed procedure execution from editor reporting invalid procedure when params
   have were not loaded by EQ.
 - Added 'Execute as Single Statement' editor action shortcut key.
+- Added database table views to the Query Editor autocomplete list. 
 
 
 Summary of changes - v3.3.0 Build 5181:
@@ -330,4 +331,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-28 February 2012
+24 April 2012

@@ -27,6 +27,7 @@ public enum AutoCompleteListItemType {
     DATABASE_DEFINED_KEYWORD, 
     DATABASE_TABLE, 
     DATABASE_TABLE_COLUMN,
+    DATABASE_VIEW, 
     DATABASE_SEQUENCE,
     DATABASE_DATA_TYPE,
     NOTHING_PROPOSED;
@@ -43,6 +44,11 @@ public enum AutoCompleteListItemType {
         return this == DATABASE_TABLE_COLUMN;
     }
 
+    public boolean isTableView() {
+        
+        return this == DATABASE_VIEW;
+    }
+    
     public boolean isTable() {
 
         return this == DATABASE_TABLE;
