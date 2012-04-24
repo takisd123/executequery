@@ -36,6 +36,8 @@ public class AutoCompleteSelectionsFactory {
 
     private static final String DATABASE_TABLE_DESCRIPTION = "Database Table";
     
+    private static final String DATABASE_TABLE_VIEW = "Database View";
+    
     private static final String DATABASE_COLUMN_DESCRIPTION = "Database Column";
     
     public List<AutoCompleteListItem> build(DatabaseHost databaseHost,
@@ -91,48 +93,6 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
-    @Deprecated
-    public List<AutoCompleteListItem> loadForTables(DatabaseHost databaseHost, List<QueryTable> queryTables) {
-
-        if (tables == null) {
-            
-            databaseTablesForHost(databaseHost);
-        }
-        
-        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-
-        String catalog = defaultCatalogForHost(databaseHost);
-        String schema = defaultSchemaForHost(databaseHost);
-        
-        for (QueryTable table : queryTables) {
-            
-            String _catalog = catalog;
-            String _schema = schema;
-            
-            if (table.hasCatalogOrSchemaPrefix()) {
-                
-                _catalog = table.getCatalogOrSchemaPrefix();
-                _schema= table.getCatalogOrSchemaPrefix();
-            }
-            
-            String tableName = databaseHeldTableName(table.getName());
-            List<String> columns = databaseHost.getColumnNames(_catalog, _schema, tableName);
-            
-            for (String columnName : columns) {
-                
-                list.add(new AutoCompleteListItem(
-                        columnName, 
-                        table.getName(),
-                        formatColumnName(table.getName(), columnName), 
-                        DATABASE_COLUMN_DESCRIPTION, 
-                        AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
-            }
-                
-        }
-        
-        return list;
-    }
-
     private String databaseHeldTableName(String name) {
 
         for (String table : tables) {
@@ -150,20 +110,32 @@ public class AutoCompleteSelectionsFactory {
     
     private List<AutoCompleteListItem> databaseTablesForHost(DatabaseHost databaseHost) {
 
+        tables = databaseObjectsForHost(databaseHost, "TABLE");
+        List<String> views = databaseObjectsForHost(databaseHost, "VIEW");
+        
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+        tablesToAutoCompleteListItems(list, tables, 
+                DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
+        tablesToAutoCompleteListItems(list, views,
+                DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
 
-        tables = databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
-                defaultSchemaForHost(databaseHost), "TABLE");
-
-        return tablesToAutoCompleteListItems(list, tables);
+        return list;
     }
 
-    private List<AutoCompleteListItem> tablesToAutoCompleteListItems(List<AutoCompleteListItem> list, List<String> tables) {
+    private List<String> databaseObjectsForHost(DatabaseHost databaseHost, String type) {
+        
+        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
+                defaultSchemaForHost(databaseHost), type);
+    }
+    
+    private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
+            List<AutoCompleteListItem> list, List<String> tables, 
+            String databaseObjectDescription, AutoCompleteListItemType autoCompleteListItemType) {
 
         for (String table : tables) {
 
             list.add(new AutoCompleteListItem(table, 
-                    table, DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE)); 
+                    table, databaseObjectDescription, autoCompleteListItemType)); 
         }
         
         return list;
@@ -281,6 +253,47 @@ public class AutoCompleteSelectionsFactory {
         
     }
 
+    @Deprecated
+    public List<AutoCompleteListItem> loadForTables(DatabaseHost databaseHost, List<QueryTable> queryTables) {
+
+        if (tables == null) {
+            
+            databaseTablesForHost(databaseHost);
+        }
+        
+        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+
+        String catalog = defaultCatalogForHost(databaseHost);
+        String schema = defaultSchemaForHost(databaseHost);
+        
+        for (QueryTable table : queryTables) {
+            
+            String _catalog = catalog;
+            String _schema = schema;
+            
+            if (table.hasCatalogOrSchemaPrefix()) {
+                
+                _catalog = table.getCatalogOrSchemaPrefix();
+                _schema= table.getCatalogOrSchemaPrefix();
+            }
+            
+            String tableName = databaseHeldTableName(table.getName());
+            List<String> columns = databaseHost.getColumnNames(_catalog, _schema, tableName);
+            
+            for (String columnName : columns) {
+                
+                list.add(new AutoCompleteListItem(
+                        columnName, 
+                        table.getName(),
+                        formatColumnName(table.getName(), columnName), 
+                        DATABASE_COLUMN_DESCRIPTION, 
+                        AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
+            }
+                
+        }
+        
+        return list;
+    }
 
 }
 

@@ -24,6 +24,7 @@ import java.awt.Component;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
@@ -38,14 +39,14 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
     private static final Icon databaseSpecificKeyword;
     private static final Icon databaseTable;
     private static final Icon databaseTableColumn;
-    
+    private static final ImageIcon databaseTableView;
     static {
-        
         sql92Keyword = GUIUtilities.loadIcon("Sql92.png", true);
         userDefinedKeyword = GUIUtilities.loadIcon("User16.png", true);
         databaseSpecificKeyword = GUIUtilities.loadIcon("DatabaseKeyword16.png", true);
         databaseTable = GUIUtilities.loadIcon("PlainTable16.png", true);
         databaseTableColumn = GUIUtilities.loadIcon("TableColumn16.png", true);
+        databaseTableView = GUIUtilities.loadIcon("TableView16.png", true);
     }
     
 
@@ -78,6 +79,10 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
                 setIcon(databaseTable);
                 break;
         
+            case DATABASE_VIEW:
+                setIcon(databaseTableView);
+                break;
+                
             case DATABASE_TABLE_COLUMN:
                 setIcon(databaseTableColumn);
                 break;

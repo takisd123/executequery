@@ -375,7 +375,12 @@ public class ApplicationLauncher {
 
     private String versionString() {
 
-        return "version " + System.getProperty("executequery.minor.version");
+        String minorVersion = System.getProperty("executequery.minor.version");
+        if (minorVersion.endsWith(".0")) {
+            
+            minorVersion = minorVersion.substring(0, minorVersion.length() - 2);
+        }
+        return "version " + minorVersion;
     }
 
     private Color progressBarColour() {
