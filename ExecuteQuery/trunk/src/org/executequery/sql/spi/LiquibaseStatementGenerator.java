@@ -24,32 +24,36 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import liquibase.change.AddColumnChange;
-import liquibase.change.AddDefaultValueChange;
-import liquibase.change.AddForeignKeyConstraintChange;
-import liquibase.change.AddNotNullConstraintChange;
-import liquibase.change.AddPrimaryKeyChange;
-import liquibase.change.AddUniqueConstraintChange;
 import liquibase.change.Change;
 import liquibase.change.ColumnConfig;
 import liquibase.change.ConstraintsConfig;
-import liquibase.change.CreateTableChange;
-import liquibase.change.DropColumnChange;
-import liquibase.change.DropForeignKeyConstraintChange;
-import liquibase.change.DropPrimaryKeyChange;
-import liquibase.change.DropTableChange;
-import liquibase.change.DropUniqueConstraintChange;
-import liquibase.change.ModifyColumnChange;
-import liquibase.change.RenameColumnChange;
+import liquibase.change.core.AddColumnChange;
+import liquibase.change.core.AddDefaultValueChange;
+import liquibase.change.core.AddForeignKeyConstraintChange;
+import liquibase.change.core.AddNotNullConstraintChange;
+import liquibase.change.core.AddPrimaryKeyChange;
+import liquibase.change.core.AddUniqueConstraintChange;
+import liquibase.change.core.CreateTableChange;
+import liquibase.change.core.DropColumnChange;
+import liquibase.change.core.DropForeignKeyConstraintChange;
+import liquibase.change.core.DropPrimaryKeyChange;
+import liquibase.change.core.DropTableChange;
+import liquibase.change.core.DropUniqueConstraintChange;
+import liquibase.change.core.ModifyDataTypeChange;
+import liquibase.change.core.RenameColumnChange;
 import liquibase.database.Database;
-import liquibase.database.sql.SqlStatement;
-import liquibase.exception.StatementNotSupportedOnDatabaseException;
-import liquibase.exception.UnsupportedChangeException;
-import liquibase.log.LogFactory;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.DatabaseException;
+import liquibase.logging.LogFactory;
+import liquibase.sql.Sql;
+import liquibase.sqlgenerator.SqlGeneratorFactory;
+import liquibase.statement.SqlStatement;
 
 import org.executequery.ApplicationException;
 import org.executequery.databaseobjects.DatabaseColumn;
+import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
+import org.executequery.databaseobjects.DatabaseView;
 import org.executequery.databaseobjects.impl.ColumnConstraint;
 import org.executequery.databaseobjects.impl.DatabaseTableColumn;
 import org.executequery.log.Log;
@@ -62,7 +66,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     public String columnNameValueEscaped(DatabaseTableColumn tableColumn) {
 
         Database database = databaseFromName(
-                connectionFromTable(tableColumn.getTable()), tableColumn.getTable().getHost().getDatabaseProductName());
+                connectionFromObject(tableColumn.getTable()), tableColumn.getTable().getHost().getDatabaseProductName());
 
         return database.escapeColumnName(tableColumn.getSchemaName(),
                 tableColumn.getTable().getName(), tableColumn.getName());
@@ -81,9 +85,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     public String alterTable(String databaseName, DatabaseTable table) {
 
         StringBuilder sb = new StringBuilder();
-
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
-
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
         for (DatabaseColumn column : table.getColumns()) {
 
             sb.append(alterColumn(column, database));
@@ -109,10 +111,8 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         StringBuilder sb = new StringBuilder();
 
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
-
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
         sb.append(addPrimaryKeys(primaryKeysForTable(table), database));
-
         for (ColumnConstraint constraint : table.getConstraints()) {
 
             if (!constraint.isPrimaryKey()) {
@@ -129,8 +129,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         StringBuilder sb = new StringBuilder();
         List<ColumnConstraint> uniqueKeys = table.getUniqueKeys();
 
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
-
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
         for (ColumnConstraint constraint : uniqueKeys) {
 
             AddUniqueConstraintChange change = new AddUniqueConstraintChange();
@@ -149,8 +148,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         StringBuilder sb = new StringBuilder();
         List<ColumnConstraint> foreignKeys = table.getForeignKeys();
 
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
-
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
         for (ColumnConstraint constraint : foreignKeys) {
 
             AddForeignKeyConstraintChange change = new AddForeignKeyConstraintChange();
@@ -179,7 +177,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         primaryKeyChange.setTableName(table.getName());
 
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0, n = primaryKeys.size(); i < n; i++) {
 
             ColumnConstraint columnConstraint = primaryKeys.get(i);
@@ -194,18 +191,17 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         }
 
         primaryKeyChange.setColumnNames(sb.toString());
-
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
 
         return generateStatements(primaryKeyChange, database);
     }
 
     public String createTableWithConstraints(String databaseName, DatabaseTable table) {
 
-        CreateTableChange tableChange = createTableChange(table);
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
+        CreateTableChange tableChange = createTableChange(table, database);
 
         List<DatabaseColumn> columns = table.getColumns();
-
         for (DatabaseColumn column : columns) {
 
             if (column.hasConstraints()) {
@@ -245,30 +241,41 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         }
 
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
-
         return generateStatements(tableChange, database);
     }
 
     public String columnDescription(DatabaseTableColumn tableColumn) {
         
         DatabaseTable table = (DatabaseTable) tableColumn.getParent();
-        Database database = databaseFromName(
-                connectionFromTable(table), table.getHost().getDatabaseProductName());
-        ColumnConfig columnConfig = createColumn(tableColumn);
+        Database database = databaseFromName(connectionFromObject(table), table.getHost().getDatabaseProductName());
+
+        ColumnConfig columnConfig = createColumn(tableColumn, database);
         
         StringBuilder sb = new StringBuilder();
-//        sb.append(database.escapeColumnName(tableColumn.getSchemaName(), table.getName(), tableColumn.getName()));
         sb.append(tableColumn.getName());
-        sb.append(" [ ").append(database.getColumnType(columnConfig.getType(), false)).append(" ]");
+//        sb.append(" [ ").append(database.getColumnType(columnConfig.getType(), false)).append(" ]");
+        sb.append(" [ ").append(columnConfig.getType()).append(" ]");
 
         return sb.toString();
     }
     
+    public String viewDefinition(String databaseName, DatabaseView view) {
+        
+        try {
+
+            Database database = databaseFromName(connectionFromObject(view), databaseName);
+            return database.getViewDefinition(view.getNamePrefix(), view.getName());
+
+        } catch (DatabaseException e) {
+
+            return "";
+        }
+    }
+    
     public String createTable(String databaseName, DatabaseTable table) {
 
-        CreateTableChange tableChange = createTableChange(table);
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
+        Database database = databaseFromName(connectionFromObject(table), databaseName);        
+        CreateTableChange tableChange = createTableChange(table, database);
 
         return generateStatements(tableChange, database);
     }
@@ -279,7 +286,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         DropTableChange tableChange = dropTableChange(table);
         tableChange.setCascadeConstraints(Boolean.valueOf(cascadeConstraints));
 
-        Database database = databaseFromName(connectionFromTable(table), databaseName);
+        Database database = databaseFromName(connectionFromObject(table), databaseName);
 
         return generateStatements(tableChange, database).trim();
     }
@@ -288,9 +295,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             CreateTableChange tableChange, DatabaseColumn column) {
 
         String name = column.getName();
-
         List<ColumnConfig> columns = tableChange.getColumns();
-
         for (ColumnConfig columnConfig : columns) {
 
             if (columnConfig.getName().equalsIgnoreCase(name)) {
@@ -303,9 +308,9 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return null;
     }
 
-    private Connection connectionFromTable(DatabaseTable table) {
+    private Connection connectionFromObject(DatabaseObject databaseObject) {
 
-        return table.getHost().getConnection();
+        return databaseObject.getHost().getConnection();
     }
 
     private DropTableChange dropTableChange(DatabaseTable table) {
@@ -316,7 +321,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return tableChange;
     }
 
-    private CreateTableChange createTableChange(DatabaseTable table) {
+    private CreateTableChange createTableChange(DatabaseTable table, Database database) {
 
         CreateTableChange tableChange = new CreateTableChange();
         //tableChange.setSchemaName(table.getSchemaName());
@@ -324,7 +329,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         for (DatabaseColumn column : table.getColumns()) {
 
-            tableChange.addColumn(createColumn(column));
+            tableChange.addColumn(createColumn(column, database));
         }
 
         return tableChange;
@@ -333,7 +338,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private String addConstraint(ColumnConstraint constraint, Database database) {
 
         StringBuilder sb = new StringBuilder();
-
         if (constraint.isPrimaryKey()) {
 
             sb.append(addPrimaryKey(constraint, database));
@@ -429,7 +433,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private String dropConstraint(ColumnConstraint constraint, Database database) {
 
         StringBuilder sb = new StringBuilder();
-
         if (constraint.isPrimaryKey()) {
 
             sb.append(dropPrimaryKey(constraint, database));
@@ -477,11 +480,9 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     private String alterColumn(DatabaseColumn column, Database database) {
 
-        DatabaseTableColumn tableColumn = (DatabaseTableColumn)column;
-
-        StringBuilder sb = new StringBuilder();
-
         boolean isNewOrDeleted = true;
+        StringBuilder sb = new StringBuilder();
+        DatabaseTableColumn tableColumn = (DatabaseTableColumn)column;
 
         if (tableColumn.isNewColumn()) {
 
@@ -527,7 +528,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private List<ColumnConstraint> primaryKeysForTable(DatabaseTable table) {
 
         List<ColumnConstraint> primaryKeys = new ArrayList<ColumnConstraint>();
-
         for (ColumnConstraint constraint : table.getConstraints()) {
 
             if (constraint.isPrimaryKey()) {
@@ -566,11 +566,12 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     private String modifyColumnChange(DatabaseTableColumn tableColumn, Database database) {
 
-        ModifyColumnChange columnChange = new ModifyColumnChange();
+        ModifyDataTypeChange columnChange = new ModifyDataTypeChange();
 
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
-        columnChange.addColumn(createColumn(tableColumn));
+        columnChange.setColumnName(tableColumn.getName());
+        columnChange.setNewDataType(tableColumn.getTypeName());
 
         return generateStatements(columnChange, database);
     }
@@ -581,7 +582,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
-        columnChange.addColumn(createColumn(tableColumn));
+        columnChange.addColumn(createColumn(tableColumn, database));
 
         return generateStatements(columnChange, database);
     }
@@ -601,7 +602,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         RenameColumnChange columnChange = new RenameColumnChange();
 
-        //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.setNewColumnName(tableColumn.getName());
         columnChange.setOldColumnName(tableColumn.getOriginalColumn().getName());
@@ -613,33 +613,24 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
     private String generateStatements(Change change, Database database) {
 
         StringBuilder sb = new StringBuilder();
+        SqlStatement[] statements = change.generateStatements(database);
+        for (SqlStatement statement : statements) {
 
-        try {
-
-            SqlStatement[] statements = change.generateStatements(database);
-
-            for (SqlStatement statement : statements) {
-
-                sb.append(statement.getSqlStatement(database));
-                sb.append(END_DELIMITER);
-                sb.append("\n");
+            Sql[] generatedSql = SqlGeneratorFactory.getInstance().generateSql(statement, database);
+            for (Sql sql : generatedSql) {
+                
+                sb.append(sql.toSql());
+                sb.append(sql.getEndDelimiter());
             }
-
-        } catch (UnsupportedChangeException e) {
-
-            handleAndRethrowException(e);
-
-        } catch (StatementNotSupportedOnDatabaseException e) {
-
-            handleAndRethrowException(e);
+            sb.append("\n");
         }
 
         return sb.toString();
     }
 
-    private ColumnConfig createColumn(DatabaseColumn column) {
+    private ColumnConfig createColumn(DatabaseColumn column, Database database) {
 
-        ColumnConfig columnConfig = new EqColumnConfig();
+        ColumnConfig columnConfig = new EqColumnConfig(column.getTypeName(), database);
 
         columnConfig.setName(column.getName() == null ? "" : column.getName());
         columnConfig.setType(column.getFormattedDataType());
@@ -660,7 +651,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         LogFactory.setLoggingLevel("warning");
 
         Database database = databaseFactory().createDatabase(databaseName);
-        database.setConnection(connection);
+        database.setConnection(new JdbcConnection(connection));
 
         return database;
     }
@@ -675,6 +666,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return databaseFactory;
     }
 
+    @SuppressWarnings("unused")
     private void handleAndRethrowException(Throwable e) {
 
         if (Log.isDebugEnabled()) {

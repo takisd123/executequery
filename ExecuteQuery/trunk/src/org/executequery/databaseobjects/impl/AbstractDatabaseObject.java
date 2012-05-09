@@ -21,6 +21,7 @@
 package org.executequery.databaseobjects.impl;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -317,7 +318,11 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                 dataRowCount = rs.getInt(1);
             }
 
-            connection.commit();
+            if (!connection.getAutoCommit()) {
+                
+                connection.commit();
+            }
+
             return dataRowCount;
 
         } catch (SQLException e) {
@@ -362,6 +367,21 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             }
 
             throw e;
+        }
+    }
+    
+    public ResultSet getMetaData() throws DataSourceException {
+        try {
+            
+            DatabaseHost databaseHost = getHost();
+            String _catalog = databaseHost.getCatalogNameForQueries(getCatalogName());
+            String _schema = databaseHost.getSchemaNameForQueries(getSchemaName());
+
+            DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
+            return dmd.getColumns(_catalog, _schema, getName(), null);
+        
+        } catch (SQLException e) {
+            throw new DataSourceException(e);
         }
     }
     
@@ -481,6 +501,16 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
             logThrowable(e);
             return "\"";
         }
+    }
+
+    public boolean hasSQLDefinition() {
+
+        return false;
+    }
+
+    public String getCreateSQLText() throws DataSourceException {
+
+        return "";
     }
 
 }

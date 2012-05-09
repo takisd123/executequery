@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.executequery.databaseobjects.DatabaseColumn;
+import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -324,20 +325,12 @@ public class DefaultDatabaseColumn extends AbstractDatabaseObjectElement
 
         ResultSet rs = null;
         try {
-            String _catalog = getCatalogName();
-            String _schema = getSchemaName();
-            DatabaseMetaData dmd = ((DatabaseObject)_parent).
-                    getHost().getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
             
+            DatabaseHost databaseHost = ((DatabaseObject)_parent).getHost();
+            String _catalog = databaseHost.getCatalogNameForQueries(getCatalogName());
+            String _schema = databaseHost.getSchemaNameForQueries(getSchemaName());
+
+            DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
             rs = dmd.getColumns(_catalog, _schema, getParentsName(), getName());
 
             ResultSetMetaData rsmd = rs.getMetaData();

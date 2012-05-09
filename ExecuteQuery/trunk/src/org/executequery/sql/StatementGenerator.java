@@ -21,6 +21,7 @@
 package org.executequery.sql;
 
 import org.executequery.databaseobjects.DatabaseTable;
+import org.executequery.databaseobjects.DatabaseView;
 import org.executequery.databaseobjects.impl.DatabaseTableColumn;
 
 public interface StatementGenerator {
@@ -48,6 +49,8 @@ public interface StatementGenerator {
     String createPrimaryKeyChange(String databaseName, DatabaseTable table);
 
     String columnDescription(DatabaseTableColumn column);
+
+    String viewDefinition(String databaseName, DatabaseView view);
     
 }
 

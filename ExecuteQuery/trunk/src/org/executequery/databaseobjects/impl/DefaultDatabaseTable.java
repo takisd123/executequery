@@ -37,7 +37,6 @@ import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.sql.SQLFormatter;
 import org.executequery.sql.StatementGenerator;
-import org.executequery.sql.StatementGeneratorFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -236,20 +235,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                     }
 
                     // reload and define the constraints
-                    String _catalog = getCatalogName();
-                    String _schema = getSchemaName();
+                    String _catalog = host.getCatalogNameForQueries(getCatalogName());
+                    String _schema = host.getSchemaNameForQueries(getSchemaName());
                     DatabaseMetaData dmd = host.getDatabaseMetaData();
-
-                    // check that the db supports catalog and schema names
-                    if (!dmd.supportsCatalogsInTableDefinitions()) {
-
-                        _catalog = null;
-                    }
-
-                    if (!dmd.supportsSchemasInTableDefinitions()) {
-
-                        _schema = null;
-                    }
 
                     rs = dmd.getPrimaryKeys(_catalog, _schema, getName());
                     while (rs.next()) {
@@ -437,24 +425,8 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      * @return the column meta data result set
      */
     public ResultSet getColumnMetaData() throws DataSourceException {
-        try {
-            String _catalog = getCatalogName();
-            String _schema = getSchemaName();
-            DatabaseMetaData dmd = getHost().getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
-            return dmd.getColumns(_catalog, _schema, getName(), null);
-        }
-        catch (SQLException e) {
-            throw new DataSourceException(e);
-        }
+        
+        return getMetaData();
     }
 
     /**
@@ -781,7 +753,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public String getCreateSQLText(int style) throws DataSourceException {
 
         StatementGenerator statementGenerator = createStatementGenerator();
-
         String databaseProductName = databaseProductName();
 
         if (style == STYLE_CONSTRAINTS_DEFAULT) {
@@ -815,16 +786,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     private String formatSqlText(String text) {
 
         return new SQLFormatter(text).format();
-    }
-
-    private String databaseProductName() {
-
-        return getHost().getDatabaseProductName();
-    }
-
-    private StatementGenerator createStatementGenerator() {
-
-        return StatementGeneratorFactory.create();
     }
 
     /**
@@ -1105,6 +1066,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return null;
     }
 
+    @Override
+    public boolean hasSQLDefinition() {
+
+        return true;
+    }
+    
 }
 
 

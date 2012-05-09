@@ -194,13 +194,10 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         }
 
         ResultSet rs = null;
-
         try {
 
             catalogs = new ArrayList<DatabaseCatalog>();
-
             rs = getDatabaseMetaData().getCatalogs();
-
             while (rs.next()) {
 
                 catalogs.add(new DefaultDatabaseCatalog(this, rs.getString(1)));
@@ -274,18 +271,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
         ResultSet rs = null;
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
 
             String tableName = null;
             String typeName = null;
@@ -381,20 +369,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         ResultSet rs = null;
         try {
 
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-
-                _schema = null;
-            }
 
             List<DatabaseColumn> columns = new ArrayList<DatabaseColumn>();
 
@@ -433,6 +410,38 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
     }
 
+    public String getCatalogNameForQueries(String catalogName) {
+        
+        DatabaseMetaData dmd = getDatabaseMetaData();
+        try {
+            if (!dmd.supportsCatalogsInTableDefinitions()) {
+
+                return null;
+            }
+        } catch (SQLException e) {
+
+            throw new DataSourceException(e);
+        }
+
+        return catalogName;
+    }
+    
+    public String getSchemaNameForQueries(String schemaName) {
+        
+        DatabaseMetaData dmd = getDatabaseMetaData();
+        try {
+            if (!dmd.supportsSchemasInTableDefinitions()) {
+                
+                return null;
+            }
+        } catch (SQLException e) {
+            
+            throw new DataSourceException(e);
+        }
+        
+        return schemaName;
+    }
+    
     /**
      * Returns the table names hosted by this host of the specified type and
      * belonging to the specified catalog and schema.
@@ -447,21 +456,11 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
         ResultSet rs = null;
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
 
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
-
             String typeName = null;
-
             List<String> tables = new ArrayList<String>();
 
             String[] types = null;
@@ -471,7 +470,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             }
 
             rs = dmd.getTables(_catalog, _schema, null, types);
-
             while (rs.next()) {
 
                 typeName = rs.getString(4);
@@ -518,18 +516,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         List<String> columns = new ArrayList<String>();
 
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
 
             // retrieve the base column info
             rs = dmd.getColumns(_catalog, _schema, table, null);
@@ -573,19 +562,10 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         List<ColumnInformation> columns = new ArrayList<ColumnInformation>();
 
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
 
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
-            
             // retrieve the base column info
             rs = dmd.getColumns(_catalog, _schema, table, null);
             while (rs.next()) {
@@ -635,18 +615,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         List<DatabaseColumn> columns = new ArrayList<DatabaseColumn>();
 
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
 
             // retrieve the base column info
             rs = dmd.getColumns(_catalog, _schema, table, null);
@@ -758,18 +729,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
         ResultSet rs = null;
         try {
-            String _catalog = catalog;
-            String _schema = schema;
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
-
-            // check that the db supports catalog and schema names
-            if (!dmd.supportsCatalogsInTableDefinitions()) {
-                _catalog = null;
-            }
-
-            if (!dmd.supportsSchemasInTableDefinitions()) {
-                _schema = null;
-            }
 
             List<TablePrivilege> privs = new ArrayList<TablePrivilege>();
             rs = dmd.getTablePrivileges(_catalog, _schema, table);
