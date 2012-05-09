@@ -127,6 +127,12 @@ public interface DatabaseObject extends NamedObject {
 
     ResultSet getData(boolean rollbackOnError) throws DataSourceException;
 
+    boolean hasSQLDefinition();
+    
+    ResultSet getMetaData() throws DataSourceException;
+    
+    String getCreateSQLText() throws DataSourceException;
+    
 }
 
 

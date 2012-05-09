@@ -132,15 +132,24 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
                     // reset as editable tables for a default
                     // connection and meta type TABLE
                     
-                    List<NamedObject> _children = 
-                            new ArrayList<NamedObject>(children.size());
-    
+                    List<NamedObject> _children = new ArrayList<NamedObject>(children.size());
                     for (NamedObject i : children) {
     
                         _children.add(new DefaultDatabaseTable((DatabaseObject)i));
                     }
                     
                     children = _children;
+                
+                } else if (type == VIEW) {
+                    
+                    List<NamedObject> _children = new ArrayList<NamedObject>(children.size());
+                    for (NamedObject i : children) {
+    
+                        _children.add(new DefaultDatabaseView((DatabaseObject)i));
+                    }
+                    
+                    children = _children;
+                    
                 }
 
             }

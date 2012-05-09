@@ -20,19 +20,19 @@
 
 package org.executequery.sql.spi;
 
-import liquibase.database.DB2Database;
 import liquibase.database.Database;
-import liquibase.database.DerbyDatabase;
-import liquibase.database.FirebirdDatabase;
-import liquibase.database.H2Database;
-import liquibase.database.HsqlDatabase;
-import liquibase.database.MSSQLDatabase;
-import liquibase.database.MaxDBDatabase;
-import liquibase.database.MySQLDatabase;
-import liquibase.database.OracleDatabase;
-import liquibase.database.PostgresDatabase;
-import liquibase.database.SybaseDatabase;
-import liquibase.database.UnsupportedDatabase;
+import liquibase.database.core.DB2Database;
+import liquibase.database.core.DerbyDatabase;
+import liquibase.database.core.FirebirdDatabase;
+import liquibase.database.core.H2Database;
+import liquibase.database.core.HsqlDatabase;
+import liquibase.database.core.MSSQLDatabase;
+import liquibase.database.core.MaxDBDatabase;
+import liquibase.database.core.MySQLDatabase;
+import liquibase.database.core.OracleDatabase;
+import liquibase.database.core.PostgresDatabase;
+import liquibase.database.core.SybaseDatabase;
+import liquibase.database.core.UnsupportedDatabase;
 
 class LiquibaseDatabaseFactory {
 

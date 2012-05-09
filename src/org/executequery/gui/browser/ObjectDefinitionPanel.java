@@ -21,33 +21,40 @@
 package org.executequery.gui.browser;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.awt.print.Printable;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
-
 import javax.swing.event.ChangeListener;
+
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.TablePrivilege;
+import org.executequery.event.ApplicationEvent;
+import org.executequery.event.DefaultKeywordEvent;
+import org.executequery.event.KeywordEvent;
+import org.executequery.event.KeywordListener;
 import org.executequery.gui.databaseobjects.DefaultDatabaseObjectTable;
+import org.executequery.gui.forms.AbstractFormObjectViewPanel;
+import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.print.TablePrinter;
+import org.executequery.sql.SQLFormatter;
+import org.underworldlabs.Constants;
+import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.util.MiscUtils;
-import org.executequery.gui.forms.AbstractFormObjectViewPanel;
-import org.underworldlabs.jdbc.DataSourceException;
 
 /**
  *
@@ -56,7 +63,8 @@ import org.underworldlabs.jdbc.DataSourceException;
  * @date     $Date$
  */
 public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
-                                   implements ChangeListener {
+                                   implements ChangeListener,
+                                              KeywordListener {
     
     public static final String NAME = "ObjectDefinitionPanel";
     
@@ -68,6 +76,8 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
     
     /** Contains the view name */
     private DisabledField tableNameField;
+    
+    private DatabaseObjectMetaDataPanel metaDataPanel;
     
     /** table description base panel */
     private JPanel tableDescriptionPanel;
@@ -99,6 +109,10 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
     
     /** the browser's control object */
     private BrowserController controller;
+
+    private boolean metaDataLoaded;
+
+    private SimpleSqlTextPanel sqlTextPanel;
 
     public ObjectDefinitionPanel(BrowserController controller) {
         super();
@@ -151,10 +165,17 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         tableDataPanel = new TableDataTab();
         tablePrivilegePanel = new TablePrivilegeTab();
         
+        metaDataPanel = new DatabaseObjectMetaDataPanel();
+        
+        sqlTextPanel = new SimpleSqlTextPanel();
+        sqlTextPanel.setSQLTextBackground(Color.WHITE);
+        
         tabPane = new JTabbedPane();
         tabPane.add("Description", descBottomPanel);
         tabPane.add("Privileges", tablePrivilegePanel);
         tabPane.add("Data", tableDataPanel);
+        tabPane.add("SQL", sqlTextPanel);
+        tabPane.add("Meta Data", metaDataPanel);
         
         // add the tab pane
         gbc.gridy = 2;
@@ -188,7 +209,6 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
     public Printable getPrintable() {
         
         int tabIndex = tabPane.getSelectedIndex();
-        
         switch (tabIndex) {
             
             case 0:
@@ -204,6 +224,14 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
                 return new TablePrinter(tableDataPanel.getTable(),
                                         "Table Data: " + currentObjectView.getName());
                 
+            case 3:
+                return new TablePrinter(tableDataPanel.getTable(),
+                        "Table Data: " + currentObjectView.getName());
+
+            case 4:
+                return new TablePrinter(metaDataPanel.getTable(),
+                        "Meta Data: " + currentObjectView.getName());
+                
             default:
                 return null;
                 
@@ -211,10 +239,27 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         
     }
     
+    /**
+     * Notification of a new keyword added to the list.
+     */
+    public void keywordsAdded(KeywordEvent e) {
+        sqlTextPanel.setSQLKeywords(true);
+    }
+
+    /**
+     * Notification of a keyword removed from the list.
+     */
+    public void keywordsRemoved(KeywordEvent e) {
+        sqlTextPanel.setSQLKeywords(true);
+    }
+
+    public boolean canHandleEvent(ApplicationEvent event) {
+        return (event instanceof DefaultKeywordEvent);
+    }
+    
     public void stateChanged(ChangeEvent e) {
 
         int selectedIndex = tabPane.getSelectedIndex();
-
         if (selectedIndex == 2) {
 
             if (!dataLoaded) {
@@ -229,11 +274,36 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
                 loadPrivileges();
             }
 
+        } else if (selectedIndex == 4) {
+            
+            if (!metaDataLoaded) {
+                
+                loadMetaData();
+            }
+            
         } else if (tableDataPanel.isExecuting()) {
           
             tableDataPanel.cancelStatement();
         }
 
+    }
+
+    private void loadMetaData() {
+
+        try {
+
+            metaDataPanel.setData(currentObjectView.getMetaData());
+
+        } catch (DataSourceException e) {
+          
+            controller.handleException(e);
+            metaDataPanel.setData(null);
+
+        } finally {
+            
+            metaDataLoaded = true;
+        }
+        
     }
 
     private void loadData() {
@@ -291,7 +361,10 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         currentObjectView = object;
         privilegesLoaded = false;
         dataLoaded = false;
+        metaDataLoaded = false;
 
+        sqlTextPanel.setSQLText(Constants.EMPTY);
+        
         // header values
         setHeaderText("Database " + MiscUtils.firstLetterToUpper(object.getMetaDataKey()));
         tableNameField.setText(object.getName());
@@ -325,6 +398,8 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
                 descBottomPanel.add(tableDescriptionPanel, BorderLayout.CENTER);
             }
 
+            sqlTextPanel.setSQLText(new SQLFormatter(currentObjectView.getCreateSQLText()).format());
+            
         } catch (DataSourceException e) {
 
             controller.handleException(e);

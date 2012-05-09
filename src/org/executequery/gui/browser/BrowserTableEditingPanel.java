@@ -64,7 +64,6 @@ import org.executequery.gui.databaseobjects.EditableColumnConstraintTable;
 import org.executequery.gui.databaseobjects.EditableDatabaseTable;
 import org.executequery.gui.databaseobjects.TableColumnIndexTableModel;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
-import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.gui.table.TableConstraintFunction;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
@@ -145,11 +144,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     /** the browser's control object */
     private BrowserController controller;
 
-    /** the meta data table */
-    private JTable metaDataTable;
-    
-    /** the meta data model */
-    private ResultSetTableModel metaDataModel;
+    private DatabaseObjectMetaDataPanel metaDataPanel;
     
     /** the last focused editor */
     private TextEditor lastFocusEditor;
@@ -179,14 +174,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         indexesPanel.add(new JScrollPane(columnIndexTable), BorderLayout.CENTER);
 
         // table meta data table
-        metaDataModel = new ResultSetTableModel();
-        metaDataTable = new DefaultTable(metaDataModel);
-        metaDataTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
-        // table meta data panel
-        JPanel metaDataPanel = new JPanel(new BorderLayout());
-        metaDataPanel.setBorder(BorderFactory.createTitledBorder("Table Column Meta Data"));
-        metaDataPanel.add(new JScrollPane(metaDataTable), BorderLayout.CENTER);
+        metaDataPanel = new DatabaseObjectMetaDataPanel();
         
         // table data panel
         tableDataPanel = new TableDataTab();
@@ -453,7 +441,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                                         "Table Data: " + table.getName());
 
             case 7:
-                return new TablePrinter(metaDataTable,
+                return new TablePrinter(metaDataPanel.getTable(),
                                         "Table Meta Data: " + table.getName());
 
             default:
@@ -603,11 +591,12 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         try {
 
-            metaDataModel.createTable(table.getColumnMetaData());
+            metaDataPanel.setData(table.getColumnMetaData());
+
         } catch (DataSourceException e) {
           
             controller.handleException(e);
-            metaDataModel.createTable(null);
+            metaDataPanel.setData(null);
         }
     }
 

@@ -22,15 +22,36 @@ package org.executequery.sql.spi;
 
 import liquibase.change.ColumnConfig;
 import liquibase.database.Database;
-import liquibase.database.MaxDBDatabase;
-import liquibase.database.MySQLDatabase;
+import liquibase.database.core.MaxDBDatabase;
+import liquibase.database.core.MySQLDatabase;
+import liquibase.database.structure.type.DataType;
+import liquibase.database.typeconversion.TypeConverterFactory;
 
 class EqColumnConfig extends ColumnConfig {
 
-    public String getDefaultColumnValue(Database database) {
+    private final Database database;
+    private final String typeName;
 
-        String columnDefaultValue = getDefaultValue();
+    public EqColumnConfig(String typeName, Database database) {
+        this.typeName = typeName;
+        this.database = database;
+    }
 
+    @Override
+    public String getType() {
+     
+        DataType dataType = TypeConverterFactory.getInstance().findTypeConverter(database).getDataType(typeName, isAutoIncrement());
+        if (dataType.getMaxParameters() < 1) {
+
+            return dataType.getDataTypeName();
+        }
+        
+        return super.getType();
+    }
+    
+    public String getDefaultValue() {
+
+        String columnDefaultValue = super.getDefaultValue();
         if (columnDefaultValue != null) {
 
             if ("null".equalsIgnoreCase(columnDefaultValue)) {
@@ -54,7 +75,7 @@ class EqColumnConfig extends ColumnConfig {
             return columnDefaultValue;
         }
 
-        return super.getDefaultColumnValue(database);
+        return super.getDefaultValue();
     }
 
     private boolean shouldQuoteDefaultValue(Database database) {

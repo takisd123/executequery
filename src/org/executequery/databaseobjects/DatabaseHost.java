@@ -269,6 +269,10 @@ public interface DatabaseHost extends NamedObject {
 
     List<ColumnInformation> getColumnInformation(String catalog, String schema,String table) throws DataSourceException;
 
+    String getCatalogNameForQueries(String catalogName);
+
+    String getSchemaNameForQueries(String schemaName);
+
 }
 
 

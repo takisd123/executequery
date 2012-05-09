@@ -25,6 +25,8 @@ import java.util.List;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.sql.StatementGenerator;
+import org.executequery.sql.StatementGeneratorFactory;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.util.MiscUtils;
 
@@ -148,6 +150,14 @@ public class DefaultDatabaseObject extends AbstractDatabaseObject {
         return sb.toString();
     }
 
+    protected String databaseProductName() {
+
+        return getHost().getDatabaseProductName();
+    }
+
+    protected StatementGenerator createStatementGenerator() {
+
+        return StatementGeneratorFactory.create();
+    }
+    
 }
-
-

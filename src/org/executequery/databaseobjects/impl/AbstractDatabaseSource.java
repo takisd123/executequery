@@ -64,7 +64,6 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
         name = name.toUpperCase();
 
         List<DatabaseMetaTag> _metaObjects = getMetaObjects();
-
         for (DatabaseMetaTag object : _metaObjects) {
 
             if (name.equals(object.getName().toUpperCase())) {
@@ -118,7 +117,6 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
         }
 
         metaObjects = getHost().getMetaObjects(getCatalog(), getSchema());
-
         return metaObjects;
     }
 
