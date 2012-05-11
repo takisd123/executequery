@@ -362,7 +362,7 @@ public class PropertiesKeyShortcuts extends PropertiesBasePanel
 	class ShortcutInputField extends JTextField {
 
         private int keyCode;
-        private StringBuffer keyStrokeText;
+        private StringBuilder keyStrokeText;
 
         public void reset() {
             if (keyStrokeText != null) {
@@ -385,12 +385,12 @@ public class PropertiesKeyShortcuts extends PropertiesBasePanel
                 }
                 
                 keyCode = _keyCode;
-                StringBuffer keyString = new StringBuffer(getText());
+                StringBuilder keyString = new StringBuilder(getText());
                 String modifiers = KeyEvent.getKeyText(evt.getKeyCode());
                 boolean nullModifiers = MiscUtils.isNull(modifiers);
 
                 if (keyStrokeText == null) {
-                    keyStrokeText = new StringBuffer();
+                    keyStrokeText = new StringBuilder();
                 }
 
                 if (getDocument().getLength() != 0) {

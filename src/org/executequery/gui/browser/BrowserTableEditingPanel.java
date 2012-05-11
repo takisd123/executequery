@@ -177,7 +177,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         metaDataPanel = new DatabaseObjectMetaDataPanel();
         
         // table data panel
-        tableDataPanel = new TableDataTab();
+        tableDataPanel = new TableDataTab(false);
         
         // table privileges panel
         tablePrivilegePanel = new TablePrivilegeTab();
@@ -314,15 +314,14 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         
         // set up and add the focus listener for the tables
         FocusListener tableFocusListener = new FocusListener() {
-            public void focusGained(FocusEvent e) {
-                focusTable = (JTable)e.getSource(); }
             public void focusLost(FocusEvent e) {}
+            public void focusGained(FocusEvent e) {focusTable = (JTable)e.getSource();}
         };
         descriptionTable.addFocusListener(tableFocusListener);
         //columnDataTable.addTableFocusListener(tableFocusListener);
         constraintsTable.addFocusListener(tableFocusListener);
 
-        sbTemp = new StringBuffer(100);        
+        sbTemp = new StringBuffer(100);
 
         setContentPanel(base);
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseTable24.png"));

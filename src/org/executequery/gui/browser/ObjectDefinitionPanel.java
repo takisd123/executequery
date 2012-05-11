@@ -162,7 +162,7 @@ public class ObjectDefinitionPanel extends AbstractFormObjectViewPanel
         descBottomPanel = new JPanel(new BorderLayout());
         descBottomPanel.setBorder(BorderFactory.createTitledBorder("Columns"));
         
-        tableDataPanel = new TableDataTab();
+        tableDataPanel = new TableDataTab(true);
         tablePrivilegePanel = new TablePrivilegeTab();
         
         metaDataPanel = new DatabaseObjectMetaDataPanel();

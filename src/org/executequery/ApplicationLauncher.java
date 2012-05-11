@@ -258,6 +258,7 @@ public class ApplicationLauncher {
                 Log.debug("Error loading look and feel", e);
             }
             loadDefaultLookAndFeel(loader);
+        
         }
 
     }

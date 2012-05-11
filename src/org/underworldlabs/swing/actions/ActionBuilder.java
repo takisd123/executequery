@@ -39,6 +39,7 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -288,17 +289,27 @@ public final class ActionBuilder {
                 if (!MiscUtils.isNull(value)) {
                     actionCommand.putValue(Action.SMALL_ICON, loadIcon(value));
                 }
-                
-                value = attrs.getValue(ACCEL_KEY);
-                if (!MiscUtils.isNull(value)) {
-                    actionCommand.putValue(Action.ACCELERATOR_KEY, 
-                                           KeyStroke.getKeyStroke(value));
-                }
-                
+
                 value = attrs.getValue(ACCEL_EDITABLE);
                 if (!MiscUtils.isNull(value)) {
                     actionCommand.setAcceleratorEditable(
                             Boolean.valueOf(value).booleanValue());
+                }
+
+                value = attrs.getValue(ACCEL_KEY);
+                if (!MiscUtils.isNull(value)) {
+                    
+                    KeyStroke keyStroke = KeyStroke.getKeyStroke(value);
+                    if (UIUtils.isMac() && !actionCommand.isAcceleratorEditable()) {
+
+                        if (keyStroke.getModifiers() == (KeyEvent.CTRL_MASK|KeyEvent.CTRL_DOWN_MASK)) {
+
+                            KeyStroke.getKeyStroke(keyStroke.getKeyCode(), KeyEvent.META_DOWN_MASK);                            
+                        }
+                        
+                    }
+                    
+                    actionCommand.putValue(Action.ACCELERATOR_KEY, keyStroke);
                 }
 
                 actionCommand.putValue(Action.SHORT_DESCRIPTION, 
@@ -333,10 +344,3 @@ public final class ActionBuilder {
     } // ActionHandler
     
 }
-
-
-
-
-
-
-
