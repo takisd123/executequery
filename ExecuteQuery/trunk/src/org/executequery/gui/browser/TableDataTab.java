@@ -39,6 +39,7 @@ import org.executequery.gui.editor.ResultSetTablePopupMenu;
 import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.SystemProperties;
@@ -65,9 +66,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
     private GridBagConstraints errorLabelConstraints;
 
-    public TableDataTab() {
+    private GridBagConstraints rowCountPanelConstraints;
+
+    private DisabledField rowCountField;
+
+    private JPanel rowCountPanel;
+
+    private final boolean displayRowCount;
+
+    public TableDataTab(boolean displayRowCount) {
 
         super(new GridBagLayout());
+        this.displayRowCount = displayRowCount;
+
         try {
 
             init();
@@ -81,11 +92,22 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
     private void init() throws Exception {
 
+        if (displayRowCount) {
+            
+            initRowCountPanel();
+        }
+        
         scroller = new JScrollPane();
         scrollerConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                                 GridBagConstraints.SOUTHEAST,
                                 GridBagConstraints.BOTH,
                                 new Insets(5, 5, 5, 5), 0, 0);
+
+        rowCountPanelConstraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 0,
+                GridBagConstraints.SOUTHWEST,
+                GridBagConstraints.HORIZONTAL,
+                new Insets(0, 5, 5, 5), 0, 0);
+
         errorLabelConstraints = new GridBagConstraints(1, 1, 1, 1, 0, 1.0,
                 GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH,
@@ -134,19 +156,16 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
     private Object setTableResultsPanel(DatabaseObject databaseObject) {
 
         this.databaseObject = databaseObject;
-
         try {
 
             if (tableModel == null) {
 
-                tableModel = new ResultSetTableModel(
-                        SystemProperties.getIntProperty("user", "browser.max.records"));
+                tableModel = new ResultSetTableModel(SystemProperties.getIntProperty("user", "browser.max.records"));
                 tableModel.setHoldMetaData(false);
             }
 
             ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
-
             if (table == null) {
 
                 createResultSetTable();
@@ -161,10 +180,16 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
             scroller.getViewport().add(table);
             add(scroller, scrollerConstraints);
             
+            if (displayRowCount) {
+                
+                add(rowCountPanel, rowCountPanelConstraints);
+                rowCountField.setText(String.valueOf(sorter.getRowCount()));
+            }
+            
+            
         } catch (DataSourceException e) {
 
             addErrorLabel(e);
-            
 //            GUIUtilities.displayExceptionErrorDialog("Error retrieving table data.", e);
         }
 
@@ -192,10 +217,30 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
         table = new ResultSetTable();
         table.addMouseListener(new ResultSetTablePopupMenu(table, this));
-
         setTableProperties();
     }
 
+    private void initRowCountPanel() {
+
+        rowCountField = new DisabledField();
+        rowCountPanel = new JPanel(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        rowCountPanel.add(new JLabel("Data Row Count:"), gbc);
+        gbc.gridx = 2;
+        gbc.insets.bottom = 2;
+        gbc.insets.left = 5;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets.right = 0;
+        rowCountPanel.add(rowCountField, gbc);        
+    }
+
+    
     /**
      * Whether a SQL SELECT statement is currently being executed by this class.
      *

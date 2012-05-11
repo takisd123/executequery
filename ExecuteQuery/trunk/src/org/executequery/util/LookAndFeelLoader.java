@@ -20,15 +20,21 @@
 
 package org.executequery.util;
 
+import java.awt.event.KeyEvent;
+
+import javax.swing.InputMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
+import javax.swing.text.DefaultEditorKit;
 
 import org.executequery.ApplicationException;
 import org.executequery.Constants;
 import org.executequery.plaf.ExecuteQueryTheme;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.plaf.bumpygradient.BumpyGradientLookAndFeel;
 
 public final class LookAndFeelLoader {
@@ -97,9 +103,27 @@ public final class LookAndFeelLoader {
         } catch (IllegalAccessException e) {
 
             throw new ApplicationException(e);
-        }
+        
+        } 
 
+        applyMacAcceleratorSettings();
         return lookAndFeel;
+    }
+
+    private void applyMacAcceleratorSettings() {
+
+        if (UIUtils.isMac()) {
+
+            String[] textComponents = {"TextField", "TextPane", "TextArea", "EditorPane", "PasswordField"};
+            for (String textComponent : textComponents) {
+                
+                InputMap im = (InputMap) UIManager.get(textComponent + ".focusInputMap");
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+                im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+            }
+            
+        }
     }
 
     private void loadCustomLookAndFeel() {

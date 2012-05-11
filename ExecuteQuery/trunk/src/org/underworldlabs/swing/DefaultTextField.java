@@ -21,6 +21,7 @@
 package org.underworldlabs.swing;
 
 import java.awt.Insets;
+import java.awt.Toolkit;
 
 import javax.swing.JTextField;
 import javax.swing.text.Document;
