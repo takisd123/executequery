@@ -645,7 +645,7 @@ public class QueryEditorAutoCompletePopupProvider
 
         if (databaseConnection != null) {
 
-            databaseHost = databaseObjectFactory.createDatabaseHost(databaseConnection);
+            databaseHost = databaseObjectFactory.createDatabaseHost(databaseConnection);            
             scheduleListItemLoad();
         }
 

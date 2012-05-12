@@ -143,23 +143,27 @@ public class AutoCompleteSelectionsFactory {
 
     private String defaultSchemaForHost(DatabaseHost databaseHost) {
         
-        DatabaseSource schema = databaseHost.getDefaultSchema();
-        if (schema != null) {
-        
-            return schema.getName();
-        }
-        
+        if (databaseHost.isConnected()) {
+
+            DatabaseSource schema = databaseHost.getDefaultSchema();
+            if (schema != null) {
+            
+                return schema.getName();
+            }
+        }        
         return null;
     }
 
     private String defaultCatalogForHost(DatabaseHost databaseHost) {
 
-        DatabaseSource catalog = databaseHost.getDefaultCatalog();
-        if (catalog != null) {
+        if (databaseHost.isConnected()) {
         
-            return catalog.getName();
-        }
-        
+            DatabaseSource catalog = databaseHost.getDefaultCatalog();
+            if (catalog != null) {
+            
+                return catalog.getName();
+            }
+        }        
         return null;
     }
 
