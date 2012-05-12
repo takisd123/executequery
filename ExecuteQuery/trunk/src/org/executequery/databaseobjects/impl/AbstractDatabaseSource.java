@@ -152,9 +152,7 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
         if (_host != null) {
 
             String value = null;
-
             String myName = getName();
-
             if (isCatalog()) {
 
                 try {

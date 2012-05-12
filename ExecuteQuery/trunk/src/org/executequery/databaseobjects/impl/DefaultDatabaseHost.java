@@ -533,7 +533,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table, e);
+                Log.error("Error retrieving column data for table " + table 
+                        + " using connection " + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -566,6 +567,11 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             String _schema = getSchemaNameForQueries(schema);
             DatabaseMetaData dmd = getDatabaseMetaData();
 
+            if (!isConnected()) {
+
+                return new ArrayList<ColumnInformation>(0);
+            }
+
             // retrieve the base column info
             rs = dmd.getColumns(_catalog, _schema, table, null);
             while (rs.next()) {
@@ -587,7 +593,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table, e);
+                Log.error("Error retrieving column data for table " + table 
+                        + " using connection " + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -703,7 +710,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table, e);
+                Log.error("Error retrieving column data for table " + table 
+                        + " using connection " + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -784,7 +792,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         }
 
         DatabaseSource source = findByName(getSchemas(), name);
-
         if (source == null) {
 
             source = findByName(getCatalogs(), name);
@@ -798,7 +805,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         if (sources != null) {
 
             String _name = name.toUpperCase();
-
             for (int i = 0, n = sources.size(); i < n; i++) {
 
                 DatabaseSource source = (DatabaseSource) sources.get(i);
@@ -890,7 +896,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             DatabaseSchema schema) throws DataSourceException {
 
         List<DatabaseMetaTag> metaObjects = new ArrayList<DatabaseMetaTag>();
-
         createDefaultMetaObjects(catalog, schema, metaObjects);
 
         // load other types available not included in the defaults
