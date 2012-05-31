@@ -180,8 +180,7 @@ public class ApplicationLauncher {
             // set proxy server settings
             initProxySettings();
 
-            ActionBuilder.setActionMaps(
-                                frame.getRootPane(),
+            ActionBuilder.setActionMaps(frame.getRootPane(),
                                 SystemResources.getUserActionShortcuts());
 
             GUIUtilities.initPanels();

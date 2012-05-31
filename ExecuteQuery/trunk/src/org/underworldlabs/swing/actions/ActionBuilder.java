@@ -39,6 +39,7 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.executequery.log.Log;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
 import org.xml.sax.Attributes;
@@ -59,19 +60,18 @@ public final class ActionBuilder {
     
     public static final String INVALID_KEYSTROKE = "<undefined>";
     
-    private static final String ACTIONS = "actions";
     private static final String ACTION = "action";
     private static final String NAME = "name";
     private static final String ID = "id";
     private static final String MNEMONIC = "mnemonic";
     private static final String SMALL_ICON = "small-icon";
-    private static final String LARGE_ICON = "large-icon";
+//    private static final String LARGE_ICON = "large-icon";
     private static final String ACCEL_KEY = "accel-key";
     private static final String DESCRIPTION = "description";
     private static final String EXECUTE_CLASS = "execute-class";
     private static final String ACCEL_EDITABLE = "accel-editable";
     
-    private static Map<String, BaseActionCommand> actionsMap;
+    private static Map<String, Action> actionsMap;
     
     /**
      * Builds the action map for the specified action and input maps 
@@ -105,10 +105,9 @@ public final class ActionBuilder {
             return;
         }
 
-        for (Map.Entry<String, BaseActionCommand> entry : actionsMap.entrySet()) {
+        for (Map.Entry<String, Action> entry : actionsMap.entrySet()) {
             
-            BaseActionCommand command = entry.getValue();
-
+            BaseActionCommand command = (BaseActionCommand) entry.getValue();
             String actionId = command.getActionId();
             actionMap.put(actionId, command);
 
@@ -116,7 +115,6 @@ public final class ActionBuilder {
 
                 inputMap.put((KeyStroke)command.getValue(
                                             Action.ACCELERATOR_KEY), actionId);
-
             }
             
         }
@@ -175,7 +173,7 @@ public final class ActionBuilder {
     /**
      * Reloads the actions from the action conf file at the specified path.
      */
-    public static Map<String, BaseActionCommand> reloadActions(String path) {
+    public static Map<String, Action> reloadActions(String path) {
         return loadActions(path);
     }
     
@@ -197,7 +195,7 @@ public final class ActionBuilder {
      * Returns a map containing key/value pairs of all the currently
      * bound actions.
      */
-    public static Map getActions() {
+    public static Map<String, Action> getActions() {
         return actionsMap;
     }
     
@@ -208,7 +206,7 @@ public final class ActionBuilder {
         return (Action)actionsMap.get(key);
     }
     
-    private static Map<String, BaseActionCommand> loadActions(String path) {
+    private static Map<String, Action> loadActions(String path) {
         InputStream input = null;
         ClassLoader cl = ActionBuilder.class.getClassLoader();
         
@@ -244,13 +242,13 @@ public final class ActionBuilder {
     
     static class ActionHandler extends DefaultHandler {
         
-        private Map<String, BaseActionCommand> map;
+        private Map<String, Action> map;
         private CharArrayWriter contents;
         private BaseActionCommand actionCommand;
         
         public ActionHandler() {
             contents = new CharArrayWriter();
-            map = new HashMap<String, BaseActionCommand>();
+            map = new HashMap<String, Action>();
         }
         
         private ImageIcon loadIcon(String path) {
@@ -263,7 +261,7 @@ public final class ActionBuilder {
             return null;
         }
         
-        public Map<String, BaseActionCommand> getActions() {
+        public Map<String, Action> getActions() {
             return map;
         }
         
@@ -280,42 +278,52 @@ public final class ActionBuilder {
                 
                 value = attrs.getValue(MNEMONIC);
                 if (!MiscUtils.isNull(value)) {
-                    actionCommand.putValue(Action.MNEMONIC_KEY, 
-                                           Integer.valueOf(value.charAt(0)));
+
+                    actionCommand.putValue(Action.MNEMONIC_KEY, Integer.valueOf(value.charAt(0)));
                 }
 
                 //value = attrs.getValue(LARGE_ICON);
                 value = attrs.getValue(SMALL_ICON);
                 if (!MiscUtils.isNull(value)) {
+                    
                     actionCommand.putValue(Action.SMALL_ICON, loadIcon(value));
                 }
 
                 value = attrs.getValue(ACCEL_EDITABLE);
                 if (!MiscUtils.isNull(value)) {
-                    actionCommand.setAcceleratorEditable(
-                            Boolean.valueOf(value).booleanValue());
+
+                    actionCommand.setAcceleratorEditable(Boolean.valueOf(value).booleanValue());
                 }
 
                 value = attrs.getValue(ACCEL_KEY);
                 if (!MiscUtils.isNull(value)) {
-                    
-                    KeyStroke keyStroke = KeyStroke.getKeyStroke(value);
-                    if (UIUtils.isMac() && !actionCommand.isAcceleratorEditable()) {
 
-                        if (keyStroke.getModifiers() == (KeyEvent.CTRL_MASK|KeyEvent.CTRL_DOWN_MASK)) {
+                    if (UIUtils.isMac() && value.contains("control")) {
 
-                            KeyStroke.getKeyStroke(keyStroke.getKeyCode(), KeyEvent.META_DOWN_MASK);                            
+                        value = value.replaceAll("control", "meta");
+                        if (Log.isDebugEnabled()) {
+                        
+                            Log.debug("Modifying accelerator to MAC meta key for action - " + attrs.getValue(NAME));
                         }
+                            
+                        /*
+                        if (keyStroke.getModifiers() == (KeyEvent.CTRL_MASK|KeyEvent.CTRL_DOWN_MASK)) {
+                            if (Log.isDebugEnabled()) {
+                                Log.debug("Modifying accelerator to MAC meta key for action - " + attrs.getValue(NAME));
+                            }
+
+                            keyStroke = KeyStroke.getKeyStroke(keyStroke.getKeyCode(), KeyEvent.META_DOWN_MASK);                            
+                        }
+                        */
                         
                     }
                     
+                    KeyStroke keyStroke = KeyStroke.getKeyStroke(value);
                     actionCommand.putValue(Action.ACCELERATOR_KEY, keyStroke);
                 }
 
-                actionCommand.putValue(Action.SHORT_DESCRIPTION, 
-                                       attrs.getValue(DESCRIPTION));
-                actionCommand.setCommand(attrs.getValue(EXECUTE_CLASS));
-                
+                actionCommand.putValue(Action.SHORT_DESCRIPTION, attrs.getValue(DESCRIPTION));
+                actionCommand.setCommand(attrs.getValue(EXECUTE_CLASS));                
             } 
             
         }

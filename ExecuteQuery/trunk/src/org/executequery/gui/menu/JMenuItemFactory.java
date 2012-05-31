@@ -28,6 +28,7 @@ import javax.swing.KeyStroke;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.menu.MenuItemFactory;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
 
 public class JMenuItemFactory {
@@ -122,7 +123,12 @@ public class JMenuItemFactory {
                     menuItem.getId()).getValue(Action.ACCELERATOR_KEY);
         }
 
-        return KeyStroke.getKeyStroke(menuItem.getAcceleratorKey());
+        if (UIUtils.isMac() && accelKey.contains("control")) {
+
+            accelKey = accelKey.replaceAll("control", "meta");
+        }
+        
+        return KeyStroke.getKeyStroke(accelKey);
     }
 
 

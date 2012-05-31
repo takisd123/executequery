@@ -252,19 +252,14 @@ public class ManageShortcutsPanel extends DefaultActionButtonsPanel
         try {
 
             storeQueryForShortcut();
-
             List<EditorSQLShortcut> shortcuts = shortcutsFromList();
-
             if (!shortcutsValid(shortcuts)) {
 
-                GUIUtilities.displayErrorMessage(
-                        bundleString("invalidShortcuts"));
-
+                GUIUtilities.displayErrorMessage(bundleString("invalidShortcuts"));
                 return;
             }
 
             shortcuts().save(shortcuts);
-
             EventMediator.fireEvent(
                     new DefaultQueryShortcutEvent(this, QueryShortcutEvent.SHORTCUT_ADDED));
 
@@ -353,7 +348,6 @@ public class ManageShortcutsPanel extends DefaultActionButtonsPanel
     private List<EditorSQLShortcut> shortcutsFromList() {
 
         Object[] shortcuts = modelFromList().toArray();
-        
         List<EditorSQLShortcut> shortcutList = 
             new ArrayList<EditorSQLShortcut>(shortcuts.length);
         
