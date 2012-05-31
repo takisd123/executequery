@@ -40,19 +40,13 @@ import org.executequery.repository.LookAndFeelProperties;
 import org.executequery.GUIUtilities;
 import org.underworldlabs.util.DynamicLibraryLoader;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes","unchecked"})
 public class PluginLookAndFeelManager  {
     
     /** The look and feel to install */

@@ -73,8 +73,7 @@ abstract class AbstractXMLRepository<T> {
         return read(input, handler);
     }
 
-    protected final List<T> read(String filePath, 
-            DefaultHandler handler) throws RepositoryException {
+    protected final List<T> read(String filePath, DefaultHandler handler) throws RepositoryException {
         
         File file = new File(filePath);
 
