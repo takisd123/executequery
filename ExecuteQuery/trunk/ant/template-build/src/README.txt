@@ -1,14 +1,14 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 20 May 2012
+Date: 1 August 2012
 
-Summary of changes - v3.5.1 Build 5191:
+Summary of changes - v3.5.1 Build 5196:
 ----------------------------------------
 
 - Upgraded to Liquibase v2.0.5.
 - Added meta data and SQL tabs to database object views in the browser.
 - Added SQL text for database views in the browser tab.
-- Added imporved MAC meta key support for not editable commands - ie. cut/paste.
+- Added improved MAC meta key support for selected command shortcuts.
 - Added data row count field for database object views in the browser. 
 
 
@@ -341,4 +341,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-24 April 2012
+1 August 2012

@@ -32,7 +32,9 @@ import org.executequery.databasemediators.DatabaseDriver;
  */
 public interface DriverLoader {
 
-    public abstract Driver loadDriver(DatabaseDriver databaseDriver);
+    Driver load(DatabaseDriver databaseDriver);
+
+    void unload(DatabaseDriver databaseDriver);
 
 }
 
