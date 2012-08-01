@@ -28,6 +28,7 @@ import java.util.Vector;
 import javax.sql.DataSource;
 
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -113,6 +114,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
         activeConnections.clear();
         openConnections.clear();
+//        ((SimpleDataSource) dataSource).deregister();
     }
 
     public synchronized Connection getConnection() {

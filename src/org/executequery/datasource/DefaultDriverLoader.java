@@ -23,6 +23,8 @@ package org.executequery.datasource;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,10 +44,9 @@ public class DefaultDriverLoader implements DriverLoader {
 
     private static final Map<DatabaseDriver, Driver> LOADED_DRIVERS = new HashMap<DatabaseDriver, Driver>();
     
-    public Driver loadDriver(DatabaseDriver databaseDriver) {
+    public Driver load(DatabaseDriver databaseDriver) {
 
         Driver driver = null;
-        
         if (LOADED_DRIVERS.containsKey(databaseDriver)) {
             
             return LOADED_DRIVERS.get(databaseDriver);
@@ -79,10 +80,10 @@ public class DefaultDriverLoader implements DriverLoader {
                 clazz = Class.forName(driverName, true,
                                       ClassLoader.getSystemClassLoader());
             } 
-    
+
             Object object = clazz.newInstance();
             driver = (Driver) object;
-            
+
             Log.info("JDBC driver " + driverName + " loaded - v" 
                     + driver.getMajorVersion() + "." + driver.getMinorVersion());
             
@@ -108,6 +109,20 @@ public class DefaultDriverLoader implements DriverLoader {
         return driver;
     }
 
+    public void unload(DatabaseDriver databaseDriver) {
+        
+        if (LOADED_DRIVERS.containsKey(databaseDriver)) {
+            
+            Driver driver = LOADED_DRIVERS.get(databaseDriver);
+            try {
+                DriverManager.deregisterDriver(driver);
+            } catch (SQLException e) {e.printStackTrace();}
+            LOADED_DRIVERS.remove(databaseDriver);
+            driver = null;
+        }
+        
+    }
+    
     private void handleException(String message, DatabaseDriver databaseDriver, Throwable e) {
 
         if (Log.isDebugEnabled()) {

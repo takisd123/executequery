@@ -124,18 +124,15 @@ public class PropertiesKeyShortcuts extends PropertiesBasePanel
     private Vector<ShortcutKey> formatValues(Map<?, ?> actionMap) {
 
         Set<?> set = actionMap.keySet();
-        
         BaseActionCommand command = null;
-        
         Vector<ShortcutKey> shortcuts = new Vector<ShortcutKey>(actionMap.size());
-        
+
         for (Iterator<?> i = set.iterator(); i.hasNext();) {
         
             command = (BaseActionCommand)actionMap.get(i.next());
 
             if (command.isAcceleratorEditable()) {
-                shortcuts.add(
-                        new ShortcutKey(
+                shortcuts.add(new ShortcutKey(
                                 command.getActionId(), 
                                 (String)command.getValue(Action.NAME),
                                 (KeyStroke)command.getValue(Action.ACCELERATOR_KEY)));
@@ -160,8 +157,8 @@ public class PropertiesKeyShortcuts extends PropertiesBasePanel
         }
 
         Vector<ShortcutKey> shortcuts = tableModel.getShortcuts();
-
         for (int i = 0, k = shortcuts.size(); i < k; i++) {
+
             ShortcutKey shortcut = (ShortcutKey)shortcuts.get(i);            
             if (!MiscUtils.isNull(shortcut.keyStrokeText)) {
 

@@ -53,14 +53,13 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
 
     private Properties properties = new Properties();
 
+    private Driver driver;
     private final String url;
-    private final Driver driver;
     private final DatabaseConnection databaseConnection;
 
     public SimpleDataSource(DatabaseConnection databaseConnection) {
 
         this.databaseConnection = databaseConnection;
-
         if (databaseConnection.hasAdvancedProperties()) {
             
             populateAdvancedProperties();
@@ -118,7 +117,7 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
 
     protected final Driver loadDriver(DatabaseDriver databaseDriver) {
 
-        return DRIVER_LOADER.loadDriver(databaseDriver);
+        return DRIVER_LOADER.load(databaseDriver);
     }
     
     protected final String generateUrl(DatabaseConnection databaseConnection) {
@@ -171,7 +170,6 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         throw new DataSourceException(e);
     }
 
-    @SuppressWarnings("unchecked")
     private void populateAdvancedProperties() {
 
         Properties advancedProperties = databaseConnection.getJdbcProperties();
@@ -223,7 +221,5 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         
         return driver.getClass().getName();
     }
-    
+
 }
-
-
