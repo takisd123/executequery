@@ -915,11 +915,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             String indent = getSpacesForLength(sb.length());
 
             List<DatabaseColumn> _columns = getColumns();
-
             for (int i = 0, n = _columns.size(); i < n; i++) {
 
                 DatabaseTableColumn column = (DatabaseTableColumn)_columns.get(i);
-
                 sb.append(column.getNameForQuery());
 
                 if (i < n - 1) {

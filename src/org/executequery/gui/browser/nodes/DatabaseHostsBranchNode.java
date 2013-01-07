@@ -30,15 +30,20 @@ import org.executequery.databaseobjects.NamedObject;
 /** 
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1094 $
+ * @date     $Date: 2012-02-20 23:51:20 +1100 (Mon, 20 Feb 2012) $
  */
-public class RootDatabaseObjectNode extends DatabaseObjectNode {
+public class DatabaseHostsBranchNode extends DatabaseObjectNode {
     
-    private static final String NAME = "Database Connections";
-    
+    private final String name;
+
     private List<DatabaseHostNode> hostNodes = new ArrayList<DatabaseHostNode>();
 
+    public DatabaseHostsBranchNode(String name) {
+
+        this.name = name;
+    }
+    
     /**
      * Propagates the call to the underlying database object 
      * and removes all children from this node.
@@ -58,7 +63,7 @@ public class RootDatabaseObjectNode extends DatabaseObjectNode {
      */
     public String getName() {
         
-        return NAME;
+        return name;
     }
 
     /**
@@ -89,16 +94,12 @@ public class RootDatabaseObjectNode extends DatabaseObjectNode {
 
     public void add(MutableTreeNode newChild) {
 
-        if (!(newChild instanceof DatabaseHostNode) && !(newChild instanceof ConnectionsFolderNode)) {
+        if (!(newChild instanceof DatabaseHostNode)) {
 
             throw new IllegalArgumentException("Node must be of type DatabaseHostNode");
         }
 
-        if (newChild instanceof DatabaseHostNode) {
-        
-            hostNodes.add((DatabaseHostNode)newChild);
-        }
-
+        hostNodes.add((DatabaseHostNode)newChild);
         super.add(newChild);
     }
     

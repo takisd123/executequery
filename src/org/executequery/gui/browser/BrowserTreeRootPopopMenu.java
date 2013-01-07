@@ -31,6 +31,7 @@ public class BrowserTreeRootPopopMenu extends JPopupMenu {
 
     public BrowserTreeRootPopopMenu(ConnectionsTreePanel treePanel) {
 
+        add(createMenuItem("New Folder", "newFolder", treePanel));
         add(createMenuItem("New Connection", "newConnection", treePanel));
         addSeparator();
 

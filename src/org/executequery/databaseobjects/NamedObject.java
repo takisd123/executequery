@@ -20,7 +20,6 @@
 
 package org.executequery.databaseobjects;
 
-import java.sql.ResultSet;
 import java.util.List;
 
 import org.underworldlabs.jdbc.DataSourceException;
@@ -34,6 +33,7 @@ import org.underworldlabs.jdbc.DataSourceException;
  */
 public interface NamedObject extends java.io.Serializable {
 
+    public static final int BRANCH_NODE = 100;
     public static final int ROOT = 96;
     public static final int CATALOG = 98;
     public static final int HOST = 99;

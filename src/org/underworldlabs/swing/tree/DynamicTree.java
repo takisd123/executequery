@@ -274,12 +274,20 @@ public class DynamicTree extends JTree {
         treeModel.insertNodeInto(_node, root, root.getChildCount());
         
         if (selectNode) {
-            TreePath path = new TreePath(_node.getPath());
-            scrollPathToVisible(path);
-            setSelectionPath(path);
+            selectNode(_node);
         }
     }
 
+    public void nodesWereInserted(TreeNode parent, int[] childIndices) {
+        treeModel.nodesWereInserted(parent, childIndices);
+    }
+    
+    public void selectNode(DefaultMutableTreeNode node) {
+        TreePath path = new TreePath(node.getPath());
+        scrollPathToVisible(path);
+        setSelectionPath(path);        
+    }
+    
     /**
      * Moves the specified node in the specified direction.
      */

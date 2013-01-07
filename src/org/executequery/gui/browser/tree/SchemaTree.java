@@ -83,19 +83,20 @@ public class SchemaTree extends DynamicTree
         DefaultTreeCellRenderer renderer = new BrowserTreeCellRenderer(loadIcons());
         setCellRenderer(renderer);
 
-//        setEditable(true);
-//        setCellEditor(new ConnectionTreeCellEditor(this, renderer));
+        setEditable(true);
+        setCellEditor(new ConnectionTreeCellEditor(this, renderer));
         
         setShowsRootHandles(true);
         setDragEnabled(true);
+        setAutoscrolls(true);
 
-        setDropMode(DropMode.INSERT);
+        setDropMode(DropMode.ON_OR_INSERT);
         setTransferHandler(new TreeTransferHandler());
         getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
         setRowHeight(ROW_HEIGHT);
     }
-
+    
     private Map<String, Icon> loadIcons() {
 
         Map<String, Icon> icons = new HashMap<String, Icon>();
@@ -110,6 +111,10 @@ public class SchemaTree extends DynamicTree
         return icons;
     }
 
+    public DefaultMutableTreeNode getConnectionsBranchNode() {
+        return getRootNode();
+    }
+    
     @Override
     protected void processMouseEvent(MouseEvent e) {
 
@@ -327,7 +332,7 @@ public class SchemaTree extends DynamicTree
         }
 
         private DefaultMutableTreeNode copy(DatabaseHostNode node) {
-            return new DatabaseHostNode((DatabaseHost) node.getDatabaseObject());
+            return new DatabaseHostNode((DatabaseHost) node.getDatabaseObject(), node.getParentFolder());
         }
         
         protected void exportDone(JComponent source, Transferable data, int action) {
@@ -347,8 +352,8 @@ public class SchemaTree extends DynamicTree
                 }
 
                 panel.rebuildConnectionsFromTree();
-
                 panel.repaint();
+
                 ThreadUtils.invokeLater(new Runnable() {
                     public void run() {
                         if (lastPathComponent instanceof DatabaseHostNode) {
@@ -365,11 +370,10 @@ public class SchemaTree extends DynamicTree
                             while (index < rowCount) { 
 
                                 path = getNextMatch(prefix, index, Position.Bias.Forward);
-                                if (prefix.equals(path.getLastPathComponent().toString())) {
+                                if (path != null && prefix.equals(path.getLastPathComponent().toString())) {
 
                                     break;
                                 }
-
                                 index++;
                             }
                             

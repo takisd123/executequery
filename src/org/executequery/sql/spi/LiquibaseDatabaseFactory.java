@@ -25,7 +25,6 @@ import liquibase.database.core.DB2Database;
 import liquibase.database.core.DerbyDatabase;
 import liquibase.database.core.FirebirdDatabase;
 import liquibase.database.core.H2Database;
-import liquibase.database.core.HsqlDatabase;
 import liquibase.database.core.MSSQLDatabase;
 import liquibase.database.core.MaxDBDatabase;
 import liquibase.database.core.MySQLDatabase;
@@ -34,9 +33,9 @@ import liquibase.database.core.PostgresDatabase;
 import liquibase.database.core.SybaseDatabase;
 import liquibase.database.core.UnsupportedDatabase;
 
-class LiquibaseDatabaseFactory {
+public class LiquibaseDatabaseFactory {
 
-    Database createDatabase(String databaseName) {
+    public Database createDatabase(String databaseName) {
 
         String name = databaseName.toUpperCase();
 
@@ -133,7 +132,7 @@ class LiquibaseDatabaseFactory {
 
     private Database hsqlDatabase() {
 
-        return new HsqlDatabase();
+        return new ShiftyHsqlDatabase();
     }
 
     private Database oracleDatabase() {

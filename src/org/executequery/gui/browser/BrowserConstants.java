@@ -135,6 +135,8 @@ public class BrowserConstants {
     /** The image icon 'SavedConnection16.png' */
     public static final String CONNECTIONS_IMAGE = "DatabaseConnections16.png";
 
+    public static final String CONNECTIONS_FOLDER_IMAGE = "ConnectionsFolder16.png";
+    
     /** The image icon 'Database16.png' */
     public static final String CATALOG_IMAGE = "DBImage16.png";
     
@@ -188,6 +190,7 @@ public class BrowserConstants {
     public static final String TABLE_TRIGGER_IMAGE = "TableTrigger16.png";
     
     public static final String[] NODE_ICONS = {CONNECTIONS_IMAGE,
+                                               CONNECTIONS_FOLDER_IMAGE,
                                                CATALOG_IMAGE,
                                                HOST_IMAGE,
                                                HOST_NOT_CONNECTED_IMAGE,

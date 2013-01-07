@@ -1,5 +1,5 @@
 /*
- * DefaultConnectionRepositoryEvent.java
+ * ConnectionRepositoryEvent.java
  *
  * Copyright (C) 2002-2012 Takis Diakoumis
  *
@@ -20,30 +20,26 @@
 
 package org.executequery.event;
 
-import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.gui.browser.ConnectionsFolder;
 
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1094 $
+ * @date     $Date: 2012-02-20 23:51:20 +1100 (Mon, 20 Feb 2012) $
  */
-public class DefaultConnectionRepositoryEvent extends AbstractApplicationEvent 
-                                              implements ConnectionRepositoryEvent {
+public interface ConnectionsFolderRepositoryEvent extends ApplicationEvent {
 
-    private final DatabaseConnection databaseConnection;
+    /** Method name for folder added */
+    String FOLDER_ADDED = "folderAdded";
+    
+    /** Method name for folder modified */
+    String FOLDER_MODIFIED = "folderModified";
+    
+    /** Method name for folder removed */
+    String FOLDER_REMOVED = "folderRemoved";
 
-    public DefaultConnectionRepositoryEvent(
-            Object source, String method, DatabaseConnection databaseConnection) {
-
-        super(source, method);
-        this.databaseConnection = databaseConnection;
-    }
-
-    public DatabaseConnection getDatabaseConnection() {
-
-        return databaseConnection;
-    }
+    ConnectionsFolder getConnectionsFolder();
     
 }
 

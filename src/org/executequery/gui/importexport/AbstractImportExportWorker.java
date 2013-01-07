@@ -38,6 +38,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import liquibase.database.Database;
+
 import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.DatabaseConnection;
@@ -46,6 +48,7 @@ import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.browser.ColumnData;
 import org.executequery.repository.LogRepository;
 import org.executequery.repository.RepositoryCache;
+import org.executequery.sql.spi.LiquibaseDatabaseFactory;
 import org.executequery.util.Base64;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
@@ -154,11 +157,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                 query.append(schema).append('.');
             }
 
-            String _tableName = tableName;
-            if (_tableName.contains(" ")) {
-                _tableName = "\"" + tableName + "\"";
-            }
-            query.append(_tableName);
+            query.append(formatTableName(tableName));
 
             conn = getConnection();
             stmnt = conn.createStatement();
@@ -183,9 +182,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      *
      * @param table - the database table
      */
-    protected ResultSet getResultSet(String table)
-        throws DataSourceException,
-               SQLException {
+    protected ResultSet getResultSet(String table) throws DataSourceException, SQLException {
         return getResultSet(table, null);
     }
 
@@ -198,9 +195,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      * @param table - the database table name
      * @param columns - the columns to select from the table
      */
-    protected ResultSet getResultSet(String table, Vector<?> columns)
-        throws DataSourceException,
-               SQLException {
+    protected ResultSet getResultSet(String table, Vector<?> columns) throws DataSourceException, SQLException {
 
         // check the columns and retrieve if null
         if (columns == null) {
@@ -209,28 +204,21 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
         // build the SQL statement
         StringBuilder query = new StringBuilder("SELECT ");
-
-        int columnCount = columns.size();
-        for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
-            query.append(formatColumnName(columns.get(i).toString()));
-            if (i != n) {
-                query.append(',');
-            }
-        }
+        query.append(columnNamesAsCommaSeparatedString(table, columns));
         query.append(" FROM ");
 
         String schema = parent.getSchemaName();
         if (!MiscUtils.isNull(schema)) {
             query.append(schema).append('.');
         }
-        query.append(table);
+        
+        query.append(formatTableName(table));
 
         if (stmnt != null) {
             try {
                 stmnt.close();
             } catch (SQLException e) {}
-        }
-
+        }        
         conn = getConnection();
         stmnt = conn.createStatement();
 
@@ -239,14 +227,47 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         return stmnt.executeQuery(query.toString());
     }
 
-    private String formatColumnName(String columnName) {
+    private String columnNamesAsCommaSeparatedString(String table, Vector<?> columns) throws DataSourceException, SQLException {
+        
+        StringBuilder sb = new StringBuilder();
+        Database database = new LiquibaseDatabaseFactory().createDatabase(getConnection().getMetaData().getDatabaseProductName());
+        
+        int columnCount = columns.size();
+        for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
+            
+            String columnName = columns.get(i).toString();
+            if (columnName.contains(" ")) {
 
-        if (columnName.contains(" ")) {
+                columnName = "\"" + columnName + "\"";
 
-            return "\"" + columnName + "\"";
+            } else {
+                
+                columnName = database.escapeColumnName(parent.getSchemaName(), table, columnName);                
+            }
+
+            sb.append(columnName);
+            if (i != n) {
+                sb.append(',');
+            }
         }
 
-        return columnName;
+        return sb.toString();
+    }
+    
+    private Object formatTableName(String table) {
+        try {
+
+            if (table.contains(" ")) {
+                return "\"" + table + "\"";
+            }
+            
+            String identifierQuoteString = getConnection().getMetaData().getIdentifierQuoteString();
+            return identifierQuoteString + table + identifierQuoteString;
+
+        } catch (SQLException e) {
+
+            return "\"";
+        }
     }
 
     /**
@@ -255,9 +276,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      * @param table - the database table name
      * @param columns - the columns to select from the table
      */
-    protected void prepareStatement(String table, Vector<?> columns)
-        throws DataSourceException,
-               SQLException {
+    protected void prepareStatement(String table, Vector<?> columns) throws DataSourceException, SQLException {
 
         // check the columns and retrieve if null
         if (columns == null) {
@@ -271,20 +290,14 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         if (!MiscUtils.isNull(schema)) {
             query.append(schema).append('.');
         }
-        query.append(table);
-        query.append(" (");
 
-        // add the column names to the query
-        int columnCount = columns.size();
-        for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
-            query.append(columns.get(i).toString());
-            if (i != n) {
-                query.append(',');
-            }
-        }
+        query.append(formatTableName(table));
+        query.append(" (");
+        query.append(columnNamesAsCommaSeparatedString(table, columns));
         query.append(") VALUES (");
 
         // add the value place holders
+        int columnCount = columns.size();
         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
             query.append('?');
             if (i != n) {

@@ -43,7 +43,7 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
     
     /** indicates that children have been retrieved */
     private boolean childrenRetrieved;
-    
+
     /** Creates a new instance of DefaultDatabaseObjectNode */
     public DatabaseObjectNode() {}
 
@@ -51,7 +51,7 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
     public DatabaseObjectNode(NamedObject databaseObject) {
 
         super(databaseObject);
-        this.databaseObject = databaseObject;        
+        this.databaseObject = databaseObject;
     }
 
     /**
@@ -96,6 +96,10 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
         }
     }
 
+    public boolean isNameEditable() {
+        return false;
+    }
+    
     /**
      * Returns whether the object represented by this 
      * node may be dropped/deleted.

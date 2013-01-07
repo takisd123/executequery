@@ -75,6 +75,7 @@ import org.executequery.gui.sqlstates.SQLStateCodesDockedPanel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
 import org.executequery.io.RecentFileIOListener;
+import org.executequery.listeners.ConnectionFoldersRepositoryChangeListener;
 import org.executequery.listeners.ConnectionRepositoryChangeListener;
 import org.executequery.listeners.DefaultConnectionListener;
 import org.executequery.listeners.DefaultUserPreferenceListener;
@@ -202,6 +203,7 @@ public final class GUIUtilities {
         EventMediator.registerListener(new DefaultConnectionListener());
         EventMediator.registerListener(new OpenEditorConnectionListener());
         EventMediator.registerListener(new ConnectionRepositoryChangeListener());
+        EventMediator.registerListener(new ConnectionFoldersRepositoryChangeListener());
         EventMediator.registerListener(new DefaultUserPreferenceListener());
         EventMediator.registerListener(new RecentFileIOListener());
         EventMediator.registerListener(new ToolBarVisibilityListener());
@@ -239,7 +241,7 @@ public final class GUIUtilities {
         desktopMediator.addDockedTabListener(layoutProperties);
 
         // select the first main panel
-        desktopMediator.setSelectedPane(SwingConstants.CENTER, 0);
+//        desktopMediator.setSelectedPane(SwingConstants.CENTER, 0);
     }
 
     /**

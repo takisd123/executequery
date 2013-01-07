@@ -61,7 +61,6 @@ public class DataTransferObject {
         if (type == ImportExportProcess.IMPORT && fileName != null) {
             
             File file = new File(fileName);
-
             return file.isFile() && file.exists();
 
         } else {

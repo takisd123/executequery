@@ -106,11 +106,9 @@ public final class EventMediator {
             if (method.getName().compareTo(methodName) == 0) {
                 
                 Class<?>[] parameterTypes = method.getParameterTypes();
-                
                 if (parameterTypes.length ==1) {
 
                     Class<?> parameter = parameterTypes[0];
-                    
                     if (parameter.isInstance(event)) {
 
                         return method;

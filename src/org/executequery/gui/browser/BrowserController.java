@@ -41,6 +41,7 @@ import org.executequery.databaseobjects.DatabaseSchema;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
+import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.executequery.gui.forms.FormObjectView;
 import org.executequery.log.Log;
 import org.executequery.sql.SqlStatementResult;
@@ -211,7 +212,6 @@ public class BrowserController {
     protected void updateDatabaseProperties() {
 
         FormObjectView view = viewPanel.getFormObjectView(HostPanel.NAME);
-
         if (view != null) {
 
             HostPanel panel = (HostPanel)view;
@@ -253,7 +253,6 @@ public class BrowserController {
         try {
 
             FormObjectView panel = buildPanelView(node);
-
             if (panel != null) {
 
                 viewPanel.setView(panel);
@@ -423,11 +422,27 @@ public class BrowserController {
     /**
      * Displays the root main view panel.
      */
-    protected void displayRootPanel() {
+    protected void displayConnectionList(ConnectionsFolder folder) {
         checkBrowserPanel();
-        viewPanel.displayRootPanel();
+        viewPanel.displayConnectionList(folder);
     }
 
+    /**
+     * Displays the root main view panel.
+     */
+    protected void displayConnectionList() {
+        checkBrowserPanel();
+        viewPanel.displayConnectionList();
+    }
+    
+    /**
+     * Displays the root main view panel.
+     */
+    protected void displayRootPanel(RootDatabaseObjectNode node) {
+        checkBrowserPanel();
+        viewPanel.displayConnectionList();
+    }
+    
     /**
      * Applies the table alteration changes.
      */

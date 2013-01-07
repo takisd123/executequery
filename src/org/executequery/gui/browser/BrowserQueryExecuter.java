@@ -27,13 +27,6 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
 import org.executequery.databasemediators.spi.StatementExecutor;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * Performs SQL execution tasks from browser components.
  *
@@ -117,14 +110,3 @@ public class BrowserQueryExecuter {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-

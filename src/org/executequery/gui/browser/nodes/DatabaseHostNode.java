@@ -51,18 +51,32 @@ public class DatabaseHostNode extends DatabaseObjectNode {
     /** indicates whether to show only default catalogs/schemas */
     private boolean defaultCatalogsAndSchemasOnly;
 
+    private ConnectionsFolderNode parentFolder;
+    
     /** Creates a new instance of DatabaseHostNode */
-    public DatabaseHostNode(DatabaseHost host) {
+    public DatabaseHostNode(DatabaseHost host, ConnectionsFolderNode parentFolder) {
         
         super(host);
-
+        this.parentFolder = parentFolder;
         applyUserPreferences();
     }
 
+    @Override
+    public boolean isNameEditable() {
+        return true;
+    }
+    
+    public void setParentFolder(ConnectionsFolderNode parentFolder) {
+        this.parentFolder = parentFolder;
+    }
+    
+    public ConnectionsFolderNode getParentFolder() {
+        return parentFolder;
+    }
+    
     public void applyUserPreferences() {
 
-        setDefaultCatalogsAndSchemasOnly(
-                UserProperties.getInstance().getBooleanProperty(
+        setDefaultCatalogsAndSchemasOnly(UserProperties.getInstance().getBooleanProperty(
                         "browser.catalog.schema.defaults.only"));
     }
     
@@ -332,12 +346,13 @@ public class DatabaseHostNode extends DatabaseObjectNode {
 
         this.order = order;
     }
+
+    public void removeFromFolder() {
+
+        if (parentFolder != null) {
+        
+            parentFolder.removeNode(this);
+        }
+    }
     
 }
-
-
-
-
-
-
-

@@ -183,7 +183,7 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
         gbc.gridx = 1;
         gbc.insets.top = 15;
         gbc.insets.right = 5;
-        gbc.insets.bottom = 0;
+        gbc.insets.bottom = 10;
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.NONE;
