@@ -50,14 +50,18 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
 import org.executequery.event.ConnectionRepositoryEvent;
+import org.executequery.event.ConnectionsFolderRepositoryEvent;
 import org.executequery.event.DefaultConnectionRepositoryEvent;
+import org.executequery.event.DefaultConnectionsFolderRepositoryEvent;
 import org.executequery.event.UserPreferenceEvent;
 import org.executequery.event.UserPreferenceListener;
 import org.executequery.gui.AbstractDockedTabActionPanel;
+import org.executequery.gui.browser.nodes.ConnectionsFolderNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.executequery.gui.browser.tree.SchemaTree;
+import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -118,24 +122,34 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         // initialise the controller
         controller = new BrowserController(this);
 
+        /*
         RootDatabaseObjectNode root = new RootDatabaseObjectNode();
-
+        
+        ConnectionsFolderNode connectionsNode = new ConnectionsFolderNode("Database Connections");
+        ConnectionsFolderNode favouritesNode = new ConnectionsFolderNode("Favourites");
+        
         DatabaseObjectFactory factory = databaseObjectFactory();
 
+        createFolderStructureForNode(root);
+        
         // loop through available connections and add as leaf objects
         int count = 0;
         connections = connections();
         for (DatabaseConnection connection : connections) {
 
-            DatabaseHost host = factory.createDatabaseHost(connection);
-
-            DatabaseHostNode child = new DatabaseHostNode(host);
+            DatabaseHostNode child = createHostNode(factory, favouritesNode,
+                    connection);
             child.setOrder(count++);
 
-            root.add(child);
+            favouritesNode.add(child);
         }
 
-        tree = new SchemaTree(root, this);
+        root.add(favouritesNode);
+        root.add(connectionsNode);
+
+        */
+        
+        tree = new SchemaTree(createTreeStructure(), this);
 
         MouseHandler mouseHandler = new MouseHandler();
         tree.addMouseListener(mouseHandler);
@@ -155,17 +169,69 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         tree.setToggleClickCount(2);
     }
 
+    private DefaultMutableTreeNode createTreeStructure() {
+
+        RootDatabaseObjectNode root = new RootDatabaseObjectNode();
+        
+        folders = folders();
+        List<DatabaseConnection> connectionsAdded = new ArrayList<DatabaseConnection>();
+
+        DatabaseObjectFactory factory = databaseObjectFactory();
+        
+        int count = 0;
+        connections = connections();
+        for (ConnectionsFolder folder : folders) {
+            
+            ConnectionsFolderNode folderNode = new ConnectionsFolderNode(folder);
+            for (DatabaseConnection connection : folder.getConnections()) {
+
+                DatabaseHostNode child = createHostNode(factory, folderNode, connection);
+
+                child.setOrder(count++);
+                folderNode.add(child);
+                connectionsAdded.add(connection);
+            }
+            
+            root.add(folderNode);
+        }
+
+        for (DatabaseConnection connection : connections) {
+
+            if (!connectionsAdded.contains(connection)) {
+                
+                DatabaseHostNode child = createHostNode(factory, null, connection);
+                root.add(child);
+            }
+            
+        }
+
+        return root;
+    }
+
+    private DatabaseHostNode createHostNode(DatabaseObjectFactory factory,
+            ConnectionsFolderNode folderNode, DatabaseConnection connection) {
+
+        DatabaseHost host = factory.createDatabaseHost(connection);
+        return new DatabaseHostNode(host, folderNode);
+    }
+
     public Action getTreeFindAction() {
 
         return treeFindAction;
     }
 
-    private List<DatabaseConnection> connections() {
+    private List<ConnectionsFolder> folders() {
 
+        return ((ConnectionFoldersRepository)RepositoryCache.load(
+                ConnectionFoldersRepository.REPOSITORY_ID)).findAll();
+    }
+
+    private List<DatabaseConnection> connections() {
+        
         return ((DatabaseConnectionRepository)RepositoryCache.load(
                 DatabaseConnectionRepository.REPOSITORY_ID)).findAll();
     }
-
+    
     private DatabaseConnectionFactory databaseConnectionFactory() {
 
         if (databaseConnectionFactory == null) {
@@ -213,7 +279,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             // adjust the position of the connection
             Object object = tree.getLastPathComponent();
-            if (object instanceof DatabaseHostNode) {
+            if (isADatabaseHostNode(object)) {
 
                 moveNode((DatabaseHostNode)object, DynamicTree.MOVE_UP);
             }
@@ -232,7 +298,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             hostNodeSorter = new DatabaseHostNodeSorter();
         }
 
-        DefaultMutableTreeNode rootNode = tree.getRootNode();
+        DefaultMutableTreeNode rootNode = tree.getConnectionsBranchNode();
         hostNodeSorter.sort(rootNode);
 
         tree.nodeStructureChanged(rootNode);
@@ -248,31 +314,92 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             count++;
         }
 
-        EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
-                        this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, null));
-
+        connectionModified(null);
     }
 
     public void rebuildConnectionsFromTree() {
         
-        DefaultMutableTreeNode root = tree.getRootNode();
+        DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
         connections.clear();
+        folders.clear();
 
         for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
 
             DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
-            Object userObject = _node.getUserObject();
-            if (userObject instanceof DatabaseHost) {
+            if (_node instanceof ConnectionsFolderNode) {
 
-                DatabaseHost object = (DatabaseHost)userObject;
-                connections.add(object.getDatabaseConnection());
+                ConnectionsFolderNode folderNode = (ConnectionsFolderNode) _node;
+                ConnectionsFolder connectionsFolder = folderNode.getConnectionsFolder();
+                connectionsFolder.empty();
+
+                for (Enumeration<?> j = folderNode.children(); j.hasMoreElements();) {
+
+                    Object object = j.nextElement();
+                    if (isADatabaseHostNode(object)) {
+
+                        DatabaseHostNode child = (DatabaseHostNode) object;
+                        child.setParentFolder(folderNode);
+
+                        DatabaseConnection databaseConnection = addConnectionFromNode(child);
+                        connectionsFolder.addConnection(databaseConnection.getId());
+                    }
+
+                }
+
+                folders.add(folderNode.getConnectionsFolder());
+                
+            } else if (_node instanceof DatabaseHostNode) {
+            
+                addConnectionFromNode(_node);
             }
             
         }
 
-//        EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
-//                this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, null));
+        folderModified(null);
+    }
 
+    private void connectionModified(DatabaseConnection databaseConnection) {
+        
+        EventMediator.fireEvent(
+                new DefaultConnectionRepositoryEvent(
+                        this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, databaseConnection));
+    }
+    
+    private void connectionAdded(DatabaseConnection databaseConnection) {
+        
+        EventMediator.fireEvent(
+                new DefaultConnectionRepositoryEvent(
+                        this, ConnectionRepositoryEvent.CONNECTION_ADDED, databaseConnection));
+    }
+    
+    private void folderModified(ConnectionsFolder connectionsFolder) {
+
+        EventMediator.fireEvent(new DefaultConnectionsFolderRepositoryEvent(
+                this, ConnectionsFolderRepositoryEvent.FOLDER_MODIFIED, connectionsFolder));
+    }
+    
+    private void folderAdded(ConnectionsFolder connectionsFolder) {
+        
+        EventMediator.fireEvent(new DefaultConnectionsFolderRepositoryEvent(
+                this, ConnectionsFolderRepositoryEvent.FOLDER_ADDED, connectionsFolder));
+    }
+    
+    private void folderRemoved(ConnectionsFolder connectionsFolder) {
+        
+        EventMediator.fireEvent(new DefaultConnectionsFolderRepositoryEvent(
+                this, ConnectionsFolderRepositoryEvent.FOLDER_REMOVED, connectionsFolder));
+    }
+    
+    
+    
+    private DatabaseConnection addConnectionFromNode(DefaultMutableTreeNode _node) {
+
+        Object userObject = _node.getUserObject();
+        DatabaseHost object = (DatabaseHost)userObject;
+        
+        DatabaseConnection databaseConnection = object.getDatabaseConnection();
+        connections.add(databaseConnection);
+        return databaseConnection;
     }
     
     /**
@@ -304,38 +431,12 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     public void setSelectedConnection(DatabaseConnection dc) {
 
-        DefaultMutableTreeNode node = null;
-        DefaultMutableTreeNode root = tree.getRootNode();
-
-        for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
-
-            DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
-
-            Object userObject = _node.getUserObject();
-
-            // make sure its a connection object
-            if (userObject instanceof DatabaseHost) {
-
-                DatabaseHost object = (DatabaseHost)userObject;
-
-                if (object.getDatabaseConnection() == dc) {
-
-                    node = _node;
-                    break;
-                }
-
-            }
-
-        }
-
-        // select the node path
+        DefaultMutableTreeNode node = getHostNode(dc);
         if (node != null) {
 
             selectTreePath(new TreePath(node.getPath()));
-
             Object object = tree.getLastPathComponent();
-
-            if (object instanceof DatabaseHostNode) {
+            if (isADatabaseHostNode(object)) {
 
                 controller.valueChanged_((DatabaseHostNode)object);
             }
@@ -349,7 +450,42 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void deleteConnection() {
 
         Object object = tree.getLastPathComponent();
-        deleteConnection((DatabaseHostNode)object);
+        if (isADatabaseHostNode(object)) {
+        
+            deleteConnection((DatabaseHostNode) object);
+
+        } else if (isAConnectionsFolderNode(object)) {
+            
+            deleteFolder((ConnectionsFolderNode) object);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void deleteFolder(ConnectionsFolderNode folder) {
+
+        int yesNo = GUIUtilities.displayConfirmCancelDialog(
+                "Are you sure you want to delete the folder " + folder + 
+                " ?\nAny connections within this folder will also be deleted.");
+
+        if (yesNo != JOptionPane.YES_OPTION) {
+        
+            return;
+        }
+     
+        if (folder.getChildCount() > 0) {
+
+            for (Enumeration<DatabaseHostNode> i = folder.children(); i.hasMoreElements();) {
+                
+                connections.remove(i.nextElement().getDatabaseConnection());
+            }
+            
+        }
+        
+        ConnectionsFolder connectionsFolder = folder.getConnectionsFolder();
+        folders.remove(connectionsFolder);
+        tree.removeNode(folder);
+        connectionModified(null);
+        folderRemoved(connectionsFolder);
     }
 
     /**
@@ -389,41 +525,65 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             return;
         }
 
-        // select the next connection
-        int nextIndex = index + 1;
-        if (index == connections.size() - 1) {
-
-            nextIndex = index - 1;
-        }
-
-        boolean noConnectionsAvailable = true;
-        if (nextIndex >= 0) {
-
-            noConnectionsAvailable = false;
-            setSelectedConnection(connections.get(nextIndex));
-        }
-
+        DatabaseHostNode nextSelectableHostNode = nextSelectableHostNode(node);
+        
         // remove the node from the tree
         tree.removeNode(node);
 
+        // remove from folder
+        node.removeFromFolder();
+        
         // remove from the connections
         connections.remove(index);
 
-        EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(this,
-                ConnectionRepositoryEvent.CONNECTION_MODIFIED, dc));
-
-        if (noConnectionsAvailable) {
-//            GUIUtilities.closeSelectedCentralPane();
+        connectionModified(dc);
+        folderModified(null);
+        
+        if (nextSelectableHostNode != null) {
+         
+            setNodeSelected(nextSelectableHostNode);
+        
+        } else {
+            
             GUIUtils.invokeLater(new Runnable() {
                 public void run() {
                     controller.selectionChanging();
                     enableButtons(false, false, false, false);
                     tree.setSelectionRow(0);
-                    //controller.displayRootPanel();
                 }
             });
+
+        }
+        
+    }
+
+    private DatabaseHostNode nextSelectableHostNode(DatabaseHostNode node) {
+        
+        List<DatabaseHostNode> hostNodes = databaseHostNodes();
+        
+        int size = hostNodes.size();
+        if (size > 1) {
+            
+            for (int i = 0; i < size; i++) {
+                
+                DatabaseHostNode databaseHostNode = hostNodes.get(i);
+                if (databaseHostNode == node) {
+                    
+                    if (i == 0) {
+                        
+                        return hostNodes.get(i + 1);
+                    
+                    } else {
+                        
+                        return hostNodes.get(i - 1);
+                    }
+                    
+                }
+                
+            }
         }
 
+        return null;
     }
 
     /**
@@ -443,7 +603,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     protected DatabaseConnection getConnectionAt(TreePath path) {
         if (path != null) {
             Object object = path.getLastPathComponent();
-            if (object instanceof DatabaseObjectNode) {
+            if (isADatabaseObjectNode(object)) {
                 return getDatabaseConnection((DatabaseObjectNode)object);
             }
         }
@@ -534,34 +694,105 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         getTreeFindAction().actionPerformed(new ActionEvent(this, 0, "searchNodes"));
     }
 
-    private List<DatabaseHost> databaseHosts() {
+    private List<DatabaseHostNode> databaseHostNodes() {
 
-        DefaultMutableTreeNode root = tree.getRootNode();
-        List<DatabaseHost> hosts = new ArrayList<DatabaseHost>();
+        DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+        List<DatabaseHostNode> hosts = new ArrayList<DatabaseHostNode>();
+    
         for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
 
-            DefaultMutableTreeNode _node = (DefaultMutableTreeNode)i.nextElement();
+            Object object = i.nextElement();
+            if (isAConnectionsFolderNode(object)) {
 
-            Object userObject = _node.getUserObject();
-            if (userObject instanceof DatabaseHost) {
+                ConnectionsFolderNode node = (ConnectionsFolderNode)object;
+                hosts.addAll(node.getDatabaseHostNodes());
+                
+            } else if (isADatabaseHostNode(object)) {
 
-                hosts.add((DatabaseHost) userObject);
+                hosts.add((DatabaseHostNode) object);
             }
 
         }
-
+        
         return hosts;
+    }
+
+    private List<DatabaseHost> databaseHosts() {
+        
+        DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+        List<DatabaseHost> hosts = new ArrayList<DatabaseHost>();
+        
+        for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
+            
+            Object object = i.nextElement();
+            if (isAConnectionsFolderNode(object)) {
+                
+                ConnectionsFolderNode node = (ConnectionsFolderNode)object;
+                hosts.addAll(node.getDatabaseHosts());
+                
+            } else if (isADatabaseHostNode(object)) {
+                
+                DatabaseHostNode node = (DatabaseHostNode) object;
+                DatabaseHost host = (DatabaseHost) node.getDatabaseObject();
+                hosts.add(host);
+            }
+            
+        }
+        
+        return hosts;
+    }
+    
+    /**
+     * Creates a new folder and adds it to the bottom of the list.
+     */
+    public void newFolder() {
+
+        String name = GUIUtilities.displayInputMessage("New Folder", "Folder Name:");
+        if (!JOptionPane.UNINITIALIZED_VALUE.equals(name)) {
+         
+            ConnectionsFolder folder = new ConnectionsFolder(name);
+            folders.add(folder);
+
+            ConnectionsFolderNode lastFolder = null;
+            DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+            for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
+                
+                Object object = i.nextElement();
+                if (isAConnectionsFolderNode(object)) {
+
+                    lastFolder = (ConnectionsFolderNode) object;
+
+                } else {
+                    
+                    break;
+                }
+
+            }
+
+            int insertIndex = 0;
+            ConnectionsFolderNode folderNode = new ConnectionsFolderNode(folder);
+            if (lastFolder != null) {
+                
+                insertIndex = root.getIndex(lastFolder) + 1;
+            } 
+            
+            root.insert(folderNode, insertIndex);
+            tree.nodesWereInserted(root, new int[]{insertIndex});
+            
+            folderAdded(folder);
+        }
+        
     }
 
     /**
      * Creates a new connection and adds it to the bottom of the list.
      */
     public void newConnection() {
-
+        
         String name = buildConnectionName("New Connection");
         newConnection(databaseConnectionFactory().create(name));
     }
-
+    
     /**
      * Creates a new connection based on the specified connection.
      *
@@ -572,10 +803,23 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         DatabaseHost host = databaseObjectFactory().createDatabaseHost(dc);
         connections.add(dc);
 
-        tree.addToRoot(new DatabaseHostNode(host));
-        EventMediator.fireEvent(
-                new DefaultConnectionRepositoryEvent(
-                        this, ConnectionRepositoryEvent.CONNECTION_ADDED, dc));
+        ConnectionsFolderNode folderNode = getSelectedFolderNode();
+        if (folderNode != null) {
+            
+            DatabaseHostNode hostNode = new DatabaseHostNode(host, folderNode);
+            folderNode.addNewHostNode(hostNode);
+            
+            tree.nodesWereInserted(folderNode, new int[]{folderNode.getChildCount() - 1});
+            tree.selectNode(hostNode);
+
+            folderModified(folderNode.getConnectionsFolder());
+
+        } else {
+            
+            tree.addToRoot(new DatabaseHostNode(host, null));
+        }
+
+        connectionAdded(dc);
     }
 
     /**
@@ -589,7 +833,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             // adjust the position of the connection
             Object object = tree.getLastPathComponent();
-            if (object instanceof DatabaseHostNode) {
+            if (isADatabaseHostNode(object)) {
 
                 moveNode((DatabaseHostNode)object, DynamicTree.MOVE_DOWN);
             }
@@ -656,7 +900,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         // make sure we have a BrowserTreeNode
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof BrowserTreeNode)) {
+        if (!isABrowserTreeNode(object)) {
             return null;
         }
 
@@ -679,7 +923,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         // make sure we have a BrowserTreeNode
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof BrowserTreeNode)) {
+        if (!isABrowserTreeNode(object)) {
             return false;
         }
 
@@ -696,19 +940,57 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      *         user object is a DBaseDatabaseObject
      */
     protected NamedObject getSelectedNamedObject() {
-        // if path is null return null
+
         if (tree.isSelectionEmpty()) {
+
             return null;
         }
 
         // make sure we have a BrowserTreeNode
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof DatabaseObjectNode)) {
+        if (!isADatabaseObjectNode(object)) {
             return null;
         }
 
         DatabaseObjectNode node = (DatabaseObjectNode)object;
         return node.getDatabaseObject();
+    }
+
+    protected ConnectionsFolderNode getSelectedFolderNode() {
+
+        if (tree.isSelectionEmpty()) {
+        
+            return null;
+        }
+        
+        Object object = tree.getLastPathComponent();
+        if (isAConnectionsFolderNode(object)) {
+            
+            return (ConnectionsFolderNode) object;
+        
+        } else if (isADatabaseHostNode(object)) {
+
+            DatabaseHostNode databaseHostNode = (DatabaseHostNode) object;
+            return databaseHostNode.getParentFolder();
+        }
+        
+        return null;
+    }
+
+    private boolean isADatabaseHostNode(Object object) {
+        return object instanceof DatabaseHostNode;
+    }
+
+    private boolean isADatabaseObjectNode(Object object) {
+        return object instanceof DatabaseObjectNode;
+    }
+
+    private boolean isAConnectionsFolderNode(Object object) {
+        return object instanceof ConnectionsFolderNode;
+    }
+    
+    private boolean isABrowserTreeNode(Object object) {
+        return object instanceof BrowserTreeNode;
     }
 
     /**
@@ -724,7 +1006,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         // make sure we have a DatabaseObjectNode
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof DatabaseObjectNode)) {
+        if (!isADatabaseObjectNode(object)) {
             return null;
         }
 
@@ -831,7 +1113,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     protected BrowserTreeNode getOldBrowserNodeSelection() {
         Object object = getOldSelectionPath().getLastPathComponent();
-        if (object != null && object instanceof BrowserTreeNode) {
+        if (object != null && isABrowserTreeNode(object)) {
             return (BrowserTreeNode)object;
         }
         return null;
@@ -843,18 +1125,25 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     protected DatabaseObjectNode getHostNode(DatabaseConnection dc) {
 
-        for (Enumeration<?> i = tree.getRootNode().children(); i.hasMoreElements();) {
+        for (Enumeration<?> i = tree.getConnectionsBranchNode().children(); i.hasMoreElements();) {
 
             Object object = i.nextElement();
+            if (isAConnectionsFolderNode(object)) {
 
-            if (object instanceof DatabaseObjectNode) {
+                ConnectionsFolderNode node = (ConnectionsFolderNode)object;
+                DatabaseObjectNode hostNode = node.getHostNode(dc);
+                if (hostNode != null) {
+                    
+                    return hostNode;
+                }
+                
+            } else if (isADatabaseObjectNode(object)) {
 
                 DatabaseObjectNode node = (DatabaseObjectNode)object;
 
                 if (node.getType() == NamedObject.HOST) {
 
                     DatabaseHost host = (DatabaseHost)node.getDatabaseObject();
-
                     if (host.getDatabaseConnection() == dc) {
 
                         return node;
@@ -873,7 +1162,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     protected void selectedNodeDisconnected() {
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof DatabaseObjectNode)) {
+        if (!isADatabaseObjectNode(object)) {
             return;
         }
 
@@ -902,7 +1191,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         }
 
         Object object = tree.getLastPathComponent();
-        if (!(object instanceof DatabaseObjectNode)) {
+        if (!isADatabaseObjectNode(object)) {
 
             return;
         }
@@ -943,7 +1232,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             Object lastObject = oldSelectionPath.getLastPathComponent();
 
-            if (lastObject instanceof DatabaseObjectNode) {
+            if (isADatabaseObjectNode(lastObject)) {
 
                 DatabaseObjectNode dbObject = (DatabaseObjectNode)lastObject;
 
@@ -1012,15 +1301,21 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         controller.selectionChanging();
 
-        if (object == tree.getRootNode()) { // root node
+        if (object == tree.getConnectionsBranchNode()) { // root node
 
-            controller.displayRootPanel();
+            controller.displayConnectionList();
             enableButtons(false, false, false, false);
             return;
         }
 
-        final DatabaseObjectNode node = (DatabaseObjectNode)object;
-        if (node instanceof DatabaseHostNode) {
+        final DatabaseObjectNode node = (DatabaseObjectNode) object;
+        if (node instanceof ConnectionsFolderNode) {
+          
+            controller.displayConnectionList(((ConnectionsFolderNode) node).getConnectionsFolder());
+            enableButtons(true, true, false, true);
+            return;
+            
+        } else if (node instanceof DatabaseHostNode) {
 
             DatabaseHostNode hostNode = (DatabaseHostNode)node;
 
@@ -1083,7 +1378,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
 
             Object object = path.getLastPathComponent();
-            if (!(object instanceof DatabaseObjectNode)) {
+            if (!isADatabaseObjectNode(object)) {
 
                 return;
             }
@@ -1123,7 +1418,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         Object object = path.getLastPathComponent();
 
-        if (!(object instanceof DatabaseObjectNode)) {
+        if (!isADatabaseObjectNode(object)) {
             return;
         }
 
@@ -1232,7 +1527,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             Object object = selection.getLastPathComponent();
 
-            if (object instanceof DatabaseObjectNode) {
+            if (isADatabaseObjectNode(object)) {
 
                 DatabaseObjectNode dbObject = (DatabaseObjectNode)object;
 
@@ -1320,6 +1615,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public static final String MENU_ITEM_KEY = "viewConnections";
 
     public static final String PROPERTY_KEY = "system.display.connections";
+
+    private List<ConnectionsFolder> folders;
 
     // ----------------------------------------
     // DockedTabView Implementation
@@ -1517,7 +1814,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
         if (event.getEventType() == UserPreferenceEvent.ALL) {
 
-            RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
+            RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getConnectionsBranchNode();
             List<DatabaseHostNode> hosts = root.getHostNodes();
 
             for (DatabaseHostNode host : hosts) {

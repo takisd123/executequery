@@ -134,7 +134,11 @@ public class BrowserViewPanel extends FormObjectViewContainer
         return panel;
     }
 
-    public void displayRootPanel() {
+    public void displayConnectionList() {
+        displayConnectionList(null);
+    }
+
+    public void displayConnectionList(ConnectionsFolder folder) {
         ConnectionsListPanel panel = null;
         if (!containsPanel(ConnectionsListPanel.NAME)) {
             panel = new ConnectionsListPanel(controller);
@@ -143,9 +147,10 @@ public class BrowserViewPanel extends FormObjectViewContainer
         else {
             panel = (ConnectionsListPanel)getFormObjectView(ConnectionsListPanel.NAME);
         }
+        panel.selected(folder);
         setView(panel);
     }
-
+    
     // ------------------------------------------------
     // ----- TextEditorContainer implementations ------
     // ------------------------------------------------

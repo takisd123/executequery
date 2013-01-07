@@ -170,15 +170,35 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         connectionsChanged();
     }
     
+    public void selected(ConnectionsFolder folder) {
+        
+        if (folder == null) {
+            
+            connectionsChanged();
+        
+        } else {
+            
+            connectionsChanged(folder.getConnections());
+        }
+    }
+    
     private void connectionsChanged() {
-        model.reload(connections());
+        connectionsChanged(connections());
+    }
+    
+    private void connectionsChanged(List<DatabaseConnection> connections) {
+        model.reload(connections);
         table.repaint();
     }
     
     private List<DatabaseConnection> connections() {
 
-        return ((DatabaseConnectionRepository)RepositoryCache.load(
-                DatabaseConnectionRepository.REPOSITORY_ID)).findAll();
+        return connectionsRepository().findAll();
+    }
+
+    private DatabaseConnectionRepository connectionsRepository() {
+
+        return (DatabaseConnectionRepository)RepositoryCache.load(DatabaseConnectionRepository.REPOSITORY_ID);
     }
 
     public void actionPerformed(ActionEvent e) {

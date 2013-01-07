@@ -25,7 +25,14 @@ import java.util.EventObject;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 
+import org.executequery.EventMediator;
+import org.executequery.event.ConnectionRepositoryEvent;
+import org.executequery.event.ConnectionsFolderRepositoryEvent;
+import org.executequery.event.DefaultConnectionRepositoryEvent;
+import org.executequery.event.DefaultConnectionsFolderRepositoryEvent;
+import org.executequery.gui.browser.nodes.ConnectionsFolderNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
+import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 
 /**
  * @author   Takis Diakoumis
@@ -44,23 +51,35 @@ public class ConnectionTreeCellEditor extends DefaultTreeCellEditor {
 
     public boolean isCellEditable(EventObject event) {
         
-        if (!(tree.getSelectionPath().getLastPathComponent() instanceof DatabaseHostNode)) {
-
-            return false;
+        Object object = tree.getSelectionPath().getLastPathComponent();
+        if (object instanceof DatabaseObjectNode) {
+            
+            return ((DatabaseObjectNode) object).isNameEditable();
         }
 
-        return true;        
+        return false;        
     }
     
     public Object getCellEditorValue() {
 
         Object value = super.getCellEditorValue();
         Object lastPathComponent = tree.getSelectionPath().getLastPathComponent();
-        if (lastPathComponent instanceof DatabaseHostNode) {
-
-            schemaTree.connectionNameChanged((String)value);
+        if (lastPathComponent instanceof ConnectionsFolderNode) {
+            
+            ConnectionsFolderNode node = (ConnectionsFolderNode) lastPathComponent;
+            node.setName(value.toString());
+            
+            EventMediator.fireEvent(new DefaultConnectionsFolderRepositoryEvent(
+                    this, ConnectionsFolderRepositoryEvent.FOLDER_MODIFIED, node.getConnectionsFolder()));
+        
+        } else if (lastPathComponent instanceof DatabaseHostNode) {
+            
+            DatabaseHostNode node = (DatabaseHostNode) lastPathComponent;
+            schemaTree.connectionNameChanged(value.toString());
+            EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
+                    this, ConnectionRepositoryEvent.CONNECTION_MODIFIED, node.getDatabaseConnection()));            
         }
-
+        
         return value;
     }
 }

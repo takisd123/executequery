@@ -380,14 +380,7 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
             case Types.BOOLEAN:
                 boolean boolValue = ((Boolean) value).booleanValue();
 
-                if (boolValue) {
-
-                    return "true";
-
-                } else {
-
-                    return "false";
-                }
+                return boolValue ? "true" : "false";
 
             case Types.TINYINT:
             case Types.SMALLINT:
@@ -430,11 +423,9 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         stringBuilder.append(" (");
 
         List<DatabaseColumn> columns = table.getColumns();
-        
         for (int i = 0, n = columns.size(); i < n; i++) {
 
             stringBuilder.append(((DatabaseTableColumn) columns.get(i)).getNameEscaped());
-
             if (i < (n - 1)) {
                 
                 stringBuilder.append(", ");
@@ -443,7 +434,6 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         }
         
         stringBuilder.append(") VALUES \n    (");
-
         return stringBuilder.toString();
     }
 
@@ -467,7 +457,6 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         DatabaseTable table = importExportFile.getDatabaseTable();
 
         List<DatabaseColumn> columns = null;
-        
         if (importExportFile.hasColumnSelections()) {
             
             columns = importExportFile.getDatabaseTableColumns();
@@ -478,13 +467,10 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         }
 
         StringBuilder sb = new StringBuilder("SELECT ");
-        
         for (int i = 0, n = columns.size(); i < n; i++) {
             
             DatabaseTableColumn column = (DatabaseTableColumn) columns.get(i);
-            
             sb.append(column.getNameEscaped());
-            
             if (i < (n - 1)) {
                 
                 sb.append(',');
@@ -493,14 +479,14 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         }
 
         sb.append(" FROM ");
-        
+
         if (table.getParentNameForStatement() != null) {
         
             sb.append(table.getParentNameForStatement());
             sb.append(".");
         }
 
-        sb.append(table.getName());
+        sb.append(table.getNameForQuery());
         
         if (Log.isDebugEnabled()) {
             

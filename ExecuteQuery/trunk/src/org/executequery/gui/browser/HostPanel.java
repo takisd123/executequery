@@ -39,6 +39,7 @@ import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
+import org.underworldlabs.swing.util.SwingWorker;
 
 /**
  * Database connection host panel.
@@ -164,8 +165,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         this.host = host;
         connectionPanel.setConnectionValue(host);
 
-        DatabaseConnection databaseConnection = 
-                                host.getDatabaseConnection();
+        DatabaseConnection databaseConnection = host.getDatabaseConnection();
         if (databaseConnection.isConnected()) {
 
             changePanelData();
@@ -234,7 +234,10 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         }        
     }
 
+    private SwingWorker worker;
+    
     private void changePanelData() {
+        
         // notify the database properties
         updateDatabaseProperties();
         //Hashtable properties = controller.getDatabaseProperties();

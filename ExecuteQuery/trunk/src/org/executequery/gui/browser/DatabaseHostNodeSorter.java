@@ -64,7 +64,6 @@ class DatabaseHostNodeSorter {
         return comparators.get(lastSort);
     }
 
-    @SuppressWarnings("unchecked")
     public void sort(DefaultMutableTreeNode rootNode) {
 
         List<DatabaseHostNode> children =

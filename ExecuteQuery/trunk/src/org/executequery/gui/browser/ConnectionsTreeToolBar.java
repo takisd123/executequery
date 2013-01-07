@@ -66,6 +66,11 @@ class ConnectionsTreeToolBar extends PanelToolBar {
                 GUIUtilities.getAbsoluteIconPath("NewConnection16.png"), 
                 "New connection");
 
+        addButton(
+                treePanel, "newFolder", 
+                GUIUtilities.getAbsoluteIconPath("NewFolder16.png"), 
+                "New folder");
+        
         deleteConnectionButton = addButton(
                 treePanel, "deleteConnection", 
                 GUIUtilities.getAbsoluteIconPath("Delete16.png"),

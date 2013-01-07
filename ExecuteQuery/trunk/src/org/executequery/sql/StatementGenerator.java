@@ -20,6 +20,10 @@
 
 package org.executequery.sql;
 
+import java.sql.Connection;
+
+import liquibase.database.Database;
+
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.DatabaseView;
 import org.executequery.databaseobjects.impl.DatabaseTableColumn;
@@ -51,6 +55,6 @@ public interface StatementGenerator {
     String columnDescription(DatabaseTableColumn column);
 
     String viewDefinition(String databaseName, DatabaseView view);
-    
+
 }
 

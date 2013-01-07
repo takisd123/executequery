@@ -23,6 +23,7 @@ package org.executequery.databasemediators.spi;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.crypto.PasswordEncoderDecoder;
 import org.executequery.crypto.spi.DefaultPasswordEncoderDecoderFactory;
@@ -154,7 +155,7 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
     }
     
     public boolean hasURL() {
-        return url != null && url.length() > 0;
+        return StringUtils.isNotBlank(url);
     }
     
     public int getPortInt() {

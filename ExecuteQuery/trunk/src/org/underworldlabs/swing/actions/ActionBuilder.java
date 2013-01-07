@@ -320,6 +320,14 @@ public final class ActionBuilder {
                     
                     KeyStroke keyStroke = KeyStroke.getKeyStroke(value);
                     actionCommand.putValue(Action.ACCELERATOR_KEY, keyStroke);
+                    
+                    /*
+                    if (value.contains("control")) {
+                        
+                        Log.debug(attrs.getValue(NAME) + " - " + keyStroke);
+                        
+                    }
+                    */
                 }
 
                 actionCommand.putValue(Action.SHORT_DESCRIPTION, attrs.getValue(DESCRIPTION));

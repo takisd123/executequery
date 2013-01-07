@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    =======================================================================
+    File:         connection-folders-default.xml
+    Author:       Takis Diakoumis
+    Description:  Default empty connection folders - default has Favourites 
+                  only
+    Date:         $Date: 2012-01-27 16:36:44 +1100 (Fri, 27 Jan 2012) $
+    Version:      $Revision: 1052 $
+    =======================================================================
+-->
+
+<connection-folders>
+
+   <folder>
+      <id>61a05e8a-df1c-44fd-b8b7-8684691ee6ca</id>
+      <name>Favourites</name>
+      <connections/>
+   </folder>
+
+</connection-folders>

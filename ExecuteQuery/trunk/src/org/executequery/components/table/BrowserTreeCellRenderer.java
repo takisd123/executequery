@@ -55,6 +55,8 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
     
     private Color textForeground;
     private Color selectedTextForeground;
+    
+    private Color selectedBackground;
 
     /**
      * Constructs a new instance and initialises any variables
@@ -65,6 +67,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
 
         textForeground = UIManager.getColor("Tree.textForeground");
         selectedTextForeground = UIManager.getColor("Tree.selectionForeground");
+        selectedBackground = UIManager.getColor("Tree.selectionBackground");
 
         setIconTextGap(10);
         setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
@@ -114,6 +117,11 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
                         BrowserConstants.CONNECTIONS_IMAGE));
                 break;
 
+            case NamedObject.BRANCH_NODE:
+                setIcon(icons.get(
+                        BrowserConstants.CONNECTIONS_FOLDER_IMAGE));
+                break;
+                
             case NamedObject.HOST:
                 DatabaseHostNode _node = (DatabaseHostNode)node;
 
@@ -234,6 +242,8 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
             }
         }
 
+        setBackgroundSelectionColor(selectedBackground);
+        
         this.selected = isSelected;
         if(!selected) {
 
@@ -244,6 +254,20 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
             setForeground(selectedTextForeground);
         }
 
+        JTree.DropLocation dropLocation = tree.getDropLocation();
+        if (dropLocation != null && type == NamedObject.BRANCH_NODE
+                && dropLocation.getChildIndex() == -1
+                && tree.getRowForPath(dropLocation.getPath()) == row) {
+
+            setForeground(selectedTextForeground);
+            Color background = UIManager.getColor("Tree.dropCellBackground");
+            if (background == null) {                
+                background = UIUtils.getBrighter(getBackgroundSelectionColor(), 0.87);
+            }
+            setBackgroundSelectionColor(background);
+            
+            selected = true;
+        }
         return this;
     }
 

@@ -23,6 +23,7 @@ package org.executequery.repository;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.executequery.repository.spi.ConnectionFoldersXMLRepository;
 import org.executequery.repository.spi.DatabaseConnectionXMLRepository;
 import org.executequery.repository.spi.DatabaseDriverXMLRepository;
 import org.executequery.repository.spi.EditorSQLShortcutXMLRepository;
@@ -76,6 +77,9 @@ public final class RepositoryCache {
 
         repositories.put(DatabaseConnectionRepository.REPOSITORY_ID, 
                 new DatabaseConnectionXMLRepository());
+        
+        repositories.put(ConnectionFoldersRepository.REPOSITORY_ID, 
+                new ConnectionFoldersXMLRepository());
         
         repositories.put(DatabaseDriverRepository.REPOSITORY_ID, 
                 new DatabaseDriverXMLRepository());
