@@ -308,10 +308,3 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
     }
 
 }
-
-
-
-
-
-
-
