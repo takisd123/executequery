@@ -31,6 +31,7 @@ import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeNode;
@@ -298,23 +299,57 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             hostNodeSorter = new DatabaseHostNodeSorter();
         }
 
-        DefaultMutableTreeNode rootNode = tree.getConnectionsBranchNode();
-        hostNodeSorter.sort(rootNode);
-
-        tree.nodeStructureChanged(rootNode);
+        boolean isRootNode = false;
+        DefaultMutableTreeNode selectedNode = getSelectedFolderNode();
+        if (selectedNode == null) {
+            
+            isRootNode = true;
+            selectedNode = tree.getConnectionsBranchNode();
+        }
+        
+        hostNodeSorter.sort(selectedNode);
+        tree.nodeStructureChanged(selectedNode);
 
         int count = 0;
-        for (Enumeration i = rootNode.children(); i.hasMoreElements();) {
+        for (Enumeration i = selectedNode.children(); i.hasMoreElements();) {
 
-            DatabaseHostNode node = (DatabaseHostNode) i.nextElement();
-            DatabaseConnection databaseConnection = node.getDatabaseConnection();
-            connections.remove(databaseConnection);
-            connections.add(count, databaseConnection);
+            Object object = i.nextElement();
+            if (object instanceof DatabaseHostNode) {
 
-            count++;
+                DatabaseHostNode node = (DatabaseHostNode) object;
+                DatabaseConnection databaseConnection = node.getDatabaseConnection();
+                connections.remove(databaseConnection);
+                connections.add(count, databaseConnection);
+                
+                count++;
+            }
         }
 
-        connectionModified(null);
+        if (isRootNode) {
+        
+            connectionModified(null);
+
+        } else {
+        
+            ConnectionsFolderNode folderNode = (ConnectionsFolderNode) selectedNode;
+            ConnectionsFolder folder = folderNode.getConnectionsFolder();
+            folder.empty();
+            
+            for (Enumeration<?> j = selectedNode.children(); j.hasMoreElements();) {
+
+                Object object = j.nextElement();
+                if (isADatabaseHostNode(object)) {
+                    
+                    DatabaseHostNode child = (DatabaseHostNode) object;
+                    DatabaseConnection databaseConnection = child.getDatabaseConnection();
+                    folder.addConnection(databaseConnection.getId());
+                }
+
+            }
+
+            folderModified(folder);
+            
+        }
     }
 
     public void rebuildConnectionsFromTree() {
@@ -977,10 +1012,14 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         return null;
     }
 
+    private boolean isRootNode(Object object) {
+        return object instanceof RootDatabaseObjectNode;
+    }
+
     private boolean isADatabaseHostNode(Object object) {
         return object instanceof DatabaseHostNode;
     }
-
+    
     private boolean isADatabaseObjectNode(Object object) {
         return object instanceof DatabaseObjectNode;
     }
@@ -1440,7 +1479,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     /** provides an indicator that an expansion is in progress */
     private boolean treeExpanding = false;
 
-    private BrowserTreeRootPopopMenu rootPopupMenu;
+    private BrowserTreeRootPopupMenu rootPopupMenu;
+
+    private BrowserTreeFolderPopupMenu folderPopupMenu;
 
     protected DatabaseObjectNode getParentNode(DatabaseObjectNode child) {
 
@@ -1683,41 +1724,40 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         return popupMenu;
     }
 
-    private BrowserTreeRootPopopMenu getBrowserRootTreePopupMenu() {
+    private BrowserTreeRootPopupMenu getBrowserRootTreePopupMenu() {
         if (rootPopupMenu == null) {
-            rootPopupMenu = new BrowserTreeRootPopopMenu(this);
+            rootPopupMenu = new BrowserTreeRootPopupMenu(this);
         }
         return rootPopupMenu;
     }
 
+    private BrowserTreeFolderPopupMenu getBrowserTreeFolderPopupMenu() {
+        if (folderPopupMenu == null) {
+            folderPopupMenu = new BrowserTreeFolderPopupMenu(this);
+        }
+        return folderPopupMenu;
+    }
+    
     private class MouseHandler extends MouseAdapter {
 
         public MouseHandler() {}
 
         public void mouseClicked(MouseEvent e) {
 
-//            int clickCount = e.getClickCount();
-//            System.out.println("mouseClicked clicks : " + clickCount);
-
             if (e.getClickCount() < 2) {
 
                 return;
             }
-
             twoClicks(e);
         }
 
         public void mousePressed(MouseEvent e) {
-
-//            int clickCount = e.getClickCount();
-//            System.out.println("mousePressed clicks : " + clickCount);
 
             if (e.getClickCount() < 2) {
 
                 maybeShowPopup(e);
                 return;
             }
-
             twoClicks(e);
         }
 
@@ -1742,39 +1782,41 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
                 Point point = new Point(e.getX(), e.getY());
                 TreePath treePathForLocation = getTreePathForLocation(point.x, point.y);
+                try {
 
-                if (tree.getRowForPath(treePathForLocation) == 0) {
+                    removeTreeSelectionListener();
+                    setTreeSelectionPath(treePathForLocation);
 
-                    BrowserTreeRootPopopMenu popup = getBrowserRootTreePopupMenu();
-                    popup.show(e.getComponent(), point.x, point.y);
-                    return;
+                } finally {
+
+                    addTreeSelectionListener();
                 }
 
-                BrowserTreePopupMenu popup = getBrowserTreePopupMenu();
-                popup.setCurrentPath(treePathForLocation);
+                JPopupMenu popupMenu = null;
+                Object object = treePathForLocation.getLastPathComponent();
+                if (isAConnectionsFolderNode(object)) {
+                    
+                    popupMenu = getBrowserTreeFolderPopupMenu();                
+                
+                } else if (isRootNode(object)) {
 
-                DatabaseConnection connection = getConnectionAt(point);
+                    popupMenu = getBrowserRootTreePopupMenu();
 
-                if (connection == null) {
-                    return;
-                }
+                } else {
 
-                popup.setCurrentSelection(connection);
-
-                if (popup.hasCurrentSelection()) {
-
-                    try {
-
-                        removeTreeSelectionListener();
-                        setTreeSelectionPath(popup.getCurrentPath());
-
-                    } finally {
-
-                        addTreeSelectionListener();
+                    popupMenu = getBrowserTreePopupMenu();
+                    BrowserTreePopupMenu browserPopup = (BrowserTreePopupMenu) popupMenu; 
+                    browserPopup.setCurrentPath(treePathForLocation);
+    
+                    DatabaseConnection connection = getConnectionAt(point);
+                    if (connection == null) {
+                        return;
                     }
-
-                    popupMenu.show(e.getComponent(), point.x, point.y);
+    
+                    browserPopup.setCurrentSelection(connection);
                 }
+
+                popupMenu.show(e.getComponent(), point.x, point.y);
             }
         }
 

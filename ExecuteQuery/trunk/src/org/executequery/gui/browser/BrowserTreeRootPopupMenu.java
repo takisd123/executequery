@@ -27,9 +27,9 @@ import javax.swing.JPopupMenu;
 
 import org.underworldlabs.swing.menu.MenuItemFactory;
 
-public class BrowserTreeRootPopopMenu extends JPopupMenu {
+public class BrowserTreeRootPopupMenu extends JPopupMenu {
 
-    public BrowserTreeRootPopopMenu(ConnectionsTreePanel treePanel) {
+    public BrowserTreeRootPopupMenu(ConnectionsTreePanel treePanel) {
 
         add(createMenuItem("New Folder", "newFolder", treePanel));
         add(createMenuItem("New Connection", "newConnection", treePanel));

@@ -74,7 +74,7 @@ class ConnectionsTreeToolBar extends PanelToolBar {
         deleteConnectionButton = addButton(
                 treePanel, "deleteConnection", 
                 GUIUtilities.getAbsoluteIconPath("Delete16.png"),
-                "Remove connection");
+                "Delete");
 
         upButton = addButton(
                 treePanel, "moveConnectionUp", 

@@ -64,22 +64,30 @@ class DatabaseHostNodeSorter {
         return comparators.get(lastSort);
     }
 
-    public void sort(DefaultMutableTreeNode rootNode) {
+    @SuppressWarnings("rawtypes")
+    public void sort(DefaultMutableTreeNode parent) {
 
-        List<DatabaseHostNode> children =
-            new ArrayList<DatabaseHostNode>(rootNode.getChildCount());
+        List<DatabaseHostNode> children = new ArrayList<DatabaseHostNode>(parent.getChildCount());
+        for (Enumeration i = parent.children(); i.hasMoreElements();) {
 
-        for (Enumeration i = rootNode.children(); i.hasMoreElements();) {
-
-            children.add((DatabaseHostNode) i.nextElement());
+            Object object = i.nextElement();
+            if (object instanceof DatabaseHostNode) {
+             
+                children.add((DatabaseHostNode) object);
+            }
         }
 
         Collections.sort(children, nextComparator());
-        rootNode.removeAllChildren();
+
+        // remove - retains folders etc
+        for (DatabaseHostNode treeNode : children) {
+
+            parent.remove(treeNode);
+        }
 
         for (DatabaseHostNode treeNode : children) {
 
-            rootNode.add(treeNode);
+            parent.add(treeNode);
         }
 
     }
