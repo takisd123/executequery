@@ -87,6 +87,7 @@ import org.executequery.listeners.PreferencesChangesListener;
 import org.executequery.listeners.ToolBarVisibilityListener;
 import org.executequery.log.Log;
 import org.executequery.print.PrintFunction;
+import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.repository.UserLayoutObject;
@@ -1450,6 +1451,9 @@ public final class GUIUtilities {
         ((DatabaseConnectionRepository)RepositoryCache.load(
                 DatabaseConnectionRepository.REPOSITORY_ID)).save();
 
+        ((ConnectionFoldersRepository)RepositoryCache.load(
+                ConnectionFoldersRepository.REPOSITORY_ID)).save();
+        
         ToolBarProperties.saveTools();
 
         Log.info("System exiting...");

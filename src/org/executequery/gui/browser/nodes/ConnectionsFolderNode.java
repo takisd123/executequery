@@ -43,6 +43,16 @@ public class ConnectionsFolderNode extends RootDatabaseObjectNode {
 
         this.connectionsFolder = connectionsFolder;
     }
+
+    @Override
+    public DatabaseObjectNode copy() {
+        return new ConnectionsFolderNode(connectionsFolder);
+    }
+    
+    @Override
+    public boolean isDraggable() {
+        return true;
+    }
     
     @Override
     public boolean isNameEditable() {

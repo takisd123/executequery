@@ -26,6 +26,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,10 +51,11 @@ import javax.swing.tree.TreeSelectionModel;
 import org.executequery.GUIUtilities;
 import org.executequery.SuppressedException;
 import org.executequery.components.table.BrowserTreeCellRenderer;
-import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.gui.browser.BrowserConstants;
 import org.executequery.gui.browser.ConnectionsTreePanel;
+import org.executequery.gui.browser.nodes.ConnectionsFolderNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
+import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.tree.DynamicTree;
@@ -158,6 +160,27 @@ public class SchemaTree extends DynamicTree
         // do nothing
     }
 
+    @SuppressWarnings("unchecked")
+    private boolean hasFolders() {
+        
+        for (Enumeration<DefaultMutableTreeNode> i = getRootNode().children(); i.hasMoreElements();) {
+            
+            DefaultMutableTreeNode element = i.nextElement();
+            if (element instanceof ConnectionsFolderNode) {
+                
+                return true;
+
+            } else if (element instanceof DatabaseHostNode) {
+                
+                return false;
+            }
+
+        }
+        
+        return false;
+    }
+    
+    
     // nice example: http://www.coderanch.com/t/346509/GUI/java/JTree-drag-drop-inside-one
     
     class TreeTransferHandler extends TransferHandler {
@@ -203,26 +226,56 @@ public class SchemaTree extends DynamicTree
                     return false;
                 }
             }
-            // Do not allow MOVE-action drops if a non-leaf node is
-            // selected unless all of its children are also selected.
+
+            TreePath dest = dl.getPath();
+            DefaultMutableTreeNode target = asTreeNode(dest.getLastPathComponent());
+
+            TreePath path = tree.getPathForRow(selRows[0]);
+            DefaultMutableTreeNode firstNode = asTreeNode(path.getLastPathComponent());
+
+            if (isFolderNode(firstNode) && isFolderNode(target)) {
+                
+                return false;
+            }
+
+            if (target instanceof RootDatabaseObjectNode) {
+                
+                int index = dl.getChildIndex();
+                TreePath insertionPath = tree.getPathForRow(index);
+
+                if (index == 0) {
+                    
+                    if (!isFolderNode(firstNode) && hasFolders()) {
+                        
+                        return false;
+                    }
+
+                } else if (insertionPath != null) {
+                     
+                    DefaultMutableTreeNode nodeAtInsertionPath = asTreeNode(insertionPath.getLastPathComponent());
+                    if (!(firstNode.getClass().getName().equals(nodeAtInsertionPath.getClass().getName()))) {
+                        
+                        return false;
+                    }
+                    
+                }
+
+            }
+            
+            // Do not allow MOVE-action drops if a non-leaf node is selected 
+            // unless all of its children are also selected.
             int action = support.getDropAction();
             if (action == MOVE) {
 
                 return haveCompleteNode(tree);
             }
 
-            // Do not allow a non-leaf node to be copied to a level
-            // which is less than its source level.
-            TreePath dest = dl.getPath();
-            DefaultMutableTreeNode target = (DefaultMutableTreeNode)dest.getLastPathComponent();
-            TreePath path = tree.getPathForRow(selRows[0]);
-            DefaultMutableTreeNode firstNode =
-                (DefaultMutableTreeNode)path.getLastPathComponent();
+            // Do not allow a non-leaf node to be copied to a level which is less than its source level.
+            if (firstNode.getChildCount() > 0 && target.getLevel() < firstNode.getLevel()) {
 
-            if (firstNode.getChildCount() > 0 &&
-                   target.getLevel() < firstNode.getLevel()) {
                 return false;
             }
+            
             return true;
         }
 
@@ -230,21 +283,23 @@ public class SchemaTree extends DynamicTree
             
             int[] selRows = tree.getSelectionRows();
             TreePath path = tree.getPathForRow(selRows[0]);
-            DefaultMutableTreeNode first = (DefaultMutableTreeNode)path.getLastPathComponent();
+            DefaultMutableTreeNode first = asTreeNode(path.getLastPathComponent());
             
             int childCount = first.getChildCount();
 
+            /*
             // first has children and no children are selected.
             if (childCount > 0 && selRows.length == 1) {
              
                 return false;
             }
-
+            */
+            
             // first may have children.
             for (int i = 1; i < selRows.length; i++) {
 
                 path = tree.getPathForRow(selRows[i]);
-                DefaultMutableTreeNode next = (DefaultMutableTreeNode)path.getLastPathComponent();
+                DefaultMutableTreeNode next = asTreeNode(path.getLastPathComponent());
                 if (first.isNodeChild(next)) {
 
                     // Found a child of first.
@@ -278,26 +333,25 @@ public class SchemaTree extends DynamicTree
 
             if (paths != null) {
 
-                DefaultMutableTreeNode node = (DefaultMutableTreeNode)paths[0].getLastPathComponent();
-                if (!(node instanceof DatabaseHostNode) || isExpanded(paths[0])) {
+                DefaultMutableTreeNode node = asTreeNode(paths[0].getLastPathComponent());
+                if (!canDrag(node) || isExpanded(paths[0])) {
                     
                     return null;
                 }
-                
+
                 // Make up a node array of copies for transfer and
                 // another for/of the nodes that will be removed in
                 // exportDone after a successful drop.
                 List<DefaultMutableTreeNode> copies = new ArrayList<DefaultMutableTreeNode>();
                 List<DefaultMutableTreeNode> toRemove = new ArrayList<DefaultMutableTreeNode>();
                 
-                DefaultMutableTreeNode copy = copy((DatabaseHostNode) node);
+                DefaultMutableTreeNode copy = ((DatabaseObjectNode) node).copy();
                 copies.add(copy);
                 toRemove.add(node);
 
                 for (int i = 1; i < paths.length; i++) {
 
-                    DefaultMutableTreeNode next =
-                        (DefaultMutableTreeNode) paths[i].getLastPathComponent();
+                    DefaultMutableTreeNode next = asTreeNode(paths[i].getLastPathComponent());
                     
                     // Do not allow higher level nodes to be added to list.
                     if (next.getLevel() < node.getLevel()) {
@@ -326,15 +380,21 @@ public class SchemaTree extends DynamicTree
             return null;
         }
 
+        private boolean canDrag(DefaultMutableTreeNode node) {
+
+            if (node instanceof DatabaseObjectNode) {
+
+                return ((DatabaseObjectNode) node).isDraggable();
+            }
+            
+            return false;
+        }
+
         /** Defensive copy used in createTransferable. */
         private DefaultMutableTreeNode copy(TreeNode node) {
             return new DefaultMutableTreeNode(node);
         }
 
-        private DefaultMutableTreeNode copy(DatabaseHostNode node) {
-            return new DatabaseHostNode((DatabaseHost) node.getDatabaseObject(), node.getParentFolder());
-        }
-        
         protected void exportDone(JComponent source, Transferable data, int action) {
 
             TreePath[] paths = getSelectionPaths();
@@ -425,8 +485,7 @@ public class SchemaTree extends DynamicTree
                     (JTree.DropLocation)support.getDropLocation();
             int childIndex = dl.getChildIndex();
             TreePath dest = dl.getPath();
-            DefaultMutableTreeNode parent =
-                (DefaultMutableTreeNode)dest.getLastPathComponent();
+            DefaultMutableTreeNode parent = asTreeNode(dest.getLastPathComponent());
             
             if (!(parent instanceof RootDatabaseObjectNode)) {
                 return false;
@@ -493,6 +552,47 @@ public class SchemaTree extends DynamicTree
         
         panel.connectionNameChanged(name);
     }
-    
+
+    public boolean canMoveSelection(int direction) {
+
+        DefaultMutableTreeNode node = asTreeNode(getLastPathComponent());
+        int currentIndex = getIndexWithinParent(node);
+
+        TreeNode parent = node.getParent();
+        DefaultMutableTreeNode adjacentNode = null;
+        
+        if (direction == MOVE_UP) {
+
+            if (currentIndex == 0) {
+                
+                return false;
+            }
+            
+            int newIndex = currentIndex - 1;
+            adjacentNode = (DefaultMutableTreeNode) parent.getChildAt(newIndex);
+            
+        } else {
+            
+            int newIndex = currentIndex + 1;
+            int childCount = parent.getChildCount();
+            if (newIndex > (childCount - 1)) {
+
+                return false;
+            }
+            
+            adjacentNode = (DefaultMutableTreeNode) parent.getChildAt(newIndex);
+        }
+        
+        return (adjacentNode.getClass().getName().equals(node.getClass().getName()));
+    }
+
+    private boolean isFolderNode(DefaultMutableTreeNode node) {
+        return node instanceof ConnectionsFolderNode;
+    }
+
+    private DefaultMutableTreeNode asTreeNode(Object object) {
+        return (DefaultMutableTreeNode) object;
+    }
+
 }
 

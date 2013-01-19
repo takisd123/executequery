@@ -54,6 +54,10 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
         this.databaseObject = databaseObject;
     }
 
+    public DatabaseObjectNode copy() {
+        return new DatabaseObjectNode(this.databaseObject);
+    }
+    
     /**
      * Sets the user object to that specified.
      *
@@ -97,6 +101,10 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
     }
 
     public boolean isNameEditable() {
+        return false;
+    }
+    
+    public boolean isDraggable() {
         return false;
     }
     
