@@ -62,6 +62,16 @@ public class DatabaseHostNode extends DatabaseObjectNode {
     }
 
     @Override
+    public DatabaseObjectNode copy() {
+        return new DatabaseHostNode((DatabaseHost) getDatabaseObject(), parentFolder);
+    }
+    
+    @Override
+    public boolean isDraggable() {
+        return true;
+    }
+    
+    @Override
     public boolean isNameEditable() {
         return true;
     }

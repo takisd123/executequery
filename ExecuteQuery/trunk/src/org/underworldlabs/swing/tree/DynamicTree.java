@@ -288,12 +288,29 @@ public class DynamicTree extends JTree {
         setSelectionPath(path);        
     }
     
+    public int getIndexWithinParent(TreeNode node) {
+        
+        MutableTreeNode parent = (MutableTreeNode) node.getParent();
+        if (parent == null) {
+            
+            parent = root;
+        }
+        
+        return parent.getIndex(node);
+    }
+    
     /**
      * Moves the specified node in the specified direction.
      */
     private void move(TreeNode node, int direction) {
 
-        int currentIndex = root.getIndex(node);
+        MutableTreeNode parent = (MutableTreeNode) node.getParent();
+        if (parent == null) {
+            
+            parent = root;
+        }
+        
+        int currentIndex = parent.getIndex(node);
         if (currentIndex <= 0 && direction == MOVE_UP) {
 
             return;
@@ -308,7 +325,7 @@ public class DynamicTree extends JTree {
 
             newIndex = currentIndex + 1;
 
-            int childCount = root.getChildCount();
+            int childCount = parent.getChildCount();
             if (newIndex > (childCount - 1)) {
 
                 return;
@@ -319,13 +336,14 @@ public class DynamicTree extends JTree {
         int selectedRow = getTreeSelectionRow();
 
         // remove node from root
-        root.remove(currentIndex);
+        parent.remove(currentIndex);
+        MutableTreeNode _node = (MutableTreeNode)node;
         
         // insert into the new index
-        root.insert((MutableTreeNode)node, newIndex);
+        parent.insert(_node, newIndex);
 
         // fire event
-        treeModel.nodeStructureChanged(root);
+        treeModel.nodeStructureChanged(parent);
         
         TreePath path = null;
         if (node instanceof DefaultMutableTreeNode) {
@@ -352,15 +370,6 @@ public class DynamicTree extends JTree {
         setSelectionPath(path);
     }
     
-    /**
-     * Moves the selected node up in the tree.
-     */
-    public void moveSelectionUp() {
-
-        TreeNode node = (TreeNode)getLastPathComponent();
-        move(node, MOVE_UP);
-    }
-
     /**
      * Selects the node that matches the specified prefix forward 
      * from the currently selected node.
@@ -438,12 +447,23 @@ public class DynamicTree extends JTree {
         }
     }
 
+    public void moveSelection(int direction) {
+        TreeNode node = (TreeNode)getLastPathComponent();
+        move(node, direction);
+    }
+    
+    /**
+     * Moves the selected node up in the tree.
+     */
+    public void moveSelectionUp() {
+        moveSelection(MOVE_UP);
+    }
+
     /**
      * Moves the selected node down in the tree.
      */
     public void moveSelectionDown() {
-        TreeNode node = (TreeNode)getLastPathComponent();
-        move(node, MOVE_DOWN);
+        moveSelection(MOVE_DOWN);
     }
 
     /**
