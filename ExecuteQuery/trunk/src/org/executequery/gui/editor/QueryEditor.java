@@ -148,6 +148,8 @@ public class QueryEditor extends DefaultTabView
 
     private TokenizingFormatter formatter;
 
+    private JPanel toolsPanel;
+    
     private List<ConnectionChangeListener> connectionChangeListeners;
 
     /** Constructs a new instance. */
@@ -263,7 +265,7 @@ public class QueryEditor extends DefaultTabView
 
         maxRowCountField = new MaxRowCountField(this);
 
-        JPanel toolsPanel = new JPanel(new GridBagLayout());
+        toolsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 0);
         gbc.anchor = GridBagConstraints.NORTHWEST;
@@ -446,6 +448,7 @@ public class QueryEditor extends DefaultTabView
 
         setPanelBackgrounds();
         statusBar.setVisible(isStatusBarVisible());
+        toolsPanel.setVisible(isToolsPanelVisible());
         editorPanel.showLineNumbers(isLineNumbersVisible());
         editorPanel.preferencesChanged();
         delegate.preferencesChanged();
@@ -505,6 +508,11 @@ public class QueryEditor extends DefaultTabView
         return userProperties().getBooleanProperty("editor.display.statusbar");
     }
 
+    private boolean isToolsPanelVisible() {
+        
+        return userProperties().getBooleanProperty("editor.display.toolsPanel");
+    }
+    
     private UserProperties userProperties() {
 
         return UserProperties.getInstance();

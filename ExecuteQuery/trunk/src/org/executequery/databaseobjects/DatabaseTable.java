@@ -177,7 +177,6 @@ public interface DatabaseTable extends DatabaseObject {
 
     int getColumnCount() throws DataSourceException;
 
+    boolean hasPrimaryKey();
+    
 }
-
-
-

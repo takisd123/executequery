@@ -22,11 +22,13 @@ package org.executequery.gui.browser;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-
 import java.awt.print.Printable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import javax.swing.BorderFactory;
+import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import org.executequery.gui.erd.ErdViewerPanel;
@@ -58,7 +60,9 @@ public class ReferencesDiagramPanel extends JPanel {
     }
     
     public void setTables(List tableNames, List columnData) {
-        viewerPanel.resetTableValues(tableNames, columnData);
+        
+        Set<String> uniqueNames = new HashSet<String>(tableNames);
+        viewerPanel.resetTableValues(new ArrayList<String>(uniqueNames), columnData);
     }
    
 }

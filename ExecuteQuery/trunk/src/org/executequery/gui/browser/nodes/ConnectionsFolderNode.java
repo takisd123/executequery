@@ -45,8 +45,16 @@ public class ConnectionsFolderNode extends RootDatabaseObjectNode {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public DatabaseObjectNode copy() {
-        return new ConnectionsFolderNode(connectionsFolder);
+
+        ConnectionsFolderNode copy = new ConnectionsFolderNode(connectionsFolder);
+        for (Enumeration<DatabaseObjectNode> i = children(); i.hasMoreElements();) {
+            
+            copy.add(i.nextElement().copy());
+        }
+        
+        return copy;
     }
     
     @Override

@@ -187,6 +187,13 @@ public class PropertiesEditorGeneral extends PropertiesBasePanel {
                     "Status bar",
                     Boolean.valueOf(stringUserProperty(key))));
 
+        key = "editor.display.toolsPanel";
+        list.add(new UserPreference(
+                UserPreference.BOOLEAN_TYPE,
+                key,
+                "Tools panel",
+                new Boolean(SystemProperties.getProperty("user", key))));
+
         key = "editor.display.linenums";
         list.add(new UserPreference(
                     UserPreference.BOOLEAN_TYPE,

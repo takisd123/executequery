@@ -1,6 +1,17 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 1 August 2012
+Date: 25 January 2013
+
+Summary of changes - v3.5.2 Build 5203:
+----------------------------------------
+
+- Added connection folders.
+- Fixed issue wth References Panel showing current table multiple times for 
+  composite keys.
+- Added Collapse All feature for connection nodes in the Browser Tree.
+- Added show/hide tools panel for the Query Editor.
+- Added alternating row colour for results table.
+
 
 Summary of changes - v3.5.1 Build 5196:
 ----------------------------------------

@@ -233,12 +233,15 @@ public class SchemaTree extends DynamicTree
             TreePath path = tree.getPathForRow(selRows[0]);
             DefaultMutableTreeNode firstNode = asTreeNode(path.getLastPathComponent());
 
+//            System.out.println(" ------------------- ");
+//            System.out.println("target: " + target);
+            
             if (isFolderNode(firstNode) && isFolderNode(target)) {
                 
                 return false;
             }
 
-            if (target instanceof RootDatabaseObjectNode) {
+            if (isRootNode(target)) {
                 
                 int index = dl.getChildIndex();
                 TreePath insertionPath = tree.getPathForRow(index);
@@ -253,6 +256,9 @@ public class SchemaTree extends DynamicTree
                 } else if (insertionPath != null) {
                      
                     DefaultMutableTreeNode nodeAtInsertionPath = asTreeNode(insertionPath.getLastPathComponent());
+                    
+//                    System.out.println("node at insertion: " + nodeAtInsertionPath);
+                    
                     if (!(firstNode.getClass().getName().equals(nodeAtInsertionPath.getClass().getName()))) {
                         
                         return false;
@@ -473,17 +479,20 @@ public class SchemaTree extends DynamicTree
             // Extract transfer data.
             DefaultMutableTreeNode[] nodes = null;
             try {
+                
                 Transferable t = support.getTransferable();
                 nodes = (DefaultMutableTreeNode[])t.getTransferData(nodesFlavor);
+                
             } catch(UnsupportedFlavorException ufe) {
                 System.out.println("UnsupportedFlavor: " + ufe.getMessage());
             } catch(java.io.IOException ioe) {
                 System.out.println("I/O error: " + ioe.getMessage());
             }
+            
             // Get drop location info.
-            JTree.DropLocation dl =
-                    (JTree.DropLocation)support.getDropLocation();
+            JTree.DropLocation dl = (JTree.DropLocation)support.getDropLocation();
             int childIndex = dl.getChildIndex();
+
             TreePath dest = dl.getPath();
             DefaultMutableTreeNode parent = asTreeNode(dest.getLastPathComponent());
             
@@ -516,7 +525,7 @@ public class SchemaTree extends DynamicTree
 
             public NodesTransferable(DefaultMutableTreeNode[] nodes) {
                 this.nodes = nodes;
-             }
+            }
 
             public Object getTransferData(DataFlavor flavor)
                                      throws UnsupportedFlavorException {
@@ -590,6 +599,10 @@ public class SchemaTree extends DynamicTree
         return node instanceof ConnectionsFolderNode;
     }
 
+    private boolean isRootNode(DefaultMutableTreeNode node) {
+        return node instanceof RootDatabaseObjectNode && !(isFolderNode(node));
+    }
+    
     private DefaultMutableTreeNode asTreeNode(Object object) {
         return (DefaultMutableTreeNode) object;
     }

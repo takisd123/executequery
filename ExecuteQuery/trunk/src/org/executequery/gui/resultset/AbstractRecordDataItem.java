@@ -34,6 +34,8 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	private int dataType;
 
 	private String dataTypeName;
+	
+	private boolean changed;
 
 	public AbstractRecordDataItem(int dataType, String dataTypeName) {
 
@@ -74,6 +76,11 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 		this.value = value;
 	}
 
+	public void valueChanged(Object newValue) {
+	    setValue(newValue);
+	    changed = true;
+	}
+	
 	public boolean isValueNull() {
 		return (value == null);
 	}
@@ -91,6 +98,10 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	public void setNull() {
 		value = null;
 	}
+	
+	public boolean isChanged() {
+        return changed;
+    }
 	
 }
 

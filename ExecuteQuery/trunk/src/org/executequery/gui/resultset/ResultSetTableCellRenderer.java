@@ -74,6 +74,8 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     private Color dateValueDisplayColor;
     private Color charValueDisplayColor;
     private Color blobValueDisplayColor;
+    
+    private Color alternatingRowBackground;
 
     private boolean rightAlignNumeric;
 
@@ -115,7 +117,14 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
             }
 
             setForeground(tableForeground);
-            setBackground(tableBackground);
+            if (row % 2 == 0) {
+                
+                setBackground(alternatingRowBackground);
+
+            } else {
+             
+                setBackground(tableBackground);
+            }
         }
 
         if (hasFocus) {
@@ -277,7 +286,14 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
 
         if (!isSelected) {
 
-            setBackground(color);
+            if (color.getRGB() != Color.WHITE.getRGB()) {
+
+                // if its not white, apply the bg otherwise run with 
+                // alternating bg alreday set - which may alsobe white
+                
+                setBackground(color);
+            }
+
         }
 
     }
@@ -331,6 +347,9 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         numericValueDisplayColor = SystemProperties.getColourProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.cell.numeric.background.colour");
 
+        alternatingRowBackground = SystemProperties.getColourProperty(
+                Constants.USER_PROPERTIES_KEY, "results.alternating.row.background");
+        
         nullValueDisplayString = SystemProperties.getStringProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.cell.null.text");
     }

@@ -99,6 +99,11 @@ class ConnectionsTreeToolBar extends PanelToolBar {
 
         addButton(treePanel.getTreeFindAction());
 
+        addButton(
+                treePanel, "collapseAll", 
+                GUIUtilities.getAbsoluteIconPath("Collapse16.png"), 
+                "Collapse all");
+
     }
 
     protected void enableButtons(final boolean enableUpButton, 
