@@ -29,7 +29,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.log.Log;
@@ -342,19 +344,14 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         try {
 
             int columnCount = rsmd.getColumnCount();
-
             columns = new ArrayList<String>(metaMethods.length - 1);
-
             metaData = new ArrayList<List<String>>(columnCount);
 
             Object[] obj = new Object[1];
-
             for (int j = 1; j <= columnCount; j++) {
 
                 obj[0] = Integer.valueOf(j);
-
                 rowData = new ArrayList<String>(metaMethods.length - 1);
-
                 for (int i = 0; i < metaMethods.length; i++) {
 
                     String methodName = metaMethods[i].getName();
@@ -496,13 +493,22 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         
         return tableData.get(row);
     }
+
+    @Override
+    public void setValueAt(Object value, int row, int column) {
+
+        List<RecordDataItem> rowData = tableData.get(row);
+        if (column < rowData.size()) {
+
+            rowData.get(column).valueChanged(value);
+        }
+    }
     
     public Object getValueAt(int row, int column) {
 
         if (row < tableData.size()) {
 
             List<RecordDataItem> rowData = tableData.get(row);
-
             if (column < rowData.size()) {
 
                 return rowData.get(column);
@@ -518,7 +524,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     }
 
     private boolean cellsEditable;
-
+    private Set<String> nonEditableColumns;
+    
     public void setCellsEditable(boolean cellsEditable) {
      
         this.cellsEditable = cellsEditable;
@@ -526,9 +533,24 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     
     public boolean isCellEditable(int row, int column) {
 
+        if (columnHeaders != null) {
+            
+            String name = columnHeaders.get(column);
+            if (nonEditableColumns.contains(name)) {
+                
+                return false;
+            }
+            
+        }
+        
         return cellsEditable;
     }
 
+    public void setNonEditableColumns(List<String> nonEditableColumns) {
+        setCellsEditable(true);
+        this.nonEditableColumns = new HashSet<String>(nonEditableColumns);
+    }
+    
     public String getColumnName(int column) {
         
         return columnHeaders.get(column);

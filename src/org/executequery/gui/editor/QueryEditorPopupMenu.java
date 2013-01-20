@@ -88,6 +88,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createUseSchemaAutoComplete());
         add(createRemoveCommentsForQueryMenuItem());
         add(createRecycleResultSetTabMenuItem());
+        add(createShowHideToolsPanelMenuItem());
 
         addSeparator();
         add(createOptionsMenuItem());
@@ -120,14 +121,12 @@ public class QueryEditorPopupMenu extends JPopupMenu
     public void statementExecuting() {
 
         setExecuteActionButtonsEnabled(false);
-
         setExecutingButtonsEnabled(true);
     }
 
     public void statementFinished() {
 
         setExecuteActionButtonsEnabled(true);
-
         setExecutingButtonsEnabled(false);
     }
 
@@ -172,6 +171,11 @@ public class QueryEditorPopupMenu extends JPopupMenu
         checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.results.tabs.single");
     }
 
+    public void toggleToolsPanelVisible(ActionEvent e) {
+        
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.display.toolsPanel");
+    }
+    
     public void removeCommentsPriorToQueryExecution(ActionEvent e) {
 
         checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.execute.remove.comments");
@@ -245,6 +249,16 @@ public class QueryEditorPopupMenu extends JPopupMenu
         return menuItem;
     }
 
+    private JMenuItem createShowHideToolsPanelMenuItem() {
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
+        menuItem.setText("Display tools panel");
+        menuItem.setSelected(SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "editor.display.toolsPanel"));
+        menuItem.setActionCommand("toggleToolsPanelVisible");
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+    
     private JMenuItem createRemoveCommentsForQueryMenuItem() {
         JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
         menuItem.setText("Remove comments for execution");

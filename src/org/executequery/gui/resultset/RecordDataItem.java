@@ -42,6 +42,10 @@ public interface RecordDataItem extends TableCellValue {
 	
 	void setNull();
 
+    void valueChanged(Object newValue);
+
+    boolean isChanged();
+
 }
 
 

@@ -256,7 +256,7 @@ public class ErdExecuteSQL extends ErdPrintableDialog
     public void executeQuery(String query, boolean executeAsBlock) {}
     public void setResultSet(ResultSet rs, String query) throws SQLException {}
     public boolean isLogEnabled() {return false;}
-
+    
     // -------------------------------------------
     
 }

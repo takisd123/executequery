@@ -240,6 +240,17 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 enableReloadButton, enableDeleteButton);
     }
 
+    @SuppressWarnings("unchecked")
+    public void collapseAll() {
+        
+        for (Enumeration<DefaultMutableTreeNode> i = tree.getRootNode().children(); i.hasMoreElements();) {
+            
+            DefaultMutableTreeNode node = i.nextElement();
+            tree.collapsePath(new TreePath(node.getPath()));
+        }
+        
+    }
+    
     /**
      * Moves the selected connection (host node) up in the list.
      */
@@ -752,10 +763,14 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     private List<DatabaseHost> databaseHosts() {
         
-        DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
-        List<DatabaseHost> hosts = new ArrayList<DatabaseHost>();
+        DefaultMutableTreeNode parent = getSelectedFolderNode();
+        if (parent == null) {
+            
+            parent = tree.getConnectionsBranchNode();
+        }
         
-        for (Enumeration<?> i = root.children(); i.hasMoreElements();) {
+        List<DatabaseHost> hosts = new ArrayList<DatabaseHost>();
+        for (Enumeration<?> i = parent.children(); i.hasMoreElements();) {
             
             Object object = i.nextElement();
             if (isAConnectionsFolderNode(object)) {
@@ -768,6 +783,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 DatabaseHostNode node = asDatabaseHostNode(object);
                 DatabaseHost host = (DatabaseHost) node.getDatabaseObject();
                 hosts.add(host);
+                
             }
             
         }
@@ -1769,31 +1785,35 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                     addTreeSelectionListener();
                 }
 
-                JPopupMenu popupMenu = null;
-                Object object = treePathForLocation.getLastPathComponent();
-                if (isAConnectionsFolderNode(object)) {
+                if (treePathForLocation != null) {
+
+                    JPopupMenu popupMenu = null;
+                    Object object = treePathForLocation.getLastPathComponent();
+                    if (isAConnectionsFolderNode(object)) {
+                        
+                        popupMenu = getBrowserTreeFolderPopupMenu();                
                     
-                    popupMenu = getBrowserTreeFolderPopupMenu();                
-                
-                } else if (isRootNode(object)) {
-
-                    popupMenu = getBrowserRootTreePopupMenu();
-
-                } else {
-
-                    popupMenu = getBrowserTreePopupMenu();
-                    BrowserTreePopupMenu browserPopup = (BrowserTreePopupMenu) popupMenu; 
-                    browserPopup.setCurrentPath(treePathForLocation);
+                    } else if (isRootNode(object)) {
     
-                    DatabaseConnection connection = getConnectionAt(point);
-                    if (connection == null) {
-                        return;
+                        popupMenu = getBrowserRootTreePopupMenu();
+    
+                    } else {
+    
+                        popupMenu = getBrowserTreePopupMenu();
+                        BrowserTreePopupMenu browserPopup = (BrowserTreePopupMenu) popupMenu; 
+                        browserPopup.setCurrentPath(treePathForLocation);
+        
+                        DatabaseConnection connection = getConnectionAt(point);
+                        if (connection == null) {
+                            return;
+                        }
+        
+                        browserPopup.setCurrentSelection(connection);
                     }
-    
-                    browserPopup.setCurrentSelection(connection);
+
+                    popupMenu.show(e.getComponent(), point.x, point.y);
                 }
 
-                popupMenu.show(e.getComponent(), point.x, point.y);
             }
         }
 

@@ -296,10 +296,10 @@ public class ErdViewerPanel extends DefaultTabView
         int vertDiff = 50;
         int horizDiff = 50;
         
-        int v_size = tableNames.size();
-        tables = new Vector(v_size);
+        int size = tableNames.size();
+        tables = new Vector(size);
         
-        for (int i = 0; i < v_size; i++) {
+        for (int i = 0; i < size; i++) {
             
             // create the ERD display component
             table = new ErdTable((String)tableNames.get(i),

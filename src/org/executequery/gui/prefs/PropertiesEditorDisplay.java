@@ -55,14 +55,14 @@ public class PropertiesEditorDisplay extends PropertiesBasePanel {
                 key,
                 "Status bar",
                 new Boolean(SystemProperties.getProperty("user", key))));
-
+        
         key = "editor.display.linenums";
         list.add(new UserPreference(
                 UserPreference.BOOLEAN_TYPE,
                 key,
                 "Line numbers",
                 new Boolean(SystemProperties.getProperty("user", key))));
-
+        
         key = "editor.display.results";
         list.add(new UserPreference(
                 UserPreference.BOOLEAN_TYPE,

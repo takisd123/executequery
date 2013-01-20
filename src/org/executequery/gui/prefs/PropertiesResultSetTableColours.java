@@ -53,7 +53,7 @@ public class PropertiesResultSetTableColours extends PropertiesBasePanel {
         list.add(new UserPreference(
                 UserPreference.CATEGORY_TYPE,
                 null,
-                "Cell Background Colours",
+                "Row and Cell Background Colours",
                 null));
 
         String key = "results.table.cell.background.colour";
@@ -112,6 +112,13 @@ public class PropertiesResultSetTableColours extends PropertiesBasePanel {
                 "Other value cell background",
                 SystemProperties.getColourProperty("user", key)));
 
+        key = "results.alternating.row.background";
+        list.add(new UserPreference(
+                UserPreference.COLOUR_TYPE,
+                key,
+                "Alternating row background",
+                SystemProperties.getColourProperty("user", key)));
+        
         UserPreference[] preferences =
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);

@@ -540,7 +540,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 if (constraint.isPrimaryKey()) {
                     
                     tableNames.add(constraint.getTableName());
-
                     columns.add(controller.getColumnData(constraint.getCatalogName(),
                                                          constraint.getSchemaName(),
                                                          constraint.getTableName()));
@@ -549,7 +548,6 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 else if (constraint.isForeignKey()) {
 
                     tableNames.add(constraint.getReferencedTable());
-
                     columns.add(controller.getColumnData(constraint.getReferencedCatalog(),
                                                          constraint.getReferencedSchema(),
                                                          constraint.getReferencedTable()));
@@ -558,11 +556,9 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             }
             
             List<DatabaseColumn> exportedKeys = table.getExportedKeys();
-            
             for (DatabaseColumn column : exportedKeys) {
                 
                 tableNames.add(column.getParentsName());
-
                 columns.add(controller.getColumnData(column.getCatalogName(),
                                                      column.getSchemaName(),
                                                      column.getParentsName()));

@@ -164,6 +164,25 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 tableModel.setHoldMetaData(false);
             }
 
+            /*
+            if (databaseObject instanceof DatabaseTable) {
+                
+                DatabaseTable databaseTable = (DatabaseTable) databaseObject;
+                if (databaseTable.hasPrimaryKey()) {
+                    
+                    List<String> primaryKeyColumns = new ArrayList<String>();
+                    List<ColumnConstraint> primaryKeys = databaseTable.getPrimaryKeys();
+                    for (ColumnConstraint constraint : primaryKeys) {
+
+                        primaryKeyColumns.add(constraint.getColumnName());
+                    }
+
+                    tableModel.setNonEditableColumns(primaryKeyColumns);
+                }
+                
+            }
+            */
+            
             ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
             if (table == null) {

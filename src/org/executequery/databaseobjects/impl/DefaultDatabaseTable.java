@@ -655,16 +655,19 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return dropStatement;
     }
 
+    public boolean hasPrimaryKey() {
+        
+        List<ColumnConstraint> keys = getPrimaryKeys();
+        return keys != null && !keys.isEmpty(); 
+    }
+    
     public List<ColumnConstraint> getPrimaryKeys() {
 
         List<ColumnConstraint> primaryKeys = new ArrayList<ColumnConstraint>();
-
         List<ColumnConstraint> _constraints = getConstraints();
-
         for (int i = 0, n = _constraints.size(); i < n; i++) {
 
             ColumnConstraint columnConstraint = _constraints.get(i);
-
             if (columnConstraint.isPrimaryKey()) {
 
                 primaryKeys.add(columnConstraint);
@@ -678,13 +681,10 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public List<ColumnConstraint> getForeignKeys() {
 
         List<ColumnConstraint> foreignKeys = new ArrayList<ColumnConstraint>();
-
         List<ColumnConstraint> _constraints = getConstraints();
-
         for (int i = 0, n = _constraints.size(); i < n; i++) {
 
             ColumnConstraint columnConstraint = _constraints.get(i);
-
             if (columnConstraint.isForeignKey()) {
 
                 foreignKeys.add(columnConstraint);
