@@ -20,9 +20,12 @@
 
 package org.executequery.gui.editor;
 
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+
 import org.underworldlabs.swing.AbstractStatusBarPanel;
-import org.underworldlabs.swing.IndeterminateProgressBar;
+import org.underworldlabs.swing.ProgressBar;
+import org.underworldlabs.swing.ProgressBarFactory;
 
 /**
  * Query Editor status bar panel.
@@ -37,7 +40,7 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
     private StringBuffer caretBuffer;
     
     /** the progress bar */
-    private IndeterminateProgressBar progressBar;
+    private ProgressBar progressBar;
     
     /** the status bar panel fixed height */
     private static final int HEIGHT = 22;
@@ -54,10 +57,10 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
     private void jbInit() throws Exception {
         caretBuffer = new StringBuffer();
         // setup the progress bar
-        progressBar = new IndeterminateProgressBar(false);
+        progressBar = ProgressBarFactory.create(false, true);
 
         addLabel(0, 100, true); // activity label
-        addComponent(progressBar, 1, 120, false); // progress bar
+        addComponent(((JComponent) progressBar), 1, 120, false); // progress bar
         addLabel(2, 90, false); // execution time
         addLabel(3, 35, false); // insert mode
         addLabel(4, 60, false); // caret position

@@ -256,9 +256,7 @@ public class QueryEditor extends DefaultTabView
         maxRowCountCheckBox = new JCheckBox();
         maxRowCountCheckBox.setToolTipText("Enable/disable max records");
         maxRowCountCheckBox.addChangeListener(new ChangeListener() {
-
             public void stateChanged(ChangeEvent e) {
-
                 maxRowCountCheckBoxSelected();
             }
         });
@@ -1123,13 +1121,9 @@ public class QueryEditor extends DefaultTabView
     public void executeSQLAtCursor() {
 
         preExecute();
-
         String query = getQueryAtCursor();
-
         if (StringUtils.isNotBlank(query)) {
-
             editorPanel.setExecutingQuery(query);
-
             delegate.executeQuery(query);
         }
     }

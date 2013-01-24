@@ -90,10 +90,15 @@ public abstract class AbstractTabPane extends JPanel
         if (selectedTabBackground == null) {
             if ((UIUtils.isMetalLookAndFeel()) ||// && !UIUtils.usingOcean()) ||
                     UIUtils.isMotifLookAndFeel() || UIUtils.isWindowsLookAndFeel()) {
-                selectedTabBackground = 
-                        UIUtils.getDefaultActiveBackgroundColour();
-            }
-            else {
+
+            	selectedTabBackground = UIUtils.getDefaultActiveBackgroundColour();
+            
+            } else if (UIUtils.isNativeMacLookAndFeel()) {
+            	
+            	selectedTabBackground = UIManager.getColor("Focus.color");
+            	
+            } else {
+            	
                 double darker = 0.9;
                 // check that the normal panel bg is not 
                 // the same as the tab selection bg
@@ -136,7 +141,13 @@ public abstract class AbstractTabPane extends JPanel
      */
     protected Color getTabForeground() {
         if (tabForeground == null) {
-            tabForeground = UIManager.getColor("TabbedPane.foreground");
+        	
+        	if (!UIUtils.isNativeMacLookAndFeel()) {
+        		tabForeground = UIManager.getColor("TabbedPane.foreground");
+        	} else {
+        		tabForeground = UIManager.getColor("text");        		
+        	}
+
         }
         return tabForeground;
     }

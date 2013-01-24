@@ -46,6 +46,7 @@ import javax.swing.event.MouseInputListener;
 
 import org.executequery.gui.GUIConstants;
 import org.underworldlabs.swing.menu.MenuItemFactory;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  * Left, right and bottom docked tab pane.
@@ -499,6 +500,10 @@ public class DockedTabPane extends AbstractTabPane {
                 return;
             }
 
+            Graphics2D g2d = (Graphics2D)g;
+            Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+            UIUtils.antialias(g2d);
+
             calculateTabHeight();
             calculateTabRects(tabCount);
 
@@ -623,12 +628,10 @@ public class DockedTabPane extends AbstractTabPane {
                                                     textIconGap);
 
                 g.setColor(foreground);
+                if (i != selectedIndex || !isFocusedTabPane) {
+                	g.setColor(UIManager.getColor("TabbedPane.foreground"));
+                }
 
-                Graphics2D g2d = (Graphics2D)g;
-                Object antialiasHint = g2d.getRenderingHint(
-                        RenderingHints.KEY_ANTIALIASING);
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                     RenderingHints.VALUE_ANTIALIAS_ON);
                 g.drawString(title, textRect.x + 3, textRect.y + textRect.height - 3);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialiasHint);
             }

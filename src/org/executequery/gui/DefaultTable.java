@@ -54,7 +54,6 @@ public class DefaultTable extends JTable {
     public DefaultTable(Object[][] rowData, Object[] columnNames) {
 
         super(rowData, columnNames);
-        
         init();
     }
     
@@ -69,8 +68,7 @@ public class DefaultTable extends JTable {
         } else {
 
             JTableHeader tableHeader = getTableHeader();
-            tableHeader.setPreferredSize(
-                    new Dimension(tableHeader.getWidth(), 
+            tableHeader.setPreferredSize(new Dimension(tableHeader.getWidth(), 
                             Math.max(tableHeader.getHeight(), DEFAULT_ROW_HEIGHT)));
             
         }
@@ -78,6 +76,3 @@ public class DefaultTable extends JTable {
     }
     
 }
-
-
-

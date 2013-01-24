@@ -643,7 +643,9 @@ public class DockedTabContainer extends JPanel
     public void setSelectedIndex(int position, int index) {
 
         TabPane tabPane = getTabPaneForPosition(position);
-        ((AbstractTabPane) tabPane).setSelectedIndex(index);
+        if (tabPane != null) {
+        	((AbstractTabPane) tabPane).setSelectedIndex(index);
+        }
     }
     
     public int getSelectedIndex(int position) {

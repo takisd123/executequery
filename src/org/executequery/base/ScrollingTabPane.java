@@ -56,6 +56,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
 import org.underworldlabs.swing.menu.MenuItemFactory;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  * Central tab pane with scroll and menu buttons.
@@ -1043,6 +1044,10 @@ public class ScrollingTabPane extends AbstractTabPane
                 return;
             }
 
+            Graphics2D g2d = (Graphics2D)g;
+            Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+            UIUtils.antialias(g2d);
+
             calculateTabHeight();
             calculateTabRects(tabCount);
 
@@ -1149,6 +1154,9 @@ public class ScrollingTabPane extends AbstractTabPane
                 
                 // add the text
                 g.setColor(foreground);
+                if (i != selectedIndex || !isFocusedTabPane) {
+                	g.setColor(UIManager.getColor("TabbedPane.foreground"));
+                }
                 x = tabRect.x + tabInsets.left;
 
                 if (tabComponent.hasIcon()) {
@@ -1160,11 +1168,6 @@ public class ScrollingTabPane extends AbstractTabPane
                 }
 
                 y = metrics.getHeight() + tabRect.y + tabInsets.top + 1;
-                Graphics2D g2d = (Graphics2D)g;
-                Object antialiasHint = g2d.getRenderingHint(
-                        RenderingHints.KEY_ANTIALIASING);
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                                     RenderingHints.VALUE_ANTIALIAS_ON);
                 g.drawString(tabComponent.getDisplayName(), x, y);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialiasHint);
             }

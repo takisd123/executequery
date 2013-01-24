@@ -32,6 +32,7 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -56,6 +57,8 @@ import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.IndeterminateProgressBar;
+import org.underworldlabs.swing.ProgressBar;
+import org.underworldlabs.swing.ProgressBarFactory;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.MiscUtils;
 
@@ -513,7 +516,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
 
     private static final int STATUS_BAR_HEIGHT = 21;
 
-    private IndeterminateProgressBar progressBar;
+    private ProgressBar progressBar;
     
     class SqlTextPaneStatusBar extends AbstractStatusBarPanel {
 
@@ -522,8 +525,8 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
             super(STATUS_BAR_HEIGHT);
 
             addLabel(0, 200, true);
-            progressBar = new IndeterminateProgressBar(false);
-            addComponent(progressBar, 1, 120, false);
+            progressBar = ProgressBarFactory.create(false);
+            addComponent(((JComponent) progressBar), 1, 120, false);
         }
         
         public void setStatusText(String text) {

@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,7 +54,7 @@ public class InterruptibleProgressDialog extends JDialog
     private InterruptibleProcess process;
 
     /** The progress bar widget */
-    private IndeterminateProgressBar progressBar;
+    private ProgressBar progressBar;
 
     /** The parent frame of this dialog */
     private Frame parentFrame;
@@ -112,8 +113,8 @@ public class InterruptibleProgressDialog extends JDialog
 
     private void init() throws Exception {
 
-        progressBar = new IndeterminateProgressBar();
-        progressBar.setPreferredSize(new Dimension(260, 18));
+        progressBar = ProgressBarFactory.create();
+        ((JComponent) progressBar).setPreferredSize(new Dimension(260, 18));
 
         JPanel base = new JPanel(new GridBagLayout());
 
@@ -126,7 +127,7 @@ public class InterruptibleProgressDialog extends JDialog
         base.add(new JLabel(labelText), gbc);
         gbc.gridy = 1;
         gbc.insets.top = 0;
-        base.add(progressBar, gbc);
+        base.add(((JComponent) progressBar), gbc);
         gbc.gridy = 2;
         gbc.weighty = 1.0;
         base.add(cancelButton, gbc);

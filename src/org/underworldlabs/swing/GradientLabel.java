@@ -75,9 +75,7 @@ public class GradientLabel extends JComponent {
     
     /** Creates a new instance with default component settings. */
     public GradientLabel() {
-
-        this("", null, 
-                UIManager.getFont("Label.font").deriveFont(Font.BOLD, DEFAULT_FONT_SIZE));
+        this("", null, UIManager.getFont("Label.font").deriveFont(Font.BOLD, DEFAULT_FONT_SIZE));
     }
 
     /**
@@ -88,7 +86,6 @@ public class GradientLabel extends JComponent {
      * @param font - the label font
      */
     public GradientLabel(String text, ImageIcon icon, Font font) {
-
         this(text, icon, font, null, null);
     }
     
@@ -129,7 +126,9 @@ public class GradientLabel extends JComponent {
     }
     
     private Color determineForegroundColour() {
-
+    	if (UIUtils.isNativeMacLookAndFeel()) {
+    		return UIManager.getColor("text");
+    	}
         return UIManager.getColor("controlText");
     }
 
@@ -182,12 +181,14 @@ public class GradientLabel extends JComponent {
      *         perform the painting
      */
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        
+    	Graphics2D g2 = (Graphics2D)g;
+    	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    	
+    	super.paintComponent(g);
         
         int width = getWidth();
         int height = getHeight();
-        
-        Graphics2D g2 = (Graphics2D)g;
 
         // draw the gradient background
         Color color1 = getLeftGradientColor();
@@ -221,8 +222,6 @@ public class GradientLabel extends JComponent {
         if (text != null) {
             Font _font = getFont();
             g2.setFont(_font);
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
 
             FontMetrics metrics = getFontMetrics(_font);
             int fontHeight = metrics.getHeight();
@@ -230,8 +229,7 @@ public class GradientLabel extends JComponent {
             
             if (isShadowDropped()) {
                 Composite composite = g2.getComposite();
-                g2.setComposite(
-                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
                 g2.setColor(Color.BLACK);
                 g2.drawString(text, x+2, y+2);
                 g2.setComposite(composite);
@@ -330,7 +328,7 @@ public class GradientLabel extends JComponent {
     }
 
     private Color leftGradientColourForMac() {        
-        return UIManager.getColor("controlHighlight");
+        return UIManager.getColor("Focus.color");
     }
     
     public void setText(String _text) {

@@ -28,6 +28,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.UIManager;
@@ -44,7 +45,6 @@ import org.underworldlabs.swing.plaf.UIUtils;
  * @date     $Date$
  */
 public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer { 
-                                        //implements TableCellRenderer {
 
     /** the height of the header */
     private int height;
@@ -73,7 +73,7 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
 
         setHorizontalAlignment(JLabel.CENTER);
 
-        fillGradient = (UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean());
+        fillGradient = (UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean() || UIUtils.isNativeMacLookAndFeel());
         if (fillGradient) {
             colour1 = UIManager.getColor("Label.background");
             colour2 = UIUtils.getDarker(colour1, 0.85);
@@ -97,7 +97,25 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
         setText(label);
         setToolTipText(label);
 
-        setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+        if (!UIUtils.isNativeMacLookAndFeel()) {
+        	
+        	setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+
+        } else {
+
+        	Color color = UIManager.getColor("controlShadow");
+			if (column == 0) {
+        		
+        		setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, color));
+
+        	} else {
+
+        		setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, color));        		
+        	}
+        	
+        }
+        
+        
         setFont(UIManager.getFont("TableHeader.font"));
         setForeground(UIManager.getColor("TableHeader.foreground"));
         setBackground(UIManager.getColor("TableHeader.background"));
@@ -112,8 +130,7 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
 
             Graphics2D g2 = (Graphics2D)g;
             Paint originalPaint = g2.getPaint();
-            GradientPaint fade = new GradientPaint(0, height, colour2,
-                    0, (int)(height * 0.5), colour1);
+            GradientPaint fade = new GradientPaint(0, height, colour2, 0, (int)(height * 0.5), colour1);
 
             g2.setPaint(fade);
             g2.fillRect(0,0, width, height);

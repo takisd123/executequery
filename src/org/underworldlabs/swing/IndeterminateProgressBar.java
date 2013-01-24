@@ -23,12 +23,13 @@ package org.underworldlabs.swing;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Graphics;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JComponent;
 import javax.swing.UIManager;
+
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  *
@@ -37,7 +38,7 @@ import javax.swing.UIManager;
  * @date     $Date$
  */
 public class IndeterminateProgressBar extends JComponent
-                                      implements Runnable {
+                                      implements Runnable, ProgressBar {
     
     private Color scrollbarColour;
     
@@ -60,7 +61,13 @@ public class IndeterminateProgressBar extends JComponent
         this.paintBorder = paintBorder;
 
         animationOffset = scrollerWidth * -1;
-        setScrollbarColour(UIManager.getColor("ProgressBar.foreground"));
+        Color foregroundColour = UIManager.getColor("ProgressBar.foreground");
+        
+        if (UIUtils.isNativeMacLookAndFeel()) {
+        	foregroundColour = UIManager.getColor("Focus.color");
+        }
+        
+		setScrollbarColour(foregroundColour);
     }
     
     public void run() {
@@ -102,6 +109,8 @@ public class IndeterminateProgressBar extends JComponent
     
     public void paintComponent(Graphics g) {
         
+    	UIUtils.antialias(g);
+    	
         int width = getWidth();
         int height = getHeight();
         
