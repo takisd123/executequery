@@ -33,6 +33,7 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 
 import org.underworldlabs.swing.GradientLabel;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  *
@@ -63,7 +64,9 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
         super(new BorderLayout());
         
         gradientLabel = new GradientLabel();
-        gradientLabel.setForeground(new ColorUIResource(0x333333));
+        if (!UIUtils.isNativeMacLookAndFeel()) {
+        	gradientLabel.setForeground(new ColorUIResource(0x333333));
+        }
         add(gradientLabel, BorderLayout.NORTH);
     }
 

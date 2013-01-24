@@ -80,7 +80,7 @@ public class CustomTextPaneUI extends BasicTextPaneUI {
      */
     public static void initialize() {
         String key = "TextPaneUI";
-        Class cls = CustomTextPaneUI.class;
+        Class<CustomTextPaneUI> cls = CustomTextPaneUI.class;
         String name = cls.getName();
         UIManager.put(key, name);
         UIManager.put(name, cls);

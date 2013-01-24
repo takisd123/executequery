@@ -25,23 +25,23 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import org.executequery.Constants;
-
 import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.ConnectionBuilder;
 import org.executequery.log.Log;
-import org.underworldlabs.swing.IndeterminateProgressBar;
+import org.underworldlabs.swing.ProgressBar;
+import org.underworldlabs.swing.ProgressBarFactory;
 
 /**
  *
@@ -57,7 +57,7 @@ public class ConnectionProgressDialog extends JDialog
     private ConnectionBuilder connectonBuilder;
 
     /** The progress bar widget */
-    private IndeterminateProgressBar progressBar;
+    private ProgressBar progressBar;
 
     /** connection name label */
     private JLabel connectionNameLabel;
@@ -85,16 +85,15 @@ public class ConnectionProgressDialog extends JDialog
 
     private void jbInit() throws Exception {
 
-        progressBar = new IndeterminateProgressBar();
-        progressBar.setPreferredSize(new Dimension(260, 18));
+        progressBar = ProgressBarFactory.create(true, true);
+        ((JComponent) progressBar).setPreferredSize(new Dimension(260, 18));
 
         JPanel base = new JPanel(new GridBagLayout());
 
         JButton cancelButton = new CancelButton();
         cancelButton.addActionListener(this);
 
-        connectionNameLabel = new JLabel("Establishing connection to " +
-                connectonBuilder.getConnectionName());
+        connectionNameLabel = new JLabel("Establishing connection to " + connectonBuilder.getConnectionName());
 
         GridBagConstraints gbc = new GridBagConstraints();
         Insets ins = new Insets(10, 20, 10, 20);
@@ -102,7 +101,7 @@ public class ConnectionProgressDialog extends JDialog
         base.add(connectionNameLabel, gbc);
         gbc.gridy = 1;
         gbc.insets.top = 0;
-        base.add(progressBar, gbc);
+        base.add(((JComponent) progressBar), gbc);
         gbc.gridy = 2;
         gbc.weighty = 1.0;
         gbc.insets.left = 10;

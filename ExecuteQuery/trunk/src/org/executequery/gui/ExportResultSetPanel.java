@@ -41,6 +41,7 @@ import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -80,6 +81,8 @@ import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.IndeterminateProgressBar;
+import org.underworldlabs.swing.ProgressBar;
+import org.underworldlabs.swing.ProgressBarFactory;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.FileUtils;
@@ -570,7 +573,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
 
     private static final int STATUS_BAR_HEIGHT = 21;
 
-    private IndeterminateProgressBar progressBar;
+    private ProgressBar progressBar;
     private JButton executeButton;
     
     class SqlTextPaneStatusBar extends AbstractStatusBarPanel {
@@ -580,8 +583,8 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             super(STATUS_BAR_HEIGHT);
 
             addLabel(0, 200, true);
-            progressBar = new IndeterminateProgressBar(false);
-            addComponent(progressBar, 1, 120, false);
+            progressBar = ProgressBarFactory.create(false, true);
+            addComponent(((JComponent) progressBar), 1, 120, false);
         }
         
         public void setStatusText(String text) {

@@ -34,6 +34,7 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -936,6 +937,10 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
             boolean isSelected) {
         
         g.setFont(font);
+
+        Graphics2D g2d = (Graphics2D)g;
+        Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         
         View v = getTextViewForTab(tabIndex);
         
@@ -972,6 +977,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
             
         }
         
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialiasHint);
     }
     
     
