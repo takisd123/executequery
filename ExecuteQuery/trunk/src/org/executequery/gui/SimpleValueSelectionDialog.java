@@ -193,14 +193,3 @@ public class SimpleValueSelectionDialog {
     } // class SelectionDialog
 
 }
-
-
-
-
-
-
-
-
-
-
-

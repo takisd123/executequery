@@ -536,7 +536,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         if (columnHeaders != null) {
             
             String name = columnHeaders.get(column);
-            if (nonEditableColumns.contains(name)) {
+            if (nonEditableColumns != null && nonEditableColumns.contains(name)) {
                 
                 return false;
             }

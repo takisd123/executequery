@@ -32,7 +32,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.print.Printable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -534,23 +536,35 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             List<String> tableNames = new ArrayList<String>();
             
             List<ColumnConstraint> constraints = table.getConstraints();
-            
+            Set<String> tableNamesAdded = new HashSet<String>();
+
             for (ColumnConstraint constraint : constraints) {
 
                 if (constraint.isPrimaryKey()) {
                     
-                    tableNames.add(constraint.getTableName());
-                    columns.add(controller.getColumnData(constraint.getCatalogName(),
-                                                         constraint.getSchemaName(),
-                                                         constraint.getTableName()));
+                    String tableName = constraint.getTableName();
+                    if (!tableNamesAdded.contains(tableName)) {
                     
+                        tableNames.add(tableName);
+                        tableNamesAdded.add(tableName);
+                        columns.add(controller.getColumnData(constraint.getCatalogName(),
+                                                             constraint.getSchemaName(),
+                                                             tableName));
+                    }
+
                 }
                 else if (constraint.isForeignKey()) {
 
-                    tableNames.add(constraint.getReferencedTable());
-                    columns.add(controller.getColumnData(constraint.getReferencedCatalog(),
-                                                         constraint.getReferencedSchema(),
-                                                         constraint.getReferencedTable()));
+                    String referencedTable = constraint.getReferencedTable();
+                    if (!tableNamesAdded.contains(referencedTable)) {
+                    
+                        tableNames.add(referencedTable);
+                        tableNamesAdded.add(referencedTable);
+                        columns.add(controller.getColumnData(constraint.getReferencedCatalog(),
+                                                             constraint.getReferencedSchema(),
+                                                             referencedTable));
+                    }
+
                 }
 
             }
@@ -558,10 +572,15 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             List<DatabaseColumn> exportedKeys = table.getExportedKeys();
             for (DatabaseColumn column : exportedKeys) {
                 
-                tableNames.add(column.getParentsName());
-                columns.add(controller.getColumnData(column.getCatalogName(),
-                                                     column.getSchemaName(),
-                                                     column.getParentsName()));
+                String parentsName = column.getParentsName();
+                if (!tableNamesAdded.contains(parentsName)) {
+                
+                    tableNames.add(parentsName);
+                    columns.add(controller.getColumnData(column.getCatalogName(),
+                                                         column.getSchemaName(),
+                                                         parentsName));
+                }
+
             }
             
             referencesPanel.setTables(tableNames, columns);

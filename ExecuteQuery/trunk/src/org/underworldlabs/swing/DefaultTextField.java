@@ -21,7 +21,6 @@
 package org.underworldlabs.swing;
 
 import java.awt.Insets;
-import java.awt.Toolkit;
 
 import javax.swing.JTextField;
 import javax.swing.text.Document;
@@ -63,8 +62,7 @@ public class DefaultTextField extends JTextField {
 
     private void addPopupMenu() {
         
-         SimpleTextComponentPopUpMenu popUpMenu = new SimpleTextComponentPopUpMenu();
-         popUpMenu.registerTextComponent(this);
+         new SimpleTextComponentPopUpMenu(this);
     }
     
     public Insets getMargin() {

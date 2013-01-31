@@ -47,6 +47,7 @@ public class HeapMemoryStatusSnippet extends JPanel
     
     /** Timer for the heap memory display */
     private java.util.Timer progTimer;
+    
     /** The progress bar */
     private JProgressBar memProgress;
     

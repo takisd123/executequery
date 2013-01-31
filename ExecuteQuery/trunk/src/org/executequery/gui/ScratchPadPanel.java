@@ -74,15 +74,7 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
     public ScratchPadPanel(String text) {
 
         super(new BorderLayout());
-        
-        try {
-            
-            init();
-
-        } catch (Exception e) {
-          
-            e.printStackTrace();
-        }
+        init();
 
         if (text != null) {
 
@@ -92,7 +84,7 @@ public class ScratchPadPanel extends DefaultTextEditorContainer
 
     }
     
-    private void init() throws Exception {
+    private void init() {
 
         editorButton = new RolloverButton("/org/executequery/icons/ScratchToEditor16.png",
                                          "Paste to Query Editor");

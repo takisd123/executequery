@@ -63,6 +63,7 @@ import java.util.Map;
  * @author Dirk Verbeeck
  * @version $Revision$ $Date$
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 class DelegatingResultSet implements ResultSet {
 
     /** My delegate. **/
@@ -540,7 +541,6 @@ class DelegatingResultSet implements ResultSet {
     public void moveToCurrentRow() throws SQLException
     { try { _res.moveToCurrentRow(); } catch (SQLException e) { handleException(e); } }
 
-    @SuppressWarnings("unchecked")
     public Object getObject(int i, Map map) throws SQLException
     { try { return _res.getObject(i, map); } catch (SQLException e) { handleException(e); return null; } }
 
@@ -556,7 +556,6 @@ class DelegatingResultSet implements ResultSet {
     public Array getArray(int i) throws SQLException
     { try { return _res.getArray(i); } catch (SQLException e) { handleException(e); return null; } }
 
-    @SuppressWarnings("unchecked")
     public Object getObject(String colName, Map map) throws SQLException
     { try { return _res.getObject(colName, map); } catch (SQLException e) { handleException(e); return null; } }
 
@@ -1095,6 +1094,7 @@ class DelegatingResultSet implements ResultSet {
         }
     }
 
+    /*
 	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
 		return _res.getObject(columnIndex, type);
 	}
@@ -1102,6 +1102,6 @@ class DelegatingResultSet implements ResultSet {
 	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
 		return _res.getObject(columnLabel, type);
 	}
-
+    */
 }
 

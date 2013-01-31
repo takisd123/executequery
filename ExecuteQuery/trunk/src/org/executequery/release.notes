@@ -11,6 +11,8 @@ Summary of changes - v3.5.2 Build 5203:
 - Added Collapse All feature for connection nodes in the Browser Tree.
 - Added show/hide tools panel for the Query Editor.
 - Added alternating row colour for results table.
+- Fixed possible hang on connect when open panels are being updated.
+ 
 
 
 Summary of changes - v3.5.1 Build 5196:

@@ -48,11 +48,14 @@ public class SimpleTextComponentPopUpMenu extends JPopupMenu {
     /** the text component this popup belongs to */
     private JTextComponent textComponent;
     
-    public SimpleTextComponentPopUpMenu() {
+    public SimpleTextComponentPopUpMenu(JTextComponent textComponent) {
         
         // create the listener
         reflectiveAction = new ReflectiveAction(this);
 
+        this.textComponent = textComponent;
+        textComponent.addMouseListener(new PopupListener(this));
+        
         // the menu label text
         String[] menuLabels = {"Cut", "Copy", "Paste"};
         
@@ -111,10 +114,6 @@ public class SimpleTextComponentPopUpMenu extends JPopupMenu {
         return menuItem;
     }
     
-    public void registerTextComponent(JTextComponent textComponent) {
-        this.textComponent = textComponent;
-        textComponent.addMouseListener(new PopupListener(this));
-    }
     
     class PopupListener extends MouseAdapter {
         

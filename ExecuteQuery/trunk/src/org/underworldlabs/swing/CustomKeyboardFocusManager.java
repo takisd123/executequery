@@ -28,12 +28,6 @@ import java.awt.FocusTraversalPolicy;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /** <p>Custom KeyboardFocusManager to mainly control the focus of
  *  <code>JTextField<code> objects within a container. This
@@ -42,8 +36,8 @@ import javax.swing.JTextField;
  *  gained through keyboard traversal (ie. TAB key).
  *
  *  @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ *  @version  $Revision$
+ *  @date     $Date$
  */
 public class CustomKeyboardFocusManager extends DefaultKeyboardFocusManager {
     
@@ -227,14 +221,3 @@ public class CustomKeyboardFocusManager extends DefaultKeyboardFocusManager {
     }
     */
 }
-
-
-
-
-
-
-
-
-
-
-

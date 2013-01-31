@@ -23,10 +23,7 @@ package org.executequery.gui.browser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.print.Printable;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -59,10 +56,10 @@ public class ReferencesDiagramPanel extends JPanel {
         return viewerPanel.getPrintable();
     }
     
+    @SuppressWarnings({ "rawtypes" })
     public void setTables(List tableNames, List columnData) {
         
-        Set<String> uniqueNames = new HashSet<String>(tableNames);
-        viewerPanel.resetTableValues(new ArrayList<String>(uniqueNames), columnData);
+        viewerPanel.resetTableValues(tableNames, columnData);
     }
    
 }
