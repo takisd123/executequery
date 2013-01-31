@@ -283,10 +283,3 @@ public class SystemLogsViewer extends DefaultTextEditorContainer
     }
     
 }
-
-
-
-
-
-
-

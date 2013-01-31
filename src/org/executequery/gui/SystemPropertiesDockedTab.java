@@ -24,13 +24,6 @@ import java.awt.BorderLayout;
 import javax.swing.JTabbedPane;
 import org.underworldlabs.swing.HeapMemoryPanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * System properties docked component.
  *
@@ -118,14 +111,3 @@ public class SystemPropertiesDockedTab extends AbstractDockedTabActionPanel {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-

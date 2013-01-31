@@ -205,7 +205,6 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 rowCountField.setText(String.valueOf(sorter.getRowCount()));
             }
             
-            
         } catch (DataSourceException e) {
 
             addErrorLabel(e);

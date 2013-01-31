@@ -30,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.util.Hashtable;
 
 import javax.swing.JButton;
@@ -44,8 +43,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-class ColorMenu extends JMenu
-                implements ActionListener {
+class ColorMenu extends JMenu implements ActionListener {
     
     public static final int DESKTOP_BG = 0;
     

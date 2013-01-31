@@ -41,23 +41,15 @@ public class SimpleTextArea extends JPanel {
     private JTextArea textArea;
 
     public SimpleTextArea() {
+
         super(new BorderLayout());
-
-        try {
-            jbInit();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        init();
     }
 
-    private void jbInit() throws Exception {
+    private void init() {
 
         textArea = new JTextArea();
-
-        SimpleTextComponentPopUpMenu popup = new SimpleTextComponentPopUpMenu();
-        popup.registerTextComponent(textArea);
+        new SimpleTextComponentPopUpMenu(textArea);
 
         textArea.setFont(new Font("monospaced",0,12));
         textArea.setMargin(new Insets(3,3,3,3));
@@ -74,6 +66,3 @@ public class SimpleTextArea extends JPanel {
     }
 
 }
-
-
-

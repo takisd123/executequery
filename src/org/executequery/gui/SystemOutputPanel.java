@@ -161,4 +161,3 @@ public class SystemOutputPanel extends AbstractDockedTabPanel implements ReadOnl
     }
     
 }
-

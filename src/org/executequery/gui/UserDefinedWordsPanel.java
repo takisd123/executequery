@@ -364,9 +364,3 @@ public class UserDefinedWordsPanel extends DefaultActionButtonsPanel
     
 }
 
-
-
-
-
-
-

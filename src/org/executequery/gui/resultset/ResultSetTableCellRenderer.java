@@ -117,7 +117,7 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
             }
 
             setForeground(tableForeground);
-            if (row % 2 == 0) {
+            if (row % 2 > 0) {
                 
                 setBackground(alternatingRowBackground);
 

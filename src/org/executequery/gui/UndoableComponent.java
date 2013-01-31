@@ -20,13 +20,6 @@
 
 package org.executequery.gui;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Interface defining those components that support
  *  undo and redo functions.
  *
@@ -41,15 +34,3 @@ public interface UndoableComponent {
     public void undo();
     
 }
-
-
-
-
-
-
-
-
-
-
-
-

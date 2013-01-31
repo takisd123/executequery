@@ -99,8 +99,7 @@ public class SimpleSqlTextPanel extends DefaultTextEditorContainer
         textPane.setDragEnabled(true);
         textComponent = textPane;
         
-        popup = new SimpleTextComponentPopUpMenu();
-        popup.registerTextComponent(textPane);
+        popup = new SimpleTextComponentPopUpMenu(textPane);
 
         sqlScroller = new JScrollPane(textPane);
         defaultBorder = sqlScroller.getBorder();
