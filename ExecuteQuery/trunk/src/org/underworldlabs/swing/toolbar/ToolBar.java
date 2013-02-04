@@ -32,6 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -44,6 +45,7 @@ import javax.swing.border.Border;
 
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.RolloverButton;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  *
@@ -94,7 +96,7 @@ public class ToolBar extends AbstractToolBarPanel
     protected GridBagConstraints gbc;
     
     /** The tool buttons added */
-    protected ArrayList toolButtons;
+    protected List toolButtons;
     
     /** Dummy object for separator */
     private static final Object SEPARATOR = new Object();
@@ -430,8 +432,12 @@ public class ToolBar extends AbstractToolBarPanel
         /** indicates whether the Java L&F (or a derivative) is used */
         private boolean isJavaLookAndFeel;
 
+        private boolean isMac;
+        
         public ToolBarSelectionWidget() {
-            isJavaLookAndFeel = GUIUtils.isMetalLookAndFeel();
+            
+        	isMac = UIUtils.isMac();
+        	isJavaLookAndFeel = GUIUtils.isMetalLookAndFeel();
 
             if (background == null) {
                 background = UIManager.getDefaults().getColor("controlDkShadow");
@@ -455,12 +461,52 @@ public class ToolBar extends AbstractToolBarPanel
             int height = getHeight();
             if (!isJavaLookAndFeel) {
                 
+            	if (isMac) {
+            		
+            		background = UIManager.getDefaults().getColor("controlShadow");
+            	}
+
                 if (middleground == null) {
 
                     middleground = UIManager.getDefaults().getColor("control");
                 }
                 
                 int start = (height - 13) / 2;
+                
+                start = 7;
+                int x = 3;
+                int heightOffset = 8;
+                
+                g.setColor(background);
+            	g.drawLine(x, start, x, height - heightOffset);
+
+            	x++;
+            	heightOffset--;
+                g.setColor(middleground);
+                g.drawLine(x, start + 1, x, height - heightOffset);
+
+                x++;
+                heightOffset--;
+                g.setColor(foreground);
+                g.drawLine(x, start + 1, x, height - heightOffset);
+                
+
+                x++;
+                heightOffset = 8;
+                g.setColor(background);
+            	g.drawLine(x, start, x, height - heightOffset);
+
+            	x++;
+            	heightOffset--;
+                g.setColor(middleground);
+                g.drawLine(x, start + 1, x, height - heightOffset);
+
+                x++;
+                heightOffset--;
+                g.setColor(foreground);
+                g.drawLine(x, start + 1, x, height - heightOffset);
+                
+                /*
                 for (int i = 0; i < 3; i++) {
 
                     g.setColor(background);
@@ -476,8 +522,8 @@ public class ToolBar extends AbstractToolBarPanel
                     g.drawLine(3, start + 2, 4, start + 2);
                     g.drawLine(4, start + 1, 4, start + 1);
                     start += 6;
-
                 }
+                */
                 
             }
             else {
