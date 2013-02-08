@@ -20,17 +20,15 @@
 
 package org.executequery.datasource;
 
+import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.log.Log;
+import org.underworldlabs.jdbc.DataSourceException;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
-
-import javax.sql.DataSource;
-
-import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.databaseobjects.DatabaseSource;
-import org.executequery.log.Log;
-import org.underworldlabs.jdbc.DataSourceException;
 
 /**
  *
@@ -127,7 +125,15 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         PooledConnection connection = getNextOpenAvailable();
         
         if (connection != null) {
-            
+
+            try {
+                if (connection.isClosed()) {
+
+                    close(connection);
+                    return getConnection();
+                }
+            } catch (SQLException e) {}
+
             connection.setInUse(true);
             activeConnections.add(connection);
 

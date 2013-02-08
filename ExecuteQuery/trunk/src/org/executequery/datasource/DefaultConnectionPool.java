@@ -20,16 +20,15 @@
 
 package org.executequery.datasource;
 
+import org.executequery.log.Log;
+import org.underworldlabs.jdbc.DataSourceException;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.sql.DataSource;
-
-import org.executequery.log.Log;
-import org.underworldlabs.jdbc.DataSourceException;
 
 /**
  *
@@ -207,13 +206,13 @@ public class DefaultConnectionPool implements ConnectionPool {
 
             // retrieve the first available conn from the pool
             for (int i = 0, k = pool.size(); i < k; i++) {
+
                 PooledConnection c = pool.get(i);
                 if (c.isAvailable()) {
 
                     // check the use count if initialised (not -1)
-                    if (c.isClosed() ||
-                            (maximumUseCount > 0 && 
-                               c.getUseCount() >= maximumUseCount)) {
+                    if (c.isClosed() || (maximumUseCount > 0 && c.getUseCount() >= maximumUseCount)) {
+
                         Log.debug("Closing retrieved connection and retrying.");
                         close(c);
                         return getConnection();
@@ -225,8 +224,9 @@ public class DefaultConnectionPool implements ConnectionPool {
                     return c;
                 } 
             } 
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
+
             throw new DataSourceException(e);
         }
 
