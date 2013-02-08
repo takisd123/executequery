@@ -20,19 +20,17 @@
 
 package org.executequery.datasource;
 
+import com.mchange.v2.c3p0.DataSources;
+import com.mchange.v2.c3p0.PoolBackedDataSource;
+import org.executequery.databasemediators.DatabaseConnection;
+import org.underworldlabs.jdbc.DataSourceException;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 import java.util.Vector;
-
-import javax.sql.DataSource;
-
-import org.executequery.databasemediators.DatabaseConnection;
-import org.underworldlabs.jdbc.DataSourceException;
-
-import com.mchange.v2.c3p0.DataSources;
-import com.mchange.v2.c3p0.PoolBackedDataSource;
 
 /**
  *

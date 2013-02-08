@@ -20,9 +20,8 @@
 
 package org.executequery.datasource;
 
-import java.sql.Connection;
-
 import javax.sql.DataSource;
+import java.sql.Connection;
 
 /**
  *

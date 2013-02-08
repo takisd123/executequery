@@ -20,9 +20,9 @@
 
 package org.executequery.datasource;
 
-import java.sql.Driver;
-
 import org.executequery.databasemediators.DatabaseDriver;
+
+import java.sql.Driver;
 
 /**
  *

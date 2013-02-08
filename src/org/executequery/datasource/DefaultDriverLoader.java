@@ -20,6 +20,12 @@
 
 package org.executequery.datasource;
 
+import org.executequery.databasemediators.DatabaseDriver;
+import org.executequery.log.Log;
+import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.util.DynamicLibraryLoader;
+import org.underworldlabs.util.MiscUtils;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Driver;
@@ -27,12 +33,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.executequery.databasemediators.DatabaseDriver;
-import org.executequery.log.Log;
-import org.underworldlabs.jdbc.DataSourceException;
-import org.underworldlabs.util.DynamicLibraryLoader;
-import org.underworldlabs.util.MiscUtils;
 
 /**
  *

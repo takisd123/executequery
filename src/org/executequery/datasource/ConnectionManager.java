@@ -20,14 +20,6 @@
 
 package org.executequery.datasource;
 
-import java.sql.Connection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Vector;
-
-import javax.sql.DataSource;
-
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.log.Log;
@@ -35,6 +27,13 @@ import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.util.SystemProperties;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * Manages all data source connections across multiple
