@@ -1,6 +1,19 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 1 August 2012
+Date: 8 February 2013
+
+Summary of changes - v3.6 Build 5213:
+----------------------------------------
+
+- Added connection folders.
+- Fixed issue wth References Panel showing current table multiple times for 
+  composite keys.
+- Added Collapse All feature for connection nodes in the Browser Tree.
+- Added show/hide tools panel for the Query Editor.
+- Added alternating row colour for results table.
+- Fixed possible hang on connect when open panels are being updated.
+ 
+
 
 Summary of changes - v3.5.1 Build 5196:
 ----------------------------------------
@@ -341,4 +354,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-1 August 2012
+8 February 2013
