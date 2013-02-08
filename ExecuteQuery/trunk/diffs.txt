@@ -1,0 +1,741 @@
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/datasource/SimpleDataSource.java
+27a28
+> import java.sql.SQLFeatureNotSupportedException;
+29a31
+> import java.util.logging.Logger;
+223a226,229
+> 
+> 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+> 		return driver.getParentLogger();
+> 	}
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/datasource/ConnectionDataSource.java
+29a30
+> import java.sql.SQLFeatureNotSupportedException;
+33a35
+> import java.util.logging.Logger;
+306d307
+< 		// TODO Auto-generated method stub
+311d311
+< 		// TODO Auto-generated method stub
+313a314,317
+> 
+> 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+> 		return driver.getParentLogger();
+> 	}
+316,321d319
+< 
+< 
+< 
+< 
+< 
+< 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/datasource/PooledConnection.java
+41a42
+> import java.util.concurrent.Executor;
+578a580,605
+> 
+> 	public void setSchema(String schema) throws SQLException {
+> 		// TODO Auto-generated method stub
+> 		
+> 	}
+> 
+> 	public String getSchema() throws SQLException {
+> 		// TODO Auto-generated method stub
+> 		return null;
+> 	}
+> 
+> 	public void abort(Executor executor) throws SQLException {
+> 		// TODO Auto-generated method stub
+> 		
+> 	}
+> 
+> 	public void setNetworkTimeout(Executor executor, int milliseconds)
+> 			throws SQLException {
+> 		// TODO Auto-generated method stub
+> 		
+> 	}
+> 
+> 	public int getNetworkTimeout() throws SQLException {
+> 		// TODO Auto-generated method stub
+> 		return 0;
+> 	}
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/sql/spi/LiquibaseDatabaseFactory.java
+27a28
+> import liquibase.database.core.HsqlDatabase;
+36c37
+< public class LiquibaseDatabaseFactory {
+---
+> class LiquibaseDatabaseFactory {
+38c39
+<     public Database createDatabase(String databaseName) {
+---
+>     Database createDatabase(String databaseName) {
+135c136
+<         return new ShiftyHsqlDatabase();
+---
+>         return new HsqlDatabase();
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/sql/StatementGenerator.java
+23,26d22
+< import java.sql.Connection;
+< 
+< import liquibase.database.Database;
+< 
+58c54
+< 
+---
+>     
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/GUIUtilities.java
+242c242
+< //        desktopMediator.setSelectedPane(SwingConstants.CENTER, 0);
+---
+>         desktopMediator.setSelectedPane(SwingConstants.CENTER, 0);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/ExportResultSetPanel.java
+43a44
+> import javax.swing.JComponent;
+82a84,85
+> import org.underworldlabs.swing.ProgressBar;
+> import org.underworldlabs.swing.ProgressBarFactory;
+573c576
+<     private IndeterminateProgressBar progressBar;
+---
+>     private ProgressBar progressBar;
+583,584c586,587
+<             progressBar = new IndeterminateProgressBar(false);
+<             addComponent(progressBar, 1, 120, false);
+---
+>             progressBar = ProgressBarFactory.create(false, true);
+>             addComponent(((JComponent) progressBar), 1, 120, false);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/DefaultTable.java
+57d56
+<         
+72,73c71
+<             tableHeader.setPreferredSize(
+<                     new Dimension(tableHeader.getWidth(), 
+---
+>             tableHeader.setPreferredSize(new Dimension(tableHeader.getWidth(), 
+81,83d78
+< 
+< 
+< 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/forms/AbstractFormObjectViewPanel.java
+35a36
+> import org.underworldlabs.swing.plaf.UIUtils;
+66c67,69
+<         gradientLabel.setForeground(new ColorUIResource(0x333333));
+---
+>         if (!UIUtils.isNativeMacLookAndFeel()) {
+>         	gradientLabel.setForeground(new ColorUIResource(0x333333));
+>         }
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/ExecuteSqlScriptPanel.java
+34a35
+> import javax.swing.JComponent;
+58a60,61
+> import org.underworldlabs.swing.ProgressBar;
+> import org.underworldlabs.swing.ProgressBarFactory;
+516c519
+<     private IndeterminateProgressBar progressBar;
+---
+>     private ProgressBar progressBar;
+525,526c528,529
+<             progressBar = new IndeterminateProgressBar(false);
+<             addComponent(progressBar, 1, 120, false);
+---
+>             progressBar = ProgressBarFactory.create(false);
+>             addComponent(((JComponent) progressBar), 1, 120, false);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/editor/QueryEditor.java
+257d256
+< 
+259d257
+< 
+1118d1115
+< 
+1120d1116
+< 
+1122d1117
+< 
+1124d1118
+< 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/editor/QueryEditorStatusBar.java
+22a23
+> import javax.swing.JComponent;
+23a25
+> 
+25c27,28
+< import org.underworldlabs.swing.IndeterminateProgressBar;
+---
+> import org.underworldlabs.swing.ProgressBar;
+> import org.underworldlabs.swing.ProgressBarFactory;
+40c43
+<     private IndeterminateProgressBar progressBar;
+---
+>     private ProgressBar progressBar;
+57c60
+<         progressBar = new IndeterminateProgressBar(false);
+---
+>         progressBar = ProgressBarFactory.create(false, true);
+60c63
+<         addComponent(progressBar, 1, 120, false); // progress bar
+---
+>         addComponent(((JComponent) progressBar), 1, 120, false); // progress bar
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/nodes/RootDatabaseObjectNode.java
+92c92
+<         if (!(newChild instanceof DatabaseHostNode) && !(newChild instanceof ConnectionsBranchNode)) {
+---
+>         if (!(newChild instanceof DatabaseHostNode)) {
+94c94,95
+<             throw new IllegalArgumentException("Node must be of type DatabaseHostNode");
+---
+>             throw new IllegalArgumentException(
+>                     "Node must be of type DatabaseHostNode");
+97c98
+<         if (newChild instanceof DatabaseHostNode) {
+---
+>         hostNodes.add((DatabaseHostNode)newChild);
+99,101d99
+<             hostNodes.add((DatabaseHostNode)newChild);
+<         }
+< 
+105a104,111
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/ConnectionsTreePanel.java
+57d56
+< import org.executequery.gui.browser.nodes.ConnectionsBranchNode;
+123,126c122
+<         
+<         ConnectionsBranchNode connectionsNode = new ConnectionsBranchNode("Database Connections");
+<         ConnectionsBranchNode favouritesNode = new ConnectionsBranchNode("Favourites");
+<         
+---
+> 
+139c135
+<             favouritesNode.add(child);
+---
+>             root.add(child);
+142,145c138
+<         root.add(favouritesNode);
+<         root.add(connectionsNode);
+<         
+<         tree = new SchemaTree(root, connectionsNode, favouritesNode, this);
+---
+>         tree = new SchemaTree(root, this);
+242c235
+<         DefaultMutableTreeNode rootNode = tree.getConnectionsBranchNode();
+---
+>         DefaultMutableTreeNode rootNode = tree.getRootNode();
+265c258
+<         DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+---
+>         DefaultMutableTreeNode root = tree.getRootNode();
+315c308
+<         DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+---
+>         DefaultMutableTreeNode root = tree.getRootNode();
+546c539
+<         DefaultMutableTreeNode root = tree.getConnectionsBranchNode();
+---
+>         DefaultMutableTreeNode root = tree.getRootNode();
+853c846
+<         for (Enumeration<?> i = tree.getConnectionsBranchNode().children(); i.hasMoreElements();) {
+---
+>         for (Enumeration<?> i = tree.getRootNode().children(); i.hasMoreElements();) {
+1022c1015
+<         if (object == tree.getConnectionsBranchNode()) { // root node
+---
+>         if (object == tree.getRootNode()) { // root node
+1527c1520
+<             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getConnectionsBranchNode();
+---
+>             RootDatabaseObjectNode root = (RootDatabaseObjectNode)tree.getRootNode();
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/tree/SchemaTree.java
+56d55
+< import org.executequery.gui.browser.nodes.ConnectionsBranchNode;
+76,80c75
+<     private final ConnectionsBranchNode connectionsNode;
+< 
+<     private final ConnectionsBranchNode favouritesNode;
+< 
+<     public SchemaTree(RootDatabaseObjectNode root, ConnectionsBranchNode connectionsNode, ConnectionsBranchNode favouritesNode, ConnectionsTreePanel panel) {
+---
+>     public SchemaTree(DefaultMutableTreeNode root, ConnectionsTreePanel panel) {
+83,85d77
+< 
+<         this.connectionsNode = connectionsNode;
+<         this.favouritesNode = favouritesNode;        
+107,108d98
+<     
+<     
+123,130d112
+<     public DefaultMutableTreeNode getFavouritesBranchNode() {
+<         return favouritesNode;
+<     }
+< 
+<     public DefaultMutableTreeNode getConnectionsBranchNode() {
+<         return getRootNode();
+<     }
+<     
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/DatabaseHostNodeSorter.java
+66a67
+>     @SuppressWarnings("unchecked")
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/BrowserQueryExecuter.java
+29a30,36
+> /* ----------------------------------------------------------
+>  * CVS NOTE: Changes to the CVS repository prior to the 
+>  *           release of version 3.0.0beta1 has meant a 
+>  *           resetting of CVS revision numbers.
+>  * ----------------------------------------------------------
+>  */
+> 
+112a120,130
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/browser/BrowserController.java
+44d43
+< import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
+432,439d430
+<     /**
+<      * Displays the root main view panel.
+<      */
+<     protected void displayRootPanel(RootDatabaseObjectNode node) {
+<         checkBrowserPanel();ss
+<         viewPanel.displayRootPanel();
+<     }
+<     
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/importexport/ExportAsSQLWorker.java
+459a460
+>         
+482c483
+< 
+---
+>         
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/importexport/AbstractImportExportWorker.java
+41,42d40
+< import liquibase.database.Database;
+< 
+51d48
+< import org.executequery.sql.spi.LiquibaseDatabaseFactory;
+160c157,161
+<             query.append(formatTableName(tableName));
+---
+>             String _tableName = tableName;
+>             if (_tableName.contains(" ")) {
+>                 _tableName = "\"" + tableName + "\"";
+>             }
+>             query.append(_tableName);
+185c186,188
+<     protected ResultSet getResultSet(String table) throws DataSourceException, SQLException {
+---
+>     protected ResultSet getResultSet(String table)
+>         throws DataSourceException,
+>                SQLException {
+198c201,203
+<     protected ResultSet getResultSet(String table, Vector<?> columns) throws DataSourceException, SQLException {
+---
+>     protected ResultSet getResultSet(String table, Vector<?> columns)
+>         throws DataSourceException,
+>                SQLException {
+207c212,219
+<         query.append(columnNamesAsCommaSeparatedString(table, columns));
+---
+> 
+>         int columnCount = columns.size();
+>         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
+>             query.append(formatColumnName(columns.get(i).toString()));
+>             if (i != n) {
+>                 query.append(',');
+>             }
+>         }
+214,215c226
+<         
+<         query.append(formatTableName(table));
+---
+>         query.append(table);
+221c232,233
+<         }        
+---
+>         }
+> 
+230,246c242
+<     private String columnNamesAsCommaSeparatedString(String table, Vector<?> columns) throws DataSourceException, SQLException {
+<         
+<         StringBuilder sb = new StringBuilder();
+<         Database database = new LiquibaseDatabaseFactory().createDatabase(getConnection().getMetaData().getDatabaseProductName());
+<         
+<         int columnCount = columns.size();
+<         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
+<             
+<             String columnName = columns.get(i).toString();
+<             if (columnName.contains(" ")) {
+< 
+<                 columnName = "\"" + columnName + "\"";
+< 
+<             } else {
+<                 
+<                 columnName = database.escapeColumnName(parent.getSchemaName(), table, columnName);                
+<             }
+---
+>     private String formatColumnName(String columnName) {
+248,252c244
+<             sb.append(columnName);
+<             if (i != n) {
+<                 sb.append(',');
+<             }
+<         }
+---
+>         if (columnName.contains(" ")) {
+254,269c246
+<         return sb.toString();
+<     }
+<     
+<     private Object formatTableName(String table) {
+<         try {
+< 
+<             if (table.contains(" ")) {
+<                 return "\"" + table + "\"";
+<             }
+<             
+<             String identifierQuoteString = getConnection().getMetaData().getIdentifierQuoteString();
+<             return identifierQuoteString + table + identifierQuoteString;
+< 
+<         } catch (SQLException e) {
+< 
+<             return "\"";
+---
+>             return "\"" + columnName + "\"";
+270a248,249
+> 
+>         return columnName;
+279c258,260
+<     protected void prepareStatement(String table, Vector<?> columns) throws DataSourceException, SQLException {
+---
+>     protected void prepareStatement(String table, Vector<?> columns)
+>         throws DataSourceException,
+>                SQLException {
+293,294c274
+< 
+<         query.append(formatTableName(table));
+---
+>         query.append(table);
+296c276,284
+<         query.append(columnNamesAsCommaSeparatedString(table, columns));
+---
+> 
+>         // add the column names to the query
+>         int columnCount = columns.size();
+>         for (int i = 0, n = columnCount - 1; i < columnCount; i++) {
+>             query.append(columns.get(i).toString());
+>             if (i != n) {
+>                 query.append(',');
+>             }
+>         }
+300d287
+<         int columnCount = columns.size();
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/gui/importexport/DataTransferObject.java
+63a64
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/ApplicationLauncher.java
+183,184c183
+<             ActionBuilder.setActionMaps(frame.getRootPane(),
+<                                 SystemResources.getUserActionShortcuts());
+---
+>             ActionBuilder.setActionMaps(frame.getRootPane(), SystemResources.getUserActionShortcuts());
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/databaseobjects/impl/DefaultDatabaseTable.java
+917a918
+> 
+920a922
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/databaseobjects/impl/DelegatingResultSet.java
+1097a1098,1105
+> 	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
+> 		return _res.getObject(columnIndex, type);
+> 	}
+> 
+> 	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
+> 		return _res.getObject(columnLabel, type);
+> 	}
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/databaseobjects/NamedObject.java
+22a23
+> import java.sql.ResultSet;
+36d36
+<     public static final int BRANCH_NODE = 100;
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/databasemediators/spi/ConnectionProgressDialog.java
+28d27
+< 
+33a33
+> import javax.swing.JComponent;
+40d39
+< 
+44c43,44
+< import org.underworldlabs.swing.IndeterminateProgressBar;
+---
+> import org.underworldlabs.swing.ProgressBar;
+> import org.underworldlabs.swing.ProgressBarFactory;
+60c60
+<     private IndeterminateProgressBar progressBar;
+---
+>     private ProgressBar progressBar;
+88,89c88,89
+<         progressBar = new IndeterminateProgressBar();
+<         progressBar.setPreferredSize(new Dimension(260, 18));
+---
+>         progressBar = ProgressBarFactory.create(true, true);
+>         ((JComponent) progressBar).setPreferredSize(new Dimension(260, 18));
+96,97c96
+<         connectionNameLabel = new JLabel("Establishing connection to " +
+<                 connectonBuilder.getConnectionName());
+---
+>         connectionNameLabel = new JLabel("Establishing connection to " + connectonBuilder.getConnectionName());
+105c104
+<         base.add(progressBar, gbc);
+---
+>         base.add(((JComponent) progressBar), gbc);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/base/DockedTabContainer.java
+646c646,648
+<         ((AbstractTabPane) tabPane).setSelectedIndex(index);
+---
+>         if (tabPane != null) {
+>         	((AbstractTabPane) tabPane).setSelectedIndex(index);
+>         }
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/base/DockedTabPane.java
+48a49
+> import org.underworldlabs.swing.plaf.UIUtils;
+501a503,506
+>             Graphics2D g2d = (Graphics2D)g;
+>             Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+>             UIUtils.antialias(g2d);
+> 
+625a631,633
+>                 if (i != selectedIndex || !isFocusedTabPane) {
+>                 	g.setColor(UIManager.getColor("TabbedPane.foreground"));
+>                 }
+627,631d634
+<                 Graphics2D g2d = (Graphics2D)g;
+<                 Object antialiasHint = g2d.getRenderingHint(
+<                         RenderingHints.KEY_ANTIALIASING);
+<                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+<                                      RenderingHints.VALUE_ANTIALIAS_ON);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/base/AbstractTabPane.java
+93,96c93,101
+<                 selectedTabBackground = 
+<                         UIUtils.getDefaultActiveBackgroundColour();
+<             }
+<             else {
+---
+> 
+>             	selectedTabBackground = UIUtils.getDefaultActiveBackgroundColour();
+>             
+>             } else if (UIUtils.isNativeMacLookAndFeel()) {
+>             	
+>             	selectedTabBackground = UIManager.getColor("Focus.color");
+>             	
+>             } else {
+>             	
+139c144,150
+<             tabForeground = UIManager.getColor("TabbedPane.foreground");
+---
+>         	
+>         	if (!UIUtils.isNativeMacLookAndFeel()) {
+>         		tabForeground = UIManager.getColor("TabbedPane.foreground");
+>         	} else {
+>         		tabForeground = UIManager.getColor("text");        		
+>         	}
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/executequery/base/ScrollingTabPane.java
+58a59
+> import org.underworldlabs.swing.plaf.UIUtils;
+1045a1047,1050
+>             Graphics2D g2d = (Graphics2D)g;
+>             Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+>             UIUtils.antialias(g2d);
+> 
+1151a1157,1159
+>                 if (i != selectedIndex || !isFocusedTabPane) {
+>                 	g.setColor(UIManager.getColor("TabbedPane.foreground"));
+>                 }
+1163,1167d1170
+<                 Graphics2D g2d = (Graphics2D)g;
+<                 Object antialiasHint = g2d.getRenderingHint(
+<                         RenderingHints.KEY_ANTIALIASING);
+<                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+<                                      RenderingHints.VALUE_ANTIALIAS_ON);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/InterruptibleProgressDialog.java
+34a35
+> import javax.swing.JComponent;
+56c57
+<     private IndeterminateProgressBar progressBar;
+---
+>     private ProgressBar progressBar;
+115,116c116,117
+<         progressBar = new IndeterminateProgressBar();
+<         progressBar.setPreferredSize(new Dimension(260, 18));
+---
+>         progressBar = ProgressBarFactory.create();
+>         ((JComponent) progressBar).setPreferredSize(new Dimension(260, 18));
+129c130
+<         base.add(progressBar, gbc);
+---
+>         base.add(((JComponent) progressBar), gbc);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/IndeterminateProgressBar.java
+26d25
+< 
+32a32,33
+> import org.underworldlabs.swing.plaf.UIUtils;
+> 
+40c41
+<                                       implements Runnable {
+---
+>                                       implements Runnable, ProgressBar {
+63c64,70
+<         setScrollbarColour(UIManager.getColor("ProgressBar.foreground"));
+---
+>         Color foregroundColour = UIManager.getColor("ProgressBar.foreground");
+>         
+>         if (UIUtils.isNativeMacLookAndFeel()) {
+>         	foregroundColour = UIManager.getColor("Focus.color");
+>         }
+>         
+> 		setScrollbarColour(foregroundColour);
+104a112,113
+>     	UIUtils.antialias(g);
+>     	
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/plaf/UIUtils.java
+27a28,29
+> import java.awt.Graphics2D;
+> import java.awt.RenderingHints;
+388a391,397
+>     public static void antialias(Graphics g) {
+>     	Graphics2D g2d = (Graphics2D)g;
+>     	g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+>     	g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+>     	g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+>     }
+>     
+391,401d399
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+< 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/plaf/CloseTabbedPaneUI.java
+36a37
+> import java.awt.RenderingHints;
+938a940,943
+> 
+>         Graphics2D g2d = (Graphics2D)g;
+>         Object antialiasHint = g2d.getRenderingHint(RenderingHints.KEY_ANTIALIASING);
+>         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+974a980
+>         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antialiasHint);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/table/DefaultTableHeaderRenderer.java
+30a31
+> import javax.swing.BorderFactory;
+47d47
+<                                         //implements TableCellRenderer {
+76c76
+<         fillGradient = (UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean());
+---
+>         fillGradient = (UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean() || UIUtils.isNativeMacLookAndFeel());
+100c100,118
+<         setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+---
+>         if (!UIUtils.isNativeMacLookAndFeel()) {
+>         	
+>         	setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+> 
+>         } else {
+> 
+>         	Color color = UIManager.getColor("controlShadow");
+> 			if (column == 0) {
+>         		
+>         		setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, color));
+> 
+>         	} else {
+> 
+>         		setBorder(BorderFactory.createMatteBorder(1, 0, 1, 1, color));        		
+>         	}
+>         	
+>         }
+>         
+>         
+115,116c133
+<             GradientPaint fade = new GradientPaint(0, height, colour2,
+<                     0, (int)(height * 0.5), colour1);
+---
+>             GradientPaint fade = new GradientPaint(0, height, colour2, 0, (int)(height * 0.5), colour1);
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/actions/ActionBuilder.java
+90c90
+<         ActionMap actionMap = component.getActionMap();
+---
+>     	ActionMap actionMap = component.getActionMap();
+302a303,304
+>                     	// Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() - returns proper mask for os
+>                     	
+324d325
+<                     /*
+330c331
+<                     */
+---
+> 
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/GradientLabel.java
+78,80c78
+< 
+<         this("", null, 
+<                 UIManager.getFont("Label.font").deriveFont(Font.BOLD, DEFAULT_FONT_SIZE));
+---
+>         this("", null, UIManager.getFont("Label.font").deriveFont(Font.BOLD, DEFAULT_FONT_SIZE));
+91d88
+< 
+132c129,131
+< 
+---
+>     	if (UIUtils.isNativeMacLookAndFeel()) {
+>     		return UIManager.getColor("text");
+>     	}
+185c184,188
+<         super.paintComponent(g);
+---
+>         
+>     	Graphics2D g2 = (Graphics2D)g;
+>     	g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+>     	
+>     	super.paintComponent(g);
+189,190d191
+<         
+<         Graphics2D g2 = (Graphics2D)g;
+224,225d224
+<             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+<                 RenderingHints.VALUE_ANTIALIAS_ON);
+233,234c232
+<                 g2.setComposite(
+<                         AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+---
+>                 g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.8f));
+333c331
+<         return UIManager.getColor("controlHighlight");
+---
+>         return UIManager.getColor("Focus.color");
+/home/takisd/Development/workspace/eclipse/ExecuteQuery/temp/ExecuteQuery/src/org/underworldlabs/swing/DisabledField.java
+22a23
+> import java.awt.Dimension;
