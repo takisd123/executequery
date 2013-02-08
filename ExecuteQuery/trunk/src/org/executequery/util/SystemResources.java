@@ -319,6 +319,7 @@ public class SystemResources {
                 String[] oldFiles = {"eq.shortcuts.properties",
                                      "eq.user.properties",
                                      "jdbcdrivers.xml",
+                                     "connection-folders.xml",
                                      "lookandfeel.xml",
                                      //"toolbars.xml",
                                      "querybookmarks.xml",

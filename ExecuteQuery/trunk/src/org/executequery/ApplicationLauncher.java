@@ -219,9 +219,7 @@ public class ApplicationLauncher {
     private boolean displaySplash() {
 
         UserSettingsProperties settings = new UserSettingsProperties();
-
         File settingsHome = new File(settings.getUserSettingsBaseHome());
-
         if (settingsHome.exists()) {
 
             return booleanUserProperty("startup.display.splash");
