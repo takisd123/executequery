@@ -22,7 +22,6 @@ package org.executequery.databaseobjects;
 
 import java.sql.ResultSet;
 import java.util.List;
-
 import org.executequery.databaseobjects.impl.ColumnConstraint;
 import org.executequery.databaseobjects.impl.TableColumnIndex;
 import org.underworldlabs.jdbc.DataSourceException;

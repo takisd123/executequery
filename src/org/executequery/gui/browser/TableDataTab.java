@@ -25,15 +25,20 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.sql.ResultSet;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
-
 import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseObject;
+import org.executequery.databaseobjects.DatabaseTable;
+import org.executequery.databaseobjects.impl.ColumnConstraint;
+import org.executequery.gui.browser.sql.TableDataChange;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.editor.ResultSetTablePopupMenu;
 import org.executequery.gui.resultset.ResultSetTable;
@@ -50,7 +55,7 @@ import org.underworldlabs.util.SystemProperties;
  * @version  $Revision$
  * @date     $Date$
  */
-public class TableDataTab extends JPanel implements ResultSetTableContainer {
+public class TableDataTab extends JPanel implements ResultSetTableContainer, TableModelListener {
 
     private ResultSetTableModel tableModel;
 
@@ -73,6 +78,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
     private JPanel rowCountPanel;
 
     private final boolean displayRowCount;
+    private List<TableDataChange> tableDataChanges;
 
     public TableDataTab(boolean displayRowCount) {
 
@@ -150,7 +156,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
      * Contsructs and displays the specified <code>ResultSet</code>
      * object within the results table.
      *
-     * @param the <code>ResultSet</code> data object
+     * @param databaseObject <code>ResultSet</code> data object
      * @return the <code>String</code> 'done' when finished
      */
     private Object setTableResultsPanel(DatabaseObject databaseObject) {
@@ -164,25 +170,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
                 tableModel.setHoldMetaData(false);
             }
 
-            /*
-            if (databaseObject instanceof DatabaseTable) {
-                
+            tableModel.removeTableModelListener(this);
+
+            if (isDatabaseTable(databaseObject)) {
+
                 DatabaseTable databaseTable = (DatabaseTable) databaseObject;
                 if (databaseTable.hasPrimaryKey()) {
-                    
-                    List<String> primaryKeyColumns = new ArrayList<String>();
-                    List<ColumnConstraint> primaryKeys = databaseTable.getPrimaryKeys();
-                    for (ColumnConstraint constraint : primaryKeys) {
 
-                        primaryKeyColumns.add(constraint.getColumnName());
-                    }
-
+                    List<String> primaryKeyColumns = derivePrimaryKeyColumns(databaseTable);
                     tableModel.setNonEditableColumns(primaryKeyColumns);
                 }
                 
             }
-            */
-            
+
             ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
             if (table == null) {
@@ -208,13 +208,33 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
         } catch (DataSourceException e) {
 
             addErrorLabel(e);
-//            GUIUtilities.displayExceptionErrorDialog("Error retrieving table data.", e);
+
+        } finally {
+
+            tableModel.addTableModelListener(this);
         }
 
         validate();
         repaint();
 
         return "done";
+    }
+
+    private List<String> derivePrimaryKeyColumns(DatabaseTable databaseTable) {
+
+        List<String> primaryKeyColumns = new ArrayList<String>();
+        List<ColumnConstraint> primaryKeys = databaseTable.getPrimaryKeys();
+
+        for (ColumnConstraint constraint : primaryKeys) {
+
+            primaryKeyColumns.add(constraint.getColumnName());
+        }
+
+        return primaryKeyColumns;
+    }
+
+    private boolean isDatabaseTable(DatabaseObject databaseObject) {
+        return databaseObject instanceof DatabaseTable;
     }
 
     private void addErrorLabel(Throwable e) {
@@ -314,6 +334,33 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer {
 
         // do nothing
     }
+
+    @Override
+    public void tableChanged(TableModelEvent e) {
+
+        if (isDatabaseTable(this.databaseObject)) {
+
+            int row = e.getFirstRow();
+            tableDataChanges().add(
+                    new TableDataChange(this.databaseObject, tableModel.getRowDataForRow(row)));
+
+
+        }
+
+        System.out.println("table canged");
+
+    }
+
+    private List<TableDataChange> tableDataChanges() {
+
+        if (tableDataChanges == null) {
+
+            tableDataChanges = new ArrayList<TableDataChange>();
+        }
+
+        return tableDataChanges;
+    }
+
 
 }
 

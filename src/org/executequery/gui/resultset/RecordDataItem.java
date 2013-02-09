@@ -34,6 +34,8 @@ public interface RecordDataItem extends TableCellValue {
     
 	int getDataType();
 
+    String getName();
+
 	Object getDisplayValue();
 	
 	void setValue(Object value);
