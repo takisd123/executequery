@@ -158,7 +158,9 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 for (int i = 1; i <= count; i++) {
 
                 	RecordDataItem value = recordDataItemFactory.create(
-                			rsmd.getColumnType(i), rsmd.getColumnTypeName(i));
+                			columnHeaders.get(i),
+                            rsmd.getColumnType(i),
+                            rsmd.getColumnTypeName(i));
 
                     try {
 
@@ -284,10 +286,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                         statement.close();
                     }
 
-                } catch (SQLException e) {
-
-                    Log.debug("Error closing statement - " + e.getMessage(), e);
-                }
+                } catch (SQLException e) {}
 
             }
         }
@@ -492,6 +491,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         if (column < rowData.size()) {
 
             rowData.get(column).valueChanged(value);
+            fireTableDataChanged();
         }
     }
     

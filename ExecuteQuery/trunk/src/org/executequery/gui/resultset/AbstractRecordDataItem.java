@@ -31,16 +31,18 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 
 	private Object value;
 
-	private int dataType;
+    private String name;
+    private int dataType;
 
 	private String dataTypeName;
 	
 	private boolean changed;
 
-	public AbstractRecordDataItem(int dataType, String dataTypeName) {
+	public AbstractRecordDataItem(String name, int dataType, String dataTypeName) {
 
 		super();
-		this.dataType = dataType;
+        this.name = name;
+        this.dataType = dataType;
 		this.dataTypeName = dataTypeName;
 	}
 
@@ -102,7 +104,10 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	public boolean isChanged() {
         return changed;
     }
-	
+
+    public String getName() {
+        return name;
+    }
 }
 
 

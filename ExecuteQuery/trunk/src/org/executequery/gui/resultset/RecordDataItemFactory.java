@@ -25,7 +25,7 @@ import java.sql.Types;
 
 public class RecordDataItemFactory {
 
-	public RecordDataItem create(int dataType, String dataTypeName) {
+	public RecordDataItem create(String s, int dataType, String dataTypeName) {
 
 		switch (dataType) {
 
