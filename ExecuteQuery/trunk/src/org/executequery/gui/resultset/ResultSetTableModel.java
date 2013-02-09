@@ -142,7 +142,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             }
 
             int recordCount = 0;
-            List<RecordDataItem> rowData = null;
+            List<RecordDataItem> rowData;
             interrupted = false;
 
             while (resultSet.next()) {
@@ -284,7 +284,10 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                         statement.close();
                     }
 
-                } catch (SQLException sqlExc) {}
+                } catch (SQLException e) {
+
+                    Log.debug("Error closing statement - " + e.getMessage(), e);
+                }
 
             }
         }
@@ -355,7 +358,6 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 for (int i = 0; i < metaMethods.length; i++) {
 
                     String methodName = metaMethods[i].getName();
-
                     if (EXCLUDES.contains(methodName)) {
 
                         continue;
@@ -394,22 +396,11 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
                             }
 
-                        } catch (AbstractMethodError e) {
-
-                            continue;
-
-                        } catch (IllegalArgumentException e) {
-
-                            continue;
-
-                        } catch (IllegalAccessException e) {
-
-                            continue;
-
-                        } catch (InvocationTargetException e) {
-
-                            continue;
                         }
+                        catch (AbstractMethodError e) {}
+                        catch (IllegalArgumentException e) {}
+                        catch (IllegalAccessException e) {}
+                        catch (InvocationTargetException e) {}
 
                     }
 
@@ -613,11 +604,3 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     }
 
 }
-
-
-
-
-
-
-
-
