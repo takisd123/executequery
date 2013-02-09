@@ -2,15 +2,15 @@ package org.executequery.gui.browser.sql;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.executequery.databaseobjects.DatabaseObject;
+
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.gui.resultset.RecordDataItem;
 
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision:$
+ * @date     $Date:$
  */
 public class TableDataChangeExecutor {
 
