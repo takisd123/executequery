@@ -20,8 +20,10 @@
 
 package org.executequery.databaseobjects;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+
 import org.executequery.databaseobjects.impl.ColumnConstraint;
 import org.executequery.databaseobjects.impl.TableColumnIndex;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -177,6 +179,14 @@ public interface DatabaseTable extends DatabaseObject {
     int getColumnCount() throws DataSourceException;
 
     boolean hasPrimaryKey();
+
+    String prepareStatement(List<String> columns);
+
+    List<String> getPrimaryKeyColumnNames();
+
+    void addTableDataChange(TableDataChange tableDataChange);
+
+    boolean hasTableDataChanges();
     
 }
 

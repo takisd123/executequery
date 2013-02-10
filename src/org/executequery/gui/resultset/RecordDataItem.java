@@ -48,6 +48,10 @@ public interface RecordDataItem extends TableCellValue {
 
     boolean isChanged();
 
+    boolean isSQLValueNull();
+
+    Object getValueAsType();
+
 }
 
 

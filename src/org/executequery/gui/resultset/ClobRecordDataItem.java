@@ -37,9 +37,9 @@ public class ClobRecordDataItem extends AbstractLobRecordDataItem {
 
 	private String displayValue;
 	
-	public ClobRecordDataItem(int dataType, String dataTypeName) {
+	public ClobRecordDataItem(String name, int dataType, String dataTypeName) {
 
-		super(dataType, dataTypeName);
+		super(name, dataType, dataTypeName);
 		
 		displayLength = SystemProperties.getIntProperty(
                 Constants.USER_PROPERTIES_KEY, "results.table.clob.length");

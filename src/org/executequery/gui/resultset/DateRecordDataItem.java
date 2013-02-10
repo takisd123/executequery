@@ -1,5 +1,5 @@
 /*
- * StringRecordDataItem.java
+ * SimpleRecordDataItem.java
  *
  * Copyright (C) 2002-2013 Takis Diakoumis
  *
@@ -20,18 +20,25 @@
 
 package org.executequery.gui.resultset;
 
-public class StringRecordDataItem extends SimpleRecordDataItem {
+public class DateRecordDataItem extends AbstractRecordDataItem {
 
-    private static final int DATA_TYPE_INT = -1;
+	public DateRecordDataItem(String name, int dataType, String dataTypeName) {
 
-    private static final String DATA_TYPE_NAME = "Simple String Record Data Item";
-    
-    public StringRecordDataItem(String value) {
+		super(name, dataType, dataTypeName);
+	}
 
-        super(DATA_TYPE_NAME, DATA_TYPE_INT, DATA_TYPE_NAME);
-        setValue(value);
-    }
-    
+	@Override
+	public void setValue(Object value) {
+
+	    Object dateValue = value;
+	    if (value != null) {
+	        
+	        dateValue = valueAsType(value);
+	    }
+	    
+	    super.setValue(dateValue);
+	}
+	
 }
 
 

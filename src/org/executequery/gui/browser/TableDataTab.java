@@ -27,6 +27,7 @@ import java.awt.Insets;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -34,11 +35,11 @@ import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
+
 import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
-import org.executequery.databaseobjects.impl.ColumnConstraint;
-import org.executequery.gui.browser.sql.TableDataChange;
+import org.executequery.databaseobjects.TableDataChange;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.editor.ResultSetTablePopupMenu;
 import org.executequery.gui.resultset.ResultSetTable;
@@ -78,6 +79,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
     private JPanel rowCountPanel;
 
     private final boolean displayRowCount;
+
     private List<TableDataChange> tableDataChanges;
 
     public TableDataTab(boolean displayRowCount) {
@@ -118,6 +120,8 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH,
                 new Insets(0, 5, 5, 5), 0, 0);
+        
+        tableDataChanges = new ArrayList<TableDataChange>();
     }
 
     public void loadDataForTable(final DatabaseObject databaseObject) {
@@ -161,24 +165,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
      */
     private Object setTableResultsPanel(DatabaseObject databaseObject) {
 
+        tableDataChanges.clear();
         this.databaseObject = databaseObject;
         try {
 
-            if (tableModel == null) {
-
-                tableModel = new ResultSetTableModel(SystemProperties.getIntProperty("user", "browser.max.records"));
-                tableModel.setHoldMetaData(false);
-            }
-
+            initialiseModel();
             tableModel.removeTableModelListener(this);
 
-            if (isDatabaseTable(databaseObject)) {
+            if (isDatabaseTable()) {
 
-                DatabaseTable databaseTable = (DatabaseTable) databaseObject;
+                DatabaseTable databaseTable = asDatabaseTable();
                 if (databaseTable.hasPrimaryKey()) {
 
-                    List<String> primaryKeyColumns = derivePrimaryKeyColumns(databaseTable);
-                    tableModel.setNonEditableColumns(primaryKeyColumns);
+                    tableModel.setNonEditableColumns(databaseTable.getPrimaryKeyColumnNames());
                 }
                 
             }
@@ -220,21 +219,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         return "done";
     }
 
-    private List<String> derivePrimaryKeyColumns(DatabaseTable databaseTable) {
+    private void initialiseModel() {
+    
+        if (tableModel == null) {
 
-        List<String> primaryKeyColumns = new ArrayList<String>();
-        List<ColumnConstraint> primaryKeys = databaseTable.getPrimaryKeys();
-
-        for (ColumnConstraint constraint : primaryKeys) {
-
-            primaryKeyColumns.add(constraint.getColumnName());
+            tableModel = new ResultSetTableModel(SystemProperties.getIntProperty("user", "browser.max.records"));
+            tableModel.setHoldMetaData(false);
         }
 
-        return primaryKeyColumns;
     }
 
-    private boolean isDatabaseTable(DatabaseObject databaseObject) {
-        return databaseObject instanceof DatabaseTable;
+    private boolean isDatabaseTable() {
+
+        return this.databaseObject instanceof DatabaseTable;
     }
 
     private void addErrorLabel(Throwable e) {
@@ -335,32 +332,33 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         // do nothing
     }
 
-    @Override
     public void tableChanged(TableModelEvent e) {
 
-        if (isDatabaseTable(this.databaseObject)) {
+        if (isDatabaseTable()) {
 
             int row = e.getFirstRow();
-            tableDataChanges().add(
-                    new TableDataChange(this.databaseObject, tableModel.getRowDataForRow(row)));
-
-
+            asDatabaseTable().addTableDataChange(new TableDataChange(tableModel.getRowDataForRow(row)));
         }
-
-        System.out.println("table canged");
 
     }
 
-    private List<TableDataChange> tableDataChanges() {
+    private DatabaseTable asDatabaseTable() {
+        
+        if (isDatabaseTable()) {
 
-        if (tableDataChanges == null) {
-
-            tableDataChanges = new ArrayList<TableDataChange>();
+            return (DatabaseTable) this.databaseObject;
         }
-
-        return tableDataChanges;
+        return null;
     }
 
+    public boolean hasChanges() {
+
+        if (isDatabaseTable()) {
+
+            return asDatabaseTable().hasTableDataChanges();
+        }
+        return false;
+    }
 
 }
 

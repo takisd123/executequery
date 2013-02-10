@@ -546,7 +546,8 @@ public class BrowserController {
         if (viewPanel == null) {
             return false;
         }
-        return viewPanel.getEditingPanel().hasSQLText();
+        return viewPanel.getEditingPanel().hasSQLText() 
+                || viewPanel.getEditingPanel().getTableDataPanel().hasChanges();
     }
 
     // --------------------------------------------

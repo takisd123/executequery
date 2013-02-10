@@ -73,7 +73,7 @@ public class DataSourceException extends RuntimeException {
             return getMessage() == null ? "" : getMessage();
         }
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String message = cause.getMessage();
         if (message != null) {
             sb.append(message);

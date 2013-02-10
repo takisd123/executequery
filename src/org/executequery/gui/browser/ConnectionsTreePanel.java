@@ -110,6 +110,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     private TreeFindAction treeFindAction;
 
+    private DatabaseObjectChangeProvider databaseObjectChangeProvider;
+    
     public ConnectionsTreePanel() {
 
         super(new BorderLayout());
@@ -1266,63 +1268,26 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
             if (isADatabaseObjectNode(lastObject)) {
 
-                DatabaseObjectNode dbObject = (DatabaseObjectNode)lastObject;
-
-                boolean modified = false;
                 try {
-
-                    modified = dbObject.isObjectModified();
-
-                } catch (DataSourceException dse) {
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("An error occurred examining any changes.").
-                       append("\n\nThe system returned:\n").
-                       append(dse.getExtendedMessage());
-
-                    GUIUtilities.displayExceptionErrorDialog(sb.toString(), dse);
-                    tree.setSelectionPath(oldSelectionPath);
-
-                    return;
-                }
-
-                if (modified) {
-
-                    // apply any changes before proceeding
-                    int yesNo = GUIUtilities.displayConfirmCancelDialog(
-                            "Do you wish to apply your changes?");
-
-                    if (yesNo == JOptionPane.NO_OPTION) {
-
-                        dbObject.revert();
-
-                    } else if (yesNo == JOptionPane.CANCEL_OPTION) {
-
+                
+                    DatabaseObjectNode databaseObjectNode = (DatabaseObjectNode)lastObject;
+                    boolean applyChanges = databaseObjectChangeProvider().applyChanges(databaseObjectNode.getDatabaseObject(), true);
+                    
+                    if (!applyChanges) {
+                        
                         tree.setSelectionPath(oldSelectionPath);
-                        return;
-
-                    } else if (yesNo == JOptionPane.YES_OPTION) {
-
-                        try {
-
-                            dbObject.applyChanges();
-
-                        } catch (DataSourceException dse) {
-
-                            StringBuilder sb = new StringBuilder();
-                            sb.append("An error occurred applying the specified changes.").
-                               append("\n\nThe system returned:\n").
-                               append(dse.getExtendedMessage());
-
-                            GUIUtilities.displayExceptionErrorDialog(sb.toString(), dse);
-                            tree.setSelectionPath(oldSelectionPath);
-
-                            return;
-                        }
-
+                        return;                    
                     }
+                
+                } catch (DataSourceException e) {
+                    
+                    GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
+                    tree.setSelectionPath(oldSelectionPath);
+                    return;                    
                 }
+                 
             }
+            
         }
 
         Object object = newPath.getLastPathComponent();
@@ -1379,6 +1344,16 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             }
         };
         worker.start();
+    }
+
+    private DatabaseObjectChangeProvider databaseObjectChangeProvider() {
+
+        if (databaseObjectChangeProvider == null) {
+            
+            databaseObjectChangeProvider = new DatabaseObjectChangeProvider(); 
+        }
+        
+        return databaseObjectChangeProvider;
     }
 
     private synchronized void doNodeExpansion(DatabaseObjectNode node) {

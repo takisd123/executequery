@@ -20,6 +20,8 @@
 
 package org.executequery.gui.resultset;
 
+import org.executequery.databasemediators.SQLTypeObjectFactory;
+
 
 /**
  * 
@@ -32,12 +34,15 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	private Object value;
 
     private String name;
+    
     private int dataType;
 
 	private String dataTypeName;
 	
 	private boolean changed;
 
+	private static final SQLTypeObjectFactory TYPE_OBJECT_FACTORY = new SQLTypeObjectFactory();
+	
 	public AbstractRecordDataItem(String name, int dataType, String dataTypeName) {
 
 		super();
@@ -79,11 +84,24 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	}
 
 	public void valueChanged(Object newValue) {
-	    setValue(newValue);
+	    
+	    if (newValue != null && isStringLiteralNull(newValue)) {
+	        
+	        setValue(null);
+	        
+	    } else {
+	        
+	        setValue(newValue);
+	    }
 	    changed = true;
 	}
 	
-	public boolean isValueNull() {
+	private boolean isStringLiteralNull(Object newValue) {
+
+	    return newValue.toString().equalsIgnoreCase("NULL");
+    }
+
+    public boolean isValueNull() {
 		return (value == null);
 	}
 	
@@ -108,8 +126,23 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
     public String getName() {
         return name;
     }
+    
+    public boolean isSQLValueNull() {
+        return isValueNull();// && StringUtils.isBlank(toString());
+    }
+    
+    public Object getValueAsType() {
+
+        if (isValueNull()) {
+            
+            return null;
+        }
+        return valueAsType(this.value);
+    }
+
+    protected Object valueAsType(Object value) {
+        
+        return TYPE_OBJECT_FACTORY.create(dataType, value);
+    }
+    
 }
-
-
-
-

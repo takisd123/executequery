@@ -486,14 +486,15 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
                 // register the in params
                 for (int i = 0, n = ins.size(); i < n; i++) {
+                    
                     value = ins.get(i).getValue();
                     dataType = ins.get(i).getDataType();
 
-                    if (MiscUtils.isNull(value) ||
-                          value.equalsIgnoreCase(NULL)) {
+                    if (MiscUtils.isNull(value) || value.equalsIgnoreCase(NULL)) {
+
                         cstmnt.setNull(index, dataType);
-                    }
-                    else {
+                    
+                    } else {
 
                         switch (dataType) {
 
@@ -558,9 +559,8 @@ public class DefaultStatementExecutor implements StatementExecutor {
                     index++;
                 }
 
-            }
-            // catch formatting exceptions
-            catch (Exception e) {
+            } catch (Exception e) {
+              
                 statementResult.setOtherErrorMessage(
                         e.getClass().getName() + ": " + e.getMessage());
                 return statementResult;
