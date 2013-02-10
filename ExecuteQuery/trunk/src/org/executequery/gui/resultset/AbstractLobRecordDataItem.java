@@ -25,9 +25,9 @@ public abstract class AbstractLobRecordDataItem extends AbstractRecordDataItem
 
 	private byte[] data;
 	
-	public AbstractLobRecordDataItem(int dataType, String dataTypeName) {
+	public AbstractLobRecordDataItem(String name, int dataType, String dataTypeName) {
 		
-		super(dataType, dataTypeName);
+		super(name, dataType, dataTypeName);
 	}
 
 	public int length() {

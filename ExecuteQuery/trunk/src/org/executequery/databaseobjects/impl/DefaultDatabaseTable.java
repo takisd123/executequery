@@ -35,6 +35,8 @@ import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.databaseobjects.TableDataChange;
+import org.executequery.databaseobjects.TableDataChangeExecutor;
 import org.executequery.sql.SQLFormatter;
 import org.executequery.sql.StatementGenerator;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -56,6 +58,8 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     /** the table indexed columns */
     private List<TableColumnIndex> indexes;
 
+    private List<TableDataChange> tableDataChanges;
+    
     /** the user modified SQL text for changes */
     private String modifiedSQLText;
 
@@ -455,6 +459,14 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         modifiedSQLText = null;
         clearColumns();
         clearIndexes();
+        clearDataChanges();
+    }
+
+    private void clearDataChanges() {
+        if (tableDataChanges != null) {
+            tableDataChanges.clear();
+        }
+        tableDataChanges = null;
     }
 
     private void clearColumns() {
@@ -477,7 +489,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public void revert() {
 
         List<DatabaseColumn> newColumns = new ArrayList<DatabaseColumn>();
-
         for (DatabaseColumn i : columns) {
 
             DatabaseTableColumn column = (DatabaseTableColumn)i;
@@ -499,13 +510,43 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
 
         newColumns.clear();
+        tableDataChanges.clear();
         modifiedSQLText = null;
     }
 
+    public void addTableDataChange(TableDataChange tableDataChange) {
+
+        if (tableDataChanges == null) {
+            
+            tableDataChanges = new ArrayList<TableDataChange>();
+        }
+        
+        tableDataChanges.add(tableDataChange);
+    }
+    
     /**
      * Applies any changes to the database.
      */
     public int applyChanges() throws DataSourceException {
+
+        int result = applyTableDefinitionChanges();
+        result += applyTableDataChanges();
+        
+        return result;
+    }
+    
+    private int applyTableDataChanges() {
+
+        boolean success = new TableDataChangeExecutor(this).apply(tableDataChanges);
+        if (success) {
+         
+            clearDataChanges();
+        }
+        
+        return success ? 1 : 0;
+    }
+
+    private int applyTableDefinitionChanges() throws DataSourceException {
 
         Statement stmnt = null;
 
@@ -555,6 +596,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
     }
 
+    public boolean hasTableDataChanges() {
+        
+        return tableDataChanges != null ? !tableDataChanges.isEmpty() : false;
+    }
+    
     /**
      * Indicates whether this table or any of its columns
      * or constraints have pending modifications to be applied.
@@ -563,8 +609,12 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
      */
     public boolean isAltered() throws DataSourceException {
 
+        if (hasTableDataChanges()) {
+            
+            return true;
+        }
+        
         List<DatabaseColumn> _columns = getColumns();
-
         if (_columns != null) {
 
             for (DatabaseColumn i : _columns) {
@@ -638,11 +688,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public String getDropSQLText(boolean cascadeConstraints) {
 
         StatementGenerator statementGenerator = createStatementGenerator();
-
         String databaseProductName = databaseProductName();
 
         String dropStatement = null;
-
         if (cascadeConstraints) {
 
             dropStatement = statementGenerator.dropTableCascade(databaseProductName, this);
@@ -698,13 +746,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public List<ColumnConstraint> getUniqueKeys() {
 
         List<ColumnConstraint> uniqueKeys = new ArrayList<ColumnConstraint>();
-
         List<ColumnConstraint> _constraints = getConstraints();
 
         for (int i = 0, n = _constraints.size(); i < n; i++) {
 
             ColumnConstraint columnConstraint = _constraints.get(i);
-
             if (columnConstraint.isUniqueKey()) {
 
                 uniqueKeys.add(columnConstraint);
@@ -725,7 +771,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public String getAlterSQLTextForForeignKeys() {
 
         StatementGenerator statementGenerator = createStatementGenerator();
-
         return statementGenerator.createForeignKeyChange(databaseProductName(), this);
     }
 
@@ -1069,7 +1114,40 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         return true;
     }
+
+    public String prepareStatement(List<String> columns) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("UPDATE ").append(getName()).append(" SET ");
+        
+        for (String column : columns) {
+
+            sb.append(column).append(" = ?,");
+        }
+
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(" WHERE ");
+        
+        for (String primaryKey : getPrimaryKeyColumnNames()) {
+
+            sb.append(primaryKey).append(" = ?,");
+        }
+
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
     
+    public List<String> getPrimaryKeyColumnNames() {
+
+        List<String> primaryKeyColumns = new ArrayList<String>();
+        for (ColumnConstraint constraint : getPrimaryKeys()) {
+
+            primaryKeyColumns.add(constraint.getColumnName());
+        }
+
+        return primaryKeyColumns;
+    }
+
 }
 
 

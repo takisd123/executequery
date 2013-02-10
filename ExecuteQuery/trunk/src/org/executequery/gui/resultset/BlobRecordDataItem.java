@@ -35,9 +35,9 @@ public class BlobRecordDataItem extends AbstractLobRecordDataItem {
 
     private static final String BLOB_DATA_OBJECT = "<BLOB Data Object>";
 
-    public BlobRecordDataItem(int dataType, String dataTypeName) {
+    public BlobRecordDataItem(String name, int dataType, String dataTypeName) {
 
-        super(dataType, dataTypeName);
+        super(name, dataType, dataTypeName);
     }
 
     @Override

@@ -28,6 +28,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,6 +37,7 @@ import java.util.Set;
 import org.apache.commons.lang.StringUtils;
 import org.executequery.log.Log;
 import org.executequery.util.UserProperties;
+import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.table.AbstractSortableTableModel;
 
 /**
@@ -158,7 +160,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 for (int i = 1; i <= count; i++) {
 
                 	RecordDataItem value = recordDataItemFactory.create(
-                			columnHeaders.get(i),
+                			columnHeaders.get(i - 1),
                             rsmd.getColumnType(i),
                             rsmd.getColumnTypeName(i));
 
@@ -490,8 +492,19 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         List<RecordDataItem> rowData = tableData.get(row);
         if (column < rowData.size()) {
 
-            rowData.get(column).valueChanged(value);
-            fireTableDataChanged();
+            try {
+            
+                rowData.get(column).valueChanged(value);
+                fireTableCellUpdated(row, column);
+                
+            } catch (DataSourceException e) {
+                
+                if (e.getCause() instanceof ParseException) {
+                    
+                    
+                }
+            }
+                
         }
     }
     

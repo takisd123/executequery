@@ -31,6 +31,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.print.Printable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyVetoException;
+import java.beans.VetoableChangeListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -74,6 +77,7 @@ import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
+import org.underworldlabs.swing.VetoableSingleSelectionModel;
 import org.underworldlabs.swing.util.SwingWorker;
 
 /**
@@ -87,10 +91,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                                                  KeywordListener,
                                                  FocusListener,
                                                  TableConstraintFunction,
-                                                 ChangeListener {
+                                                 ChangeListener, 
+                                                 VetoableChangeListener {
     
     // TEXT FUNCTION CONTAINER
     
+    private static final int TABLE_DATA_TAB_INDEX = 5;
+
     public static final String NAME = "BrowserTableEditingPanel";
     
     /** Contains the table name */
@@ -227,9 +234,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         //schemaNameField = new DisabledField();
         rowCountField = new DisabledField();
         
+        VetoableSingleSelectionModel model = new VetoableSingleSelectionModel();
+        model.addVetoableChangeListener(this);
+
         // create the tabbed pane
         tabPane = new JTabbedPane();
-        //tabPane.add("Description", columnDataTable);
+        tabPane.setModel(model);
+
         tabPane.add("Description", descTablePanel);
         tabPane.add("Constraints", constraintsPanel);
         tabPane.add("Indexes", indexesPanel);
@@ -238,8 +249,9 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         tabPane.add("Data", tableDataPanel);
         tabPane.add("SQL", splitPane);
         tabPane.add("Meta Data", metaDataPanel);
+        
         tabPane.addChangeListener(this);
-
+        
         // apply/cancel buttons
         applyButton = new DefaultPanelButton("Apply");
         cancelButton = new DefaultPanelButton("Cancel");
@@ -380,29 +392,27 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     /**
      * Performs the apply/cancel changes.
      *
-     * @param e - the event
+     * @param event - the event
      */
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent event) {
 
-        Object source = e.getSource();
+        Object source = event.getSource();
         if (source == applyButton) {
+            
             try {
-                table.applyChanges();
+
+                new DatabaseObjectChangeProvider().applyChanges(table);
                 setValues(table);
+            
+            } catch (DataSourceException e) {
+
+                GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
             }
-            catch (DataSourceException dse) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("An error occurred applying the specified changes.").
-                   append("\n\nThe system returned:\n").
-                   append(dse.getExtendedMessage());
-                GUIUtilities.displayExceptionErrorDialog(sb.toString(), dse);
-            }
-        }
-        else if (source == cancelButton) {
+        
+        } else if (source == cancelButton) {
+
             table.revert();
             setValues(table);
-            //selectionChanged(metaObject, true);
-            //resetSQLText();
         }
     }
     
@@ -464,12 +474,32 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         EventMediator.deregisterListener(this);
     }
     
+    public void vetoableChange(PropertyChangeEvent e) throws PropertyVetoException {
+
+        if (Integer.valueOf(e.getOldValue().toString()) == TABLE_DATA_TAB_INDEX) {
+            
+            if (tableDataPanel.hasChanges()) {
+                
+                boolean applyChanges = new DatabaseObjectChangeProvider().applyChanges(table, true);
+                if (!applyChanges) {
+
+                    throw new PropertyVetoException("User cancelled", e);
+                }
+            }
+
+        }
+        
+        
+    }
+    
     /**
      * Handles a change tab selection.
      */
     public void stateChanged(ChangeEvent e) {
+        
         int index = tabPane.getSelectedIndex();
-        if (index != 5 && tableDataPanel.isExecuting()) {
+        if (index != TABLE_DATA_TAB_INDEX && tableDataPanel.isExecuting()) {
+
             tableDataPanel.cancelStatement();
             return;
         }
@@ -492,16 +522,20 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                     // check for any table defn changes
                     // and update the alter text pane
                     if (table.isAltered()) {
-                        alterSqlText.setSQLText(
-                                table.getAlteredSQLText().trim());
+
+                        alterSqlText.setSQLText(table.getAlteredSQLText().trim());
+                
                     } else {
+
                         alterSqlText.setSQLText(EMPTY);
                     }
-                }
-                catch (DataSourceException exc) {
+
+                } catch (DataSourceException exc) {
+                  
                     controller.handleException(exc);
                     alterSqlText.setSQLText(EMPTY);
                 }
+                
                 break;
             case 7:
                 loadTableMetaData();
@@ -757,6 +791,10 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      */
     public void selectionChanged(BaseDatabaseObject metaObject) {
         selectionChanged(metaObject, false);        
+    }
+    
+    public TableDataTab getTableDataPanel() {
+        return tableDataPanel;
     }
     
     public void setBrowserPreferences() {
