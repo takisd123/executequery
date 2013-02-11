@@ -144,7 +144,6 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
     private void showViewerForValueAt(Point point) {
         
         RecordDataItem recordDataItem = tableCellDataAtPoint(point);
-        
         if (recordDataItem != null && !recordDataItem.isValueNull()) {
 
             if (recordDataItem instanceof SimpleRecordDataItem) {
@@ -256,7 +255,6 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         try {
 
             GUIUtilities.showWaitCursor();
-            
             showViewerForValueAt(lastPopupPoint);
         
         } finally {

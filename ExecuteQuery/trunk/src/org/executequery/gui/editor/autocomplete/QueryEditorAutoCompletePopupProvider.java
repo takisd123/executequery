@@ -330,7 +330,7 @@ public class QueryEditorAutoCompletePopupProvider
         List<AutoCompleteListItem> itemsStartingWith = itemsStartingWith(tables, wordAtCursor);
         if (itemsStartingWith.isEmpty()) {
 
-            itemsStartingWith.add(noProposalsListItem());
+            noProposalsAvailable(itemsStartingWith);
         }
 
         ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith);
@@ -375,7 +375,7 @@ public class QueryEditorAutoCompletePopupProvider
 
             if (itemsStartingWith.isEmpty()) { // now bail...
 
-                itemsStartingWith.add(noProposalsListItem());
+                noProposalsAvailable(itemsStartingWith);
             }
 
         }
@@ -447,8 +447,32 @@ public class QueryEditorAutoCompletePopupProvider
 
     }
 
-    private AutoCompleteListItem noProposalsAutoCompleteListItem;
+    private void noProposalsAvailable(List<AutoCompleteListItem> itemsStartingWith) {
+        
+        if (rebuildingList) {
+            
+            itemsStartingWith.add(buildingProposalsListItem());
+        
+        } else {
+            
+            itemsStartingWith.add(noProposalsListItem());
+        }
+        
+    }
+    
+    private AutoCompleteListItem buildingProposalsAutoCompleteListItem;
+    private AutoCompleteListItem buildingProposalsListItem() {
 
+        if (buildingProposalsAutoCompleteListItem == null) {
+
+            buildingProposalsAutoCompleteListItem = new AutoCompleteListItem(null,
+                    "Please wait. Generating proposals...", null, AutoCompleteListItemType.GENERATING_LIST);
+        }
+
+        return buildingProposalsAutoCompleteListItem;
+    }
+
+    private AutoCompleteListItem noProposalsAutoCompleteListItem;
     private AutoCompleteListItem noProposalsListItem() {
 
         if (noProposalsAutoCompleteListItem == null) {
@@ -458,7 +482,6 @@ public class QueryEditorAutoCompletePopupProvider
         }
 
         return noProposalsAutoCompleteListItem;
-
     }
 
     private final ListFocusAction listFocusAction = new ListFocusAction();
@@ -693,8 +716,3 @@ public class QueryEditorAutoCompletePopupProvider
     public void focusLost(FocusEvent e) {}
 
 }
-
-
-
-
-

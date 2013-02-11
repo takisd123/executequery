@@ -21,6 +21,8 @@
 package org.executequery.gui.editor.autocomplete;
 
 import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.Icon;
@@ -39,9 +41,11 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
     private static final Icon databaseSpecificKeyword;
     private static final Icon databaseTable;
     private static final Icon databaseTableColumn;
+    private static final ImageIcon animatedSpinner;
     private static final ImageIcon databaseTableView;
     static {
         sql92Keyword = GUIUtilities.loadIcon("Sql92.png", true);
+        animatedSpinner = GUIUtilities.loadIcon("AnimatedSpinner16.gif", true);
         userDefinedKeyword = GUIUtilities.loadIcon("User16.png", true);
         databaseSpecificKeyword = GUIUtilities.loadIcon("DatabaseKeyword16.png", true);
         databaseTable = GUIUtilities.loadIcon("PlainTable16.png", true);
@@ -93,9 +97,42 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
                 setBorder(noFocusBorder);
                 break;
 
+            case GENERATING_LIST:
+                setBackground(list.getBackground());
+                setForeground(list.getForeground());
+                setBorder(noFocusBorder);
+                setIcon(animateImageIcon(animatedSpinner, list, index));
+                break;
+                
         }
-        
+
         return listLabel;
+    }
+
+    private ImageIcon animateImageIcon(ImageIcon icon, final JList list, final int row) {
+
+        icon.setImageObserver(new ImageObserver() {
+            
+            public boolean imageUpdate(Image img, int infoflags, int x, int y, int w, int h) {
+
+                if (list.isShowing() && (infoflags & (FRAMEBITS|ALLBITS)) != 0) {
+                    
+                    if (list.getSelectedIndex()==row) {
+                    
+                        list.repaint();
+                    }
+
+                    if (list.isShowing()) {
+    
+                        list.repaint(list.getCellBounds(row, row));
+                    }
+
+                }
+                return (infoflags & (ALLBITS|ABORT)) == 0;
+            };
+        });
+
+        return icon;
     }
     
 }

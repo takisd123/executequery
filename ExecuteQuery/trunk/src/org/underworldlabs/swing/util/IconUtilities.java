@@ -44,8 +44,8 @@ public class IconUtilities {
     private static Map<String,ImageIcon> icons = new HashMap<String,ImageIcon>();
     
     public static ImageIcon loadImage(String name) {
-        return new ImageIcon(
-                IconUtilities.class.getResource(name));
+
+        return new ImageIcon(IconUtilities.class.getResource(name));
     }
     
     public static ImageIcon loadIcon(String name) {
@@ -56,9 +56,11 @@ public class IconUtilities {
         ImageIcon icon = null;    
         
         if (icons.containsKey(name)) {
+        
             icon = icons.get(name);
-        }
-        else {
+
+        } else {
+        
             URL url = IconUtilities.class.getResource(name);
             if (url != null) {
                 icon = new ImageIcon(url);
@@ -76,14 +78,18 @@ public class IconUtilities {
     }
 
     public static ImageIcon loadDefaultIconResource(String name, boolean store) {
+        
         ImageIcon icon = null;
         name = ICON_PATH + name;
         if (icons.containsKey(name)) {
+        
             icon = icons.get(name);
-        }
-        else {
+
+        } else {
+            
             URL url = IconUtilities.class.getResource(name);
             if (url == null) {
+            
                 throw new RuntimeException("Icon at resource path not found: " +
                         name);
             }
@@ -96,17 +102,7 @@ public class IconUtilities {
         return icon;
     }
 
-    // prevent instantiation
     private IconUtilities() {}
 
 }
-
-
-
-
-
-
-
-
-
 

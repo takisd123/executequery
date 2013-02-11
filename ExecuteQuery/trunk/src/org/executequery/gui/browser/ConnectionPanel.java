@@ -243,7 +243,7 @@ public class ConnectionPanel extends ActionPanel
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHEAST;
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.fill = GridBagConstraints.NONE; 
         buttons.add(connectButton, gbc);
         gbc.gridx++;
         gbc.weightx = 0;
@@ -393,10 +393,11 @@ public class ConnectionPanel extends ActionPanel
     
     private JButton createButton(String text, String actionCommand, int mnemonic) {
 
-        JButton button = new FormPanelButton(text, actionCommand);
+        FormPanelButton button = new FormPanelButton(text, actionCommand);
         
         button.setMnemonic(mnemonic);
         button.addActionListener(this);
+        button.applyMaximumSize();
         
         return button;
     }
