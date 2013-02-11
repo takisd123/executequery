@@ -20,6 +20,8 @@
 
 package org.executequery.gui;
 
+import java.awt.Dimension;
+
 public class FormPanelButton extends DefaultPanelButton {
 
     private static final int DEFAULT_WIDTH = 100;
@@ -32,8 +34,12 @@ public class FormPanelButton extends DefaultPanelButton {
     public FormPanelButton(String text, String actionCommand) {
 
         super(text, actionCommand);
-
         setDefaultWidth(DEFAULT_WIDTH);
+    }
+
+    public void applyMaximumSize() {
+
+        setMaximumSize(new Dimension(DEFAULT_WIDTH, getDefaultHeight()));
     }
 
 }

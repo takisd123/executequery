@@ -133,8 +133,8 @@ public class SimpleDataItemViewerPanel extends DefaultActionButtonsPanel {
         JTextArea textArea = new JTextArea(recordDataItem.toString());
         textArea.setEditable(false);
         textArea.setLineWrap(false);
-        textArea.setMargin(new Insets(2, 2, 2, 2));
-        textArea.setFont(new Font("monospaced", Font.PLAIN, 11));
+        textArea.setMargin(new Insets(4, 4, 4, 4));
+        textArea.setFont(new Font("monospaced", Font.PLAIN, 12));
         
         return textArea;
     }

@@ -20,7 +20,7 @@
 
 package org.executequery.gui.resultset;
 
-public class DateRecordDataItem extends AbstractRecordDataItem {
+public class DateRecordDataItem extends SimpleRecordDataItem {
 
 	public DateRecordDataItem(String name, int dataType, String dataTypeName) {
 

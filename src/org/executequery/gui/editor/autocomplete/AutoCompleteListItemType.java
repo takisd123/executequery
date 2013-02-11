@@ -30,7 +30,8 @@ public enum AutoCompleteListItemType {
     DATABASE_VIEW, 
     DATABASE_SEQUENCE,
     DATABASE_DATA_TYPE,
-    NOTHING_PROPOSED;
+    NOTHING_PROPOSED,
+    GENERATING_LIST;
 
     public boolean isKeyword() {
         

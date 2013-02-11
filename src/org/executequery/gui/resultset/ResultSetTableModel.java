@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.executequery.gui.ErrorMessagePublisher;
 import org.executequery.log.Log;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -499,9 +500,11 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 
             } catch (DataSourceException e) {
                 
-                if (e.getCause() instanceof ParseException) {
+                Throwable cause = e.getCause();
+                if (cause instanceof ParseException) {
                     
-                    
+                    ErrorMessagePublisher.publish(
+                            "Invalid value provided for type -\n" + e.getExtendedMessage(), cause);
                 }
             }
                 

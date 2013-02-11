@@ -82,7 +82,7 @@ public class DatabaseObjectChangeProvider {
             
             if (table.hasTableDataChanges()) {
                 
-                sb.append("\n\nRollback was issued for all data changes.");
+                sb.append("\nRollback was issued for all data changes.");
             }
             
             throw new DataSourceException(sb.toString(), e.getCause());

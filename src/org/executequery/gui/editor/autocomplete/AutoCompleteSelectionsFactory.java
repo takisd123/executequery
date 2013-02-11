@@ -30,7 +30,6 @@ import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.impl.ColumnInformation;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
-import org.executequery.sql.QueryTable;
 
 public class AutoCompleteSelectionsFactory {
 
@@ -93,19 +92,6 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
-    private String databaseHeldTableName(String name) {
-
-        for (String table : tables) {
-            
-            if (table.equalsIgnoreCase(name)) {
-                
-                return table;
-            }
-        }
-
-        return name;
-    }
-
     private List<String> tables;
     
     private List<AutoCompleteListItem> databaseTablesForHost(DatabaseHost databaseHost) {
@@ -197,11 +183,13 @@ public class AutoCompleteSelectionsFactory {
         return list;
     }
 
+    /*
     private String formatColumnName(String table, String column) {
         
         return new StringBuilder().append(column).
             append("  [").append(table).append("]").toString();
     }
+    */
     
     private void addDatabaseDefinedKeywords(DatabaseHost databaseHost,
             List<AutoCompleteListItem> list) {
@@ -257,50 +245,4 @@ public class AutoCompleteSelectionsFactory {
         
     }
 
-    @Deprecated
-    public List<AutoCompleteListItem> loadForTables(DatabaseHost databaseHost, List<QueryTable> queryTables) {
-
-        if (tables == null) {
-            
-            databaseTablesForHost(databaseHost);
-        }
-        
-        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-
-        String catalog = defaultCatalogForHost(databaseHost);
-        String schema = defaultSchemaForHost(databaseHost);
-        
-        for (QueryTable table : queryTables) {
-            
-            String _catalog = catalog;
-            String _schema = schema;
-            
-            if (table.hasCatalogOrSchemaPrefix()) {
-                
-                _catalog = table.getCatalogOrSchemaPrefix();
-                _schema= table.getCatalogOrSchemaPrefix();
-            }
-            
-            String tableName = databaseHeldTableName(table.getName());
-            List<String> columns = databaseHost.getColumnNames(_catalog, _schema, tableName);
-            
-            for (String columnName : columns) {
-                
-                list.add(new AutoCompleteListItem(
-                        columnName, 
-                        table.getName(),
-                        formatColumnName(table.getName(), columnName), 
-                        DATABASE_COLUMN_DESCRIPTION, 
-                        AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
-            }
-                
-        }
-        
-        return list;
-    }
-
 }
-
-
-
-
