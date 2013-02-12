@@ -28,6 +28,7 @@ import java.util.List;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.impl.ColumnInformation;
+import org.executequery.log.Log;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 
@@ -67,6 +68,7 @@ public class AutoCompleteSelectionsFactory {
 
         }
 
+        Log.debug("Sorting suggestions list for host [ " + databaseHost.getName() + " ]");        
         Collections.sort(listSelections, new AutoCompleteListItemComparator());
 
         return listSelections;
@@ -97,7 +99,10 @@ public class AutoCompleteSelectionsFactory {
     private List<AutoCompleteListItem> databaseTablesForHost(DatabaseHost databaseHost) {
 
         tables = databaseObjectsForHost(databaseHost, "TABLE");
+        Log.debug("Generated list for type TABLE with size " + tables.size());
+
         List<String> views = databaseObjectsForHost(databaseHost, "VIEW");
+        Log.debug("Generated list for type VIEW with size " + views.size());
         
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
         tablesToAutoCompleteListItems(list, tables, 
@@ -110,8 +115,17 @@ public class AutoCompleteSelectionsFactory {
 
     private List<String> databaseObjectsForHost(DatabaseHost databaseHost, String type) {
         
-        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
-                defaultSchemaForHost(databaseHost), type);
+    	try {
+    	
+    		Log.debug("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+    		
+	        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
+	                defaultSchemaForHost(databaseHost), type);
+    	
+    	} finally {
+
+    		Log.debug("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+    	}
     }
     
     private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
@@ -153,14 +167,17 @@ public class AutoCompleteSelectionsFactory {
         return null;
     }
 
-    private List<AutoCompleteListItem> databaseColumnsForTables(DatabaseHost databaseHost,
-            List<AutoCompleteListItem> tables) {
+    private List<AutoCompleteListItem> databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
 
+    	Log.debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
+    	
         List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
         if (databaseHost.isConnected()) {
         
             for (AutoCompleteListItem table : tables) {
     
+            	Log.debug("Retrieving column names for table [ " + table.getDisplayValue() + " ]");
+            	
                 List<ColumnInformation> columns = databaseHost.getColumnInformation(
                         defaultCatalogForHost(databaseHost), 
                         defaultSchemaForHost(databaseHost), table.getValue());
@@ -180,6 +197,7 @@ public class AutoCompleteSelectionsFactory {
             
         }
         
+        Log.debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
         return list;
     }
 

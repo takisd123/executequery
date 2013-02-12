@@ -59,8 +59,7 @@ import org.executequery.sql.QueryTable;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.swing.util.SwingWorker;
 
-public class QueryEditorAutoCompletePopupProvider
-    implements AutoCompletePopupProvider, AutoCompletePopupListener,
+public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupProvider, AutoCompletePopupListener,
         CaretListener, ConnectionChangeListener, FocusListener {
 
     private static final KeyStroke KEY_STROKE_ENTER = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
@@ -148,9 +147,7 @@ public class QueryEditorAutoCompletePopupProvider
             addFocusActions();
             captureAndResetListValues();
 
-            ((JPopupMenu) popupMenu()).show(textComponent,
-                    caretCoords.x, caretCoords.y + caretCoords.height);
-
+            ((JPopupMenu) popupMenu()).show(textComponent, caretCoords.x, caretCoords.y + caretCoords.height);
             textComponent.requestFocus();
 
         } catch (BadLocationException e) {
@@ -177,12 +174,10 @@ public class QueryEditorAutoCompletePopupProvider
 
                     popupHidden();
                 }
-
                 public void popupMenuCanceled(PopupMenuEvent e) {
 
                     popupHidden();
                 }
-
                 public void popupMenuWillBecomeVisible(PopupMenuEvent e) {}
 
             });
@@ -304,26 +299,11 @@ public class QueryEditorAutoCompletePopupProvider
         queryEditorTextComponent().requestFocus();
     }
 
-    private void rebuildListSelectionsItems() {
-
-        DatabaseConnection selectedConnection = queryEditor.getSelectedConnection();
-
-        if (selectedConnection == null) {
-
-            databaseHost = null;
-
-        } else if (databaseHost == null) {
-
-            databaseHost = databaseObjectFactory.createDatabaseHost(selectedConnection);
-        }
-
-        autoCompleteListItems = selectionsBuilder.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
-    }
-
     private void captureAndResetListValues() {
 
         String wordAtCursor = queryEditor.getWordToCursor();
-
+        Log.debug("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
+        
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
 
@@ -349,6 +329,8 @@ public class QueryEditorAutoCompletePopupProvider
 
             return selectionsBuilder.buildKeywords(databaseHost, autoCompleteKeywords);
         }
+
+        Log.debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
 
         String wordPrefix = prefix.trim().toUpperCase();
 
@@ -451,10 +433,12 @@ public class QueryEditorAutoCompletePopupProvider
         
         if (rebuildingList) {
             
+        	Log.debug("Suggestions list still in progress");
             itemsStartingWith.add(buildingProposalsListItem());
         
         } else {
             
+        	Log.debug("Suggestions list completed - no matches found for input");
             itemsStartingWith.add(noProposalsListItem());
         }
         
@@ -661,6 +645,11 @@ public class QueryEditorAutoCompletePopupProvider
 
     public void connectionChanged(DatabaseConnection databaseConnection) {
 
+    	if (autoCompleteListItems != null) {
+    		
+    		autoCompleteListItems.clear();
+    	}
+    	
         if (databaseHost != null) {
 
             databaseHost.close();
@@ -683,8 +672,27 @@ public class QueryEditorAutoCompletePopupProvider
 
     }
 
-    private boolean rebuildingList;
+    private boolean rebuildListSelectionsItems() {
 
+        DatabaseConnection selectedConnection = queryEditor.getSelectedConnection();
+        if (selectedConnection == null) {
+
+            databaseHost = null;
+
+        } else if (databaseHost == null) {
+
+            databaseHost = databaseObjectFactory.createDatabaseHost(selectedConnection);
+        }
+
+//        if (autoCompleteListItems == null || autoCompleteListItems.isEmpty()) {
+//        	Log.debug("Suggestions list is empty... rebuilding");
+
+    	autoCompleteListItems = selectionsBuilder.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
+
+        return true;
+    }
+    
+    private boolean rebuildingList;
     private SwingWorker worker;
 
     private void scheduleListItemLoad() {
@@ -698,18 +706,43 @@ public class QueryEditorAutoCompletePopupProvider
 
             public Object construct() {
 
-                rebuildingList = true;
-                rebuildListSelectionsItems();
-
-                return "done";
+            	try {
+            	
+            		Log.debug("Rebuilding suggestions list...");
+            		
+	                rebuildingList = true;
+	                rebuildListSelectionsItems();
+	                
+	                return "done";
+	                
+            	} finally {
+            	
+            		Log.debug("Rebuilding suggestions list complete");
+            		rebuildingList = false;
+            	}
             }
 
             public void finished() {
 
-                rebuildingList = false;
+            	rebuildingList = false;
+            	Log.debug("Rebuilding suggestions list complete");
+            	
+            	JComponent popupMenu = popupMenu();
+            	if (popupMenu.isVisible()) {
+
+            		Log.debug("Resetting autocomplete popup list values");            		
+            		captureAndResetListValues();
+
+            	} else {
+            		
+            		Log.debug("Popup not visible - not updating");
+            	}
+            	
             }
 
         };
+        
+        Log.debug("Starting worker thread for suggestions list");
         worker.start();
     }
 
