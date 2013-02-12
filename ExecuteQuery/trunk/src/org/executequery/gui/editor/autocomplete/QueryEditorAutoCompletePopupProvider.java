@@ -88,7 +88,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     private final QueryEditor queryEditor;
 
-    private AutoCompleteSelectionsFactory selectionsBuilder;
+    private AutoCompleteSelectionsFactory selectionsFactory;
 
     private AutoCompletePopupAction autoCompletePopupAction;
 
@@ -109,7 +109,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         super();
         this.queryEditor = queryEditor;
 
-        selectionsBuilder = new AutoCompleteSelectionsFactory();
+        selectionsFactory = new AutoCompleteSelectionsFactory(this);
         databaseObjectFactory = new DatabaseObjectFactoryImpl();
 
         setAutoCompleteOptionFlags();
@@ -145,6 +145,16 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             final Rectangle caretCoords = textComponent.modelToView(caret.getDot());
 
             addFocusActions();
+            
+            if (autoCompleteListItems == null) {
+             
+                autoCompleteListItems = new ArrayList<AutoCompleteListItem>();
+            
+            } else {
+
+                autoCompleteListItems.clear();
+            }
+            
             captureAndResetListValues();
 
             ((JPopupMenu) popupMenu()).show(textComponent, caretCoords.x, caretCoords.y + caretCoords.height);
@@ -327,7 +337,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         boolean hasTables = hasTables(tables);
         if (StringUtils.isBlank(prefix) && !hasTables) {
 
-            return selectionsBuilder.buildKeywords(databaseHost, autoCompleteKeywords);
+            return selectionsFactory.buildKeywords(databaseHost, autoCompleteKeywords);
         }
 
         Log.debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
@@ -343,7 +353,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
 
             return buildItemsStartingWithForList(
-                    selectionsBuilder.buildKeywords(databaseHost, autoCompleteKeywords), tables, wordPrefix, false);
+                    selectionsFactory.buildKeywords(databaseHost, autoCompleteKeywords), tables, wordPrefix, false);
         }
 
         List<AutoCompleteListItem> itemsStartingWith =
@@ -687,11 +697,40 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 //        if (autoCompleteListItems == null || autoCompleteListItems.isEmpty()) {
 //        	Log.debug("Suggestions list is empty... rebuilding");
 
-    	autoCompleteListItems = selectionsBuilder.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
+//    	autoCompleteListItems = selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
+    	selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
 
         return true;
     }
+
+//    private AutoCompleteListItemComparatorByValue autoCompleteListItemComparatorByValue = new AutoCompleteListItemComparatorByValue();
+
+    public void addListItems(List<AutoCompleteListItem> items) {
+        
+        if (autoCompleteListItems == null) {
+            
+            autoCompleteListItems = new ArrayList<AutoCompleteListItem>();
+        }
+        
+        autoCompleteListItems.addAll(items);
+//        Collections.sort(autoCompleteListItems, autoCompleteListItemComparatorByValue);
+        reapplyIfVisible();
+    }
     
+    private void reapplyIfVisible() {
+
+        JComponent popupMenu = popupMenu();
+        if (popupMenu.isVisible()) {
+
+            Log.debug("Resetting autocomplete popup list values");                  
+            captureAndResetListValues();
+
+        } else {
+            
+            Log.debug("Popup not visible - not updating");
+        }
+    }
+
     private boolean rebuildingList;
     private SwingWorker worker;
 
@@ -725,19 +764,8 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             public void finished() {
 
             	rebuildingList = false;
-            	Log.debug("Rebuilding suggestions list complete");
-            	
-            	JComponent popupMenu = popupMenu();
-            	if (popupMenu.isVisible()) {
-
-            		Log.debug("Resetting autocomplete popup list values");            		
-            		captureAndResetListValues();
-
-            	} else {
-            		
-            		Log.debug("Popup not visible - not updating");
-            	}
-            	
+            	Log.debug("Rebuilding suggestions list complete");            	
+            	reapplyIfVisible();
             }
 
         };
@@ -748,4 +776,14 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     public void focusLost(FocusEvent e) {}
 
+    static class AutoCompleteListItemComparatorByValue implements Comparator<AutoCompleteListItem> {
+
+        public int compare(AutoCompleteListItem o1, AutoCompleteListItem o2) {
+
+            return o1.getValue().toUpperCase().compareTo(o2.getValue().toUpperCase());
+        }
+        
+    }
+
+    
 }

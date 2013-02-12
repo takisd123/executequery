@@ -40,14 +40,22 @@ public class AutoCompleteSelectionsFactory {
     
     private static final String DATABASE_COLUMN_DESCRIPTION = "Database Column";
     
-    public List<AutoCompleteListItem> build(DatabaseHost databaseHost,
-            boolean autoCompleteKeywords, boolean autoCompleteSchema) {
+    private QueryEditorAutoCompletePopupProvider provider;
+    
+    public AutoCompleteSelectionsFactory(QueryEditorAutoCompletePopupProvider provider) {
+        super();
+        this.provider = provider;
+    }
+
+    public void build(DatabaseHost databaseHost, boolean autoCompleteKeywords, boolean autoCompleteSchema) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
         if (autoCompleteKeywords) {
         
             addSQL92Keywords(listSelections);
             addUserDefinedKeywords(listSelections);
+            
+            addToProvider(listSelections);
         }
 
         if (databaseHost != null && databaseHost.isConnected()) {
@@ -55,23 +63,32 @@ public class AutoCompleteSelectionsFactory {
             if (autoCompleteKeywords) {
             
                 addDatabaseDefinedKeywords(databaseHost, listSelections);
+                addToProvider(listSelections);
             }
 
             if (autoCompleteSchema) {
              
                 List<AutoCompleteListItem> tables = databaseTablesForHost(databaseHost);
                 listSelections.addAll(tables);
+                addToProvider(listSelections);
+                
                 
                 List<AutoCompleteListItem> columns = databaseColumnsForTables(databaseHost, tables);
                 listSelections.addAll(columns);
+                addToProvider(listSelections);
             }
 
         }
 
-        Log.debug("Sorting suggestions list for host [ " + databaseHost.getName() + " ]");        
-        Collections.sort(listSelections, new AutoCompleteListItemComparator());
+//        Log.debug("Sorting suggestions list for host [ " + databaseHost.getName() + " ]");        
+//        Collections.sort(listSelections, new AutoCompleteListItemComparator());
 
-        return listSelections;
+//        return listSelections;
+    }
+
+    private void addToProvider(List<AutoCompleteListItem> listSelections) {
+        provider.addListItems(listSelections);
+        listSelections.clear();
     }
     
     public List<AutoCompleteListItem> buildKeywords(DatabaseHost databaseHost, 

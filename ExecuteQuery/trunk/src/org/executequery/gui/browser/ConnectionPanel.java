@@ -508,11 +508,11 @@ public class ConnectionPanel extends ActionPanel
 
     private boolean connectionNameExists() {
 
-        if (databaseConnectionRepository().nameExists(
-        		databaseConnection, nameField.getText().trim())) {
+        String name = nameField.getText().trim();
+        if (databaseConnectionRepository().nameExists(databaseConnection, name)) {
 
-            GUIUtilities.displayErrorMessage(
-        			"The name entered for this connection already exists");        	
+            GUIUtilities.displayErrorMessage("The name [ " + name 
+                    + " ] entered for this connection already exists");        	
             return true;
         }
 
@@ -968,11 +968,15 @@ public class ConnectionPanel extends ActionPanel
      */
     private void populateConnectionObject() {
 
+        if (databaseConnection == null) {
+
+            return;
+        }
+        
         databaseConnection.setPasswordStored(savePwdCheck.isSelected());
         databaseConnection.setPasswordEncrypted(encryptPwdCheck.isSelected());
         databaseConnection.setUserName(userField.getText());
-        databaseConnection.setPassword(
-                MiscUtils.charsToString(passwordField.getPassword()));
+        databaseConnection.setPassword(MiscUtils.charsToString(passwordField.getPassword()));
         databaseConnection.setHost(hostField.getText());
         databaseConnection.setPort(portField.getText());
         databaseConnection.setSourceName(sourceField.getText());
@@ -980,7 +984,6 @@ public class ConnectionPanel extends ActionPanel
 
         // jdbc driver selection
         int driverIndex = driverCombo.getSelectedIndex();
-
         if (driverIndex >= jdbcDrivers.size() + 1) {
 
             driverIndex = jdbcDrivers.size();
