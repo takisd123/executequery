@@ -57,7 +57,6 @@ import org.executequery.log.Log;
 import org.executequery.sql.DerivedQuery;
 import org.executequery.sql.QueryTable;
 import org.executequery.util.UserProperties;
-import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 
 public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupProvider, AutoCompletePopupListener,
@@ -720,24 +719,16 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     
     private void reapplyIfVisible() {
 
-        GUIUtils.invokeLater(new Runnable() {
-            public void run() {
+        JComponent popupMenu = popupMenu();
+        if (popupMenu.isVisible()) {
 
-                JComponent popupMenu = popupMenu();
-                if (popupMenu.isVisible()) {
+            debug("Resetting autocomplete popup list values");                  
+            captureAndResetListValues();
 
-                    debug("Resetting autocomplete popup list values");                  
-                    captureAndResetListValues();
-
-                } else {
-                    
-                    debug("Popup not visible - not updating");
-                }
-                
-            } 
+        } else {
             
-        });
-        
+            debug("Popup not visible - not updating");
+        }
     }
 
     private boolean rebuildingList;
