@@ -20,6 +20,9 @@
 
 package org.executequery.gui.editor.autocomplete;
 
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +31,7 @@ import java.util.List;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.impl.ColumnInformation;
+import org.executequery.databaseobjects.impl.ColumnInformationFactory;
 import org.executequery.log.Log;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
@@ -42,6 +46,8 @@ public class AutoCompleteSelectionsFactory {
     
     private QueryEditorAutoCompletePopupProvider provider;
     
+    private List<AutoCompleteListItem> tables;
+    
     public AutoCompleteSelectionsFactory(QueryEditorAutoCompletePopupProvider provider) {
         super();
         this.provider = provider;
@@ -49,6 +55,8 @@ public class AutoCompleteSelectionsFactory {
 
     public void build(DatabaseHost databaseHost, boolean autoCompleteKeywords, boolean autoCompleteSchema) {
 
+        tables = new ArrayList<AutoCompleteListItem>();
+        
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
         if (autoCompleteKeywords) {
         
@@ -68,22 +76,12 @@ public class AutoCompleteSelectionsFactory {
 
             if (autoCompleteSchema) {
              
-                List<AutoCompleteListItem> tables = databaseTablesForHost(databaseHost);
-                listSelections.addAll(tables);
-                addToProvider(listSelections);
-                
-                
-                List<AutoCompleteListItem> columns = databaseColumnsForTables(databaseHost, tables);
-                listSelections.addAll(columns);
-                addToProvider(listSelections);
+                databaseTablesForHost(databaseHost);
+                databaseColumnsForTables(databaseHost, tables);
             }
 
         }
 
-//        Log.debug("Sorting suggestions list for host [ " + databaseHost.getName() + " ]");        
-//        Collections.sort(listSelections, new AutoCompleteListItemComparator());
-
-//        return listSelections;
     }
 
     private void addToProvider(List<AutoCompleteListItem> listSelections) {
@@ -91,8 +89,7 @@ public class AutoCompleteSelectionsFactory {
         listSelections.clear();
     }
     
-    public List<AutoCompleteListItem> buildKeywords(DatabaseHost databaseHost, 
-            boolean autoCompleteKeywords) {
+    public List<AutoCompleteListItem> buildKeywords(DatabaseHost databaseHost, boolean autoCompleteKeywords) {
 
         List<AutoCompleteListItem> listSelections = new ArrayList<AutoCompleteListItem>();
         if (autoCompleteKeywords) {
@@ -111,40 +108,78 @@ public class AutoCompleteSelectionsFactory {
         return listSelections;
     }
     
-    private List<String> tables;
-    
-    private List<AutoCompleteListItem> databaseTablesForHost(DatabaseHost databaseHost) {
+    private void databaseTablesForHost(DatabaseHost databaseHost) {
 
-        tables = databaseObjectsForHost(databaseHost, "TABLE");
-        Log.debug("Generated list for type TABLE with size " + tables.size());
-
-        List<String> views = databaseObjectsForHost(databaseHost, "VIEW");
-        Log.debug("Generated list for type VIEW with size " + views.size());
+        databaseObjectsForHost(databaseHost, "TABLE", DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
+        databaseObjectsForHost(databaseHost, "VIEW", DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
         
-        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-        tablesToAutoCompleteListItems(list, tables, 
-                DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
-        tablesToAutoCompleteListItems(list, views,
-                DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
-
-        return list;
+//        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+//        tablesToAutoCompleteListItems(list, tables, 
+//                DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
+//        tablesToAutoCompleteListItems(list, views,
+//                DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
     }
 
-    private List<String> databaseObjectsForHost(DatabaseHost databaseHost, String type) {
+    private static final int INCREMENT = 5;
+    
+    private void databaseObjectsForHost(DatabaseHost databaseHost, String type, 
+            String databaseObjectDescription, AutoCompleteListItemType autocompleteType) {
         
-    	try {
-    	
-    		Log.debug("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+		debug("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+		
+		ResultSet rs = null;
+		DatabaseMetaData databaseMetaData = databaseHost.getDatabaseMetaData();
+        try {
+            String catalog = databaseHost.getCatalogNameForQueries(defaultCatalogForHost(databaseHost));
+            String schema = databaseHost.getSchemaNameForQueries(defaultSchemaForHost(databaseHost));
+
+            String typeName = null;
+            List<String> tableNames = new ArrayList<String>();
+            List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+            String[] types = new String[]{type};
+
+            int count = 0;
+            
+            rs = databaseMetaData.getTables(catalog, schema, null, types);
+            while (rs.next()) {
+
+                typeName = rs.getString(4);
+
+                // only include if the returned reported type matches
+                if (type != null && type.equalsIgnoreCase(typeName)) {
+
+                    tableNames.add(rs.getString(3));
+                    count++;
+                }
+                
+                if (count >= INCREMENT) {
+                    
+                    addTablesToProvider(databaseObjectDescription, autocompleteType, tableNames, list);
+                    count = 0;
+                    list.clear();
+                    tableNames.clear();
+                }
+                
+            }
+            
+            addTablesToProvider(databaseObjectDescription, autocompleteType, tableNames, list);
+
+        } catch (SQLException e) {
+
+            error("Tables not available for type " + type + " - driver returned: " + e.getMessage());
+
+        } finally {
+
+            releaseResources(rs);
+            debug("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+        }
     		
-	        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
-	                defaultSchemaForHost(databaseHost), type);
+    		
+//	        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
+//	                defaultSchemaForHost(databaseHost), type);
     	
-    	} finally {
-
-    		Log.debug("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
-    	}
     }
-    
+
     private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
             List<AutoCompleteListItem> list, List<String> tables, 
             String databaseObjectDescription, AutoCompleteListItemType autoCompleteListItemType) {
@@ -156,6 +191,69 @@ public class AutoCompleteSelectionsFactory {
         }
         
         return list;
+    }
+
+    private ColumnInformationFactory columnInformationFactory = new ColumnInformationFactory();
+    
+    private void databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
+
+    	debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
+
+        ResultSet rs = null;
+        List<ColumnInformation> columns = new ArrayList<ColumnInformation>();
+        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+
+        String catalog = databaseHost.getCatalogNameForQueries(defaultCatalogForHost(databaseHost));
+        String schema = databaseHost.getSchemaNameForQueries(defaultSchemaForHost(databaseHost));
+        DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
+
+        for (AutoCompleteListItem table : tables) {
+            
+            debug("Retrieving column names for table [ " + table.getValue() + " ]");
+        
+            try {
+            
+                rs = dmd.getColumns(catalog, schema, table.getValue(), null);
+                while (rs.next()) {
+
+                    String name = rs.getString(4);
+                    columns.add(columnInformationFactory.build(
+                            table.getValue(), 
+                            name, 
+                            rs.getString(6),
+                            rs.getInt(5),
+                            rs.getInt(7),
+                            rs.getInt(9),
+                            rs.getInt(11) == DatabaseMetaData.columnNoNulls));
+                }
+            
+                for (ColumnInformation column : columns) {
+                    
+                    list.add(new AutoCompleteListItem(
+                            column.getName(), 
+                            table.getValue(),
+                            column.getDescription(),
+                            DATABASE_COLUMN_DESCRIPTION, 
+                            AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
+                }
+                
+                provider.addListItems(list);
+                releaseResources(rs);
+                columns.clear();
+                list.clear();
+            
+            } catch (SQLException e) {
+
+                error("Error retrieving column data for table " + table.getDisplayValue() + " - driver returned: " + e.getMessage());
+                
+            } finally {
+
+                releaseResources(rs);
+            }
+
+        }
+        
+        debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
     }
 
     private String defaultSchemaForHost(DatabaseHost databaseHost) {
@@ -184,48 +282,6 @@ public class AutoCompleteSelectionsFactory {
         return null;
     }
 
-    private List<AutoCompleteListItem> databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
-
-    	Log.debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
-    	
-        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-        if (databaseHost.isConnected()) {
-        
-            for (AutoCompleteListItem table : tables) {
-    
-            	Log.debug("Retrieving column names for table [ " + table.getDisplayValue() + " ]");
-            	
-                List<ColumnInformation> columns = databaseHost.getColumnInformation(
-                        defaultCatalogForHost(databaseHost), 
-                        defaultSchemaForHost(databaseHost), table.getValue());
-                
-                for (ColumnInformation column : columns) {
-                    
-                    list.add(new AutoCompleteListItem(
-                            column.getName(), 
-                            table.getValue(),
-//                            formatColumnName(table.getValue(), columnName), 
-                            column.getDescription(),
-                            DATABASE_COLUMN_DESCRIPTION, 
-                            AutoCompleteListItemType.DATABASE_TABLE_COLUMN)); 
-                }
-                
-            }
-            
-        }
-        
-        Log.debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
-        return list;
-    }
-
-    /*
-    private String formatColumnName(String table, String column) {
-        
-        return new StringBuilder().append(column).
-            append("  [").append(table).append("]").toString();
-    }
-    */
-    
     private void addDatabaseDefinedKeywords(DatabaseHost databaseHost,
             List<AutoCompleteListItem> list) {
 
@@ -254,6 +310,17 @@ public class AutoCompleteSelectionsFactory {
                 list, "User Defined Keyword", AutoCompleteListItemType.USER_DEFINED_KEYWORD);
     }
 
+    private void addTablesToProvider(String databaseObjectDescription,
+            AutoCompleteListItemType autocompleteType, List<String> tableNames,
+            List<AutoCompleteListItem> list) {
+
+        List<AutoCompleteListItem> autoCompleteListItems = 
+                tablesToAutoCompleteListItems(list, tableNames, databaseObjectDescription, autocompleteType);
+
+        provider.addListItems(autoCompleteListItems);
+        tables.addAll(autoCompleteListItems);
+    }
+    
     private void addKeywordsFromList(List<String> keywords, List<AutoCompleteListItem> list,
             String description, AutoCompleteListItemType autoCompleteListItemType) {
         
@@ -280,4 +347,24 @@ public class AutoCompleteSelectionsFactory {
         
     }
 
+    private void releaseResources(ResultSet rs) {
+        try {
+            if (rs != null) {
+
+                rs.close();
+            }
+        } catch (SQLException sqlExc) {}
+    }
+
+    private void error(String message) {
+
+        Log.error(message);
+    }
+    
+    private void debug(String message) {
+        
+//        Log.debug(message);
+    }
+    
+    
 }

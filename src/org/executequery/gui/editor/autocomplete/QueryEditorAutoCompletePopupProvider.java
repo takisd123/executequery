@@ -57,6 +57,7 @@ import org.executequery.log.Log;
 import org.executequery.sql.DerivedQuery;
 import org.executequery.sql.QueryTable;
 import org.executequery.util.UserProperties;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.util.SwingWorker;
 
 public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupProvider, AutoCompletePopupListener,
@@ -164,7 +165,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
             if (Log.isDebugEnabled()) {
 
-                Log.debug("Error on caret coordinates", e);
+                debug("Error on caret coordinates", e);
             }
 
         }
@@ -312,7 +313,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     private void captureAndResetListValues() {
 
         String wordAtCursor = queryEditor.getWordToCursor();
-        Log.debug("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
+        debug("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
         
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
@@ -340,7 +341,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             return selectionsFactory.buildKeywords(databaseHost, autoCompleteKeywords);
         }
 
-        Log.debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
+        debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
 
         String wordPrefix = prefix.trim().toUpperCase();
 
@@ -443,12 +444,12 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         
         if (rebuildingList) {
             
-        	Log.debug("Suggestions list still in progress");
+        	debug("Suggestions list still in progress");
             itemsStartingWith.add(buildingProposalsListItem());
         
         } else {
             
-        	Log.debug("Suggestions list completed - no matches found for input");
+        	debug("Suggestions list completed - no matches found for input");
             itemsStartingWith.add(noProposalsListItem());
         }
         
@@ -638,7 +639,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
             if (Log.isDebugEnabled()) {
 
-                Log.debug("Error on autocomplete insertion", e);
+                debug("Error on autocomplete insertion", e);
             }
 
         } finally {
@@ -695,7 +696,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         }
 
 //        if (autoCompleteListItems == null || autoCompleteListItems.isEmpty()) {
-//        	Log.debug("Suggestions list is empty... rebuilding");
+//        	debug("Suggestions list is empty... rebuilding");
 
 //    	autoCompleteListItems = selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
     	selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
@@ -719,16 +720,24 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     
     private void reapplyIfVisible() {
 
-        JComponent popupMenu = popupMenu();
-        if (popupMenu.isVisible()) {
+        GUIUtils.invokeLater(new Runnable() {
+            public void run() {
 
-            Log.debug("Resetting autocomplete popup list values");                  
-            captureAndResetListValues();
+                JComponent popupMenu = popupMenu();
+                if (popupMenu.isVisible()) {
 
-        } else {
+                    debug("Resetting autocomplete popup list values");                  
+                    captureAndResetListValues();
+
+                } else {
+                    
+                    debug("Popup not visible - not updating");
+                }
+                
+            } 
             
-            Log.debug("Popup not visible - not updating");
-        }
+        });
+        
     }
 
     private boolean rebuildingList;
@@ -747,7 +756,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
             	try {
             	
-            		Log.debug("Rebuilding suggestions list...");
+            		debug("Rebuilding suggestions list...");
             		
 	                rebuildingList = true;
 	                rebuildListSelectionsItems();
@@ -756,7 +765,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 	                
             	} finally {
             	
-            		Log.debug("Rebuilding suggestions list complete");
+            		debug("Rebuilding suggestions list complete");
             		rebuildingList = false;
             	}
             }
@@ -764,13 +773,13 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             public void finished() {
 
             	rebuildingList = false;
-            	Log.debug("Rebuilding suggestions list complete");            	
+            	debug("Rebuilding suggestions list complete");            	
             	reapplyIfVisible();
             }
 
         };
         
-        Log.debug("Starting worker thread for suggestions list");
+        debug("Starting worker thread for suggestions list");
         worker.start();
     }
 
@@ -785,5 +794,14 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         
     }
 
+    private void debug(String message) {
+            
+//        Log.debug(message);
+    }
+
+    private void debug(String message, Throwable e) {
+        
+//        Log.debug(message, e);
+    }
     
 }
