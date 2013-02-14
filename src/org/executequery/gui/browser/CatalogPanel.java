@@ -108,7 +108,6 @@ public class CatalogPanel extends BrowserNodeBasePanel {
         public void setValues(List<DatabaseSchema> values) {
 
             this.values = values;
-            
             fireTableDataChanged();
         }
         

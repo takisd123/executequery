@@ -20,6 +20,7 @@
 
 package org.executequery.gui.browser;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,6 +30,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 
 import org.executequery.gui.SortableColumnsTable;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
@@ -51,10 +55,11 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
     
     private JTable table;
     
+    private DisabledField rowCountField;
+
     BrowserNodeBasePanel(String labelText) {
 
         super();
-        
         try {
 
             init(labelText);
@@ -95,6 +100,8 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
         
         tablePanel.add(scroller, getPanelConstraints());
         
+        rowCountField = new DisabledField();
+        
         // add to the panel
         gbc.insets.top = 10;
         gbc.weighty = 1.0;
@@ -103,13 +110,69 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
         gbc.insets.left = 5;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         base.add(tablePanel, gbc);
-
+        
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.weighty = 0;
+        gbc.weightx = 1.0;
+        gbc.insets.top = 0;
+        gbc.insets.bottom = 5;
+        gbc.insets.right = 5;
+        gbc.insets.left = 5;
+        gbc.ipady = 5;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        base.add(creatCountPanel(), gbc);
+        
         setContentPanel(base);
     }
 
+    private JPanel creatCountPanel() {
+        
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(super.getPreferredSize().width, 100);
+            }
+        };
+        GridBagConstraints gbc = new GridBagConstraints();
+        
+        gbc.gridy = 0;
+        gbc.gridx = 0;
+        gbc.weighty = 1.0;
+        gbc.weightx = 0;
+        gbc.insets.top = 1;
+        gbc.insets.left = 1;
+        gbc.insets.right = 2;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(new JLabel("Object Count:"), gbc);
+        gbc.gridx = 1;
+        gbc.insets.top = 0;
+        gbc.insets.left = 5;
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 1;
+        panel.add(rowCountField, gbc);
+
+        return panel;
+    }
+    
     private JTable createTable() {
         
-        final JTable table = new SortableColumnsTable();
+        final JTable table = new SortableColumnsTable() {
+            
+            @Override
+            public void setModel(final TableModel dataModel) {
+                dataModel.addTableModelListener(new TableModelListener() {
+                    public void tableChanged(TableModelEvent e) {
+                        rowCountField.setText(String.valueOf(dataModel.getRowCount()));
+                    }
+                });
+                super.setModel(dataModel);
+            }
+            
+        };
 
         table.getTableHeader().setReorderingAllowed(false);
         table.setColumnSelectionAllowed(false);
@@ -160,12 +223,3 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
     public abstract String getLayoutName();
 
 }
-
-
-
-
-
-
-
-
-

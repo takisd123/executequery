@@ -60,11 +60,9 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
         
         JLabel listLabel = (JLabel) super.getListCellRendererComponent(
                 list, value, index, isSelected, cellHasFocus);
-
         listLabel.setIconTextGap(TEXT_ICON_GAP);
-        
+
         AutoCompleteListItem item = (AutoCompleteListItem) value;
-        
         switch (item.getType()) {
         
             case SQL92_KEYWORD:
@@ -109,6 +107,17 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
         return listLabel;
     }
 
+    @Override
+    public void setIcon(Icon icon) {
+
+        if (icon != null) {
+        
+            super.setIcon(icon);
+        }
+       
+    }
+    
+    
     private ImageIcon animateImageIcon(ImageIcon icon, final JList list, final int row) {
 
         icon.setImageObserver(new ImageObserver() {

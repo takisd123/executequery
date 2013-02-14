@@ -20,7 +20,6 @@
 
 package org.underworldlabs.swing;
 
-import java.awt.Dimension;
 import java.awt.Insets;
 
 import javax.swing.JTextField;
