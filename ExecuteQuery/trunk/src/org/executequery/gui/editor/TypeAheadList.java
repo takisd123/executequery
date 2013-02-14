@@ -75,7 +75,7 @@ public class TypeAheadList extends JList {
         
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void resetValues(List values) {
 
         Vector listData = new Vector(values.size());

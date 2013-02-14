@@ -202,12 +202,3 @@ public class BrowserViewPanel extends FormObjectViewContainer
     // --------------------------------------------------
     
 }
-
-
-
-
-
-
-
-
-

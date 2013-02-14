@@ -59,7 +59,6 @@ public class MetaKeyPanel extends BrowserNodeBasePanel {
     public MetaKeyPanel(BrowserController controller) {
 
         super("Object Type Name:");
-
         this.controller = controller;
 
         try {
@@ -71,8 +70,8 @@ public class MetaKeyPanel extends BrowserNodeBasePanel {
     }
     
     private void init() throws Exception {
-        noValuesLabel = new JLabel("No objects of this type are available.",
-                                    JLabel.CENTER);
+
+        noValuesLabel = new JLabel("No objects of this type are available.", JLabel.CENTER);
         
         tablePanel().setBorder(BorderFactory.createTitledBorder("Available Objects"));
         

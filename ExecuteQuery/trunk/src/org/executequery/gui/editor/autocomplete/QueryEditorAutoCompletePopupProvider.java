@@ -34,7 +34,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.event.CaretEvent;
@@ -155,6 +154,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
                 autoCompleteListItems.clear();
             }
             
+            resetCount = 0;
             captureAndResetListValues();
 
             ((JPopupMenu) popupMenu()).show(textComponent, caretCoords.x, caretCoords.y + caretCoords.height);
@@ -171,7 +171,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     }
 
-    private JComponent popupMenu() {
+    private JPopupMenu popupMenu() {
 
         if (autoCompletePopup == null) {
 
@@ -323,7 +323,16 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             noProposalsAvailable(itemsStartingWith);
         }
 
-        ((QueryEditorAutoCompletePopupPanel) popupMenu()).resetValues(itemsStartingWith);
+        QueryEditorAutoCompletePopupPanel popupMenu = (QueryEditorAutoCompletePopupPanel) popupMenu();
+        
+        popupMenu.resetValues(itemsStartingWith);
+
+//        String selectedValue = popupMenu.getSelectedValue();
+//        if (selectedValue != null) {
+//            
+//            popupMenu.getSelectionModel().clearSelection();
+//        }
+        
     }
 
     // TODO: determine query being executed and suggest based on that
@@ -369,7 +378,8 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
                 noProposalsAvailable(itemsStartingWith);
             }
-
+            
+            return itemsStartingWith;
         }
         /* ----- might be a little sluggish right now ...
         else { // add other entities starting with at the end of the list (??)
@@ -379,6 +389,11 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         }
         */
 
+        if (rebuildingList) {
+            
+            itemsStartingWith.add(0, buildingProposalsListItem());
+        }
+        
         return itemsStartingWith;
     }
 
@@ -636,10 +651,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
         } catch (BadLocationException e) {
 
-            if (Log.isDebugEnabled()) {
-
-                debug("Error on autocomplete insertion", e);
-            }
+            debug("Error on autocomplete insertion", e);
 
         } finally {
 
@@ -655,6 +667,11 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     public void connectionChanged(DatabaseConnection databaseConnection) {
 
+        if (worker != null) {
+            
+            worker.interrupt();
+        }
+        
     	if (autoCompleteListItems != null) {
     		
     		autoCompleteListItems.clear();
@@ -716,18 +733,22 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 //        Collections.sort(autoCompleteListItems, autoCompleteListItemComparatorByValue);
         reapplyIfVisible();
     }
-    
+
+    private int resetCount;
+    private static final int RESET_COUNT_THRESHOLD = 10; // apply every 5 calls
     private void reapplyIfVisible() {
 
-        JComponent popupMenu = popupMenu();
+        JPopupMenu popupMenu = popupMenu();
         if (popupMenu.isVisible()) {
 
-            debug("Resetting autocomplete popup list values");                  
-            captureAndResetListValues();
-
-        } else {
+//            debug("Resetting autocomplete popup list values");
             
-            debug("Popup not visible - not updating");
+            if (++resetCount == RESET_COUNT_THRESHOLD) {
+                
+                captureAndResetListValues();
+                resetCount = 0;
+            }
+            
         }
     }
 
@@ -756,7 +777,6 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 	                
             	} finally {
             	
-            		debug("Rebuilding suggestions list complete");
             		rebuildingList = false;
             	}
             }
@@ -764,7 +784,10 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             public void finished() {
 
             	rebuildingList = false;
-            	debug("Rebuilding suggestions list complete");            	
+            	debug("Rebuilding suggestions list complete");
+            	
+            	// force
+            	resetCount = RESET_COUNT_THRESHOLD - 1;
             	reapplyIfVisible();
             }
 
@@ -787,12 +810,12 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     private void debug(String message) {
             
-//        Log.debug(message);
+        Log.debug(message);
     }
 
     private void debug(String message, Throwable e) {
         
-//        Log.debug(message, e);
+        Log.debug(message, e);
     }
     
 }

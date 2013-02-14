@@ -77,16 +77,13 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
     
     public void setHeader(String text, ImageIcon icon) {
         gradientLabel.setText(text);
-//        gradientLabel.setIcon(icon);
     }
     
     public void setHeaderText(String text) {
         gradientLabel.setText(text);
     }
     
-    public void setHeaderIcon(ImageIcon icon) {
-//        gradientLabel.setIcon(icon);
-    }
+    public void setHeaderIcon(ImageIcon icon) {}
     
     /** 
      * Performs some cleanup and releases resources before being closed. 

@@ -23,6 +23,7 @@ package org.executequery.databaseobjects.impl;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.DatabaseCatalog;
 import org.executequery.databaseobjects.DatabaseHost;
@@ -179,14 +180,14 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 
             // test if the login name matches
             value = dc.getUserName();
-            if (myName.equalsIgnoreCase(value)) {
+            if (StringUtils.equalsIgnoreCase(myName, value)) {
 
                 return true;
             }
 
             // test the source name
             value = dc.getSourceName();
-            if (myName.equalsIgnoreCase(value)) {
+            if (StringUtils.equalsIgnoreCase(myName, value)) {
 
                 return true;
             }

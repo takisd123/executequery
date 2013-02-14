@@ -143,6 +143,13 @@ public class AutoCompleteSelectionsFactory {
             rs = databaseMetaData.getTables(catalog, schema, null, types);
             while (rs.next()) {
 
+                try {
+                    if (Thread.interrupted() || databaseMetaData.getConnection().isClosed()) {
+
+                        return;
+                    }
+                } catch (SQLException e) {}
+                
                 typeName = rs.getString(4);
 
                 // only include if the returned reported type matches
@@ -197,6 +204,8 @@ public class AutoCompleteSelectionsFactory {
     
     private void databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
 
+        try {
+        
     	debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
 
         ResultSet rs = null;
@@ -208,6 +217,18 @@ public class AutoCompleteSelectionsFactory {
         DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
 
         for (AutoCompleteListItem table : tables) {
+            
+            try {
+                if (Thread.interrupted() || dmd.getConnection().isClosed()) {
+                    
+                    return;
+                }
+            } catch (SQLException e) {}
+            
+            if (table == null) {
+                
+                continue;
+            }
             
             debug("Retrieving column names for table [ " + table.getValue() + " ]");
         
@@ -252,6 +273,14 @@ public class AutoCompleteSelectionsFactory {
             }
 
         }
+        
+        } catch (java.util.ConcurrentModificationException e) {
+            
+            // temp... TODO
+            
+            debug("ConcurrentModificationException on connection " + databaseHost.getName());
+        }
+        
         
         debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
     }
