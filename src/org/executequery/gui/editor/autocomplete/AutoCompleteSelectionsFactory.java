@@ -181,10 +181,6 @@ public class AutoCompleteSelectionsFactory {
             debug("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
         }
     		
-    		
-//	        return databaseHost.getTableNames(defaultCatalogForHost(databaseHost), 
-//	                defaultSchemaForHost(databaseHost), type);
-    	
     }
 
     private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
@@ -204,8 +200,6 @@ public class AutoCompleteSelectionsFactory {
     
     private void databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
 
-        try {
-        
     	debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
 
         ResultSet rs = null;
@@ -216,8 +210,8 @@ public class AutoCompleteSelectionsFactory {
         String schema = databaseHost.getSchemaNameForQueries(defaultSchemaForHost(databaseHost));
         DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
 
-        for (AutoCompleteListItem table : tables) {
-            
+        for (int i = 0, n = tables.size(); i < n; i++) {
+
             try {
                 if (Thread.interrupted() || dmd.getConnection().isClosed()) {
                     
@@ -225,6 +219,7 @@ public class AutoCompleteSelectionsFactory {
                 }
             } catch (SQLException e) {}
             
+            AutoCompleteListItem table = tables.get(i);            
             if (table == null) {
                 
                 continue;
@@ -273,14 +268,6 @@ public class AutoCompleteSelectionsFactory {
             }
 
         }
-        
-        } catch (java.util.ConcurrentModificationException e) {
-            
-            // temp... TODO
-            
-            debug("ConcurrentModificationException on connection " + databaseHost.getName());
-        }
-        
         
         debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
     }

@@ -40,6 +40,7 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
     private static final Icon userDefinedKeyword;
     private static final Icon databaseSpecificKeyword;
     private static final Icon databaseTable;
+    private static final Icon nothingFound;
     private static final Icon databaseTableColumn;
     private static final ImageIcon animatedSpinner;
     private static final ImageIcon databaseTableView;
@@ -48,6 +49,7 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
         animatedSpinner = GUIUtilities.loadIcon("AnimatedSpinner16.gif", true);
         userDefinedKeyword = GUIUtilities.loadIcon("User16.png", true);
         databaseSpecificKeyword = GUIUtilities.loadIcon("DatabaseKeyword16.png", true);
+        nothingFound = GUIUtilities.loadIcon("Warning16.png", true);
         databaseTable = GUIUtilities.loadIcon("PlainTable16.png", true);
         databaseTableColumn = GUIUtilities.loadIcon("TableColumn16.png", true);
         databaseTableView = GUIUtilities.loadIcon("TableView16.png", true);
@@ -63,6 +65,9 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
         listLabel.setIconTextGap(TEXT_ICON_GAP);
 
         AutoCompleteListItem item = (AutoCompleteListItem) value;
+
+        try {
+        
         switch (item.getType()) {
         
             case SQL92_KEYWORD:
@@ -93,6 +98,7 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
                 setBackground(list.getBackground());
                 setForeground(list.getForeground());
                 setBorder(noFocusBorder);
+                setIcon(nothingFound);
                 break;
 
             case GENERATING_LIST:
@@ -103,20 +109,19 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
                 break;
                 
         }
+        
+        
+        } catch (NullPointerException e) {
+            
+            System.out.println("ITEM: " + item.getType().name());
+            
+            e.printStackTrace();
+        }
+        
 
         return listLabel;
     }
 
-    @Override
-    public void setIcon(Icon icon) {
-
-        if (icon != null) {
-        
-            super.setIcon(icon);
-        }
-       
-    }
-    
     
     private ImageIcon animateImageIcon(ImageIcon icon, final JList list, final int row) {
 

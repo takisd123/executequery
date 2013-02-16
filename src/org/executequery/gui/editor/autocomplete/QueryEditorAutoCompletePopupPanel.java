@@ -23,13 +23,16 @@ package org.executequery.gui.editor.autocomplete;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 
 import org.executequery.gui.editor.TypeAheadList;
 import org.executequery.gui.editor.TypeAheadListProvider;
@@ -54,10 +57,16 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
 
     private static final Dimension PREFERRED_SIZE = new Dimension(450, 145);
 
+    private static final int TIMER_DELAY = 1000;
+
     private TypeAheadList list;
 
     private List<AutoCompletePopupListener> listeners;
 
+    private List<AutoCompleteListItem> values;
+
+    private Timer timer;
+    
     public QueryEditorAutoCompletePopupPanel() {
 
         init();
@@ -91,6 +100,13 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
 
         add(scrollPane, BorderLayout.CENTER);
         setPreferredSize(PREFERRED_SIZE);
+        
+        timer = new Timer(0, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                reset();
+            }
+        });
+
     }
 
     public String getSelectedValue() {
@@ -118,16 +134,57 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
         listeners.add(autoCompletePopupListener);
     }
 
+    protected void done() {
+        
+        timer.stop();
+    }
+    
     protected void resetValues(List<AutoCompleteListItem> values) {
 
+        this.values = values;
+        
+        System.out.println("AAA Resetting");
+        
+        if (!timer.isRunning()) {
+ 
+            timer.start();
+        
+        } else if (timer.getDelay() != TIMER_DELAY) {
+
+            timer.stop();
+            timer.setDelay(TIMER_DELAY);
+            timer.restart();
+        }
+        
+    }
+    
+    private void reset() {
+
+        if (values == null || values.isEmpty()) {
+            
+            return;
+        }
+        
+        System.out.println("Resetting");
+        
+        Object selectedValue = list.getSelectedValue();
+        
         list.resetValues(values);
         if (values != null && !values.isEmpty()) {
 
-            selectListIndex(0);
+            if (selectedValue != null) {
+                
+                list.setSelectedValue(selectedValue, true);
+
+            } else {
+                
+                selectListIndex(0);
+            }
+            
         }
-
+            
     }
-
+    
     protected void scrollSelectedIndexUp() {
 
         int selectedIndex = list.getSelectedIndex();
@@ -157,6 +214,8 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     }
 
     private static final int PAGE_SCROLL_SIZE = 5;
+
+    private TimerTask resetTimerTask;
 
     protected void scrollSelectedIndexPageUp() {
 

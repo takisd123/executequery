@@ -33,6 +33,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.underworldlabs.swing.plaf.UIUtils;
+
 /**
  * Vertical text icon derived from the original by
  * Santhosh Kumar http://jroller.com/pages/santhosh.
@@ -58,7 +60,10 @@ public class VerticalTextIcon implements Icon, SwingConstants {
         this.clockwize = clockwize;
     }
     
-    public void paintIcon(Component c, Graphics g, int x, int y){
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+
+        UIUtils.antialias(g);
+        
         Graphics2D g2 = (Graphics2D)g;
         Font oldFont = g.getFont();
         Color oldColor = g.getColor();

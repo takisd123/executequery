@@ -890,6 +890,7 @@ public class QueryEditor extends DefaultTabView
     public void destroyConnection() {
 
         delegate.destroyConnection();
+        queryEditorAutoCompletePopupProvider.reset();
     }
 
     public void toggleCommitMode() {
