@@ -39,6 +39,7 @@ import javax.swing.plaf.basic.BasicToolTipUI;
 import org.apache.commons.lang.StringUtils;
 import org.underworldlabs.Constants;
 import org.underworldlabs.swing.GUIUtils;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
 
 /**
@@ -53,6 +54,8 @@ public class AcceleratorToolTipUI extends BasicToolTipUI {
 
     public void paint(Graphics g, JComponent c) {
 
+        UIUtils.antialias(g);
+        
         Font font = c.getFont();
         FontMetrics metrics = c.getFontMetrics(font);
 

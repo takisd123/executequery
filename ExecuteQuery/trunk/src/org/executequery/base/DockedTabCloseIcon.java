@@ -23,16 +23,8 @@ package org.executequery.base;
 import java.awt.Component;
 import java.awt.Graphics;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
- * Simple icon drawing the close button
- * for a closeable tab on the CloseTabbedPane.
+ * Simple icon drawing the close button for a closeable tab on the CloseTabbedPane.
  *
  * @author   Takis Diakoumis
  * @version  $Revision$
@@ -76,16 +68,3 @@ public class DockedTabCloseIcon implements TabControlIcon {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

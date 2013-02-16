@@ -112,6 +112,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         databaseObjectFactory = new DatabaseObjectFactoryImpl();
 
         setAutoCompleteOptionFlags();
+        autoCompleteListItems = new ArrayList<AutoCompleteListItem>();
 
         queryEditor.addConnectionChangeListener(this);
         queryEditorTextComponent().addFocusListener(this);
@@ -124,6 +125,11 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         autoCompleteSchema = userProperties.getBooleanProperty("editor.autocomplete.schema.on");
     }
 
+    public void reset() {
+        
+        connectionChanged(databaseHost.getDatabaseConnection());
+    }
+    
     public Action getPopupAction() {
 
         if (autoCompletePopupAction == null) {
@@ -151,7 +157,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             
             } else {
 
-                autoCompleteListItems.clear();
+//                autoCompleteListItems.clear();
             }
             
             resetCount = 0;
@@ -312,7 +318,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     private void captureAndResetListValues() {
 
         String wordAtCursor = queryEditor.getWordToCursor();
-        debug("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
+//        debug("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
         
         DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
@@ -349,7 +355,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             return selectionsFactory.buildKeywords(databaseHost, autoCompleteKeywords);
         }
 
-        debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
+//        debug("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
 
         String wordPrefix = prefix.trim().toUpperCase();
 
@@ -416,8 +422,9 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
         if (items != null) {
 
-            for (AutoCompleteListItem item : items) {
+            for (int i = 0, n = items.size(); i < n; i++) {
 
+                AutoCompleteListItem item = items.get(i);
                 if (item.isForPrefix(tables, searchPattern, prefixHadAlias)) {
 
                     itemsStartingWith.add(item);
@@ -711,16 +718,10 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             databaseHost = databaseObjectFactory.createDatabaseHost(selectedConnection);
         }
 
-//        if (autoCompleteListItems == null || autoCompleteListItems.isEmpty()) {
-//        	debug("Suggestions list is empty... rebuilding");
-
-//    	autoCompleteListItems = selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
     	selectionsFactory.build(databaseHost, autoCompleteKeywords, autoCompleteSchema);
 
         return true;
     }
-
-//    private AutoCompleteListItemComparatorByValue autoCompleteListItemComparatorByValue = new AutoCompleteListItemComparatorByValue();
 
     public void addListItems(List<AutoCompleteListItem> items) {
         
@@ -735,16 +736,17 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     }
 
     private int resetCount;
-    private static final int RESET_COUNT_THRESHOLD = 10; // apply every 5 calls
+    private static final int RESET_COUNT_THRESHOLD = 20; // apply every 5 calls
     private void reapplyIfVisible() {
 
         JPopupMenu popupMenu = popupMenu();
         if (popupMenu.isVisible()) {
 
-//            debug("Resetting autocomplete popup list values");
             
             if (++resetCount == RESET_COUNT_THRESHOLD) {
                 
+//                debug("Reset count reached -- Resetting autocomplete popup list values");
+
                 captureAndResetListValues();
                 resetCount = 0;
             }
@@ -757,7 +759,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     private void scheduleListItemLoad() {
 
-        if (rebuildingList) {
+        if (rebuildingList || !autoCompleteListItems.isEmpty()) {
 
             return;
         }
@@ -789,6 +791,9 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
             	// force
             	resetCount = RESET_COUNT_THRESHOLD - 1;
             	reapplyIfVisible();
+            	
+            	QueryEditorAutoCompletePopupPanel popupMenu = (QueryEditorAutoCompletePopupPanel) popupMenu();
+            	popupMenu.done();
             }
 
         };
