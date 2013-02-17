@@ -145,7 +145,7 @@ public interface Constants {
     
     
     // Log4J logging levels
-    String[] LOG_LEVELS = {"INFO","WARN","DEBUG","ERROR","FATAL","ALL"};
+    String[] LOG_LEVELS = {"INFO","WARN","DEBUG","ERROR","FATAL","TRACE","ALL"};
 
     /** worker success result */
     String WORKER_SUCCESS = "success";

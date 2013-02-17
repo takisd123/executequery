@@ -148,6 +148,35 @@ public class ApplicationLog {
     }
 
     /**
+     * Logs a message at log level TRACE.
+     *
+     * @param message  the log message.
+     */
+    public void trace(Object message) {
+        
+        if (logger().isTraceEnabled()) {
+            
+            logger().trace(message);
+        }
+        
+    }
+    
+    /**
+     * Logs a message at log level TRACE.
+     *
+     * @param message  the log message.
+     * @param throwable the throwable.
+     */
+    public void trace(Object message, Throwable throwable) {
+        
+        if (logger().isTraceEnabled()) {
+            
+            logger().trace(message, throwable);
+        }
+        
+    }
+    
+    /**
      * Logs a message at log level ERROR.
      *
      * @param message  the log message.

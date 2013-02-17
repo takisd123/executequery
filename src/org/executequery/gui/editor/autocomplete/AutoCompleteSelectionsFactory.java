@@ -125,7 +125,7 @@ public class AutoCompleteSelectionsFactory {
     private void databaseObjectsForHost(DatabaseHost databaseHost, String type, 
             String databaseObjectDescription, AutoCompleteListItemType autocompleteType) {
         
-		debug("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+        trace("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
 		
 		ResultSet rs = null;
 		DatabaseMetaData databaseMetaData = databaseHost.getDatabaseMetaData();
@@ -178,7 +178,7 @@ public class AutoCompleteSelectionsFactory {
         } finally {
 
             releaseResources(rs);
-            debug("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+            trace("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
         }
     		
     }
@@ -200,7 +200,7 @@ public class AutoCompleteSelectionsFactory {
     
     private void databaseColumnsForTables(DatabaseHost databaseHost, List<AutoCompleteListItem> tables) {
 
-    	debug("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
+        trace("Retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
 
         ResultSet rs = null;
         List<ColumnInformation> columns = new ArrayList<ColumnInformation>();
@@ -225,7 +225,7 @@ public class AutoCompleteSelectionsFactory {
                 continue;
             }
             
-            debug("Retrieving column names for table [ " + table.getValue() + " ]");
+            trace("Retrieving column names for table [ " + table.getValue() + " ]");
         
             try {
             
@@ -269,7 +269,7 @@ public class AutoCompleteSelectionsFactory {
 
         }
         
-        debug("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
+        trace("Finished retrieving column names for tables for host [ " + databaseHost.getName() + " ]");
     }
 
     private String defaultSchemaForHost(DatabaseHost databaseHost) {
@@ -377,9 +377,9 @@ public class AutoCompleteSelectionsFactory {
         Log.error(message);
     }
     
-    private void debug(String message) {
+    private void trace(String message) {
         
-//        Log.debug(message);
+        Log.trace(message);
     }
     
     
