@@ -76,6 +76,7 @@ import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ActionPanel;
 import org.underworldlabs.swing.DefaultFieldLabel;
+import org.underworldlabs.swing.DefaultTextField;
 import org.underworldlabs.swing.DynamicComboBoxModel;
 import org.underworldlabs.swing.LinkButton;
 import org.underworldlabs.swing.NumberTextField;
@@ -159,9 +160,9 @@ public class ConnectionPanel extends ActionPanel
         passwordField = createPasswordField();
         hostField = createTextField();
         portField = createNumberTextField();
-        sourceField = createTextField();
+        sourceField = createMatchedWidthTextField();
         userField = createTextField();
-        urlField = createTextField();
+        urlField = createMatchedWidthTextField();
 
         nameField.addFocusListener(new ConnectionNameFieldListener(this));
         
@@ -380,14 +381,26 @@ public class ConnectionPanel extends ActionPanel
         return field;
     }
 
-    private JTextField createTextField() {
+    private JTextField createMatchedWidthTextField() {
         
-        JTextField textField = WidgetFactory.createTextField();
+        JTextField textField = new DefaultTextField() {
+            public Dimension getPreferredSize() {
+                return nameField.getPreferredSize();
+            };
+        };
         formatTextField(textField);
 
         return textField;
     }
 
+    private JTextField createTextField() {
+        
+        JTextField textField = WidgetFactory.createTextField();
+        formatTextField(textField);
+        
+        return textField;
+    }
+    
     private void formatTextField(JTextField textField) {
         textField.setActionCommand(CONNECT_ACTION_COMMAND);
         textField.addActionListener(this);
