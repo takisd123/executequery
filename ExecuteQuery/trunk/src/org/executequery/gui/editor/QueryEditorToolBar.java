@@ -69,6 +69,8 @@ class QueryEditorToolBar extends PanelToolBar {
 
     private static final String EDITOR_EXPORT_COMMAND = "editor-export-command";
 
+    private static final String EDITOR_REFRESH_AUTOCOMPLETE_COMMAND = "editor-refresh-autocomplete-command";
+    
     private static final String EDITOR_RS_METADATA_COMMAND = "editor-rs-metadata-command";
 
     private static final String EDITOR_CONN_CHANGE_COMMAND = "editor-conn-change-command";
@@ -167,6 +169,9 @@ class QueryEditorToolBar extends PanelToolBar {
         addButton(createButton(EDITOR_CONN_CHANGE_COMMAND,
                      "Closes the editor's connection and retrieves another from the pool"));
 
+        addButton(createButton(EDITOR_REFRESH_AUTOCOMPLETE_COMMAND,
+                "Refresh editor's schema autocomplete list"));
+        
         addSeparator();
 
         addButton(createButton(EDITOR_RS_METADATA_COMMAND,

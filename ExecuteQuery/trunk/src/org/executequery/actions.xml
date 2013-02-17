@@ -323,6 +323,13 @@
           small-icon="/org/executequery/icons/ContextualHelp16.png"
           execute-class="org.executequery.actions.queryeditor.EditorHelpCommand"/>
 
+  <action id="editor-refresh-autocomplete-command"
+          name=" Query Editor Refresh Autocomplete List"
+          accel-key="shift alt R"
+          accel-editable="true"
+          small-icon="/org/executequery/icons/TableRefresh16.png"
+          execute-class="org.executequery.actions.queryeditor.RefreshAutocompleteListCommand"/>
+
   <action id="editor-format-sql-command"
           name="Format SQL"
           accel-key="control shift F"

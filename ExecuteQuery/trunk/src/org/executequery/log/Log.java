@@ -126,6 +126,27 @@ public final class Log {
     }
 
     /**
+     * Logs a message at log level TRACE.
+     *
+     * @param message  the log message.
+     */
+    public static void trace(Object message) {
+        
+        log.trace("TRACE: " + message);
+    }
+    
+    /**
+     * Logs a message at log level TRACE.
+     *
+     * @param message  the log message.
+     * @param throwable the throwable.
+     */
+    public static void trace(Object message, Throwable throwable) {
+        
+        log.trace("TRACE: " + message, throwable);
+    }
+    
+    /**
      * Logs a message at log level ERROR.
      *
      * @param message  the log message.

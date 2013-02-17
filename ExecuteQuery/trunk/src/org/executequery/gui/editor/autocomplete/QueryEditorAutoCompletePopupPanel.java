@@ -26,7 +26,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
@@ -38,22 +37,7 @@ import org.executequery.gui.editor.TypeAheadList;
 import org.executequery.gui.editor.TypeAheadListProvider;
 import org.underworldlabs.swing.plaf.UIUtils;
 
-public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
-                implements TypeAheadListProvider {
-
-    /*
-    private static final String POPUP_CANCELLED_KEY = "popupCancelledAction";
-
-    private static final String LIST_SELECTION_CANCELLED_KEY = "listSelectionCancelledAction";
-
-    private static final KeyStroke KEY_STROKE_ESC = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-
-    private static final KeyStroke KEY_STROKE_SPACE = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
-
-    private static final KeyStroke KEY_STROKE_BACKSPACE = KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0);
-
-    private static final KeyStroke KEY_STROKE_SHIFT_TAB = KeyStroke.getKeyStroke(KeyEvent.VK_TAB, KeyEvent.SHIFT_MASK);
-    */
+public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements TypeAheadListProvider {
 
     private static final Dimension PREFERRED_SIZE = new Dimension(450, 145);
 
@@ -80,18 +64,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
 
         list = new TypeAheadList(this);
         list.setCellRenderer(new AutoCompleteListItemCellRenderer());
-
-        /*
-        ActionMap listActionMap = list.getActionMap();
-        listActionMap.put(POPUP_CANCELLED_KEY, new PopupCancelledAction());
-        listActionMap.put(LIST_SELECTION_CANCELLED_KEY, new ListSelectionCancelledAction());
-
-        InputMap listInputMap = list.getInputMap();
-        listInputMap.put(KEY_STROKE_ESC, POPUP_CANCELLED_KEY);
-        listInputMap.put(KEY_STROKE_SPACE, POPUP_CANCELLED_KEY);
-        listInputMap.put(KEY_STROKE_BACKSPACE, LIST_SELECTION_CANCELLED_KEY);
-        listInputMap.put(KEY_STROKE_SHIFT_TAB, LIST_SELECTION_CANCELLED_KEY);
-        */
 
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
@@ -139,12 +111,15 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
         timer.stop();
     }
     
-    protected void resetValues(List<AutoCompleteListItem> values) {
+    protected void reset(List<AutoCompleteListItem> values) {
+        
+        this.values = values;
+        reset();
+    }
+    
+    protected void scheduleReset(List<AutoCompleteListItem> values) {
 
         this.values = values;
-        
-        System.out.println("AAA Resetting");
-        
         if (!timer.isRunning()) {
  
             timer.start();
@@ -164,8 +139,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
             
             return;
         }
-        
-        System.out.println("Resetting");
         
         Object selectedValue = list.getSelectedValue();
         
@@ -214,8 +187,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu
     }
 
     private static final int PAGE_SCROLL_SIZE = 5;
-
-    private TimerTask resetTimerTask;
 
     protected void scrollSelectedIndexPageUp() {
 

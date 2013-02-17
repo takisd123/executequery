@@ -188,7 +188,6 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         	if (value instanceof RecordDataItem) {
 
         		RecordDataItem recordDataItem = (RecordDataItem) value;
-
         		if (recordDataItem.isValueNull()) {
 
         		    formatForNullValue(isSelected);

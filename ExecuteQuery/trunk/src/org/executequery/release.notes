@@ -11,7 +11,12 @@ Summary of changes - v3.6.1 Build 5218:
   primary key exists for that table.
 - Modified Query Editor autocomplete to incrementally add to the list instead of
   waiting to populate the complete list.
+- Modified Query Editor autocomplete to retain derived suggestions list with a 
+  new action from te toolbar to force a refresh.
+- Added main connection details panel to scrollpane to avoid field/button 
+  collapsing on view resize. 
 - Added object count value to all object lists on the Database Browser view.
+- Added TRACE log level.
 
  
 

@@ -1490,11 +1490,9 @@ public class QueryEditor extends DefaultTabView
         editorPanel.editorShortcutsUpdated();
     }
 
+    public void refreshAutocompleteList() {
+
+        queryEditorAutoCompletePopupProvider.reset();
+    }
+
 }
-
-
-
-
-
-
-

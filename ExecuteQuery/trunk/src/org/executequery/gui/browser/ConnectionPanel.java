@@ -352,14 +352,16 @@ public class ConnectionPanel extends ActionPanel
         advancedPanel.add(advPropsPanel, BorderLayout.CENTER);
         advancedPanel.add(advTxPanel, BorderLayout.SOUTH);
         
+        JScrollPane scrollPane = new JScrollPane(mainPanel);
+        scrollPane.setBorder(null);
+
         tabPane = new JTabbedPane(JTabbedPane.BOTTOM);
-        tabPane.addTab("Basic", mainPanel);
+        tabPane.addTab("Basic", scrollPane);
         tabPane.addTab("Advanced", advancedPanel);
 
         add(tabPane, BorderLayout.CENTER);
         
         EventMediator.registerListener(this);
-
     }
 
     private NumberTextField createNumberTextField() {
