@@ -22,17 +22,14 @@ package org.executequery.gui.sqlstates;
 
 import java.awt.Component;
 import java.awt.Font;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import org.executequery.Constants;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
+import org.executequery.Constants;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  *
@@ -47,7 +44,7 @@ public class SQLStateCodesCellRenderer extends JLabel
     
     /** Creates a new instance of KeywordCellRenderer */
     public SQLStateCodesCellRenderer() {
-        sb = new StringBuffer();
+        sb = new StringBuilder();
     }
     
     public Component getTableCellRendererComponent(JTable table,
@@ -98,7 +95,7 @@ public class SQLStateCodesCellRenderer extends JLabel
     }
     
     /** tool tip concat buffer */
-    private StringBuffer sb;
+    private StringBuilder sb;
     
     private String buildToolTip(SQLStateCode code) {
         // reset
@@ -127,13 +124,3 @@ public class SQLStateCodesCellRenderer extends JLabel
     }
 
 }
-
-
-
-
-
-
-
-
-
-

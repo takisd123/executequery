@@ -33,6 +33,7 @@ import javax.swing.JComponent;
 
 import org.executequery.GUIUtilities;
 import org.executequery.util.UserProperties;
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  *
@@ -179,6 +180,9 @@ public class LineNumber extends JComponent {
     }
     
     public void paintComponent(Graphics g) {
+    	
+    	UIUtils.antialias(g);
+    	
         int lineHeight = getLineHeight();
         int startOffset = getStartOffset();
         Rectangle drawHere = g.getClipBounds();

@@ -26,6 +26,7 @@ import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
+import javax.swing.UIManager;
 
 import org.executequery.databasemediators.ConnectionMediator;
 import org.executequery.databasemediators.DatabaseConnection;
@@ -142,6 +143,11 @@ public class ApplicationLauncher {
             CustomTextAreaUI.initialize();
             CustomTextPaneUI.initialize();
 
+            if (UIUtils.isNativeMacLookAndFeel()) {
+            	
+            	UIManager.put("Table.gridColor", UIUtils.getDefaultBorderColour());
+            }
+            
             GUIUtilities.startLogger();
 
             advanceSplash(splash);
