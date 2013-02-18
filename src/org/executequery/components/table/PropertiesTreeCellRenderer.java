@@ -27,8 +27,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JTree;
 import javax.swing.UIManager;
 
-import org.executequery.Constants;
-import org.executequery.GUIUtilities;
 import org.underworldlabs.swing.tree.AbstractTreeCellRenderer;
 
 /**
@@ -43,12 +41,14 @@ public class PropertiesTreeCellRenderer extends AbstractTreeCellRenderer {
     private Color textBackground;
     private Color textForeground;
     private Color selectionBackground;
+	private Color selectionForeground;
     
     public PropertiesTreeCellRenderer() {
 
         textBackground = UIManager.getColor("Tree.textBackground");
         textForeground = UIManager.getColor("Tree.textForeground");
         selectionBackground = UIManager.getColor("Tree.selectionBackground");        
+        selectionForeground = UIManager.getColor("Tree.selectionForeground");        
 
         setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
     }
@@ -72,16 +72,7 @@ public class PropertiesTreeCellRenderer extends AbstractTreeCellRenderer {
         } else {
           
             setBackground(selectionBackground);
-
-            if (GUIUtilities.getLookAndFeel() == Constants.WIN_LAF) {
-
-                setForeground(Color.WHITE);
-
-            } else {
-            
-                setForeground(textForeground);
-            }
-
+            setForeground(selectionForeground);
         }
 
         setText(value.toString());

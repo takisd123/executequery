@@ -21,12 +21,12 @@
 package org.underworldlabs.swing;
 
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Graphics;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JComponent;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 
 import org.underworldlabs.swing.plaf.UIUtils;
@@ -45,11 +45,10 @@ public class IndeterminateProgressBar extends JComponent
     private int scrollerWidth;
     private int animationOffset;
     
-    private Timer timer;
-    private TimerTask paintProgress;
-    
     private boolean inProgress;
     private boolean paintBorder;
+    
+    private Timer timer;
     
     public IndeterminateProgressBar() {
         this(true);
@@ -68,7 +67,18 @@ public class IndeterminateProgressBar extends JComponent
         }
         
 		setScrollbarColour(foregroundColour);
+		
+        createTimer();
     }
+
+	private void createTimer() {
+		timer = new Timer(25, new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                run();
+            }
+        });
+        timer.setInitialDelay(0);
+	}
     
     public void run() {
         animationOffset++;
@@ -80,29 +90,21 @@ public class IndeterminateProgressBar extends JComponent
     
     public void stop() {
         if (timer != null) {
-            timer.cancel();
+            timer.stop();
         }
         inProgress = false;
         repaint();
     }
     
     public void start() {
-        
-        paintProgress = new TimerTask() {
-            public void run() {
-                EventQueue.invokeLater(IndeterminateProgressBar.this);
-            }
-        };
-        
-        timer = new Timer();
-        timer.schedule(paintProgress, 0, 25);
+    	timer.start();
         inProgress = true;
         repaint();
     }
     
     public void cleanup() {
         if (timer != null) {
-            timer.cancel();
+            timer.stop();
         }
         timer = null;
     }
@@ -167,12 +169,3 @@ public class IndeterminateProgressBar extends JComponent
     }
    
 }
-
-
-
-
-
-
-
-
-

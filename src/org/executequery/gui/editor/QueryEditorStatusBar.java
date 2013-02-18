@@ -135,16 +135,3 @@ public class QueryEditorStatusBar extends AbstractStatusBarPanel {
     }
  
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

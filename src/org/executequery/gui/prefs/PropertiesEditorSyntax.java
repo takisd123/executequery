@@ -46,6 +46,7 @@ import javax.swing.table.TableColumnModel;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.underworldlabs.util.SystemProperties;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.table.ComboBoxCellEditor;
 import org.underworldlabs.swing.table.ColourTableCellRenderer;
 import org.underworldlabs.swing.table.ComboBoxCellRenderer;
@@ -72,7 +73,7 @@ public class PropertiesEditorSyntax extends PropertiesBasePanel
         }
     }
     
-    private void init() throws Exception {        
+    private void init() throws Exception {
         tableModel = new ColorTableModel();
         table = new JTable(tableModel);
         table.setFont(PropertiesBasePanel.panelFont);
@@ -200,10 +201,12 @@ public class PropertiesEditorSyntax extends PropertiesBasePanel
         }
         
         public void paintComponent(Graphics g) {
+        	
+        	UIUtils.antialias(g);
+        	
             SyntaxColour[] labels = tableModel.getSyntaxColours();
             
             int row = size + 5;
-            
             int width = getWidth();
             
             g.setColor(Color.WHITE);
