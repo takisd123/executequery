@@ -80,7 +80,7 @@ public class SQLTypeObjectFactory {
         
         try {
         
-            return new java.sql.Date(parseDateTime(value).getTime());
+            return new java.sql.Date(parseDate(value).getTime());
 
         } catch (ParseException e) {
             
@@ -102,16 +102,11 @@ public class SQLTypeObjectFactory {
         
     }
 
-    private Date parseDateTime(String value) throws ParseException {
-
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(value);
-    }
-    
     private Time stringAsTime(String value) {
         
         try {
             
-            return new Time(new SimpleDateFormat("HH:mm:ss.S").parse(value).getTime());
+            return new Time(new SimpleDateFormat(TIME_FORMAT).parse(value).getTime());
             
         } catch (ParseException e) {
             
@@ -120,5 +115,17 @@ public class SQLTypeObjectFactory {
         
     }
     
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String TIME_FORMAT = "HH:mm:ss.S"; 
+    
+    private Date parseDate(String value) throws ParseException {
+        
+        return new SimpleDateFormat(DATE_FORMAT).parse(value);
+    }
+    
+    private Date parseDateTime(String value) throws ParseException {
+        
+        return new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT).parse(value);
+    }
     
 }

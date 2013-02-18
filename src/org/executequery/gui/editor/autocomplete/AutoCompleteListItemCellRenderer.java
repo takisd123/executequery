@@ -30,7 +30,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
+import org.executequery.log.Log;
 
 public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
 
@@ -68,56 +70,57 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
 
         try {
         
-        switch (item.getType()) {
-        
-            case SQL92_KEYWORD:
-                setIcon(sql92Keyword);
-                break;
-
-            case DATABASE_DEFINED_KEYWORD:
-                setIcon(databaseSpecificKeyword);
-                break;
-        
-            case USER_DEFINED_KEYWORD:
-                setIcon(userDefinedKeyword);
-                break;
-        
-            case DATABASE_TABLE:
-                setIcon(databaseTable);
-                break;
-        
-            case DATABASE_VIEW:
-                setIcon(databaseTableView);
-                break;
-                
-            case DATABASE_TABLE_COLUMN:
-                setIcon(databaseTableColumn);
-                break;
-
-            case NOTHING_PROPOSED:
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-                setBorder(noFocusBorder);
-                setIcon(nothingFound);
-                break;
-
-            case GENERATING_LIST:
-                setBackground(list.getBackground());
-                setForeground(list.getForeground());
-                setBorder(noFocusBorder);
-                setIcon(animateImageIcon(animatedSpinner, list, index));
-                break;
-                
-        }
-        
-        
-        } catch (NullPointerException e) {
+            switch (item.getType()) {
             
-            System.out.println("ITEM: " + item.getType().name());
+                case SQL92_KEYWORD:
+                    setIcon(sql92Keyword);
+                    break;
+    
+                case DATABASE_DEFINED_KEYWORD:
+                    setIcon(databaseSpecificKeyword);
+                    break;
             
-            e.printStackTrace();
-        }
+                case USER_DEFINED_KEYWORD:
+                    setIcon(userDefinedKeyword);
+                    break;
+            
+                case DATABASE_TABLE:
+                    setIcon(databaseTable);
+                    break;
+            
+                case DATABASE_VIEW:
+                    setIcon(databaseTableView);
+                    break;
+                    
+                case DATABASE_TABLE_COLUMN:
+                    setIcon(databaseTableColumn);
+                    break;
+    
+                case NOTHING_PROPOSED:
+                    setBackground(list.getBackground());
+                    setForeground(list.getForeground());
+                    setBorder(noFocusBorder);
+                    setIcon(nothingFound);
+                    break;
+    
+                case GENERATING_LIST:
+                    setBackground(list.getBackground());
+                    setForeground(list.getForeground());
+                    setBorder(noFocusBorder);
+                    setIcon(animateImageIcon(animatedSpinner, list, index));
+                    break;
+            }
         
+        
+        } catch (Exception e) {
+            
+            if (e instanceof NullPointerException) { // setIcon throwing ???
+
+                Log.trace("NPE for item renderer item: " + item.getType().name(), e);
+            }
+
+            throw new ApplicationException(e);
+        }
 
         return listLabel;
     }

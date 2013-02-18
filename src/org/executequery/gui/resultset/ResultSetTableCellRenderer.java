@@ -202,7 +202,6 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         	} else {
 
         	    formatForOther(value, isSelected);
-
         	}
 
         } else {
