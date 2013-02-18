@@ -79,11 +79,11 @@ public class QueryDispatcher {
     private boolean waiting;
 
     // ------------------------------------------------
-    // static string constants
+    // static string outputs
     // ------------------------------------------------
 
     private static final String SUBSTRING = "...";
-    private static final String EXECUTING_1 = "Executing: ";
+    private static final String EXECUTING = "Executing: ";
     private static final String ERROR_EXECUTING = " Error executing statement";
     private static final String DONE = " Done";
     private static final String COMMITTING_LAST = "Committing last transaction block...";
@@ -699,12 +699,12 @@ public class QueryDispatcher {
      */
     private void logExecution(String query) {
 
-        Log.info(EXECUTING_1 + query);
+        Log.info(EXECUTING + query);
 
         if (verboseLogging) {
 
             setOutputMessage(
-                    SqlMessages.ACTION_MESSAGE, EXECUTING_1);
+                    SqlMessages.ACTION_MESSAGE, EXECUTING);
             setOutputMessage(
                     SqlMessages.ACTION_MESSAGE_PREFORMAT, query);
 
@@ -714,7 +714,7 @@ public class QueryDispatcher {
             int subIndex = queryLength < 50 ? (queryLength + 1) : 50;
 
             setOutputMessage(
-                    SqlMessages.ACTION_MESSAGE, EXECUTING_1);
+                    SqlMessages.ACTION_MESSAGE, EXECUTING);
             setOutputMessage(
                     SqlMessages.ACTION_MESSAGE_PREFORMAT,
                     query.substring(0, subIndex-1).trim() + SUBSTRING);
@@ -766,8 +766,7 @@ public class QueryDispatcher {
         setOutputMessage(type, text, true);
     }
 
-    private void setOutputMessage(
-            final int type, final String text, final boolean selectTab) {
+    private void setOutputMessage(final int type, final String text, final boolean selectTab) {
         ThreadUtils.invokeAndWait(new Runnable() {
             public void run() {
                 delegate.setOutputMessage(type, text, selectTab);
@@ -779,6 +778,7 @@ public class QueryDispatcher {
     }
 
     private void setResultSet(final ResultSet rs, final String query) {
+/*
         ThreadUtils.invokeAndWait(new Runnable() {
             public void run() {
                 try {
@@ -788,6 +788,13 @@ public class QueryDispatcher {
                 }
             }
         });
+*/
+        try {
+            delegate.setResultSet(rs, query);
+        } catch (SQLException e) {
+            processException(e);
+        }
+
     }
 
     /** matcher to remove new lines from log messages */

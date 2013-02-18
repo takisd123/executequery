@@ -29,6 +29,40 @@ public class RecordDataItemFactory {
 
 		switch (dataType) {
 
+    		case Types.BIT:
+    		case Types.TINYINT:
+    		case Types.SMALLINT:
+    		case Types.INTEGER:
+    		case Types.BIGINT:
+    		case Types.FLOAT:
+    		case Types.REAL:
+    		case Types.DOUBLE:
+    		case Types.NUMERIC:
+    		case Types.DECIMAL:
+    		case Types.CHAR:
+    		case Types.VARCHAR:
+    		case Types.NULL:
+    		case Types.OTHER:
+    		case Types.JAVA_OBJECT:
+    		case Types.DISTINCT:
+    		case Types.STRUCT:
+    		case Types.ARRAY:
+    		case Types.REF:
+    		case Types.DATALINK:
+    		case Types.BOOLEAN:
+    		case Types.ROWID:
+    		case Types.NCHAR:
+    		case Types.NVARCHAR:
+    		case Types.LONGNVARCHAR:
+    		case Types.NCLOB:
+    		case Types.SQLXML:
+    		    return new SimpleRecordDataItem(name, dataType, dataTypeName);
+		
+    		case Types.DATE:
+    		case Types.TIMESTAMP:
+    		case Types.TIME:
+    		    return new DateRecordDataItem(name, dataType, dataTypeName);
+    		    
 	        case Types.CLOB:
 	        case Types.LONGVARCHAR:
 	        	return new ClobRecordDataItem(name, dataType, dataTypeName);
@@ -39,16 +73,9 @@ public class RecordDataItemFactory {
 	        case Types.LONGVARBINARY:
 	        	return new BlobRecordDataItem(name, dataType, dataTypeName);
 
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case Types.TIME:
-                return new DateRecordDataItem(name, dataType, dataTypeName);
-                
-			default:
-				return new SimpleRecordDataItem(name, dataType, dataTypeName);
-
 		}
-		
+
+		return new SimpleRecordDataItem(name, dataType, dataTypeName);
 	}
 	
 }

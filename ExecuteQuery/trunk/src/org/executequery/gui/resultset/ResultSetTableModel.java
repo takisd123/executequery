@@ -40,6 +40,7 @@ import org.executequery.log.Log;
 import org.executequery.util.UserProperties;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.table.AbstractSortableTableModel;
+import org.underworldlabs.util.MiscUtils;
 
 /**
  * The sql result set table model.
@@ -86,11 +87,9 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public ResultSetTableModel(ResultSet resultSet, int maxRecords) {
 
         this.maxRecords = maxRecords;
-        
         recordDataItemFactory = new RecordDataItemFactory();
-        
-        holdMetaData = UserProperties.getInstance().getBooleanProperty(
-                "editor.results.metadata");
+
+        holdMetaData = UserProperties.getInstance().getBooleanProperty("editor.results.metadata");
 
         if (resultSet != null) {
 
@@ -148,6 +147,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             List<RecordDataItem> rowData;
             interrupted = false;
 
+            long time = System.currentTimeMillis();
             while (resultSet.next()) {
 
                 if (interrupted || Thread.interrupted()) {
@@ -159,7 +159,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 rowData = new ArrayList<RecordDataItem>(count);
 
                 for (int i = 1; i <= count; i++) {
-
+                    
                 	RecordDataItem value = recordDataItemFactory.create(
                 			columnHeaders.get(i - 1),
                             rsmd.getColumnType(i),
@@ -168,7 +168,6 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                     try {
 
                         int dataType = columnTypes[i - 1];
-                        
                         switch (dataType) {
 
                             // some drivers (informix for example)
@@ -246,16 +245,15 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 setMetaDataVectors(rsmd);
             }
 
+            Log.trace("Finished populating table model - " + recordCount + " rows - [ " 
+                    + MiscUtils.formatDuration(System.currentTimeMillis() - time) + "]");
+            
             fireTableStructureChanged();
 
         } catch (SQLException e) {
 
             System.err.println("SQL error populating table model at: " + e.getMessage());
-
-            if (Log.isDebugEnabled()) {
-
-                e.printStackTrace();
-            }
+            Log.debug("Table model error - ", e);
 
         } catch (Exception e) {
 
@@ -270,10 +268,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 System.err.println("Exception populating table model at: " + message);
             }
 
-            if (Log.isDebugEnabled()) {
-            
-                e.printStackTrace();
-            }
+            Log.debug("Table model error - ", e);
 
         } finally {
 
@@ -414,11 +409,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
         } catch (SQLException e) {
             
-            if (Log.isDebugEnabled()) {
-                
-                e.printStackTrace();
-            }
-            
+            Log.debug(e.getMessage(), e);
         }
 
         if (metaDataTableModel == null) {

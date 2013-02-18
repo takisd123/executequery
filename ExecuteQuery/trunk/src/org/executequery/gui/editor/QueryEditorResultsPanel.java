@@ -361,7 +361,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             panel.setResultSet(model, showRowNumber);
 
             resultSetTableColumnResizingManager.setColumnWidthsForTable(panel.getTable());
-
             addResultSetPanel(query, rowCount, panel);
         }
 
