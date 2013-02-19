@@ -466,8 +466,7 @@ public class GUIUtils {
      * @return true | false
      */
     public static boolean isDefaultLookAndFeel() {
-        return UIUtils.isDefaultLookAndFeel() ||
-                UIUtils.usingOcean();
+        return UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean();
     }
 
     /**
