@@ -20,32 +20,42 @@
 
 package org.executequery.gui.browser;
 
+import java.awt.Component;
 import java.awt.Cursor;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.StringUtils;
+import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.TableDataChange;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.editor.ResultSetTablePopupMenu;
+import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
+import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
+import org.underworldlabs.swing.table.SortableHeaderRenderer;
 import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.SystemProperties;
@@ -156,20 +166,20 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         worker.start();
     }
 
-    /**
-     * Contsructs and displays the specified <code>ResultSet</code>
-     * object within the results table.
-     *
-     * @param databaseObject <code>ResultSet</code> data object
-     * @return the <code>String</code> 'done' when finished
-     */
+    private List<String> primaryKeyColumns = new ArrayList<String>(0);
+    private List<String> foreignKeyColumns = new ArrayList<String>(0);
+    
     private Object setTableResultsPanel(DatabaseObject databaseObject) {
 
         tableDataChanges.clear();
+        primaryKeyColumns.clear();
+        foreignKeyColumns.clear();
+        
         this.databaseObject = databaseObject;
         try {
 
             initialiseModel();
+            tableModel.setCellsEditable(false);
             tableModel.removeTableModelListener(this);
 
             if (isDatabaseTable()) {
@@ -177,7 +187,13 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 DatabaseTable databaseTable = asDatabaseTable();
                 if (databaseTable.hasPrimaryKey()) {
 
-                    tableModel.setNonEditableColumns(databaseTable.getPrimaryKeyColumnNames());
+                    primaryKeyColumns = databaseTable.getPrimaryKeyColumnNames();
+					tableModel.setNonEditableColumns(primaryKeyColumns);
+                }
+
+                if (databaseTable.hasForeignKey()) {
+                	
+                	foreignKeyColumns = databaseTable.getForeignKeyColumnNames();
                 }
                 
             }
@@ -192,6 +208,70 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
             TableSorter sorter = new TableSorter(tableModel);
             table.setModel(sorter);
             sorter.setTableHeader(table.getTableHeader());
+
+            if (isDatabaseTable()) {
+	            
+	            SortableHeaderRenderer renderer = new SortableHeaderRenderer(sorter) {
+	            	
+	            	private ImageIcon primaryKeyIcon = GUIUtilities.loadIcon(BrowserConstants.PRIMARY_COLUMNS_IMAGE); 
+	            	private ImageIcon foreignKeyIcon = GUIUtilities.loadIcon(BrowserConstants.FOREIGN_COLUMNS_IMAGE); 
+	            	
+	            	@Override
+	            	public Component getTableCellRendererComponent(JTable table,
+	            			Object value, boolean isSelected, boolean hasFocus,
+	            			int row, int column) {
+	
+	            		DefaultTableCellRenderer renderer = (DefaultTableCellRenderer) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	            		
+	            		Icon keyIcon = iconForValue(value);
+	            		if (keyIcon != null) {
+	            		
+		            		Icon icon = renderer.getIcon();
+		            		if (icon != null) {
+		            			
+		            			BufferedImage image = new BufferedImage(icon.getIconWidth() + keyIcon.getIconWidth() + 2, 
+		            					Math.max(keyIcon.getIconHeight(), icon.getIconHeight()), BufferedImage.TYPE_INT_ARGB);
+		            			
+		            			Graphics graphics = image.getGraphics();
+		            			keyIcon.paintIcon(null, graphics, 0, 0);
+		            			icon.paintIcon(null, graphics, keyIcon.getIconWidth() + 2, 5);
+		
+		            			setIcon(new ImageIcon(image));
+
+		            		} else {
+		            			
+		            			setIcon(keyIcon);
+		            		}
+
+	            		}
+	            		
+						return renderer;
+	            	}
+	            	
+	            	private ImageIcon iconForValue(Object value) {
+	            		
+	            		if (value != null) {
+	            			
+	            			String name = value.toString();
+	            			if (primaryKeyColumns.contains(name)) {
+	            				
+	            				return primaryKeyIcon;
+	            			
+	            			} else if (foreignKeyColumns.contains(name)) {
+	            				
+	            				return foreignKeyIcon;
+	            			}
+	            			
+	            		}
+	            		
+	            		return null;
+	            	}
+	            	
+	            	
+	            };
+	            sorter.setTableHeaderRenderer(renderer);
+            
+            }
 
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
@@ -213,6 +293,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
             tableModel.addTableModelListener(this);
         }
 
+        setTableProperties();
         validate();
         repaint();
 
@@ -337,7 +418,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         if (isDatabaseTable()) {
 
             int row = e.getFirstRow();
-            asDatabaseTable().addTableDataChange(new TableDataChange(tableModel.getRowDataForRow(row)));
+            List<RecordDataItem> rowDataForRow = tableModel.getRowDataForRow(row);
+            for (RecordDataItem recordDataItem : rowDataForRow) {
+				
+            	if (recordDataItem.isChanged()) {
+            		
+            		Log.debug("Change detected in column [ " + recordDataItem.getName() + " ] - value [ " + recordDataItem.getValue() + " ]");
+            		
+            		asDatabaseTable().addTableDataChange(new TableDataChange(rowDataForRow));
+            		return;
+            	}
+
+			}
+            
         }
 
     }
@@ -361,7 +454,3 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
     }
 
 }
-
-
-
-

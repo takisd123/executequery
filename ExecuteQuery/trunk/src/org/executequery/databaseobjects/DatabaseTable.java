@@ -187,6 +187,10 @@ public interface DatabaseTable extends DatabaseObject {
     void addTableDataChange(TableDataChange tableDataChange);
 
     boolean hasTableDataChanges();
+
+	boolean hasForeignKey();
+
+	List<String> getForeignKeyColumnNames();
     
 }
 

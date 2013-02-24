@@ -96,7 +96,7 @@ public abstract class ErdMoveableComponent extends JComponent {
      *  @param the current view scale
      */
     public void setScale(double scale) {
-        this.scale = scale;
+        ErdMoveableComponent.scale = scale;
     }
     
     /** <p>Sends this component to the front over all others. */

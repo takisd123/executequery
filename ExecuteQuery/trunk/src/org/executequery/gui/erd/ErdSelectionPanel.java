@@ -49,6 +49,7 @@ import org.underworldlabs.swing.ListSelectionPanel;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes"})
 public class ErdSelectionPanel extends JPanel
                                implements ItemListener {
                                           //ActionListener {

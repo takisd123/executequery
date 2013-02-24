@@ -17,6 +17,7 @@ Summary of changes - v3.6.1 Build 5218:
   collapsing on view resize. 
 - Added object count value to all object lists on the Database Browser view.
 - Added TRACE log level.
+- Misc UI tweaks for for Mac OS look and feel 
 
  
 

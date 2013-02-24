@@ -50,6 +50,7 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdGenerateProgressDialog extends AbstractBaseDialog {
     
     /** The ERD parent panel */

@@ -42,6 +42,7 @@ import org.executequery.gui.browser.ColumnData;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdTable extends ErdMoveableComponent
                       implements Serializable {
     

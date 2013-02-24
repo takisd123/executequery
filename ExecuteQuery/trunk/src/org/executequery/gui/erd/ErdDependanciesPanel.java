@@ -38,6 +38,7 @@ import javax.swing.JComponent;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes"})
 public class ErdDependanciesPanel extends JComponent {
     
     /** The controller for the ERD viewer */

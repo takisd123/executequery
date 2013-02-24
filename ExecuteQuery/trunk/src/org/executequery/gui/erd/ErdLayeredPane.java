@@ -49,20 +49,23 @@ import org.underworldlabs.swing.util.MenuBuilder;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes"})
 public class ErdLayeredPane extends JLayeredPane
                             implements MouseListener,
                                        MouseMotionListener {
     
     /** The controller for the ERD viewer */
     private ErdViewerPanel parent;
+    
     /** The popup menu */
     private PopMenu popup;
+    
     /** The currently selected component */
     private static ErdMoveableComponent selectedComponent;
-    /** Currently selected table */
-    private static ErdTable inFocusTable;
+
     /** The title panel */
     //  private ErdTitle titlePanel;
+    
     /** The display scale factor */
     private double scale = 1.0;
     

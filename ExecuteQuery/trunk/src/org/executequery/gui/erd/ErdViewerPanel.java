@@ -59,6 +59,7 @@ import org.executequery.util.UserProperties;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdViewerPanel extends DefaultTabView
                             implements PrintFunction,
                                        SaveFunction,
@@ -138,15 +139,11 @@ public class ErdViewerPanel extends DefaultTabView
     
     private static int openCount = 1;
                                                    
-    private ErdViewerPanel() {
-        this(null, null, true, true, true);
-    }
-    
     public ErdViewerPanel(boolean showTools, boolean editable) {
         this(null, null, true, showTools, editable);
     }
     
-    public ErdViewerPanel(Vector tableNames, Vector columnData, boolean isNew) {        
+	public ErdViewerPanel(Vector tableNames, Vector columnData, boolean isNew) {        
         this(tableNames, columnData, isNew, true, true);
     }
     

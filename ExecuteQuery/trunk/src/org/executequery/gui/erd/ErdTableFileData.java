@@ -35,6 +35,7 @@ import org.executequery.gui.browser.ColumnData;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes"})
 public class ErdTableFileData implements Serializable {
     
     /** The table name displayed */

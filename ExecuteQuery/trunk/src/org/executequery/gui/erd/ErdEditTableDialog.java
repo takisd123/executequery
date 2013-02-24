@@ -61,6 +61,7 @@ import org.underworldlabs.swing.table.ComboBoxCellEditor;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdEditTableDialog extends ErdPrintableDialog
                                 implements TableFunction,
                                            TableConstraintFunction {

@@ -51,6 +51,7 @@ import org.underworldlabs.swing.AbstractBaseDialog;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes"})
 public class ErdScriptGenerator extends BaseScriptGeneratorPanel
                                 implements ScriptGenerator {
     
