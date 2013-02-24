@@ -152,9 +152,7 @@ public final class LookAndFeelLoader {
 
         try {
 
-            MetalLookAndFeel.setCurrentTheme(
-                    new javax.swing.plaf.metal.DefaultMetalTheme());
-
+            MetalLookAndFeel.setCurrentTheme(new javax.swing.plaf.metal.DefaultMetalTheme());
             UIManager.setLookAndFeel(new MetalLookAndFeel());
 
         } catch (UnsupportedLookAndFeelException e) {
@@ -202,8 +200,7 @@ public final class LookAndFeelLoader {
     public void loadNativeLookAndFeel() {
         try {
 
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
         } catch (Exception e) {
 
@@ -214,8 +211,7 @@ public final class LookAndFeelLoader {
     public void loadCrossPlatformLookAndFeel() {
         try {
 
-            UIManager.setLookAndFeel(
-                    UIManager.getCrossPlatformLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
         } catch (Exception e) {
 

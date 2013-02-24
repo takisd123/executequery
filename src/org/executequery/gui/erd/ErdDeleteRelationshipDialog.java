@@ -51,6 +51,7 @@ import org.executequery.gui.browser.ColumnData;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdDeleteRelationshipDialog extends ErdPrintableDialog
                                          implements ActionListener {
     

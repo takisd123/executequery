@@ -47,6 +47,7 @@ import org.underworldlabs.util.SystemProperties;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ResultSetTable extends JTable {
 
     private DefaultCellEditor cellEditor;
@@ -202,7 +203,6 @@ public class ResultSetTable extends JTable {
         return getValueAt(row, col);
     }
 
-    @SuppressWarnings("unchecked")
     public TableModel selectedCellsAsTableModel() {
 
         int cols = getSelectedColumnCount();

@@ -703,10 +703,16 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return dropStatement;
     }
 
-    public boolean hasPrimaryKey() {
+    public boolean hasForeignKey() {
         
-        List<ColumnConstraint> keys = getPrimaryKeys();
+        List<ColumnConstraint> keys = getForeignKeys();
         return keys != null && !keys.isEmpty(); 
+    }
+    
+    public boolean hasPrimaryKey() {
+    	
+    	List<ColumnConstraint> keys = getPrimaryKeys();
+    	return keys != null && !keys.isEmpty(); 
     }
     
     public List<ColumnConstraint> getPrimaryKeys() {
@@ -1139,15 +1145,26 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     
     public List<String> getPrimaryKeyColumnNames() {
 
-        List<String> primaryKeyColumns = new ArrayList<String>();
-        for (ColumnConstraint constraint : getPrimaryKeys()) {
-
-            primaryKeyColumns.add(constraint.getColumnName());
-        }
-
-        return primaryKeyColumns;
+        return namesFromConstraints(getPrimaryKeys());
     }
 
+    public List<String> getForeignKeyColumnNames() {
+    	
+    	return namesFromConstraints(getForeignKeys());
+    }
+
+    private List<String> namesFromConstraints(List<ColumnConstraint> constraints) {
+    	
+    	List<String> names = new ArrayList<String>();
+    	for (ColumnConstraint constraint : constraints) {
+    		
+    		names.add(constraint.getColumnName());
+    	}
+    	
+    	return names;
+
+    }
+    
 }
 
 

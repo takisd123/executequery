@@ -43,6 +43,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ErdToolBarPalette extends PanelToolBar 
                                implements ActionListener {
     
@@ -243,7 +244,6 @@ public class ErdToolBarPalette extends PanelToolBar
         scaleCombo.setSelectedItem(value);
     }
 
-    @SuppressWarnings("unchecked")
     public void actionPerformed(ActionEvent e) {
         Object btnObject = e.getSource();
         

@@ -20,6 +20,7 @@
 
 package org.executequery.gui.resultset;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.executequery.databasemediators.SQLTypeObjectFactory;
 
 
@@ -84,7 +85,12 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	}
 
 	public void valueChanged(Object newValue) {
-	    
+
+		if (valuesEqual(this.value, newValue)) {
+
+			return;
+		}
+		
 	    if (newValue != null && isStringLiteralNull(newValue)) {
 	        
 	        setValue(null);
@@ -96,6 +102,21 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 	    changed = true;
 	}
 	
+	private boolean valuesEqual(Object firstValue, Object secondValue) {
+
+		if (ObjectUtils.equals(firstValue, secondValue)) {
+			
+			return true;
+		}
+		
+		if (firstValue != null && secondValue != null) {
+			
+			return firstValue.toString().equals(secondValue.toString());
+		}
+		
+		return false;
+	}
+
 	private boolean isStringLiteralNull(Object newValue) {
 
 	    return newValue.toString().equalsIgnoreCase("NULL");

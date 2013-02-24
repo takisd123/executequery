@@ -100,7 +100,7 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @version  $Revision$
  * @date     $Date$
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes","unchecked"})
 public class TableSorter extends AbstractTableModel {
     
     protected SortableTableModel tableModel;
@@ -206,6 +206,11 @@ public class TableSorter extends AbstractTableModel {
             tableHeader.setDefaultRenderer(headerRenderer);
         }
         
+    }
+    
+    public void setTableHeaderRenderer(SortableHeaderRenderer headerRenderer) {
+		this.headerRenderer = headerRenderer;
+		tableHeader.setDefaultRenderer(headerRenderer);
     }
     
     public boolean isSorting() {
@@ -739,13 +744,16 @@ public class TableSorter extends AbstractTableModel {
                 
                 Object object = tableModel.getValueAt(i, selectedColumn);
                 if (object != null) {
-                    String stringValue = object.toString();
+
+                	String stringValue = object.toString();
                     if (stringValue != null) {
-                        longestValue = Math.max(longestValue, 
-                                fontMetrics.stringWidth(stringValue));
+                    
+                    	longestValue = Math.max(longestValue, fontMetrics.stringWidth(stringValue));
                     }
+
                 }
             }
+            
             return longestValue;
         }
         

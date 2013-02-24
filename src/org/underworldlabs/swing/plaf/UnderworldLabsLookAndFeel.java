@@ -20,6 +20,8 @@
 
 package org.underworldlabs.swing.plaf;
 
+import javax.swing.UIDefaults;
+
 import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
 
 /**
@@ -47,6 +49,24 @@ public class UnderworldLabsLookAndFeel extends SmoothGradientLookAndFeel {
         return "Themed extension to Smooth Gradient Look and Feel - modified from " +
                 "The JGoodies Plastic Look and Feel";
     }
+    
+    @Override
+    protected void initComponentDefaults(UIDefaults table) {
+
+    	if (UIUtils.isMac()) {
+    		
+    		// TODO: !!! apply mac key bindings - delegate to new class and use across all!!!
+    		// fukin' macs!
+    		
+    		// wee average but minor reference here:
+    		// http://lists.apple.com/archives/java-dev/2008/Apr/msg00209.html
+    		
+    		
+    	}
+    	
+    	super.initComponentDefaults(table);
+    }
+    
 
 }
 

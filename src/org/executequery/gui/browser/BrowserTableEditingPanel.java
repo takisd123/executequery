@@ -574,9 +574,9 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
             for (ColumnConstraint constraint : constraints) {
 
-                if (constraint.isPrimaryKey()) {
+                String tableName = constraint.getTableName();
+				if (constraint.isPrimaryKey()) {
                     
-                    String tableName = constraint.getTableName();
                     if (!tableNamesAdded.contains(tableName)) {
                     
                         tableNames.add(tableName);
@@ -586,8 +586,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                                                              tableName));
                     }
 
-                }
-                else if (constraint.isForeignKey()) {
+                } else if (constraint.isForeignKey()) {
 
                     String referencedTable = constraint.getReferencedTable();
                     if (!tableNamesAdded.contains(referencedTable)) {
@@ -598,6 +597,17 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                                                              constraint.getReferencedSchema(),
                                                              referencedTable));
                     }
+                    
+                    String columnName = constraint.getColumnName();
+					if (!tableNames.contains(tableName) && !columns.contains(columnName)) {
+                    	
+                        tableNames.add(tableName);
+                        tableNamesAdded.add(tableName);
+                        columns.add(controller.getColumnData(constraint.getCatalogName(),
+                                                             constraint.getSchemaName(),
+                                                             tableName));
+                    }
+                    
 
                 }
 
@@ -610,6 +620,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 if (!tableNamesAdded.contains(parentsName)) {
                 
                     tableNames.add(parentsName);
+                    tableNamesAdded.add(parentsName);
                     columns.add(controller.getColumnData(column.getCatalogName(),
                                                          column.getSchemaName(),
                                                          parentsName));
