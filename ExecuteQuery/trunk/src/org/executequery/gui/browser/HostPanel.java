@@ -266,14 +266,13 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
 
         // notify connection panel
         connectionPanel.connected(connectionEvent.getDatabaseConnection());
-
         GUIUtils.startWorker(new Runnable() {
             public void run() {
                 // notify other panels
                 changePanelData();
             }
         });
-        
+        GUIUtilities.scheduleGC();
     }
 
     /**
@@ -284,6 +283,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     public void disconnected(ConnectionEvent connectionEvent) {
         connectionPanel.disconnected(connectionEvent.getDatabaseConnection());
         enableConnectionTabs(false);
+        GUIUtilities.scheduleGC();
     }
 
     public boolean canHandleEvent(ApplicationEvent event) {

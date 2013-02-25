@@ -37,26 +37,21 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision$
  * @date     $Date$
  */
-public class ConnectCommand extends OpenFrameCommand
-                            implements BaseCommand {
+public class ConnectCommand extends OpenFrameCommand implements BaseCommand {
     
     public void execute(ActionEvent e) {
         
         GUIUtilities.ensureDockedTabVisible(ConnectionsTreePanel.PROPERTY_KEY);        
-
         ConnectionsTreePanel panel = connectionsPanel();
 
         String command = e.getActionCommand();
-
-        if (MiscUtils.isNull(command) || 
-                "New Connection".equals(command)) {
+        if (MiscUtils.isNull(command) || "New Connection".equals(command)) {
             
             panel.newConnection();
 
         } else {
 
             DatabaseConnection dc = loadConnection(command);
-
             panel.setSelectedConnection(dc);
         }
 
@@ -80,12 +75,3 @@ public class ConnectCommand extends OpenFrameCommand
     }
     
 }
-
-
-
-
-
-
-
-
-
