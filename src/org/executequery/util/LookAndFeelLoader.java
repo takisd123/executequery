@@ -21,11 +21,13 @@
 package org.executequery.util;
 
 import java.awt.event.KeyEvent;
+import java.util.Map.Entry;
 
 import javax.swing.InputMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -35,6 +37,8 @@ import org.executequery.ApplicationException;
 import org.executequery.Constants;
 import org.executequery.plaf.ExecuteQueryTheme;
 import org.underworldlabs.swing.plaf.UIUtils;
+import org.underworldlabs.swing.plaf.base.CustomTextAreaUI;
+import org.underworldlabs.swing.plaf.base.CustomTextPaneUI;
 import org.underworldlabs.swing.plaf.bumpygradient.BumpyGradientLookAndFeel;
 
 public final class LookAndFeelLoader {
@@ -105,12 +109,18 @@ public final class LookAndFeelLoader {
             throw new ApplicationException(e);
         
         } 
+     
+        if (!UIUtils.isNativeMacLookAndFeel()) {
 
-        applyMacAcceleratorSettings();
+            CustomTextAreaUI.initialize();
+            CustomTextPaneUI.initialize();            	
+        }
+        
+        applyMacSettings();        
         return lookAndFeel;
     }
 
-    private void applyMacAcceleratorSettings() {
+    private void applyMacSettings() {
 
         if (UIUtils.isMac()) {
 
@@ -123,7 +133,14 @@ public final class LookAndFeelLoader {
                 im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
             }
             
+            if (UIUtils.isNativeMacLookAndFeel()) {
+            	
+            	UIManager.put("Table.gridColor", UIUtils.getDefaultBorderColour());
+            }
+
         }
+        
+        
     }
 
     private void loadCustomLookAndFeel() {
