@@ -26,7 +26,6 @@ import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
-import javax.swing.UIManager;
 
 import org.executequery.databasemediators.ConnectionMediator;
 import org.executequery.databasemediators.DatabaseConnection;
@@ -48,8 +47,6 @@ import org.underworldlabs.swing.PasswordDialog;
 import org.underworldlabs.swing.SplashPanel;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.plaf.UIUtils;
-import org.underworldlabs.swing.plaf.base.CustomTextAreaUI;
-import org.underworldlabs.swing.plaf.base.CustomTextPaneUI;
 import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
 
@@ -139,15 +136,6 @@ public class ApplicationLauncher {
 
             advanceSplash(splash);
 
-            // initialise the custom text UI
-            CustomTextAreaUI.initialize();
-            CustomTextPaneUI.initialize();
-
-            if (UIUtils.isNativeMacLookAndFeel()) {
-            	
-            	UIManager.put("Table.gridColor", UIUtils.getDefaultBorderColour());
-            }
-            
             GUIUtilities.startLogger();
 
             advanceSplash(splash);
