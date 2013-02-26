@@ -16,6 +16,7 @@ Summary of changes - v3.6.1 Build 5218:
 - Added main connection details panel to scrollpane to avoid field/button 
   collapsing on view resize. 
 - Added object count value to all object lists on the Database Browser view.
+- Added summary file info to all export data workers.
 - Added TRACE log level.
 - Misc UI tweaks for for Mac OS look and feel 
 

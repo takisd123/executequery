@@ -72,6 +72,14 @@ public final class Log {
     }
     
     /**
+     * Returns whether the log level is set to TRACE.
+     */
+    public static boolean isTraceEnabled() {
+    	
+    	return log.isTraceEnabled();
+    }
+    
+    /**
      * Sets the logger level to that specified.
      *
      * @param level - the logger level to be set.<br>

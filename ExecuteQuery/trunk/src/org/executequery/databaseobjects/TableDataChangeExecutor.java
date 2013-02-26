@@ -93,7 +93,7 @@ public class TableDataChangeExecutor {
             int n = changes.size();
             String sql = table.prepareStatement(columns);
             
-            Log.debug("Executing change with SQL - [ " + sql + " ]");
+            Log.info("Executing data change using statement - [ " + sql + " ]");
             
             statement = connection.prepareStatement(sql);
             for (int i = 0; i < n; i++) {

@@ -479,19 +479,14 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         }
 
         sb.append(" FROM ");
-
         if (table.getParentNameForStatement() != null) {
         
             sb.append(table.getParentNameForStatement());
             sb.append(".");
         }
-
         sb.append(table.getNameForQuery());
-        
-        if (Log.isDebugEnabled()) {
-            
-            Log.debug("selectStatementForExport: " + sb);
-        }
+
+        Log.info("Executing query for export: [ " + sb + " ]");
 
         return sb.toString();
     }

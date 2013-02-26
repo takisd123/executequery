@@ -304,10 +304,13 @@ public abstract class BaseImportExportWorker {
     protected void printExportFileSize(ImportExportFile importExportFile) {
         
         StringBuilder sb = new StringBuilder();
+
+        sb.append(getBundle().getString("AbstractImportExportWorker.outputFileName"));
+        sb.append(importExportFile.getFile().getName());
         
         long fileSize = importExportFile.getFile().length();
         
-        sb.append(getBundle().getString("AbstractImportExportWorker.fileSize"));
+        sb.append(getBundle().getString("AbstractImportExportWorker.outputFileSize"));
         sb.append(new DecimalFormat("0.00").format(MiscUtils.bytesToMegaBytes(fileSize)));
         sb.append("Mb");
 

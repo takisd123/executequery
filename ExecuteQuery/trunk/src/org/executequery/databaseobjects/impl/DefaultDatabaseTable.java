@@ -1133,10 +1133,16 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         sb.deleteCharAt(sb.length() - 1);
         sb.append(" WHERE ");
-        
+
+        boolean applied = false;
         for (String primaryKey : getPrimaryKeyColumnNames()) {
 
-            sb.append(primaryKey).append(" = ?,");
+        	if (applied) {
+        		
+        		sb.append(" AND ");
+        	}
+            sb.append(primaryKey).append(" = ? ");
+            applied =true;
         }
 
         sb.deleteCharAt(sb.length() - 1);

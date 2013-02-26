@@ -20,6 +20,7 @@
 
 package org.executequery.gui.importexport;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -32,6 +33,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
@@ -46,6 +48,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.MetaDataValues;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.browser.ColumnData;
+import org.executequery.log.Log;
 import org.executequery.repository.LogRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.sql.spi.LiquibaseDatabaseFactory;
@@ -222,7 +225,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         conn = getConnection();
         stmnt = conn.createStatement();
 
-        System.out.println(query);
+        Log.info("Executing query for export: [ " + query + " ]");
 
         return stmnt.executeQuery(query.toString());
     }
@@ -681,7 +684,8 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
      * Appends the final process results to the output pane.
      */
     protected void printResults() {
-        StringBuilder sb = new StringBuilder();
+
+    	StringBuilder sb = new StringBuilder();
         sb.append("---------------------------\n");
 
         if (result == SUCCESS) {
@@ -716,7 +720,19 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
     }
 
-    /**
+    protected void appendFileInfo(File file) {
+    	
+    	StringBuilder sb = new StringBuilder();
+        sb.append(getBundle().getString("AbstractImportExportWorker.outputFileName"));
+        sb.append(file.getName());
+        sb.append(getBundle().getString("AbstractImportExportWorker.outputFileSize"));
+        sb.append(new DecimalFormat("0.00").format(MiscUtils.bytesToMegaBytes(file.length())));
+    	sb.append("Mb");
+    	
+    	appendProgressText(sb);
+    }
+    
+	/**
      * Returns the controlling parent process object.
      */
     protected ImportExportProcess getParent() {

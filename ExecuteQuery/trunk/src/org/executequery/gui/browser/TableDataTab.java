@@ -26,13 +26,17 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,6 +47,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.StringUtils;
+import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
@@ -55,6 +60,9 @@ import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
+import org.underworldlabs.swing.LinkButton;
+import org.underworldlabs.swing.UpdatableLabel;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.table.SortableHeaderRenderer;
 import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.swing.util.SwingWorker;
@@ -84,6 +92,8 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
 
     private GridBagConstraints rowCountPanelConstraints;
 
+    private GridBagConstraints canEditTableNoteConstraints;
+    
     private DisabledField rowCountField;
 
     private JPanel rowCountPanel;
@@ -92,6 +102,12 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
 
     private List<TableDataChange> tableDataChanges;
 
+    private JPanel canEditTableNotePanel;
+    
+    private JLabel canEditTableLabel;
+    
+    private boolean alwaysHideCanEditNotePanel;
+    
     public TableDataTab(boolean displayRowCount) {
 
         super(new GridBagLayout());
@@ -115,13 +131,19 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
             initRowCountPanel();
         }
         
+        canEditTableNotePanel = createCanEditTableNotePanel();
+        canEditTableNoteConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 0,
+                GridBagConstraints.NORTHWEST,
+                GridBagConstraints.HORIZONTAL,
+                new Insets(5, 5, 5, 5), 0, 0);
+
         scroller = new JScrollPane();
-        scrollerConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+        scrollerConstraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
                                 GridBagConstraints.SOUTHEAST,
                                 GridBagConstraints.BOTH,
                                 new Insets(5, 5, 5, 5), 0, 0);
 
-        rowCountPanelConstraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 0,
+        rowCountPanelConstraints = new GridBagConstraints(1, 3, 1, 1, 1.0, 0,
                 GridBagConstraints.SOUTHWEST,
                 GridBagConstraints.HORIZONTAL,
                 new Insets(0, 5, 5, 5), 0, 0);
@@ -132,6 +154,53 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 new Insets(0, 5, 5, 5), 0, 0);
         
         tableDataChanges = new ArrayList<TableDataChange>();
+        alwaysHideCanEditNotePanel = SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "browser.always.show.table.editable.label");
+    }
+
+    private JPanel createCanEditTableNotePanel() {
+
+        final JPanel panel = new JPanel(new GridBagLayout());
+        
+        canEditTableLabel = new UpdatableLabel();
+        JButton hideButton = new LinkButton(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+            }
+        });
+        hideButton.setText("Hide");
+        
+        JButton alwaysHideButton = new LinkButton(new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                panel.setVisible(false);
+                alwaysHideCanEditNotePanel = true;
+                SystemProperties.setBooleanProperty(Constants.USER_PROPERTIES_KEY, 
+                        "browser.always.show.table.editable.label", false);
+                
+                // need to listen for prefs update
+                
+            }
+        });
+        alwaysHideButton.setText("Always Hide");
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx++;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        panel.add(canEditTableLabel, gbc);
+        gbc.gridx++;
+        gbc.weightx = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        panel.add(hideButton, gbc);
+        gbc.gridx++;
+        gbc.insets.left = 15;
+        gbc.insets.right = 10;
+        panel.add(alwaysHideButton, gbc);
+
+        panel.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
+        
+        return panel;
     }
 
     public void loadDataForTable(final DatabaseObject databaseObject) {
@@ -149,10 +218,6 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 } catch (Exception e) {
 
                     addErrorLabel(e);
-                    
-//                    GUIUtilities.displayExceptionErrorDialog(
-//                                        "An error occured retrieving the object data.\n" +
-//                                        e.getMessage(), e);
                     return "done";
                 }
             }
@@ -168,9 +233,9 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
 
     private List<String> primaryKeyColumns = new ArrayList<String>(0);
     private List<String> foreignKeyColumns = new ArrayList<String>(0);
-    
-    private Object setTableResultsPanel(DatabaseObject databaseObject) {
 
+    private Object setTableResultsPanel(DatabaseObject databaseObject) {
+        
         tableDataChanges.clear();
         primaryKeyColumns.clear();
         foreignKeyColumns.clear();
@@ -189,6 +254,8 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
 
                     primaryKeyColumns = databaseTable.getPrimaryKeyColumnNames();
 					tableModel.setNonEditableColumns(primaryKeyColumns);
+					
+					canEditTableLabel.setText("This table has a primary key(s) and data may be edited here");
                 }
 
                 if (databaseTable.hasForeignKey()) {
@@ -196,6 +263,16 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 	foreignKeyColumns = databaseTable.getForeignKeyColumnNames();
                 }
                 
+            }
+
+            if (primaryKeyColumns.isEmpty()) {
+                
+                canEditTableLabel.setText("This table has no primary keys defined and is not editable here");
+            }
+            
+            if (!alwaysHideCanEditNotePanel) {
+            
+                canEditTableNotePanel.setVisible(true);
             }
 
             ResultSet resultSet = databaseObject.getData(true);
@@ -276,6 +353,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
             scroller.getViewport().add(table);
+            add(canEditTableNotePanel, canEditTableNoteConstraints);
             add(scroller, scrollerConstraints);
             
             if (displayRowCount) {

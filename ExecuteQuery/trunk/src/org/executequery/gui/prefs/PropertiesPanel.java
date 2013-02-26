@@ -173,6 +173,7 @@ public class PropertiesPanel extends JPanel
         node = new PropertyNode(PropertyTypes.CONNECTIONS, "Connection");
         branches.add(node);
         node = new PropertyNode(PropertyTypes.BROWSER_GENERAL, "Database Browser");
+        node.addChild(new PropertyNode(PropertyTypes.BROWSER_DATA_TAB, "Table Data Panel"));
         branches.add(node);
 
         DefaultMutableTreeNode root =
@@ -358,6 +359,9 @@ public class PropertiesPanel extends JPanel
             case PropertyTypes.BROWSER_GENERAL:
                 panel = new PropertiesBrowserGeneral();
                 break;
+            case PropertyTypes.BROWSER_DATA_TAB:
+                panel = new PropertiesBrowserTableData();
+                break;
             case PropertyTypes.RESULT_SET_CELL_COLOURS:
                 panel = new PropertiesResultSetTableColours();
                 break;
@@ -414,12 +418,3 @@ public class PropertiesPanel extends JPanel
     }
 
 }
-
-
-
-
-
-
-
-
-

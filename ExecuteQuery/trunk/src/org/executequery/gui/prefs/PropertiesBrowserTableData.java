@@ -28,14 +28,14 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1185 $
+ * @date     $Date: 2013-02-08 22:16:55 +1100 (Fri, 08 Feb 2013) $
  */
-public class PropertiesBrowserGeneral extends PropertiesBasePanel {
+public class PropertiesBrowserTableData extends PropertiesBasePanel {
     
     private SimplePreferencesPanel preferencesPanel;
     
-    public PropertiesBrowserGeneral() {
+    public PropertiesBrowserTableData() {
         try  {
             init();
         }
@@ -51,21 +51,21 @@ public class PropertiesBrowserGeneral extends PropertiesBasePanel {
         list.add(new UserPreference(
                     UserPreference.CATEGORY_TYPE,
                     null,
-                    "General",
+                    "Database table data view tab",
                     null));
 
-        String key = "browser.catalog.schema.defaults.only";
+        String key = "browser.max.records";
         list.add(new UserPreference(
-                    UserPreference.BOOLEAN_TYPE,
+                    UserPreference.INTEGER_TYPE,
                     key,
-                    "Show only default catalog or schema",
-                    SystemProperties.getBooleanProperty("user", key)));
+                    "Maximum records returned",
+                    SystemProperties.getProperty("user", key)));
 
-        key = "browser.double-click.to.connect";
+        key = "browser.always.show.table.editable.label";
         list.add(new UserPreference(
                     UserPreference.BOOLEAN_TYPE,
                     key,
-                    "Connect on double-click",
+                    "Indicate when table data may be edited in-place",
                     SystemProperties.getBooleanProperty("user", key)));
 
         UserPreference[] preferences = 
@@ -83,16 +83,3 @@ public class PropertiesBrowserGeneral extends PropertiesBasePanel {
     }
    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

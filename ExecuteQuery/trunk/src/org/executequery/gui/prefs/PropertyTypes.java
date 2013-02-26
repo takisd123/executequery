@@ -54,6 +54,7 @@ public class PropertyTypes {
     public static final int TOOLBAR_IMPORT_EXPORT = 23;
     public static final int TOOLBAR_BROWSER = 24;
     public static final int RESULT_SET_CELL_COLOURS = 25;
+    public static final int BROWSER_DATA_TAB = 26;
 
     /** Creates a new instance of PropertyTypes */
     private PropertyTypes() {}
