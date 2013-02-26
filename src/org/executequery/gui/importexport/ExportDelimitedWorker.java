@@ -254,6 +254,8 @@ public class ExportDelimitedWorker extends AbstractImportExportWorker {
                 outputBuffer.append(dto.getTableName());
                 appendProgressText(outputBuffer);
                 
+                appendFileInfo(exportFile);
+                
                 /*
                 if (tableCount != fileCount) {
                     setProgressStatus(0);

@@ -244,6 +244,8 @@ public class ExportExcelWorker extends AbstractImportExportWorker
                 outputBuffer.append(tableName);
                 appendProgressText(outputBuffer);
                 
+                appendFileInfo(exportFile);
+                
             }
             
             if (!isSingleTable && fileFormat == ImportExportProcess.SINGLE_FILE) {     

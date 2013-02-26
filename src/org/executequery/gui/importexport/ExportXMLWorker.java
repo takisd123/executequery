@@ -128,7 +128,7 @@ public class ExportXMLWorker extends AbstractImportExportWorker
         int fileFormat = parent.getMutlipleTableTransferType();
 
         // the size of the transfer
-        int transfers_size = transfers.size();
+        int transfersCount = transfers.size();
 
         try {
 
@@ -159,9 +159,9 @@ public class ExportXMLWorker extends AbstractImportExportWorker
             // record the start time
             start();
 
-            Log.debug("Transfers count: " + transfers_size);
+            Log.debug("Transfers count: " + transfersCount);
             
-            for (int i = 0; i < transfers_size; i++) {
+            for (int i = 0; i < transfersCount; i++) {
                 
                 DataTransferObject obj = (DataTransferObject)transfers.get(i);
                 
@@ -180,6 +180,8 @@ public class ExportXMLWorker extends AbstractImportExportWorker
                 streamResult = new StreamResult(os);
                 transformer.transform(source, streamResult);
                 os.close();
+                
+                appendFileInfo(exportFile);
             }
             
             if (processResult == null) {
@@ -202,7 +204,7 @@ public class ExportXMLWorker extends AbstractImportExportWorker
             if (fileFormat == ImportExportProcess.SINGLE_FILE) {
                 setTableCount(tablesArray.length);
             } else {
-                setTableCount(transfers_size);
+                setTableCount(transfersCount);
             }
 
             setRecordCount(parser.getTotalRecordCount() + 

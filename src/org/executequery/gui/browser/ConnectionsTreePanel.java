@@ -1115,6 +1115,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             if (tree.getSelectionPath().getLastPathComponent() == host) {
 
                 enableButtons(true, true, false, true);
+                controller.valueChanged_(host);
             }
 
         }
@@ -1246,17 +1247,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     public void pathChanged(TreePath oldPath, TreePath newPath) {
-
-        doPathChanged(oldPath, newPath);
-    }
-
-    /**
-     * Called whenever the value of the selection changes.
-     * This will store the current path selection.
-     *
-     * @param the event that characterizes the change
-     */
-    private void doPathChanged(TreePath oldPath, TreePath newPath) {
 
         // store the last position
         oldSelectionPath = oldPath;

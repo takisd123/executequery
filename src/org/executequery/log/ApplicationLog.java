@@ -80,6 +80,14 @@ public class ApplicationLog {
     }
 
     /**
+     * Returns whether the log level is set to TRACE.
+     */
+    public boolean isTraceEnabled() {
+    	
+    	return logger().isTraceEnabled();
+    }
+    
+    /**
      * Sets the logger level to that specified.
      *
      * @param level - the logger level to be set.<br>
