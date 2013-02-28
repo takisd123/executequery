@@ -113,20 +113,11 @@ public class DefaultDatabaseSchema extends AbstractDatabaseSource
 
                 _metaTags[i] = metaTags.get(i).getName();
             }
-            
-            DatabaseMetaData dmd = getHost().getDatabaseMetaData();
 
-            String catalogName = null;
-            if (dmd.supportsCatalogsInTableDefinitions()) {
-                
-                catalogName = getCatalogName();
-            }
-
-            String schemaName = null;
-            if (dmd.supportsSchemasInTableDefinitions()) {
-                
-                schemaName = getName();
-            }
+            DatabaseHost databaseHost = getHost();
+            DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
+            String catalogName = databaseHost.getCatalogNameForQueries(getCatalogName());
+            String schemaName = databaseHost.getSchemaNameForQueries(getName());
             
             rs = dmd.getTables(catalogName, schemaName, null, _metaTags);
             if (rs == null) {
@@ -134,8 +125,7 @@ public class DefaultDatabaseSchema extends AbstractDatabaseSource
                 return null;
             }
             
-            List<SimpleDatabaseObject> list = 
-                    new ArrayList<SimpleDatabaseObject>();
+            List<SimpleDatabaseObject> list = new ArrayList<SimpleDatabaseObject>();
             while (rs.next()) {
 
                 SimpleDatabaseObject object = new SimpleDatabaseObject();

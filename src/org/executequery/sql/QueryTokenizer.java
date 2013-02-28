@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import org.executequery.Constants;
 import org.executequery.gui.text.syntax.Token;
 import org.executequery.gui.text.syntax.TokenTypes;
+import org.underworldlabs.util.InterruptedException;
 
 /** 
  *
@@ -86,9 +87,12 @@ public class QueryTokenizer {
 
         for (DerivedQuery derivedQuery : derivedQueries) {
             
-            String noCommentsQuery = 
-                removeAllCommentsFromQuery(derivedQuery.getOriginalQuery());
+            if (Thread.interrupted()) {
+                
+                throw new InterruptedException();
+            }
 
+            String noCommentsQuery = removeAllCommentsFromQuery(derivedQuery.getOriginalQuery());
             derivedQuery.setDerivedQuery(noCommentsQuery.trim());
         }
         
@@ -118,9 +122,13 @@ public class QueryTokenizer {
         int lastIndex = 0;
 
         List<DerivedQuery> queries = new ArrayList<DerivedQuery>();
-        
         while ((index = query.indexOf(QUERY_DELIMITER, index + 1)) != -1) {
 
+            if (Thread.interrupted()) {
+                
+                throw new InterruptedException();
+            }
+            
             if (notInAnyToken(index)) {
 
                 String substring = query.substring(lastIndex, index);
@@ -156,8 +164,7 @@ public class QueryTokenizer {
         addTokensForMatcherWhenNotInString(multiLineCommentMatcher, query, multiLineCommentTokens);
     }
 
-    private void addTokensForMatcherWhenNotInString(Matcher matcher, 
-            String query, List<Token> tokens) {
+    private void addTokensForMatcherWhenNotInString(Matcher matcher, String query, List<Token> tokens) {
         
         tokens.clear();
         matcher.reset(query);

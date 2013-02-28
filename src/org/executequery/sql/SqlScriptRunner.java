@@ -54,7 +54,7 @@ public class SqlScriptRunner {
         
         try {
 
-            executionController.message("Reading input file " + fileName);            
+            executionController.message("Reading input file " + fileName);
             String script = FileUtils.loadFile(fileName);
             
             executionController.message("Scanning and tokenizing queries...");
@@ -68,7 +68,12 @@ public class SqlScriptRunner {
             List<DerivedQuery> executableQueries = new ArrayList<DerivedQuery>();
             
             for (DerivedQuery query : queries) {
-                
+
+                if (Thread.interrupted()) {
+
+                    throw new InterruptedException();
+                }
+
                 if (query.isExecutable()) {
 
                     executableQueries.add(query);
@@ -130,6 +135,10 @@ public class SqlScriptRunner {
            
             sqlStatementResult.setOtherException(e);
 
+        } catch (org.underworldlabs.util.InterruptedException e) {
+            
+            sqlStatementResult.setOtherException(e);
+            
         } finally {
 
             if (statement != null) {

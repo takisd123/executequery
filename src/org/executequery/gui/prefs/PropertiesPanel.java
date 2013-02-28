@@ -410,8 +410,7 @@ public class PropertiesPanel extends JPanel
 
         if (panelMap.containsKey("Colours") && panelMap.get("Colours") instanceof PropertiesEditorBackground) {
 
-            PropertiesEditorBackground panel =
-                    (PropertiesEditorBackground) panelMap.get("Colours");
+            PropertiesEditorBackground panel = (PropertiesEditorBackground) panelMap.get("Colours");
             panel.stopCaretDisplayTimer();
         }
 

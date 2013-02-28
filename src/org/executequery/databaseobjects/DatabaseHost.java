@@ -273,6 +273,8 @@ public interface DatabaseHost extends NamedObject {
 
     String getSchemaNameForQueries(String schemaName);
 
+    boolean hasTablesForType(String catalog, String schema, String type);
+
 }
 
 

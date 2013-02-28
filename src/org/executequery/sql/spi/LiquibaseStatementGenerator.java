@@ -36,6 +36,7 @@ import liquibase.change.core.AddUniqueConstraintChange;
 import liquibase.change.core.CreateTableChange;
 import liquibase.change.core.DropColumnChange;
 import liquibase.change.core.DropForeignKeyConstraintChange;
+import liquibase.change.core.DropNotNullConstraintChange;
 import liquibase.change.core.DropPrimaryKeyChange;
 import liquibase.change.core.DropTableChange;
 import liquibase.change.core.DropUniqueConstraintChange;
@@ -514,7 +515,15 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         if (tableColumn.isRequiredChanged()) {
 
-            sb.append(addNotNullConstraintChange(tableColumn, database));
+            if (tableColumn.isRequired()) {
+                
+                sb.append(addNotNullConstraintChange(tableColumn, database));                
+            
+            } else {
+                
+                sb.append(addNullConstraintChange(tableColumn, database));
+            }
+            
         }
 
         if (tableColumn.isDefaultValueChanged()) {
@@ -552,6 +561,18 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         return generateStatements(columnChange, database);
     }
 
+    private String addNullConstraintChange(DatabaseTableColumn tableColumn, Database database) {
+        
+        DropNotNullConstraintChange columnChange = new DropNotNullConstraintChange();
+        
+        //columnChange.setSchemaName(tableColumn.getSchemaName());
+        columnChange.setTableName(tableColumn.getTable().getName());
+        columnChange.setColumnName(tableColumn.getName());
+        columnChange.setColumnDataType(tableColumn.getFormattedDataType());
+        
+        return generateStatements(columnChange, database);
+    }
+    
     private String addDefaultValueChange(DatabaseTableColumn tableColumn, Database database) {
 
         AddDefaultValueChange columnChange = new AddDefaultValueChange();

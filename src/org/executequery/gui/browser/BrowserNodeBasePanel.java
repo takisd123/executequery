@@ -20,7 +20,6 @@
 
 package org.executequery.gui.browser;
 
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -120,8 +119,8 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
         gbc.insets.right = 5;
         gbc.insets.left = 5;
         gbc.ipady = 5;
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.SOUTHWEST;
         base.add(creatCountPanel(), gbc);
         
         setContentPanel(base);
@@ -129,12 +128,7 @@ abstract class BrowserNodeBasePanel extends AbstractFormObjectViewPanel {
 
     private JPanel creatCountPanel() {
         
-        JPanel panel = new JPanel(new GridBagLayout()) {
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(super.getPreferredSize().width, 100);
-            }
-        };
+        JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         
         gbc.gridy = 0;

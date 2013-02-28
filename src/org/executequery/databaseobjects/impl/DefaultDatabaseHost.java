@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.ConnectionMediator;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.DatabaseCatalog;
@@ -257,6 +258,43 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         }
     }
 
+    public boolean hasTablesForType(String catalog, String schema, String type) {
+        
+        ResultSet rs = null;
+        try {
+            String _catalog = getCatalogNameForQueries(catalog);
+            String _schema = getSchemaNameForQueries(schema);
+            DatabaseMetaData dmd = getDatabaseMetaData();
+
+            rs = dmd.getTables(_catalog, _schema, null, new String[]{type});
+            while(rs.next()) {
+                
+                if (StringUtils.equalsIgnoreCase(type, rs.getString(4))) {
+                    
+                    return true;
+                }
+                
+            }
+            
+            return false;
+            
+        } catch (SQLException e) {
+
+            if (Log.isDebugEnabled()) {
+
+                Log.error("Tables not available for type "
+                        + type + " - driver returned: " + e.getMessage());
+            }
+
+            return false;
+
+        } finally {
+
+            releaseResources(rs);
+        }
+        
+    }
+    
     /**
      * Returns the tables hosted by this host of the specified type and
      * belonging to the specified catalog and schema.

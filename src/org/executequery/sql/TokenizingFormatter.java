@@ -40,7 +40,6 @@ public class TokenizingFormatter {
     public String format(String text) {
 
         List<DerivedQuery> queries = queryTokenizer().tokenize(text);
-
         List<String> formattedQueries = formatQueries(queries);
 
         return rebuildQueryString(formattedQueries);

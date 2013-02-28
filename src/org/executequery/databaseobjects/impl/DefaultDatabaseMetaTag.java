@@ -26,6 +26,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseCatalog;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseMetaTag;
@@ -100,8 +101,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     
     /**
      * Retrieves child objects classified as this tag type.
-     * These may be database tables, functions, procedures, sequences,
-     * views, etc.
+     * These may be database tables, functions, procedures, sequences, views, etc.
      *
      * @return this meta tag's child database objects.
      */
@@ -113,12 +113,11 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
         }
 
         int type = getSubType();
-
         if (type != SYSTEM_FUNCTION) {
 
 
-            if (type == FUNCTION || type == PROCEDURE) {
-    
+            if (isFunctionOrProcedure()) {
+
                 children = loadFunctionsOrProcedures(type);
     
             } else {
@@ -185,9 +184,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
         try {
    
-            String procTerm = getHost().getDatabaseMetaData().getProcedureTerm();
-   
-            if (procTerm != null && getName().equalsIgnoreCase(procTerm)) {
+            if (StringUtils.equalsIgnoreCase(getName(), procedureTerm())) {
    
                 // check what the term is - proc or function
                 if (type == FUNCTION) {
@@ -210,29 +207,114 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     }
 
     public boolean hasChildObjects() throws DataSourceException {
+        
+        if (!isMarkedForReload() && children != null) {
+            
+            return !children.isEmpty();
+        }
 
-        return (getObjects() != null && !getObjects().isEmpty());
+        try {
+        
+            int type = getSubType();
+            if (type != SYSTEM_FUNCTION) {
+                
+                if (isFunctionOrProcedure()) {
+
+                    if (StringUtils.equalsIgnoreCase(getName(), procedureTerm())) {
+    
+                        if (type == FUNCTION) {
+                            
+                            return hasFunctions();
+                        
+                        } else if (type == PROCEDURE) {
+                            
+                            return hasProcedures();
+                        }
+    
+                    }
+    
+                    return false;
+                
+                } else {
+                    
+                    return getHost().hasTablesForType(getCatalogName(), getSchemaName(), getMetaDataKey());                
+                }
+                
+            }
+
+        } catch (SQLException e) {
+            
+            logThrowable(e);
+            return false;
+        }
+        
+        return true;
     }
 
+    private boolean isFunctionOrProcedure() {
+
+        int type = getSubType();
+        return type == FUNCTION || type == PROCEDURE;
+    }
+
+    private String procedureTerm() throws SQLException {
+
+        return getHost().getDatabaseMetaData().getProcedureTerm();
+    }
+
+    private boolean hasFunctions() {
+
+        ResultSet rs = null;
+        try {
+            
+            rs = getFunctionsResultSet();
+            return rs != null && rs.next();
+        
+        } catch (SQLException e) {
+          
+            logThrowable(e);
+            return false;
+
+        } finally {
+
+            releaseResources(rs);
+        }
+    }
+
+    private boolean hasProcedures() {
+        
+        ResultSet rs = null;
+        try {
+
+            rs = getProceduresResultSet();
+            return rs != null && rs.next();
+            
+        } catch (SQLException e) {
+            
+            logThrowable(e);
+            return false;
+            
+        } finally {
+            
+            releaseResources(rs);
+        }
+    }
+    
     /**
      * Loads the database functions.
      */
     private List<NamedObject> getFunctions() throws DataSourceException {
+        
         ResultSet rs = null;
         try {
-            String _catalog = getCatalogName();
-            String _schema = getSchemaName();
-
-            DatabaseMetaData dmd = getHost().getDatabaseMetaData();
-            rs = dmd.getProcedures(_catalog, _schema, null);
-
-            List<NamedObject> list = new ArrayList<NamedObject>();
             
+            rs = getFunctionsResultSet();
+            List<NamedObject> list = new ArrayList<NamedObject>();
             if (rs != null) { // informix returns null rs
             
                 while (rs.next()) {
-                    DefaultDatabaseFunction function = 
-                            new DefaultDatabaseFunction(this, rs.getString(3));
+            
+                    DefaultDatabaseFunction function = new DefaultDatabaseFunction(this, rs.getString(3));
                     function.setRemarks(rs.getString(7));
                     list.add(function);
                 }
@@ -257,23 +339,15 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     private List<NamedObject> getProcedures() throws DataSourceException {
         
         ResultSet rs = null;
-
         try {
 
-            String _catalog = getCatalogName();
-            String _schema = getSchemaName();
-
-            DatabaseMetaData dmd = getHost().getDatabaseMetaData();
-            rs = dmd.getProcedures(_catalog, _schema, null);
-
+            rs = getProceduresResultSet();
             List<NamedObject> list = new ArrayList<NamedObject>();
-
             while (rs.next()) {
 
-                DefaultDatabaseProcedure function = 
-                        new DefaultDatabaseProcedure(this, rs.getString(3));
-                function.setRemarks(rs.getString(7));
-                list.add(function);
+                DefaultDatabaseProcedure procedure = new DefaultDatabaseProcedure(this, rs.getString(3));
+                procedure.setRemarks(rs.getString(7));
+                list.add(procedure);
             }
 
             return list;
@@ -289,11 +363,30 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
         }
     }
 
+    private ResultSet getProceduresResultSet() throws SQLException {
+        
+        String catalogName = getHost().getCatalogNameForQueries(getCatalogName());
+        String schemaName = getHost().getSchemaNameForQueries(getSchemaName());
+        
+        DatabaseMetaData dmd = getHost().getDatabaseMetaData();
+        return dmd.getProcedures(catalogName, schemaName, null);
+    }
+    
+    private ResultSet getFunctionsResultSet() throws SQLException {
+        
+        String catalogName = getHost().getCatalogNameForQueries(getCatalogName());
+        String schemaName = getHost().getSchemaNameForQueries(getSchemaName());
+        
+        DatabaseMetaData dmd = getHost().getDatabaseMetaData();
+        
+        // TODO: 1.6 getFunctions
+        return dmd.getProcedures(catalogName, schemaName, null);
+    }
+
     /**
      * Loads the system function types.
      */
-    private List<NamedObject> getSystemFunctionTypes() 
-        throws DataSourceException {
+    private List<NamedObject> getSystemFunctionTypes() {
 
         List<NamedObject> objects = new ArrayList<NamedObject>(3);
 
@@ -318,7 +411,6 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     public int getSubType() {
 
         String key = getMetaDataKey();
-
         for (int i = 0; i < META_TYPES.length; i++) {
         
             if (META_TYPES[i].equals(key)) {
@@ -361,7 +453,6 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     private String getCatalogName() {
 
         DatabaseCatalog _catalog = getCatalog();
-        
         if (_catalog != null) {
         
             return _catalog.getName();
@@ -386,7 +477,6 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     private String getSchemaName() {
 
         DatabaseSchema _schema = getSchema();
-
         if (_schema != null) {
         
             return _schema.getName();
@@ -447,13 +537,3 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     }
     
 }
-
-
-
-
-
-
-
-
-
-
