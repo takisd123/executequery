@@ -48,10 +48,15 @@ import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
+import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.TableDataChange;
+import org.executequery.event.ApplicationEvent;
+import org.executequery.event.DefaultUserPreferenceEvent;
+import org.executequery.event.UserPreferenceEvent;
+import org.executequery.event.UserPreferenceListener;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.editor.ResultSetTablePopupMenu;
 import org.executequery.gui.resultset.RecordDataItem;
@@ -74,7 +79,8 @@ import org.underworldlabs.util.SystemProperties;
  * @version  $Revision$
  * @date     $Date$
  */
-public class TableDataTab extends JPanel implements ResultSetTableContainer, TableModelListener {
+public class TableDataTab extends JPanel 
+    implements ResultSetTableContainer, TableModelListener, UserPreferenceListener {
 
     private ResultSetTableModel tableModel;
 
@@ -106,7 +112,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
     
     private JLabel canEditTableLabel;
     
-    private boolean alwaysHideCanEditNotePanel;
+    private boolean alwaysShowCanEditNotePanel;
     
     public TableDataTab(boolean displayRowCount) {
 
@@ -135,7 +141,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         canEditTableNoteConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 0,
                 GridBagConstraints.NORTHWEST,
                 GridBagConstraints.HORIZONTAL,
-                new Insets(5, 5, 5, 5), 0, 0);
+                new Insets(5, 5, 0, 5), 0, 0);
 
         scroller = new JScrollPane();
         scrollerConstraints = new GridBagConstraints(1, 2, 1, 1, 1.0, 1.0,
@@ -154,8 +160,10 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 new Insets(0, 5, 5, 5), 0, 0);
         
         tableDataChanges = new ArrayList<TableDataChange>();
-        alwaysHideCanEditNotePanel = SystemProperties.getBooleanProperty(
+        alwaysShowCanEditNotePanel = SystemProperties.getBooleanProperty(
                 Constants.USER_PROPERTIES_KEY, "browser.always.show.table.editable.label");
+        
+        EventMediator.registerListener(this);
     }
 
     private JPanel createCanEditTableNotePanel() {
@@ -165,6 +173,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         canEditTableLabel = new UpdatableLabel();
         JButton hideButton = new LinkButton(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+
                 panel.setVisible(false);
             }
         });
@@ -172,12 +181,14 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
         
         JButton alwaysHideButton = new LinkButton(new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
+
                 panel.setVisible(false);
-                alwaysHideCanEditNotePanel = true;
+                alwaysShowCanEditNotePanel = false;
+
                 SystemProperties.setBooleanProperty(Constants.USER_PROPERTIES_KEY, 
                         "browser.always.show.table.editable.label", false);
-                
-                // need to listen for prefs update
+
+                EventMediator.fireEvent(new DefaultUserPreferenceEvent(TableDataTab.this, null, UserPreferenceEvent.ALL));
                 
             }
         });
@@ -270,10 +281,7 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
                 canEditTableLabel.setText("This table has no primary keys defined and is not editable here");
             }
             
-            if (!alwaysHideCanEditNotePanel) {
-            
-                canEditTableNotePanel.setVisible(true);
-            }
+            canEditTableNotePanel.setVisible(alwaysShowCanEditNotePanel);
 
             ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
@@ -529,6 +537,17 @@ public class TableDataTab extends JPanel implements ResultSetTableContainer, Tab
             return asDatabaseTable().hasTableDataChanges();
         }
         return false;
+    }
+
+    public boolean canHandleEvent(ApplicationEvent event) {
+
+        return (event instanceof UserPreferenceEvent);
+    }
+
+    public void preferencesChanged(UserPreferenceEvent event) {
+
+        alwaysShowCanEditNotePanel = SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "browser.always.show.table.editable.label");        
     }
 
 }

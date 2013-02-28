@@ -48,6 +48,7 @@ public class DatabaseSchemaNode extends DatabaseObjectNode {
      *
      * @return a list of children for this node
      */
+    @SuppressWarnings("rawtypes")
     public List<DatabaseObjectNode> getChildObjects() throws DataSourceException {
 
         if (children != null) {

@@ -166,7 +166,8 @@ public class SqlStatementResult {
     }
     
     public boolean isInterrupted() {
-        return otherException instanceof InterruptedException;  
+        return otherException instanceof InterruptedException 
+                || otherException instanceof org.underworldlabs.util.InterruptedException;
     }
     
     public SQLException getSqlException() {

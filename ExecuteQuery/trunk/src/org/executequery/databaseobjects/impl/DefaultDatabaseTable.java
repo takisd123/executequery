@@ -537,6 +537,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     
     private int applyTableDataChanges() {
 
+        if (!hasTableDataChanges()) {
+            
+            return 1;
+        }
+        
         boolean success = new TableDataChangeExecutor(this).apply(tableDataChanges);
         if (success) {
          

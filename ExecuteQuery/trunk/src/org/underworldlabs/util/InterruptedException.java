@@ -1,5 +1,5 @@
 /*
- * UserPreferenceEvent.java
+ * InterruptedException.java
  *
  * Copyright (C) 2002-2013 Takis Diakoumis
  *
@@ -18,39 +18,33 @@
  *
  */
 
-package org.executequery.event;
+package org.underworldlabs.util;
 
-/** 
+/**
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision:1105 $
+ * @date     $Date:2008-02-08 15:05:55 +0000 (Fri, 08 Feb 2008) $
  */
-public interface UserPreferenceEvent extends ApplicationEvent {
+public final class InterruptedException extends RuntimeException {
 
-    int ALL = 0;
+    public InterruptedException() {
+        super();
+    }
     
-    int QUERY_EDITOR = 1;
-    
-    int TOOL_BAR = 2;
-    
-    int LOG = 3;
- 
-    int PROXY = 4;
+    public InterruptedException(String message, Throwable cause) {
 
-    int KEYBOARD_SHORTCUTS = 5;
+        super(message, cause);
+    }
 
-    int LAYOUT_VIEW = 7;
+    public InterruptedException(String message) {
 
-    int DOCKED_COMPONENT_CLOSED = 8;
-    
-    int DOCKED_COMPONENT_OPENED = 9;
-    
-    /** Method name for preferences changed event */
-    String PREFERENCES_CHANGED = "preferencesChanged";
+        super(message);
+    }
 
-    int getEventType();
-    
-    String getKey();
-    
+    public InterruptedException(Throwable cause) {
+
+        super(cause);
+    }
+
 }

@@ -172,7 +172,6 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
         if (!childrenRetrieved) {
        
             List<DatabaseObjectNode> children = getChildObjects();
-        
             if (children != null) {
             
                 for (int i = 0, n = children.size(); i < n; i++) {
@@ -192,18 +191,23 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
      * @return a list of children for this node
      */
     public List<DatabaseObjectNode> getChildObjects() throws DataSourceException {
+        
         NamedObject _namedObject = getDatabaseObject();
         if (_namedObject != null) {
+
             List<NamedObject> values = _namedObject.getObjects();
             if (values != null) {
-                List<DatabaseObjectNode> nodes = 
-                        new ArrayList<DatabaseObjectNode>();
+
+                List<DatabaseObjectNode> nodes = new ArrayList<DatabaseObjectNode>();
                 for (int i = 0, n = values.size(); i < n; i++) {
+                
                     nodes.add(new DatabaseObjectNode(values.get(i)));
                 }
+                
                 return nodes;
             }
         }
+
         return null;
     }
     
