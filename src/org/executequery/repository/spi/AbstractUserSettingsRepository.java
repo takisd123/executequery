@@ -20,7 +20,7 @@
 
 package org.executequery.repository.spi;
 
-import org.executequery.ApplicationContext;
+import org.executequery.util.UserSettingsProperties;
 
 /**
  *
@@ -30,9 +30,11 @@ import org.executequery.ApplicationContext;
  */
 abstract class AbstractUserSettingsRepository {
 
+    private static final UserSettingsProperties SETTINGS = new UserSettingsProperties();
+    
     protected final String getUserSettingsHomePath() {
 
-        return ApplicationContext.getInstance().getUserSettingsHome();
+        return SETTINGS.getUserSettingsBaseHome();
     }
     
 }

@@ -26,6 +26,10 @@ public final class UserSettingsProperties {
 
     public String getUserSettingsDirectory() {
         
+        /* 
+         * /home/user_name/.executequery/1234
+         */
+        
         StringBuilder sb = new StringBuilder();
 
         sb.append(getUserSettingsBaseHome()).
@@ -34,17 +38,14 @@ public final class UserSettingsProperties {
 
         return sb.toString();
     }
-
+    
     public String getUserSettingsBaseHome() {
+    
+        /* 
+         * /home/user_name/.executequery/
+         */
         
-        StringBuilder sb = new StringBuilder();
-
-        sb.append(userHome()).
-           append(fileSeparator()).
-           append(userSettingsHome()).
-           append(fileSeparator());
-
-        return sb.toString();
+        return ApplicationContext.getInstance().getUserSettingsHome();
     }
 
     private String eqBuild() {
@@ -52,28 +53,9 @@ public final class UserSettingsProperties {
         return ApplicationContext.getInstance().getBuild();
     }
 
-    private String userSettingsHome() {
-
-        return ApplicationContext.getInstance().getUserSettingsDirectoryName();
-    }
-
-    private String userHome() {
-
-        return ApplicationContext.getInstance().getUserHome();
-    }
-    
     private String fileSeparator() {
 
         return System.getProperty("file.separator");
     }
     
 }
-
-
-
-
-
-
-
-
-
