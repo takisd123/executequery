@@ -449,7 +449,7 @@ public final class GUIUtilities {
 
         } else {
 
-            if (register.getOpenDialogCount() > 0) {
+            if (register != null && register.getOpenDialogCount() > 0) {
 
                 List<JDialog> list = register.getOpenDialogs();
 
