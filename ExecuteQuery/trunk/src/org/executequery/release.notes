@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 8 February 2013
+Date: 6 March 2013
 
 Summary of changes - v3.6.1 Build 5218:
 ----------------------------------------
@@ -23,6 +23,8 @@ Summary of changes - v3.6.1 Build 5218:
   Database Browser Table view.  
 - Modified datbase object node loading to check for a single item only and load
   contents on selection from the Database Browser.
+- Modified to allow for custom settings directory supplied as an argument on 
+  startup using: executequery.user.home.dir=[some_path]
 
  
 
@@ -378,4 +380,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-8 February 2013
+6 March 2013

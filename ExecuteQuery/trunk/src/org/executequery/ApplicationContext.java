@@ -33,20 +33,19 @@ public final class ApplicationContext {
 
     private static final String EXECUTEQUERY_BUILD = "executequery.build";
 
-    private static final String EXECUTEQUERY_USER_HOME_DIR = "executequery.user.home.dir";
+    private static final String SETTINGS_DIR = "executequery.user.settings.dir";
+
+    private static final String USER_HOME_DIR = "executequery.user.home.dir";
 
     private static final String USER_HOME = "user.home";
 
-    private static final String[] PROPERTY_OVERRIDES = {EXECUTEQUERY_USER_HOME_DIR};
+    private static final String[] PROPERTY_OVERRIDES = {SETTINGS_DIR, USER_HOME_DIR};
     
     private static ApplicationContext applicationContext;
     
-    private Map<String, String> settingsMap;
-    
-    private ApplicationContext() {
-        
-        settingsMap = new HashMap<String, String>();
-    }
+    private Map<String, String> settings = new HashMap<String, String>();
+
+    private ApplicationContext() {}
 
     public static synchronized ApplicationContext getInstance() {
         
@@ -58,26 +57,34 @@ public final class ApplicationContext {
         return applicationContext;
     }
 
-    public String getUserHome() {
+    private String getUserHome() {
         
         return System.getProperty(USER_HOME);
     }
     
-    public String getUserSettingsDirectoryName() {
+    private String getUserSettingsDirectoryName() {
 
-        return settingsMap.get(EXECUTEQUERY_USER_HOME_DIR);
+        // .executequery
+        
+        return settings.get(SETTINGS_DIR);
     }
 
     public void setUserSettingsDirectoryName(String settingsDirectoryName) {
 
-        settingsMap.put(EXECUTEQUERY_USER_HOME_DIR, settingsDirectoryName);
+        settings.put(SETTINGS_DIR, settingsDirectoryName);
     }
 
     public String getUserSettingsHome() {
 
-        StringBuilder sb = new StringBuilder();
+        // ie. /home/user_name/.executequery/
         
-        sb.append(getUserHome()).
+        if (!settings.containsKey(USER_HOME_DIR)) { // ie. /home/user_name
+        
+            settings.put(USER_HOME_DIR, getUserHome());
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append(settings.get(USER_HOME_DIR)).
             append(fileSeparator()).
             append(getUserSettingsDirectoryName()).
             append(fileSeparator());
@@ -92,12 +99,12 @@ public final class ApplicationContext {
 
     public String getBuild() {
         
-        return settingsMap.get(EXECUTEQUERY_BUILD);
+        return settings.get(EXECUTEQUERY_BUILD);
     }
     
     public void setBuild(String build) {
 
-        settingsMap.put(EXECUTEQUERY_BUILD, build);
+        settings.put(EXECUTEQUERY_BUILD, build);
     }
 
     public void startup(String[] args) {
@@ -112,7 +119,7 @@ public final class ApplicationContext {
 
                     String key = arg.substring(0, index);
                     String value = arg.substring(index + 1);
-                    settingsMap.put(key, value);
+                    settings.put(key, value);
                 }
 
             }

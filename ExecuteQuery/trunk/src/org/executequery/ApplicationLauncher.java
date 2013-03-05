@@ -22,7 +22,6 @@ package org.executequery;
 
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
-import java.io.File;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
@@ -40,7 +39,6 @@ import org.executequery.util.LookAndFeelLoader;
 import org.executequery.util.SystemResources;
 import org.executequery.util.ThreadUtils;
 import org.executequery.util.UserProperties;
-import org.executequery.util.UserSettingsProperties;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.CustomKeyboardFocusManager;
 import org.underworldlabs.swing.PasswordDialog;
@@ -212,14 +210,7 @@ public class ApplicationLauncher {
 
     private boolean displaySplash() {
 
-        UserSettingsProperties settings = new UserSettingsProperties();
-        File settingsHome = new File(settings.getUserSettingsBaseHome());
-        if (settingsHome.exists()) {
-
-            return booleanUserProperty("startup.display.splash");
-        }
-
-        return true;
+        return booleanUserProperty("startup.display.splash");
     }
 
     private boolean hasLocaleSettings() {

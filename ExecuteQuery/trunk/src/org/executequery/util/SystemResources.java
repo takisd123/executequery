@@ -241,7 +241,7 @@ public class SystemResources {
             // whether the equery base dir exists
             boolean equeryDirExists = false;
 
-            // whether the conf dir exists
+            // whether the conf dir exists - build number dir
             boolean confDirExists = false;
             
             // whether the logs dir exists
@@ -254,17 +254,16 @@ public class SystemResources {
             // -- Check for ~/.executequery
             // -------------------------------------------
             if (!equeryDir.exists()) {
-
-                equeryDirExists = equeryDir.mkdirs();
-                // create the conf directory
-                confDirExists = confDir.mkdirs();
+                
+                equeryDirExists = create(equeryDir);
+                confDirExists = create(confDir);
             }            
             // -------------------------------------------
             // -- Check for ~/.executequery/<build_number>
             // -------------------------------------------
             else if (!confDir.exists()) {
                 
-                confDirExists = confDir.mkdirs();
+                confDirExists = create(confDir);
                 copyOldFiles = true;
 
             } else { // they exist
@@ -330,6 +329,7 @@ public class SystemResources {
                 File file = null;
                 // move the above files to the new build dir
                 for (int i = 0; i < oldFiles.length; i++) {
+
                     file = new File(oldFromPath, oldFiles[i]);
                     if (file.exists()) {
                         String path1 = file.getAbsolutePath();
@@ -337,6 +337,7 @@ public class SystemResources {
                         String path2 = file.getAbsolutePath();
                         FileUtils.copyFile(path1, path2);
                     }
+
                 }
 
             }
@@ -348,6 +349,7 @@ public class SystemResources {
             
             if (!equeryDirExists && !confDirExists && !logsDirExists) {
                 
+                error("Error creating profile in user's home directory.\nExiting.");
                 GUIUtilities.displayErrorMessage(
                    "Error creating profile in user's home directory.\nExiting.");
                 System.exit(0);
@@ -513,9 +515,21 @@ public class SystemResources {
         
     }
 
+    private static boolean create(File directory) {
+        
+        info("Attempting to create directory [ " + directory.getAbsolutePath() + " ]");
+
+        boolean created = directory.mkdirs();
+        
+        info("Directory [ " + directory.getAbsolutePath() + " ] created - " + created);
+        
+        return created;
+    }
+    
+    private static final UserSettingsProperties SETTINGS = new UserSettingsProperties();
     private static String userSettingsHome() {
 
-        return ApplicationContext.getInstance().getUserSettingsHome();
+        return SETTINGS.getUserSettingsBaseHome();
     }
 
     private static void removeOldSettingsDirs() {
@@ -578,6 +592,16 @@ public class SystemResources {
         return settings.getUserSettingsDirectory();
     }
    
+    private static void info(String message) {
+        
+        System.out.println("INFO: " + message);        
+    }
+    
+    private static void error(String message) {
+        
+        System.out.println("ERROR: " + message);        
+    }
+    
 }
 
 
