@@ -120,23 +120,22 @@ public class AutoCompleteListItem {
         
         if (!hasTables) { // ??? hhhmmmmmm
             
-            return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+            return getInsertionValue().regionMatches(true, 0, prefix, 0, prefix.length());
         }
         
         if (parentName != null) { // shouldn't here but does TODO:
         
-            String tableName = parentName.toUpperCase();
-            
             for (QueryTable table : tables) {
                 
-                if (tableName.equals(table.getCompareName().toUpperCase())) {
+                String name = table.getCompareName();
+                if (parentName.regionMatches(true, 0, name, 0, name.length())) {
                 
                     if (StringUtils.isBlank(prefix)) {
                         
                         return true;
                     }
                     
-                    return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+                    return getInsertionValue().regionMatches(true, 0, prefix, 0, prefix.length());
                 }
                 
             }
