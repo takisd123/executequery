@@ -447,7 +447,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
                 return 1;
             }
 
-            return o1.getValue().toUpperCase().compareTo(o2.getValue().toUpperCase());
+            return o1.getUpperCaseValue().compareTo(o2.getUpperCaseValue());
         }
 
     }
