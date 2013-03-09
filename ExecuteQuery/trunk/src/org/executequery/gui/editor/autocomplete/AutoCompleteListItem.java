@@ -37,6 +37,10 @@ public class AutoCompleteListItem {
 
     private final String parentName;
 
+    private String upperCaseValue;
+
+    private String insertionValue;
+    
     public AutoCompleteListItem(String value, String displayValue, String description,
             AutoCompleteListItemType type) {
 
@@ -88,18 +92,31 @@ public class AutoCompleteListItem {
         return value;
     }
 
+    public String getUpperCaseValue() {
+        if (upperCaseValue == null) {
+
+            upperCaseValue = value.toUpperCase();
+        }
+        return upperCaseValue;
+    }
+    
     public String getInsertionValue() {
         
-        if (type.isTableColumn()) {
+        if (insertionValue == null) {
             
-            int dotIndex = value.indexOf('.');
-            return value.substring(dotIndex + 1);
-        
-        } else {
+            if (type.isTableColumn()) {
+                
+                int dotIndex = value.indexOf('.');
+                insertionValue = value.substring(dotIndex + 1);
             
-            return value;
+            } else {
+                
+                insertionValue = value;
+            }
+
         }
-        
+
+        return insertionValue;
     }
     
     public boolean isForPrefix(List<QueryTable> tables, String prefix, boolean prefixHadAlias) {
@@ -114,7 +131,7 @@ public class AutoCompleteListItem {
             
             if (!hasTables || !type.isTable()) { // keyword
 
-                return getInsertionValue().toUpperCase().startsWith(prefix, 0);
+                return getUpperCaseValue().startsWith(prefix, 0);
             }
         }
         
