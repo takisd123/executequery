@@ -183,20 +183,20 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                             case Types.DATE:
                                 value.setValue(resultSet.getDate(i));
                                 break;
-                            case Types.TIMESTAMP:
-                                value.setValue(resultSet.getTimestamp(i));
-                                break;
                             case Types.TIME:
                                 value.setValue(resultSet.getTime(i));
                                 break;
-                            case Types.CLOB:
+                            case Types.TIMESTAMP:
+                                value.setValue(resultSet.getTimestamp(i));
+                                break;
                             case Types.LONGVARCHAR:
+                            case Types.CLOB:
                                 value.setValue(resultSet.getClob(i));
                                 break;
-                            case Types.BLOB:
-                            case Types.BINARY:
-                            case Types.VARBINARY:
                             case Types.LONGVARBINARY:
+                            case Types.VARBINARY:
+                            case Types.BINARY:
+                            case Types.BLOB:
                                 value.setValue(resultSet.getBlob(i));
                                 break;
                             default:
@@ -571,29 +571,29 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             case Types.TINYINT:
                 return Byte.class;
     
-            case Types.SMALLINT:
-                return Short.class;
-    
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BIT:
-            case Types.BOOLEAN: // don't display the checkbox
-                return String.class;
-    
-            case Types.INTEGER:
-                return Integer.class;
-    
-            case Types.DECIMAL:
-            case Types.NUMERIC:
-                return BigDecimal.class;
-    
             case Types.BIGINT:
                 return Long.class;
     
+            case Types.SMALLINT:
+                return Short.class;
+    
+            case Types.BIT:
+            case Types.LONGVARCHAR:
+            case Types.CHAR:
+            case Types.VARCHAR:
+            case Types.BOOLEAN: // don't display the checkbox
+                return String.class;
+    
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                return BigDecimal.class;
+    
+            case Types.INTEGER:
+                return Integer.class;
+                
             case Types.DATE:
-            case Types.TIMESTAMP:
             case Types.TIME:
+            case Types.TIMESTAMP:
                 return java.util.Date.class;
     
             case Types.REAL:

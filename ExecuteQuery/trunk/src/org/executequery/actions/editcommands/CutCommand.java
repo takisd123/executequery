@@ -26,13 +26,6 @@ import org.executequery.GUIUtilities;
 import org.executequery.gui.text.TextEditor;
 import org.underworldlabs.swing.actions.BaseCommand;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * <p>Performs the 'CUT' command and those objects
  *  implementing <code>TextEditor</code>.

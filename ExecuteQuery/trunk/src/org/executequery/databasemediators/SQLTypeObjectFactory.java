@@ -22,13 +22,17 @@ public class SQLTypeObjectFactory {
                 valueAsType = Byte.valueOf(valueAsString);
                 break;
         
+            case Types.BIGINT:
+                valueAsType = Long.valueOf(valueAsString);
+                break;
+
             case Types.SMALLINT:
                 valueAsType = Short.valueOf(valueAsString);
                 break;
         
+            case Types.LONGVARCHAR:
             case Types.CHAR:
             case Types.VARCHAR:
-            case Types.LONGVARCHAR:
                 valueAsType = valueAsString;
                 break;
         
@@ -37,38 +41,34 @@ public class SQLTypeObjectFactory {
                 valueAsType = Boolean.valueOf(valueAsString);
                 break;
         
-            case Types.BIGINT:
-                valueAsType = Long.valueOf(valueAsString);
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                valueAsType = new BigDecimal(valueAsString);
                 break;
-        
+                
+            case Types.INTEGER:
+                valueAsType = Integer.valueOf(valueAsString);
+                break;
+                
             case Types.REAL:
                 valueAsType = Float.valueOf(valueAsString);
                 break;
         
-            case Types.INTEGER:
-                valueAsType = Integer.valueOf(valueAsString);
-                break;
-        
-            case Types.DECIMAL:
-            case Types.NUMERIC:
-                valueAsType = new BigDecimal(valueAsString);
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                valueAsType = Double.valueOf(valueAsString);
                 break;
 
             case Types.DATE:
                 valueAsType = stringAsDate(valueAsString);
                 break;
 
-            case Types.TIMESTAMP:
-                valueAsType = stringAsTimestamp(valueAsString);
-                break;
-                
             case Types.TIME:
                 valueAsType = stringAsTime(valueAsString);
                 break;
-
-            case Types.FLOAT:
-            case Types.DOUBLE:
-                valueAsType = Double.valueOf(valueAsString);
+                
+            case Types.TIMESTAMP:
+                valueAsType = stringAsTimestamp(valueAsString);
                 break;
 
         }

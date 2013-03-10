@@ -226,12 +226,12 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         boolean isDateValue = false;
         Color color = Color.WHITE;
         int sqlType = recordDataItem.getDataType();
-
+        
         switch (sqlType) {
 
+            case Types.LONGVARCHAR:
             case Types.CHAR:
             case Types.VARCHAR:
-            case Types.LONGVARCHAR:
             case Types.CLOB:
                 color = charValueDisplayColor;
                 break;
@@ -241,29 +241,29 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
                 color = booleanValueDisplayColor;
                 break;
 
-            case Types.BIGINT:
-            case Types.REAL:
-            case Types.INTEGER:
-            case Types.DECIMAL:
-            case Types.NUMERIC:
             case Types.TINYINT:
+            case Types.BIGINT:
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+            case Types.INTEGER:
             case Types.SMALLINT:
             case Types.FLOAT:
+            case Types.REAL:
             case Types.DOUBLE:
                 color = numericValueDisplayColor;
                 break;
 
             case Types.DATE:
-            case Types.TIMESTAMP:
             case Types.TIME:
+            case Types.TIMESTAMP:
                 color = dateValueDisplayColor;
                 isDateValue = true;
                 break;
 
-            case Types.BLOB:
-            case Types.BINARY:
-            case Types.VARBINARY:
             case Types.LONGVARBINARY:
+            case Types.VARBINARY:
+            case Types.BINARY:
+            case Types.BLOB:
                 color = blobValueDisplayColor;
 
             default:
@@ -399,6 +399,5 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
     public void firePropertyChange(String propertyName, boolean oldValue, boolean newValue) {}
     protected void firePropertyChange(String propertyName, Object oldValue, Object newValue) {}
 
+    
 }
-
-

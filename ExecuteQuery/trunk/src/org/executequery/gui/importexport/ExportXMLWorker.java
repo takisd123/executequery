@@ -452,27 +452,27 @@ public class ExportXMLWorker extends AbstractImportExportWorker
                             type = columns.get(i).getSQLType();
                             
                             switch (type) {
-                                case Types.TINYINT:
-                                case Types.SMALLINT:
-                                case Types.CHAR:
-                                case Types.VARCHAR:
-                                case Types.LONGVARCHAR:
                                 case Types.BIT:
-                                case Types.BOOLEAN:
+                                case Types.TINYINT:
                                 case Types.BIGINT:
-                                case Types.REAL:
-                                case Types.DECIMAL:
+                                case Types.LONGVARCHAR:
+                                case Types.CHAR:
                                 case Types.NUMERIC:
-                                case Types.FLOAT:
-                                case Types.DOUBLE:
+                                case Types.DECIMAL:
                                 case Types.INTEGER:
+                                case Types.SMALLINT:
+                                case Types.FLOAT:
+                                case Types.REAL:
+                                case Types.DOUBLE:
+                                case Types.VARCHAR:
+                                case Types.BOOLEAN:
 
                                     value = rs.getString(i+1);
                                     break;
 
                                 case Types.DATE:
-                                case Types.TIMESTAMP:
                                 case Types.TIME:
+                                case Types.TIMESTAMP:
 
                                     if (parseDateValues && dateFormat != null) {
 
@@ -484,10 +484,10 @@ public class ExportXMLWorker extends AbstractImportExportWorker
                                     }
                                     break;
 
+                                case Types.LONGVARBINARY:
+                                case Types.BINARY:
                                 case Types.BLOB:
                                 case Types.CLOB:
-                                case Types.BINARY:
-                                case Types.LONGVARBINARY:
 
                                     value = Base64.encodeBytes(
                                             MiscUtils.inputStreamToBytes(

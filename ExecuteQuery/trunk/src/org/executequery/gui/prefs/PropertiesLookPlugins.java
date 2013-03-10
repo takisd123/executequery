@@ -60,14 +60,6 @@ import org.executequery.repository.LookAndFeelProperties;
 import org.underworldlabs.swing.FileSelector;
 import org.underworldlabs.util.MiscUtils;
 
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis

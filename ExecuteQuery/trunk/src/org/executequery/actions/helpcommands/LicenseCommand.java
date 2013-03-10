@@ -25,13 +25,6 @@ import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.InformationDialog;
 import org.underworldlabs.swing.actions.BaseCommand;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** 
  * The Help | License command execution.
  *

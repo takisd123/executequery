@@ -505,9 +505,7 @@ public class KeywordsDockedPanel extends AbstractDockedTabActionPanel
      */
     private class KeywordComparator implements Comparator<SqlKeyword> {
         public int compare(SqlKeyword obj1, SqlKeyword obj2) {
-            String text1 = obj1.getText();
-            String text2 = obj2.getText();
-            return text1.compareTo(text2);
+            return obj1.getText().compareTo(obj2.getText());
         }
     } // class KeywordComparator
     

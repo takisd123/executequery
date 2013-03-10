@@ -358,22 +358,22 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         
         switch (columnType) {
 
+            case Types.LONGVARCHAR:
             case Types.CHAR:
             case Types.VARCHAR:
-            case Types.LONGVARCHAR:
                 return "'" + formatString(value.toString()) + "'";
 
             case Types.DATE:
-            case Types.TIMESTAMP:
             case Types.TIME:
+            case Types.TIMESTAMP:
                 return "'" + value.toString() + "'";
             
             // TODO: not really sure how well this will work with blobs et al
 
+            case Types.LONGVARBINARY:
+            case Types.BINARY:
             case Types.BLOB:
             case Types.CLOB:
-            case Types.BINARY:
-            case Types.LONGVARBINARY:
                 return Base64.encodeBytes(
                         MiscUtils.inputStreamToBytes(rs.getBinaryStream(index)));
 
@@ -382,16 +382,16 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
                 return boolValue ? "true" : "false";
 
-            case Types.TINYINT:
-            case Types.SMALLINT:
             case Types.BIT:
+            case Types.TINYINT:
             case Types.BIGINT:
-            case Types.REAL:
-            case Types.DECIMAL:
             case Types.NUMERIC:
-            case Types.FLOAT:
-            case Types.DOUBLE:
+            case Types.DECIMAL:
             case Types.INTEGER:
+            case Types.SMALLINT:
+            case Types.FLOAT:
+            case Types.REAL:
+            case Types.DOUBLE:
                     return value.toString();
 
             default:

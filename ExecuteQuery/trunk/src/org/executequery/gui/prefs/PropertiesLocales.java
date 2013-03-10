@@ -23,7 +23,6 @@ package org.executequery.gui.prefs;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Locale;
@@ -36,10 +35,11 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import org.executequery.GUIUtilities;
-import org.underworldlabs.util.SystemProperties;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.util.StringSorter;
+import org.underworldlabs.util.SystemProperties;
 
 /**
  *
@@ -186,24 +186,7 @@ public class PropertiesLocales extends PropertiesBasePanel
 
         public int compare(Locale loc1, Locale loc2) {
 
-            String value1 = loc1.getDisplayName();
-            String value2 = loc2.getDisplayName();
-            
-            int result = value1.compareTo(value2);
-
-            if (result < 0) {
-                
-                return -1;
-
-            } else if (result > 0) {
-                
-                return 1;
-
-            } else {
-             
-                return 0;
-            }
-            
+            return loc1.getDisplayName().compareTo(loc2.getDisplayName());
         }
         
     } // class LocalesComparator

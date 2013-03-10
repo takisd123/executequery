@@ -615,21 +615,7 @@ public class PropertiesKeyShortcuts extends PropertiesBasePanel
 
         public int compare(ShortcutKey key1, ShortcutKey key2) {
             
-            int result = key1.label.compareTo(key2.label);
-
-            if (result < 0) {
-                
-                return -1;
-
-            } else if (result > 0) {
-                
-                return 1;
-
-            } else {
-
-                return 0;
-            }
-
+            return key1.label.compareTo(key2.label);
         }
         
     } // ShortcutKeyComparator

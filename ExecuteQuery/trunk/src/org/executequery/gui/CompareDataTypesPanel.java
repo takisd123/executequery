@@ -856,19 +856,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         public int compare(Object obj1, Object obj2) {
             List<String> row1 = (List<String>)obj1;
             List<String> row2 = (List<String>)obj2;
-            
-            String value1 = row1.get(NAME_COLUMN - 1);
-            String value2 = row2.get(NAME_COLUMN - 1);
-
-            int result = value1.compareTo(value2);
-
-            if (result < 0) {
-                return -1;
-            } else if (result > 0) {
-                return 1;
-            } else {
-                return 0;
-            }
+            return row1.get(NAME_COLUMN - 1).compareTo(row2.get(NAME_COLUMN - 1));
         }
 
     }

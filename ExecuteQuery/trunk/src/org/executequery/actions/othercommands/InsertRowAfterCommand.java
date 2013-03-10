@@ -27,13 +27,6 @@ import org.executequery.GUIUtilities;
 import org.executequery.gui.browser.BrowserViewPanel;
 import org.executequery.gui.table.TableFunction;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Inserts a table row within relevant table type
  *  functions (ie. browser, create table, etc) after the
  *  currently selected row.
