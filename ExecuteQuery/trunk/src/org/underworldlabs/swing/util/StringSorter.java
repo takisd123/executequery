@@ -34,21 +34,7 @@ public final class StringSorter implements Comparator<String>, Serializable {
 
     public int compare(String value1, String value2) {
 
-        int result = value1.compareTo(value2);
-
-        if (result < 0) {
-
-            return -1;
-
-        } else if (result > 0) {
-        
-            return 1;
-
-        } else {
-        
-            return 0;
-        }
-
+        return value1.compareTo(value2);
     }
     
 }
