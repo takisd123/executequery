@@ -115,6 +115,9 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
         queryEditor.addConnectionChangeListener(this);
         queryEditorTextComponent().addFocusListener(this);
+        
+        autoCompletePopupAction = new AutoCompletePopupAction(this);
+        autoCompleteListItems = new ArrayList<AutoCompleteListItem>();
     }
 
     public void setAutoCompleteOptionFlags() {
@@ -131,11 +134,6 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     
     public Action getPopupAction() {
 
-        if (autoCompletePopupAction == null) {
-
-            autoCompletePopupAction = new AutoCompletePopupAction(this);
-        }
-
         return autoCompletePopupAction;
     }
 
@@ -150,12 +148,6 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
             addFocusActions();
             
-            if (autoCompleteListItems == null) {
-             
-                autoCompleteListItems = new ArrayList<AutoCompleteListItem>();
-            
-            } 
-
             resetCount = 0;
             captureAndResetListValues();
 

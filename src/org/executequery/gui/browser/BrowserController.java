@@ -60,7 +60,7 @@ public class BrowserController {
     public static final int UPDATE_CANCELLED = 99;
 
     /** the meta data retrieval object */
-    private MetaDataValues metaData;
+    private final MetaDataValues metaData;
 
     /** query sender object */
     private StatementExecutor querySender;
@@ -75,6 +75,7 @@ public class BrowserController {
     public BrowserController(ConnectionsTreePanel treePanel) {
         this.treePanel = treePanel;
         viewPanel = new BrowserViewPanel(this);
+        metaData = new MetaDataValues(true);
     }
 
     /**
@@ -585,7 +586,6 @@ public class BrowserController {
      */
     protected Vector<String> getHostedSchemas(DatabaseConnection dc) {
         try {
-            checkMetaDataObject();
             metaData.setDatabaseConnection(dc);
             return metaData.getHostedSchemasVector();
         }
@@ -601,7 +601,6 @@ public class BrowserController {
     protected Vector<String> getColumnNamesVector(DatabaseConnection dc,
                                                   String table, String schema) {
         try {
-            checkMetaDataObject();
             metaData.setDatabaseConnection(dc);
             return metaData.getColumnNamesVector(table, schema);
         }
@@ -637,7 +636,6 @@ public class BrowserController {
      */
     protected Vector<String> getTables(DatabaseConnection dc, String schema) {
         try {
-            checkMetaDataObject();
             metaData.setDatabaseConnection(dc);
             return metaData.getSchemaTables(schema);
         }
@@ -649,7 +647,6 @@ public class BrowserController {
 
     protected ColumnData[] getColumnData(String catalog, String schema, String name) {
         try {
-            checkMetaDataObject();
             metaData.setDatabaseConnection(getDatabaseConnection());
             return metaData.getColumnMetaData(
                     isUsingCatalogs() ? catalog : null, schema, name);
@@ -667,20 +664,10 @@ public class BrowserController {
      */
     protected void recycleConnection(DatabaseConnection dc) {
         try {
-            checkMetaDataObject();
             metaData.recycleConnection(dc);
         }
         catch (DataSourceException e) {
             handleException(e);
-        }
-    }
-
-    /**
-     * Ensures the meta data object is initialised.
-     */
-    private void checkMetaDataObject() {
-        if (metaData == null) {
-            metaData = new MetaDataValues(true);
         }
     }
 

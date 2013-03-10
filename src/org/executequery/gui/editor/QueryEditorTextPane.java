@@ -458,6 +458,7 @@ public class QueryEditorTextPane extends SQLTextPane
         // set to insert mode
         document.setInsertMode(SqlMessages.INSERT_MODE);
 
+        editorShortcuts = new HashMap<String, EditorSQLShortcut>();
         loadEditorShortcuts();
     }
 
@@ -1174,13 +1175,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
     private void loadEditorShortcuts() {
 
-        if (editorShortcuts == null) {
-
-            editorShortcuts = new HashMap<String, EditorSQLShortcut>();
-        }
-
         List<EditorSQLShortcut> shortcuts = EditorSQLShortcuts.getInstance().getEditorShortcuts();
-
         for (EditorSQLShortcut editorSQLShortcut : shortcuts) {
 
             editorShortcuts.put(editorSQLShortcut.getShortcut(), editorSQLShortcut);

@@ -552,8 +552,7 @@ public class QueryEditorTextPanel extends JPanel {
 
         if (sqlCommentMatcher == null) {
 
-            sqlCommentMatcher = Pattern.compile(
-                    SQL_COMMENT_REGEX).matcher("");
+            sqlCommentMatcher = Pattern.compile(SQL_COMMENT_REGEX).matcher("");
         }
 
         return sqlCommentMatcher;

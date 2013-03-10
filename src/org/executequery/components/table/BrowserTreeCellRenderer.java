@@ -261,7 +261,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
 
             setForeground(selectedTextForeground);
             Color background = UIManager.getColor("Tree.dropCellBackground");
-            if (background == null) {                
+            if (background == null) {
                 background = UIUtils.getBrighter(getBackgroundSelectionColor(), 0.87);
             }
             setBackgroundSelectionColor(background);

@@ -28,7 +28,3 @@ public class SimpleRecordDataItem extends AbstractRecordDataItem {
 	}
 
 }
-
-
-
-
