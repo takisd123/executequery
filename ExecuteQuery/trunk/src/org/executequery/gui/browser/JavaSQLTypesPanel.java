@@ -58,7 +58,6 @@ public class JavaSQLTypesPanel extends ConnectionPropertiesPanel {
         if (model == null) {
 
             add(new JLabel("Not Available"));
-
             return;
         }
         

@@ -92,6 +92,11 @@ public class LineNumber extends JComponent {
                                           component.getFont()).getAscent();
         }
 
+        ImageIcon icon = GUIUtilities.loadIcon("ExecutingPointer.png", true);
+        iconWidth = icon.getIconWidth();
+        iconHeight = icon.getIconHeight();
+        executingIcon = icon.getImage();
+
         setPreferredWidth(9999);
         totalRows = 1;
     }
@@ -264,16 +269,6 @@ public class LineNumber extends JComponent {
     }
     
     private Image executingIcon() {
-        
-        if (executingIcon == null) {
-
-            ImageIcon icon = GUIUtilities.loadIcon("ExecutingPointer.png", true);
-    
-            iconWidth = icon.getIconWidth();
-            iconHeight = icon.getIconHeight();
-
-            executingIcon = icon.getImage();
-        }
         
         return executingIcon;
     }

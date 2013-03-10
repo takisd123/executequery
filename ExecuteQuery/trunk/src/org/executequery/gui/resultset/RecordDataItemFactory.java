@@ -28,7 +28,7 @@ public class RecordDataItemFactory {
 	public RecordDataItem create(String name, int dataType, String dataTypeName) {
 
 		switch (dataType) {
-
+/*
     		case Types.LONGNVARCHAR:
     		case Types.NCHAR:
     		case Types.NVARCHAR:
@@ -57,12 +57,8 @@ public class RecordDataItemFactory {
     		case Types.SQLXML:
     		case Types.NCLOB:
     		    return new SimpleRecordDataItem(name, dataType, dataTypeName);
-		
-    		case Types.DATE:
-    		case Types.TIME:
-    		case Types.TIMESTAMP:
-    		    return new DateRecordDataItem(name, dataType, dataTypeName);
-    		    
+*/
+
     		case Types.LONGVARCHAR:
 	        case Types.CLOB:
 	        	return new ClobRecordDataItem(name, dataType, dataTypeName);
@@ -72,10 +68,17 @@ public class RecordDataItemFactory {
 	        case Types.BINARY:
 	        case Types.BLOB:
 	        	return new BlobRecordDataItem(name, dataType, dataTypeName);
+	        	
+	        case Types.DATE:
+	        case Types.TIME:
+	        case Types.TIMESTAMP:
+	            return new DateRecordDataItem(name, dataType, dataTypeName);
+	            
+        	default:
+        	    return new SimpleRecordDataItem(name, dataType, dataTypeName);
 
 		}
 
-		return new SimpleRecordDataItem(name, dataType, dataTypeName);
 	}
 	
 }

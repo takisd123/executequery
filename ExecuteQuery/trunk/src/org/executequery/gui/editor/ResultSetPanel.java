@@ -72,9 +72,7 @@ public class ResultSetPanel extends JPanel {
     public ResultSetPanel(ResultSetTableContainer resultSetTableContainer) {
 
         super(new BorderLayout());
-
         this.resultSetTableContainer = resultSetTableContainer;
-
         init();
     }
 

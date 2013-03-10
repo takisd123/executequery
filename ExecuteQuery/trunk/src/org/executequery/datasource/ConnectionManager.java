@@ -47,6 +47,9 @@ public final class ConnectionManager {
 
     /** the connection 'container' */
     private static Map<DatabaseConnection, ConnectionPool> connectionPools;
+    static {
+        connectionPools = new HashMap<DatabaseConnection, ConnectionPool>();
+    }
 
     /**
      * Creates a stored data source for the specified database
@@ -88,11 +91,6 @@ public final class ConnectionManager {
 
 //        pool.ensureCapacity();
 
-        if (connectionPools == null) {
-
-            connectionPools = new HashMap<DatabaseConnection, ConnectionPool>();
-        }
-
         connectionPools.put(databaseConnection, pool);
         databaseConnection.setConnected(true);
 
@@ -114,8 +112,7 @@ public final class ConnectionManager {
 
         synchronized (databaseConnection) {
 
-            if (connectionPools == null ||
-                    !connectionPools.containsKey(databaseConnection)) {
+            if (connectionPools == null || !connectionPools.containsKey(databaseConnection)) {
 
                 createDataSource(databaseConnection);
             }

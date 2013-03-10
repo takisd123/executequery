@@ -128,6 +128,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             setTableProperties();
         }
 
+        outputTabIcon = GUIUtilities.loadIcon("SystemOutput.png", true);
+        resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.png", true);
+        
         resultSetTableColumnResizingManager = new ResultSetTableColumnResizingManager();
 
         addChangeListener(this);
@@ -210,11 +213,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     private void addTextOutputTab() {
 
         if (indexOfTab(OUTPUT_TAB_TITLE) == -1) {
-
-            if (outputTabIcon == null) {
-
-                outputTabIcon = GUIUtilities.loadIcon("SystemOutput.png", true);
-            }
 
             insertTab(OUTPUT_TAB_TITLE, outputTabIcon, outputTextPane, "Database output", 0);
         }
@@ -445,11 +443,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     }
 
     private Icon resulSetTabIcon() {
-
-        if (resultSetTabIcon == null) {
-
-            resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.png", true);
-        }
 
         return resultSetTabIcon;
     }

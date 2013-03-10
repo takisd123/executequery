@@ -222,7 +222,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
                 tableData.add(rowData);
 
-                if (recordCount == maxRecords) {
+                if (maxRecords > 0 && recordCount == maxRecords) {
 
                     break;
                 }

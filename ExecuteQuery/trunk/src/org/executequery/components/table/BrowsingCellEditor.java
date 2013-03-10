@@ -260,11 +260,12 @@ public abstract class BrowsingCellEditor extends DefaultCellEditor
         Object[] listeners = listenerList.getListenerList();
         // Process the listeners last to first, notifying
         // those that are interested in this event
-        for (int i = listeners.length-2; i>=0; i-=2) {
-            if (listeners[i]==CellEditorListener.class) {
+        for (int i = listeners.length - 2; i >= 0; i -= 2) {
+            if (listeners[i] == CellEditorListener.class) {
                 // Lazily create the event:
-                if (changeEvent == null)
+                if (changeEvent == null) {
                     changeEvent = new ChangeEvent(this);
+                }
                 ((CellEditorListener)listeners[i+1]).editingStopped(changeEvent);
             }
         }

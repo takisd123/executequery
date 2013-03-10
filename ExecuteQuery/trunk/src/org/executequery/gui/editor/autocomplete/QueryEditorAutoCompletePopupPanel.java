@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
+import org.executequery.Constants;
 import org.executequery.gui.editor.TypeAheadList;
 import org.executequery.gui.editor.TypeAheadListProvider;
 import org.underworldlabs.swing.plaf.UIUtils;
@@ -78,7 +79,8 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements Typ
                 reset();
             }
         });
-
+        
+        listeners = new ArrayList<AutoCompletePopupListener>();
     }
 
     public String getSelectedValue() {
@@ -89,7 +91,7 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements Typ
             return selectedValue.toString();
         }
 
-        return "";
+        return Constants.EMPTY;
     }
 
     public Object getSelectedItem() {
@@ -99,10 +101,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements Typ
 
     public void addAutoCompletePopupListener(AutoCompletePopupListener autoCompletePopupListener) {
 
-        if (listeners == null) {
-
-            listeners = new ArrayList<AutoCompletePopupListener>();
-        }
         listeners.add(autoCompletePopupListener);
     }
 

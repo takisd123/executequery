@@ -162,14 +162,14 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
         int sqlType = recordDataItem.getDataType();
         switch (sqlType) {
 
-            case Types.BIGINT:
-            case Types.REAL:
-            case Types.INTEGER:
-            case Types.DECIMAL:
-            case Types.NUMERIC:
             case Types.TINYINT:
+            case Types.BIGINT:
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+            case Types.INTEGER:
             case Types.SMALLINT:
             case Types.FLOAT:
+            case Types.REAL:
             case Types.DOUBLE:
                 setHorizontalAlignment(SwingConstants.RIGHT);
                 break;
