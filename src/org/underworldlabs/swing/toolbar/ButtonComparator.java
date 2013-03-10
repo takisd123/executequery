@@ -31,16 +31,8 @@ import java.util.Comparator;
 public class ButtonComparator implements Comparator<ToolBarButton> {
     
     public int compare(ToolBarButton obj1, ToolBarButton obj2) {
-        int first = obj1.getOrder();
-        int second = obj2.getOrder();
-        
-        if (first < second)
-            return -1;
-        else if (first > second)
-            return 1;
-        else
-            return 0;
-        
+
+        return obj1.getOrder() - obj2.getOrder();
     }
     
 }
