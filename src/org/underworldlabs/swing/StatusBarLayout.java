@@ -298,23 +298,11 @@ public class StatusBarLayout implements LayoutManager2, Serializable {
 
     class ConstraintsComparator implements Comparator {
         
-        /** <p>Compares the two objects. */
         public int compare(Object obj1, Object obj2) {
+
             StatusBarLayoutConstraints cons1 = (StatusBarLayoutConstraints)obj1;
             StatusBarLayoutConstraints cons2 = (StatusBarLayoutConstraints)obj2;
-           
-            int index1 = cons1.getIndex();
-            int index2 = cons2.getIndex();
-            
-            if (index1 < index2) {
-                return -1;
-            }
-            else if (index1 > index2) {
-                return 1;
-            }
-            else {
-                return 0;
-            }
+            return cons1.getIndex() -  cons2.getIndex();
         }
     }
 
