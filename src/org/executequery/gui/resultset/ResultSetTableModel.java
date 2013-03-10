@@ -51,9 +51,6 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class ResultSetTableModel extends AbstractSortableTableModel {
 
-    /** The column types */
-    private int[] columnTypes;
-
     /** Whether the meta data should be generated */
     private boolean holdMetaData;
 
@@ -87,6 +84,9 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public ResultSetTableModel(ResultSet resultSet, int maxRecords) {
 
         this.maxRecords = maxRecords;
+
+        columnHeaders = new ArrayList<String>();
+        tableData = new ArrayList<List<RecordDataItem>>();
         recordDataItemFactory = new RecordDataItemFactory();
 
         holdMetaData = UserProperties.getInstance().getBooleanProperty("editor.results.metadata");
@@ -116,31 +116,21 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
             resetMetaData();
             ResultSetMetaData rsmd = resultSet.getMetaData();
+
+            columnHeaders.clear();
+            tableData.clear();
+
+            int zeroBaseIndex = 0;
             int count = rsmd.getColumnCount();
+            int[] columnTypes = new int[count];
+            String[] columnTypeNames = new String[count];
 
-            if (columnHeaders != null) {
-
-                columnHeaders.clear();
-
-            } else {
-
-                columnHeaders = new ArrayList<String>(count);
-            }
-
-            if (tableData != null) {
-
-                tableData.clear();
-
-            } else {
-
-                tableData = new ArrayList<List<RecordDataItem>>();
-            }
-
-            columnTypes = new int[count];
             for (int i = 1; i <= count; i++) {
 
+                zeroBaseIndex = i - 1;
                 columnHeaders.add(rsmd.getColumnName(i));
-                columnTypes[i - 1] = rsmd.getColumnType(i);
+                columnTypes[zeroBaseIndex] = rsmd.getColumnType(i);
+                columnTypeNames[zeroBaseIndex] = rsmd.getColumnTypeName(i);
             }
 
             int recordCount = 0;
@@ -159,15 +149,16 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 rowData = new ArrayList<RecordDataItem>(count);
 
                 for (int i = 1; i <= count; i++) {
-                    
+
+                    zeroBaseIndex = i - 1;
                 	RecordDataItem value = recordDataItemFactory.create(
-                			columnHeaders.get(i - 1),
-                            rsmd.getColumnType(i),
-                            rsmd.getColumnTypeName(i));
+                			columnHeaders.get(zeroBaseIndex),
+                            columnTypes[zeroBaseIndex],
+                            columnTypeNames[zeroBaseIndex]);
 
                     try {
 
-                        int dataType = columnTypes[i - 1];
+                        int dataType = columnTypes[zeroBaseIndex];
                         switch (dataType) {
 
                             // some drivers (informix for example)
@@ -217,9 +208,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
                             // noticed with invalid date formatted values in mysql
                             
-                            value.setValue("<Error - " 
-                                    + sqlException.getMessage() + ">");
-                            
+                            value.setValue("<Error - " + sqlException.getMessage() + ">");
                         }
                     }
 
@@ -245,9 +234,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                 setMetaDataVectors(rsmd);
             }
 
-            Log.trace("Finished populating table model - " + recordCount + " rows - [ " 
-                    + MiscUtils.formatDuration(System.currentTimeMillis() - time) + "]");
+            if (Log.isTraceEnabled()) {
             
+                Log.trace("Finished populating table model - " + recordCount + " rows - [ " 
+                        + MiscUtils.formatDuration(System.currentTimeMillis() - time) + "]");
+            }
+
             fireTableStructureChanged();
 
         } catch (SQLException e) {
