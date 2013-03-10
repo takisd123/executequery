@@ -388,14 +388,19 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                     prepStmnt.setShort(index, _byte);
                     break;
 
+                case Types.BIGINT:
+                    long _long = Long.valueOf(value).longValue();
+                    prepStmnt.setLong(index, _long);
+                    break;
+
                 case Types.SMALLINT:
                     short _short = Short.valueOf(value).shortValue();
                     prepStmnt.setShort(index, _short);
                     break;
 
+                case Types.LONGVARCHAR:
                 case Types.CHAR:
                 case Types.VARCHAR:
-                case Types.LONGVARCHAR:
                     if (trim) {
                         value = value.trim();
                     }
@@ -408,21 +413,16 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                     prepStmnt.setBoolean(index, _boolean);
                     break;
 
-                case Types.BIGINT:
-                    long _long = Long.valueOf(value).longValue();
-                    prepStmnt.setLong(index, _long);
+                case Types.NUMERIC:
+                case Types.DECIMAL:
+                    prepStmnt.setBigDecimal(index, new BigDecimal(value));
                     break;
 
                 case Types.REAL:
                     float _float = Float.valueOf(value).floatValue();
                     prepStmnt.setFloat(index, _float);
                     break;
-
-                case Types.DECIMAL:
-                case Types.NUMERIC:
-                    prepStmnt.setBigDecimal(index, new BigDecimal(value));
-                    break;
-
+                    
                 case Types.FLOAT:
                 case Types.DOUBLE:
                     prepStmnt.setDouble(index, Double.parseDouble(value));
@@ -433,8 +433,8 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                     break;
 
                 case Types.DATE:
-                case Types.TIMESTAMP:
                 case Types.TIME:
+                case Types.TIMESTAMP:
                     // if the date format is null, insert as a char value
                     if (df != null) {
                         java.util.Date j_datetime = df.parse(value);
@@ -472,10 +472,10 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
                     }
                     break;
 
+                case Types.LONGVARBINARY:
+                case Types.BINARY:
                 case Types.BLOB:
                 case Types.CLOB:
-                case Types.BINARY:
-                case Types.LONGVARBINARY:
                     prepStmnt.setBytes(index, Base64.decode(value));
                     break;
 

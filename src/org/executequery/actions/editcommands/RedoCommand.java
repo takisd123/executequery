@@ -25,13 +25,6 @@ import java.awt.event.ActionEvent;
 import org.executequery.gui.UndoableComponent;
 import org.underworldlabs.swing.actions.BaseCommand;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Query Editor Redo command execution.
  *
  *  @author   Takis Diakoumis

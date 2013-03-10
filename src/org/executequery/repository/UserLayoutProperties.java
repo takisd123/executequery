@@ -720,22 +720,7 @@ public class UserLayoutProperties implements Serializable,
 
         public int compare(UserLayoutObject value1, UserLayoutObject value2) {
 
-            int index1= value1.getIndex();
-            int index2= value2.getIndex();
-
-            if (index1 < index2) {
-
-                return -1;
-
-            } else if (index1 > index2) {
-
-                return 1;
-
-            } else {
-
-                return 0;
-            }
-
+            return value1.getIndex() - value2.getIndex();
         }
 
     } // class LayoutSorter

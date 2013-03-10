@@ -29,48 +29,48 @@ public class RecordDataItemFactory {
 
 		switch (dataType) {
 
+    		case Types.LONGNVARCHAR:
+    		case Types.NCHAR:
+    		case Types.NVARCHAR:
+    		case Types.ROWID:
     		case Types.BIT:
     		case Types.TINYINT:
-    		case Types.SMALLINT:
-    		case Types.INTEGER:
     		case Types.BIGINT:
+    		case Types.NULL:
+    		case Types.CHAR:
+    		case Types.NUMERIC:
+    		case Types.DECIMAL:
+    		case Types.INTEGER:
+    		case Types.SMALLINT:
     		case Types.FLOAT:
     		case Types.REAL:
     		case Types.DOUBLE:
-    		case Types.NUMERIC:
-    		case Types.DECIMAL:
-    		case Types.CHAR:
     		case Types.VARCHAR:
-    		case Types.NULL:
+    		case Types.BOOLEAN:
+    		case Types.DATALINK:
     		case Types.OTHER:
     		case Types.JAVA_OBJECT:
     		case Types.DISTINCT:
     		case Types.STRUCT:
     		case Types.ARRAY:
     		case Types.REF:
-    		case Types.DATALINK:
-    		case Types.BOOLEAN:
-    		case Types.ROWID:
-    		case Types.NCHAR:
-    		case Types.NVARCHAR:
-    		case Types.LONGNVARCHAR:
-    		case Types.NCLOB:
     		case Types.SQLXML:
+    		case Types.NCLOB:
     		    return new SimpleRecordDataItem(name, dataType, dataTypeName);
 		
     		case Types.DATE:
-    		case Types.TIMESTAMP:
     		case Types.TIME:
+    		case Types.TIMESTAMP:
     		    return new DateRecordDataItem(name, dataType, dataTypeName);
     		    
+    		case Types.LONGVARCHAR:
 	        case Types.CLOB:
-	        case Types.LONGVARCHAR:
 	        	return new ClobRecordDataItem(name, dataType, dataTypeName);
 
-	        case Types.BLOB:
-	        case Types.BINARY:
-	        case Types.VARBINARY:
 	        case Types.LONGVARBINARY:
+	        case Types.VARBINARY:
+	        case Types.BINARY:
+	        case Types.BLOB:
 	        	return new BlobRecordDataItem(name, dataType, dataTypeName);
 
 		}

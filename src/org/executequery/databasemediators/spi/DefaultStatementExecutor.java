@@ -508,9 +508,9 @@ public class DefaultStatementExecutor implements StatementExecutor {
                                 cstmnt.setShort(index, _short);
                                 break;
 
+                            case Types.LONGVARCHAR:
                             case Types.CHAR:
                             case Types.VARCHAR:
-                            case Types.LONGVARCHAR:
                                 cstmnt.setString(index, value);
                                 break;
 
@@ -525,18 +525,18 @@ public class DefaultStatementExecutor implements StatementExecutor {
                                 cstmnt.setLong(index, _long);
                                 break;
 
+                            case Types.INTEGER:
+                                int _int = Integer.valueOf(value).intValue();
+                                cstmnt.setInt(index, _int);
+                                break;
+                                
                             case Types.REAL:
                                 float _float = Float.valueOf(value).floatValue();
                                 cstmnt.setFloat(index, _float);
                                 break;
 
-                            case Types.INTEGER:
-                                int _int = Integer.valueOf(value).intValue();
-                                cstmnt.setInt(index, _int);
-                                break;
-
-                            case Types.DECIMAL:
                             case Types.NUMERIC:
+                            case Types.DECIMAL:
                                 cstmnt.setBigDecimal(index, new BigDecimal(value));
                                 break;
     /*
@@ -601,9 +601,9 @@ public class DefaultStatementExecutor implements StatementExecutor {
                                 returnValue = Short.toString(cstmnt.getShort(index));
                                 break;
 
+                            case Types.LONGVARCHAR:
                             case Types.CHAR:
                             case Types.VARCHAR:
-                            case Types.LONGVARCHAR:
                                 cstmnt.getString(index);
                                 break;
 
@@ -624,14 +624,14 @@ public class DefaultStatementExecutor implements StatementExecutor {
                                 returnValue = Float.toString(cstmnt.getFloat(index));
                                 break;
 
-                            case Types.DECIMAL:
                             case Types.NUMERIC:
+                            case Types.DECIMAL:
                                 returnValue = cstmnt.getBigDecimal(index).toString();
                                 break;
 
                             case Types.DATE:
-                            case Types.TIMESTAMP:
                             case Types.TIME:
+                            case Types.TIMESTAMP:
                                 returnValue = cstmnt.getDate(index).toString();
                                 break;
 

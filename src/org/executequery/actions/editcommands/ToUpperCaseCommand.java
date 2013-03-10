@@ -25,13 +25,6 @@ import org.executequery.GUIUtilities;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.gui.text.TextEditor;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * To Upper Case command execution.
  *
