@@ -134,9 +134,9 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             }
 
             int recordCount = 0;
-            List<RecordDataItem> rowData;
             interrupted = false;
 
+            List<RecordDataItem> rowData;
             long time = System.currentTimeMillis();
             while (resultSet.next()) {
 
@@ -222,7 +222,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
                 tableData.add(rowData);
 
-                if (maxRecords > 0 && recordCount == maxRecords) {
+                if (recordCount == maxRecords) {
 
                     break;
                 }
@@ -548,16 +548,13 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
     public Class<?> getColumnClass(int col) {
 
-        List<RecordDataItem> rowData = tableData.get(0);
-        RecordDataItem recordDataItem = rowData.get(col);
-        
-        int columnType = recordDataItem.getDataType();
+        RecordDataItem recordDataItem = tableData.get(0).get(col);
         if (recordDataItem.isValueNull()) {
             
             return String.class;
         }
         
-        //switch (columnTypes[col]) {
+        int columnType = recordDataItem.getDataType();
         switch (columnType) {
 
             case Types.TINYINT:
