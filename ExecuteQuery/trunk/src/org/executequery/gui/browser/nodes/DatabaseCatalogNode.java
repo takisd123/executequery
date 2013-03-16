@@ -114,13 +114,3 @@ public class DatabaseCatalogNode extends DatabaseObjectNode {
     }
     
 }
-
-
-
-
-
-
-
-
-
-

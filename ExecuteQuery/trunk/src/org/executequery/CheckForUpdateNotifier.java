@@ -35,7 +35,7 @@ import org.executequery.repository.LatestVersionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.InterruptibleProgressDialog;
-import org.underworldlabs.swing.util.InterruptibleProcess;
+import org.underworldlabs.swing.util.Interruptible;
 import org.underworldlabs.swing.util.SwingWorker;
 
 /**
@@ -45,7 +45,7 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @version  $Revision$
  * @date     $Date$
  */
-public class CheckForUpdateNotifier implements InterruptibleProcess {
+public class CheckForUpdateNotifier implements Interruptible {
 
     private static final int LABEL_INDEX = 2;
     

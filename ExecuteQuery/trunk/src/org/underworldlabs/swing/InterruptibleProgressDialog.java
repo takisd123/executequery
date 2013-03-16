@@ -38,7 +38,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.underworldlabs.Constants;
-import org.underworldlabs.swing.util.InterruptibleProcess;
+import org.underworldlabs.swing.util.Interruptible;
 
 /**
  *
@@ -51,7 +51,7 @@ public class InterruptibleProgressDialog extends JDialog
                                                     ActionListener {
 
     /** The event parent to this object */
-    private InterruptibleProcess process;
+    private Interruptible process;
 
     /** The progress bar widget */
     private ProgressBar progressBar;
@@ -65,7 +65,7 @@ public class InterruptibleProgressDialog extends JDialog
     public InterruptibleProgressDialog(Frame parentFrame,
                                        String title,
                                        String labelText,
-                                       InterruptibleProcess process) {
+                                       Interruptible process) {
 
         super(parentFrame, title, true);
 
@@ -86,7 +86,7 @@ public class InterruptibleProgressDialog extends JDialog
     public InterruptibleProgressDialog(Dialog parentDialog,
                                         String title,
                                         String labelText,
-                                        InterruptibleProcess process) {
+                                        Interruptible process) {
 
         super(parentDialog, title, true);
 

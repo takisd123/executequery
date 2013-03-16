@@ -43,7 +43,7 @@ import org.underworldlabs.swing.toolbar.PanelToolBar;
 /**
  * The Query Editor's tool bar.
  *
- *  @author   Takis Diakoumis
+ * @author   Takis Diakoumis
  * @version  $Revision$
  * @date     $Date$
  */
@@ -332,10 +332,6 @@ class QueryEditorToolBar extends PanelToolBar {
         return MenuItemFactory.createMenuItem(ActionBuilder.get(actionId));
     }
 
-    /**
-     * Creates a button with the action specified by the action name
-     * and with the specified tool tip text.
-     */
     private RolloverButton createButton(String actionId, String toolTipText) {
 
         RolloverButton button = new RolloverButton(ActionBuilder.get(actionId), toolTipText);

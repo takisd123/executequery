@@ -36,7 +36,7 @@ import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.TableDataChange;
-import org.executequery.databaseobjects.TableDataChangeExecutor;
+import org.executequery.databaseobjects.TableDataChangeWorker;
 import org.executequery.sql.SQLFormatter;
 import org.executequery.sql.StatementGenerator;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -62,6 +62,8 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     
     /** the user modified SQL text for changes */
     private String modifiedSQLText;
+
+    private TableDataChangeWorker tableDataChangeExecutor;
 
     /** Creates a new instance of DatabaseTable */
     public DefaultDatabaseTable(DatabaseObject object) {
@@ -510,18 +512,22 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
 
         newColumns.clear();
-        tableDataChanges.clear();
+        tableDataChanges().clear();
         modifiedSQLText = null;
     }
 
-    public void addTableDataChange(TableDataChange tableDataChange) {
-
+    private List<TableDataChange> tableDataChanges() {
+        
         if (tableDataChanges == null) {
             
             tableDataChanges = new ArrayList<TableDataChange>();
         }
-        
-        tableDataChanges.add(tableDataChange);
+        return tableDataChanges;
+    }
+    
+    public void addTableDataChange(TableDataChange tableDataChange) {
+
+        tableDataChanges().add(tableDataChange);
     }
     
     /**
@@ -535,6 +541,15 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return result;
     }
     
+    public void cancelChanges() {
+
+        if (tableDataChangeExecutor != null) {
+
+            tableDataChangeExecutor.cancel();
+        }
+        tableDataChangeExecutor = null;
+    }
+    
     private int applyTableDataChanges() {
 
         if (!hasTableDataChanges()) {
@@ -542,7 +557,8 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             return 1;
         }
         
-        boolean success = new TableDataChangeExecutor(this).apply(tableDataChanges);
+        tableDataChangeExecutor = new TableDataChangeWorker(this);
+        boolean success = tableDataChangeExecutor.apply(tableDataChanges);
         if (success) {
          
             clearDataChanges();

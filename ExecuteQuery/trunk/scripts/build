@@ -29,4 +29,17 @@ if [ -f $OUTPUT_JAR ]; then
 
 fi
 
+echo
+echo -n "Do you wish to upload this latest build? (y/n) "
+read ANSWER
+echo
+
+if [ $ANSWER = "y" -o $ANSWER = "Y" -o $ANSWER = "yes" -o $ANSWER = "YES" ]; then
+    ./ftp-latest.sh
+fi
+
+
+
+
+
 

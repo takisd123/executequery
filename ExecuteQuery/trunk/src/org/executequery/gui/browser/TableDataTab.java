@@ -100,6 +100,10 @@ public class TableDataTab extends JPanel
 
     private GridBagConstraints canEditTableNoteConstraints;
     
+//    private GridBagConstraints toolBarConstraints;
+    
+//    private TableDataTabToolBar toolBar;
+    
     private DisabledField rowCountField;
 
     private JPanel rowCountPanel;
@@ -136,6 +140,13 @@ public class TableDataTab extends JPanel
             
             initRowCountPanel();
         }
+        
+//        toolBarConstraints = new GridBagConstraints(0, 0, 
+//                GridBagConstraints.REMAINDER, 1, 1.0, 0,
+//                GridBagConstraints.NORTHWEST,
+//                GridBagConstraints.HORIZONTAL,
+//                new Insets(5, 5, 1, 5), 0, 0);
+//        toolBar = new TableDataTabToolBar();
         
         canEditTableNotePanel = createCanEditTableNotePanel();
         canEditTableNoteConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 0,
@@ -361,6 +372,7 @@ public class TableDataTab extends JPanel
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
             scroller.getViewport().add(table);
+//            add(toolBar, toolBarConstraints);
             add(canEditTableNotePanel, canEditTableNoteConstraints);
             add(scroller, scrollerConstraints);
             

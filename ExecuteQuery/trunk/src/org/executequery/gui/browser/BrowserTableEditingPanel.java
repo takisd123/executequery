@@ -396,24 +396,29 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      */
     public void actionPerformed(ActionEvent event) {
 
-        Object source = event.getSource();
-        if (source == applyButton) {
-            
-            try {
-
-                new DatabaseObjectChangeProvider().applyChanges(table);
-                setValues(table);
-            
-            } catch (DataSourceException e) {
-
-                GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
-            }
+        if (table.isAltered()) {
         
-        } else if (source == cancelButton) {
+            Object source = event.getSource();
+            if (source == applyButton) {
+    
+                try {
+    
+                    new DatabaseObjectChangeProvider(table).applyChanges();
+                    setValues(table);
+                
+                } catch (DataSourceException e) {
+    
+                    GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
+                }
+                    
+            } else if (source == cancelButton) {
+    
+                table.revert();
+                setValues(table);
+            }
 
-            table.revert();
-            setValues(table);
         }
+            
     }
     
     public String getLayoutName() {
@@ -480,7 +485,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             
             if (tableDataPanel.hasChanges()) {
                 
-                boolean applyChanges = new DatabaseObjectChangeProvider().applyChanges(table, true);
+                boolean applyChanges = new DatabaseObjectChangeProvider(table).applyChanges(true);
                 if (!applyChanges) {
 
                     throw new PropertyVetoException("User cancelled", e);

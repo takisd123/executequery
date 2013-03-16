@@ -46,7 +46,7 @@ import org.executequery.repository.UserFeedbackRepository;
 import org.executequery.repository.spi.UserFeedbackRepositoryImpl;
 import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.InterruptibleProgressDialog;
-import org.underworldlabs.swing.util.InterruptibleProcess;
+import org.underworldlabs.swing.util.Interruptible;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
@@ -61,7 +61,7 @@ import org.underworldlabs.util.SystemProperties;
 public class FeedbackPanel extends DefaultActionButtonsPanel
                            implements ActionListener,
                                       FocusComponentPanel,
-                                      InterruptibleProcess {
+                                      Interruptible {
 
     /** user comments feedback indicator */
     public static final int USER_COMMENTS = 2;

@@ -17,13 +17,15 @@ import org.underworldlabs.jdbc.DataSourceException;
  * @version  $Revision: 1185 $
  * @date     $Date: 2013-02-08 22:16:55 +1100 (Fri, 08 Feb 2013) $
  */
-public class TableDataChangeExecutor {
+public class TableDataChangeWorker {
 
     private Connection connection;
     
     private DatabaseTable table;
 
-    public TableDataChangeExecutor(DatabaseTable table) {
+    private PreparedStatement statement;
+
+    public TableDataChangeWorker(DatabaseTable table) {
 
         this.table = table;
     }
@@ -87,7 +89,6 @@ public class TableDataChangeExecutor {
             return 0;
         }
         
-        PreparedStatement statement = null;
         try {
         
             int n = changes.size();
@@ -179,7 +180,7 @@ public class TableDataChangeExecutor {
         } catch (SQLException e) {
             
             throw handleException(e);
-        }            
+        }
         
     }
 
@@ -195,5 +196,22 @@ public class TableDataChangeExecutor {
         
     }
 
+    public void cancel() {
+        
+        if (statement != null) {
+            
+            try {
+            
+                statement.cancel();
+                rollback();
+
+            } catch (SQLException e) {
+
+                Log.debug(e.getMessage());
+            }
+
+        }
+        
+    }
     
 }
