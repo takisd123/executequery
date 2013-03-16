@@ -65,12 +65,3 @@ final class MaxRowCountField extends NumberTextField
     public void focusLost(FocusEvent e) {}
 
 }
-
-
-
-
-
-
-
-
-

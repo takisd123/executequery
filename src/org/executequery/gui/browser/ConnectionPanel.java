@@ -575,8 +575,7 @@ public class ConnectionPanel extends ActionPanel
 
             String port = portField.getText();
             
-            if (StringUtils.isNotBlank(port) 
-                    && !StringUtils.isNumeric(port)) {
+            if (!StringUtils.isNumeric(port)) {
                     
                 GUIUtilities.displayErrorMessage("Invalid port number");
                 return;                    

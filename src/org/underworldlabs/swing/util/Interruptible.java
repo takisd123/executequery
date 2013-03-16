@@ -27,7 +27,7 @@ package org.underworldlabs.swing.util;
  * @version  $Revision$
  * @date     $Date$
  */
-public interface InterruptibleProcess {
+public interface Interruptible {
   
     /**
      * Sets the process cancel flag as specified.

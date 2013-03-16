@@ -110,8 +110,6 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     private TreeFindAction treeFindAction;
 
-    private DatabaseObjectChangeProvider databaseObjectChangeProvider;
-    
     public ConnectionsTreePanel() {
 
         super(new BorderLayout());
@@ -1261,7 +1259,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 try {
                 
                     DatabaseObjectNode databaseObjectNode = (DatabaseObjectNode)lastObject;
-                    boolean applyChanges = databaseObjectChangeProvider().applyChanges(databaseObjectNode.getDatabaseObject(), true);
+                    boolean applyChanges = databaseObjectChangeProvider(databaseObjectNode.getDatabaseObject()).applyChanges(true);
                     
                     if (!applyChanges) {
                         
@@ -1336,14 +1334,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         worker.start();
     }
 
-    private DatabaseObjectChangeProvider databaseObjectChangeProvider() {
+    private DatabaseObjectChangeProvider databaseObjectChangeProvider(NamedObject namedObject) {
 
-        if (databaseObjectChangeProvider == null) {
-            
-            databaseObjectChangeProvider = new DatabaseObjectChangeProvider(); 
-        }
-        
-        return databaseObjectChangeProvider;
+        return new DatabaseObjectChangeProvider(namedObject); 
     }
 
     private synchronized void doNodeExpansion(DatabaseObjectNode node) {

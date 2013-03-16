@@ -20,7 +20,6 @@
 
 package org.executequery.databaseobjects;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -191,6 +190,8 @@ public interface DatabaseTable extends DatabaseObject {
 	boolean hasForeignKey();
 
 	List<String> getForeignKeyColumnNames();
+
+    void cancelChanges();
     
 }
 

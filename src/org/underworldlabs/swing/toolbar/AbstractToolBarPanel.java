@@ -120,8 +120,3 @@ public abstract class AbstractToolBarPanel extends JPanel {
     }
     
 }
-
-
-
-
-

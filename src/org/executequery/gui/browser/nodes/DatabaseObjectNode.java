@@ -28,6 +28,7 @@ import javax.swing.tree.MutableTreeNode;
 
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.gui.browser.DatabaseObjectChangeProvider;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /** 
@@ -149,13 +150,14 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
      * Applies any changes on the underlying database object.
      */
     public void applyChanges() throws DataSourceException {
+
+//        NamedObject namedObject = getDatabaseObject();
+        new DatabaseObjectChangeProvider(getDatabaseObject()).applyChanges(true);
         
-        NamedObject namedObject = getDatabaseObject();
-
-        if (isDatabaseTable(namedObject)) {
-
-            ((DatabaseTable)namedObject).applyChanges();
-        }
+//        if (isDatabaseTable(namedObject)) {
+//
+//            ((DatabaseTable)namedObject).applyChanges();
+//        }
 
     }
 
