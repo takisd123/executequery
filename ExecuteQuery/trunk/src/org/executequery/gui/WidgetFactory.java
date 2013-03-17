@@ -22,6 +22,7 @@ package org.executequery.gui;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
@@ -58,6 +59,11 @@ public final class WidgetFactory {
     public static JButton createButton(String text) {
         
         return new DefaultButton(text);
+    }
+    
+    public static JButton createButton(ActionListener actionListener, String text) {
+        
+        return new DefaultButton(actionListener, text, null);
     }
     
     public static JComboBox createComboBox(Vector<?> items) {

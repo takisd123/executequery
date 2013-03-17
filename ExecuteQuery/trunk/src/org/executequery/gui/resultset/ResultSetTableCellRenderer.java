@@ -287,7 +287,7 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
             if (color.getRGB() != Color.WHITE.getRGB()) {
 
                 // if its not white, apply the bg otherwise run with 
-                // alternating bg alreday set - which may alsobe white
+                // alternating bg alreday set - which may also be white
                 
                 setBackground(color);
             }

@@ -108,13 +108,3 @@ public class ColumnIndexTableModel extends AbstractTableModel {
     
     
 }
-
-
-
-
-
-
-
-
-
-

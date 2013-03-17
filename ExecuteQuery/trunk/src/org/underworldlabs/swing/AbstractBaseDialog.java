@@ -89,10 +89,9 @@ public abstract class AbstractBaseDialog extends JDialog {
 
     protected JRootPane createRootPane() {
 
-        JRootPane rootPane = super.createRootPane();
-
         KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
+        JRootPane rootPane = super.createRootPane();
         rootPane.registerKeyboardAction(
                 closeDialogActionListener(), keyStroke, 
                 JComponent.WHEN_IN_FOCUSED_WINDOW);

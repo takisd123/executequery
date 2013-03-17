@@ -27,6 +27,7 @@ import java.awt.Insets;
 import java.awt.print.Printable;
 import java.sql.DatabaseMetaData;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -66,7 +67,7 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
     private JTable table;
     private ProcedureTableModel model;
     
-    private HashMap cache;
+    private Map cache;
     
     /** the browser's control object */
     private BrowserController controller;

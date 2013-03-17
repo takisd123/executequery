@@ -89,21 +89,28 @@ public class IndeterminateProgressBar extends JComponent
     }
     
     public void stop() {
-        if (timer != null) {
+        if (hasTimer()) {
             timer.stop();
         }
         inProgress = false;
         repaint();
     }
+
+    private boolean hasTimer() {
+        return timer != null;
+    }
     
     public void start() {
-    	timer.start();
+        if (!hasTimer()) {
+            createTimer();
+        }
+        timer.start();
         inProgress = true;
         repaint();
     }
     
     public void cleanup() {
-        if (timer != null) {
+        if (hasTimer()) {
             timer.stop();
         }
         timer = null;

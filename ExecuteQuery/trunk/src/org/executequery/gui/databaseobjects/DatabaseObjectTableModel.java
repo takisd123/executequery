@@ -104,7 +104,8 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
             case 0:
                 return column;
             case 1:
-                return stringValueToUpper(column.getShortName());
+//                return stringValueToUpper(column.getShortName());
+                return column.getShortName();
             case 2:
                 return column.getTypeName();
             case 3:
@@ -121,6 +122,7 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
 
     }
 
+    @SuppressWarnings("unused")
     private String stringValueToUpper(String value) {
 
         if (StringUtils.isNotBlank(value)) {
