@@ -1653,15 +1653,12 @@ public final class GUIUtilities {
 
     public static boolean saveOpenChanges(SaveFunction saveFunction) {
 
-        int result = displayConfirmCancelDialog(
-                        "Do you wish to save changes to " +
+        int result = displayConfirmCancelDialog("Do you wish to save changes to " +
                          saveFunction.getDisplayName() + "?");
 
         if (result == JOptionPane.YES_OPTION) {
 
-            int saved = saveFunction.save(false);
-
-            if (saved != SaveFunction.SAVE_COMPLETE) {
+            if (saveFunction.save(false) != SaveFunction.SAVE_COMPLETE) {
 
                 return false;
             }
@@ -1682,8 +1679,7 @@ public final class GUIUtilities {
      * @param message - the error message to display
      * @param e - the throwable
      */
-    public static void displayExceptionErrorDialog(
-            final String message, final Throwable e) {
+    public static void displayExceptionErrorDialog(final String message, final Throwable e) {
         GUIUtils.invokeAndWait(new Runnable() {
             public void run() {
                 new ExceptionErrorDialog(frame, message, e);

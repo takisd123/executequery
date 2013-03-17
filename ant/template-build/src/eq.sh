@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Java heap size, in megabytes
-JAVA_HEAP_SIZE=256
+JAVA_HEAP_SIZE=512
 
 # determine the java command to be run
 JAVA=`which java`
@@ -11,5 +11,5 @@ if [ "X$JAVA" = "X" ]; then
     JAVA=/usr/bin/java
 fi
 
-exec $JAVA -mx${JAVA_HEAP_SIZE}m -jar "eq.jar" &
+exec $JAVA "-javaagent:agent.jar=ExecuteQuery" -mx${JAVA_HEAP_SIZE}m -jar "eq.jar" &
 

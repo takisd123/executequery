@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.gui.ErrorMessagePublisher;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.InterruptibleProgressDialog;
 import org.underworldlabs.swing.util.Interruptible;
@@ -93,11 +94,7 @@ public class DatabaseObjectChangeProvider implements Interruptible {
 
                 try {
 
-                    try {
-                        table().applyChanges();
-                    } catch (DataSourceException e) {}
-                    
-                    return "done";
+                    table().applyChanges();
         
                 } catch (DataSourceException e) {
         
@@ -120,16 +117,17 @@ public class DatabaseObjectChangeProvider implements Interruptible {
                         sb.append("\nRollback was issued for all data changes.");
                     }
 
-                    throw new DataSourceException(sb.toString(), e.getCause());
+                    dispose();
+                    ErrorMessagePublisher.publish(sb.toString(), e.getCause());
                 }
-                
+
+                return "done";
             }
             
             @Override
             public void finished() {
 
-                interruptibleProgressDialog.dispose();
-                interruptibleProgressDialog = null;
+                dispose();
             }
             
         };
@@ -138,6 +136,15 @@ public class DatabaseObjectChangeProvider implements Interruptible {
         interruptibleProgressDialog.run();
     }
 
+    private void dispose() {
+
+        if (interruptibleProgressDialog != null) {
+            
+            interruptibleProgressDialog.dispose();
+            interruptibleProgressDialog = null;
+        }        
+    }
+    
     private boolean isTable() {
         
         return (table() != null);

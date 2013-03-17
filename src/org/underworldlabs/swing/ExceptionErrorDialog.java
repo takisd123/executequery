@@ -48,6 +48,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
+import org.executequery.gui.WidgetFactory;
+import org.executequery.log.Log;
+import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.util.IconUtilities;
 
 /**
@@ -100,8 +103,10 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
     /** the current exception index (chained exceptions) */
     private int selectedIndex;
     
-    /** Creates a new instance of ExceptionErrorDialog */
+    private static final int DEFAULT_WIDTH = 600;
+    
     public ExceptionErrorDialog(Frame owner, String message, Throwable exception) {
+
         super(owner, "Error Message", true);
         this.message = message;
 
@@ -128,20 +133,11 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
             errorIcon = UIManager.getIcon("OptionPane.warningIcon");
         }
         
-        closeButton = new JButton("Close");
-        closeButton.addActionListener(this);
-
-        showStackButton = new JButton("Show Stack Trace") {
-            public Dimension getPreferredSize() {
-                Dimension dim = super.getPreferredSize();
-                dim.width = 150;
-                return dim;
-            }
-        };
-        showStackButton.addActionListener(this);
+        closeButton = WidgetFactory.createButton(this, "Close");
+        showStackButton = WidgetFactory.createButton(this, "Show Stack Trace");
         
         // format the text
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("<html><table border=\"0\" cellpadding=\"2\">");
         
         String delim = "\n";
@@ -234,18 +230,18 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
 
         // set the height and width for resets
         defaultHeight = size.height;
-        defaultWidth = 450;
+        defaultWidth = DEFAULT_WIDTH;
         
         setVisible(true);
     }    
     
     public Dimension getMinimumSize() {
-        return new Dimension(400, getSize().height);
+
+        return new Dimension(Math.max(DEFAULT_WIDTH, getWidth()), getSize().height);
     }
     
     /**
-     * Builds the stack trace text pane and associated
-     * buttons in the case of SQLExceptions.
+     * Builds the stack trace text pane and associated buttons in the case of SQLExceptions.
      */
     private void buildStackTracePanel() {
         if (textPane == null) {
@@ -415,6 +411,8 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
         if (resizeRequired) {
             setSize(_size);
         }
+    
+        Log.trace("Dialog resized - " + getSize());
     }
 
     /**
@@ -433,16 +431,3 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
     public void componentHidden(ComponentEvent e) {}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

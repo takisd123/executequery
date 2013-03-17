@@ -2,7 +2,7 @@
 
 Date: 6 March 2013
 
-Summary of changes - v3.6.1 Build 5218:
+Summary of changes - v3.6.1 Build 5226:
 ----------------------------------------
 
 - Fixed possible NPE on null catalog value when setting show defaiult cat/schema
@@ -19,10 +19,12 @@ Summary of changes - v3.6.1 Build 5218:
 - Added summary file info to all export data workers.
 - Added TRACE log level.
 - Misc UI tweaks for for Mac OS look and feel. 
+- Modified to display column names as returned - previously defaulted to upper.
 - Fixed applying a column NULL change being executed as NOT NULL from the 
   Database Browser Table view.  
 - Modified datbase object node loading to check for a single item only and load
   contents on selection from the Database Browser.
+- Performance improvements on result set table model. 
 - Modified to allow for custom settings directory supplied as an argument on 
   startup using: executequery.user.home.dir=[some_path]
 

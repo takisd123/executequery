@@ -73,6 +73,7 @@ import org.underworldlabs.util.MiscUtils;
  * @version  $Revision$
  * @date     $Date$
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MetaDataValues implements ConnectionListener {
     
     /** The open database connection. */
@@ -560,7 +561,7 @@ public class MetaDataValues implements ConnectionListener {
             // -----------------------------------------
             
             ResultSet keys = dmd.getPrimaryKeys(catalog, schema, name);
-            ArrayList _primaryKeys = new ArrayList();
+            List _primaryKeys = new ArrayList();
             
             while (keys.next()) {
                 ColumnConstraint cc = new ColumnConstraint();
@@ -588,7 +589,7 @@ public class MetaDataValues implements ConnectionListener {
             keys = dmd.getImportedKeys(catalog, schema, name);
             
             // put the foreign key details in a temporary collection
-            ArrayList _foreignKeys = new ArrayList();
+            List _foreignKeys = new ArrayList();
             while (keys.next()) {
                 ColumnConstraint cc = new ColumnConstraint();
                 cc.setTable(name);
@@ -619,7 +620,7 @@ public class MetaDataValues implements ConnectionListener {
             // The current key's column name
             String columnNameForKey = null;
             // to store the result set
-            ArrayList _columns = new ArrayList();
+            List _columns = new ArrayList();
             
             //Log.debug("catalog: " + catalog + " schema: " + schema);
             
@@ -680,7 +681,7 @@ public class MetaDataValues implements ConnectionListener {
                 
                 columnName = null;
                 columnNameForKey = null;
-                cd.setNamesToUpper();
+//                cd.setNamesToUpper();
                 _columns.add(cd);
                 
             } 
@@ -1087,6 +1088,7 @@ public class MetaDataValues implements ConnectionListener {
         }
     }
 
+    @SuppressWarnings("unused")
     private void releaseResources(Statement stmnt) {
         try {
             if (stmnt != null) {
@@ -1099,6 +1101,7 @@ public class MetaDataValues implements ConnectionListener {
         }
     }
 
+    @SuppressWarnings("unused")
     private void releaseResources(Statement stmnt, ResultSet rs) {
         try {
             if (rs != null) {
@@ -1284,7 +1287,8 @@ public class MetaDataValues implements ConnectionListener {
             
             Vector<String> v = new Vector<String>();            
             while (rs.next()) {
-                v.add(rs.getString(4).toUpperCase());
+//                v.add(rs.getString(4).toUpperCase());
+                v.add(rs.getString(4));
             }
             return v;            
         } 
@@ -1374,8 +1378,6 @@ public class MetaDataValues implements ConnectionListener {
             rs = dmd.getColumns(catalog, schema, name, null);
             
             Vector v = new Vector();
-            String columnName = null;
-            
             while (rs.next()) {
                 ColumnData cd = new ColumnData();
                 cd.setColumnName(rs.getString(4));
