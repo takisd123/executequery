@@ -27,6 +27,7 @@ Summary of changes - v3.6.1 Build 5226:
 - Performance improvements on result set table model. 
 - Modified to allow for custom settings directory supplied as an argument on 
   startup using: executequery.user.home.dir=[some_path]
+- Added key event modifiers check for INS key in the Query Editor.
 
  
 
