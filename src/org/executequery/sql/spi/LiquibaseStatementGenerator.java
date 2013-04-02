@@ -208,9 +208,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             if (column.hasConstraints()) {
 
                 ColumnConfig columnConfig = columnConfigForColumn(tableChange, column);
-
                 ConstraintsConfig constraintConfig = new ConstraintsConfig();
-
                 for (ColumnConstraint constraint : column.getConstraints()) {
 
                     if (constraint.isPrimaryKey()) {
@@ -638,10 +636,12 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         for (SqlStatement statement : statements) {
 
             Sql[] generatedSql = SqlGeneratorFactory.getInstance().generateSql(statement, database);
-            for (Sql sql : generatedSql) {
-                
-                sb.append(sql.toSql());
-                sb.append(sql.getEndDelimiter());
+            if (generatedSql != null) { // jt400
+                for (Sql sql : generatedSql) {
+                    
+                    sb.append(sql.toSql());
+                    sb.append(sql.getEndDelimiter());
+                }
             }
             sb.append("\n");
         }
