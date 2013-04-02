@@ -1097,7 +1097,7 @@ public class QueryEditorTextPane extends SQLTextPane
                     document.shiftTabEvent(selectionStart, selectionEnd);
                 }
 
-            } else if (keyCode == KeyEvent.VK_INSERT) {
+            } else if (keyCode == KeyEvent.VK_INSERT && e.getModifiers() == 0) {
 
                 // toggle insert mode on the document
 
