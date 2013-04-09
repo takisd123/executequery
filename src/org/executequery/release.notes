@@ -2,7 +2,7 @@
 
 Date: 2 April 2013
 
-Summary of changes - v3.6.1 Build 5226:
+Summary of changes - v3.6.2 Build 5226:
 ----------------------------------------
 
 - Fixed possible NPE on null catalog value when setting show defaiult cat/schema
@@ -13,8 +13,8 @@ Summary of changes - v3.6.1 Build 5226:
   waiting to populate the complete list.
 - Modified Query Editor autocomplete to retain derived suggestions list with a 
   new action from te toolbar to force a refresh.
-- Added main connection details panel to scrollpane to avoid field/button 
-  collapsing on view resize. 
+- Added main connection and driver details panel to scrollpane to avoid 
+  field/button collapsing on view resize. 
 - Added object count value to all object lists on the Database Browser view.
 - Added summary file info to all export data workers.
 - Added TRACE log level.
