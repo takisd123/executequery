@@ -54,6 +54,7 @@ public class DriverViewPanel extends FormObjectViewContainer
         else {
             panel = (DriverListPanel)getFormObjectView(DriverListPanel.NAME);
         }
+
         setView(panel);
     }
     
