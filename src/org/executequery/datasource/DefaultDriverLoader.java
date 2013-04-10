@@ -62,6 +62,7 @@ public class DefaultDriverLoader implements DriverLoader {
             if (!databaseDriver.isDefaultSunOdbc()) {
                 
                 String path = databaseDriver.getPath();
+                Log.trace("Loading driver from: " + path);
                 
                 if (!MiscUtils.isNull(path)) {
     
@@ -71,14 +72,12 @@ public class DefaultDriverLoader implements DriverLoader {
                 
                 } else {
     
-                    clazz = Class.forName(driverName, true,
-                                          ClassLoader.getSystemClassLoader());
+                    clazz = loadUsingSystemLoader(driverName);
                 }
     
             } else {
                 
-                clazz = Class.forName(driverName, true,
-                                      ClassLoader.getSystemClassLoader());
+                clazz = loadUsingSystemLoader(driverName);
             } 
 
             Object object = clazz.newInstance();
@@ -107,6 +106,11 @@ public class DefaultDriverLoader implements DriverLoader {
         }
 
         return driver;
+    }
+
+    private Class<?> loadUsingSystemLoader(String driverName) throws ClassNotFoundException {
+
+        return Class.forName(driverName, true, ClassLoader.getSystemClassLoader());
     }
 
     public void unload(DatabaseDriver databaseDriver) {
