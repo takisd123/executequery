@@ -284,8 +284,7 @@ public final class MiscUtils {
             throws MalformedURLException, IOException {
 
         URL[] urls = loadURLs(paths);
-        URLClassLoader loader = new URLClassLoader(
-                urls, ClassLoader.getSystemClassLoader());
+        URLClassLoader loader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
 
         JarFile jarFile = null;
         String className = null;

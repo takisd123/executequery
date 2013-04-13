@@ -45,6 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import org.apache.commons.lang.StringUtils;
+import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
 import org.executequery.components.TextFieldPanel;
@@ -57,6 +59,7 @@ import org.executequery.log.Log;
 import org.executequery.repository.DatabaseDefinitionCache;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
+import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.DefaultButton;
 import org.underworldlabs.swing.DefaultFieldLabel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -72,7 +75,7 @@ public abstract class AbstractDriverPanel extends JPanel
 
     private JTextField nameField;
     private JTextField descField;
-    private JTextField classField;
+    private JComboBox classField;
 
     private JList jarPathList;
     private DefaultListModel jarPathListModel;
@@ -81,6 +84,7 @@ public abstract class AbstractDriverPanel extends JPanel
     private JComboBox databaseNameCombo;
 
     private DynamicComboBoxModel urlComboModel;
+    private DynamicComboBoxModel classComboModel;
 
     /** the currently selected driver */
     private DatabaseDriver databaseDriver;
@@ -112,8 +116,14 @@ public abstract class AbstractDriverPanel extends JPanel
 
         nameField = textFieldWithKey("AbstractDriverPanel.driverNameToolTip");
         descField = textFieldWithKey("AbstractDriverPanel.descriptionToolTip");
-        classField = textFieldWithKey("AbstractDriverPanel.classNameToolTip");
+//        classField = textFieldWithKey("AbstractDriverPanel.classNameToolTip");
 
+        classComboModel = new DynamicComboBoxModel();
+        classField = WidgetFactory.createComboBox(classComboModel);
+        classField.setToolTipText(getString("AbstractDriverPanel.classNameToolTip"));
+        classField.setEditable(true);
+
+        
         jarPathList = new JList(jarPathListModel);
         jarPathList.setToolTipText(getString("AbstractDriverPanel.pathToolTip"));
         JScrollPane jarPathListScrollPane = new JScrollPane(jarPathList) {
@@ -285,11 +295,9 @@ public abstract class AbstractDriverPanel extends JPanel
     private String jarPathsFormatted() {
 
         StringBuilder sb = new StringBuilder();
-
         for (int i = 0, n = jarPathListModel.size(); i < n; i++) {
 
             sb.append(jarPathListModel.get(i));
-
             if (i < (n-1)) {
 
                 sb.append(";");
@@ -319,22 +327,7 @@ public abstract class AbstractDriverPanel extends JPanel
         try {
 
             GUIUtilities.showWaitCursor();
-            drivers = MiscUtils.findImplementingClasses(
-                                            "java.sql.Driver", jarPathsFormatted());
-
-        } catch (MalformedURLException urlExc) {
-
-            logError(urlExc);
-
-            GUIUtilities.displayErrorMessage(
-                    getString("AbstractDriverPanel.pathListEmptyError"));
-
-        } catch (IOException ioExc) {
-
-            logError(ioExc);
-
-            GUIUtilities.displayErrorMessage(
-                    getString("AbstractDriverPanel.ioError", ioExc.getMessage()));
+            drivers = implementingDriverClasses();
 
         } finally {
 
@@ -343,43 +336,47 @@ public abstract class AbstractDriverPanel extends JPanel
 
         if (drivers == null || drivers.length == 0) {
 
-            GUIUtilities.displayWarningMessage(
-                    getString("AbstractDriverPanel.noDriverClassesError"));
-
+            GUIUtilities.displayWarningMessage(getString("AbstractDriverPanel.noDriverClassesError"));
             return;
         }
 
-        int result = -1;
-        String value = null;
+        SimpleValueSelectionDialog dialog =
+                new SimpleValueSelectionDialog(getString("AbstractDriverPanel.selectJdbcDriverLabel"), drivers);
 
-        while (true) {
+        int result = dialog.showDialog();
+        if (result == JOptionPane.OK_OPTION) {
 
-            SimpleValueSelectionDialog dialog =
-                    new SimpleValueSelectionDialog(
-                            getString("AbstractDriverPanel.selectJdbcDriverLabel"), drivers);
+            String value = dialog.getValue();
+            if (StringUtils.isNotBlank(value)) {
 
-            result = dialog.showDialog();
-            if (result == JOptionPane.OK_OPTION) {
-
-                value = dialog.getValue();
-                if (value == null) {
-
-                    GUIUtilities.displayErrorMessage(
-                            getString("AbstractDriverPanel.selectJdbcDriverNoSelection"));
-
-                } else {
-
-                    classField.setText(value);
-                    databaseDriver.setClassName(value);
-                    break;
-                }
-
-            } else {
-
-                break;
+                classField.setSelectedItem(value);
+                databaseDriver.setClassName(value);
             }
 
         }
+
+    }
+
+    private String[] implementingDriverClasses() {
+
+        try {
+        
+            return MiscUtils.findImplementingClasses("java.sql.Driver", jarPathsFormatted());
+            
+        } catch (MalformedURLException urlExc) {
+
+            logError(urlExc);
+            GUIUtilities.displayErrorMessage(
+                    getString("AbstractDriverPanel.pathListEmptyError"));
+
+        } catch (IOException ioExc) {
+
+            logError(ioExc);
+            GUIUtilities.displayErrorMessage(
+                    getString("AbstractDriverPanel.ioError", ioExc.getMessage()));
+        }
+
+        return new String[0];
     }
 
     private void logError(Throwable e) {
@@ -415,7 +412,8 @@ public abstract class AbstractDriverPanel extends JPanel
 
             jarPathList.setSelectedIndex(selectedIndex);
         }
-
+        
+        populateDriverClassCombo();
     }
 
     public void browseDrivers(ActionEvent e) {
@@ -431,7 +429,7 @@ public abstract class AbstractDriverPanel extends JPanel
         FileSelector zipFiles = new FileSelector(
                 new String[] {"zip"}, getString("AbstractDriverPanel.zipArchiveFiles"));
 
-        FileChooserDialog fileChooser = new FileChooserDialog();
+        final FileChooserDialog fileChooser = new FileChooserDialog();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.addChoosableFileFilter(zipFiles);
         fileChooser.addChoosableFileFilter(jarFiles);
@@ -450,13 +448,37 @@ public abstract class AbstractDriverPanel extends JPanel
             return;
         }
 
-        File[] files = fileChooser.getSelectedFiles();
-        for (int i = 0; i < files.length; i++) {
+        ThreadUtils.startWorker(new Runnable() {
+           
+            public void run() {
 
-            jarPathListModel.addElement(files[i].getAbsolutePath());
-        }
+                try {
+                    GUIUtilities.showWaitCursor();
+                    
+                    File[] files = fileChooser.getSelectedFiles();
+                    for (int i = 0; i < files.length; i++) {
+                        
+                        String path = files[i].getAbsolutePath();
+                        if (!jarPathListModel.contains(path)) {
+                            
+                            jarPathListModel.addElement(path);
+                        }
+                        
+                    }   
+                    
+                    databaseDriver.setPath(jarPathsFormatted());
+                    populateDriverClassCombo();
+                    
+                } finally {
+                    
+                    GUIUtilities.showNormalCursor();
+                }
+                
+            }
+            
+        });
+        
 
-        databaseDriver.setPath(jarPathsFormatted());
     }
 
     /**
@@ -477,7 +499,7 @@ public abstract class AbstractDriverPanel extends JPanel
 
         databaseDriver.setName(nameField.getText());
         databaseDriver.setDescription(descField.getText());
-        databaseDriver.setClassName(classField.getText());
+        databaseDriver.setClassName(driverClassName());
         databaseDriver.setURL(driverUrlCombo.getEditor().getItem().toString());
         databaseDriver.setPath(jarPathsFormatted());
 
@@ -493,6 +515,18 @@ public abstract class AbstractDriverPanel extends JPanel
             // need to check exisitng conns with this driver's name
         }
 
+    }
+
+    private String driverClassName() {
+        Object selectedItem = classField.getSelectedItem();
+        if (selectedItem != null) {
+         
+            return selectedItem.toString();
+        
+        } else {
+            
+            return Constants.EMPTY;
+        }
     }
 
     private void driverPathsToList(String driversPath) {
@@ -519,11 +553,17 @@ public abstract class AbstractDriverPanel extends JPanel
 
             nameField.setText(databaseDriver.getName());
             descField.setText(formatDriverDescription(databaseDriver));
-            classField.setText(databaseDriver.getClassName());
-
+            
             jarPathListModel.clear();
             driverPathsToList(databaseDriver.getPath());
 
+            populateDriverClassCombo();
+            if (!classComboModel.contains(databaseDriver.getClassName())) {
+
+                classComboModel.addElement(databaseDriver.getClassName());
+            }
+            classComboModel.setSelectedItem(databaseDriver.getClassName());
+            
             int databaseId = databaseDriver.getType();
             DatabaseDefinition database = loadDatabaseDefinition(databaseId);
 
@@ -555,6 +595,33 @@ public abstract class AbstractDriverPanel extends JPanel
         } finally {
 
             databaseNameCombo.addItemListener(this);
+        }
+
+    }
+
+    private void populateDriverClassCombo() {
+
+        String[] clazzes = implementingDriverClasses();
+        
+        String currentSelection = null;
+        if (classField.getSelectedItem() != null) {
+         
+            currentSelection = driverClassName();
+        
+        }
+        classComboModel.setElements(clazzes);
+
+        if (currentSelection != null) {
+        
+            for (String clazz : clazzes) {
+                
+                if (StringUtils.equals(currentSelection, clazz)) {
+                    
+                    classComboModel.setSelectedItem(clazz);
+                    break;
+                }
+                
+            }
         }
 
     }
