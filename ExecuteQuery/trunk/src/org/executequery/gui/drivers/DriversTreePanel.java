@@ -57,6 +57,7 @@ import org.executequery.event.DatabaseDriverListener;
 import org.executequery.gui.AbstractDockedTabActionPanel;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
+import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
@@ -424,27 +425,42 @@ public class DriversTreePanel extends AbstractDockedTabActionPanel
         }
     }
 
-    public void valueChanged(TreeSelectionEvent e) {
+    public void valueChanged(final TreeSelectionEvent e) {
 
-        Object object = e.getPath().getLastPathComponent();
+        ThreadUtils.startWorker(new Runnable() {
+            
+            public void run() {
 
-        if (object instanceof DatabaseDriverNode) {
+                GUIUtilities.showWaitCursor();
+                try {
+                
+                    Object object = e.getPath().getLastPathComponent();
+                    if (object instanceof DatabaseDriverNode) {
+            
+                        enableButtons(true);
+                        checkDriversPanel();
+                        DatabaseDriverNode node = (DatabaseDriverNode)object;
+                        driversPanel.valueChanged(node);
+            
+                    } else if (object == tree.getRootNode()) {
+            
+                        checkDriversPanel();
+                        driversPanel.displayRootPanel();
+                        enableButtons(false);
+            
+                    } else {
+            
+                        enableButtons(false);
+                    }
 
-            enableButtons(true);
-            checkDriversPanel();
-            DatabaseDriverNode node = (DatabaseDriverNode)object;
-            driversPanel.valueChanged(node);
+                } finally {
+                    
+                    GUIUtilities.showNormalCursor();
+                }
 
-        } else if (object == tree.getRootNode()) {
-
-            checkDriversPanel();
-            driversPanel.displayRootPanel();
-            enableButtons(false);
-
-        } else {
-
-            enableButtons(false);
-        }
+            }
+        });
+            
     }
 
     /**
