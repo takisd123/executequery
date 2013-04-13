@@ -18,6 +18,8 @@ Summary of changes - v4.0.0 Build 5283:
 - Added object count value to all object lists on the Database Browser view.
 - Added summary file info to all export data workers.
 - Added TRACE log level.
+- Modified driver panel class field to use a drop-down box with available 
+  drivers in addition to the 'Find' button.
 - Misc UI tweaks for for Mac OS look and feel. 
 - Modified to display column names as returned - previously defaulted to upper.
 - Fixed applying a column NULL change being executed as NOT NULL from the 
