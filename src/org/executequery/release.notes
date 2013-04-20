@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 15 April 2013
+Date: 22 April 2013
 
-Summary of changes - v4.0.0 Build 5283:
+Summary of changes - v4.0.0 Build 5297:
 ----------------------------------------
 
 - Fixed possible NPE on null catalog value when setting show defaiult cat/schema
@@ -385,4 +385,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-15 April 2013
+22 April 2013
