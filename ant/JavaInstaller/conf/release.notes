@@ -1,6 +1,37 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 8 February 2013
+Date: 22 April 2013
+
+Summary of changes - v4.0.0 Build 5297:
+----------------------------------------
+
+- Fixed possible NPE on null catalog value when setting show defaiult cat/schema
+  option only.
+- Added database table data edit support for the browser Data tab where a 
+  primary key exists for that table.
+- Modified Query Editor autocomplete to incrementally add to the list instead of
+  waiting to populate the complete list.
+- Modified Query Editor autocomplete to retain derived suggestions list with a 
+  new action from te toolbar to force a refresh.
+- Added main connection and driver details panel to scrollpane to avoid 
+  field/button collapsing on view resize. 
+- Added object count value to all object lists on the Database Browser view.
+- Added summary file info to all export data workers.
+- Added TRACE log level.
+- Modified driver panel class field to use a drop-down box with available 
+  drivers in addition to the 'Find' button.
+- Misc UI tweaks for for Mac OS look and feel. 
+- Modified to display column names as returned - previously defaulted to upper.
+- Fixed applying a column NULL change being executed as NOT NULL from the 
+  Database Browser Table view.  
+- Modified datbase object node loading to check for a single item only and load
+  contents on selection from the Database Browser.
+- Performance improvements on result set table model. 
+- Modified to allow for custom settings directory supplied as an argument on 
+  startup using: executequery.user.home.dir=[some_path]
+- Added key event modifiers check for INS key in the Query Editor.
+
+ 
 
 Summary of changes - v3.6 Build 5213:
 ----------------------------------------
@@ -354,4 +385,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-8 February 2013
+22 April 2013
