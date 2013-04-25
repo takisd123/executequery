@@ -51,6 +51,8 @@ public interface RecordDataItem extends TableCellValue {
     boolean isSQLValueNull();
 
     Object getValueAsType();
+    
+    boolean isLob();
 
 }
 

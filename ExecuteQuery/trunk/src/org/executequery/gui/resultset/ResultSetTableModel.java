@@ -532,6 +532,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             }
             
         }
+
+        RecordDataItem recordDataItem = tableData.get(row).get(column);
+        if (recordDataItem.isLob()) {
+
+            return false;
+        }
         
         return cellsEditable;
     }

@@ -128,9 +128,5 @@ public class ClobRecordDataItem extends AbstractLobRecordDataItem {
 
     	return writer.toString().trim().getBytes();
     }
-    
+
 }
-
-
-
-

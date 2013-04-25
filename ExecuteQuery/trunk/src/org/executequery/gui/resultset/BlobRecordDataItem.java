@@ -106,9 +106,5 @@ public class BlobRecordDataItem extends AbstractLobRecordDataItem {
 
         return MimeTypes.get().getMimeType(data);
     }
-
+    
 }
-
-
-
-

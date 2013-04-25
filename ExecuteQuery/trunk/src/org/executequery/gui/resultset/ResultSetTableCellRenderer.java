@@ -279,7 +279,16 @@ class ResultSetTableCellRenderer extends DefaultTableCellRenderer {
 
         } else {
 
-            setValue(dateFormatted((Date)value));
+            // account for possible dump on parse conversion
+            if (value instanceof Date) {
+                
+                setValue(dateFormatted((Date) value));
+
+            } else {
+                
+                setValue(value);
+            }
+            
         }
 
         if (!isSelected) {
