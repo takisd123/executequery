@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -106,7 +107,17 @@ public class SQLTypeObjectFactory {
         
         try {
             
-            return new Time(new SimpleDateFormat(TIME_FORMAT).parse(value).getTime());
+            DateFormat dateFormat;
+            if (value.length() != TIME_FORMAT_SIMPLE_LENGTH) {
+                
+                dateFormat = new SimpleDateFormat(TIME_FORMAT_FULL);
+
+            } else {
+                
+                dateFormat = new SimpleDateFormat(TIME_FORMAT_SIMPLE);
+            }
+            
+            return new Time(dateFormat.parse(value).getTime());
             
         } catch (ParseException e) {
             
@@ -116,7 +127,9 @@ public class SQLTypeObjectFactory {
     }
     
     private static final String DATE_FORMAT = "yyyy-MM-dd";
-    private static final String TIME_FORMAT = "HH:mm:ss.S"; 
+    private static final String TIME_FORMAT_FULL = "HH:mm:ss.S"; 
+    private static final String TIME_FORMAT_SIMPLE = "HH:mm:ss"; 
+    private static final int TIME_FORMAT_SIMPLE_LENGTH = TIME_FORMAT_SIMPLE.length();
     
     private Date parseDate(String value) throws ParseException {
         
@@ -125,7 +138,7 @@ public class SQLTypeObjectFactory {
     
     private Date parseDateTime(String value) throws ParseException {
         
-        return new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT).parse(value);
+        return new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT_FULL).parse(value);
     }
     
 }

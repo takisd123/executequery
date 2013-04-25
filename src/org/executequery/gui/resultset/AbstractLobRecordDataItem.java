@@ -83,6 +83,11 @@ public abstract class AbstractLobRecordDataItem extends AbstractRecordDataItem
         return sb.toString();
     }
 
+    public boolean isLob() {
+
+        return true;
+    }
+    
 }
 
 

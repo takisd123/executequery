@@ -22,6 +22,8 @@ package org.executequery.gui.resultset;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.executequery.databasemediators.SQLTypeObjectFactory;
+import org.executequery.log.Log;
+import org.underworldlabs.jdbc.DataSourceException;
 
 
 /**
@@ -163,7 +165,22 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 
     protected Object valueAsType(Object value) {
         
-        return TYPE_OBJECT_FACTORY.create(dataType, value);
+        try {
+        
+            return TYPE_OBJECT_FACTORY.create(dataType, value);
+            
+        } catch (DataSourceException e) {
+            
+            Log.info("Unable to retrieve value as type for column [ " + name + " ]");
+            return e.getMessage();
+            
+        }
+    }
+
+    public boolean isLob() {
+
+        return false;
     }
     
 }
+
