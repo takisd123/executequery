@@ -8,7 +8,7 @@ Summary of changes - v4.0.1 Build 5301:
 - Modified result set model to log and return for unsupported data conversions
   in values.
 - Modified time value returns in result set to check for full length as in 
-  HH:mm:ss.S or HH:mm:ss before attempting to parse.  
+  HH:mm:ss.S or HH:mm:ss before attempting to parse.
 
 
 Summary of changes - v4.0.0 Build 5297:

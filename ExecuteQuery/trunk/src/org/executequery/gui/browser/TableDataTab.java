@@ -262,6 +262,8 @@ public class TableDataTab extends JPanel
         primaryKeyColumns.clear();
         foreignKeyColumns.clear();
         
+        GUIUtilities.showWaitCursor();
+        
         this.databaseObject = databaseObject;
         try {
 
@@ -285,14 +287,18 @@ public class TableDataTab extends JPanel
                 	foreignKeyColumns = databaseTable.getForeignKeyColumnNames();
                 }
                 
+                if (primaryKeyColumns.isEmpty()) {
+                    
+                    canEditTableLabel.setText("This table has no primary keys defined and is not editable here");
+                }
+                
+                canEditTableNotePanel.setVisible(alwaysShowCanEditNotePanel);
             }
 
-            if (primaryKeyColumns.isEmpty()) {
-                
-                canEditTableLabel.setText("This table has no primary keys defined and is not editable here");
+            if (!isDatabaseTable()) {
+             
+                canEditTableNotePanel.setVisible(false);
             }
-            
-            canEditTableNotePanel.setVisible(alwaysShowCanEditNotePanel);
 
             ResultSet resultSet = databaseObject.getData(true);
             tableModel.createTable(resultSet);
@@ -388,6 +394,7 @@ public class TableDataTab extends JPanel
 
         } finally {
 
+            GUIUtilities.showNormalCursor();
             tableModel.addTableModelListener(this);
         }
 

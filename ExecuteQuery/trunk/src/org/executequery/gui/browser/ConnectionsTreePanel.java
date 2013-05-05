@@ -1718,7 +1718,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
             if (path != null && path == getTreeSelectionPath()) {
 
                 connectOnDoubleClick(path);
-                pathChanged(path);
+//                pathChanged(path);
             }
         }
 
