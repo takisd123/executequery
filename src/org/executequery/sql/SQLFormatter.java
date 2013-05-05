@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang.StringUtils;
+
 // borrowed and modified from org.hibernate.pretty.Formatter and DDLFormatter
 
 /** 
@@ -525,6 +527,9 @@ public class SQLFormatter {
     }
 
     private boolean isFunctionName(String tok) {
+        if (StringUtils.isBlank(tok)) {
+            return false;
+        }
         final char begin = tok.charAt(0);
         final boolean isIdentifier = Character.isJavaIdentifierStart(begin) || '"'==begin;
         return isIdentifier && 
