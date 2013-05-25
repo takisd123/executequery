@@ -15,6 +15,12 @@ public class SQLTypeObjectFactory {
 
     public Object create(int type, Object value) {
         
+        Class<?> clazz = classForType(type);
+        if (value.getClass().isAssignableFrom(clazz)) {
+            
+            return value;
+        }
+        
         Object valueAsType = value;
         String valueAsString = value.toString();
         switch (type) {
@@ -139,6 +145,56 @@ public class SQLTypeObjectFactory {
     private Date parseDateTime(String value) throws ParseException {
         
         return new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT_FULL).parse(value);
+    }
+    
+    private Class<?> classForType(int type) {
+        
+        switch (type) {
+        
+            case Types.TINYINT:
+                return Byte.class;
+        
+            case Types.BIGINT:
+                return Long.class;
+    
+            case Types.SMALLINT:
+                return Short.class;
+        
+            case Types.LONGVARCHAR:
+            case Types.CHAR:
+            case Types.VARCHAR:
+                return String.class;
+        
+            case Types.BIT:
+            case Types.BOOLEAN:
+                return Boolean.class;
+        
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                return BigDecimal.class;
+                
+            case Types.INTEGER:
+                return Integer.class;
+                
+            case Types.REAL:
+                return Float.class;
+        
+            case Types.FLOAT:
+            case Types.DOUBLE:
+                return Double.class;
+    
+            case Types.DATE:
+                return Date.class;
+    
+            case Types.TIME:
+                return Time.class;
+                
+            case Types.TIMESTAMP:
+                return Timestamp.class;
+    
+        }
+        
+        return Object.class;
     }
     
 }

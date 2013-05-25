@@ -1,8 +1,15 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 25 April 2013
+Date: 9 May 2013
 
-Summary of changes - v4.0.1 Build 5301:
+Summary of changes - v4.0.2 Build 5324:
+----------------------------------------
+
+- Fixed issue where a lost data source causes a closing editor to hang.
+- Modified type conversion of result set table views.
+
+
+Summary of changes - v4.0.1 Build 5306:
 ----------------------------------------
 
 - Modified result set model to log and return for unsupported data conversions
@@ -394,4 +401,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-25 April 2013
+9 May 2013
