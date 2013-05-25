@@ -459,7 +459,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
             cstmnt = conn.prepareCall(procQuery);
             stmnt = cstmnt;
         } catch (SQLException e) {
-            handleSQLException(e);
+            handleException(e);
             statementResult.setSqlException(e);
             return statementResult;
         }
@@ -668,7 +668,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } catch (SQLException e) {
 
-            handleSQLException(e);
+            handleException(e);
             statementResult.setSqlException(e);
 
         } catch (Exception e) {
@@ -819,7 +819,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
             } catch (SQLException e) {
 
-                handleSQLException(e);
+                handleException(e);
                 statementResult.setSqlException(e);
             }
 
@@ -1162,7 +1162,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         }
         catch (SQLException e) {
-            handleSQLException(e);
+            handleException(e);
             statementResult.setSqlException(e);
         }
         return statementResult;
@@ -1205,7 +1205,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
             }
         }
         catch (SQLException e) {
-            handleSQLException(e);
+            handleException(e);
         }
     }
 
@@ -1230,7 +1230,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
             } catch (SQLException e) {
 
-                handleSQLException(e);
+                handleException(e);
             }
 
         }
@@ -1253,7 +1253,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
             }
         }
         catch (SQLException e) {
-            handleSQLException(e);
+            handleException(e);
         }
     }
 
@@ -1274,13 +1274,13 @@ public class DefaultStatementExecutor implements StatementExecutor {
                 }
                 conn = null;
             }
-            catch (SQLException e) {
-                handleSQLException(e);
+            catch (Exception e) {
+                handleException(e);
             }
         }
     }
 
-    private void handleSQLException(SQLException e) {
+    private void handleException(Throwable e) {
         if (Log.isDebugEnabled()) {
             e.printStackTrace();
         }
@@ -1347,7 +1347,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } catch (SQLException e) {
 
-            handleSQLException(e);
+            handleException(e);
         }
 
     }
@@ -1367,7 +1367,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
             }
             catch (DataSourceException e) {}
             catch (SQLException e) {
-                handleSQLException(e);
+                handleException(e);
             }
         }
     }

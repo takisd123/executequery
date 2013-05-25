@@ -491,10 +491,17 @@ public class TableSorter extends AbstractTableModel {
             
             else if (type == java.util.Date.class) {
 
-                Date d1 = (Date)o1;
-                long n1 = d1.getTime();
-                Date d2 = (Date)o2;
-                long n2 = d2.getTime();
+                long n1 = -1;
+                try {
+                    Date d1 = (Date)o1;
+                    n1 = d1.getTime();
+                } catch (ClassCastException e) {}
+
+                long n2 = -1;
+                try {
+                    Date d2 = (Date)o2;
+                    n2 = d2.getTime();
+                } catch (ClassCastException e) {}
                 
                 if (n1 < n2)
                     return -1;

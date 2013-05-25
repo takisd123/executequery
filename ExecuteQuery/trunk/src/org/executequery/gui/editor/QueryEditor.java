@@ -924,7 +924,6 @@ public class QueryEditor extends DefaultTabView
         }
 
         UserProperties properties = UserProperties.getInstance();
-
         if (properties.getBooleanProperty("general.save.prompt") && contentChanged) {
 
             if (!GUIUtilities.saveOpenChanges(this)) {
@@ -934,7 +933,17 @@ public class QueryEditor extends DefaultTabView
 
         }
 
-        cleanup();
+        try {
+            
+            cleanup();
+        
+        } catch (Exception e) {
+            
+            GUIUtilities.displayExceptionErrorDialog(
+                    "An error occurred when closing this editor.\nWhile this could " +
+                    "be nothing, sometimes it helps to check the stack trace to see if anything " +
+                    "peculiar happened.\n\nThe system returned:\n" + e.getMessage(), e);
+        }
 
         return true;
     }
