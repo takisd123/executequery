@@ -50,7 +50,6 @@ import javax.swing.UIManager;
 
 import org.executequery.gui.WidgetFactory;
 import org.executequery.log.Log;
-import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.util.IconUtilities;
 
 /**

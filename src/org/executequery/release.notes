@@ -1,12 +1,13 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 9 May 2013
+Date: 11 June 2013
 
-Summary of changes - v4.0.2 Build 5324:
+Summary of changes - v4.0.2 Build 5310:
 ----------------------------------------
 
 - Fixed issue where a lost data source causes a closing editor to hang.
 - Modified type conversion of result set table views.
+- Fixed determination and display of array values in the result set table views.
 
 
 Summary of changes - v4.0.1 Build 5306:
