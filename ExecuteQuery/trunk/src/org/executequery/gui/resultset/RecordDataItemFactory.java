@@ -74,6 +74,9 @@ public class RecordDataItemFactory {
 	        case Types.TIMESTAMP:
 	            return new DateRecordDataItem(name, dataType, dataTypeName);
 	            
+	        case Types.ARRAY:
+	            return new ArrayRecordDataItem(name, dataType, dataTypeName);
+	            
         	default:
         	    return new SimpleRecordDataItem(name, dataType, dataTypeName);
 

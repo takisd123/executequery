@@ -7,6 +7,7 @@ import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.underworldlabs.jdbc.DataSourceException;
@@ -78,6 +79,13 @@ public class SQLTypeObjectFactory {
                 valueAsType = stringAsTimestamp(valueAsString);
                 break;
 
+            case Types.ARRAY:
+                if (value instanceof Object[]) {
+                    
+                    valueAsType = Arrays.toString((Object[])value);
+                }
+                break;
+                
         }
 
         return valueAsType;
