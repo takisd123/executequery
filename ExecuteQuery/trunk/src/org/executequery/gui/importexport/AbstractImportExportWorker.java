@@ -245,7 +245,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
             } else {
                 
-                columnName = database.escapeColumnName(parent.getSchemaName(), table, columnName);                
+                columnName = database.escapeColumnName(null, parent.getSchemaName(), table, columnName);                
             }
 
             sb.append(columnName);

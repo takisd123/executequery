@@ -20,9 +20,12 @@
 
 package org.executequery.gui.prefs;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.gui.text.LineSeparator;
 import org.underworldlabs.util.SystemProperties;
@@ -125,6 +128,15 @@ public class PropertiesGeneral extends PropertiesBasePanel {
                     "Log System.err to console",
                     Boolean.valueOf(stringUserProperty(key))));
 
+        key = "system.file.encoding";
+        list.add(new UserPreference(
+                    UserPreference.STRING_TYPE,
+                    key,
+                    "Default file encoding",
+                    encodingValue(),
+                    availableCharsets()));
+
+        
         list.add(new UserPreference(
                     UserPreference.CATEGORY_TYPE,
                     null,
@@ -172,6 +184,28 @@ public class PropertiesGeneral extends PropertiesBasePanel {
         addContent(preferencesPanel);
     }
 
+    private String[] availableCharsets() {
+
+        List<String> available = new ArrayList<String>();
+        SortedMap<String, Charset> charsets = Charset.availableCharsets();
+        for (Charset charset : charsets.values()) {
+            
+            available.add(charset.name());
+        }
+        
+        return available.toArray(new String[available.size()]);
+    }
+
+    private String encodingValue() {
+        
+        String encoding = stringUserProperty("system.file.encoding");
+        if (StringUtils.isBlank(encoding)) {
+            
+            return System.getProperty("file.encoding");
+        }
+        return encoding;
+    }
+    
     public void restoreDefaults() {
 
         preferencesPanel.restoreDefaults();
@@ -183,12 +217,4 @@ public class PropertiesGeneral extends PropertiesBasePanel {
     }
     
 }
-
-
-
-
-
-
-
-
 

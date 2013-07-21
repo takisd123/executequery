@@ -22,10 +22,16 @@ package org.executequery;
 
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 
 import javax.swing.JComponent;
 import javax.swing.JMenuBar;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.ConnectionMediator;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.ExecuteQueryFrame;
@@ -193,6 +199,8 @@ public class ApplicationLauncher {
 
             });
 
+            printSystemProperties();
+
             // auto-login if selected
             if (openConnection) {
 
@@ -206,6 +214,26 @@ public class ApplicationLauncher {
             e.printStackTrace();
         }
 
+    }
+
+    private void printSystemProperties() {
+        if (Log.isTraceEnabled()) {
+            
+            Log.trace(" --- System properties --- ");
+
+            List<String> keys = new ArrayList<String>();
+            Properties properties = System.getProperties();
+            for (Enumeration<Object> i = properties.keys(); i.hasMoreElements();) {
+                
+                keys.add((String) i.nextElement());                    
+            }
+            
+            Collections.sort(keys);
+            for (String key : keys) {
+
+                Log.trace(key + ": " + properties.getProperty(key));                    
+            }
+        }
     }
 
     private boolean displaySplash() {
@@ -264,6 +292,12 @@ public class ApplicationLauncher {
     }
 
     private void applySystemProperties() {
+
+        String encoding = stringApplicationProperty("system.file.encoding");
+        if (StringUtils.isNotBlank(encoding)) {
+            
+            System.setProperty("file.encoding", encoding);
+        }
 
         String settingDirName = stringApplicationProperty("eq.user.home.dir");
         System.setProperty("executequery.user.home.dir", settingDirName);

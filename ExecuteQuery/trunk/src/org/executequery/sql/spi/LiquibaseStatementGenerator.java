@@ -24,6 +24,7 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
+import liquibase.CatalogAndSchema;
 import liquibase.change.Change;
 import liquibase.change.ColumnConfig;
 import liquibase.change.ConstraintsConfig;
@@ -69,8 +70,10 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         Database database = databaseFromName(
                 connectionFromObject(tableColumn.getTable()), tableColumn.getTable().getHost().getDatabaseProductName());
 
-        return database.escapeColumnName(tableColumn.getSchemaName(),
+        return database.escapeColumnName(tableColumn.getCatalogName(), tableColumn.getSchemaName(),
                 tableColumn.getTable().getName(), tableColumn.getName());
+//        return database.escapeColumnName(tableColumn.getSchemaName(),
+//                tableColumn.getTable().getName(), tableColumn.getName());
     }
 
     public String dropTable(String databaseName, DatabaseTable table) {
@@ -263,7 +266,10 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         try {
 
             Database database = databaseFromName(connectionFromObject(view), databaseName);
-            return database.getViewDefinition(view.getNamePrefix(), view.getName());
+//            return database.getViewDefinition(view.getNamePrefix(), view.getName());
+
+            return database.getViewDefinition(
+                    new CatalogAndSchema(view.getCatalogName(), view.getSchemaName()), view.getName());
 
         } catch (DatabaseException e) {
 

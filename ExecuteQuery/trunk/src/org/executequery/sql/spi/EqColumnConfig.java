@@ -24,8 +24,8 @@ import liquibase.change.ColumnConfig;
 import liquibase.database.Database;
 import liquibase.database.core.MaxDBDatabase;
 import liquibase.database.core.MySQLDatabase;
-import liquibase.database.structure.type.DataType;
-import liquibase.database.typeconversion.TypeConverterFactory;
+import liquibase.datatype.DataTypeFactory;
+import liquibase.datatype.LiquibaseDataType;
 
 class EqColumnConfig extends ColumnConfig {
 
@@ -39,11 +39,11 @@ class EqColumnConfig extends ColumnConfig {
 
     @Override
     public String getType() {
-     
-        DataType dataType = TypeConverterFactory.getInstance().findTypeConverter(database).getDataType(typeName, isAutoIncrement());
-        if (dataType.getMaxParameters() < 1) {
 
-            return dataType.getDataTypeName();
+        LiquibaseDataType dataType = DataTypeFactory.getInstance().fromDescription(typeName);
+        if (dataType.getMaxParameters(database) < 1) {
+
+            return dataType.getName();
         }
         
         return super.getType();
@@ -61,6 +61,9 @@ class EqColumnConfig extends ColumnConfig {
 
             if (shouldQuoteDefaultValue(database)) {
 
+                return database.escapeStringForDatabase(columnDefaultValue);
+
+                /* 2.0.5
                 if (!database.shouldQuoteValue(columnDefaultValue)) {
 
                     return columnDefaultValue;
@@ -69,6 +72,7 @@ class EqColumnConfig extends ColumnConfig {
 
                     return "'" + columnDefaultValue.replaceAll("'", "''") + "'";
                 }
+                */
 
             }
 

@@ -20,14 +20,6 @@
 
 package org.executequery.datasource;
 
-import org.apache.commons.lang.StringUtils;
-import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.databasemediators.DatabaseDriver;
-import org.executequery.log.Log;
-import org.underworldlabs.jdbc.DataSourceException;
-import org.underworldlabs.util.MiscUtils;
-
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -35,6 +27,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.apache.commons.lang.StringUtils;
+import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.databasemediators.DatabaseDriver;
+import org.executequery.log.Log;
+import org.underworldlabs.jdbc.DataSourceException;
+import org.underworldlabs.util.MiscUtils;
 
 /**
  *
@@ -221,7 +222,7 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         
         return driver.getClass().getName();
     }
-
+    
     /*
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return driver.getParentLogger();
