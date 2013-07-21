@@ -20,13 +20,6 @@
 
 package org.executequery.datasource;
 
-import org.executequery.databasemediators.DatabaseConnection;
-import org.executequery.databasemediators.DatabaseDriver;
-import org.executequery.log.Log;
-import org.underworldlabs.util.DynamicLibraryLoader;
-import org.underworldlabs.util.MiscUtils;
-
-import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -38,6 +31,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+
+import javax.sql.DataSource;
+
+import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.databasemediators.DatabaseDriver;
+import org.executequery.log.Log;
+import org.underworldlabs.util.DynamicLibraryLoader;
+import org.underworldlabs.util.MiscUtils;
 
 /** 
  * Acts as a wrapper to the actual data source and JDBC driver.
@@ -313,8 +314,7 @@ public class ConnectionDataSource implements DataSource, DatabaseDataSource {
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return driver.getParentLogger();
 	}
-    */
-	
+	*/
 }
 
 

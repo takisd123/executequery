@@ -1145,8 +1145,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
     public String prepareStatement(List<String> columns) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("UPDATE ").append(getName()).append(" SET ");
-        
+        sb.append("UPDATE ").append(getNameWithPrefixForQuery()).append(" SET ");
         for (String column : columns) {
 
             sb.append(column).append(" = ?,");

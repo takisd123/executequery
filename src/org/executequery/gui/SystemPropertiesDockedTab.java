@@ -70,6 +70,7 @@ public class SystemPropertiesDockedTab extends AbstractDockedTabActionPanel {
      * Override to make sure the timer has started.
      */
     public boolean tabViewSelected() {
+        propertiesPanel.reload();
         resourcesPanel.startTimer();
         return true;
     }

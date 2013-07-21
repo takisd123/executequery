@@ -71,6 +71,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
     private RecordDataItemFactory recordDataItemFactory;
 
+    private String query;
+
     public ResultSetTableModel() {
         
         this(null, -1);
@@ -83,25 +85,35 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
     public ResultSetTableModel(ResultSet resultSet, int maxRecords) {
 
-        this.maxRecords = maxRecords;
+        this(resultSet, maxRecords, null);
+    }
 
+    public ResultSetTableModel(ResultSet resultSet, int maxRecords, String query) {
+        
+        this.maxRecords = maxRecords;
+        this.query = query;
+        
         columnHeaders = new ArrayList<String>();
         tableData = new ArrayList<List<RecordDataItem>>();
         recordDataItemFactory = new RecordDataItemFactory();
-
+        
         holdMetaData = UserProperties.getInstance().getBooleanProperty("editor.results.metadata");
-
+        
         if (resultSet != null) {
-
+            
             createTable(resultSet);
         }
-
+        
     }
-
+    
     public ResultSetTableModel(List<String> columnHeaders, List<List<RecordDataItem>> tableData) {
         
         this.columnHeaders = columnHeaders;
         this.tableData = tableData;
+    }
+    
+    public String getQuery() {
+        return query;
     }
     
     public void createTable(ResultSet resultSet) {

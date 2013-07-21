@@ -41,6 +41,8 @@ import org.underworldlabs.swing.table.PropertyWrapperModel;
  */
 public class SystemPropertiesPanel extends JPanel {
     
+    private SortableColumnsTable table;
+
     public SystemPropertiesPanel() {
 
         super(new GridBagLayout());
@@ -48,7 +50,7 @@ public class SystemPropertiesPanel extends JPanel {
                                             System.getProperties(), 
                                             PropertyWrapperModel.SORT_BY_KEY);
         
-        JTable table = new SortableColumnsTable(model);
+        table = new SortableColumnsTable(model);
         table.getTableHeader().setReorderingAllowed(false);
         table.getColumnModel().getColumn(0).setCellRenderer(new PropertiesTableCellRenderer());
         table.getColumnModel().getColumn(1).setCellRenderer(new PropertiesTableCellRenderer());
@@ -72,6 +74,14 @@ public class SystemPropertiesPanel extends JPanel {
         add(scroller, gbc);
     }
  
+    public void reload() {
+        
+        table.setModel(new PropertyWrapperModel(
+                                            System.getProperties(), 
+                                            PropertyWrapperModel.SORT_BY_KEY));
+        table.resetSorter();
+    }
+    
     
     private class PropertiesTableCellRenderer extends DefaultTableCellRenderer {
 

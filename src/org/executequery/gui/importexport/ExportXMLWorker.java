@@ -450,7 +450,6 @@ public class ExportXMLWorker extends AbstractImportExportWorker
                         for (int i = 0; i < cols.length; i++) {
 
                             type = columns.get(i).getSQLType();
-                            
                             switch (type) {
                                 case Types.BIT:
                                 case Types.TINYINT:
@@ -489,9 +488,7 @@ public class ExportXMLWorker extends AbstractImportExportWorker
                                 case Types.BLOB:
                                 case Types.CLOB:
 
-                                    value = Base64.encodeBytes(
-                                            MiscUtils.inputStreamToBytes(
-                                                rs.getBinaryStream(i+1)));
+                                    value = Base64.encodeBytes(MiscUtils.inputStreamToBytes(rs.getBinaryStream(i+1)));
                                     break;
 
                                 default:

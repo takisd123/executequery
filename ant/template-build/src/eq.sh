@@ -11,5 +11,7 @@ if [ "X$JAVA" = "X" ]; then
     JAVA=/usr/bin/java
 fi
 
+# DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 exec $JAVA "-javaagent:agent.jar=ExecuteQuery" -mx${JAVA_HEAP_SIZE}m -jar "eq.jar" &
 

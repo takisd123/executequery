@@ -49,6 +49,8 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.table.TableModel;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.executequery.GUIUtilities;
 import org.executequery.components.FileChooserDialog;
@@ -59,6 +61,8 @@ import org.executequery.gui.importexport.DefaultExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ExcelWorkbookBuilder;
 import org.executequery.gui.importexport.ImportExportProcess;
 import org.executequery.gui.resultset.RecordDataItem;
+import org.executequery.gui.resultset.ResultSetTableModel;
+import org.executequery.gui.resultset.ResultSetTableModelToXMLWriter;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.CharLimitedTextField;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -96,31 +100,22 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     public QueryEditorResultsExporter(TableModel model) {
 
         super(GUIUtilities.getParentFrame(), "Export Query Results", true);
-            
         this.model = model;
-
-        try {
-            
-            init();
-
-        } catch (Exception e) {
-          
-            e.printStackTrace();
-        }
+        init();
         
         pack();
         this.setLocation(GUIUtilities.getLocationForDialog(this.getSize()));
         setVisible(true);
     }
     
-    private void init() throws Exception {
+    private void init() {
 
         ReflectiveAction action = new ReflectiveAction(this);       
         
         String[] delims = {"Pipe","Comma","Semi-colon","Hash","Custom"};
         delimCombo = ActionUtilities.createComboBox(action, delims, "delimeterChanged");
         
-        String[] types = {"Delimited File", "Excel Spreadsheet"};
+        String[] types = {"Delimited File", "Excel Spreadsheet", "XML"};
         typeCombo = ActionUtilities.createComboBox(action, types, "exportTypeChanged");
         
         customDelimField = new CharLimitedTextField(1);
@@ -218,7 +213,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         base.add(btnPanel, gbc);
         
-        Dimension baseDim = new Dimension(480, 220);
+        Dimension baseDim = new Dimension(550, 240);
         base.setPreferredSize(baseDim);
 
         base.setBorder(BorderFactory.createEtchedBorder());
@@ -242,20 +237,23 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     private int getExportFormatType() {
 
         int index = typeCombo.getSelectedIndex();
-
-        if (index == 0) { 
-            
-            return ImportExportProcess.DELIMITED;
-
-        } else {
-          
-            return ImportExportProcess.EXCEL;
+        switch (index) {
+            case 0:
+                return ImportExportProcess.DELIMITED;
+            case 1:
+                return ImportExportProcess.EXCEL;
+            case 2:
+                return ImportExportProcess.XML;
+            default:
+                return ImportExportProcess.DELIMITED;
         }
+
     }
     
     public void exportTypeChanged(ActionEvent e) {
         int index = typeCombo.getSelectedIndex();
         delimCombo.setEnabled(index == 0);
+        columnHeadersCheck.setEnabled(index != 2);
     }
     
     public void delimeterChanged(ActionEvent e) {
@@ -268,6 +266,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     }
     
     public void browse(ActionEvent e) {
+
         FileChooserDialog fileChooser = new FileChooserDialog();
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fileChooser.setMultiSelectionEnabled(false);
@@ -277,17 +276,33 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
 
         int result = fileChooser.showDialog(GUIUtilities.getInFocusDialogOrWindow(), "Select");
         if (result == JFileChooser.CANCEL_OPTION) {
+            
             return;
         }
 
+        String suffix = null;
         File file = fileChooser.getSelectedFile();
         String path = file.getAbsolutePath();
-        if (getExportFormatType() == ImportExportProcess.EXCEL) {
-            if (!path.endsWith(".xls")) {
-                path += ".xls";
-            }
+
+        int exportFormatType = getExportFormatType();
+        if (exportFormatType == ImportExportProcess.EXCEL) {
+            
+            suffix = ".xls";
+
+        } else if (exportFormatType == ImportExportProcess.XML) {
+        
+            suffix = ".xml";            
         }
+
+        path = appendToPath(path, suffix);
         fileNameField.setText(path);
+    }
+
+    private String appendToPath(String path, String suffix) {
+        if (suffix != null && !path.endsWith(suffix)) {
+            path += suffix;
+        }
+        return path;
     }
     
     public void cancel(ActionEvent e) {
@@ -315,23 +330,26 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
             }
         }
         
-        if (getExportFormatType() == ImportExportProcess.DELIMITED &&
-                delimCombo.getSelectedIndex() == 4) {
+        if (getExportFormatType() == ImportExportProcess.DELIMITED 
+                && delimCombo.getSelectedIndex() == 4) {
+
             value = customDelimField.getText();
             if (MiscUtils.isNull(value)) {
-                GUIUtilities.displayErrorMessage(
-                        "You must enter a custom delimeter");
+
+                GUIUtilities.displayErrorMessage("You must enter a custom delimeter");
                 return;
             }
+
         }
 
         SwingWorker worker = new SwingWorker() {
             public Object construct() {
+                
                 return doExport();
             }
             public void finished() {
-                GUIUtilities.displayInformationMessage(
-                        "Result set export complete.");
+
+                GUIUtilities.displayInformationMessage("Result set export complete.");
                 dispose();
             }
         };
@@ -339,14 +357,47 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     }
 
     private Object doExport() {
-        if (getExportFormatType() == ImportExportProcess.DELIMITED) {
+        int exportFormatType = getExportFormatType();
+        if (exportFormatType == ImportExportProcess.DELIMITED) {
+
             return exportDelimited();
-        }
-        else {
+        } else if (exportFormatType == ImportExportProcess.EXCEL) {
+            
             return exportExcel();
+
+        } else {
+            
+            return exportXML();
         }
     }
     
+    private Object exportXML() {
+
+        ResultSetTableModelToXMLWriter writer = new ResultSetTableModelToXMLWriter((ResultSetTableModel) model, fileNameField.getText());
+        try {
+            
+            writer.write();
+        
+        } catch (ParserConfigurationException e) {
+
+            return handleError(e);
+
+        } catch (TransformerException e) {
+
+            return handleError(e);
+        }
+
+        return "done";
+    }
+
+    private Object handleError(Throwable e) {
+
+        String message = "Error writing to file:\n\n" + e.getMessage();
+        GUIUtilities.displayExceptionErrorDialog(message, e);
+      
+        return "failed";
+    }
+
     private Object exportExcel() {
 
         OutputStream outputStream = null;
@@ -363,12 +414,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
             int rowCount = model.getRowCount();
             int columnCount = model.getColumnCount();
 
-            progressDialog = new ResultsProgressDialog(rowCount);
-            setVisible(false);
-            progressDialog.pack();
-            progressDialog.setLocation(
-                    GUIUtilities.getLocationForDialog(progressDialog.getSize()));
-            progressDialog.setVisible(true);
+            progressDialog = progressDialog(rowCount);
 
             List<String> values = new ArrayList<String>(columnCount);
             
@@ -402,10 +448,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
 
         } catch (IOException e) {
 
-            String message = "Error writing to file:\n\n" + e.getMessage();
-            GUIUtilities.displayExceptionErrorDialog(message, e);
-        
-            return "failed";
+            return handleError(e);
         
         } finally {
 
@@ -422,6 +465,19 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
 
         }
 
+    }
+
+    private ResultsProgressDialog progressDialog(int rowCount) {
+
+        ResultsProgressDialog progressDialog;
+        progressDialog = new ResultsProgressDialog(rowCount);
+        setVisible(false);
+        progressDialog.pack();
+
+        progressDialog.setLocation(GUIUtilities.getLocationForDialog(progressDialog.getSize()));
+        progressDialog.setVisible(true);
+        
+        return progressDialog;
     }
 
     private OutputStream createOutputStream() throws FileNotFoundException {
@@ -469,12 +525,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
             int rowCount = model.getRowCount();
             int columnCount = model.getColumnCount();
             
-            progressDialog = new ResultsProgressDialog(rowCount);
-            setVisible(false);
-            progressDialog.pack();
-            progressDialog.setLocation(GUIUtilities.getLocationForDialog(
-                                                        progressDialog.getSize()));
-            progressDialog.setVisible(true);
+            progressDialog = progressDialog(rowCount);
 
             if (columnHeadersCheck.isSelected()) {
                 for (int i = 0; i < columnCount; i++) {
@@ -510,10 +561,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
 
         } catch (IOException e) {
         
-            String message = "Error writing to file:\n\n" + e.getMessage();
-            
-            GUIUtilities.displayExceptionErrorDialog(message, e);
-            return "failed";
+            return handleError(e);
         
         } finally {
             if (progressDialog != null && progressDialog.isVisible()) {

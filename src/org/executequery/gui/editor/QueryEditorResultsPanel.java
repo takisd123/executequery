@@ -341,7 +341,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public int setResultSet(ResultSet rset, boolean showRowNumber,
                             int maxRecords, String query) {
 
-        ResultSetTableModel model = new ResultSetTableModel(rset, maxRecords);
+        ResultSetTableModel model = new ResultSetTableModel(rset, maxRecords, query);
 
         int rowCount = getResultSetRowCount(model, showRowNumber);
         if (rowCount == 0) {

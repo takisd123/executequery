@@ -1103,6 +1103,7 @@ class DelegatingResultSet implements ResultSet {
 		return _res.getObject(columnLabel, type);
 	}
     */
+    
 }
 
 

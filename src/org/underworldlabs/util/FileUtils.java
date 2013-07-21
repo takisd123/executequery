@@ -38,6 +38,8 @@ import java.io.PrintWriter;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * File access utilities.
  *
@@ -121,28 +123,35 @@ public class FileUtils {
     }
 
     public static String loadFile(File file, boolean escapeLines) throws IOException {
+
         FileReader fileReader = null;
         BufferedReader reader = null;
-
+        
         try {
             fileReader = new FileReader(file);
             reader = new BufferedReader(fileReader);
-
+            
             String value = null;
             StringBuilder sb = new StringBuilder();
-
+            
             while ((value = reader.readLine()) != null) {
                 sb.append(value);
-
+                
                 if (escapeLines) {
                     sb.append('\n');
                 }
-
+                
             }
 
+            String charset = new EncodingDetector().detectCharset(file);
+            if (StringUtils.isNotBlank(charset)) {
+                
+                return new String(sb.toString().getBytes(), charset);
+            }
+            
             return sb.toString();
-        }
-        finally {
+        
+        } finally {
             if (reader != null) {
                 reader.close();
             }
@@ -151,7 +160,7 @@ public class FileUtils {
             }
         }
     }
-
+    
     public static String loadResource(String path) throws IOException {
         InputStream input = null;
         BufferedReader reader = null;

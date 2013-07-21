@@ -42,6 +42,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import org.apache.commons.lang.StringUtils;
 import org.underworldlabs.swing.VerticalTextIcon;
 
 /**
@@ -679,7 +680,6 @@ public class DockedTabContainer extends JPanel
     public int getTabCount(int position) {
         
         TabPane tabPane = getTabPaneForPosition(position);
-        
         if (tabPane != null) {
          
             return ((AbstractTabPane) tabPane).getTabCount();
@@ -697,7 +697,6 @@ public class DockedTabContainer extends JPanel
     public List<TabComponent> getOpenTabs(int position) {
         
         TabPane tabPane = getTabPaneForPosition(position);
-        
         if (tabPane != null) {
             
             return ((AbstractTabPane) tabPane).getTabComponents();
@@ -708,21 +707,46 @@ public class DockedTabContainer extends JPanel
 
     public TabComponent getTabComponent(int position, String title) {
         
+        String tabTitle = title.toUpperCase();
         List<TabComponent> components = getOpenTabs(position);
         if (components != null) {
-            title = title.toUpperCase();
             int tabCount = components.size();
             for (int i = 0; i < tabCount; i++) {
                 TabComponent tabComponent = components.get(i);
                 String _title = tabComponent.getTitle();
-                if (_title != null && _title.toUpperCase().startsWith(title)) {
+                if (_title != null && _title.toUpperCase().startsWith(tabTitle)) {
                     return tabComponent;
                 }
             }
         }
-        return null;        
+        
+        return getTabComponent(title);        
     }
 
+    private TabComponent getTabComponent(String title) {
+        
+        String tabTitle = title.toUpperCase();        
+        int[] positions = {SwingConstants.NORTH, SwingConstants.SOUTH, SwingConstants.CENTER};
+        for (int tabPosition : positions) {
+        
+            List<TabComponent> tabs = getOpenTabs(tabPosition);
+            if (tabs != null) {
+             
+                for (TabComponent tab : tabs) {
+                    
+                    if (StringUtils.startsWithIgnoreCase(tab.getTitle(), tabTitle)) {
+                        
+                        return tab;
+                    }
+                    
+                }
+            }
+
+        }
+        
+        return null;
+    }
+    
     /**
      * Minimises the tab from the panel at the specified index.
      *
@@ -972,6 +996,7 @@ public class DockedTabContainer extends JPanel
     /**
      * The button panel to containing the minimised tab buttons.
      */
+    @SuppressWarnings("deprecation")
     private class ButtonPanel extends JPanel 
                               implements ActionListener {
 

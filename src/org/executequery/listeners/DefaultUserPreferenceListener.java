@@ -22,6 +22,7 @@ package org.executequery.listeners;
 
 import java.util.Properties;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.event.UserPreferenceEvent;
 import org.executequery.event.UserPreferenceListener;
 import org.executequery.util.SystemResources;
@@ -38,24 +39,20 @@ public class DefaultUserPreferenceListener extends AbstractUserPreferenceListene
             public void run() {
 
                 Properties properties = UserProperties.getInstance().getProperties();
-                
                 if (properties != null) {
                  
                     SystemResources.setUserPreferences(properties);
                 }
-            
+                
+                String encoding = properties.getProperty("system.file.encoding");
+                if (StringUtils.isNotBlank(encoding)) {
+
+                    System.setProperty("file.encoding", encoding);
+                }
+
             }
         });
 
     }
     
 }
-
-
-
-
-
-
-
-
-

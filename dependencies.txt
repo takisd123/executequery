@@ -69,8 +69,8 @@ Licence: GPL
 
 Liquibase
 -----------------------
-Lib jar file: liquibase-1.9.5.jar
-Version: 1.9.5 (works with >= v1.8.0)
+Lib jar file: liquibase-2.0.5.jar
+Version: 2.0.5
 URL: http://www.liquibase.org/
 Used in: Selected SQL statement generation
 Licence: LGPL
@@ -83,4 +83,11 @@ URL: http://logging.apache.org/log4j/
 Used in: Application logging.
 Licence: Apache License v2.0
 
+juniversalchardet
+-----------------------
+Lib jar file: juniversalchardet-1.0.3.jar
+Version: 1.0.3
+URL: https://code.google.com/p/juniversalchardet/
+Used in: File encoding detection.
+Licence: Mozilla Public License 1.1
 

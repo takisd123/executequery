@@ -1,6 +1,15 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 22 April 2013
+Date: 9 May 2013
+
+Summary of changes - v4.0.1 Build 5306:
+----------------------------------------
+
+- Modified result set model to log and return for unsupported data conversions
+  in values.
+- Modified time value returns in result set to check for full length as in 
+  HH:mm:ss.S or HH:mm:ss before attempting to parse.
+
 
 Summary of changes - v4.0.0 Build 5297:
 ----------------------------------------
@@ -385,4 +394,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-22 April 2013
+9 May 2013
