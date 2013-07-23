@@ -23,6 +23,7 @@ package org.executequery.gui.importexport;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -849,10 +850,6 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
                     }
                 }
 
-                reader.close();
-                fileReader.close();
-                prepStmnt.close();
-
                 // update the progress display
                 printTableResult(tableRowCount,
                         tableInsertCount, dto.getTableName());
@@ -947,6 +944,23 @@ public class ImportDelimitedWorker extends AbstractImportExportWorker {
 
             setProgressStatus(100);
             GUIUtilities.scheduleGC();
+
+            if (reader != null) {           
+                try {
+                    reader.close();
+                } catch (IOException e) {}
+            }
+            if (fileReader != null) {
+                try {
+                    fileReader.close();
+                } catch (IOException e) {}
+            }
+            if (prepStmnt != null) {
+                try {
+                    prepStmnt.close();
+                } catch (SQLException e) {}
+            }
+
         }
 
         return processResult;
