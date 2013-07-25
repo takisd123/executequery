@@ -1,6 +1,10 @@
 package org.executequery.gui.resultset;
 
 import java.io.File;
+import java.sql.Types;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,7 +48,8 @@ public class ResultSetTableModelToXMLWriter {
         Element queryElement = element(document, "query");
         queryElement.appendChild(document.createTextNode("\n" + model.getQuery() + "\n"));
         rootElement.appendChild(queryElement);
-        
+
+        Map<String, String> cdata = new HashMap<String, String>();
         Element dataElement = element(document, "data");
         for (int i = 0, n = model.getRowCount(); i < n; i++) {
             
@@ -61,6 +66,13 @@ public class ResultSetTableModelToXMLWriter {
                 if (!valueAt.isValueNull()) {
 
                     valueElement.appendChild(document.createTextNode(valueAt.toString()));
+                    
+                    String name = valueAt.getName();
+                    if (isCDATA(valueAt) && !cdata.containsKey(name)) {
+                        
+                        cdata.put(name, name);
+                    }
+                    
                 
                 } else {
 
@@ -77,12 +89,26 @@ public class ResultSetTableModelToXMLWriter {
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-        transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, "query"); 
         
+        StringBuilder sb = new StringBuilder("query");
+        for (Entry<String, String> entry : cdata.entrySet()) {
+
+            sb.append(" ").append(entry.getKey());
+        }
+        transformer.setOutputProperty(OutputKeys.CDATA_SECTION_ELEMENTS, sb.toString()); 
+        System.out.println(sb);
         DOMSource source = new DOMSource(document);
         StreamResult result = new StreamResult(new File(outputPath));
  
         transformer.transform(source, result);
+    }
+
+    private boolean isCDATA(RecordDataItem valueAt) {
+        
+        int type = valueAt.getDataType();
+        return (type == Types.CHAR ||
+                type == Types.VARCHAR ||
+                type == Types.LONGVARCHAR);
     }
 
     private Attr attribute(Document document, Element element, String name, String value) {
