@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 11 June 2013
+Date: 22 July 2013
 
 Summary of changes - v4.0.2 Build 5311:
 ----------------------------------------
@@ -14,6 +14,8 @@ Summary of changes - v4.0.2 Build 5311:
 - Added new library juniversalchardet to detect file encoding when opening text
   files and apply this encoding for rendering in the Query Editor.
 - Added XML as export option of result set from Query Editor.
+- Modified CSV result set exporter to quote char, varchar and longvarchar 
+  values.
 
 
 Summary of changes - v4.0.1 Build 5306:
@@ -408,4 +410,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-9 May 2013
+22 July 2013

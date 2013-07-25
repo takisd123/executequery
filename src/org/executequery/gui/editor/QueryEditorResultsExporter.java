@@ -34,6 +34,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -541,9 +542,16 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
             for (int i = 0; i < rowCount; i++) {
 
                 for (int j = 0; j < columnCount; j++) {
-                    
+
                     Object value = model.getValueAt(i, j);
-                    rowLines.append(valueAsString(value));
+                    if (isCDATA((RecordDataItem) value)) {
+                    
+                        rowLines.append("\""+valueAsString(value)+"\"");
+                    
+                    } else {
+                        
+                        rowLines.append(valueAsString(value));
+                    }
                     
                     if (j != columnCount - 1) {
 
@@ -575,7 +583,14 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         
     }
     
-    
+    private boolean isCDATA(RecordDataItem valueAt) {
+        
+        int type = valueAt.getDataType();
+        return (type == Types.CHAR ||
+                type == Types.VARCHAR ||
+                type == Types.LONGVARCHAR);
+    }
+
     private String valueAsString(Object value) {
 
         if (value instanceof RecordDataItem) {
