@@ -83,6 +83,9 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
     // column headers check
     private JCheckBox columnHeadersCheck;
 
+    // use quotes check
+    private JCheckBox applyQuotesCheck;
+    
     // the export type combo
     private JComboBox typeCombo;
 
@@ -130,6 +133,7 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         JButton cancelButton = new DefaultPanelButton(action, "Cancel", "cancel");
         
         columnHeadersCheck = new JCheckBox("Include column names as first row");
+        applyQuotesCheck = new JCheckBox("Use double quotes for char/varchar/longvarchar columns", true);
         
         // the button panel
         JPanel btnPanel = new JPanel(new GridBagLayout());
@@ -156,6 +160,10 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         gbc.insets.bottom = 0;
         base.add(columnHeadersCheck, gbc);
         gbc.gridy++;
+
+        base.add(applyQuotesCheck, gbc);
+        gbc.gridy++;
+
         gbc.gridwidth = 1;
         gbc.insets.bottom = 0;
         gbc.insets.top = 6;
@@ -539,12 +547,13 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
                 rowLines.setLength(0);
             }
             
+            boolean applyQuotes = applyQuotesCheck.isSelected();
             for (int i = 0; i < rowCount; i++) {
 
                 for (int j = 0; j < columnCount; j++) {
 
                     Object value = model.getValueAt(i, j);
-                    if (isCDATA((RecordDataItem) value)) {
+                    if (applyQuotes && isCDATA((RecordDataItem) value)) {
                     
                         rowLines.append("\""+valueAsString(value)+"\"");
                     
