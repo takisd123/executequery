@@ -111,9 +111,9 @@ echo "copying third-party libraries to template build dir"
 rm -f $ANT_DIR/template-build/src/lib/*
 cp $EQ_DIR/lib/* $ANT_DIR/template-build/src/lib
 
-
 # start ant
 cd $ANT_BUILDS
+echo
 echo "starting Ant"
 echo "using version: `ant -version`"
 echo

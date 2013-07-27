@@ -1,6 +1,22 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 9 May 2013
+Date: 29 July 2013
+
+Summary of changes - v4.1.0 Build 5326:
+----------------------------------------
+
+- Fixed issue where a lost data source causes a closing editor to hang.
+- Modified type conversion of result set table views.
+- Fixed determination and display of array values in the result set table views.
+- Modified the query generated to apply data changes within the Data tab to use
+  a schema or catalog prefix where available.
+- Update Liquibase to v3.0.2 and modified to use new API.
+- Added new library juniversalchardet to detect file encoding when opening text
+  files and apply this encoding for rendering in the Query Editor.
+- Added XML as export option of result set from Query Editor.
+- Modified CSV result set exporter to quote char, varchar and longvarchar 
+  values.
+
 
 Summary of changes - v4.0.1 Build 5306:
 ----------------------------------------
@@ -394,4 +410,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-9 May 2013
+29 July 2013

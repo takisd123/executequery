@@ -2,7 +2,7 @@
 
 Date: 29 July 2013
 
-Summary of changes - v4.0.2 Build 5316:
+Summary of changes - v4.1.0 Build 5326:
 ----------------------------------------
 
 - Fixed issue where a lost data source causes a closing editor to hang.
