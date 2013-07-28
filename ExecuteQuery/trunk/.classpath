@@ -22,6 +22,7 @@
 	<classpathentry kind="lib" path="lib/log4j-1.2.16.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lang-2.6.jar" sourcepath="/home/takisd/.m2/repository/commons-lang/commons-lang/2.6/commons-lang-2.6-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="lib/liquibase-2.0.5.jar" sourcepath="/home/takisd/Development/tools/libs/liquibase-2.0.5-bin/liquibase-liquibase-liquibase-parent-2.0.5-1-gb3f7374.zip"/>
+	<classpathentry kind="lib" path="lib/juniversalchardet-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/liquibase-3.0.2.jar" sourcepath="/home/takisd/Development/tools/libs/liquibase-3.0.2-bin/liquibase-master/liquibase-core/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
