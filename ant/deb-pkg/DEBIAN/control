@@ -8,12 +8,13 @@ Recommends: openjdk-6-jre | sun-java6-jre
 Priority: optional
 Installed-Size: {install_size}
 Description: A database query and visualisation tool.
- Execute Query is an operating system independent database 
- utility written entirely in Java.
+ Execute Query is a database utility allowing for the 
+ execution of simple queries to schema modifications and 
+ import/export of data using delimited and XML files as 
+ well as complete INSERT scripts.
  .
- Using the flexibility provided by Java Database Connectivity (JDBC), 
- Execute Query provides a simple way to interact with almost any 
- database from simple queries to table creation and import/export of an 
- entire schema's data.
+ Execute Query includes a powerful query execution and 
+ a fully functional database browser. Execute Query uses 
+ JDBC/ODBC for database connectivity.
  .
 

@@ -383,7 +383,7 @@ Source code snapshots are also available from the Execute Query project
 on sourceforge at http://sourceforge.net/projects/executequery. Source may be
 checked out using svn as shown below:
 
-svn co https://executequery.svn.sourceforge.net/svnroot/executequery/trunk executequery
+svn co svn://svn.code.sf.net/p/executequery/code/trunk executequery
 
 The source requires Java version 1.6 to build successfully.
 
