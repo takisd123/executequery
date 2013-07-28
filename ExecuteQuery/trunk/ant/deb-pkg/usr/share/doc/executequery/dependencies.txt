@@ -29,16 +29,16 @@ Licence: Apache License v2.0
 
 Commons Codec
 -----------------------
-Lib jar file: commons-codec-1.3.jar
-Version: 1.3
+Lib jar file: commons-codec-1.4.jar
+Version: 1.4
 URL: http://commons.apache.org/codec/
 Used in: Dependency of HTTP Client
 Licence: Apache License v2.0
 
 Commons Lang
 -----------------------
-Lib jar file: commons-lang-2.4.jar
-Version: 2.4 (works with >= v2.0)
+Lib jar file: commons-lang-2.6.jar
+Version: 2.6 (works with >= v2.0)
 URL: http://commons.apache.org/lang/
 Used in: Misc utils
 Licence: Apache License v2.0
@@ -69,18 +69,25 @@ Licence: GPL
 
 Liquibase
 -----------------------
-Lib jar file: liquibase-1.9.2.jar
-Version: 1.9.2 (works with >= v1.8.0)
+Lib jar file: liquibase-3.0.2.jar
+Version: 3.0.2
 URL: http://www.liquibase.org/
 Used in: Selected SQL statement generation
 Licence: LGPL
 
 Log4j
 -----------------------
-Lib jar file: log4j-1.2.13.jar
-Version: 1.2.13 (works with >= v1.2.9)
+Lib jar file: log4j-1.2.16.jar
+Version: 1.2.16 (works with >= v1.2.9)
 URL: http://logging.apache.org/log4j/
 Used in: Application logging.
 Licence: Apache License v2.0
 
+juniversalchardet
+-----------------------
+Lib jar file: juniversalchardet-1.0.3.jar
+Version: 1.0.3
+URL: https://code.google.com/p/juniversalchardet/
+Used in: File encoding detection.
+Licence: Mozilla Public License 1.1
 
