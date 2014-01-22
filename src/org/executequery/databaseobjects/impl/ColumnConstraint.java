@@ -180,6 +180,12 @@ public interface ColumnConstraint extends DatabaseObjectElement {
      */
     void detachFromColumn();
 
+    short getUpdateRule();
+
+    short getDeleteRule();
+
+    short getDeferrability();
+    
 }
 
 

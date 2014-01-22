@@ -29,6 +29,8 @@ import org.executequery.crypto.PasswordEncoderDecoder;
 import org.executequery.crypto.spi.DefaultPasswordEncoderDecoderFactory;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.DatabaseDriver;
+import org.executequery.gui.browser.ConnectionsFolder;
+import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.util.MiscUtils;
@@ -76,7 +78,7 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
     private String url;
     
     /** The unique name of the JDBC/ODBC driver used with this connection */
-    private String dName;
+    private String driverName;
     
     /** The unique ID of the JDBC/ODBC driver used with this connection */
     private long driverId;
@@ -95,6 +97,10 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
     
     /** the tx isolation level */
     private int transactionIsolation;
+    
+    private String folderId;
+    
+    private ConnectionsFolder folder;
     
     /** the commit mode */
     private transient boolean autoCommit = true;
@@ -144,6 +150,24 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
         return jdbcProperties != null && jdbcProperties.size() > 0;
     }
     
+    public void setFolderId(String folderId) {
+        this.folderId = folderId;
+    }
+    
+    public String getFolderId() {
+        return folderId;
+    }
+    
+    public ConnectionsFolder getFolder() {
+    
+        if (folder == null) {
+            
+            folder = folderById(folderId);
+        }
+        
+        return folder;
+    }
+    
     public DatabaseDriver getJDBCDriver() {
 
         if (driver == null) {
@@ -167,11 +191,11 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
     }
     
     public String getDriverName() {
-        return dName;
+        return driverName == null ? Constants.EMPTY : driverName;
     }
 
     public void setDriverName(String dName) {
-        this.dName = dName;
+        this.driverName = dName;
     }
     
     public String getPort() {
@@ -385,6 +409,12 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
                 DatabaseDriverRepository.REPOSITORY_ID)).findById(driverId);
     }
 
+    private ConnectionsFolder folderById(String folderId) {
+        
+        return ((ConnectionFoldersRepository) RepositoryCache.load(
+                ConnectionFoldersRepository.REPOSITORY_ID)).findById(folderId);
+    }
+    
     private static final long serialVersionUID = 950081216942320441L;
     
 }

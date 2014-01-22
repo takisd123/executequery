@@ -293,7 +293,10 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                                 constraint.setReferencedSchema(rs.getString(2));
                                 constraint.setReferencedTable(rs.getString(3));
                                 constraint.setReferencedColumn(rs.getString(4));
+                                constraint.setUpdateRule(rs.getShort(10));
+                                constraint.setDeleteRule(rs.getShort(11));
                                 constraint.setName(rs.getString(12));
+                                constraint.setDeferrability(rs.getShort(14));
                                 column.addConstraint(constraint);
                                 break;
 

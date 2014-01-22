@@ -23,6 +23,8 @@ package org.executequery.databasemediators;
 import java.io.Serializable;
 import java.util.Properties;
 
+import org.executequery.gui.browser.ConnectionsFolder;
+
 /**
  *  <p>This class maintains the necessary information for each
  *  saved database connection.<br>
@@ -125,6 +127,12 @@ public interface DatabaseConnection extends Serializable {
     void setId(String id);
 
     DatabaseConnection copy();
+
+    String getFolderId();
+
+    ConnectionsFolder getFolder();
+
+    void setFolderId(String folderId);
     
 }
 

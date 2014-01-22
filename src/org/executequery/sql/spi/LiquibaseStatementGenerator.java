@@ -21,6 +21,8 @@
 package org.executequery.sql.spi;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +52,9 @@ import liquibase.logging.LogFactory;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.statement.SqlStatement;
+import liquibase.structure.core.ForeignKeyConstraintType;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.ApplicationException;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseObject;
@@ -228,6 +232,9 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
                                 + "(" +
                                 constraint.getReferencedColumn()
                                 + ")");
+                        
+                        constraintConfig.setDeleteCascade(constraint.getDeleteRule() == DatabaseMetaData.importedKeyCascade);
+                        constraintConfig.setInitiallyDeferred(constraint.getDeferrability() == DatabaseMetaData.importedKeyInitiallyDeferred);
                     }
 
                     if (constraint.isUniqueKey()) {
@@ -380,9 +387,43 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         change.setReferencedTableName(constraint.getReferencedTable());
         change.setReferencedColumnNames(constraint.getReferencedColumn());
 
+        if (constraint.getDeleteRule() != DatabaseMetaData.importedKeyNoAction) {
+        
+            change.setOnDelete(getForeignKeyConstraintType(constraint.getDeleteRule()));
+        }
+        
+        if (constraint.getUpdateRule() != DatabaseMetaData.importedKeyNoAction) {
+         
+            change.setOnUpdate(getForeignKeyConstraintType(constraint.getUpdateRule()));
+        }
+        
         return generateStatements(change, database);
     }
 
+    private ForeignKeyConstraintType getForeignKeyConstraintType(short rule) {
+        
+        switch (rule) {
+        
+            case DatabaseMetaData.importedKeyCascade:
+                return ForeignKeyConstraintType.importedKeyCascade;
+                
+            case DatabaseMetaData.importedKeySetNull:
+                return ForeignKeyConstraintType.importedKeySetNull;
+                
+            case DatabaseMetaData.importedKeyRestrict:
+                return ForeignKeyConstraintType.importedKeyRestrict;
+                
+            case DatabaseMetaData.importedKeySetDefault:
+                return ForeignKeyConstraintType.importedKeySetDefault;
+            
+            case DatabaseMetaData.importedKeyNoAction:
+            default:
+                return ForeignKeyConstraintType.importedKeyNoAction;
+        
+        }
+        
+    }
+    
     private String addPrimaryKey(ColumnConstraint constraint, Database database) {
 
         AddPrimaryKeyChange change = new AddPrimaryKeyChange();
@@ -661,6 +702,19 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         columnConfig.setName(column.getName() == null ? "" : column.getName());
         columnConfig.setType(column.getFormattedDataType());
+        
+        if (column.getTypeInt() == Types.BIT) {
+            
+            if (StringUtils.isNotBlank(column.getDefaultValue())) {
+            
+                columnConfig.setDefaultValue(column.getDefaultValue().replaceAll("\\(|\\)", ""));
+            }
+
+        } else {
+            
+            columnConfig.setDefaultValue(column.getDefaultValue());
+        }
+        
         columnConfig.setDefaultValue(column.getDefaultValue());
 
         if (column.isRequired()) {

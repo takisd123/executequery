@@ -763,6 +763,20 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
     }
 
+    public boolean supportCatalogOrSchemaInFunctionOrProcedureCalls() throws DataSourceException {
+
+        try {
+            
+            DatabaseMetaData dmd = getDatabaseMetaData();
+            return dmd.supportsCatalogsInProcedureCalls() || dmd.supportsSchemasInProcedureCalls();
+
+        }
+        catch (SQLException e) {
+
+            throw new DataSourceException(e);
+        }
+    }
+    
     /**
      * Returns the priviliges of the specified object.
      *

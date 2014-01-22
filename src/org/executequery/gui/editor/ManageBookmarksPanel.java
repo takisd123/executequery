@@ -133,7 +133,7 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
 
         addContentPanel(panel);
         
-        setPreferredSize(new Dimension(600, 350));
+        setPreferredSize(new Dimension(700, 500));
     }
 
     private JButton createCancelButton() {

@@ -352,6 +352,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                     DatabaseHostNode child = asDatabaseHostNode(object);
                     DatabaseConnection databaseConnection = child.getDatabaseConnection();
                     folder.addConnection(databaseConnection.getId());
+                    databaseConnection.setFolderId(folder.getId());
                 }
 
             }

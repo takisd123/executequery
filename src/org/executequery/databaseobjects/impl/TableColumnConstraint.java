@@ -51,6 +51,15 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
     /** The referenced column of this constraint */
     private String referencedColumn;
 
+    /** What happens to a foreign key when the primary key is updated */
+    private short updateRule;
+    
+    /** What happens to the foreign key when primary is deleted */
+    private short deleteRule;
+
+    /** can the evaluation of foreign key constraints be deferred until commit */
+    private short deferrability;
+    
     /** The type of constraint */
     private int keyType;
     
@@ -294,6 +303,30 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
 
     public void setReferencedCatalog(String referencedCatalog) {
         this.referencedCatalog = referencedCatalog;
+    }
+
+    public short getUpdateRule() {
+        return updateRule;
+    }
+
+    public void setUpdateRule(short updateRule) {
+        this.updateRule = updateRule;
+    }
+
+    public short getDeleteRule() {
+        return deleteRule;
+    }
+
+    public void setDeleteRule(short deleteRule) {
+        this.deleteRule = deleteRule;
+    }
+
+    public short getDeferrability() {
+        return deferrability;
+    }
+
+    public void setDeferrability(short deferrability) {
+        this.deferrability = deferrability;
     }
 
     public boolean isMarkedDeleted() {

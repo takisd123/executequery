@@ -80,7 +80,6 @@ import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
-import org.underworldlabs.swing.IndeterminateProgressBar;
 import org.underworldlabs.swing.ProgressBar;
 import org.underworldlabs.swing.ProgressBarFactory;
 import org.underworldlabs.swing.plaf.UIUtils;

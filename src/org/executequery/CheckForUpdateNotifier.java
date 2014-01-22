@@ -75,7 +75,7 @@ public class CheckForUpdateNotifier implements Interruptible {
         worker.start();
     }
     
-    public void startupCheck() {
+    private void startupCheck() {
         
         try {
         
