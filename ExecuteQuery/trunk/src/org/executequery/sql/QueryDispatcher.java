@@ -524,14 +524,12 @@ public class QueryDispatcher {
 
                         if (results == null) {
 
-                            setOutputMessage(SqlMessages.ERROR_MESSAGE,
-                                             result.getErrorMessage());
+                            setOutputMessage(SqlMessages.ERROR_MESSAGE,result.getErrorMessage());
                             setStatusMessage(ERROR_EXECUTING);
 
                         } else {
 
-                            setOutputMessage(SqlMessages.PLAIN_MESSAGE,
-                                             "Call executed successfully.");
+                            setOutputMessage(SqlMessages.PLAIN_MESSAGE, "Call executed successfully.");
                             int updateCount = result.getUpdateCount();
 
                             if (updateCount > 0) {

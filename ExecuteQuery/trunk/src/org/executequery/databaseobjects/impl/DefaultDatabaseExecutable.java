@@ -95,6 +95,48 @@ public class DefaultDatabaseExecutable extends AbstractDatabaseObject
                                        ProcedureParameter[parameters.size()]);
     }
 
+    public boolean supportCatalogOrSchemaInFunctionOrProcedureCalls() throws DataSourceException {
+
+        try {
+
+            DatabaseMetaData dmd = getMetaTagParent().getHost().getDatabaseMetaData();
+            return dmd.supportsCatalogsInProcedureCalls() || dmd.supportsSchemasInProcedureCalls();
+
+        }
+        catch (SQLException e) {
+
+            throw new DataSourceException(e);
+        }
+    }
+
+    public boolean supportCatalogInFunctionOrProcedureCalls() throws DataSourceException {
+        
+        try {
+            
+            DatabaseMetaData dmd = getMetaTagParent().getHost().getDatabaseMetaData();
+            return dmd.supportsCatalogsInProcedureCalls();
+            
+        }
+        catch (SQLException e) {
+            
+            throw new DataSourceException(e);
+        }
+    }
+    
+    public boolean supportSchemaInFunctionOrProcedureCalls() throws DataSourceException {
+        
+        try {
+            
+            DatabaseMetaData dmd = getMetaTagParent().getHost().getDatabaseMetaData();
+            return dmd.supportsSchemasInProcedureCalls();
+            
+        }
+        catch (SQLException e) {
+            
+            throw new DataSourceException(e);
+        }
+    }
+    
     /**
      * Returns this object's parameters.
      */

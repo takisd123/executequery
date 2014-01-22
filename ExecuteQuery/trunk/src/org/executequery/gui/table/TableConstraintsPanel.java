@@ -24,7 +24,6 @@ import java.awt.BorderLayout;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
 import java.util.Vector;
 
 import javax.swing.DefaultCellEditor;
@@ -35,13 +34,13 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import org.executequery.gui.DefaultTable;
 
+import org.executequery.Constants;
+import org.executequery.gui.DefaultTable;
 import org.executequery.gui.browser.ColumnConstraint;
+import org.executequery.gui.browser.ColumnData;
 import org.underworldlabs.swing.table.ComboBoxCellEditor;
 import org.underworldlabs.swing.table.StringCellEditor;
-
-import org.executequery.gui.browser.ColumnData;
 
 /**
  *
@@ -366,12 +365,12 @@ public abstract class TableConstraintsPanel extends JPanel
                     break;
                 case 2:
                     String colType = (String)value;
-                    if (colType == cc.PRIMARY) {
-                        cc.setType(cc.PRIMARY_KEY);
-                    } else if (colType == cc.FOREIGN) {
-                        cc.setType(cc.FOREIGN_KEY);
-                    } else if (colType == cc.UNIQUE) {
-                        cc.setType(cc.UNIQUE_KEY);
+                    if (colType == ColumnConstraint.PRIMARY) {
+                        cc.setType(ColumnConstraint.PRIMARY_KEY);
+                    } else if (colType == ColumnConstraint.FOREIGN) {
+                        cc.setType(ColumnConstraint.FOREIGN_KEY);
+                    } else if (colType == ColumnConstraint.UNIQUE) {
+                        cc.setType(ColumnConstraint.UNIQUE_KEY);
                     }
                     
                     if (colType != null) {
@@ -379,20 +378,20 @@ public abstract class TableConstraintsPanel extends JPanel
                         columnValuesChanged(col, row, null);
                     }
                     
-                    cc.setColumn(cc.EMPTY);
-                    cc.setRefSchema(cc.EMPTY);
-                    cc.setRefTable(cc.EMPTY);
-                    cc.setRefColumn(cc.EMPTY);
+                    cc.setColumn(Constants.EMPTY);
+                    cc.setRefSchema(Constants.EMPTY);
+                    cc.setRefTable(Constants.EMPTY);
+                    cc.setRefColumn(Constants.EMPTY);
                     break;
                 case 3:
-                    cc.setColumn(value.toString());
+                    cc.setColumn(value != null ? value.toString() : "");
                     columnValuesChanged(col, row, null);
                     break;
                 case 4:
                     String schema = (String)value;
                     cc.setRefSchema(schema);
-                    cc.setRefTable(cc.EMPTY);
-                    cc.setRefColumn(cc.EMPTY);
+                    cc.setRefTable(Constants.EMPTY);
+                    cc.setRefColumn(Constants.EMPTY);
                     
                     if (schema != null) {
                         updateCellEditor(col, row, schema);
@@ -402,7 +401,7 @@ public abstract class TableConstraintsPanel extends JPanel
                     break;
                 case 5:
                     String tbl = (String)value;
-                    cc.setRefColumn(cc.EMPTY);
+                    cc.setRefColumn(Constants.EMPTY);
                     cc.setRefTable(tbl);
                     if (tbl != null) {
                         updateCellEditor(col, row, tbl);
@@ -439,8 +438,8 @@ public abstract class TableConstraintsPanel extends JPanel
                     case 4:
                     case 5:
                     case 6:
-                        if ((cc.getType() == cc.UNIQUE_KEY ||
-                                cc.getType() == cc.PRIMARY_KEY)) {
+                        if ((cc.getType() == ColumnConstraint.UNIQUE_KEY ||
+                                cc.getType() == ColumnConstraint.PRIMARY_KEY)) {
                             return false;
                         }
                         return true;
@@ -453,8 +452,8 @@ public abstract class TableConstraintsPanel extends JPanel
 
                 if (cc.isNewConstraint()) {
 
-                    if (col > 3 && (cc.getType() == cc.UNIQUE_KEY ||
-                            cc.getType() == cc.PRIMARY_KEY)) {
+                    if (col > 3 && (cc.getType() == ColumnConstraint.UNIQUE_KEY ||
+                            cc.getType() == ColumnConstraint.PRIMARY_KEY)) {
                         return false;
                     } 
                     else {
@@ -527,15 +526,3 @@ public abstract class TableConstraintsPanel extends JPanel
     
     
 }
-
-
-
-
-
-
-
-
-
-
-
-

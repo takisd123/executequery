@@ -42,7 +42,6 @@ import org.executequery.databasemediators.ProcedureParameterSorter;
 import org.executequery.databasemediators.QueryTypes;
 import org.executequery.databaseobjects.DatabaseExecutable;
 import org.executequery.databaseobjects.DatabaseHost;
-import org.executequery.databaseobjects.DatabaseProcedure;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.ProcedureParameter;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
@@ -405,12 +404,26 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
             sb.append(" call ");
 
-            String namePrefix = databaseExecutable.getNamePrefix();
-            if (namePrefix != null) {
+            if (databaseExecutable.supportCatalogOrSchemaInFunctionOrProcedureCalls()) {
 
-                sb.append(namePrefix).append('.');
+                String namePrefix = null;
+                if (databaseExecutable.supportCatalogInFunctionOrProcedureCalls()) {
+                    
+                    namePrefix = databaseExecutable.getCatalogName();
+                    
+                }
+                if (databaseExecutable.supportSchemaInFunctionOrProcedureCalls()) {
+                    
+                    namePrefix = databaseExecutable.getSchemaName();
+                    
+                }
+                
+                if (namePrefix != null) {
+                    
+                    sb.append(namePrefix).append('.');
+                }
             }
-
+            
             sb.append(databaseExecutable.getName()).
                append("( ");
 
@@ -568,6 +581,21 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         }
 
+        /*
+        test creating function for postgres:
+            
+        CREATE FUNCTION concat_lower_or_upper(a text, b text, uppercase boolean DEFAULT false)
+        RETURNS text
+        AS
+        $$
+         SELECT CASE
+                WHEN $3 THEN UPPER($1 || ' ' || $2)
+                ELSE LOWER($1 || ' ' || $2)
+                END;
+        $$
+        LANGUAGE SQL IMMUTABLE STRICT;
+        */
+        
         try {
             cstmnt.clearWarnings();
             boolean hasResultSet = cstmnt.execute();
@@ -604,7 +632,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
                             case Types.LONGVARCHAR:
                             case Types.CHAR:
                             case Types.VARCHAR:
-                                cstmnt.getString(index);
+                                returnValue = cstmnt.getString(index);
                                 break;
 
                             case Types.BIT:
@@ -738,7 +766,12 @@ public class DefaultStatementExecutor implements StatementExecutor {
             prefix = host.getDefaultNamePrefix();
         }
 
-        DatabaseProcedure procedure = host.getDatabaseSource(prefix).getProcedure(procedureName);
+        DatabaseExecutable procedure = host.getDatabaseSource(prefix).getProcedure(procedureName);
+        if (procedure == null) { // hedge
+
+            procedure = host.getDatabaseSource(prefix).getFunction(procedureName);
+        }
+
         if (procedure != null) {
 
             if (possibleParams) {

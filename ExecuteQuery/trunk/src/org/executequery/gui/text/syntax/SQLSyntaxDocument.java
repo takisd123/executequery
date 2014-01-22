@@ -39,6 +39,7 @@ import javax.swing.text.StyleConstants;
 
 import org.executequery.Constants;
 import org.executequery.gui.editor.QueryEditorSettings;
+import org.executequery.log.Log;
 import org.executequery.sql.SqlMessages;
 
 /**
@@ -782,7 +783,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
             return;
         }
 
-        //Log.debug("replace");
+        Log.debug("replace");
 
         int textLength = text.length();
         if ((length == 0) && (textLength == 0)) {
@@ -792,7 +793,8 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
         // if text is selected - ie. length > 0
         // and it is a TAB and we have a text component 
         if ((length > 0) && (textLength > 0) && 
-                (text.charAt(0) == Constants.TAB_CHAR) && 
+//                (text.charAt(0) == Constants.TAB_CHAR) && 
+                ("\t".equals(text)) &&
                 (textComponent != null)) {
 
             int selectionStart = textComponent.getSelectionStart();

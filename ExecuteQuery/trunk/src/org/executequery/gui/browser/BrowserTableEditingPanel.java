@@ -728,7 +728,11 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             constraintsTable.setDatabaseTable(table);
             
             alterSqlText.setSQLText(EMPTY);
-            createSqlText.setSQLText(createTableStatementFormatted());
+            try {
+                createSqlText.setSQLText(createTableStatementFormatted());
+            } catch (Exception e) { // some liquibase generated issues... ??
+                createSqlText.setSQLText("Error generating SQL for table - " + e.getMessage());
+            }
 
         } catch (DataSourceException e) {
 

@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.DatabaseCatalog;
+import org.executequery.databaseobjects.DatabaseFunction;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseMetaTag;
 import org.executequery.databaseobjects.DatabaseProcedure;
@@ -102,6 +103,34 @@ public abstract class AbstractDatabaseSource extends AbstractNamedObject {
 
         }
 
+        return null;
+    }
+
+    /**
+     * Returns the procedure or function if procedure does not exist with
+     * the specified name.
+     *
+     * @param name
+     * @return the named procedure or function
+     */
+    public DatabaseFunction getFunction(String name) {
+
+        DatabaseMetaTag metaTag = getDatabaseMetaTag(META_TYPES[FUNCTION]);
+        if (metaTag == null) {
+            
+            return null;
+        }
+        
+        List<NamedObject> objects = metaTag.getObjects();
+        for (NamedObject namedObject: objects) {
+            
+            if (name.equalsIgnoreCase(namedObject.getName())) {
+                
+                return (DatabaseFunction) namedObject;
+            }
+            
+        }
+        
         return null;
     }
 

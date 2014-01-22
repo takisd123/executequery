@@ -40,7 +40,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -218,13 +217,12 @@ public class SQLHistoryDialog extends AbstractBaseDialog
                 historyListKeyPressed(e); }
         });
     
-        c.setPreferredSize(new Dimension(670, 460));
+        c.setPreferredSize(new Dimension(800, 490));
     }
     
     private void initHistoryList(Vector<String> data) {
 
         historyList = new DefaultList(data);
-        historyList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private JSplitPane createSplitPane() {
@@ -287,7 +285,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
 
                 return;
             }
-            
+
             int start = historyList.getSelectedIndex();
             if (start == -1 || start == data.size() - 1) {
                 
@@ -362,8 +360,8 @@ public class SQLHistoryDialog extends AbstractBaseDialog
 
         if (validateSelection()) {
         
-            String query = queryForIndex(historyList.getSelectedIndex());
-            GUIUtilities.copyToClipBoard(query.trim());
+            String query = queryForIndices(historyList.getSelectedIndices());
+            GUIUtilities.copyToClipBoard(query);
          
             dispose();
         }
@@ -374,7 +372,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
 
         if (validateSelection()) {
         
-            String query = queryForIndex(historyList.getSelectedIndex());
+            String query = queryForIndices(historyList.getSelectedIndices());
             
             if (newEditorCheck.isSelected()) {
 
@@ -394,15 +392,32 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         }
     }
 
-    private String queryForIndex(int index) {
+    private String queryForIndices(int[] indices) {
 
-        if (index != -1) {
+        if (indices.length > 0) {
         
+            StringBuilder sb = new StringBuilder();
+            for (int index :indices) {
+                
+                sb.append(queryForIndex(index).trim());
+                sb.append("\n\n");
+            }
+
+            return sb.toString().trim();
+        }
+
+        return "";
+    }
+
+    private String queryForIndex(int index) {
+        
+        if (index != -1) {
+            
             return data.get(index);
         }
         return "";
     }
-
+    
     /** <p>Initiates the action on the history list after
      * double clicking a selected statement and propagates
      * the action to the method <code>selectButton_actionPerformed</code>.

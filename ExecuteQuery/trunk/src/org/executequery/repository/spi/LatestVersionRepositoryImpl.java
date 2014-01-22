@@ -131,7 +131,15 @@ public class LatestVersionRepositoryImpl implements LatestVersionRepository {
 
     private boolean siteAvailable() {
 
-        return remoteHttpClient().hostReachable(ADDRESS);
+        try {
+        
+            return remoteHttpClient().hostReachable(ADDRESS);
+            
+        } catch (Exception e) {
+            
+            Log.error(e.getMessage(), e);
+            throw new ApplicationException(ioErrorMessage());
+        }
     }
 
     public String getReleaseNotes() {

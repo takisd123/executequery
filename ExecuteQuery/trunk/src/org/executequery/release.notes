@@ -1,6 +1,17 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 29 July 2013
+Date: 22 January 2014
+
+Summary of changes - v4.1.1 Build 5332:
+----------------------------------------
+
+- Fixed issue with return type and value from executing a stored procedure or 
+  function from the Query Editor.
+- Modified application update check on startup to not block database connection 
+  attempts. 
+- Added on delete, on update and deferability to SQL generation for constraints.
+- Modified Query Editor history dialog to accept multiple selections. 
+
 
 Summary of changes - v4.1.0 Build 5326:
 ----------------------------------------
@@ -410,4 +421,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-29 July 2013
+6 December 2013

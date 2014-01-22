@@ -172,6 +172,7 @@ public class DatabaseConnectionXMLRepository extends AbstractXMLRepository<Datab
     private static final String NAME = "name";
     private static final String USER = "user";
     private static final String PASSWORD = "password";
+    private static final String FOLDER_ID = "folderid";
     private static final String ENCRYPTED = "encrypted";
     private static final String DRIVER_ID = "driverid";
     private static final String HOST = "host";
@@ -295,6 +296,10 @@ public class DatabaseConnectionXMLRepository extends AbstractXMLRepository<Datab
 
                 connection().setDriverId(contentsAsLong());
 
+            } else if (localNameIsKey(localName, FOLDER_ID)) {
+                
+                connection().setFolderId(contentsAsString());
+                
             } else if (localNameIsKey(localName, DRIVER_NAME)) {
 
                 connection().setDriverName(contentsAsString());
@@ -471,6 +476,7 @@ public class DatabaseConnectionXMLRepository extends AbstractXMLRepository<Datab
                 writeXML(DRIVER_NAME, connection.getDriverName(), INDENT_TWO);
 
                 writeXML(DRIVER_ID, valueToString(connection.getDriverId()), INDENT_TWO);
+                writeXML(FOLDER_ID, connection.getFolderId(), INDENT_TWO);
 
                 writeXML(AUTO_COMMIT,
                         valueToString(connection.isAutoCommit()), INDENT_TWO);

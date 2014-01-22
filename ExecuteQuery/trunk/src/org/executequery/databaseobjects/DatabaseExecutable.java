@@ -61,6 +61,12 @@ public interface DatabaseExecutable extends DatabaseObject {
      * Returns this object's parameters as an array.
      */
     ProcedureParameter[] getParametersArray() throws DataSourceException;
+
+    boolean supportCatalogOrSchemaInFunctionOrProcedureCalls() throws DataSourceException;
+
+    boolean supportCatalogInFunctionOrProcedureCalls() throws DataSourceException;
+
+    boolean supportSchemaInFunctionOrProcedureCalls() throws DataSourceException;
     
 }
 

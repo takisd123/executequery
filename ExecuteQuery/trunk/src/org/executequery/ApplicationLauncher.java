@@ -416,7 +416,7 @@ public class ApplicationLauncher {
 
         if (doUpdateCheck) {
 
-            new CheckForUpdateNotifier().startupCheck();
+            new CheckForUpdateNotifier().startupCheckForUpdate();
         }
 
     }

@@ -43,9 +43,9 @@ import org.underworldlabs.util.SystemProperties;
  */
 public class UserFeedbackRepositoryImpl implements UserFeedbackRepository {
 
-    private static final String FEEDBACK_POST_ADDRESS = "http://executequery.org/servlet/applicationfeedback";
+    private static final String FEEDBACK_POST_ADDRESS = "http://executequery.org/feedback-submit";
     
-    private static final String ADDRESS = "www.executequery.org";
+    private static final String ADDRESS = "executequery.org";
     
     public void postFeedback(UserFeedback userFeedback) throws RepositoryException {
 
@@ -59,11 +59,14 @@ public class UserFeedbackRepositoryImpl implements UserFeedbackRepository {
                 
                 URL url = new URL(FEEDBACK_POST_ADDRESS);
 
+                Log.trace("Sending user feedback to path [ " + ADDRESS + url.getPath() + " ]");
+                
                 RemoteHttpClient httpClient = remoteHttpClient();
-
                 RemoteHttpResponse httpPostResponse = 
                     httpClient.httpPostRequest(ADDRESS, url.getPath(), userFeedback.asMap());
 
+                Log.trace("User feedback submitted - response code [ " + httpPostResponse.getResponseCode() + " ]");
+                
                 if (httpPostResponse.getResponseCode() != 200) {
                     
                     throw new RepositoryException(genericExceptionMessage());

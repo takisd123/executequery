@@ -71,6 +71,14 @@ public interface DatabaseSource extends NamedObject {
     DatabaseProcedure getProcedure(String name);
     
     /**
+     * Returns the function with the specified name.
+     * 
+     * @param name
+     * @return the named function
+     */
+    DatabaseFunction getFunction(String name);
+    
+    /**
      * Returns whether this is the default source connection.
      *
      * @return true | false

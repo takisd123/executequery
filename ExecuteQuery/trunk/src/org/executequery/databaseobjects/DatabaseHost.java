@@ -275,6 +275,8 @@ public interface DatabaseHost extends NamedObject {
 
     boolean hasTablesForType(String catalog, String schema, String type);
 
+    boolean supportCatalogOrSchemaInFunctionOrProcedureCalls();
+
 }
 
 
