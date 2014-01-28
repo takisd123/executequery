@@ -115,6 +115,12 @@ public class DatabaseObjectChangeProvider implements Interruptible {
                     if (table().hasTableDataChanges()) {
                         
                         sb.append("\nRollback was issued for all data changes.");
+                    } 
+
+                    if (table().hasTableDefinitionChanges()) { // for ddl changes in tx 
+
+                        table().cancelChanges();
+                        sb.append("\nRollback was issued for all changes.");
                     }
 
                     dispose();
