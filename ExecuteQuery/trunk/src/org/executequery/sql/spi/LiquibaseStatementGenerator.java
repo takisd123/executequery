@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import liquibase.CatalogAndSchema;
+import liquibase.change.AddColumnConfig;
 import liquibase.change.Change;
 import liquibase.change.ColumnConfig;
 import liquibase.change.ConstraintsConfig;
@@ -637,7 +638,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
         columnChange.setColumnName(tableColumn.getName());
-        columnChange.setNewDataType(tableColumn.getTypeName());
+        columnChange.setNewDataType(tableColumn.getFormattedDataType());
 
         return generateStatements(columnChange, database);
     }
@@ -648,7 +649,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         //columnChange.setSchemaName(tableColumn.getSchemaName());
         columnChange.setTableName(tableColumn.getTable().getName());
-        columnChange.addColumn(createColumn(tableColumn, database));
+        columnChange.addColumn((AddColumnConfig) createColumn(tableColumn, database));
 
         return generateStatements(columnChange, database);
     }
@@ -729,7 +730,7 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
     private Database databaseFromName(Connection connection, String databaseName) {
 
-        LogFactory.setLoggingLevel("warning");
+        LogFactory.getInstance().setDefaultLoggingLevel("warning");
 
         Database database = databaseFactory().createDatabase(databaseName);
         database.setConnection(new JdbcConnection(connection));

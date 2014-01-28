@@ -625,6 +625,11 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return tableDataChanges != null ? !tableDataChanges.isEmpty() : false;
     }
     
+    public boolean hasTableDefinitionChanges() {
+        
+        return StringUtils.isNotBlank(getModifiedSQLText());
+    }
+    
     /**
      * Indicates whether this table or any of its columns
      * or constraints have pending modifications to be applied.

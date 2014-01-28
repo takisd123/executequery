@@ -192,7 +192,9 @@ public interface DatabaseTable extends DatabaseObject {
 	List<String> getForeignKeyColumnNames();
 
     void cancelChanges();
-    
+
+    boolean hasTableDefinitionChanges();
+
 }
 
 

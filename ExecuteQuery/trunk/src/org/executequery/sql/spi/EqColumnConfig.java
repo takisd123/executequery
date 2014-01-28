@@ -20,14 +20,15 @@
 
 package org.executequery.sql.spi;
 
-import liquibase.change.ColumnConfig;
+import liquibase.change.AddColumnConfig;
 import liquibase.database.Database;
-import liquibase.database.core.MaxDBDatabase;
 import liquibase.database.core.MySQLDatabase;
 import liquibase.datatype.DataTypeFactory;
 import liquibase.datatype.LiquibaseDataType;
 
-class EqColumnConfig extends ColumnConfig {
+import org.executequery.sql.liquibase.MaxDBDatabase;
+
+class EqColumnConfig extends AddColumnConfig {
 
     private final Database database;
     private final String typeName;
