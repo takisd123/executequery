@@ -708,7 +708,8 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             
             if (StringUtils.isNotBlank(column.getDefaultValue())) {
             
-                columnConfig.setDefaultValue(column.getDefaultValue().replaceAll("\\(|\\)", ""));
+//                columnConfig.setDefaultValue(column.getDefaultValue().replaceAll("\\(|\\)", ""));
+                columnConfig.setDefaultValueBoolean(column.getDefaultValue().replaceAll("\\(|\\)", ""));
             }
 
         } else {
@@ -716,8 +717,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
             columnConfig.setDefaultValue(column.getDefaultValue());
         }
         
-        columnConfig.setDefaultValue(column.getDefaultValue());
-
         if (column.isRequired()) {
 
             ConstraintsConfig constraintConfig = new ConstraintsConfig();

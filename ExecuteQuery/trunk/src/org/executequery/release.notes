@@ -10,7 +10,10 @@ Summary of changes - v4.1.1 Build 5332:
 - Modified application update check on startup to not block database connection 
   attempts. 
 - Added on delete, on update and deferability to SQL generation for constraints.
-- Modified Query Editor history dialog to accept multiple selections. 
+- Modified Query Editor history dialog to accept multiple selections.
+- Upgraded to Liquibase 3.1.1
+- Fixed BIT and BOOLEAN column definition with default value for statement 
+  generation.
 
 
 Summary of changes - v4.1.0 Build 5326:
