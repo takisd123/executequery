@@ -72,6 +72,7 @@ import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.gui.table.TableConstraintFunction;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
+import org.executequery.log.Log;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
@@ -731,7 +732,9 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             try {
                 createSqlText.setSQLText(createTableStatementFormatted());
             } catch (Exception e) { // some liquibase generated issues... ??
-                createSqlText.setSQLText("Error generating SQL for table - " + e.getMessage());
+                String message = "Error generating SQL for table - " + e.getMessage();
+				createSqlText.setSQLText(message);
+                Log.error("Error generating SQL for table - " + e.getMessage(), e);
             }
 
         } catch (DataSourceException e) {
