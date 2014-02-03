@@ -508,14 +508,16 @@ public class ConnectionPanel extends ActionPanel
      * Applies the tx level on open connections of the type selected.
      */
     private void applyTransactionLevel(boolean reloadProperties) throws DataSourceException {
+        
         // set the tx level from the combo selection
         getTransactionIsolationLevel();        
         int isolationLevel = databaseConnection.getTransactionIsolation();
+
         // apply to open connections
-        ConnectionManager.
-                setTransactionIsolationLevel(databaseConnection, isolationLevel);
+        ConnectionManager.setTransactionIsolationLevel(databaseConnection, isolationLevel);
         
         if (reloadProperties) {
+        
             controller.updateDatabaseProperties();
         }
         
