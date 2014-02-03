@@ -373,9 +373,10 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
             return;
         }
         
-        if (isolationLevel == -1) {
+        int isolationLevelToApply = isolationLevel;
+        if (isolationLevelToApply == -1) {
          
-            isolationLevel = defaultTxIsolation;
+            isolationLevelToApply = defaultTxIsolation;
         }
 
         try {
@@ -384,7 +385,7 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
                 if (!connection.isClosed()) {
                 
-                    connection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+                    connection.setTransactionIsolation(isolationLevelToApply);
                 }
 
             }
