@@ -51,6 +51,8 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     private final DatabaseConnection databaseConnection;
 
     private int defaultTxIsolation = -1;
+    
+    private boolean supportsTransactions;
 
     private DataSource dataSource;
     
@@ -211,10 +213,10 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
                 		"established.\nPlease ensure that the details " +
                 		"are correct and the supplied host is available.");
             }
-            
+
             if (defaultTxIsolation == -1) {
-             
-                defaultTxIsolation = realConnection.getTransactionIsolation();
+ 
+                configureTransactionIsolationLevel(realConnection);                
             }
             
             int transactionIsolation = databaseConnection.getTransactionIsolation();
@@ -239,6 +241,20 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
         }
 
         return connection;
+    }
+
+    private void configureTransactionIsolationLevel(Connection connection) {
+
+        try {
+
+            defaultTxIsolation = connection.getTransactionIsolation();
+            supportsTransactions = connection.getMetaData().supportsTransactions();
+            
+        } catch (SQLException e) {
+
+            rethrowAsDataSourceException(e);
+        }
+        
     }
 
     private PooledConnection getNextOpenAvailable() {
@@ -287,7 +303,21 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
 
     public boolean isTransactionSupported() {
 
-        return false;
+        if (defaultTxIsolation == -1) {
+            
+            Connection connection = getConnection();
+            try {
+
+                configureTransactionIsolationLevel(connection);
+
+            } finally {
+
+                close(connection);
+            }
+
+        }
+        
+        return supportsTransactions;
     }
 
     public void setDataSource(DataSource dataSource) {
