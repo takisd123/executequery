@@ -14,6 +14,7 @@ Summary of changes - v4.1.1 Build 5332:
 - Upgraded to Liquibase 3.1.1
 - Fixed BIT and BOOLEAN column definition with default value for statement 
   generation.
+- Fixed transaction isolation level setting not being correctly assigned.
 
 
 Summary of changes - v4.1.0 Build 5326:
