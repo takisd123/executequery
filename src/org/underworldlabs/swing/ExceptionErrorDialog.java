@@ -344,8 +344,7 @@ public class ExceptionErrorDialog extends AbstractBaseDialog
                 printException(exceptions.get(selectedIndex));
             }
 
-        }
-        else if (source == nextButton) {
+        } else if (source == nextButton) {
             selectedIndex++;
             if (exceptions.size() - 1 < selectedIndex) {
                 SQLException sqlException = (SQLException)exceptions.get(selectedIndex - 1);

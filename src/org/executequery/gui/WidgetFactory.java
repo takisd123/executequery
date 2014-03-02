@@ -48,6 +48,21 @@ public final class WidgetFactory {
         return new DefaultInlineFieldButton(text);
     }
     
+    public static JButton createPanelButton(String text, String toolTip, ActionListener actionListener) {
+        
+        return createPanelButton(text, toolTip, actionListener, null);
+    }
+    
+    public static JButton createPanelButton(String text, String toolTip, ActionListener actionListener, String actionCommand) {
+        
+        JButton button = new DefaultPanelButton(text);
+        button.addActionListener(actionListener);
+        button.setToolTipText(toolTip);
+        button.setActionCommand(actionCommand);
+
+        return button;
+    }
+    
     public static JButton createInlineFieldButton(String text, String actionCommand) {
         
         JButton button = new DefaultInlineFieldButton(text);
