@@ -633,9 +633,6 @@ public class ConnectionPanel extends ActionPanel
 
     public void showPassword() {
         
-//        GUIUtilities.displayInformationMessage("Password: " + 
-//                MiscUtils.charsToString(passwordField.getPassword()));
-
         new ShowPasswordDialog(nameField.getText(), 
                 MiscUtils.charsToString(passwordField.getPassword()));
     }

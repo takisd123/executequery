@@ -77,8 +77,6 @@ public class LiquibaseStatementGenerator implements StatementGenerator {
 
         return database.escapeColumnName(tableColumn.getCatalogName(), tableColumn.getSchemaName(),
                 tableColumn.getTable().getName(), tableColumn.getName());
-//        return database.escapeColumnName(tableColumn.getSchemaName(),
-//                tableColumn.getTable().getName(), tableColumn.getName());
     }
 
     public String dropTable(String databaseName, DatabaseTable table) {
