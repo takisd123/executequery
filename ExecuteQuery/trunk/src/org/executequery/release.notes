@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 22 January 2014
+Date: 3 March 2014
 
-Summary of changes - v4.1.1 Build 5332:
+Summary of changes - v4.1.1 Build 5388:
 ----------------------------------------
 
 - Fixed issue with return type and value from executing a stored procedure or 
@@ -15,6 +15,8 @@ Summary of changes - v4.1.1 Build 5332:
 - Fixed BIT and BOOLEAN column definition with default value for statement 
   generation.
 - Fixed transaction isolation level setting not being correctly assigned.
+- Added copy action for the connection Show Password dialog.
+- Added Insert at Cursor action for the editor's SQL Command History.
 
 
 Summary of changes - v4.1.0 Build 5326:
@@ -425,4 +427,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-6 December 2013
+3 March 2014 

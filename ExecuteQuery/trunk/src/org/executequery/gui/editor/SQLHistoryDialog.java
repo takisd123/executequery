@@ -126,9 +126,11 @@ public class SQLHistoryDialog extends AbstractBaseDialog
 
         JButton cancelButton = createButton("Cancel", null);       
         JButton selectButton = createButton("Select", 
-                "Pastes the selected query into the Query Editor");
+                "Pastes the selected queries into the Query Editor");
         JButton copyButton = createButton("Copy", 
-                "Copies the selected query to the system clipboard");
+                "Copies the selected queries to the system clipboard");
+        JButton insertAtCursorButton = createButton("Insert at Cursor", 
+                "Inserts the selected queries at the cursor position within the Query Editor");
         JButton clearButton = createButton("Clear", 
                 "Clears and resets ALL SQL history");
 
@@ -199,6 +201,8 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         gbc.insets.right = 0;
         c.add(copyButton, gbc);
         gbc.gridx--;
+        c.add(insertAtCursorButton, gbc);
+        gbc.gridx--;
         gbc.weightx = 1.0;
         c.add(selectButton, gbc);
         gbc.weightx = 0;
@@ -239,7 +243,6 @@ public class SQLHistoryDialog extends AbstractBaseDialog
     private JButton createButton(String text, String toolTip) {
         
         JButton button = new DefaultPanelButton(text);       
-
         if (toolTip != null) {
 
             button.setToolTipText(toolTip);
@@ -277,6 +280,10 @@ public class SQLHistoryDialog extends AbstractBaseDialog
             
             copySQLCommand();
                 
+        } else if (command.equals("Insert at Cursor")) {
+            
+            insertAtCursorButton();
+            
         } else if (command.equals("Search") || e.getSource() == searchField) {
 
             String text = searchField.getText();
@@ -340,7 +347,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         historyList.ensureIndexIsVisible(i);
     }
 
-    private boolean validateSelection() {
+    private boolean validSelection() {
         
         if (data.isEmpty()) {
             
@@ -358,7 +365,7 @@ public class SQLHistoryDialog extends AbstractBaseDialog
     
     private void copySQLCommand() {
 
-        if (validateSelection()) {
+        if (validSelection()) {
         
             String query = queryForIndices(historyList.getSelectedIndices());
             GUIUtilities.copyToClipBoard(query);
@@ -368,12 +375,26 @@ public class SQLHistoryDialog extends AbstractBaseDialog
         
     }
     
+    private void insertAtCursorButton() {
+        
+        if (newEditorCheck.isSelected()) {
+            
+            selectSQLCommand();
+        
+        } else if (queryEditor != null) {
+            
+            String query = queryForIndices(historyList.getSelectedIndices());
+            queryEditor.insertTextAtCaret(query);
+            dispose();
+        }
+    }
+   
+    
     private void selectSQLCommand() {
 
-        if (validateSelection()) {
+        if (validSelection()) {
         
             String query = queryForIndices(historyList.getSelectedIndices());
-            
             if (newEditorCheck.isSelected()) {
 
                 QueryEditor editor = new QueryEditor(query);
