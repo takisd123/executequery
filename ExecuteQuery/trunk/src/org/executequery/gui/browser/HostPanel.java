@@ -190,8 +190,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         
         try {
 
-            databasePropertiesPanel.setDatabaseProperties(
-                    host.getDatabaseProperties());
+            databasePropertiesPanel.setDatabaseProperties(host.getDatabaseProperties());
 
         } catch (DataSourceException e) {
 

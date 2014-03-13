@@ -1036,7 +1036,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             Class<?> clazz = metaMethods[i].getReturnType();
 
             String methodName = metaMethods[i].getName();
-
             if (methodName == null || clazz == null) {
 
                 continue;
