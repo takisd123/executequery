@@ -32,14 +32,14 @@ import liquibase.database.core.PostgresDatabase;
 import liquibase.database.core.SybaseDatabase;
 import liquibase.database.core.UnsupportedDatabase;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.sql.liquibase.MaxDBDatabase;
 
 public class LiquibaseDatabaseFactory {
 
     public Database createDatabase(String databaseName) {
 
-        String name = databaseName.toUpperCase();
-
+        String name = safelyToUpper(databaseName);
         if (name.contains("POSTGRESQL")) {
 
             return postgresDatabase();
@@ -64,13 +64,11 @@ public class LiquibaseDatabaseFactory {
 
             return derbyDatabase();
 
-        } else if (name.contains("MAXDB")
-                || name.contains("SAP")) {
+        } else if (name.contains("MAXDB") || name.contains("SAP")) {
 
             return maxDbDatabase();
 
-        } else if (name.contains("ADAPTIVE SERVER")
-                || name.contains("SYBASE")) {
+        } else if (name.contains("ADAPTIVE SERVER") || name.contains("SYBASE")) {
 
             return sybaseDatabase();
 
@@ -85,7 +83,6 @@ public class LiquibaseDatabaseFactory {
         } else if (name.contains("DB2")) {
 
             return db2Database();
-
         }
 
         return unsupportedDatabase();
@@ -151,8 +148,9 @@ public class LiquibaseDatabaseFactory {
         return new PostgresDatabase();
     }
 
+    private String safelyToUpper(String databaseName) {
+
+        return StringUtils.isNotBlank(databaseName) ? databaseName.toUpperCase() : "";
+    }
+
 }
-
-
-
-
