@@ -21,7 +21,6 @@
 package org.executequery.gui.browser;
 
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -232,7 +231,7 @@ public class TableDataTab extends JPanel
                 try {
 
                     executing = true;
-                    showWaitCursor();
+//                    showWaitCursor();
 
                     removeAll();
                     return setTableResultsPanel(databaseObject);
@@ -246,7 +245,7 @@ public class TableDataTab extends JPanel
             public void finished() {
 
                 executing = false;
-                showNormalCursor();
+//                showNormalCursor();
             }
 
         };
@@ -262,7 +261,7 @@ public class TableDataTab extends JPanel
         primaryKeyColumns.clear();
         foreignKeyColumns.clear();
         
-        GUIUtilities.showWaitCursor();
+//        GUIUtilities.showWaitCursor();
         
         this.databaseObject = databaseObject;
         try {
@@ -394,7 +393,7 @@ public class TableDataTab extends JPanel
 
         } finally {
 
-            GUIUtilities.showNormalCursor();
+//            GUIUtilities.showNormalCursor();
             tableModel.addTableModelListener(this);
         }
 
@@ -493,6 +492,7 @@ public class TableDataTab extends JPanel
                 SystemProperties.getIntProperty("user", "browser.max.records"));
     }
 
+    /*
     private void showNormalCursor() {
 
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -502,6 +502,7 @@ public class TableDataTab extends JPanel
 
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
+    */
 
     public JTable getTable() {
 
