@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+        <key>CFBundleExecutable</key>
+        <string>JavaAppLauncher</string>
+        <key>CFBundleIconFile</key>
+        <string>eq.icns</string>
+        <key>CFBundleIdentifier</key>
+        <string>org.executequery.ExecuteQuery</string>
+        <key>CFBundleDisplayName</key>
+        <string>Execute Query</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>Execute Query</string>
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+        <key>CFBundleShortVersionString</key>
+        <string>1.0</string>
+        <key>CFBundleSignature</key>
+        <string>????</string>
+        <key>CFBundleVersion</key>
+        <string>1</string>
+        <key>NSHumanReadableCopyright</key>
+        <string></string>
+        <key>JVMMainClassName</key>
+        <string>org.executequery.ExecuteQuery</string>
+        <key>JVMOptions</key>
+        <array>
+        </array>
+        <key>JVMArguments</key>
+        <array>
+            <string>-Xmx1024m</string>
+        </array>
+        <key>ClassPath</key>
+        <array>
+            <string>$JAVAROOT/eq.jar</string>
+            <string>$JAVAROOT/docs/eqhelp.jar
+            <string>$JAVAROOT/lib/</string>
+            <string>$JAVAROOT/lib/BrowserLauncher2-1_3.jar</string>
+            <string>$JAVAROOT/lib/batik-awt-util.jar</string>
+            <string>$JAVAROOT/lib/batik-codec.jar</string>
+            <string>$JAVAROOT/lib/batik-dom.jar</string>
+            <string>$JAVAROOT/lib/batik-ext.jar</string>
+            <string>$JAVAROOT/lib/batik-rasterizer-ext.jar</string>
+            <string>$JAVAROOT/lib/batik-svggen.jar</string>
+            <string>$JAVAROOT/lib/batik-util.jar</string>
+            <string>$JAVAROOT/lib/batik-xml.jar</string>
+            <string>$JAVAROOT/lib/batik.jar</string>
+            <string>$JAVAROOT/lib/c3p0-0.9.1.2.jar</string>
+            <string>$JAVAROOT/lib/commons-codec-1.4.jar</string>
+            <string>$JAVAROOT/lib/commons-httpclient-3.1.jar</string>
+            <string>$JAVAROOT/lib/commons-lang-2.6.jar</string>
+            <string>$JAVAROOT/lib/commons-logging-1.1.1.jar</string>
+            <string>$JAVAROOT/lib/jh.jar</string>
+            <string>$JAVAROOT/lib/juniversalchardet-1.0.3.jar</string>
+            <string>$JAVAROOT/lib/liquibase-3.1.1.jar</string>
+            <string>$JAVAROOT/lib/log4j-1.2.16.jar</string>
+            <string>$JAVAROOT/lib/poi-3.2-FINAL-20081019.jar</string>
+            <string>$JAVAROOT/lib/xml-apis.jar</string>
+        </array>
+        <key>Properties</key>
+        <dict>
+            <key>com.apple.mrj.application.apple.menu.about.name</key>
+            <string>Execute Query</string>
+            <key>com.apple.macos.useScreenMenuBar</key>
+            <string>true</string>
+            <key>apple.laf.useScreenMenuBar</key>
+            <string>true</string>
+        </dict>
+    </dict>
+</plist>
+
