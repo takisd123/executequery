@@ -769,13 +769,17 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         return table.getCreateSQLText();
     }
     
+    private boolean loadingRowCount; 
     private SwingWorker worker;
     
     protected void reloadDataRowCount() {
 
         if (worker != null) {
 
-            Log.debug("Interrupting worker from data row count");
+            if (loadingRowCount) {
+                
+                Log.debug("Interrupting worker for data row count");
+            }
             worker.interrupt();
         }
 
@@ -787,12 +791,17 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                         Thread.sleep(200);
                     } catch (InterruptedException e) {}
 
+                    loadingRowCount = true;
                     Log.debug("Retrieving data row count for table - " + table.getName());
                     return String.valueOf(table.getDataRowCount());
                     
                 } catch (DataSourceException e) {
                     
                     return "Error: " + e.getMessage();
+                
+                } finally {
+
+                    loadingRowCount = false;
                 }
             }
             public void finished() {
@@ -802,6 +811,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                         rowCountField.setText(get().toString());
                     }
                 });
+                
             }
         };
         worker.start();
