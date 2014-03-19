@@ -783,7 +783,7 @@ public class SQLSyntaxDocument extends DefaultStyledDocument
             return;
         }
 
-        Log.debug("replace");
+//        Log.debug("replace");
 
         int textLength = text.length();
         if ((length == 0) && (textLength == 0)) {

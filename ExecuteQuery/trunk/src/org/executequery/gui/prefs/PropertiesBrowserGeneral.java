@@ -68,6 +68,13 @@ public class PropertiesBrowserGeneral extends PropertiesBasePanel {
                     "Connect on double-click",
                     SystemProperties.getBooleanProperty("user", key)));
 
+        key = "browser.query.row.count";
+        list.add(new UserPreference(
+                    UserPreference.BOOLEAN_TYPE,
+                    key,
+                    "Query for the data row count",
+                    SystemProperties.getBooleanProperty("user", key)));
+
         UserPreference[] preferences = 
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);

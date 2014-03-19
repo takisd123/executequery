@@ -80,6 +80,7 @@ import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.VetoableSingleSelectionModel;
 import org.underworldlabs.swing.util.SwingWorker;
+import org.underworldlabs.util.SystemProperties;
 
 /**
  *
@@ -710,9 +711,15 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     private DatabaseTable table; 
 
     public void setValues(DatabaseTable table) {
+
         this.table = table;
         reloadView();
-        reloadDataRowCount();
+        
+        if (SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
+        
+            reloadDataRowCount();
+        }
+
         stateChanged(null);
     }
     
@@ -720,7 +727,14 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         try {
 
-            rowCountField.setText("Querying...");
+            if (SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
+            
+                rowCountField.setText("Querying...");
+
+            } else {
+                
+                rowCountField.setText("Option Disabled");
+            }
             
             referencesLoaded = false;
 
@@ -730,8 +744,11 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             
             alterSqlText.setSQLText(EMPTY);
             try {
+                
                 createSqlText.setSQLText(createTableStatementFormatted());
+
             } catch (Exception e) { // some liquibase generated issues... ??
+
                 String message = "Error generating SQL for table - " + e.getMessage();
 				createSqlText.setSQLText(message);
                 Log.error("Error generating SQL for table - " + e.getMessage(), e);
@@ -758,9 +775,10 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         if (worker != null) {
 
+            Log.debug("Interrupting worker from data row count");
             worker.interrupt();
         }
-        
+
         worker = new SwingWorker() {
             public Object construct() {
                 try {
@@ -769,6 +787,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                         Thread.sleep(200);
                     } catch (InterruptedException e) {}
 
+                    Log.debug("Retrieving data row count for table - " + table.getName());
                     return String.valueOf(table.getDataRowCount());
                     
                 } catch (DataSourceException e) {

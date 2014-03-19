@@ -1,6 +1,13 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 3 March 2014
+Date: 20 March 2014
+
+Summary of changes - v4.1.2 Build 5392:
+----------------------------------------
+
+- Added user preference option to disable row count query on table selection.
+
+
 
 Summary of changes - v4.1.1 Build 5388:
 ----------------------------------------
