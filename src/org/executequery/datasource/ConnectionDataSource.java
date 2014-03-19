@@ -315,7 +315,6 @@ public class ConnectionDataSource implements DataSource, DatabaseDataSource {
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return driver.getParentLogger();
 	}
-
 }
 
 

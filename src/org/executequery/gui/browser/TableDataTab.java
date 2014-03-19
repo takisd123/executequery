@@ -381,7 +381,7 @@ public class TableDataTab extends JPanel
             add(canEditTableNotePanel, canEditTableNoteConstraints);
             add(scroller, scrollerConstraints);
             
-            if (displayRowCount) {
+            if (displayRowCount && SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
                 
                 add(rowCountPanel, rowCountPanelConstraints);
                 rowCountField.setText(String.valueOf(sorter.getRowCount()));
