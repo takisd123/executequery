@@ -30,6 +30,8 @@ product.install.directory=ExecuteQuery
 
 product.zip.path=org/executequery/installer/program/{zip-file}
 mac.zip.path=org/executequery/installer/program/mac-infrastructure.zip
+mac.zip.path.6=org/executequery/installer/program/mac-infrastructure-6.zip
+mac.zip.path.7=org/executequery/installer/program/mac-infrastructure-7.zip
 product.zip.file={zip-file}
 product.zip.files.number={archive-file-count}
 
@@ -61,6 +63,7 @@ windows.delete.6=${temp_dir}\\Elevate.exe
 
 # MAC specific commands/options
 mac.configure.1=chmod 755 ${install_path}/Contents/MacOS/JavaApplicationStub
+mac.configure.2=chmod 755 ${install_path}/Contents/MacOS/JavaAppLauncher
 mac.delete.1=${install_path}/Contents/Resources/Java/eq.exe
 mac.delete.2=${install_path}/Contents/Resources/Java/eqhelp.exe
 mac.delete.3=${install_path}/Contents/Resources/Java/uninstall.exe
