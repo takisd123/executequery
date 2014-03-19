@@ -1,0 +1,6 @@
+
+http://stackoverflow.com/questions/14806709/application-is-using-java-6-from-apple-instead-of-java-7-from-oracle-on-mac-os-x
+
+https://java.net/projects/appbundler
+
+
