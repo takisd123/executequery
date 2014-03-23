@@ -1,6 +1,30 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 29 July 2013
+Date: 20 March 2014
+
+Summary of changes - v4.1.2 Build 5392:
+----------------------------------------
+
+- Added user preference option to disable row count query on table selection.
+
+
+
+Summary of changes - v4.1.1 Build 5388:
+----------------------------------------
+
+- Fixed issue with return type and value from executing a stored procedure or 
+  function from the Query Editor.
+- Modified application update check on startup to not block database connection 
+  attempts. 
+- Added on delete, on update and deferability to SQL generation for constraints.
+- Modified Query Editor history dialog to accept multiple selections.
+- Upgraded to Liquibase 3.1.1
+- Fixed BIT and BOOLEAN column definition with default value for statement 
+  generation.
+- Fixed transaction isolation level setting not being correctly assigned.
+- Added copy action for the connection Show Password dialog.
+- Added Insert at Cursor action for the editor's SQL Command History.
+
 
 Summary of changes - v4.1.0 Build 5326:
 ----------------------------------------
@@ -383,7 +407,7 @@ Source code snapshots are also available from the Execute Query project
 on sourceforge at http://sourceforge.net/projects/executequery. Source may be
 checked out using svn as shown below:
 
-svn co https://executequery.svn.sourceforge.net/svnroot/executequery/trunk executequery
+svn co svn://svn.code.sf.net/p/executequery/code/trunk executequery
 
 The source requires Java version 1.6 to build successfully.
 
@@ -410,4 +434,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-29 July 2013
+3 March 2014 
