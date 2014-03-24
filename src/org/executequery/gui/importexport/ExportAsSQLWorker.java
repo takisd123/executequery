@@ -178,13 +178,15 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
                     }
 
                     if (dataRowCount > 0) {
-                    
+
+                        List<DatabaseColumn> columns = columnSelections(importExportFile);
+                        
                         appendProgressText("Exporting data...");
                         
-                        rs = resultSetForExport(importExportFile);
+                        rs = resultSetForExport(importExportFile, columns);
                         ResultSetMetaData rsmd = rs.getMetaData();
                         
-                        String insertStatement = insertStatementForTable(table);
+                        String insertStatement = insertStatementForTable(importExportFile, columns);
 
                         while (rs.next()) {
                             
@@ -415,14 +417,15 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
 
     private StringBuilder stringBuilder = new StringBuilder();
     
-    private String insertStatementForTable(DatabaseTable table) throws SQLException {
+    private String insertStatementForTable(ImportExportFile importExportFile, List<DatabaseColumn> columns) throws SQLException {
 
+        DatabaseTable table = importExportFile.getDatabaseTable();
+        
         stringBuilder.setLength(0);
         stringBuilder.append("INSERT INTO ");
         stringBuilder.append(table.getName());
         stringBuilder.append(" (");
 
-        List<DatabaseColumn> columns = table.getColumns();
         for (int i = 0, n = columns.size(); i < n; i++) {
 
             stringBuilder.append(((DatabaseTableColumn) columns.get(i)).getNameEscaped());
@@ -437,9 +440,21 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         return stringBuilder.toString();
     }
 
+    private List<DatabaseColumn> columnSelections(ImportExportFile importExportFile) {
+
+        if (importExportFile.hasColumnSelections()) {
+            
+            return importExportFile.getDatabaseTableColumns();
+            
+        } else {
+            
+            return importExportFile.getDatabaseTable().getColumns();
+        }        
+    }
+
     private Statement statement;
     
-    private ResultSet resultSetForExport(ImportExportFile importExportFile) 
+    private ResultSet resultSetForExport(ImportExportFile importExportFile, List<DatabaseColumn> columns) 
         throws SQLException {
 
         closeStatement(statement);
@@ -449,22 +464,12 @@ public class ExportAsSQLWorker extends BaseImportExportWorker {
         Connection connection = table.getHost().getConnection();
         statement = connection.createStatement();
 
-        return statement.executeQuery(selectStatementForExport(importExportFile));
+        return statement.executeQuery(selectStatementForExport(importExportFile, columns));
     }
 
-    private String selectStatementForExport(ImportExportFile importExportFile) {
+    private String selectStatementForExport(ImportExportFile importExportFile, List<DatabaseColumn> columns) {
         
         DatabaseTable table = importExportFile.getDatabaseTable();
-
-        List<DatabaseColumn> columns = null;
-        if (importExportFile.hasColumnSelections()) {
-            
-            columns = importExportFile.getDatabaseTableColumns();
-            
-        } else {
-            
-            columns = table.getColumns();
-        }
 
         StringBuilder sb = new StringBuilder("SELECT ");
         for (int i = 0, n = columns.size(); i < n; i++) {
