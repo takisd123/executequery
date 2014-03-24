@@ -46,8 +46,7 @@ public class ImportExportFile {
         this.databaseTable = databaseTable;
     }
 
-    public ImportExportFile(DatabaseTable databaseTable,
-            List<DatabaseColumn> databaseTableColumns) {
+    public ImportExportFile(DatabaseTable databaseTable, List<DatabaseColumn> databaseTableColumns) {
         this.databaseTable = databaseTable;
         this.setDatabaseTableColumns(databaseTableColumns);
     }
@@ -95,8 +94,3 @@ public class ImportExportFile {
     }
     
 }
-
-
-
-
-

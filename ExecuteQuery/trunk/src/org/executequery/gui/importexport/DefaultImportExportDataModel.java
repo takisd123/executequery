@@ -22,7 +22,6 @@ package org.executequery.gui.importexport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
@@ -117,7 +116,7 @@ public class DefaultImportExportDataModel implements ImportExportDataModel {
         
         if (importExportFiles == null) {
             
-            importExportFiles = new Vector<ImportExportFile>();
+            importExportFiles = new ArrayList<ImportExportFile>();
         }
 
         if (isSingleFileMultiTableExport()) {
@@ -147,7 +146,14 @@ public class DefaultImportExportDataModel implements ImportExportDataModel {
             }
 
             if (addTable) {
-                importExportFiles.add(new ImportExportFile(databaseTable));
+
+                ImportExportFile importExportFile = new ImportExportFile(databaseTable);                
+                if (!isMultipleTableImportExport()) {
+                
+                    importExportFile.setDatabaseTableColumns(databaseTableColumns);
+                }
+                
+                importExportFiles.add(importExportFile);
             }
 
         }

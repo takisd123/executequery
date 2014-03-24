@@ -22,6 +22,7 @@ package org.executequery.gui.importexport;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -262,15 +263,9 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
     private void fourthPanelToModel() {
 
         exportDataModel.setOnErrorOption(fourthPanel.getOnErrorOption());
-        
-        exportDataModel.setIncludeCreateTableStatements(
-                fourthPanel.getIncludeCreateTableStatement());
-        
-        exportDataModel.setIncludePrimaryKeyConstraints(
-                fourthPanel.getIncludePrimaryKeyConstraints());
-        
-        exportDataModel.setIncludeForeignKeyConstraints(
-                fourthPanel.getIncludeForeignKeyConstraints());
+        exportDataModel.setIncludeCreateTableStatements(fourthPanel.getIncludeCreateTableStatement());
+        exportDataModel.setIncludePrimaryKeyConstraints(fourthPanel.getIncludePrimaryKeyConstraints());
+        exportDataModel.setIncludeForeignKeyConstraints(fourthPanel.getIncludeForeignKeyConstraints());
     }
 
     private void thirdPanelToModel() {
@@ -291,9 +286,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         }
         
         StringBuilder sb = new StringBuilder();
-        
         List<ImportExportFile> exportFiles = exportDataModel.getImportExportFiles();
-        
         for (ImportExportFile exportFile : exportFiles) {
             
             if (exportFile.fileExists()) {
@@ -308,9 +301,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         if (sb.length() > 0) {
             
             int result = displayConfirmCancelDialog(getString("ImportExportPanelThree.filesExist", sb));
-
-            if (result == JOptionPane.CANCEL_OPTION 
-                    || result == JOptionPane.NO_OPTION) {
+            if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
 
                 return false;
             }
@@ -325,7 +316,6 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         if (!secondPanel.hasSelections()) {
             
             String errorMessage = null;
-            
             if (exportDataModel.isMultipleTableImportExport()) {
 
                 errorMessage = "You must select at least one table";
@@ -334,7 +324,6 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
 
                 errorMessage = "You must select at least one column";
             }
-
             displayErrorDialog(errorMessage);
             
             return false;
@@ -369,14 +358,13 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         exportDataModel.setDatabaseSource(tableSelectionCombosGroup.getSelectedSource());
 
         List<DatabaseTable> tables = null;
-        
         if (exportDataModel.isMultipleTableImportExport()) {
         
             tables = (Vector<DatabaseTable>) secondPanel.getSelectedItems();
 
         } else {
             
-            tables = new Vector<DatabaseTable>(1);
+            tables = new ArrayList<DatabaseTable>(1);
             tables.add(tableSelectionCombosGroup.getSelectedTable());
             
             exportDataModel.setDatabaseTableColumns(
