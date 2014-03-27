@@ -7,6 +7,8 @@ Summary of changes - v4.1.2 Build 5392:
 
 - Added user preference option to disable row count query on table selection.
 - Fixed export as SQL not respecting column selections for single table exports.
+- Fixed multi-line comment issue when start of each line within the comment 
+  contains an asterisk (*).
 
 
 
