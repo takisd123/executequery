@@ -98,8 +98,14 @@ public class SimpleCloseTabbedPane extends AbstractTabPopupMenuContainer {
         if (rollListeners == null) {
             rollListeners = new ArrayList<TabRollOverListener>();
         }
-        rollListeners.add(listener);
-        
+        rollListeners.add(listener);        
+    }
+
+    public void addTabSelectionListener(TabSelectionListener listener) {
+        if (selectionListeners == null) {
+            selectionListeners = new ArrayList<TabSelectionListener>();
+        }
+        selectionListeners.add(listener);
     }
 
     public void removeTabRollOverListener(TabRollOverListener listener) {
@@ -110,8 +116,3 @@ public class SimpleCloseTabbedPane extends AbstractTabPopupMenuContainer {
     }
 
 }
-
-
-
-
-

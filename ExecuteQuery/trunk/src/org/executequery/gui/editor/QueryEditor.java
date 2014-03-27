@@ -221,7 +221,7 @@ public class QueryEditor extends DefaultTabView
         popup = new QueryEditorPopupMenu(delegate);
         editorPanel.addEditorPaneMouseListener(popup);
 
-        JPanel baseEditorPanel = new JPanel(new BorderLayout());
+        baseEditorPanel = new JPanel(new BorderLayout());
         baseEditorPanel.add(editorPanel, BorderLayout.CENTER);
         baseEditorPanel.add(statusBar, BorderLayout.SOUTH);
         baseEditorPanel.setBorder(BorderFactory.createMatteBorder(
@@ -405,6 +405,7 @@ public class QueryEditor extends DefaultTabView
     private int lastDividerLocation;
     private QueryEditorAutoCompletePopupProvider queryEditorAutoCompletePopupProvider;
     private DatabaseConnection selectConnection;
+    private JPanel baseEditorPanel;
 
     /**
      * Toggles the output pane visible or not.
@@ -1502,6 +1503,21 @@ public class QueryEditor extends DefaultTabView
     public void refreshAutocompleteList() {
 
         queryEditorAutoCompletePopupProvider.reset();
+    }
+
+    public void toggleResultPane() {
+
+        if (baseEditorPanel.isVisible()) {
+
+            lastDividerLocation = splitPane.getDividerLocation();
+            baseEditorPanel.setVisible(false);
+
+        } else {
+        
+            baseEditorPanel.setVisible(true);
+            splitPane.setDividerLocation(lastDividerLocation);
+        }
+        
     }
 
 }
