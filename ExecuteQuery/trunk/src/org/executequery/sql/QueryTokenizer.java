@@ -54,7 +54,8 @@ public class QueryTokenizer {
     
     private static final String QUOTE_REGEX = "'((?>[^']*+)(?>'{2}[^']*+)*+)'|'.*";
     
-    private static final String MULTILINE_COMMENT_REGEX = "/\\*((?>[^\\*/]*+)*+)\\*/|/\\*.*";
+    private static final String MULTILINE_COMMENT_REGEX = "/\\*(?:.|[\\n\\r])*?\\*/|/\\*.*"; 
+//                                                        "/\\*((?>[^\\*/]*+)*+)\\*/|/\\*.*";
     
     public QueryTokenizer() {
 
