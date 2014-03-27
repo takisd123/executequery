@@ -52,7 +52,7 @@ public class SimpleCloseTabbedPane extends AbstractTabPopupMenuContainer {
         super(tabPlacement, tabLayoutPolicy);
     }
 
-    public void fireTabSelection(MouseEvent e) {
+    public void fireTabSelected(MouseEvent e) {
         
         if (selectionListeners == null || selectionListeners.isEmpty()) {
             return;
