@@ -3426,6 +3426,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                 
             }
 
+            ((SimpleCloseTabbedPane) tabPane).fireTabSelection(e);
         }
 
         private boolean maybeShowPopup(MouseEvent e) {

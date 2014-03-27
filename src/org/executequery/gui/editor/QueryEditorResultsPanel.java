@@ -22,6 +22,7 @@ package org.executequery.gui.editor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -31,6 +32,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.StringUtils;
@@ -134,6 +136,13 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         resultSetTableColumnResizingManager = new ResultSetTableColumnResizingManager();
 
         addChangeListener(this);
+        addMouseListener(new MouseInputAdapter() {
+            
+            public void mouseClicked(MouseEvent e) {
+                System.out.println(e.getClickCount());
+            }
+            
+        });
     }
 
     private TransposedRowTableModelBuilder transposedRowTableModelBuilder;
@@ -820,8 +829,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
                     queryPopup = new QueryTextPopup(this);
                 }
                 lastRolloverIndex = index;
-                queryPopup.showPopup(e.getX(), e.getY(),
-                        query, getTitleAt(index), index);
+                queryPopup.showPopup(e.getX(), e.getY(), query, getTitleAt(index), index);
             }
         }
     }
@@ -856,10 +864,4 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         return true;
     }
 
-
 }
-
-
-
-
-
