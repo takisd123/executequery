@@ -32,7 +32,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputAdapter;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,6 +44,7 @@ import org.executequery.sql.SqlMessages;
 import org.underworldlabs.swing.SimpleCloseTabbedPane;
 import org.underworldlabs.swing.plaf.TabRollOverListener;
 import org.underworldlabs.swing.plaf.TabRolloverEvent;
+import org.underworldlabs.swing.plaf.TabSelectionListener;
 import org.underworldlabs.util.MiscUtils;
 
 /**
@@ -56,6 +56,7 @@ import org.underworldlabs.util.MiscUtils;
  */
 public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
                                      implements TabRollOverListener,
+                                                TabSelectionListener,
                                                 ResultSetTableContainer,
                                                 ChangeListener {
 
@@ -106,6 +107,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
         if (queryEditor != null) {
             addTabRollOverListener(this);
+            addTabSelectionListener(this);
         }
 
         try {
@@ -136,13 +138,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         resultSetTableColumnResizingManager = new ResultSetTableColumnResizingManager();
 
         addChangeListener(this);
-        addMouseListener(new MouseInputAdapter() {
-            
-            public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getClickCount());
-            }
-            
-        });
+        
     }
 
     private TransposedRowTableModelBuilder transposedRowTableModelBuilder;
@@ -796,6 +792,16 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         return (queryPopup != null && queryPopup.isVisible());
     }
 
+    public void tabSelected(MouseEvent e) {
+
+        if (e.getClickCount() >= 2) {
+
+            queryEditor.toggleResultPane();
+        }
+        
+    }
+    
+    
     /**
      * Reacts to a tab rollover.
      *
