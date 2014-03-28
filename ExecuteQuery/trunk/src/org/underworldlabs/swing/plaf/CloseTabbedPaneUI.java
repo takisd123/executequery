@@ -3400,8 +3400,9 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
 
         }
 
-        public void mouseClicked(MouseEvent e) {            
+        public void mouseClicked(MouseEvent e) {
             mousePressed(e);
+            ((SimpleCloseTabbedPane) tabPane).fireTabSelected(e);
         }
         
         public void mousePressed(MouseEvent e) {
@@ -3426,7 +3427,6 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                 
             }
 
-            ((SimpleCloseTabbedPane) tabPane).fireTabSelected(e);
         }
 
         private boolean maybeShowPopup(MouseEvent e) {

@@ -9,6 +9,8 @@ Summary of changes - v4.1.2 Build 5392:
 - Fixed export as SQL not respecting column selections for single table exports.
 - Fixed multi-line comment issue when start of each line within the comment 
   contains an asterisk (*).
+- Added ability to maximize and restore the results pane within the editor tab 
+  on double-click.
 
 
 
