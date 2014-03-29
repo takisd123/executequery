@@ -1,6 +1,6 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 20 March 2014
+Date: 24 March 2014
 
 Summary of changes - v4.1.2 Build 5392:
 ----------------------------------------
@@ -11,7 +11,6 @@ Summary of changes - v4.1.2 Build 5392:
   contains an asterisk (*).
 - Added ability to maximize and restore the results pane within the editor tab 
   on double-click.
-
 
 
 Summary of changes - v4.1.1 Build 5388:
@@ -439,4 +438,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-3 March 2014 
+24 March 2014 
