@@ -40,6 +40,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -117,6 +118,8 @@ public class ScrollingTabPane extends AbstractTabPane
         scrollingPanel.add(scrollButtonPanel, BorderLayout.EAST);
 
         setTabPanel(scrollingPanel);
+        
+        componentPanel.setBorder(null);
         add(componentPanel, BorderLayout.CENTER);
         
         setBorder(BorderFactory.createLineBorder(tabPanel.controlShadow));
@@ -169,7 +172,7 @@ public class ScrollingTabPane extends AbstractTabPane
         }
         
         Component component = tabComponent.getComponent();
-        
+
         String layoutName = tabComponent.getLayoutName();
         componentPanel.add(component, layoutName);
         cardLayout.addLayoutComponent(component, layoutName);
@@ -182,6 +185,7 @@ public class ScrollingTabPane extends AbstractTabPane
             tabSelectionPopupMenu = new TabSelectionPopupMenu();
         }
         tabSelectionPopupMenu.addTabMenuItem(tabComponent);
+        scrollButtonPanel.setVisible(true);
         scrollButtonPanel.enableButton(SOUTH, true);
     }
 
@@ -426,8 +430,11 @@ public class ScrollingTabPane extends AbstractTabPane
         componentPanel.setVisible(false);
         selectedIndex = -1;
         tabSelectionPopupMenu.removeAll();
-        scrollButtonPanel.enableButton(SOUTH, false);
-        scrollButtonPanel.repaint();
+
+//        scrollButtonPanel.enableButton(SOUTH, false);
+//        scrollButtonPanel.repaint();
+
+        scrollButtonPanel.setVisible(false);
     }
     
     /**
