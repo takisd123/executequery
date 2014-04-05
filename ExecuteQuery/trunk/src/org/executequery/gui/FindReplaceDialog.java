@@ -276,6 +276,7 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
     private void startFindReplace(Object button) {
         
         try {
+
             GUIUtilities.showWaitCursor();
             
             String find = getFindFieldText();
@@ -299,20 +300,26 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
             boolean useRegex = regexCheck.isSelected();
             TextAreaSearch.setUseRegex(useRegex);
             
-            if (useRegex)
+            if (useRegex) {
+                
                 TextAreaSearch.setWholeWords(false);
-            else
+
+            } else {
+            
                 TextAreaSearch.setWholeWords(wholeWordsCheck.isSelected());
+            }
             
             TextAreaSearch.setMatchCase(matchCaseCheck.isSelected());
             TextAreaSearch.setWrapSearch(wrapCheck.isSelected());
             
             if (button == findNextButton) {
+
                 TextAreaSearch.findNext(false, true);
-            }            
-            else if (button == replaceButton) {
+
+            } else if (button == replaceButton) {
                 
                 if (!replaceCheck.isSelected()) {
+
                     return;
                 }
                 
@@ -320,24 +327,23 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
                 TextAreaSearch.setReplacementText(replacement);
                 TextAreaSearch.findNext(true, true);
                 
-            }
-            else if (button == replaceAllButton) {
+            } else if (button == replaceAllButton) {
                 
                 if (!replaceCheck.isSelected()) {
+
                     return;
                 }
                 
                 addReplace(replacement);
                 TextAreaSearch.setReplacementText(replacement);
                 TextAreaSearch.replaceAll();
-                
             }
             
             findField.requestFocusInWindow();
             GUIUtils.scheduleGC();
             
-        }
-        finally {
+        } finally {
+            
             GUIUtilities.showNormalCursor();
         }
         
