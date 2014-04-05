@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 24 March 2014
+Date: 6 April 2014
 
-Summary of changes - v4.1.2 Build 5392:
+Summary of changes - v4.1.2 Build 5393:
 ----------------------------------------
 
 - Added user preference option to disable row count query on table selection.
@@ -11,6 +11,8 @@ Summary of changes - v4.1.2 Build 5392:
   contains an asterisk (*).
 - Added ability to maximize and restore the results pane within the editor tab 
   on double-click.
+- Fixed find/replace dialog finctionality on replace replacing the next find 
+  instead of the current one.
 
 
 Summary of changes - v4.1.1 Build 5388:
@@ -438,4 +440,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-24 March 2014 
+6 April 2014 

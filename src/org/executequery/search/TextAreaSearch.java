@@ -27,6 +27,7 @@ import java.util.regex.PatternSyntaxException;
 
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 
 /** <p>Provides for text area searches.
@@ -44,10 +45,10 @@ public class TextAreaSearch {
     public static final int SEARCH_DOWN = 1;
     
     /** Previously used 'Find' text */
-    private static ArrayList prevFindValues;
+    private static ArrayList<String> prevFindValues;
     
     /** Previously used 'Replace' text */
-    private static ArrayList prevReplaceValues;
+    private static ArrayList<String> prevReplaceValues;
     
     /** The text area */
     private static JTextComponent textComponent;
@@ -79,33 +80,46 @@ public class TextAreaSearch {
     public static int findNext(boolean replacing, boolean showErrorDialog) {
         
         GUIUtilities.scheduleGC();
-        
         if (textComponent == null) {
+            
             GUIUtilities.displayWarningMessage("Search text not found.");
             return -1;
         }
 
-        if (findText == null || findText.length() == 0) {
+        if (StringUtils.isBlank(findText)) {
+
             return -1;
         }
         
         String text = textComponent.getText();
+        if (StringUtils.isBlank(text)) {
         
-        if (text == null || text.length() == 0) {
             GUIUtilities.displayWarningMessage("Search text not found.");
             return -1;
         }
-        
-        String regexPattern = null;
 
-        if (!useRegex)
+        if (replacing) {
+            
+            if (replacementText == null) {
+             
+                replacementText = "";
+            }
+            
+            textComponent.replaceSelection(replacementText);
+        }
+
+        String regexPattern = null;
+        if (!useRegex) {
+            
             regexPattern = formatRegularExpression(findText, wholeWords);
-        else
+
+        } else {
+
             regexPattern = findText;
-        
+        }
+
         Pattern pattern = null;
         Matcher matcher = null;
-        
         try {
             
             if (matchCase) {
@@ -118,6 +132,7 @@ public class TextAreaSearch {
             }
 
             regexPattern = null;
+            text = textComponent.getText();
             matcher = pattern.matcher(text);
 
             boolean found = false;
@@ -133,38 +148,44 @@ public class TextAreaSearch {
                     
                     if (matcher.end() > caretPosition) {
                         
-                        if (!found && wrapSearch)
+                        if (!found && wrapSearch) {
+
                             caretPosition = textLength - 1;
-                        else
+
+                        } else {
+                         
                             break;
+                        }
                         
                     }
                     
                     found = true;
                     foundStart = matcher.start();
                     foundEnd = matcher.end();
-                    
                 }
                 
-                if (!found && showErrorDialog)
+                if (!found && showErrorDialog) {
+                    
                     GUIUtilities.displayWarningMessage("Search text not found.");
-                else
-                    setSelection(foundStart, foundEnd);
+
+                } else {
                 
-            }
-            
-            else {
+                    setSelection(foundStart, foundEnd);
+                }
+                
+            } else {
                 
                 if (matcher.find(caretPosition)) {
+                
                     found = true;
                     foundStart = matcher.start();
                     foundEnd = matcher.end();
                     setSelection(foundStart, foundEnd);
-                }
-                
-                else {
+
+                } else {
                     
                     if (wrapSearch && matcher.find(0)) {
+                    
                         found = true;
                         foundStart = matcher.start();
                         foundEnd = matcher.end();
@@ -173,20 +194,27 @@ public class TextAreaSearch {
                     
                 }
                 
-                if (!found && showErrorDialog)
+                if (!found && showErrorDialog) {
+                 
                     GUIUtilities.displayWarningMessage("Search text not found.");
+                }
                 
             }
             
             if (replacing) {
                 
-                if (replacementText == null)
-                    replacementText = "";
-                
-                textComponent.replaceSelection(replacementText);
-                setSelection(foundStart, foundStart + replacementText.length());
-                
+//                setSelection(foundStart, foundStart + replacementText.length());
             }
+            
+//            if (replacing) {
+//                
+//                if (replacementText == null)
+//                    replacementText = "";
+//                
+//                textComponent.replaceSelection(replacementText);
+//                setSelection(foundStart, foundStart + replacementText.length());
+//                
+//            }
             
         }
         
@@ -378,10 +406,17 @@ public class TextAreaSearch {
      */
     public static Object[] getPrevFindValues() {
         
-        if (prevFindValues == null)
-            prevFindValues = new ArrayList();
+        return previousFindValues().toArray();
+    }
+
+    private static ArrayList<String> previousFindValues() {
         
-        return prevFindValues.toArray();
+        if (prevFindValues == null) {
+        
+            prevFindValues = new ArrayList<String>();
+        }
+        
+        return prevFindValues;
     }
     
     /** <p>Retrieves any previously entered replace values
@@ -392,10 +427,7 @@ public class TextAreaSearch {
      */
     public static Object[] getPrevReplaceValues() {
         
-        if (prevReplaceValues == null)
-            prevReplaceValues = new ArrayList();
-        
-        return prevReplaceValues.toArray();
+        return previousReplaceValues().toArray();
     }
     
     /** <p>Adds a value to the find list after a search
@@ -405,15 +437,16 @@ public class TextAreaSearch {
      */
     public static void addPrevFindValue(String value) {
         
-        if (prevFindValues == null)
-            prevFindValues = new ArrayList();
-        
-        if (prevFindValues.contains(value))
+        if (previousFindValues().contains(value)) {
+         
             return;
+        }
         
         // maintain only 5 previous values
-        if (prevFindValues.size() == 5)
+        if (prevFindValues.size() == 5) {
+         
             prevFindValues.remove(4);
+        }
         
         prevFindValues.add(0, value);
     }
@@ -425,16 +458,27 @@ public class TextAreaSearch {
      */
     public static void addPrevReplaceValue(String value) {
         
-        if (prevReplaceValues == null)
-            prevReplaceValues = new ArrayList();
-        
-        if (prevReplaceValues.contains(value))
+        if (previousReplaceValues().contains(value)) {
+         
             return;
+        }
         
-        if (prevReplaceValues.size() == 5)
+        if (prevReplaceValues.size() == 5) {
+         
             prevReplaceValues.remove(4);
+        }
         
         prevReplaceValues.add(0, value);
+    }
+
+    private static ArrayList<String> previousReplaceValues() {
+        
+        if (prevReplaceValues == null) {
+         
+            prevReplaceValues = new ArrayList<String>();
+        }
+        
+        return prevReplaceValues;
     }
     
     public static void setTextComponent(JTextComponent _textComponent) {
