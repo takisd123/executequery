@@ -20,21 +20,26 @@
 
 package org.underworldlabs.swing.plaf;
 
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.io.Serializable;
+
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
+
 import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
+
+import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
+import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
 
 /**
  * User interface utilities. Allows for central determination of
@@ -76,6 +81,12 @@ public class UIUtils {
         return UIManager.getColor("controlShadow");
     }
 
+    public static Border getDefaultLineBorder() {
+        
+        return BorderFactory.createLineBorder(getDefaultBorderColour());
+    }
+    
+    
     /**
      * Returns true if running on Mac.
      */

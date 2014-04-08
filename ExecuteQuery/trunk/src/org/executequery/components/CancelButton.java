@@ -46,12 +46,3 @@ public class CancelButton extends DefaultPanelButton {
     }
     
 }
-
-
-
-
-
-
-
-
-
