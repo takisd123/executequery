@@ -250,8 +250,6 @@ public class TableDataTab extends JPanel
             public Object construct() {
                 try {
 
-                    cancelled = false;
-                    
                     removeAll();
                     add(cancelPanel, scrollerConstraints);
 
@@ -270,6 +268,7 @@ public class TableDataTab extends JPanel
             public void finished() {
 
                 executing = false;
+                cancelled = false;
             }
 
         };
