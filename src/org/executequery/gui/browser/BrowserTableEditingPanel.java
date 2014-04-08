@@ -994,7 +994,3 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     }
 
 }
-
-
-
-

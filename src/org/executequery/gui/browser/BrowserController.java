@@ -249,7 +249,7 @@ public class BrowserController {
      */
     public synchronized void valueChanged_(DatabaseObjectNode node) {
 
-        treePanel.setInProcess(true);
+//        treePanel.setInProcess(true);
 
         try {
 
@@ -262,7 +262,7 @@ public class BrowserController {
 
         } finally {
 
-            treePanel.setInProcess(false);
+//            treePanel.setInProcess(false);
         }
 
     }

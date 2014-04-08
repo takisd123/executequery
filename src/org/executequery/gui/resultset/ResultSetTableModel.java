@@ -255,24 +255,30 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             fireTableStructureChanged();
 
         } catch (SQLException e) {
-
+            
             System.err.println("SQL error populating table model at: " + e.getMessage());
             Log.debug("Table model error - " + e.getMessage(), e);
 
         } catch (Exception e) {
 
-            String message = e.getMessage();
-
-            if (StringUtils.isBlank(message)) {
-
-                System.err.println("Exception populating table model.");
-
-            } else {
+            if (e instanceof InterruptedException) {
+                
+                Log.debug("ResultSet generation interrupted.", e);
             
-                System.err.println("Exception populating table model at: " + message);
-            }
+            } else {
 
-            Log.debug("Table model error - ", e);
+                String message = e.getMessage();
+                if (StringUtils.isBlank(message)) {
+    
+                    System.err.println("Exception populating table model.");
+    
+                } else {
+                
+                    System.err.println("Exception populating table model at: " + message);
+                }
+    
+                Log.debug("Table model error - ", e);
+            }
 
         } finally {
 

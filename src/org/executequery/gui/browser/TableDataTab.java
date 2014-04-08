@@ -21,21 +21,23 @@
 package org.executequery.gui.browser;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -49,6 +51,7 @@ import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
+import org.executequery.components.CancelButton;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.TableDataChange;
@@ -65,6 +68,8 @@ import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.LinkButton;
+import org.underworldlabs.swing.ProgressBar;
+import org.underworldlabs.swing.ProgressBarFactory;
 import org.underworldlabs.swing.UpdatableLabel;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.table.SortableHeaderRenderer;
@@ -90,6 +95,10 @@ public class TableDataTab extends JPanel
     private DatabaseObject databaseObject;
 
     private boolean executing = false;
+    
+    private SwingWorker worker;
+
+    private boolean cancelled;
 
     private GridBagConstraints scrollerConstraints;
 
@@ -116,6 +125,8 @@ public class TableDataTab extends JPanel
     private JLabel canEditTableLabel;
     
     private boolean alwaysShowCanEditNotePanel;
+   
+    private InterruptibleProcessPanel cancelPanel;
     
     public TableDataTab(boolean displayRowCount) {
 
@@ -164,14 +175,16 @@ public class TableDataTab extends JPanel
                 GridBagConstraints.HORIZONTAL,
                 new Insets(0, 5, 5, 5), 0, 0);
 
-        errorLabelConstraints = new GridBagConstraints(1, 1, 1, 1, 0, 1.0,
+        errorLabelConstraints = new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
                 GridBagConstraints.CENTER,
                 GridBagConstraints.BOTH,
-                new Insets(0, 5, 5, 5), 0, 0);
+                new Insets(5, 5, 5, 5), 0, 0);
         
         tableDataChanges = new ArrayList<TableDataChange>();
         alwaysShowCanEditNotePanel = SystemProperties.getBooleanProperty(
                 Constants.USER_PROPERTIES_KEY, "browser.always.show.table.editable.label");
+        
+        cancelPanel = new InterruptibleProcessPanel("Executing query for data...");
         
         EventMediator.registerListener(this);
     }
@@ -219,21 +232,33 @@ public class TableDataTab extends JPanel
         gbc.insets.right = 10;
         panel.add(alwaysHideButton, gbc);
 
-        panel.setBorder(BorderFactory.createLineBorder(UIUtils.getDefaultBorderColour()));
+        panel.setBorder(UIUtils.getDefaultLineBorder());
         
         return panel;
     }
 
-    public void loadDataForTable(final DatabaseObject databaseObject) {
+    // TODO Auto-generated method stub
+    public synchronized void loadDataForTable(final DatabaseObject databaseObject) {
 
-        SwingWorker worker = new SwingWorker() {
+        if (worker != null) {
+
+            cancel();
+            worker.interrupt();
+        }
+
+        worker = new SwingWorker() {
             public Object construct() {
                 try {
 
-                    executing = true;
-//                    showWaitCursor();
-
+                    cancelled = false;
+                    
                     removeAll();
+                    add(cancelPanel, scrollerConstraints);
+
+                    repaint();
+                    cancelPanel.start();
+                    
+                    executing = true;
                     return setTableResultsPanel(databaseObject);
 
                 } catch (Exception e) {
@@ -245,13 +270,28 @@ public class TableDataTab extends JPanel
             public void finished() {
 
                 executing = false;
-//                showNormalCursor();
             }
 
         };
         worker.start();
     }
 
+    private void cancel() {
+        
+        if (executing) {
+            try {
+                
+                Log.debug("Cancelling open statement for data tab for table - " + databaseObject.getName());
+                databaseObject.cancelStatement();
+
+            } finally {
+                
+                cancelled = true;
+            }
+        }
+        
+    }
+    
     private List<String> primaryKeyColumns = new ArrayList<String>(0);
     private List<String> foreignKeyColumns = new ArrayList<String>(0);
 
@@ -375,8 +415,10 @@ public class TableDataTab extends JPanel
             }
 
             table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
+            
             scroller.getViewport().add(table);
+            removeAll();
+
 //            add(toolBar, toolBarConstraints);
             add(canEditTableNotePanel, canEditTableNoteConstraints);
             add(scroller, scrollerConstraints);
@@ -389,7 +431,14 @@ public class TableDataTab extends JPanel
             
         } catch (DataSourceException e) {
 
-            addErrorLabel(e);
+            if (!cancelled) {
+             
+                addErrorLabel(e);
+            
+            } else {
+                
+                addCancelledLabel();
+            }
 
         } finally {
 
@@ -430,7 +479,31 @@ public class TableDataTab extends JPanel
         }
 
         sb.append(" ]</center></p><p><center><i>(Note: Data will not always be available for all object types)</i></center></p></body></html>");
-        add(new JLabel(sb.toString()), errorLabelConstraints);
+        
+        addErrorPanel(sb);
+    }
+
+    private void addErrorPanel(StringBuilder sb) {
+
+        removeAll();
+
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, 20, 10, 20);
+        panel.add(new JLabel(sb.toString()), gbc);
+        panel.setBorder(UIUtils.getDefaultLineBorder());
+
+        add(panel, errorLabelConstraints);
+    }
+
+    private void addCancelledLabel() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("<html><body><p><center>Statement execution cancelled at user request.");
+        sb.append("</center></p><p><center><i>(Note: Data will not always be available for all object types)</i></center></p></body></html>");
+
+        addErrorPanel(sb);
     }
 
     private void createResultSetTable() {
@@ -488,8 +561,7 @@ public class TableDataTab extends JPanel
         table.applyUserPreferences();
         table.setCellSelectionEnabled(false);
 
-        tableModel.setMaxRecords(
-                SystemProperties.getIntProperty("user", "browser.max.records"));
+        tableModel.setMaxRecords(SystemProperties.getIntProperty("user", "browser.max.records"));
     }
 
     /*
@@ -570,4 +642,46 @@ public class TableDataTab extends JPanel
                 Constants.USER_PROPERTIES_KEY, "browser.always.show.table.editable.label");        
     }
 
+    
+    class InterruptibleProcessPanel extends JPanel implements ActionListener {
+        
+        private ProgressBar progressBar;
+
+        public InterruptibleProcessPanel(String labelText) {
+
+            super(new GridBagLayout());
+
+            progressBar = ProgressBarFactory.create();
+            ((JComponent) progressBar).setPreferredSize(new Dimension(260, 18));
+
+            JButton cancelButton = new CancelButton();
+            cancelButton.addActionListener(this);
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            Insets ins = new Insets(0, 20, 10, 20);
+            gbc.insets = ins;
+            add(new JLabel(labelText), gbc);
+            gbc.gridy = 1;
+            gbc.insets.top = 5;
+            add(((JComponent) progressBar), gbc);
+            gbc.gridy = 2;
+            add(cancelButton, gbc);
+
+            setBorder(UIUtils.getDefaultLineBorder());            
+        }
+  
+        public void start() {
+            
+            progressBar.start();
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+
+            progressBar.stop();
+            cancel();
+        }
+        
+    }
+
+    
 }
