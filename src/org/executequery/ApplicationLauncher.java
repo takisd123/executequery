@@ -22,6 +22,8 @@ package org.executequery;
 
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
+import java.awt.Toolkit;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -72,6 +74,7 @@ public class ApplicationLauncher {
 
             applySystemProperties();
             macSettings();
+            x11Settings();
             
             boolean dirsCreated = SystemResources.createUserHomeDirSettings();
             aaFonts();
@@ -511,6 +514,37 @@ public class ApplicationLauncher {
         new HttpProxyConfigurator().configureHttpProxy();
     }
 
+    private void x11Settings() {
+        
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Class<?> xtoolkit = toolkit.getClass();
+        if (xtoolkit.getName().equals("sun.awt.X11.XToolkit")) {
+
+            try {
+            
+                Field awtAppClassName = xtoolkit.getDeclaredField("awtAppClassName");
+                awtAppClassName.setAccessible(true);
+                awtAppClassName.set(null, ExecuteQueryFrame.TITLE);
+            
+            } catch (Exception e) {
+
+                e.printStackTrace();
+            }
+        }
+
+        /*
+        try {
+            Toolkit xToolkit = Toolkit.getDefaultToolkit();
+            java.lang.reflect.Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
+            awtAppClassNameField.setAccessible(true);
+            awtAppClassNameField.set(xToolkit, "Execute Query");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        */
+
+    }
+    
     private void macSettings() {
 
         if (UIUtils.isMac()) {

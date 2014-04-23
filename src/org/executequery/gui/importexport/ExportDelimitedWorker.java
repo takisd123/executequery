@@ -307,8 +307,7 @@ public class ExportDelimitedWorker extends AbstractImportExportWorker {
     
     private String formatString(String value) {
 
-        return value.replaceAll("\n", "\\\\n").
-                replaceAll("\r", "\\\\r");
+        return value.replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\r");
     }
 
     private void logException(Throwable e) {
