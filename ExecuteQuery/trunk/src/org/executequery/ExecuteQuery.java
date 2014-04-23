@@ -20,6 +20,8 @@
 
 package org.executequery;
 
+import java.awt.Toolkit;
+
 import javax.swing.JOptionPane;
 
 import org.executequery.gui.HelpWindow;
@@ -56,6 +58,15 @@ public final class ExecuteQuery {
             System.exit(1);
         }
 
+        try {
+            Toolkit xToolkit = Toolkit.getDefaultToolkit();
+            java.lang.reflect.Field awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
+            awtAppClassNameField.setAccessible(true);
+            awtAppClassNameField.set(xToolkit, "Execute Query");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         if (isHelpStartupOnly(args)) {
             
             HelpWindow.main(args);
