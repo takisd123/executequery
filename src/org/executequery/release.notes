@@ -16,6 +16,7 @@ Summary of changes - v4.1.2 Build 5397:
 - Added ability to cancel the query executed within the Data tab on table 
   selection.  
 - Removed dependency on agent to set the correct application name for X11.
+- Removed proprietary dependency on sun.misc.BASE64Encoder/Decoder.
 
 
 Summary of changes - v4.1.1 Build 5388:

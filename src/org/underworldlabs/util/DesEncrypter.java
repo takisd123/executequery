@@ -29,6 +29,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import org.executequery.util.Base64;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -40,27 +42,30 @@ public class DesEncrypter {
     private static char[] pwdChars = 
             "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
     
-    public DesEncrypter() {}
+    private DesEncrypter() {}
 
     public static String encrypt(String key, String value) {
         try {            
+            
             SecretKey secretKey = getSecretKey(key);
             
             Cipher ecipher = Cipher.getInstance("DES");
 			ecipher.init(Cipher.ENCRYPT_MODE, secretKey);
+			
 			byte[] cleartext = value.getBytes("UTF8");
 			byte[] ciphertext = ecipher.doFinal(cleartext);
 
-			sun.misc.BASE64Encoder base64encoder = new sun.misc.BASE64Encoder();
-			return base64encoder.encode(ciphertext);
-
+			return Base64.encodeBytes(ciphertext);
+        
         } catch (Exception e) {
+
             e.printStackTrace();
         }
         return null;
     }
     
     public static SecretKey getSecretKey(String key) throws Exception {
+        
         byte[] keyAsBytes = key.getBytes("UTF8");
         KeySpec keySpec = new DESKeySpec(keyAsBytes);
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
@@ -68,16 +73,19 @@ public class DesEncrypter {
     }
     
     public static String decrypt(String key, String value) {
+
         try {
+
             SecretKey secretKey = getSecretKey(key);
 
             Cipher dcipher = Cipher.getInstance("DES");
 			dcipher.init(Cipher.DECRYPT_MODE, secretKey);
 
             // Decode base64 to get bytes
-            byte[] dec = new sun.misc.BASE64Decoder().decodeBuffer(value);
+            byte[] dec = Base64.decode(value);
+            
             // Decrypt
-            byte[] utf8 = dcipher.doFinal(dec);
+            byte[] utf8 = dcipher.doFinal(dec);            
             
             // Decode using utf-8
             return new String(utf8, "UTF8");
@@ -120,8 +128,4 @@ public class DesEncrypter {
     }
 
 }
-
-
-
-
 
