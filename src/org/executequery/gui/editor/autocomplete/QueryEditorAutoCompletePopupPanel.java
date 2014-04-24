@@ -40,7 +40,7 @@ import org.underworldlabs.swing.plaf.UIUtils;
 
 public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements TypeAheadListProvider {
 
-    private static final Dimension PREFERRED_SIZE = new Dimension(450, 145);
+    private static final Dimension PREFERRED_SIZE = new Dimension(460, 150);
 
     private static final int TIMER_DELAY = 1000;
 
@@ -60,7 +60,6 @@ public class QueryEditorAutoCompletePopupPanel extends JPopupMenu implements Typ
     private void init() {
 
         setLayout(new BorderLayout());
-        setLightWeightPopupEnabled(false);
         setVisible(false);
 
         list = new TypeAheadList(this);
