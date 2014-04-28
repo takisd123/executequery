@@ -59,14 +59,12 @@ public class LatestVersionRepositoryImpl implements LatestVersionRepository {
                 String build = null;
 
                 RemoteHttpClient httpClient = remoteHttpClient();
-                
-                RemoteHttpResponse response = httpClient.httpGetRequest(
-                        ADDRESS, versionUrl().getPath());
+                RemoteHttpResponse response = httpClient.httpGetRequest(ADDRESS, versionUrl().getPath());
 
                 String[] responseTextLines = response.getResponse().split("\n");
                 for (String line : responseTextLines) {
                     
-                    if(line.startsWith("version")) {
+                    if (line.startsWith("version")) {
 
                         version = line.substring(8).trim();
 
@@ -124,9 +122,7 @@ public class LatestVersionRepositoryImpl implements LatestVersionRepository {
 
     private URL versionUrl() throws MalformedURLException {
 
-        return new URL(
-                SystemProperties.getProperty(
-                    Constants.SYSTEM_PROPERTIES_KEY, "check.version.url"));
+        return new URL(SystemProperties.getProperty(Constants.SYSTEM_PROPERTIES_KEY, "check.version.url"));
     }
 
     private boolean siteAvailable() {
@@ -171,14 +167,7 @@ public class LatestVersionRepositoryImpl implements LatestVersionRepository {
 
     private URL releaseNotesUrl() throws MalformedURLException {
 
-        return new URL(
-                SystemProperties.getProperty(
-                    Constants.SYSTEM_PROPERTIES_KEY, "check.version.notes.url"));
+        return new URL(SystemProperties.getProperty(Constants.SYSTEM_PROPERTIES_KEY, "check.version.notes.url"));
     }
     
 }
-
-
-
-
-
