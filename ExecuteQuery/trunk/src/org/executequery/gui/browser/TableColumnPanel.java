@@ -91,7 +91,7 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
         paramPanel.add(new JScrollPane(table), BorderLayout.CENTER);
 
         JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
-        tabs.add("Meta Data", paramPanel);
+        tabs.add("Properties", paramPanel);
         
         colNameField = new DisabledField();
         //tableNameField = new DisabledField();
