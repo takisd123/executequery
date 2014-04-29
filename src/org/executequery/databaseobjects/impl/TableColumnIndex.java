@@ -23,6 +23,7 @@ package org.executequery.databaseobjects.impl;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -118,7 +119,7 @@ public class TableColumnIndex extends AbstractDatabaseObjectElement {
         this.metaData = metaData;
         for (String key : this.metaData.keySet()) {
             
-            if ("TYPE".equals(key)) {
+            if (StringUtils.equalsIgnoreCase("TYPE", key)) {
 
                 Short value = Short.valueOf(this.metaData.get(key));
                 this.metaData.put(key, translateType(value));

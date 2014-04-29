@@ -175,7 +175,7 @@ public abstract class AbstractNamedObject implements NamedObject,
 
         Map<String,String> metaData = new HashMap<String,String>(columnCount);
         for (int i = 1; i < columnCount; i++) {
-            metaData.put(metaColumnNames[i - 1], rs.getString(i));
+            metaData.put(metaColumnNames[i - 1].toUpperCase(), rs.getString(i));
         }
  
         return metaData;
