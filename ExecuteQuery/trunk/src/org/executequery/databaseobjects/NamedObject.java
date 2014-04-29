@@ -33,41 +33,50 @@ import org.underworldlabs.jdbc.DataSourceException;
  */
 public interface NamedObject extends java.io.Serializable {
 
-    public static final int BRANCH_NODE = 100;
-    public static final int ROOT = 96;
-    public static final int CATALOG = 98;
-    public static final int HOST = 99;
-    public static final int SCHEMA = 97;
+    int BRANCH_NODE = 100;
+    int COLUMNS_FOLDER_NODE = 101;
+    int FOREIGN_KEYS_FOLDER_NODE = 101;
+    int PRIMARY_KEYS_FOLDER_NODE = 102;
+    int INDEXES_FOLDER_NODE = 101;
+    
+    int ROOT = 96;
+    int CATALOG = 98;
+    int HOST = 99;
+    int SCHEMA = 97;
 
-    public static final int OTHER = 95;
+    int OTHER = 95;
     
-    public static final int TABLE_COLUMN = 94;
+    int TABLE_COLUMN = 94;
 
-    public static final int META_TAG = 93;
+    int META_TAG = 93;
 
     
-    public static final int FUNCTION = 0;
-    public static final int INDEX = 1;
-    public static final int PROCEDURE = 2;
-    public static final int SEQUENCE = 3;
-    public static final int SYNONYM = 4;
-    public static final int SYSTEM_TABLE = 5;
-    public static final int TABLE = 6;
-    public static final int TRIGGER = 7;
-    public static final int VIEW = 8;
+    int FUNCTION = 0;
+    int INDEX = 1;
+    int PROCEDURE = 2;
+    int SEQUENCE = 3;
+    int SYNONYM = 4;
+    int SYSTEM_TABLE = 5;
+    int TABLE = 6;
+    int TRIGGER = 7;
+    int VIEW = 8;
 
-    public static final int SYSTEM_VIEW = 13;
+    int PRIMARY_KEY = 999;
+    int FOREIGN_KEY = 998;
+    int UNIQUE_KEY = 997;
+
+    int SYSTEM_VIEW = 13;
     
-    public static final int SYSTEM_FUNCTION = 9;
+    int SYSTEM_FUNCTION = 9;
     
-    public static final int SYSTEM_STRING_FUNCTIONS = 10;
+    int SYSTEM_STRING_FUNCTIONS = 10;
     
-    public static final int SYSTEM_NUMERIC_FUNCTIONS = 11;
+    int SYSTEM_NUMERIC_FUNCTIONS = 11;
     
-    public static final int SYSTEM_DATE_TIME_FUNCTIONS = 12;
+    int SYSTEM_DATE_TIME_FUNCTIONS = 12;
     
     
-    public static final String[] META_TYPES = {"FUNCTION",
+    String[] META_TYPES = {"FUNCTION",
                                                "INDEX",
                                                "PROCEDURE",
                                                "SEQUENCE",
@@ -153,10 +162,7 @@ public interface NamedObject extends java.io.Serializable {
      */
     int drop() throws DataSourceException;
     
+    
     String getDescription();
 
 }
-
-
-
-

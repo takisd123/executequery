@@ -108,7 +108,6 @@ public class DatabaseHostNode extends DatabaseObjectNode {
         if (isConnected()) {
 
             super.populateChildren();
-            
             ensureValidCatalogsAndSchemasVisible();
         }
     }
@@ -153,7 +152,6 @@ public class DatabaseHostNode extends DatabaseObjectNode {
         
         // check for catalogs
         List<?> _children = host.getCatalogs();
-
         if (_children == null || _children.isEmpty()) {
 
             // otherwise get schemas

@@ -21,9 +21,12 @@
 package org.executequery.databaseobjects.impl;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.NamedObject;
@@ -87,7 +90,7 @@ public abstract class AbstractNamedObject implements NamedObject,
     }
 
     /**
-     * Marks this object as being 'reset', where for any loaded object
+     * Marks this object as being 'reset', where for any loaded objectnode.
      * these are cleared and a fresh database call would be made where 
      * appropriate.
      */
@@ -160,6 +163,24 @@ public abstract class AbstractNamedObject implements NamedObject,
         return name;
     }
 
+    Map<String, String> resultSetRowToMap(ResultSet rs) throws SQLException {
+        
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnCount = rsmd.getColumnCount();
+
+        String[] metaColumnNames = new String[columnCount];
+        for (int i = 1; i < columnCount; i++) {
+            metaColumnNames[i - 1] = rsmd.getColumnName(i);
+        }
+
+        Map<String,String> metaData = new HashMap<String,String>(columnCount);
+        for (int i = 1; i < columnCount; i++) {
+            metaData.put(metaColumnNames[i - 1], rs.getString(i));
+        }
+ 
+        return metaData;
+    }
+    
     public String getDescription() {
 
         if (getType() != META_TAG) {
@@ -243,7 +264,3 @@ public abstract class AbstractNamedObject implements NamedObject,
     }
     
 }
-
-
-
-

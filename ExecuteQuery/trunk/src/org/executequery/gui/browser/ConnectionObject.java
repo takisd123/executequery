@@ -22,13 +22,6 @@ package org.executequery.gui.browser;
 
 import org.executequery.databasemediators.DatabaseConnection;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  *
  * @author   Takis Diakoumis

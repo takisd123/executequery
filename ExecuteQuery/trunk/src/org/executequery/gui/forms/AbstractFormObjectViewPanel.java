@@ -75,6 +75,10 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
         add(panel, BorderLayout.CENTER);
     }
     
+    public String getHeaderText() {
+        return gradientLabel.getText();
+    }
+    
     public void setHeader(String text, ImageIcon icon) {
         gradientLabel.setText(text);
     }

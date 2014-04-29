@@ -81,7 +81,7 @@ public class DatabaseCatalogNode extends DatabaseObjectNode {
             children = new ArrayList<DatabaseObjectNode>(count);
             for (int i = 0; i < count; i++) {
                 DatabaseMetaTag metaTag = (DatabaseMetaTag)_children.get(i);
-                children.add(new DatabaseObjectNode(metaTag));
+                children.add(new DatabaseMetaTagNode(metaTag));
             }
             return children;
         }

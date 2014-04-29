@@ -20,6 +20,8 @@
 
 package org.executequery.databaseobjects;
 
+import java.util.Map;
+
 /**
  *
  * @author takisd
@@ -36,7 +38,7 @@ public interface DatabaseObjectElement extends NamedObject {
     /**
      * Sets the parent catalog name to that specified.
      *
-     * @param catalog the catalog name
+     * @param catalog the catalog nameColumnConstraint
      */
     void setCatalogName(String catalog);
     
@@ -60,15 +62,13 @@ public interface DatabaseObjectElement extends NamedObject {
      * @return database object remarks
      */
     String getRemarks();
+
+    /**
+     * Returns the meta data as a map of this column.
+     *
+     * @return the meta data
+     */
+    Map<String,String> getMetaData();
+
     
 }
-
-
-
-
-
-
-
-
-
-

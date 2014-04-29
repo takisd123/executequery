@@ -20,11 +20,13 @@
 
 package org.executequery.databaseobjects.impl;
 
+import org.executequery.databaseobjects.DatabaseObjectElement;
+
 /**
  *
  * @author takisd
  */
-public abstract class AbstractDatabaseObjectElement extends AbstractNamedObject {
+public abstract class AbstractDatabaseObjectElement extends AbstractNamedObject implements DatabaseObjectElement {
     
     /** the catalog name */
     private String catalogName;
@@ -108,13 +110,3 @@ public abstract class AbstractDatabaseObjectElement extends AbstractNamedObject 
     }
 
 }
-
-
-
-
-
-
-
-
-
-
