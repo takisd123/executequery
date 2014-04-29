@@ -216,6 +216,18 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
                 setIcon(icons.get(BrowserConstants.SYSTEM_FUNCTIONS_IMAGE));
                 break;
                 
+            case NamedObject.PRIMARY_KEY:
+                setIcon(icons.get(BrowserConstants.PRIMARY_COLUMNS_IMAGE));
+                break;
+
+            case NamedObject.FOREIGN_KEY:
+                setIcon(icons.get(BrowserConstants.FOREIGN_COLUMNS_IMAGE));
+                break;
+                
+            case NamedObject.UNIQUE_KEY:
+                setIcon(icons.get(BrowserConstants.COLUMNS_IMAGE));
+                break;
+                
             default:
                 setIcon(icons.get(BrowserConstants.DATABASE_OBJECT_IMAGE));
                 break;

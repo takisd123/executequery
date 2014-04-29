@@ -20,6 +20,9 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.DatabaseMetaData;
+import java.util.Map;
+
 import org.executequery.databaseobjects.NamedObject;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -41,6 +44,9 @@ public class TableColumnIndex extends AbstractDatabaseObjectElement {
     /** Whether this column is marked as to be deleted */
     private boolean markedDeleted;
 
+    /** the column meta data map */
+    private Map<String,String> metaData;
+    
     /** Creates a new instance of DatabaseTableColumnIndex */
     public TableColumnIndex(String name) {
         setName(name);
@@ -55,6 +61,11 @@ public class TableColumnIndex extends AbstractDatabaseObjectElement {
         return "INDEX";
     }
 
+    @Override
+    public int getType() {
+        return INDEX;
+    }
+    
     /**
      * Returns the parent named object of this object.
      *
@@ -103,14 +114,40 @@ public class TableColumnIndex extends AbstractDatabaseObjectElement {
         this.markedDeleted = markedDeleted;
     }
 
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
+        for (String key : this.metaData.keySet()) {
+            
+            if ("TYPE".equals(key)) {
+
+                Short value = Short.valueOf(this.metaData.get(key));
+                this.metaData.put(key, translateType(value));
+            }
+
+        }
+    }
+    
+    private String translateType(Short value) {
+
+        String translated = String.valueOf(value);
+        switch (value) {
+            case DatabaseMetaData.tableIndexStatistic:
+                return translated + " - tableIndexStatistic";
+
+            case DatabaseMetaData.tableIndexClustered:
+                return translated + " - tableIndexClustered";
+
+            case DatabaseMetaData.tableIndexHashed:
+                return translated + " - tableIndexHashed";
+
+            case DatabaseMetaData.tableIndexOther:
+                return translated + " - tableIndexOther";
+        }        
+        return translated;
+    }
+
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+    
 }
-
-
-
-
-
-
-
-
-
-

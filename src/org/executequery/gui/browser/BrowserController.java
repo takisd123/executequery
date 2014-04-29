@@ -278,7 +278,11 @@ public class BrowserController {
     private FormObjectView buildPanelView(DatabaseObjectNode node) {
         try {
 
-            NamedObject databaseObject = node.getDatabaseObject();
+            NamedObject databaseObject   = node.getDatabaseObject();
+            if (databaseObject == null) {
+                
+                return null;
+            }
 
 //            System.out.println("selected object type: " + databaseObject.getClass().getName());
 
@@ -371,6 +375,21 @@ public class BrowserController {
                     }
                     columnPanel.setValues((DatabaseColumn)databaseObject);
                     return columnPanel;
+
+                case NamedObject.INDEX:
+                case NamedObject.PRIMARY_KEY:
+                case NamedObject.FOREIGN_KEY:
+                case NamedObject.UNIQUE_KEY:
+                    SimpleMetaDataPanel panel = null;
+                    if (!viewPanel.containsPanel(SimpleMetaDataPanel.NAME)) {
+                        panel = new SimpleMetaDataPanel(this);
+                        viewPanel.addToLayout(panel);
+                    }
+                    else {
+                        panel = (SimpleMetaDataPanel) viewPanel.getFormObjectView(SimpleMetaDataPanel.NAME);
+                    }
+                    panel.setValues((NamedObject) databaseObject);
+                    return panel;
 
                 default:
                     ObjectDefinitionPanel objectDefnPanel = null;

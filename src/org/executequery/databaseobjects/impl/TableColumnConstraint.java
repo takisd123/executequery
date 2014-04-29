@@ -20,6 +20,9 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.DatabaseMetaData;
+import java.util.Map;
+
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
@@ -36,6 +39,7 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
                                    implements ColumnConstraint {
     
     public static final String EMPTY = "";
+
     /** the table column this constraint belongs to */
     private DatabaseTableColumn column;
 
@@ -74,6 +78,9 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
     
     /** the foreign key column */
     private DatabaseColumn foreignKeyColumn;
+    
+    /** the column meta data map */
+    private Map<String,String> metaData;
     
     /** Creates a new instance of TableColumnConstraint */
     public TableColumnConstraint(int type) {
@@ -475,8 +482,7 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
      * @return a clone of this object
      */
     public Object clone() throws CloneNotSupportedException {
-        TableColumnConstraint clone = 
-                new TableColumnConstraint(getKeyType());
+        TableColumnConstraint clone = new TableColumnConstraint(getKeyType());
         copyConstraint(this, clone);
         return clone;
     }
@@ -538,15 +544,122 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
     public void detachFromColumn() {
         column.removeConstraint(this);
     }
+
+    public void setMetaData(Map<String, String> metaData) {
+        this.metaData = metaData;
+        for (String key : this.metaData.keySet()) {
+            
+            if ("DELETE_RULE".equals(key)) {
+                
+                Short value = Short.valueOf(this.metaData.get(key));
+                this.metaData.put(key, translateDeletedRule(value));
+
+            } else if ("UPDATE_RULE".equals(key)) {
+                
+                Short value = Short.valueOf(this.metaData.get(key));
+                this.metaData.put(key, translateUpdateRule(value));
+
+            } else if ("DEFERRABILITY".equals(key)) {
+                
+                Short value = Short.valueOf(this.metaData.get(key));
+                this.metaData.put(key, translateDeferrabilityRule(value));
+    
+            }
+            
+        }
+    }
+    
+    private String translateDeferrabilityRule(Short value) {
+
+        String translated = String.valueOf(value);
+        if (isForeignKey()) {
+        
+            switch (value) {
+                case DatabaseMetaData.importedKeyInitiallyDeferred:
+                    return translated + " - importedKeyInitiallyDeferred";
+    
+                case DatabaseMetaData.importedKeyInitiallyImmediate:
+                    return translated + " - importedKeyInitiallyImmediate";
+    
+                case DatabaseMetaData.importedKeyNotDeferrable:
+                    return translated + " - importedKeyNotDeferrable";
+            }
+        
+        }        
+        return translated; 
+    }
+
+    private String translateDeletedRule(Short value) {
+
+        String translated = String.valueOf(value);
+        if (isForeignKey()) {
+        
+            switch (value) {
+                case DatabaseMetaData.importedKeyNoAction:
+                    return translated + " - importedKeyNoAction";
+    
+                case DatabaseMetaData.importedKeyCascade:
+                    return translated + " - importedKeyCascade";
+    
+                case DatabaseMetaData.importedKeySetNull:
+                    return translated + " - importedKeySetNull";
+    
+                case DatabaseMetaData.importedKeyRestrict:
+                    return translated + " - importedKeyRestrict";
+    
+                case DatabaseMetaData.importedKeySetDefault:
+                    return translated + " - importedKeySetDefault";
+            }
+        
+        }        
+        return translated; 
+    }
+
+    public Map<String, String> getMetaData() {
+        return metaData;
+    }
+
+    private String translateUpdateRule(Short value) {
+
+        String translated = String.valueOf(value);
+        if (isForeignKey()) {
+        
+            switch (value) {
+                case DatabaseMetaData.importedKeyNoAction:
+                    return translated + " - importedKeyNoAction";
+    
+                case DatabaseMetaData.importedKeyCascade:
+                    return translated + " - importedKeyCascade";
+    
+                case DatabaseMetaData.importedKeySetNull:
+                    return translated + " - importedKeySetNull";
+    
+                case DatabaseMetaData.importedKeyRestrict:
+                    return translated + " - importedKeyRestrict";
+    
+                case DatabaseMetaData.importedKeySetDefault:
+                    return translated + " - importedKeySetDefault";
+            }
+        
+        }        
+        return translated; 
+    }
+    @Override
+    public int getType() {
+        
+        if (isForeignKey()) {
+         
+            return FOREIGN_KEY;
+        
+        } else if (isPrimaryKey()) {
+
+            return PRIMARY_KEY;
+
+        } else {
+            
+            return UNIQUE_KEY;
+        }
+
+    }
     
 }
-
-
-
-
-
-
-
-
-
-

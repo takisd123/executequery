@@ -33,8 +33,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-import org.executequery.GUIUtilities;
-import org.executequery.databaseobjects.DatabaseColumn;
+import org.executequery.databaseobjects.DatabaseObjectElement;
+import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.print.TablePrinter;
@@ -44,20 +44,18 @@ import org.underworldlabs.swing.DisabledField;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1185 $
+ * @date     $Date: 2013-02-08 22:16:55 +1100 (Fri, 08 Feb 2013) $
  */
-public class TableColumnPanel extends AbstractFormObjectViewPanel {
+public class SimpleMetaDataPanel extends AbstractFormObjectViewPanel {
     
-    private static final String DEFAULT_HEADER_TEXT = "Table Column";
+    public static final String NAME = "SimpleMetaDataPanel";
 
-    private static final String PK_HEADER_TEXT = "Table Column - Primary Key";
+    private static final String INDEX_HEADER_TEXT = "Table Index";
 
-    private static final String FK_HEADER_TEXT = "Table Column - Foreign Key";
-
-    public static final String NAME = "TableColumnPanel";
+    private static final String FOREIGN_KEY_HEADER_TEXT = "Foreign Key";
     
-    private DisabledField colNameField;
+    private DisabledField nameField;
     
     private JTable table;
 
@@ -66,7 +64,7 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
     /** the browser's control object */
     private BrowserController controller;
 
-    public TableColumnPanel(BrowserController controller) {
+    public SimpleMetaDataPanel(BrowserController controller) {
         super();
         this.controller = controller;
         try {
@@ -93,7 +91,7 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
         JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
         tabs.add("Meta Data", paramPanel);
         
-        colNameField = new DisabledField();
+        nameField = new DisabledField();
         //tableNameField = new DisabledField();
         
         JPanel base = new JPanel(new GridBagLayout());
@@ -125,12 +123,9 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
         gbc.weighty = 0;
         gbc.gridy = 0;
         gbc.gridx = 1;
-        base.add(colNameField, gbc);
+        base.add(nameField, gbc);
 
-        setContentPanel(base);        
-        setHeaderText(DEFAULT_HEADER_TEXT);
-        setHeaderIcon(GUIUtilities.loadIcon("TableColumn24.png"));
-
+        setContentPanel(base);
     }
     
     public String getLayoutName() {
@@ -147,29 +142,22 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
     
     public Printable getPrintable() {
 
-        return new TablePrinter(table, "Table Column: " + colNameField.getText());
+        return new TablePrinter(table, getHeaderText() + ": " + nameField.getText());
     }
     
-    public void setValues(DatabaseColumn column) {
+    public void setValues(NamedObject namedObject) {
 
+        if (!(namedObject instanceof DatabaseObjectElement)) {
+            
+            throw new IllegalArgumentException("Requires valid DatabaseObjectElement instance");
+        }
+        
         try {
 
-            colNameField.setText(column.getName());
-            model.setValues(column.getMetaData());
+            nameField.setText(namedObject.getName());
+            model.setValues(((DatabaseObjectElement) namedObject).getMetaData());
+            setHeaderText(headerTextForType(namedObject));
 
-            if (column.isPrimaryKey()) {
-                
-                setHeaderText(PK_HEADER_TEXT);
-                
-            } else if (column.isForeignKey()) {
-                
-                setHeaderText(FK_HEADER_TEXT);
-
-            } else {
-                
-                setHeaderText(DEFAULT_HEADER_TEXT);
-            }
-            
         } catch (DataSourceException e) {
 
             controller.handleException(e);
@@ -178,4 +166,17 @@ public class TableColumnPanel extends AbstractFormObjectViewPanel {
 
     }
 
+    private String headerTextForType(NamedObject namedObject) {
+        
+        if (namedObject.getType() == NamedObject.INDEX) {
+            
+            return INDEX_HEADER_TEXT;
+
+        } else {
+            
+            return FOREIGN_KEY_HEADER_TEXT;                
+        }
+
+    }
+    
 }

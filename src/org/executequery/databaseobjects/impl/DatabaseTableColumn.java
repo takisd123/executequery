@@ -647,8 +647,3 @@ public class DatabaseTableColumn extends DefaultDatabaseColumn {
     }
     
 }
-
-
-
-
-

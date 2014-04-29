@@ -22,6 +22,7 @@ package org.executequery.databaseobjects.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseTable;
@@ -189,14 +190,8 @@ public class DefaultTableIndex extends AbstractDatabaseObjectElement
         }
     }
 
+    public Map<String, String> getMetaData() {
+        return null;
+    }
+
 }
-
-
-
-
-
-
-
-
-
-

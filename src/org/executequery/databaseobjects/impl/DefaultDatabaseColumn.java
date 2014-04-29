@@ -22,12 +22,11 @@ package org.executequery.databaseobjects.impl;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObject;
@@ -333,38 +332,20 @@ public class DefaultDatabaseColumn extends AbstractDatabaseObjectElement
             DatabaseMetaData dmd = databaseHost.getDatabaseMetaData();
             rs = dmd.getColumns(_catalog, _schema, getParentsName(), getName());
 
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-
-            String[] metaColumnNames = new String[columnCount];
-            for (int i = 1; i < columnCount; i++) {
-                metaColumnNames[i - 1] = rsmd.getColumnName(i);
-            }
-
-            metaData = new HashMap<String,String>(columnCount);
             if (rs.next()) {
-                for (int i = 1; i < columnCount; i++) {
-                    metaData.put(metaColumnNames[i - 1], rs.getString(i));
-                }
-            } 
+
+                metaData = resultSetRowToMap(rs);
+            }
             return metaData;
-        } 
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
+
             throw new DataSourceException(e);
-        }
-        finally {
+
+        } finally {
+
             releaseResources(rs);
         }
     }
 
 }
-
-
-
-
-
-
-
-
-
-

@@ -34,12 +34,9 @@ import org.underworldlabs.jdbc.DataSourceException;
  */
 public interface ColumnConstraint extends DatabaseObjectElement {
 
-    public static final int PRIMARY_KEY = 0;
-    public static final int FOREIGN_KEY = 1;
-    public static final int UNIQUE_KEY = 2;
-    public static final String PRIMARY = "PRIMARY";
-    public static final String FOREIGN = "FOREIGN";
-    public static final String UNIQUE = "UNIQUE";
+    String PRIMARY = "PRIMARY";
+    String FOREIGN = "FOREIGN";
+    String UNIQUE = "UNIQUE";
 
     /**
      * Returns the column object referenced by this column or

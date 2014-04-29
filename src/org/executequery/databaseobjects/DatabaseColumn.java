@@ -21,10 +21,8 @@
 package org.executequery.databaseobjects;
 
 import java.util.List;
-import java.util.Map;
 
 import org.executequery.databaseobjects.impl.ColumnConstraint;
-import org.underworldlabs.jdbc.DataSourceException;
 
 /**
  * Defines a database column. This may be a column as defined by 
@@ -115,13 +113,6 @@ public interface DatabaseColumn extends DatabaseObjectElement {
     String getDefaultValue();
 
     /**
-     * Returns the meta data as a map of this column.
-     *
-     * @return the meta data
-     */
-    Map<String,String> getMetaData() throws DataSourceException;
-
-    /**
      * Returns a formatted string representation of the
      * column's data type and size - eg. VARCHAR(10).
      *
@@ -132,13 +123,3 @@ public interface DatabaseColumn extends DatabaseObjectElement {
     List<ColumnConstraint> getConstraints();
     
 }
-
-
-
-
-
-
-
-
-
-

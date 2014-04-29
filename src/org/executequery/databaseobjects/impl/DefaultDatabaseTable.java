@@ -249,17 +249,15 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                     while (rs.next()) {
 
                         String pkColumn = rs.getString(4);
-
                         for (DatabaseColumn i : columns) {
 
                             if (i.getName().equalsIgnoreCase(pkColumn)) {
 
                                 DatabaseTableColumn column = (DatabaseTableColumn)i;
-                                TableColumnConstraint constraint =
-                                        new TableColumnConstraint(
-                                            column, ColumnConstraint.PRIMARY_KEY);
+                                TableColumnConstraint constraint = new TableColumnConstraint(column, ColumnConstraint.PRIMARY_KEY);
 
                                 constraint.setName(rs.getString(6));
+                                constraint.setMetaData(resultSetRowToMap(rs));
                                 column.addConstraint(constraint);
                                 break;
 
@@ -284,11 +282,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                             if (i.getName().equalsIgnoreCase(fkColumn)) {
 
-                                DatabaseTableColumn column = (DatabaseTableColumn)i;
-                                TableColumnConstraint constraint =
-                                        new TableColumnConstraint(
-                                            column, ColumnConstraint.FOREIGN_KEY);
+                                DatabaseTableColumn column = (DatabaseTableColumn) i;
 
+                                TableColumnConstraint constraint = new TableColumnConstraint(column, ColumnConstraint.FOREIGN_KEY);
                                 constraint.setReferencedCatalog(rs.getString(1));
                                 constraint.setReferencedSchema(rs.getString(2));
                                 constraint.setReferencedTable(rs.getString(3));
@@ -297,6 +293,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                                 constraint.setDeleteRule(rs.getShort(11));
                                 constraint.setName(rs.getString(12));
                                 constraint.setDeferrability(rs.getShort(14));
+                                constraint.setMetaData(resultSetRowToMap(rs));
                                 column.addConstraint(constraint);
                                 break;
 
@@ -382,9 +379,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         ResultSet rs = null;
         try {
+
             DatabaseHost _host = getHost();
-            rs = _host.getDatabaseMetaData().getIndexInfo(
-                    getCatalogName(), getSchemaName(), getName(), false, true);
+            rs = _host.getDatabaseMetaData().getIndexInfo(getCatalogName(), getSchemaName(), getName(), false, true);
 
             indexes = new ArrayList<TableColumnIndex>();
             while (rs.next()) {
@@ -399,7 +396,9 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 TableColumnIndex index = new TableColumnIndex(name);
 
                 index.setNonUnique(rs.getBoolean(4));
-                index.setIndexedColumn(rs.getString(9));
+                index.setIndexedColumn(rs.getString(9));                
+                index.setMetaData(resultSetRowToMap(rs));
+                
                 indexes.add(index);
             }
 
