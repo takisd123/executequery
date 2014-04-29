@@ -23,6 +23,7 @@ package org.executequery.databaseobjects.impl;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
@@ -549,17 +550,17 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
         this.metaData = metaData;
         for (String key : this.metaData.keySet()) {
             
-            if ("DELETE_RULE".equals(key)) {
+            if (StringUtils.equalsIgnoreCase("DELETE_RULE", key)) {
                 
                 Short value = Short.valueOf(this.metaData.get(key));
                 this.metaData.put(key, translateDeletedRule(value));
 
-            } else if ("UPDATE_RULE".equals(key)) {
+            } else if (StringUtils.equalsIgnoreCase("UPDATE_RULE", key)) {
                 
                 Short value = Short.valueOf(this.metaData.get(key));
                 this.metaData.put(key, translateUpdateRule(value));
 
-            } else if ("DEFERRABILITY".equals(key)) {
+            } else if (StringUtils.equalsIgnoreCase("DEFERRABILITY", key)) {
                 
                 Short value = Short.valueOf(this.metaData.get(key));
                 this.metaData.put(key, translateDeferrabilityRule(value));
