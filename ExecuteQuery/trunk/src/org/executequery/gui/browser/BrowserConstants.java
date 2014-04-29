@@ -189,6 +189,14 @@ public class BrowserConstants {
 
     public static final String TABLE_TRIGGER_IMAGE = "TableTrigger16.png";
     
+    public static final String FOLDER_FOREIGN_KEYS_IMAGE = "FolderForeignKeys16.png";
+    
+    public static final String FOLDER_PRIMARY_KEYS_IMAGE = "FolderPrimaryKeys16.png";
+    
+    public static final String FOLDER_COLUMNS_IMAGE = "FolderColumns16.png";
+    
+    public static final String FOLDER_INDEXES_IMAGE = "FolderIndexes16.png";
+    
     public static final String[] NODE_ICONS = {CONNECTIONS_IMAGE,
                                                CONNECTIONS_FOLDER_IMAGE,
                                                CATALOG_IMAGE,
@@ -209,7 +217,11 @@ public class BrowserConstants {
                                                PRIMARY_COLUMNS_IMAGE,
                                                FOREIGN_COLUMNS_IMAGE,
                                                SYSTEM_VIEWS_IMAGE,
-                                               TABLE_TRIGGER_IMAGE
+                                               TABLE_TRIGGER_IMAGE,
+                                               FOLDER_COLUMNS_IMAGE,
+                                               FOLDER_FOREIGN_KEYS_IMAGE,
+                                               FOLDER_INDEXES_IMAGE,
+                                               FOLDER_PRIMARY_KEYS_IMAGE
                                                };
     
 }

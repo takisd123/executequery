@@ -35,9 +35,9 @@ public interface NamedObject extends java.io.Serializable {
 
     int BRANCH_NODE = 100;
     int COLUMNS_FOLDER_NODE = 101;
-    int FOREIGN_KEYS_FOLDER_NODE = 101;
-    int PRIMARY_KEYS_FOLDER_NODE = 102;
-    int INDEXES_FOLDER_NODE = 101;
+    int FOREIGN_KEYS_FOLDER_NODE = 102;
+    int PRIMARY_KEYS_FOLDER_NODE = 103;
+    int INDEXES_FOLDER_NODE = 104;
     
     int ROOT = 96;
     int CATALOG = 98;
