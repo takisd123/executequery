@@ -229,8 +229,14 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
      */
     public boolean isLeaf() {
 
-        if (getDatabaseObject() != null && 
-                getDatabaseObject().getType() == NamedObject.TABLE_COLUMN) {
+        if (getDatabaseObject() != null) { 
+            
+            int type = getDatabaseObject().getType();
+            if (type == NamedObject.TABLE_COLUMN 
+                    || type == NamedObject.FOREIGN_KEY
+                    || type == NamedObject.PRIMARY_KEY
+                    || type == NamedObject.UNIQUE_KEY
+                    || type == NamedObject.INDEX)
 
             return true;
         }
