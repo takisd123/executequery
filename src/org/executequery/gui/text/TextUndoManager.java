@@ -246,7 +246,9 @@ public class TextUndoManager extends UndoManager
      * Completes a compound edit and adds it to the manager.
      */
     public void addUndoEdit() {
-        compoundEdit.end();
+        if (compoundEdit.isInProgress()) {
+            compoundEdit.end();
+        }
         addEdit(compoundEdit);
         compoundEdit = new CompoundEdit();
     }

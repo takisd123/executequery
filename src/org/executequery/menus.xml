@@ -116,7 +116,17 @@
                          action-command="deleteWord"/>
 
           </menu>
+
+          <menu-item id="separator"/>
+
+          <menu-item id="move-row-up-command" class="org.underworldlabs.swing.menu.MainMenuItem"/>
           
+          <menu-item id="move-row-down-command" class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
+          <menu-item id="duplicate-row-up-command" class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
+          <menu-item id="duplicate-row-down-command" class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
           <menu-item id="separator"/>
 
           <menu name="Change Case"

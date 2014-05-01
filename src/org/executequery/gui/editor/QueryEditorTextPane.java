@@ -82,6 +82,9 @@ public class QueryEditorTextPane extends SQLTextPane
 
     private static final Insets INSETS = new Insets(2, 2, 2, 2);
 
+    private static final int DIRECTION_UP = 1;
+    private static final int DIRECTION_DOWN = 2;
+    
     /** The editor panel containing this text component */
     private QueryEditorTextPanel editorPanel;
 
@@ -674,6 +677,7 @@ public class QueryEditorTextPane extends SQLTextPane
      * @param g the <code>Graphics</code> object to protect
      */
     public void paintComponent(Graphics g) {
+
         int height = getHeight();
         int width = getWidth();
 
@@ -694,7 +698,10 @@ public class QueryEditorTextPane extends SQLTextPane
             g.drawLine(xPosn, 0, xPosn, height);
         }
 
-        super.paintComponent(g);
+        try {
+            super.paintComponent(g);
+        } catch (Exception e) {}
+
     }
 
     public void setQueryAreaText(String s) {
@@ -1035,14 +1042,21 @@ public class QueryEditorTextPane extends SQLTextPane
         lineBorder.repaint();
     }
 
-    public String getTextAtRow(int rowNumber) throws BadLocationException {
+    public String getTextAtRow(int rowNumber) {
 
         Element line = getElementMap().getElement(rowNumber);
 
         int startOffset = line.getStartOffset();
         int endOffset = line.getEndOffset();
+        try {
 
-        return getText(startOffset, (endOffset - startOffset));
+            return getText(startOffset, (endOffset - startOffset));
+
+        } catch (BadLocationException e) {
+
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -1290,6 +1304,7 @@ public class QueryEditorTextPane extends SQLTextPane
      * @param e the caret event
      */
     public void caretUpdate(CaretEvent ce) {
+
         super.caretUpdate(ce);
         currentPosition = getCaretPosition();
 
@@ -1308,9 +1323,7 @@ public class QueryEditorTextPane extends SQLTextPane
         repaint();
     }
 
-    private static final int DIRECTION_UP = 1;
-    private static final int DIRECTION_DOWN = 2;
-
+    /*
     private String getSelectedTextOrCurrentRow() {
 
         try {
@@ -1329,131 +1342,88 @@ public class QueryEditorTextPane extends SQLTextPane
 
         return "";
     }
+    */
 
     public void moveSelectionUp() {
 
-        int caret = getCaretPosition();
-        int row = getRowAt(caret);
-        int start = getRowStartOffset(row);
-        int end = getRowEndOffset(row) - 1;
-
-        if (end != getDocument().getLength()) {
-
-            end++;
-        }
-
-        if (!hasTextSelected()) {
-
-            setSelectionStart(start);
-            setSelectionEnd(end);
-        }
-
-        start = getSelectionStart();
-        if (start == 0) {
-
-            return;
-        }
-        end = getSelectionEnd();
-
-        String text = getSelectedText();
-        if (StringUtils.isBlank(text)) {
-
-            return;
-        }
-
-        boolean removeLastChar = end == getText().length(); // line break if at end
-
-        addUndoEdit();
-        replaceSelection("");
-
-        if (removeLastChar) {
-            try {
-                getDocument().remove(getText().length() - 1, 1);
-            } catch (BadLocationException e) {}
-        }
-
         try {
 
-            if ("\n".equals(getText(start, 1))) {
+            int start = getStartOffsetAtSelectionOrCursor();
+            if (start == 0) {
+                
+                return;
+            }
+            int end = getEndOffsetAtSelectionOrCursor();
 
-                getDocument().remove(start, 1);
+            int previousRow = getRowAt(start) - 1;
+            String previousRowText = getTextAtRow(previousRow);
+            if (previousRowText == null) {
+                
+                return;
+            }
+            
+            String textToMove = getText(start, (end - start));
+            String textToInsert = textToMove + previousRowText;
+
+            if (getRowAt(end) == getRowAt(end - 1)) {
+                
+                textToInsert = StringUtils.removeEnd(textToInsert, "\n");
             }
 
-        } catch (BadLocationException e) {}
+            int insertLength = textToInsert.length();
+            if (start + insertLength > getDocument().getLength()) {
+                
+                insertLength--;
+            }
+            
+//            addUndoEdit();
+            int insertAt = getRowStartOffset(previousRow);
+            getDocument().remove(insertAt, insertLength);
+            insertTextAtOffset(insertAt, textToInsert);
 
-        text = StringUtils.removeEnd(text, "\n");
-        int offset = getRowStartOffset(getRowAt(start - 1)) - 1;
-        if (offset < 0) {
+            setSelectionStart(insertAt);
+            setSelectionEnd(insertAt + textToMove.length());
+        
+        } catch (BadLocationException e) {
 
-            insertTextAtOffset(0, text + "\n");
-
-        } else {
-
-            insertTextAfter(offset, text);
+            return;
         }
-
-        setCaretPosition(offset + 1);
-        moveCaretPosition(offset + text.length() + 1);
     }
-
     public void moveSelectionDown() {
 
-        int caret = getCaretPosition();
-        int row = getRowAt(caret);
-        int start = getRowStartOffset(row);
-        int end = getRowEndOffset(row) - 1;
-
-        int length = getDocument().getLength();
-        if (end != length) {
-
-            end++;
-        }
-
-        if (!hasTextSelected()) {
-
-            setSelectionStart(start);
-            setSelectionEnd(end);
-        }
-
-        start = getSelectionStart();
-        end = getSelectionEnd();
-
-        if (end >= length) {
-
-            return;
-        }
-
-        String text = getSelectedText();
-        if (StringUtils.isBlank(text)) {
-
-            return;
-        }
-
-        addUndoEdit();
-        replaceSelection("");
-
         try {
 
-            if ("\n".equals(getText(start, 1))) {
+            int start = getStartOffsetAtSelectionOrCursor();
+            int end = getEndOffsetAtSelectionOrCursor();
 
-                getDocument().remove(start, 1);
+            int nextRow = getRowAt(end);
+            String nextRowText = getTextAtRow(nextRow);
+            if (nextRowText == null) {
+                
+                return;
             }
+            
+            String textToMove = StringUtils.removeEnd(getText(start, (end - start)), "\n");
+            String textToInsert = nextRowText + textToMove;
+            
+            int insertLength = textToInsert.length();
+            if (start + insertLength > getDocument().getLength()) {
+                
+                insertLength--;
+            }
+            
+//            addUndoEdit();
+            getDocument().remove(start, insertLength);
+            insertTextAtOffset(start, textToInsert);
+            
+            int selectionStart = start + nextRowText.length();
+            setSelectionStart(selectionStart);
+            setSelectionEnd(selectionStart + textToMove.length() + 1);
+        
+        } catch (BadLocationException e) {
 
-        } catch (BadLocationException e) {}
-
-        text = StringUtils.removeEnd(text, "\n");
-
-        int offset = getRowStartOffset(getRowAt(start) + 1) - 1;
-        length = getDocument().getLength();
-        if (end >= length) {
-
-            offset = length;
+            return;
         }
-
-        insertTextAfter(offset, text);
-
-        setCaretPosition(offset + 1);
-        moveCaretPosition(offset + text.length() + 1);
     }
 
     public void duplicateTextUp() {
@@ -1466,53 +1436,52 @@ public class QueryEditorTextPane extends SQLTextPane
         duplicateSelectionOrRowToOffset(DIRECTION_DOWN);
     }
 
+    private int getStartOffsetAtSelectionOrCursor() {
+        
+        int row = currentRow;
+        if (hasTextSelected()) {
+            
+            row = getRowAt(getSelectionStart());
+        }
+        return getRowStartOffset(row);
+    }
+    
+    private int getEndOffsetAtSelectionOrCursor() {
+        
+        int row = getRowAt(getSelectionStart());
+        if (hasTextSelected()) {
+            
+            row = getRowAt(getSelectionEnd() - 1);
+        
+        }
+        return getRowEndOffset(row);
+    }
+    
     private void duplicateSelectionOrRowToOffset(int direction) {
 
         try {
 
-            addUndoEdit();
-            String text = getSelectedTextOrCurrentRow();
-
+//            addUndoEdit();
+            
+            int start = getStartOffsetAtSelectionOrCursor();
+            int end = getEndOffsetAtSelectionOrCursor();
+            
             int offset = 0;
             int selectionOffset = 0;
-            String insertText = null;
+
+            String insertText = getText(start, (end - start));
+            insertText = StringUtils.removeEnd(insertText, "\n");
 
             if (direction == DIRECTION_UP) {
 
-                insertText = text + "\n";
-
-                if (hasTextSelected()) {
-
-                    offset = getSelectionStart();
-                    if (insertText.endsWith("\n\n")) {
-
-                        insertText = insertText.substring(0, insertText.lastIndexOf('\n'));
-                    }
-
-                } else {
-
-                    offset = getCurrentRowStart();
-                }
-
+                insertText += "\n";
+                offset = start;
                 selectionOffset = offset;
 
             } else {
 
-                insertText = "\n" + text;
-
-                if (hasTextSelected()) {
-
-                    offset = getSelectionEnd();
-                    if ("\n".equals(getText(offset - 1, 1))) {
-
-                        offset--;
-                    }
-
-                } else {
-
-                    offset = getCurrentRowEnd() - 1;
-                }
-
+                insertText = "\n" + insertText;                
+                offset = end - 1;
                 selectionOffset = offset + 1;
             }
 
@@ -1529,6 +1498,7 @@ public class QueryEditorTextPane extends SQLTextPane
         return getSelectionStart() != getSelectionEnd();
     }
 
+    /*
     private String getCurrentRowText() throws BadLocationException {
 
         int start = getCurrentRowStart();
@@ -1536,6 +1506,7 @@ public class QueryEditorTextPane extends SQLTextPane
 
         return document.getText(start, end - start);
     }
+    */
 
     protected boolean isAtStartOfRow() {
         return currentPosition == getRowPosition(currentRow);
