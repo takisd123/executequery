@@ -1368,16 +1368,17 @@ public class QueryEditorTextPane extends SQLTextPane
             if (getRowAt(end) == getRowAt(end - 1)) {
                 
                 textToInsert = StringUtils.removeEnd(textToInsert, "\n");
+                
             }
 
             int insertLength = textToInsert.length();
-            if (start + insertLength > getDocument().getLength()) {
+            int insertAt = getRowStartOffset(previousRow);
+            if (insertAt + insertLength > getDocument().getLength()) {
                 
                 insertLength--;
             }
             
 //            addUndoEdit();
-            int insertAt = getRowStartOffset(previousRow);
             getDocument().remove(insertAt, insertLength);
             insertTextAtOffset(insertAt, textToInsert);
 
