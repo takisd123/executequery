@@ -343,8 +343,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
             for (DatabaseColumn i : columns) {
 
-                DatabaseTableColumn column = (DatabaseTableColumn)i;
-
+                DatabaseTableColumn column = (DatabaseTableColumn) i;
                 if (column.hasConstraints()) {
 
                     List<ColumnConstraint> columnConstraints = column.getConstraints();

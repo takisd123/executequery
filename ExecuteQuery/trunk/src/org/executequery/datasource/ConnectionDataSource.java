@@ -27,10 +27,12 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -309,11 +311,11 @@ public class ConnectionDataSource implements DataSource, DatabaseDataSource {
 	public <T> T unwrap(Class<T> iface) throws SQLException {
 		return null;
 	}
-/*
+
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return driver.getParentLogger();
 	}
-*/
+
 }
 
 

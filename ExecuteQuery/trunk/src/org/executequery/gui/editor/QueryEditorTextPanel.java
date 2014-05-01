@@ -433,15 +433,12 @@ public class QueryEditorTextPanel extends JPanel {
         return queryPane.getText();
     }
 
-    private void addCommentToRows(int startRow, int endRow)
-        throws BadLocationException {
+    private void addCommentToRows(int startRow, int endRow) {
 
         Matcher matcher = sqlCommentMatcher();
-
         for (int i = startRow; i <= endRow; i++) {
 
             String text = queryPane.getTextAtRow(i);
-
             matcher.reset(text);
 
             if (!matcher.find()) {
