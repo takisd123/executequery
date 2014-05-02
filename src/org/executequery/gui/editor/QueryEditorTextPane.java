@@ -49,7 +49,6 @@ import javax.swing.text.Element;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.TextAction;
 import javax.swing.text.Utilities;
-import javax.swing.undo.UndoManager;
 
 import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
@@ -57,6 +56,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.components.LineNumber;
 import org.executequery.gui.UndoableComponent;
 import org.executequery.gui.text.SQLTextPane;
+import org.executequery.gui.text.TextUndoManager;
 import org.executequery.gui.text.TextUndoManager2;
 import org.executequery.repository.EditorSQLShortcut;
 import org.executequery.repository.EditorSQLShortcuts;
@@ -93,7 +93,7 @@ public class QueryEditorTextPane extends SQLTextPane
     private LineNumber lineBorder;
 
     /** The text pane's undo manager */
-    protected TextUndoManager2 undoManager;
+    protected TextUndoManager undoManager;
 
     private Map<String, EditorSQLShortcut> editorShortcuts;
 
@@ -446,7 +446,7 @@ public class QueryEditorTextPane extends SQLTextPane
         addCaretListener(this);
 
         // undo functionality
-        undoManager = new TextUndoManager2(this);
+        undoManager = new TextUndoManager(this);
         undoManager.setLimit(userProperties().getIntProperty("editor.undo.count"));
 
         document.addDocumentListener(this);
