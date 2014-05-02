@@ -24,17 +24,23 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import javax.swing.Action;
+import javax.swing.event.DocumentEvent.EventType;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+
 import org.executequery.GUIUtilities;
-import org.underworldlabs.swing.actions.ActionBuilder;
 import org.executequery.gui.UndoableComponent;
+import org.underworldlabs.swing.actions.ActionBuilder;
 
 /**
  * Undo manager for text components. 
@@ -70,7 +76,7 @@ public class TextUndoManager extends UndoManager
         document.addUndoableEditListener(this);
         
         // add a key listener
-        textComponent.addKeyListener(this);
+//        textComponent.addKeyListener(this);
         
         // add the focus listener
         textComponent.addFocusListener(this);
@@ -91,7 +97,7 @@ public class TextUndoManager extends UndoManager
         if (textComponent instanceof UndoableComponent) {
             GUIUtilities.registerUndoRedoComponent((UndoableComponent)textComponent);
         }
-        updateUndo();
+        updateControls();
     }
 
     /**
@@ -152,7 +158,8 @@ public class TextUndoManager extends UndoManager
     /**
      * Updates the state of the undo/redo actions.
      */
-    public void updateUndo() {
+    private void updateControls() {
+
         undoCommand.setEnabled(canUndo());
         redoCommand.setEnabled(canRedo());
     }
@@ -163,10 +170,69 @@ public class TextUndoManager extends UndoManager
     /** indicates that the last entry was whitespace */
     private boolean lastEntryWhitespace;
     
+    // http://stackoverflow.com/questions/417480/hide-certain-actions-from-swings-undo-manager
+    
+    // http://tips4java.wordpress.com/2008/10/27/compound-undo-manager/
+    
+    public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
+        
+        super.undoableEditHappened(undoableEditEvent);
+        
+        // add to chnage style stuff to compound edit and add - check super source
+        
+        
+        updateControls();
+    }
+    
+    public void xundoableEditHappened(UndoableEditEvent undoableEditEvent) {
+        
+        UndoableEdit edit = undoableEditEvent.getEdit();
+        AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
+        EventType eventType = event.getType();
+
+        System.out.println(eventType);
+        
+        try {
+        
+            if (eventType == EventType.INSERT) {
+                
+                int start = event.getOffset();
+                int len = event.getLength();
+                String text = event.getDocument().getText(start, len);
+    
+                if (text.contains("\n") || text.contains(" ")) {
+                    
+                    System.out.println("adding to edit 1");
+                    
+                    add();
+
+                } else {
+                    
+                    System.out.println("adding to edit 2");
+                    
+                    compoundEdit.addEdit(edit);
+                }
+
+                updateControls();
+
+            } else if (eventType == EventType.REMOVE) {
+                
+                compoundEdit.addEdit(edit);
+                add();
+            }
+
+        } catch (BadLocationException e) {
+            
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * An undoable edit happened
      */
-    public void undoableEditHappened(UndoableEditEvent e) {
+    public void undoableEditHappenedx(UndoableEditEvent undoableEditEvent) {
+        
         int caretPosition = textComponent.getCaretPosition();
         int currentRow = document.getDefaultRootElement().getElementIndex(caretPosition);
         
@@ -176,7 +242,7 @@ public class TextUndoManager extends UndoManager
             addUndoEdit();
         }
 
-        compoundEdit.addEdit(e.getEdit());
+        compoundEdit.addEdit(undoableEditEvent.getEdit());
 
         // always allow an undo at this point
         undoCommand.setEnabled(true);
@@ -188,13 +254,24 @@ public class TextUndoManager extends UndoManager
         lastEditRow = currentRow;
     }
 
+    private void add() {
+        
+        if (compoundEdit.isInProgress()) {
+
+            compoundEdit.end();
+        }
+
+        addEdit(compoundEdit);
+        compoundEdit = new CompoundEdit();
+    }
+    
     /**
      * Ensures the component regains focus and actions are updated.
      */
     public void undo() {
         try {
             if (!canRedo()) {
-                addUndoEdit();
+                add();
             }
             super.undo();
         }
@@ -202,7 +279,7 @@ public class TextUndoManager extends UndoManager
             return;
         }
 
-        updateUndo();
+        updateControls();
         if (!textComponent.hasFocus()) {
             textComponent.requestFocus();
         }
@@ -218,7 +295,7 @@ public class TextUndoManager extends UndoManager
         catch (CannotUndoException e) {
             return;
         }
-
+        
         // always enable the undo command
         undoCommand.setEnabled(true);
         redoCommand.setEnabled(canRedo());
@@ -246,6 +323,13 @@ public class TextUndoManager extends UndoManager
      * Completes a compound edit and adds it to the manager.
      */
     public void addUndoEdit() {
+
+    }
+    
+    /**
+     * Completes a compound edit and adds it to the manager.
+     */
+    public void xaddUndoEdit() {
         if (compoundEdit.isInProgress()) {
             compoundEdit.end();
         }
