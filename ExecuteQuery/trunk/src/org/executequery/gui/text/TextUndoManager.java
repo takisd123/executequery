@@ -22,8 +22,6 @@ package org.executequery.gui.text;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.Action;
 import javax.swing.event.DocumentEvent.EventType;
@@ -41,6 +39,7 @@ import javax.swing.undo.UndoableEdit;
 import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.UndoableComponent;
+import org.executequery.log.Log;
 import org.underworldlabs.swing.actions.ActionBuilder;
 
 /**
@@ -52,8 +51,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
  */
 public class TextUndoManager extends UndoManager 
                              implements UndoableEditListener,
-                                        FocusListener,
-                                        KeyListener {
+                                        FocusListener {
     
     /** the text component this manager is assigned to */
     private JTextComponent textComponent;
@@ -70,14 +68,16 @@ public class TextUndoManager extends UndoManager
     /** The redo command */
     private Action redoCommand;
     
+    private boolean addNextInsert;
+    
+    private static final String[] WHITESPACE = {"\t", " ", "\n", "\r"};
+
     /** Creates a new instance of TextUndoManager */
     public TextUndoManager(JTextComponent textComponent) {
+
         this.textComponent = textComponent;
         document = textComponent.getDocument();
         document.addUndoableEditListener(this);
-        
-        // add a key listener
-//        textComponent.addKeyListener(this);
         
         // add the focus listener
         textComponent.addFocusListener(this);
@@ -118,45 +118,6 @@ public class TextUndoManager extends UndoManager
     }
 
     /**
-     * Invoked when a key has been pressed. 
-     */
-    public void keyPressed(KeyEvent e) {
-        if (!e.isActionKey()) {
-            
-            // we want to check the char that was typed to determine
-            // if it was whitespace. we want whitespace chars in
-            // a sequence to be undone as a block
-            char keyChar = e.getKeyChar();
-            if (Character.isWhitespace(keyChar)) {
-
-                if (!lastEntryWhitespace) {
-                    lastEntryWhitespace = true;
-                    addUndoEdit();
-                }
-
-            }
-            else {
-                // if it was and isn't now - complete the edit
-                if (lastEntryWhitespace) {
-                    lastEntryWhitespace = false;
-                    addUndoEdit();
-                }
-            }
-
-        }
-    }
-
-    /**
-     * Invoked when a key has been released. Does nothing.
-     */
-    public void keyReleased(KeyEvent e) {}
-
-    /**
-     * Invoked when a key has been typed. Does nothing.
-     */
-    public void keyTyped(KeyEvent e) {}
-
-    /**
      * Updates the state of the undo/redo actions.
      */
     private void updateControls() {
@@ -164,23 +125,6 @@ public class TextUndoManager extends UndoManager
         undoCommand.setEnabled(canUndo());
         redoCommand.setEnabled(canRedo());
     }
-
-    /** the last row where an undoable edit happened */
-    private int lastEditRow;
-    
-    /** indicates that the last entry was whitespace */
-    private boolean lastEntryWhitespace;
-    
-    // http://stackoverflow.com/questions/417480/hide-certain-actions-from-swings-undo-manager
-    
-    // http://tips4java.wordpress.com/2008/10/27/compound-undo-manager/
-    
-    private String[] WHITESPACE = {"\t", " ", "\n", "\r"};
-    
-    private EventType lastEventType;
-    
-    private CompoundEdit lastInsertEdit;
-    
     
     public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
         
@@ -188,91 +132,50 @@ public class TextUndoManager extends UndoManager
         AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
         EventType eventType = event.getType();
 
-        compoundEdit.addEdit(edit);
-        
-        System.out.println(eventType);
+//        System.out.println(eventType);
         
         if (eventType == EventType.INSERT) {
             
-//            compoundEdit.addEdit(edit);
-            lastInsertEdit = compoundEdit;
             try {
 
-                if (lastEntryWhitespace) {
+                if (addNextInsert) {
 
                     add();
-                    lastEntryWhitespace = false;
                 }
 
+                compoundEdit.addEdit(edit);
+                
                 int start = event.getOffset();
                 int length = event.getLength();
 
                 String text = event.getDocument().getText(start, length);
                 if (StringUtils.endsWithAny(text, WHITESPACE)) {
 
-                    lastEntryWhitespace = true;
-                    
-                    System.out.println("adding -- " + text);
-                    
-//                    add();
+                    addNextInsert = true;
                 }
                 
             } catch (BadLocationException e) {
                 
-                e.printStackTrace();
+                Log.debug(e);
             }
             
         } else if (eventType == EventType.REMOVE) {
-            
-//            compoundEdit.addEdit(edit);
+
+            add();
+            compoundEdit.addEdit(edit);
             add();
             
         } else if (eventType == EventType.CHANGE) {
             
-            
-            /*
-            if (lastInsertEdit != null) {
-            
-                lastInsertEdit.addEdit(edit);
-            }
-            
-            System.out.println("adding to last");
-*/
-//            lastEventType = EventType.INSERT;
-//            addToPrevious(edit);
+            compoundEdit.addEdit(edit);            
         }
 
         updateControls();
     }
 
-    /**
-     * An undoable edit happened
-     */
-    public void undoableEditHappenedx(UndoableEditEvent undoableEditEvent) {
-        
-        int caretPosition = textComponent.getCaretPosition();
-        int currentRow = document.getDefaultRootElement().getElementIndex(caretPosition);
-        
-        // if we've changed rows and the last entry 
-        // was not whitespace complete the edit
-        if (currentRow != lastEditRow && !lastEntryWhitespace) {
-            addUndoEdit();
-        }
-
-        compoundEdit.addEdit(undoableEditEvent.getEdit());
-
-        // always allow an undo at this point
-        undoCommand.setEnabled(true);
-
-        // check for redo
-        redoCommand.setEnabled(canRedo());
-
-        // update the last edit row
-        lastEditRow = currentRow;
-    }
-
     private void add() {
 
+        addNextInsert = false;
         compoundEdit.end();
         addEdit(compoundEdit);
         compoundEdit = new CompoundEdit();
@@ -289,13 +192,6 @@ public class TextUndoManager extends UndoManager
         
                 add();
             }
-
-            if (lastEventType == EventType.CHANGE) {
-
-//                super.undo();
-            }
-
-            lastInsertEdit = null;
             super.undo();
 
         } catch (CannotUndoException e) {
