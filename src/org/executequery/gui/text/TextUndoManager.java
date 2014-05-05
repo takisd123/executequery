@@ -181,31 +181,40 @@ public class TextUndoManager extends UndoManager
     
     private CompoundEdit lastInsertEdit;
     
+    
     public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
         
         UndoableEdit edit = undoableEditEvent.getEdit();
         AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
         EventType eventType = event.getType();
 
-//        compoundEdit.addEdit(edit);
+        compoundEdit.addEdit(edit);
         
         System.out.println(eventType);
         
         if (eventType == EventType.INSERT) {
             
-            compoundEdit.addEdit(edit);
+//            compoundEdit.addEdit(edit);
             lastInsertEdit = compoundEdit;
             try {
-            
+
+                if (lastEntryWhitespace) {
+
+                    add();
+                    lastEntryWhitespace = false;
+                }
+
                 int start = event.getOffset();
                 int length = event.getLength();
 
                 String text = event.getDocument().getText(start, length);
                 if (StringUtils.endsWithAny(text, WHITESPACE)) {
 
+                    lastEntryWhitespace = true;
+                    
                     System.out.println("adding -- " + text);
                     
-                    add();
+//                    add();
                 }
                 
             } catch (BadLocationException e) {
@@ -215,18 +224,20 @@ public class TextUndoManager extends UndoManager
             
         } else if (eventType == EventType.REMOVE) {
             
-            compoundEdit.addEdit(edit);
+//            compoundEdit.addEdit(edit);
             add();
             
         } else if (eventType == EventType.CHANGE) {
             
+            
+            /*
             if (lastInsertEdit != null) {
             
                 lastInsertEdit.addEdit(edit);
             }
             
             System.out.println("adding to last");
-
+*/
 //            lastEventType = EventType.INSERT;
 //            addToPrevious(edit);
         }
@@ -263,7 +274,7 @@ public class TextUndoManager extends UndoManager
     private void add() {
 
         compoundEdit.end();
-        System.out.println(addEdit(compoundEdit));
+        addEdit(compoundEdit);
         compoundEdit = new CompoundEdit();
     }
     
