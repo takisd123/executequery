@@ -38,6 +38,7 @@ import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.UndoableComponent;
 import org.underworldlabs.swing.actions.ActionBuilder;
@@ -174,58 +175,63 @@ public class TextUndoManager extends UndoManager
     
     // http://tips4java.wordpress.com/2008/10/27/compound-undo-manager/
     
-    public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
-        
-        super.undoableEditHappened(undoableEditEvent);
-        
-        // add to chnage style stuff to compound edit and add - check super source
-        
-        
-        updateControls();
-    }
+    private String[] WHITESPACE = {"\t", " ", "\n", "\r"};
     
-    public void xundoableEditHappened(UndoableEditEvent undoableEditEvent) {
+    private EventType lastEventType;
+    
+    private CompoundEdit lastInsertEdit;
+    
+    public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
         
         UndoableEdit edit = undoableEditEvent.getEdit();
         AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
         EventType eventType = event.getType();
 
+//        compoundEdit.addEdit(edit);
+        
         System.out.println(eventType);
         
-        try {
-        
-            if (eventType == EventType.INSERT) {
-                
+        if (eventType == EventType.INSERT) {
+            
+            compoundEdit.addEdit(edit);
+            lastInsertEdit = compoundEdit;
+            try {
+            
                 int start = event.getOffset();
-                int len = event.getLength();
-                String text = event.getDocument().getText(start, len);
-    
-                if (text.contains("\n") || text.contains(" ")) {
-                    
-                    System.out.println("adding to edit 1");
+                int length = event.getLength();
+
+                String text = event.getDocument().getText(start, length);
+                if (StringUtils.endsWithAny(text, WHITESPACE)) {
+
+                    System.out.println("adding -- " + text);
                     
                     add();
-
-                } else {
-                    
-                    System.out.println("adding to edit 2");
-                    
-                    compoundEdit.addEdit(edit);
                 }
-
-                updateControls();
-
-            } else if (eventType == EventType.REMOVE) {
                 
-                compoundEdit.addEdit(edit);
-                add();
+            } catch (BadLocationException e) {
+                
+                e.printStackTrace();
             }
-
-        } catch (BadLocationException e) {
             
-            e.printStackTrace();
+        } else if (eventType == EventType.REMOVE) {
+            
+            compoundEdit.addEdit(edit);
+            add();
+            
+        } else if (eventType == EventType.CHANGE) {
+            
+            if (lastInsertEdit != null) {
+            
+                lastInsertEdit.addEdit(edit);
+            }
+            
+            System.out.println("adding to last");
+
+//            lastEventType = EventType.INSERT;
+//            addToPrevious(edit);
         }
 
+        updateControls();
     }
 
     /**
@@ -255,13 +261,9 @@ public class TextUndoManager extends UndoManager
     }
 
     private void add() {
-        
-        if (compoundEdit.isInProgress()) {
 
-            compoundEdit.end();
-        }
-
-        addEdit(compoundEdit);
+        compoundEdit.end();
+        System.out.println(addEdit(compoundEdit));
         compoundEdit = new CompoundEdit();
     }
     
@@ -269,30 +271,46 @@ public class TextUndoManager extends UndoManager
      * Ensures the component regains focus and actions are updated.
      */
     public void undo() {
+
         try {
+
             if (!canRedo()) {
+        
                 add();
             }
+
+            if (lastEventType == EventType.CHANGE) {
+
+//                super.undo();
+            }
+
+            lastInsertEdit = null;
             super.undo();
-        }
-        catch (CannotUndoException e) {
+
+        } catch (CannotUndoException e) {
+
             return;
         }
-
         updateControls();
+
         if (!textComponent.hasFocus()) {
+
             textComponent.requestFocus();
         }
+
     }
 
     /**
      * Ensures the component regains focus and actions are updated.
      */
     public void redo() {
+
         try {
+
             super.redo();
-        }
-        catch (CannotUndoException e) {
+
+        } catch (CannotUndoException e) {
+
             return;
         }
         
@@ -301,8 +319,10 @@ public class TextUndoManager extends UndoManager
         redoCommand.setEnabled(canRedo());
 
         if (!textComponent.hasFocus()) {
+
             textComponent.requestFocus();
         }
+
     }
 
     /**
@@ -337,17 +357,9 @@ public class TextUndoManager extends UndoManager
         compoundEdit = new CompoundEdit();
     }
 
+    public void reset() {
+        
+        discardAllEdits();
+    }
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

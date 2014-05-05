@@ -57,7 +57,6 @@ import org.executequery.components.LineNumber;
 import org.executequery.gui.UndoableComponent;
 import org.executequery.gui.text.SQLTextPane;
 import org.executequery.gui.text.TextUndoManager;
-import org.executequery.gui.text.TextUndoManager2;
 import org.executequery.repository.EditorSQLShortcut;
 import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.KeywordRepository;
@@ -551,7 +550,7 @@ public class QueryEditorTextPane extends SQLTextPane
     protected void uninstallListeners() {
         removeCaretListener(this);
         document.removeDocumentListener(this);
-        undoManager.suspend();
+//        undoManager.suspend();
     }
 
     /**
@@ -561,7 +560,7 @@ public class QueryEditorTextPane extends SQLTextPane
     protected void reinstallListeners() {
         addCaretListener(this);
         document.addDocumentListener(this);
-        undoManager.reinstate();
+//        undoManager.reinstate();
     }
 
     private void loadDummyDocument() {
@@ -609,6 +608,8 @@ public class QueryEditorTextPane extends SQLTextPane
 
         try {
 
+            undoManager.reset();
+            undoManager.suspend();
             fireTextUpdateStarting();
 
             // clear the current held edits
@@ -640,6 +641,7 @@ public class QueryEditorTextPane extends SQLTextPane
         } finally {
 
             fireTextUpdateFinished();
+            undoManager.reinstate();
             setCaretPosition(0);
         }
 
