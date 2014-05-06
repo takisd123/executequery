@@ -484,8 +484,6 @@ public class QueryEditorTextPanel extends JPanel {
      */
     public void commentLines() {
 
-        queryPane.addUndoEdit();
-
         int selectionStart = queryPane.getSelectionStart();
         int selectionEnd = queryPane.getSelectionEnd();
 
@@ -524,8 +522,6 @@ public class QueryEditorTextPanel extends JPanel {
 
                 addCommentToRows(startRow, endRow);
             }
-
-            ensureUndo(); // add this as an edit if its not
 
         } catch (BadLocationException e) {
 
@@ -582,19 +578,6 @@ public class QueryEditorTextPanel extends JPanel {
         }
 
         return allRows;
-    }
-
-    /**
-     * Ensures an edit may be undone by forcing an end
-     * to the current compound edit within the text pane.
-     */
-    protected void ensureUndo() {
-
-        if (!queryPane.canUndo()) {
-
-            queryPane.addUndoEdit();
-        }
-
     }
 
     /**
@@ -695,37 +678,37 @@ public class QueryEditorTextPanel extends JPanel {
     }
 
     public void changeSelectionCase(boolean upper) {
-        queryPane.addUndoEdit();
+
         TextUtilities.changeSelectionCase(queryPane, upper);
     }
 
     public void deleteLine() {
-        queryPane.addUndoEdit();
+
         TextUtilities.deleteLine(queryPane);
     }
 
     public void deleteWord() {
-        queryPane.addUndoEdit();
+        
         TextUtilities.deleteWord(queryPane);
     }
 
     public void deleteSelection() {
-        queryPane.addUndoEdit();
+        
         TextUtilities.deleteSelection(queryPane);
     }
 
     public void insertFromFile() {
-        queryPane.addUndoEdit();
+        
         TextUtilities.insertFromFile(queryPane);
     }
 
     public void insertLineAfter() {
-        queryPane.addUndoEdit();
+        
         TextUtilities.insertLineAfter(queryPane);
     }
 
     public void insertLineBefore() {
-        queryPane.addUndoEdit();
+        
         TextUtilities.insertLineBefore(queryPane);
     }
 

@@ -492,13 +492,14 @@ public class QueryEditorTextPane extends SQLTextPane
     public void disableUpdates(boolean disable) {
 
         String text = getText();
-
         if (disable) {
-            addUndoEdit();
+
             setDocument(new DefaultStyledDocument());
             setText(text);
             disableCaretUpdate(true);
+
         } else {
+
             setDocument(document);
             setText(text);
             disableCaretUpdate(false);
@@ -718,7 +719,7 @@ public class QueryEditorTextPane extends SQLTextPane
      * @param end - the end offset
      */
     public void shiftTextLeft(int start, int end) {
-        addUndoEdit();
+
         getSQLSyntaxDocument().shiftTabEvent(start, end, false);
     }
 
@@ -730,7 +731,7 @@ public class QueryEditorTextPane extends SQLTextPane
      * @param start - the start offset
      */
     public void shiftTextRight(int offset) {
-        addUndoEdit();
+
         insertTextAtOffset(offset, "\t");
     }
 
@@ -1074,8 +1075,6 @@ public class QueryEditorTextPane extends SQLTextPane
             // add the processing for SHIFT-TAB
             if (e.isShiftDown() && keyCode == KeyEvent.VK_TAB) {
 
-                addUndoEdit();
-
 //                int currentPosition = getCurrentPosition();
                 int selectionStart = getSelectionStart();
                 int selectionEnd = getSelectionEnd();
@@ -1151,7 +1150,6 @@ public class QueryEditorTextPane extends SQLTextPane
         word = removeBracesAtStart(word);
         if (editorShortcuts.containsKey(word)) {
 
-            addUndoEdit();
             String text = editorShortcuts.get(word).getQuery();
             try {
                 document.replace(index - word.length(), word.length(), text, null);
@@ -1215,37 +1213,11 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     /**
-     * Cuts the editor's selected text.
-     */
-    public void cut() {
-        addUndoEdit();
-        super.cut();
-    }
-
-    /**
-     * Pastes any previously copied/cut text into the
-     * editor at the cursor or mouse pointer position.
-     */
-    public void paste() {
-        addUndoEdit();
-        super.paste();
-    }
-
-
-    /**
      * Returns true if an undo operation would be
      * successful now, false otherwise.
      */
     protected boolean canUndo() {
         return undoManager.canUndo();
-    }
-
-    /**
-     * Completes a compound edit and adds an
-     * undoable edit to the undo manager.
-     */
-    protected void addUndoEdit() {
-        undoManager.addUndoEdit();
     }
 
     /**
