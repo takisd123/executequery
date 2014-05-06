@@ -236,6 +236,7 @@ public class TextUndoManager extends UndoManager
      * Suspends this manager by removing itself from the document.
      */
     public void suspend() {
+
         document.removeUndoableEditListener(this);
     }
     
@@ -243,25 +244,8 @@ public class TextUndoManager extends UndoManager
      * Suspends this manager by removing itself from the document.
      */
     public void reinstate() {
+
         document.addUndoableEditListener(this);
-    }
-
-    /**
-     * Completes a compound edit and adds it to the manager.
-     */
-    public void addUndoEdit() {
-
-    }
-    
-    /**
-     * Completes a compound edit and adds it to the manager.
-     */
-    public void xaddUndoEdit() {
-        if (compoundEdit.isInProgress()) {
-            compoundEdit.end();
-        }
-        addEdit(compoundEdit);
-        compoundEdit = new CompoundEdit();
     }
 
     public void reset() {
