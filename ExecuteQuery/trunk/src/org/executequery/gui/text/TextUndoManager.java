@@ -31,6 +31,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.JTextComponent;
+import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoManager;
@@ -105,27 +106,21 @@ public class TextUndoManager extends UndoManager
      * Updates the state of undo/redo on a focus lost.
      */
     public void focusLost(FocusEvent e) {
+        
+        /*
         if (undoCommand != null) {
             undoCommand.setEnabled(false);
         }        
         if (redoCommand != null) {
             redoCommand.setEnabled(false);
         }
+        */
         // deregister this as an undo/redo component
         if (textComponent instanceof UndoableComponent) {
             GUIUtilities.registerUndoRedoComponent(null);
         }
     }
 
-    /**
-     * Updates the state of the undo/redo actions.
-     */
-    private void updateControls() {
-
-        undoCommand.setEnabled(canUndo());
-        redoCommand.setEnabled(canRedo());
-    }
-    
     public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
         
         UndoableEdit edit = undoableEditEvent.getEdit();
@@ -135,7 +130,7 @@ public class TextUndoManager extends UndoManager
 //        System.out.println(eventType);
         
         if (eventType == EventType.INSERT) {
-            
+
             try {
 
                 if (addNextInsert) {
@@ -153,6 +148,8 @@ public class TextUndoManager extends UndoManager
 
                     addNextInsert = true;
                 }
+
+                redoCommand.setEnabled(false);
                 
             } catch (BadLocationException e) {
                 
@@ -167,10 +164,10 @@ public class TextUndoManager extends UndoManager
             
         } else if (eventType == EventType.CHANGE) {
             
-            compoundEdit.addEdit(edit);            
+            compoundEdit.addEdit(edit);
         }
 
-        updateControls();
+//        updateControls();
     }
 
     private void add() {
@@ -188,12 +185,11 @@ public class TextUndoManager extends UndoManager
 
         try {
 
-            if (!canRedo()) {
-        
-                add();
-            }
+            add();
             super.undo();
 
+            Log.debug(String.format("Undo action executed - canRedo: [ %s ]", Boolean.valueOf(canRedo())));
+            
         } catch (CannotUndoException e) {
 
             return;
@@ -216,14 +212,16 @@ public class TextUndoManager extends UndoManager
 
             super.redo();
 
-        } catch (CannotUndoException e) {
+            Log.debug(String.format("Redo action executed - canRedo: [ %s ]", Boolean.valueOf(canRedo())));
+            
+        } catch (CannotRedoException e) {
 
             return;
         }
         
         // always enable the undo command
-        undoCommand.setEnabled(true);
-        redoCommand.setEnabled(canRedo());
+//        undoCommand.setEnabled(true);
+//        redoCommand.setEnabled(canRedo());
 
         if (!textComponent.hasFocus()) {
 
@@ -252,5 +250,25 @@ public class TextUndoManager extends UndoManager
         
         discardAllEdits();
     }
-    
+
+    /**
+     * Updates the state of the undo/redo actions.
+     */
+    private void updateControls() {
+
+      undoCommand.setEnabled(true);
+      redoCommand.setEnabled(true);
+
+        if (compoundEdit.isInProgress()) {
+            
+//            undoCommand.setEnabled(true);
+
+        } else {
+            
+//            undoCommand.setEnabled(canUndo());
+        }
+//        undoCommand.setEnabled(true);
+//        redoCommand.setEnabled(canRedo());
+    }
+
 }
