@@ -25,10 +25,8 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -224,11 +222,12 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         
         return driver.getClass().getName();
     }
-
+/*
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
 		return driver.getParentLogger();
 	}
- 
+*/
+
 }
 
 
