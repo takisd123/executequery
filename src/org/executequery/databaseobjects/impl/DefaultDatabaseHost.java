@@ -153,6 +153,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             if ((connection == null || connection.isClosed())
                     && getDatabaseConnection().isConnected()) {
 
+                databaseMetaData = null;
                 connection = ConnectionManager.getConnection(getDatabaseConnection());
             }
         } catch (SQLException e) {
@@ -169,16 +170,30 @@ public class DefaultDatabaseHost extends AbstractNamedObject
      * @return the database meta data
      */
     public DatabaseMetaData getDatabaseMetaData() throws DataSourceException {
-        if (databaseMetaData == null) {
-            try {
 
+        if (!isConnected()) {
+
+            throw new DataSourceException("Connection closed.", true);
+        }
+
+        try {
+
+            if (databaseMetaData == null) {
+    
                 databaseMetaData = getConnection().getMetaData();
 
-            } catch (SQLException e) {
-
-                throw new DataSourceException(e);
+            } else if (databaseMetaData.getConnection().isClosed()) {
+                
+                databaseMetaData = null;
+                return getDatabaseMetaData();                
             }
+
+
+        } catch (SQLException e) {
+            
+            throw new DataSourceException(e);
         }
+        
         return databaseMetaData;
     }
 

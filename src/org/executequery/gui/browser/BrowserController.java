@@ -585,17 +585,18 @@ public class BrowserController {
 
         boolean isDataSourceException = (e instanceof DataSourceException);
         GUIUtilities.displayExceptionErrorDialog(
-                "Error retrieving the selected database " +
-                "object.\n\nThe system returned:\n" +
-                (isDataSourceException ?
-                    ((DataSourceException)e).getExtendedMessage() : e.getMessage()), e);
+                "Error retrieving the selected database object.\n\nThe system returned:\n" +
+                (isDataSourceException ? ((DataSourceException)e).getExtendedMessage() : e.getMessage()), e);
 
 
-        // TODO: WTF is this!!!
         if (isDataSourceException) {
+
             if (((DataSourceException)e).wasConnectionClosed()) {
-                connect(treePanel.getSelectedDatabaseConnection());
+        
+//                connect(treePanel.getSelectedDatabaseConnection());
+                disconnect(treePanel.getSelectedDatabaseConnection());
             }
+
         }
 
     }
