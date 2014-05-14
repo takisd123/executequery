@@ -109,7 +109,6 @@ public class AbstractTabPopupMenuContainer extends JTabbedPane implements TabPop
     public void remove(int index) {
 
         super.remove(index);
-
         if (getTabCount() == 0) {
 
             setVisible(false);
