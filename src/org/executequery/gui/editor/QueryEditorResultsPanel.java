@@ -125,6 +125,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         outputTextPane = new LoggingOutputPanel();
         outputTextPane.setBorder(null);
 
+        outputTabIcon = GUIUtilities.loadIcon("SystemOutput.png", true);
+        resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.png", true);
+
         addTextOutputTab();
 
         if (queryEditor == null) { // editor calls this also
@@ -132,8 +135,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             setTableProperties();
         }
 
-        outputTabIcon = GUIUtilities.loadIcon("SystemOutput.png", true);
-        resultSetTabIcon = GUIUtilities.loadIcon("FrameIcon16.png", true);
         
         resultSetTableColumnResizingManager = new ResultSetTableColumnResizingManager();
 
@@ -288,11 +289,15 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public void stateChanged(ChangeEvent e) {
 
         Component selectedComponent = getSelectedComponent();
-
         if (selectedComponent instanceof ResultSetPanel) {
 
             int rowCount = ((ResultSetPanel)selectedComponent).getRowCount();
             resetEditorRowCount(rowCount);
+        }
+
+        if (hasNoTabs()) {
+
+            queryEditor.toggleResultPane();
         }
 
     }
@@ -396,7 +401,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         resetTabCount();
 
         String title = "Result Set " + resultSetTabTitleCounter;
-
         if (useSingleResultSetTabs()) {
 
             if (getResultSetTabCount() >= 1) {
@@ -406,11 +410,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
         }
 
-        addTab(title,
-               resulSetTabIcon(),
-               panel,
-               query);
-
+        addTab(title, resulSetTabIcon(), panel, query);
         setSelectedComponent(panel);
 
         if (queryEditor != null) {
@@ -492,7 +492,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     public void setResultText(int result, int type) {
 
-        if (getTabCount() == 0) {
+        if (hasNoTabs()) {
 
             addTextOutputTab();
         }
@@ -561,9 +561,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         }
 
         StringBuilder sb = new StringBuilder();
-
-        if ((result > -1 && type >= QueryTypes.ALL_UPDATES)
-                && type != QueryTypes.UNKNOWN) {
+        if ((result > -1 && type >= QueryTypes.ALL_UPDATES) && type != QueryTypes.UNKNOWN) {
 
             sb.append(result);
         }
@@ -572,6 +570,11 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
         setOutputMessage(SqlMessages.PLAIN_MESSAGE, sb.toString(), true);
         queryEditor.setLeftStatusText(SUCCESS);
+    }
+
+    private boolean hasNoTabs() {
+        
+        return getTabCount() == 0;
     }
 
     public void setResultBackground(Color colour) {
@@ -659,7 +662,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     }
 
     public void setErrorMessage(String s) {
-        if (getTabCount() == 0) {
+        if (hasNoTabs()) {
             addTextOutputTab();
         }
 
@@ -679,7 +682,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
     public void setOutputMessage(int type, String text, boolean selectTab) {
 
-        if (getTabCount() == 0) {
+        if (hasNoTabs()) {
 
             addTextOutputTab();
         }
@@ -728,17 +731,20 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
      * currently selected result set tab.
      */
     public void displayResultSetMetaData() {
+        
         ResultSetPanel panel = getSelectedResultSetPanel();
         if (panelHasResultSetMetaData(panel)) {
+
             int index = getSelectedIndex();
-            ResultSetMetaDataPanel metaDataPanel =
-                    panel.getResultSetMetaDataPanel();
+            ResultSetMetaDataPanel metaDataPanel = panel.getResultSetMetaDataPanel();
 
             // check if the meta data is already displayed
             // at the index next to the result panel
             if (index != getTabCount() - 1) {
+
                 Component c = getComponentAt(index + 1);
                 if (c == metaDataPanel) {
+                
                     setSelectedIndex(index + 1);
                     return;
                 }
@@ -808,13 +814,13 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
      * @param the associated event
      */
     public void tabRollOver(TabRolloverEvent e) {
+        
         int index = e.getIndex();
 
         // check if we're over the output panel (index 0)
         if (index == 0 && hasOutputPane()) {
 
             lastRolloverIndex = index;
-
             if (isQueryPopupVisible()) {
 
                 queryPopup.dispose();
