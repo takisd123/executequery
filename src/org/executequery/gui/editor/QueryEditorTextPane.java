@@ -1353,7 +1353,6 @@ public class QueryEditorTextPane extends SQLTextPane
                 insertLength--;
             }
             
-//            addUndoEdit();
             getDocument().remove(insertAt, insertLength);
             insertTextAtOffset(insertAt, textToInsert);
 
@@ -1388,7 +1387,6 @@ public class QueryEditorTextPane extends SQLTextPane
                 insertLength--;
             }
             
-//            addUndoEdit();
             getDocument().remove(start, insertLength);
             insertTextAtOffset(start, textToInsert);
             
@@ -1433,12 +1431,15 @@ public class QueryEditorTextPane extends SQLTextPane
         return getRowEndOffset(row);
     }
     
+    private int getLastRow() {
+        
+        return getRowAt(getElementMap().getEndOffset());
+    }
+    
     private void duplicateSelectionOrRowToOffset(int direction) {
 
         try {
 
-//            addUndoEdit();
-            
             int start = getStartOffsetAtSelectionOrCursor();
             int end = getEndOffsetAtSelectionOrCursor();
             
@@ -1455,10 +1456,16 @@ public class QueryEditorTextPane extends SQLTextPane
                 selectionOffset = offset;
 
             } else {
-
-                insertText = "\n" + insertText;                
+                
+                insertText = "\n" + insertText;
                 offset = end - 1;
                 selectionOffset = offset + 1;
+                
+                if (StringUtils.isWhitespace(insertText) && getLastRow() == getRowAt(end)) {
+                    
+                    return;
+                }
+                
             }
 
             insertTextAtOffset(offset, insertText);
@@ -1624,10 +1631,4 @@ public class QueryEditorTextPane extends SQLTextPane
 
     }
 
-
 }
-
-
-
-
-
