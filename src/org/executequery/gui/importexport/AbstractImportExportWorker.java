@@ -84,6 +84,9 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     /** The database connection for data retrieval */
     protected Connection conn;
 
+    /** The original commit mode */
+    private boolean autoCommit;
+    
     /** The database statement */
     protected Statement stmnt;
 
@@ -147,12 +150,11 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         progress.reset();
     }
 
-    protected int getTableRecordCount(String tableName)
-        throws DataSourceException,
-               SQLException {
+    protected int getTableRecordCount(String tableName) throws DataSourceException, SQLException {
 
         ResultSet rs = null;
         try {
+
             StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM ");
 
             String schema = parent.getSchemaName();
@@ -162,12 +164,16 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
             query.append(formatTableName(tableName));
 
+            appendProgressText("Retrieving row count for table [ " + tableName + " ] ...");
+            
             conn = getConnection();
             stmnt = conn.createStatement();
             rs = stmnt.executeQuery(query.toString());
             if (rs.next()) {
+
                 return rs.getInt(1);
             }
+
             return 0;
         }
         finally {
@@ -221,10 +227,14 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             try {
                 stmnt.close();
             } catch (SQLException e) {}
-        }        
-        conn = getConnection();
-        stmnt = conn.createStatement();
+        }
 
+        conn = getConnection();
+        conn.setAutoCommit(false);
+
+        stmnt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+        stmnt.setFetchSize(fetchSizeForDatabaseProduct(conn.getMetaData()));
+        
         Log.info("Executing query for export: [ " + query + " ]");
 
         return stmnt.executeQuery(query.toString());
@@ -318,7 +328,22 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
         conn = getConnection();
         conn.setAutoCommit(false);
-        prepStmnt = conn.prepareStatement(query.toString());
+        prepStmnt = conn.prepareStatement(query.toString(), java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+        prepStmnt.setFetchSize(fetchSizeForDatabaseProduct(conn.getMetaData()));
+    }
+
+    private int fetchSizeForDatabaseProduct(DatabaseMetaData metaData) throws SQLException {
+
+        // we only care about mysql right now which needs Integer.MIN_VALUE
+        // to provide row-by-row return on the result set cursor
+        // otherwise default to 1000 row fetch size... 
+
+        if (metaData.getDatabaseProductName().toUpperCase().contains("MYSQL")) {
+            
+            return Integer.MIN_VALUE;
+        }
+        
+        return 10000;
     }
 
     /**
@@ -357,6 +382,9 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
     protected Connection getConnection() throws DataSourceException {
         if (conn == null) {
             conn = ConnectionManager.getConnection(parent.getDatabaseConnection());
+            try {
+                autoCommit = conn.getAutoCommit();
+            } catch (SQLException e) {}
         }
         return conn;
     }
@@ -628,7 +656,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
             }
 
             if (conn != null) {
-                conn.setAutoCommit(true);
+                conn.setAutoCommit(autoCommit);
                 ConnectionManager.close(dc, conn);
                 conn = null;
             }
@@ -726,7 +754,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
         sb.append(getBundle().getString("AbstractImportExportWorker.outputFileName"));
         sb.append(file.getName());
         sb.append(getBundle().getString("AbstractImportExportWorker.outputFileSize"));
-        sb.append(new DecimalFormat("0.00").format(MiscUtils.bytesToMegaBytes(file.length())));
+        sb.append(new DecimalFormat("###,###.###").format(MiscUtils.bytesToMegaBytes(file.length())));
     	sb.append("Mb");
     	
     	appendProgressText(sb);

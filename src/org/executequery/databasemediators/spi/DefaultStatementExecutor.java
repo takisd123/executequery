@@ -249,8 +249,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
     private boolean prepared() throws SQLException {
 
-        if (databaseConnection == null ||
-                !databaseConnection.isConnected()) {
+        if (databaseConnection == null || !databaseConnection.isConnected()) {
 
             statementResult.setMessage("Not Connected");
             return false;
@@ -305,14 +304,36 @@ public class DefaultStatementExecutor implements StatementExecutor {
      *  @return the query result
      */
     public SqlStatementResult getResultSet(String query) throws SQLException {
+        
+        return getResultSet(query, -1);
+    }
+
+    /** <p>Executes the specified query (SELECT) and returns a <code>ResultSet</code> object 
+     * from this query. 
+     * 
+     * <p>If an exception occurs, null is returned and the relevant error message, if available, 
+     * assigned to this object for retrieval.
+     *
+     *  @param  the SQL query to execute
+     *  @return the query result
+     */
+    public SqlStatementResult getResultSet(String query, int fetchSize) throws SQLException {
 
         if (!prepared()) {
 
             return statementResult;
         }
 
-        stmnt = conn.createStatement();
-
+        stmnt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+        if (fetchSize != -1) {
+            
+            stmnt.setFetchSize(fetchSize);
+        }
+        
+        // mysql
+//        stmnt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+//        stmnt.setFetchSize(Integer.MIN_VALUE);
+        
         try {
 
             ResultSet rs = stmnt.executeQuery(query);
@@ -893,13 +914,18 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
     public SqlStatementResult execute(int type, String query) throws SQLException {
 
+        return execute(type, query, -1);
+    }
+
+    public SqlStatementResult execute(int type, String query, int fetchSize) throws SQLException {
+
         statementResult.setType(type);
 
         switch (type) {
 
             case QueryTypes.SELECT:
             case QueryTypes.EXPLAIN:
-                return getResultSet(query);
+                return getResultSet(query, fetchSize);
             case QueryTypes.INSERT:
             case QueryTypes.UPDATE:
             case QueryTypes.DELETE:
