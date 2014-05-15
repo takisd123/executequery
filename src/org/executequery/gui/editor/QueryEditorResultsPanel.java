@@ -297,7 +297,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
         if (hasNoTabs()) {
 
-            queryEditor.toggleResultPane();
+            queryEditor.allResultTabsClosed();
         }
 
     }
