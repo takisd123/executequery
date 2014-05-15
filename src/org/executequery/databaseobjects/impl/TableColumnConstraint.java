@@ -586,7 +586,7 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
                     return translated + " - importedKeyNotDeferrable";
             }
         
-        }        
+        }
         return translated; 
     }
 
