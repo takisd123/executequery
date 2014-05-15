@@ -568,6 +568,7 @@ public class QueryEditor extends DefaultTabView
         statusBar.stopProgressBar();
         setStopButtonEnabled(false);
         statusBar.setExecutionTime(message);
+        resetPanels();        
     }
 
     /**
@@ -1505,6 +1506,14 @@ public class QueryEditor extends DefaultTabView
         queryEditorAutoCompletePopupProvider.reset();
     }
 
+    public void allResultTabsClosed() {
+
+        lastDividerLocation = splitPane.getDividerLocation();
+
+        baseEditorPanel.setVisible(true);
+        resultsBase.setVisible(false);
+    }
+    
     public void toggleResultPane() {
 
         if (baseEditorPanel.isVisible()) {
@@ -1517,7 +1526,22 @@ public class QueryEditor extends DefaultTabView
             baseEditorPanel.setVisible(true);
             splitPane.setDividerLocation(lastDividerLocation);
         }
+
+    }
+
+    private void resetPanels() {
         
+        resultsBase.setVisible(true);
+        baseEditorPanel.setVisible(true);
+
+        if (lastDividerLocation > 0) {
+        
+            splitPane.setDividerLocation(lastDividerLocation);
+            
+        } else {
+            
+            splitPane.setDividerLocation(0.5);
+        }
     }
 
 }
