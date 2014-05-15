@@ -27,12 +27,15 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
+import org.executequery.log.Log;
+
 public class ResultSetDelimitedFileWriter {
 
     public int write(String fileName, String delimiter, ResultSet resultSet, boolean columnNamesAsFirstRow) throws InterruptedException {
 
-        PrintWriter writer = null;
+        Log.info("Writing result set to file [ " + fileName + " ]");
         
+        PrintWriter writer = null;
         try {
 
             StringBuilder sb = new StringBuilder();
@@ -44,10 +47,12 @@ public class ResultSetDelimitedFileWriter {
                 
                 writer.println(columnNames(delimiter, resultSetMetaData));
             }
+            writer.flush();
             
             int recordCount = 0;
             int columnCount = resultSetMetaData.getColumnCount();
-
+            
+            String value = null;
             while (resultSet.next()) {
 
                 if (Thread.interrupted()) {
@@ -62,10 +67,10 @@ public class ResultSetDelimitedFileWriter {
                         throw new InterruptedException();
                     }
 
-                    String value = resultSet.getString(i);
+                    value = resultSet.getString(i);
                     if (!resultSet.wasNull()) {
 
-                        sb.append(value);                        
+                        sb.append(value);
                     }
                     
                     if (i < columnCount) {
@@ -76,8 +81,9 @@ public class ResultSetDelimitedFileWriter {
                 }
 
                 writer.println(sb.toString());
-                recordCount++;
+                writer.flush();
 
+                recordCount++;                
                 sb.setLength(0);
             }
             

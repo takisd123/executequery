@@ -32,6 +32,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -414,6 +415,16 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
                             if (recordCount != -1) {
         
                                 outputPanel.append("Records transferred: " + recordCount);
+                                
+                                File file = outputFile();
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("Output file: ");
+                                sb.append(file.getName());
+                                sb.append(" (");
+                                sb.append(new DecimalFormat("###,###.##").format(MiscUtils.bytesToMegaBytes(file.length())));
+                                sb.append("Mb)");
+                                
+                                outputPanel.append(sb.toString());
                             }
     
                         } finally {
@@ -429,11 +440,17 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         }
     }
     
+    private File outputFile() {
+        
+        return new File(fileNameField.getText());
+    }
+    
     private int execute() {
      
         ResultSet resultSet = null;
         DatabaseHost host = combosGroup.getSelectedHost();
-        StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection());
+        StatementExecutor statementExecutor = new DefaultStatementExecutor(host.getDatabaseConnection(), true);
+        statementExecutor.setCommitMode(false);
 
         int result = -1;
         long startTime = System.currentTimeMillis();
@@ -450,7 +467,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
             outputPanel.appendActionFixedWidth(query);
 
             DerivedQuery derivedQuery = new DerivedQuery(query);
-            statementResult = statementExecutor.execute(derivedQuery.getQueryType(), query);
+            statementResult = statementExecutor.execute(derivedQuery.getQueryType(), query, fetchSizeForDatabaseProduct(host));
 
             if (statementResult.isException()) {
                 
@@ -501,7 +518,7 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
                     resultSet.close();
                 }
                 
-                statementExecutor.closeConnection();
+                statementExecutor.destroyConnection();
 
             } catch (SQLException e) {
 
@@ -514,6 +531,21 @@ public class ExportResultSetPanel extends DefaultTabViewActionPanel
         
         return result;
     }
+    
+    private int fetchSizeForDatabaseProduct(DatabaseHost host) {
+
+        // we only care about mysql right now which needs Integer.MIN_VALUE
+        // to provide row-by-row return on the result set cursor
+        // otherwise default to 10000 row fetch size...
+
+        if (host.getDatabaseProductName().toUpperCase().contains("MYSQL")) {
+            
+            return Integer.MIN_VALUE;
+        }
+        
+        return 10000;
+    }
+
     
     private int writeToFile(ResultSet resultSet) throws InterruptedException {
 

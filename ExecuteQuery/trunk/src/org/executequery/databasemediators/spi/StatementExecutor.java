@@ -48,8 +48,9 @@ public interface StatementExecutor {
 
     SqlStatementResult execute(int type, String query) throws SQLException;
 
-    SqlStatementResult execute(String query, boolean enableEscapes)
-            throws SQLException;
+    SqlStatementResult execute(int type, String query, int fetchSize) throws SQLException;
+    
+    SqlStatementResult execute(String query, boolean enableEscapes) throws SQLException;
 
     /** Executes the specified query and returns 0 if this
      *  executes successfully. If an exception occurs, -1 is
@@ -108,13 +109,6 @@ public interface StatementExecutor {
 
     void setDatabaseConnection(DatabaseConnection _databaseConnection);
 
+    SqlStatementResult getResultSet(String query, int fetchSize) throws SQLException;
+
 }
-
-
-
-
-
-
-
-
-
