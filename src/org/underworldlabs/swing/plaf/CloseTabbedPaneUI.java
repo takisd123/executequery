@@ -646,8 +646,6 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
             Rectangle[] rects, int tabIndex,
             Rectangle iconRect, Rectangle textRect) {
         
-        
-        
         Rectangle tabRect = rects[tabIndex];
         int selectedIndex = tabPane.getSelectedIndex();
         boolean isSelected = selectedIndex == tabIndex;
@@ -1232,6 +1230,9 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
             g.setColor(activeColor);
             g.drawLine(rect.x+1, y+h-1, 
                        rect.x + rect.width - 2, y+h-1);
+            
+            g.setColor(darkShadow);
+            g.drawLine(rect.x+1, y+h-1, rect.x + w, y+h-1);
         }
 
     }
@@ -2972,6 +2973,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         }
         
         public void scrollForward(int tabPlacement) {
+            
             Dimension viewSize = viewport.getViewSize();
             Rectangle viewRect = viewport.getViewRect();
             
@@ -3025,6 +3027,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                     }
             }
             viewport.setViewPosition(tabViewPosition);
+            tabPane.repaint();
         }
         
         public void stateChanged(ChangeEvent e) {
@@ -3284,7 +3287,6 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         public void propertyChange(PropertyChangeEvent e) {
             JTabbedPane pane = (JTabbedPane)e.getSource();
             String name = e.getPropertyName();
-            
             if ("mnemonicAt".equals(name)) {
                 updateMnemonics();
                 pane.repaint();
@@ -3402,7 +3404,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
 
         public void mouseClicked(MouseEvent e) {
             mousePressed(e);
-            ((SimpleCloseTabbedPane) tabPane).fireTabSelected(e);
+//            ((SimpleCloseTabbedPane) tabPane).fireTabSelected(e);
         }
         
         public void mousePressed(MouseEvent e) {
@@ -3477,7 +3479,10 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                         Rectangle iconRect = getCloseIconRectangle(tabRect);
                         if (iconRect.contains(x, y)) {
                             tabPane.remove(i);
+                            e.consume();
+                            return;
                         }
+                        ((SimpleCloseTabbedPane) tabPane).fireTabSelected(e);
                         break;
                     }
                 }
