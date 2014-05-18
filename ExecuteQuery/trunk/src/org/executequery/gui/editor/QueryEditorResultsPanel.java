@@ -22,6 +22,7 @@ package org.executequery.gui.editor;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,6 +42,7 @@ import org.executequery.databasemediators.QueryTypes;
 import org.executequery.gui.LoggingOutputPanel;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.sql.SqlMessages;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.SimpleCloseTabbedPane;
 import org.underworldlabs.swing.plaf.TabRollOverListener;
 import org.underworldlabs.swing.plaf.TabRolloverEvent;
@@ -396,7 +398,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         resultSetTabTitleCounter++;
     }
 
-    private void addResultSetPanel(String query, int rowCount, ResultSetPanel panel) {
+    private void addResultSetPanel(String query, int rowCount, final ResultSetPanel panel) {
 
         resetTabCount();
 
@@ -411,7 +413,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         }
 
         addTab(title, resulSetTabIcon(), panel, query);
-        setSelectedComponent(panel);
 
         if (queryEditor != null) {
 
@@ -420,12 +421,17 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             queryEditor.setExportButtonEnabled(true);
         }
 
+        GUIUtils.invokeLater(new Runnable() {
+            public void run() {
+                setSelectedComponent(panel);
+            }
+        });
+
     }
 
     private void closeResultSetTabs() {
 
         Component[] components = getComponents();
-
         for (Component component : components) {
 
             if (component instanceof ResultSetPanel) {
