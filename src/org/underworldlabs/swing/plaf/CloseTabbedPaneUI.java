@@ -3292,7 +3292,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                 pane.repaint();
             } else if ("displayedMnemonicIndexAt".equals(name)) {
                 pane.repaint();
-            } else if ( name.equals("indexForTitle") ) {
+            } else if (name.equals("indexForTitle")) {
                 int index = ((Integer)e.getNewValue()).intValue();
                 String title = tabPane.getTitleAt(index);
                 if (BasicHTML.isHTMLString(title)) {
@@ -3328,6 +3328,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                 int index = tabPane.getSelectedIndex();
                 if (index < rects.length && index != -1) {
                     tabScroller.tabPanel.scrollRectToVisible(rects[index]);
+                    
                 }
             }
         }
