@@ -2997,6 +2997,7 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         }
         
         public void setLeadingTabIndex(int tabPlacement, int index) {
+            
             leadingTabIndex = index;
             Dimension viewSize = viewport.getViewSize();
             Rectangle viewRect = viewport.getViewRect();
@@ -3285,8 +3286,10 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         // ------------------------------------------------------
         
         public void propertyChange(PropertyChangeEvent e) {
+            
             JTabbedPane pane = (JTabbedPane)e.getSource();
             String name = e.getPropertyName();
+
             if ("mnemonicAt".equals(name)) {
                 updateMnemonics();
                 pane.repaint();
@@ -3320,17 +3323,29 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
         // ------------------------------------------------------
 
         public void stateChanged(ChangeEvent e) {
-            JTabbedPane tabPane = (JTabbedPane)e.getSource();
+            
+            final JTabbedPane tabPane = (JTabbedPane)e.getSource();
             tabPane.revalidate();
             tabPane.repaint();
-            
+
             if (tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT) {
+
                 int index = tabPane.getSelectedIndex();
+                
                 if (index < rects.length && index != -1) {
+                    
                     tabScroller.tabPanel.scrollRectToVisible(rects[index]);
+                    if (index > 0) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                tabScroller.scrollForward(tabPane.getTabPlacement());
+                            }
+                        });
+                    }
                     
                 }
             }
+
         }
 
         
