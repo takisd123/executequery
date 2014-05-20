@@ -761,6 +761,15 @@ public class TableSorter extends AbstractTableModel {
                 }
             }
             
+            // check table header label too
+            String label = tableModel.getColumnName(selectedColumn);
+            
+            JTableHeader header = getTableHeader();
+            font = header.getFont();
+            fontMetrics = header.getFontMetrics(font);
+
+            longestValue = Math.max(longestValue, fontMetrics.stringWidth(label));
+            
             return longestValue;
         }
         
