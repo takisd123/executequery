@@ -22,7 +22,6 @@ package org.executequery.gui.editor;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
