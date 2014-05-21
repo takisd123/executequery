@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Java heap size, in megabytes
-JAVA_HEAP_SIZE=512
+JAVA_HEAP_SIZE=1024
 
 # determine the java command to be run
 JAVA=`which java`
@@ -13,5 +13,5 @@ fi
 
 # DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-exec $JAVA "-javaagent:agent.jar=ExecuteQuery" -mx${JAVA_HEAP_SIZE}m -jar "eq.jar" &
+exec $JAVA -mx${JAVA_HEAP_SIZE}m -jar "eq.jar" &
 
