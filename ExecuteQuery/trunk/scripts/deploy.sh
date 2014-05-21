@@ -290,26 +290,33 @@ DEB_TEMP=$EQ_DEPLOY_DIR/deb-pkg
 cd $EQ_DEPLOY_DIR
 cp -R $DEB_TEMPLATE $EQ_DEPLOY_DIR
 print_progress
+
 cp ExecuteQuery/README.txt $DEB_TEMP/usr/share/doc/executequery
 rm -Rf $DEB_TEMP/usr/share/executequery/*
 print_progress
-cp -R ExecuteQuery/eq.jar ExecuteQuery/agent.jar ExecuteQuery/lib ExecuteQuery/docs $DEB_TEMP/usr/share/executequery
+
+cp -R ExecuteQuery/eq.jar ExecuteQuery/lib ExecuteQuery/docs $DEB_TEMP/usr/share/executequery
 print_progress
+
 cp ExecuteQuery/eq.png $DEB_TEMP/usr/share/pixmaps/executequery.png
 print_progress
+
 cp $DEB_TEMP/usr/share/doc/executequery/* $DEB_TEMP/usr/share/executequery/docs
 print_progress
 
 MAN_PAGE_TEMPLATE=$DEB_TEMP/usr/share/man/man1/executequery.1.template
 cd $DEB_TEMP/usr/share/man/man1
 print_progress
+
 sed -e "s/{todays_date}/`date "+%d %B, %Y"`/ig" $MAN_PAGE_TEMPLATE > $MAN_PAGE_TEMPLATE.1
 sed -e "s/{eq-version}/$NEW_VERSION-$BUILD_NUMBER/ig" $MAN_PAGE_TEMPLATE.1 > $MAN_PAGE_TEMPLATE.2
 print_progress
+
 mv $MAN_PAGE_TEMPLATE.2 executequery.1
 gzip -9 executequery.1
 rm -f $MAN_PAGE_TEMPLATE.*
 print_progress
+
 rm -f $MAN_PAGE_TEMPLATE
 
 print_progress
@@ -327,13 +334,13 @@ mv control.1 control
 
 print_progress
 
+$REMOVE_CVS $DEB_TEMP
+echo
+
 cd $DEB_TEMP
 md5sum `find . -type f | grep -v '^[.]/DEBIAN/'` >DEBIAN/md5sums
 
 print_progress
-echo
-
-$REMOVE_CVS $DEB_TEMP
 echo
 
 cd $EQ_DEPLOY_DIR

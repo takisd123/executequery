@@ -1,12 +1,26 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 20 March 2014
+Date: 10 May 2014
 
-Summary of changes - v4.1.2 Build 5392:
+Summary of changes - v4.1.2 Build 5397:
 ----------------------------------------
 
 - Added user preference option to disable row count query on table selection.
-
+- Fixed export as SQL not respecting column selections for single table exports.
+- Fixed multi-line comment issue when start of each line within the comment 
+  contains an asterisk (*).
+- Added ability to maximize and restore the results pane within the editor tab 
+  on double-click.
+- Fixed find/replace dialog functionality on replace replacing the next find 
+  instead of the current one.
+- Added ability to cancel the query executed within the Data tab on table 
+  selection.  
+- Removed dependency on agent to set the correct application name for X11.
+- Removed proprietary dependency on sun.misc.BASE64Encoder/Decoder.
+- Added column, constraints and index nodes under table nodes within the Browser
+  tree structure.
+- Improved Query Editor undo/redo support.
+- Improved support for large result set exports.
 
 
 Summary of changes - v4.1.1 Build 5388:
@@ -434,4 +448,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-3 March 2014 
+10 May 2014 
