@@ -3331,18 +3331,9 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
             if (tabPane.getTabLayoutPolicy() == JTabbedPane.SCROLL_TAB_LAYOUT) {
 
                 int index = tabPane.getSelectedIndex();
-                
                 if (index < rects.length && index != -1) {
                     
                     tabScroller.tabPanel.scrollRectToVisible(rects[index]);
-                    if (index > 0) {
-                        SwingUtilities.invokeLater(new Runnable() {
-                            public void run() {
-                                tabScroller.scrollForward(tabPane.getTabPlacement());
-                            }
-                        });
-                    }
-                    
                 }
             }
 
@@ -3595,6 +3586,15 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
                     htmlViews.insertElementAt(null, index);
                 }                                 // nada!
             }
+            
+//            SwingUtilities.invokeLater(new Runnable() {
+//                public void run() {
+//                    tp.setSelectedIndex(index);
+////                    tabScroller.scrollForward(tabPane.getTabPlacement());
+//                }
+//            });
+
+            
         }
         public void componentRemoved(ContainerEvent e) {
             JTabbedPane tp = (JTabbedPane)e.getContainer();
@@ -3636,8 +3636,3 @@ public class CloseTabbedPaneUI extends BasicTabbedPaneUI
     }
     
 }
-
-
-
-
-

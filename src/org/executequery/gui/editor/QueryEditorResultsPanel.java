@@ -408,7 +408,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
 
                 closeResultSetTabs();
             }
-
         }
 
         addTab(title, resulSetTabIcon(), panel, query);
