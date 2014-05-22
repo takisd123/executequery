@@ -42,14 +42,15 @@ import java.util.Map;
  */
 public class DefaultDriverLoader implements DriverLoader {
 
-    private static final Map<DatabaseDriver, Driver> LOADED_DRIVERS = new HashMap<DatabaseDriver, Driver>();
+    private static final Map<String, Driver> LOADED_DRIVERS = new HashMap<String, Driver>();
     
     public Driver load(DatabaseDriver databaseDriver) {
 
         Driver driver = null;
-        if (LOADED_DRIVERS.containsKey(databaseDriver)) {
+        String key = key(databaseDriver);
+        if (LOADED_DRIVERS.containsKey(key)) {
             
-            return LOADED_DRIVERS.get(databaseDriver);
+            return LOADED_DRIVERS.get(key);
         }
 
         try {
@@ -86,7 +87,7 @@ public class DefaultDriverLoader implements DriverLoader {
             Log.info("JDBC driver " + driverName + " loaded - v" 
                     + driver.getMajorVersion() + "." + driver.getMinorVersion());
             
-            LOADED_DRIVERS.put(databaseDriver, driver);
+            LOADED_DRIVERS.put(key(databaseDriver), driver);
             
         } catch (ClassNotFoundException e) {
             
@@ -108,6 +109,11 @@ public class DefaultDriverLoader implements DriverLoader {
         return driver;
     }
 
+    private String key(DatabaseDriver databaseDriver) {
+        
+        return databaseDriver.getId() + "-" + databaseDriver.getClassName();
+    }
+
     private Class<?> loadUsingSystemLoader(String driverName) throws ClassNotFoundException {
 
         return Class.forName(driverName, true, ClassLoader.getSystemClassLoader());
@@ -115,13 +121,14 @@ public class DefaultDriverLoader implements DriverLoader {
 
     public void unload(DatabaseDriver databaseDriver) {
         
-        if (LOADED_DRIVERS.containsKey(databaseDriver)) {
+        String key = key(databaseDriver);
+        if (LOADED_DRIVERS.containsKey(key)) {
             
-            Driver driver = LOADED_DRIVERS.get(databaseDriver);
+            Driver driver = LOADED_DRIVERS.get(key);
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {e.printStackTrace();}
-            LOADED_DRIVERS.remove(databaseDriver);
+            LOADED_DRIVERS.remove(key);
             driver = null;
         }
         
@@ -138,7 +145,3 @@ public class DefaultDriverLoader implements DriverLoader {
     }
     
 }
-
-
-
-

@@ -405,14 +405,12 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
 
     private DatabaseDriver driverById(long driverId) {
 
-        return ((DatabaseDriverRepository) RepositoryCache.load(
-                DatabaseDriverRepository.REPOSITORY_ID)).findById(driverId);
+        return ((DatabaseDriverRepository) RepositoryCache.load(DatabaseDriverRepository.REPOSITORY_ID)).findById(driverId);
     }
 
     private ConnectionsFolder folderById(String folderId) {
         
-        return ((ConnectionFoldersRepository) RepositoryCache.load(
-                ConnectionFoldersRepository.REPOSITORY_ID)).findById(folderId);
+        return ((ConnectionFoldersRepository) RepositoryCache.load(ConnectionFoldersRepository.REPOSITORY_ID)).findById(folderId);
     }
     
     private static final long serialVersionUID = 950081216942320441L;
