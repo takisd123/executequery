@@ -95,8 +95,7 @@ public class DatabaseDriverXMLRepository extends AbstractXMLRepository<DatabaseD
 
         if (namesValid()) {
 
-            write(filePath(), new DatabaseDriverParser(), 
-                    new DatabaseDriverInputSource(drivers));
+            write(filePath(), new DatabaseDriverParser(), new DatabaseDriverInputSource(drivers));
         }
 
     }
@@ -111,7 +110,6 @@ public class DatabaseDriverXMLRepository extends AbstractXMLRepository<DatabaseD
         if (drivers == null) {
             
             drivers = open();
-
             sanatise(drivers);
         }
 

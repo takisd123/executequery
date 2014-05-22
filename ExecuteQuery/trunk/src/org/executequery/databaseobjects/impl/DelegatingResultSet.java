@@ -1093,7 +1093,7 @@ class DelegatingResultSet implements ResultSet {
             return new DelegatingResultSet(conn,rset);
         }
     }
-/*
+
 	public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
 		return _res.getObject(columnIndex, type);
 	}
@@ -1101,5 +1101,5 @@ class DelegatingResultSet implements ResultSet {
 	public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
 		return _res.getObject(columnLabel, type);
 	}
-*/
+
 }
