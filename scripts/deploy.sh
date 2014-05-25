@@ -13,6 +13,7 @@ print_progress() {
 }
 
 JAVA_HOME=/home/takisd/Development/tools/java/jdk6
+JAVA_HOME=/home/takisd/Development/tools/java/jdk7
 PATH=$JAVA_HOME/bin:$PATH
 export PATH JAVA_HOME
 
