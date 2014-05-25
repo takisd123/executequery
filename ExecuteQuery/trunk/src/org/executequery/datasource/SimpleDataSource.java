@@ -79,8 +79,7 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
     
     public Connection getConnection() throws SQLException {
 
-        return getConnection(databaseConnection.getUserName(),
-                databaseConnection.getUnencryptedPassword());
+        return getConnection(databaseConnection.getUserName(), databaseConnection.getUnencryptedPassword());
     }
 
     public Connection getConnection(String username, String password) throws SQLException {
@@ -99,6 +98,7 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
 
         if (driver != null) {
 
+            Log.info("JDBC Driver class: " + driver.getClass().getName());            
             return driver.connect(url, advancedProperties);
         }
 
@@ -226,7 +226,8 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
     }
 
 	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-		return driver.getParentLogger();
+
+	    return driver.getParentLogger();
 	}
 
 
