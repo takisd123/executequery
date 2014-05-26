@@ -76,6 +76,7 @@ public class ConsoleTextPane extends JTextPane {
             if (evt.isControlDown()) // event of the form Ctrl+KEY
             {
                 switch (key) {
+                    case KeyEvent.VK_V:                       // Ctrl+V pastes text
                     case KeyEvent.VK_C:                       // Ctrl+C copies selected text
                         return;
                     case KeyEvent.VK_D:                       // Ctrl+D kills current task
