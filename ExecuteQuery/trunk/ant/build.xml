@@ -120,13 +120,19 @@
 
 		<bundleapp 
 			outputdirectory="${dist.outdir}" 
-			name="Execute Query" 
+			name="Execute Query"
+			icon="${src.path}/eq.icns"
 			displayname="Execute Query" 
 			identifier="${main.class}" 
 			mainclassname="${main.class}">
 			
 			<classpath file="${dist.outdir}/eq.jar" />
-		
+			<classpath file="${dist.outdir}/docs/eqhelp.jar" />
+			<classpath file="${dist.outdir}/lib/*.jar"/>
+
+            <option value="-Dapple.laf.useScreenMenuBar=true"/>
+            <option value="-Dapple.awt.application.name=Execute Query"/>
+
 		</bundleapp>
 
 	</target>
