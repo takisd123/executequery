@@ -21,6 +21,8 @@ Summary of changes - v4.1.2 Build 5397:
   tree structure.
 - Improved Query Editor undo/redo support.
 - Improved support for large result set exports.
+- Fixed issue where a driver class name change was not being applied on 
+  reconnection with that driver.
 
 
 Summary of changes - v4.1.1 Build 5388:
