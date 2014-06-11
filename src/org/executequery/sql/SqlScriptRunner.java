@@ -30,6 +30,7 @@ import java.util.List;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
 import org.underworldlabs.util.FileUtils;
+import org.underworldlabs.util.MiscUtils;
 
 public class SqlScriptRunner {
 
@@ -83,10 +84,12 @@ public class SqlScriptRunner {
             queries.clear();
             
             executionController.message("Found " + executableQueries.size() + " executable queries");            
-            executionController.message("Executing...");
             
             statement = connection.createStatement();
 
+            long start = 0L;
+            long end = 0L;
+            int thisResult = 0;
             for (DerivedQuery query : executableQueries) {
 
                 if (Thread.interrupted()) {
@@ -101,8 +104,13 @@ public class SqlScriptRunner {
                     count++;
 //                    executionController.message("Statement No. " + count);
 //                    executionController.queryMessage(query.getLoggingQuery());
+                    
+                    executionController.message("Executing:");
+                    executionController.queryMessage(query.getDerivedQuery());
 
-                    result += statement.executeUpdate(derivedQuery);
+                    start = System.currentTimeMillis();
+                    thisResult = statement.executeUpdate(derivedQuery);
+                    result += thisResult;
                     
                 } catch (SQLException e) {
 
@@ -120,6 +128,8 @@ public class SqlScriptRunner {
 
                 }
                 
+                end = System.currentTimeMillis();
+                executionController.message("Records affected: " + thisResult + "\nDuration: " + MiscUtils.formatDuration(end - start));
             }
             
         } catch (IOException e) {

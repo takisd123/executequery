@@ -251,7 +251,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         if (StringUtils.isBlank(fileName)) {
 
             GUIUtilities.displayErrorMessage("Please select an input file");
-            return false;            
+            return false;
         
         } else {
 
@@ -351,7 +351,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                         try {
 
                             outputPanel.append("Statements executed: " + sqlStatementResult.getStatementCount());
-                            outputPanel.append("Records affected: " + sqlStatementResult.getUpdateCount());
+                            outputPanel.append("Total records affected: " + sqlStatementResult.getUpdateCount());
     
                         } finally {
 
@@ -471,7 +471,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
             statusBar.setStatusText("Done");
             statusBar.stopProgressBar();
 
-            outputPanel.append("Duration: " + MiscUtils.formatDuration(endTime - startTime));
+            outputPanel.append("Total duration: " + MiscUtils.formatDuration(endTime - startTime));
             GUIUtilities.scheduleGC();
         }
 
