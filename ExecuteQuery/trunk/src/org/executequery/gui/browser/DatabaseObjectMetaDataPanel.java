@@ -32,6 +32,7 @@ import javax.swing.table.TableModel;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.editor.ResultSetTableContainer;
 import org.executequery.gui.resultset.ResultSetTableModel;
+import org.underworldlabs.swing.table.TableSorter;
 
 public class DatabaseObjectMetaDataPanel extends JPanel implements ResultSetTableContainer {
 
@@ -42,8 +43,9 @@ public class DatabaseObjectMetaDataPanel extends JPanel implements ResultSetTabl
 
         super(new BorderLayout());
         
+        table = new DefaultTable();
         tableModel = new ResultSetTableModel();
-        table = new DefaultTable(tableModel);
+        table.setModel(new TableSorter(tableModel, table.getTableHeader()));
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         setBorder(BorderFactory.createTitledBorder("Database object Meta Data"));

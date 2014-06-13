@@ -21,14 +21,15 @@
 package org.executequery.gui.databaseobjects;
 
 import java.util.List;
-import javax.swing.table.AbstractTableModel;
+
 import org.executequery.databaseobjects.impl.TableColumnIndex;
+import org.executequery.gui.browser.AbstractDatabaseTableViewModel;
 
 /**
  *
  * @author takisd
  */
-public class TableColumnIndexTableModel extends AbstractTableModel {
+public class TableColumnIndexTableModel extends AbstractDatabaseTableViewModel {
     
     /** the table indexed columns */
     private List<TableColumnIndex> indexes;
