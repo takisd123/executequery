@@ -64,7 +64,7 @@ public class TableColumnIndex extends AbstractDatabaseObjectElement {
 
     @Override
     public int getType() {
-        return INDEX;
+        return TABLE_INDEX;
     }
     
     /**

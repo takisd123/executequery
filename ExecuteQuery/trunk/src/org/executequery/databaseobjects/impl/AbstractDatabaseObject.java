@@ -241,6 +241,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                 queryStart = "DROP FUNCTION ";
                 break;
             case INDEX:
+            case TABLE_INDEX:
                 queryStart = "DROP INDEX ";
                 break;
             case PROCEDURE:

@@ -168,7 +168,7 @@ public class SimpleMetaDataPanel extends AbstractFormObjectViewPanel {
 
     private String headerTextForType(NamedObject namedObject) {
         
-        if (namedObject.getType() == NamedObject.INDEX) {
+        if (namedObject.getType() == NamedObject.TABLE_INDEX) {
             
             return INDEX_HEADER_TEXT;
 

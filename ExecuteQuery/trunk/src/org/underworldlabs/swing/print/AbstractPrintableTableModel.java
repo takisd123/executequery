@@ -20,15 +20,8 @@
 
 package org.underworldlabs.swing.print;
 
-import javax.swing.table.AbstractTableModel;
+import org.underworldlabs.swing.table.AbstractSortableTableModel;
 import org.underworldlabs.swing.table.PrintableTableModel;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /**
  * Defines a table model where certain values may be modified
@@ -38,7 +31,7 @@ import org.underworldlabs.swing.table.PrintableTableModel;
  * @version  $Revision$
  * @date     $Date$
  */
-public abstract class AbstractPrintableTableModel extends AbstractTableModel
+public abstract class AbstractPrintableTableModel extends AbstractSortableTableModel
                                                   implements PrintableTableModel {
   
     /**
@@ -51,16 +44,3 @@ public abstract class AbstractPrintableTableModel extends AbstractTableModel
     public abstract String getPrintValueAt(int row, int col);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -21,10 +21,13 @@
 package org.executequery.gui.databaseobjects;
 
 import java.util.List;
+
 import javax.swing.table.TableColumnModel;
+
 import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.table.ColumnKeyRenderer;
+import org.underworldlabs.swing.table.TableSorter;
 
 /**
  * Simple database object table display.
@@ -49,9 +52,7 @@ public abstract class AbstractDatabaseObjectTable extends DefaultTable {
     
     /** Initialises with the default model. */
     protected void initDefaultTableModel() {
-        model = new DatabaseObjectTableModel();
-        setModel(model);
-        setColumnProperties();
+        createModel();
     }
     
     /** Returns the table model as a DatabaseObjectTableModel. */
@@ -62,8 +63,7 @@ public abstract class AbstractDatabaseObjectTable extends DefaultTable {
     /** Initialises the cell renderer. */
     protected void initDefaultCellRenderer() {
         if (getColumnCount() > 0) {
-            getColumnModel().getColumn(0).
-                    setCellRenderer(new ColumnKeyRenderer());
+            getColumnModel().getColumn(0).setCellRenderer(new ColumnKeyRenderer());
         }
     }
 
@@ -73,16 +73,24 @@ public abstract class AbstractDatabaseObjectTable extends DefaultTable {
      * @param columns the column value data to display
      */
     public void setColumnData(List<DatabaseColumn> columns) {
+        
         if (model == null) {
-            model = new DatabaseObjectTableModel(columns);
-            setModel(model);
-            setColumnProperties();
-        }
-        else {
+        
+            createModel();
+
+        } else {
+
             model.setValues(columns);
         }
     }
 
+    private void createModel() {
+        
+        model = new DatabaseObjectTableModel();
+        setModel(new TableSorter(model, getTableHeader()));
+        setColumnProperties();
+    }
+    
     /** Sets table column display properties and sizes. */
     protected void setColumnProperties() {
         TableColumnModel tcm = getColumnModel();
@@ -99,7 +107,3 @@ public abstract class AbstractDatabaseObjectTable extends DefaultTable {
     }
     
 }
-
-
-
-

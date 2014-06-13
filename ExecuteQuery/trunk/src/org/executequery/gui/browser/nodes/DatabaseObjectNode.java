@@ -236,7 +236,7 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
                     || type == NamedObject.FOREIGN_KEY
                     || type == NamedObject.PRIMARY_KEY
                     || type == NamedObject.UNIQUE_KEY
-                    || type == NamedObject.INDEX)
+                    || type == NamedObject.TABLE_INDEX)
 
             return true;
         }

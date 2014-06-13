@@ -27,6 +27,7 @@ import javax.swing.table.TableColumnModel;
 import org.executequery.databaseobjects.impl.ColumnConstraint;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.table.ColumnConstraintRenderer;
+import org.underworldlabs.swing.table.TableSorter;
 
 /**
  *
@@ -54,9 +55,7 @@ public abstract class AbstractColumnConstraintTable extends DefaultTable {
      * Initialises with the default model.
      */
     protected void initDefaultTableModel() {
-        model = new ColumnConstraintTableModel();
-        setModel(model);
-        setColumnProperties();
+        createModel();
     }
     
     /**
@@ -71,8 +70,7 @@ public abstract class AbstractColumnConstraintTable extends DefaultTable {
      */
     protected void initDefaultCellRenderer() {
         if (getColumnCount() > 0) {
-            getColumnModel().getColumn(0).
-                    setCellRenderer(new ColumnConstraintRenderer());
+            getColumnModel().getColumn(0).setCellRenderer(new ColumnConstraintRenderer());
         }
     }
 
@@ -83,13 +81,18 @@ public abstract class AbstractColumnConstraintTable extends DefaultTable {
      */
     public void setConstraintData(List<ColumnConstraint> constraints) {
         if (model == null) {
-            model = new ColumnConstraintTableModel(constraints);
-            setModel(model);
-            setColumnProperties();
+            createModel();
         }
         else {
             model.setValues(constraints);
         }
+    }
+
+    private void createModel() {
+        
+        model = new ColumnConstraintTableModel();
+        setModel(new TableSorter(model, getTableHeader()));
+        setColumnProperties();
     }
 
     /**
