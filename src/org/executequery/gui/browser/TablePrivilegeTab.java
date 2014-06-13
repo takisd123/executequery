@@ -22,15 +22,17 @@ package org.executequery.gui.browser;
 
 import java.awt.BorderLayout;
 import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
 import javax.swing.table.AbstractTableModel;
+
 import org.executequery.databaseobjects.TablePrivilege;
 import org.executequery.gui.DefaultTable;
+import org.underworldlabs.swing.table.TableSorter;
 
 /**
  *
@@ -58,7 +60,8 @@ public class TablePrivilegeTab extends JPanel {
     private void jbInit() throws Exception {
         
         model = new TablePrivilegeModel();
-        table = new DefaultTable(model);
+        table = new DefaultTable();
+        table.setModel(new TableSorter(model, table.getTableHeader()));
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
         
@@ -103,7 +106,7 @@ public class TablePrivilegeTab extends JPanel {
         }
     }
     
-    private class TablePrivilegeModel extends AbstractTableModel {
+    private class TablePrivilegeModel extends AbstractDatabaseTableViewModel {
         
         private TablePrivilege[] values;
         private String[] header = {"Grantor","Grantee","Privilege","Grantable"};

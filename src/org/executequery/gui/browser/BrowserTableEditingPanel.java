@@ -79,6 +79,7 @@ import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.VetoableSingleSelectionModel;
+import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.swing.util.SwingWorker;
 import org.underworldlabs.util.SystemProperties;
 
@@ -174,8 +175,10 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         // the column index table
         //citm = new ColumnIndexTableModel();
         
+        columnIndexTable = new DefaultTable();
         citm = new TableColumnIndexTableModel();
-        columnIndexTable = new DefaultTable(citm);
+        columnIndexTable.setModel(new TableSorter(citm, columnIndexTable.getTableHeader()));
+        
         columnIndexTable.setColumnSelectionAllowed(false);
         columnIndexTable.getTableHeader().setReorderingAllowed(false);
 
