@@ -38,8 +38,7 @@ import org.underworldlabs.swing.print.AbstractPrintableTableModel;
  */
 public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
 
-    protected String[] header = {
-            "", "Name", "Datatype", "Size", "Scale", "Required", "Default" };
+    protected String[] header = {"", "Name", "Datatype", "Size", "Scale", "Required", "Default" };
 
     /** the database table columns */
     protected List<DatabaseColumn> columns;
@@ -68,6 +67,11 @@ public class DatabaseObjectTableModel extends AbstractPrintableTableModel {
         setEditable(editable);
     }
 
+    @Override
+    public boolean canSortColumn(int column) {
+        return (column > 0);
+    }
+    
     public void setValues(List<DatabaseColumn> columns) {
         this.columns = columns;
         fireTableDataChanged();

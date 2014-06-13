@@ -156,6 +156,7 @@ public class BrowserTreeCellRenderer extends AbstractTreeCellRenderer {
                 break;
                 
             case NamedObject.INDEX:
+            case NamedObject.TABLE_INDEX:
                 setIcon(icons.get(BrowserConstants.INDEXES_IMAGE));
                 break;
                 

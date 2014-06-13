@@ -376,7 +376,7 @@ public class BrowserController {
                     columnPanel.setValues((DatabaseColumn)databaseObject);
                     return columnPanel;
 
-                case NamedObject.INDEX:
+                case NamedObject.TABLE_INDEX:
                 case NamedObject.PRIMARY_KEY:
                 case NamedObject.FOREIGN_KEY:
                 case NamedObject.UNIQUE_KEY:
