@@ -30,7 +30,6 @@ import java.util.List;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
 import org.underworldlabs.util.FileUtils;
-import org.underworldlabs.util.MiscUtils;
 
 public class SqlScriptRunner {
 
@@ -38,12 +37,19 @@ public class SqlScriptRunner {
     
     private final ExecutionController executionController;
 
+    private boolean cancel;
+
     public SqlScriptRunner(ExecutionController executionController) {
 
         super();
         this.executionController = executionController;
     }
 
+    public void stop() {
+        
+        cancel = true;
+    }
+    
     public SqlStatementResult execute(DatabaseConnection databaseConnection,
             String fileName, ActionOnError actionOnError) {
 
@@ -55,6 +61,7 @@ public class SqlScriptRunner {
         
         try {
 
+            cancel = false;
             executionController.message("Reading input file " + fileName);
             String script = FileUtils.loadFile(fileName);
             
@@ -70,7 +77,7 @@ public class SqlScriptRunner {
             
             for (DerivedQuery query : queries) {
 
-                if (Thread.interrupted()) {
+                if (shouldNotContinue()) {
 
                     throw new InterruptedException();
                 }
@@ -85,28 +92,27 @@ public class SqlScriptRunner {
             
             executionController.message("Found " + executableQueries.size() + " executable queries");            
             
-            statement = connection.createStatement();
 
             long start = 0L;
             long end = 0L;
             int thisResult = 0;
+
+            statement = connection.createStatement();
             for (DerivedQuery query : executableQueries) {
 
-                if (Thread.interrupted()) {
+                if (shouldNotContinue()) {
 
                     throw new InterruptedException();
                 }
 
                 String derivedQuery = query.getDerivedQuery();
-                
                 try {
 
                     count++;
-//                    executionController.message("Statement No. " + count);
+
+//                    executionController.message("Executing query " + count + ":");
+//                    executionController.queryMessage(query.getDerivedQuery());
 //                    executionController.queryMessage(query.getLoggingQuery());
-                    
-                    executionController.message("Executing:");
-                    executionController.queryMessage(query.getDerivedQuery());
 
                     start = System.currentTimeMillis();
                     thisResult = statement.executeUpdate(derivedQuery);
@@ -129,7 +135,7 @@ public class SqlScriptRunner {
                 }
                 
                 end = System.currentTimeMillis();
-                executionController.message("Records affected: " + thisResult + "\nDuration: " + MiscUtils.formatDuration(end - start));
+//                executionController.message("Records affected: " + thisResult + "\nDuration: " + MiscUtils.formatDuration(end - start));
             }
             
         } catch (IOException e) {
@@ -166,6 +172,11 @@ public class SqlScriptRunner {
         sqlStatementResult.setStatementCount(count);
 
         return sqlStatementResult;
+    }
+
+    private boolean shouldNotContinue() {
+
+        return Thread.interrupted() || cancel;
     }
 
     public void close() throws SQLException {
