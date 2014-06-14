@@ -30,6 +30,7 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,6 +41,7 @@ import javax.swing.ActionMap;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -1728,14 +1730,30 @@ public final class GUIUtilities {
         return GUIUtils.displayConfirmDialog(getInFocusDialogOrWindow(), message);
     }
 
+    public static void paintImmediatelyLater(final JComponent c) {
+        Runnable update = new Runnable() {
+            public void run() {
+                c.repaint();
+                Dimension dim = c.getSize();
+                c.paintImmediately(0, 0, dim.width, dim.height);
+            }
+        };
+        SwingUtilities.invokeLater(update);
+    }
+
+    public static void paintImmediatelyAndWait(final JComponent c) {
+        Runnable update = new Runnable() {
+            public void run() {
+                c.repaint();
+                Dimension dim = c.getSize();
+                c.paintImmediately(0, 0, dim.width, dim.height);
+            }
+        };
+        try {
+            SwingUtilities.invokeAndWait(update);
+        }
+        catch (InvocationTargetException e) {}
+        catch (InterruptedException e) {}
+    }
+    
 }
-
-
-
-
-
-
-
-
-
-

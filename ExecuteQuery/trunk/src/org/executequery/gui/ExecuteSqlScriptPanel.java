@@ -54,6 +54,8 @@ import org.executequery.sql.ActionOnError;
 import org.executequery.sql.ExecutionController;
 import org.executequery.sql.SqlScriptRunner;
 import org.executequery.sql.SqlStatementResult;
+import org.executequery.util.ThreadUtils;
+import org.executequery.util.ThreadWorker;
 import org.underworldlabs.swing.AbstractStatusBarPanel;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.ProgressBar;
@@ -338,7 +340,7 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     
                 enableButtons(false, true, false, false);
                 
-                swingWorker = new SwingWorker() {
+                swingWorker = new ThreadWorker() {
                     public Object construct() {
 
                         executing = true;
@@ -368,22 +370,26 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
     
     public void stop() {
         
-        if (executing) {
-
-            try {
+        ThreadUtils.startWorker(new Runnable() {
+        
+            public void run() {
             
-                if (swingWorker != null) {
-                    
-                    swingWorker.interrupt();
+                if (executing) {
+                    try {
+        
+                        if (swingWorker != null) {
+                            
+                            swingWorker.interrupt();
+                        }
+                        sqlScriptRunner.stop();
+        
+                    } finally {
+                        
+                        executing = false;
+                    }
                 }
-                
-            } finally {
-                
-                executing = false;
             }
-
-        }
-
+        });
     }
     
     public void commit() {
@@ -547,7 +553,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
                    progressBar.start();
                 } 
             });
-            
         }
 
         public void stopProgressBar() {
@@ -562,33 +567,44 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
 
     } // SqlTextPaneStatusBar
     
-    public void message(String message) {
-
-        outputPanel.append(message);
+    public void message(final String message) {
+        ThreadUtils.invokeAndWait(new Runnable() {
+            public void run() {
+                outputPanel.append(message);
+            }
+        });
     }
 
-    public void actionMessage(String message) {
-
-        outputPanel.appendAction(message);
+    public void actionMessage(final String message) {
+        ThreadUtils.invokeAndWait(new Runnable() {
+            public void run() {
+                outputPanel.appendAction(message);
+            }
+        });
     }
 
-    public void errorMessage(String message) {
-
-        outputPanel.appendError(message);
+    public void errorMessage(final String message) {
+        ThreadUtils.invokeAndWait(new Runnable() {
+            public void run() {
+                outputPanel.appendError(message);
+            }
+        });
     }
 
-    public void queryMessage(String message) {
-
-        outputPanel.appendActionFixedWidth(message);
+    public void queryMessage(final String message) {
+        ThreadUtils.invokeAndWait(new Runnable() {
+            public void run() {
+                outputPanel.appendActionFixedWidth(message);
+            }
+        });
     }
 
-    public void warningMessage(String message) {
-
-        outputPanel.appendWarning(message);        
+    public void warningMessage(final String message) {
+        ThreadUtils.invokeAndWait(new Runnable() {
+            public void run() {
+                outputPanel.appendWarning(message);
+            }
+        });
     }
 
 }
-
-
-
-

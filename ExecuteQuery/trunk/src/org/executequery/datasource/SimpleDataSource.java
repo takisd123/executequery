@@ -75,6 +75,7 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
         }
         
         url = generateUrl(databaseConnection);
+        Log.info("JDBC Driver class: " + driver.getClass().getName());
     }
     
     public Connection getConnection() throws SQLException {
@@ -98,7 +99,6 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
 
         if (driver != null) {
 
-            Log.info("JDBC Driver class: " + driver.getClass().getName());            
             return driver.connect(url, advancedProperties);
         }
 
