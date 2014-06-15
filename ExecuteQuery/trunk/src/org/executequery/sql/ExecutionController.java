@@ -32,6 +32,8 @@ public interface ExecutionController {
     
     void message(String message);
     
+    boolean logOutput();
+    
 }
 
 
