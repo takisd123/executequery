@@ -30,6 +30,7 @@ import java.util.List;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
 import org.underworldlabs.util.FileUtils;
+import org.underworldlabs.util.MiscUtils;
 
 public class SqlScriptRunner {
 
@@ -91,12 +92,14 @@ public class SqlScriptRunner {
             queries.clear();
             
             executionController.message("Found " + executableQueries.size() + " executable queries");            
-            
+            executionController.message("Executing...");
 
             long start = 0L;
             long end = 0L;
             int thisResult = 0;
 
+            boolean logOutput = executionController.logOutput();
+            
             statement = connection.createStatement();
             for (DerivedQuery query : executableQueries) {
 
@@ -110,9 +113,12 @@ public class SqlScriptRunner {
 
                     count++;
 
-//                    executionController.message("Executing query " + count + ":");
-//                    executionController.queryMessage(query.getDerivedQuery());
-//                    executionController.queryMessage(query.getLoggingQuery());
+                    if (logOutput) {
+
+                        executionController.message("Executing query " + count + ":");
+                        executionController.queryMessage(query.getDerivedQuery());
+//                        executionController.queryMessage(query.getLoggingQuery());
+                    }
 
                     start = System.currentTimeMillis();
                     thisResult = statement.executeUpdate(derivedQuery);
@@ -135,7 +141,11 @@ public class SqlScriptRunner {
                 }
                 
                 end = System.currentTimeMillis();
-//                executionController.message("Records affected: " + thisResult + "\nDuration: " + MiscUtils.formatDuration(end - start));
+                if (logOutput) {
+
+                    executionController.message("Records affected: " + thisResult + "\nDuration: " + MiscUtils.formatDuration(end - start));
+                }
+
             }
             
         } catch (IOException e) {

@@ -31,6 +31,7 @@ import java.sql.SQLException;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -91,6 +92,8 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
 
     private JComboBox actionOnErrorCombo;
     
+    private JCheckBox logOutputCheckBox;
+    
     private JButton startButton;
 
     private JButton rollbackButton;
@@ -140,6 +143,8 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         button.addActionListener(this);
         button.setMnemonic('r');
 
+        logOutputCheckBox = new JCheckBox("<html>&nbsp;&nbsp;<i>Note:</i> This will slow down the process significantly </html>");
+        
         JPanel mainPanel = new JPanel(new GridBagLayout());
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -179,7 +184,6 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         mainPanel.add(fileNameField, gbc);
         gbc.gridx = 2;
         gbc.weightx = 0;
@@ -188,9 +192,18 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         mainPanel.add(button, gbc);
         gbc.gridy++;
         gbc.gridx = 0;
+        gbc.insets.top = 5;
+        gbc.insets.left = 5;
+        mainPanel.add(new JLabel("Log output:"), gbc);
+        gbc.gridx = 1;
+        gbc.insets.top = 2;
+        gbc.insets.left = 0;
+        mainPanel.add(logOutputCheckBox, gbc);        
+        gbc.gridy++;
+        gbc.gridx = 0;
         gbc.weighty = 1.0;
         gbc.weightx = 1.0;
-        gbc.insets.top = 0;
+        gbc.insets.top = 5;
         gbc.insets.left = 5;
         gbc.insets.bottom = 0;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -228,6 +241,11 @@ public class ExecuteSqlScriptPanel extends DefaultTabViewActionPanel
         EventMediator.registerListener(this);        
     }
 
+    public boolean logOutput() {
+
+        return logOutputCheckBox.isSelected();
+    }
+    
     public void browse() {
 
         FileChooserDialog fileChooser = new FileChooserDialog();
