@@ -1,6 +1,6 @@
 #!/bin/bash
 
-JAVA_HOME=/home/takisd/Development/tools/java/jdk6
+JAVA_HOME=/home/takisd/Development/tools/java/jdk7
 export JAVA_HOME
 
 EQ_DIR=/home/takisd/Development/workspace/eclipse/ExecuteQuery
