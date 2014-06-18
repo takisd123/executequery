@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 10 May 2014
+Date: 19 June 2014
 
-Summary of changes - v4.1.2 Build 5397:
+Summary of changes - v4.2.0 Build 5406:
 ----------------------------------------
 
 - Added user preference option to disable row count query on table selection.
@@ -23,6 +23,8 @@ Summary of changes - v4.1.2 Build 5397:
 - Improved support for large result set exports.
 - Fixed issue where a driver class name change was not being applied on 
   reconnection with that driver.
+- Moved to Java7 - no longer direct support for Java 6.
+- Modified Execute SQL Script to support progress logging.
 
 
 Summary of changes - v4.1.1 Build 5388:
@@ -450,4 +452,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-10 May 2014 
+19 June 2014 
