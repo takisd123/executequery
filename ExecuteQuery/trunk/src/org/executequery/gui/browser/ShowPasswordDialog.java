@@ -54,7 +54,7 @@ public class ShowPasswordDialog extends BaseDialog implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         basePanel.add(okButton, gbc);
         
-        basePanel.setPreferredSize(new Dimension(400, 150));
+        basePanel.setPreferredSize(new Dimension(450, 180));
         basePanel.setBorder(BorderFactory.createEtchedBorder());
 
         setResizable(false);
@@ -69,10 +69,10 @@ public class ShowPasswordDialog extends BaseDialog implements ActionListener {
     private String createPanelText(String connectionName, String password) {
 
         StringBuilder sb = new StringBuilder();
-        sb.append("<html><table><tr><td>Password for connection [ ")
+        sb.append("<html><table><tr><td align='center'>Password for connection<br/>[ ")
             .append(connectionName)
             .append(" ]</td></tr>")
-            .append("<tr><td align='center'><b>")
+            .append("<tr><td align='center'><br/><b>")
             .append(password)
             .append("</b></td></tr>")
             .append("</table></html>");
