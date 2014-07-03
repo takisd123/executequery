@@ -304,7 +304,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
         String wordAtCursor = queryEditor.getWordToCursor();
         trace("Capturing and resetting list values for word [ " + wordAtCursor + " ]");
         
-        DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor());
+        DerivedQuery derivedQuery = new DerivedQuery(queryEditor.getQueryAtCursor().getQuery());
         List<QueryTable> tables = derivedQuery.tableForWord(wordAtCursor);
 
         List<AutoCompleteListItem> itemsStartingWith = itemsStartingWith(tables, wordAtCursor);

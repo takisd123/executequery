@@ -275,7 +275,7 @@ public class QueryEditorTextPanel extends JPanel {
             queryPane.uninstallListeners();
 
             // clear the current held edits
-            queryPane.clearEdits();
+//            queryPane.clearEdits();
 
             // set the text
             queryPane.setText(s);
@@ -372,7 +372,6 @@ public class QueryEditorTextPanel extends JPanel {
     public String getSelectedText() {
 
         String selection = queryPane.getSelectedText();
-
         if (StringUtils.isNotBlank(selection)) {
 
             return selection;
@@ -381,6 +380,22 @@ public class QueryEditorTextPanel extends JPanel {
         return null;
     }
 
+    public void replaceRegion(int start, int end, String replacement) {
+        
+        queryPane.select(start, end);
+        queryPane.replaceSelection(replacement);
+    }
+    
+    public int getSelectionStart() {
+        
+        return queryPane.getSelectionStart();
+    }
+    
+    public int getSelectionEnd() {
+        
+        return queryPane.getSelectionEnd();
+    }
+    
     public String getCompleteWordEndingAtCursor() {
 
         return queryPane.getCompleteWordEndingAtCursor();
@@ -391,7 +406,7 @@ public class QueryEditorTextPanel extends JPanel {
         return queryPane.getWordEndingAtCursor();
     }
 
-    protected String getQueryAtCursor() {
+    protected QueryWithPosition getQueryAtCursor() {
 
         return queryPane.getQueryAtCursor();
     }

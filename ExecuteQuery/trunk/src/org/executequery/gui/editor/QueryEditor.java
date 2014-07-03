@@ -1133,14 +1133,14 @@ public class QueryEditor extends DefaultTabView
     public void executeSQLAtCursor() {
 
         preExecute();
-        String query = getQueryAtCursor();
+        String query = getQueryAtCursor().getQuery();
         if (StringUtils.isNotBlank(query)) {
             editorPanel.setExecutingQuery(query);
             delegate.executeQuery(query);
         }
     }
 
-    public String getQueryAtCursor() {
+    public QueryWithPosition getQueryAtCursor() {
 
         return editorPanel.getQueryAtCursor();
     }
@@ -1463,15 +1463,22 @@ public class QueryEditor extends DefaultTabView
 
     public void formatSQLtext() {
 
-        String text = getSelectedText();
+        int start = editorPanel.getSelectionStart();
+        int end = editorPanel.getSelectionEnd();
 
+        String text = getSelectedText();
         if (text == null) {
 
-            text = getEditorText();
+            QueryWithPosition queryAtCursor = getQueryAtCursor();            
+            start = queryAtCursor.getStart();
+            end = queryAtCursor.getEnd();
+            text = getQueryAtCursor().getQuery();
+            
         }
 
         String formattedText = formatter.format(text);
-        setEditorText(formattedText);
+        editorPanel.replaceRegion(start, end, formattedText);        
+//        setEditorText(formattedText);
     }
 
     private String getSelectedText() {
