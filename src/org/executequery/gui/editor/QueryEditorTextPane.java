@@ -551,7 +551,6 @@ public class QueryEditorTextPane extends SQLTextPane
     protected void uninstallListeners() {
         removeCaretListener(this);
         document.removeDocumentListener(this);
-//        undoManager.suspend();
     }
 
     /**
@@ -561,7 +560,6 @@ public class QueryEditorTextPane extends SQLTextPane
     protected void reinstallListeners() {
         addCaretListener(this);
         document.addDocumentListener(this);
-//        undoManager.reinstate();
     }
 
     private void loadDummyDocument() {
@@ -791,12 +789,13 @@ public class QueryEditorTextPane extends SQLTextPane
      * @param the position
      * @return the query around the specified position
      */
-    private String getQueryAt(int position) {
+    private QueryWithPosition getQueryAt(int position) {
 
         String text = getText();
 
         if (MiscUtils.isNull(text)) {
-            return Constants.EMPTY;
+            
+            return new QueryWithPosition(0, 0, Constants.EMPTY);
         }
 
         char[] chars = text.toCharArray();
@@ -887,7 +886,7 @@ public class QueryEditorTextPane extends SQLTextPane
             return getQueryAt(start);
         }
 
-        return query;
+        return new QueryWithPosition(start, end + 1, query);
     }
 
     // ----------------------------------------
@@ -930,7 +929,7 @@ public class QueryEditorTextPane extends SQLTextPane
         lineBorder.resetExecutingLine();
     }
 
-    public String getQueryAtCursor() {
+    public QueryWithPosition getQueryAtCursor() {
 
         return getQueryAt(getCaretPosition());
     }
