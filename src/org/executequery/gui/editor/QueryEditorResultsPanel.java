@@ -171,7 +171,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public void filter(String pattern) {
 
         ResultSetPanel selectedResultSetPanel = getSelectedResultSetPanel();
-        if (selectedResultSetPanel.getRowCount() == 0) {
+        if (selectedResultSetPanel == null || selectedResultSetPanel.getRowCount() == 0) {
             
             return;
         }
