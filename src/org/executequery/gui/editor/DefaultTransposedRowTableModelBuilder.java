@@ -36,11 +36,9 @@ public class DefaultTransposedRowTableModelBuilder implements TransposedRowTable
         List<RecordDataItem> rowDataForRow = resultSetTableModel.getRowDataForRow(rowIndex);
         
         int size = rowDataForRow.size();
-        
         List<List<RecordDataItem>> transposedRow = new ArrayList<List<RecordDataItem>>(size);
         
         int columnCount = 2;
-
         for (int i = 0, n = resultSetTableModel.getColumnCount(); i < n; i++) {
             
             String columnName = resultSetTableModel.getColumnName(i);
@@ -59,7 +57,6 @@ public class DefaultTransposedRowTableModelBuilder implements TransposedRowTable
     private List<String> columnHeaderAsList() {
 
         List<String> columnHeaders = new ArrayList<String>(TRANSPOSED_ROW_COLUMN_HEADERS.length);
-        
         for (String columnName : TRANSPOSED_ROW_COLUMN_HEADERS) {
             
             columnHeaders.add(columnName);
@@ -74,7 +71,3 @@ public class DefaultTransposedRowTableModelBuilder implements TransposedRowTable
     }
     
 }
-
-
-
-

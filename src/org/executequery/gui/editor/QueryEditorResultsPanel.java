@@ -25,6 +25,7 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -39,6 +40,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.UserPreferencesManager;
 import org.executequery.databasemediators.QueryTypes;
 import org.executequery.gui.LoggingOutputPanel;
+import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.sql.SqlMessages;
 import org.underworldlabs.swing.GUIUtils;
@@ -136,11 +138,8 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
             setTableProperties();
         }
 
-        
         resultSetTableColumnResizingManager = new ResultSetTableColumnResizingManager();
-
         addChangeListener(this);
-        
     }
 
     private TransposedRowTableModelBuilder transposedRowTableModelBuilder;
@@ -163,25 +162,38 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         }
 
         ResultSetTableModel resultSetTableModel = (ResultSetTableModel) tableModel;
-        ResultSetTableModel model =
-            transposedRowTableModelBuilder().transpose(resultSetTableModel, row);
+        ResultSetTableModel model = transposedRowTableModelBuilder().transpose(resultSetTableModel, row);
 
         TransposedRowResultSetPanel resultSetPanel = new TransposedRowResultSetPanel(this, model);
         addResultSetPanel(queryForModel(tableModel), model.getRowCount(), resultSetPanel);
     }
 
+    public void filter(String pattern) {
+
+        ResultSetPanel selectedResultSetPanel = getSelectedResultSetPanel();
+        if (selectedResultSetPanel.getRowCount() == 0) {
+            
+            return;
+        }
+
+        List<List<RecordDataItem>> list = selectedResultSetPanel.filter(pattern);
+        ResultSetPanel resultSetPanel = createResultSetPanel();
+        ResultSetTableModel model = new ResultSetTableModel(selectedResultSetPanel.getResultSetTableModel().getColumnNames(), list);
+        
+        resultSetPanel.setResultSet(model, false);
+        addResultSetPanel(selectedResultSetPanel.getResultSetTableModel().getQuery(), model.getRowCount(), resultSetPanel, true);
+    }
+    
     private String queryForModel(TableModel tableModel) {
 
         Component[] tabs = getComponents();
-
         for (int i = 0; i < tabs.length; i++) {
 
             Component c = tabs[i];
-
             if (c instanceof ResultSetPanel) {
 
                 ResultSetPanel panel = (ResultSetPanel) c;
-                if (panel.getTable().getModel() == tableModel) {
+                if (panel.getResultSetTableModel() == tableModel) {
 
                     return getToolTipTextAt(i);
                 }
@@ -232,11 +244,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public void setTableProperties() {
 
         Component[] tabs = getComponents();
-
         for (int i = 0; i < tabs.length; i++) {
 
             Component c = tabs[i];
-
             if (c instanceof ResultSetPanel) {
 
                 ResultSetPanel panel = (ResultSetPanel) c;
@@ -250,9 +260,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     public int getResultSetTabCount() {
 
         int count = 0;
-
         Component[] components = getComponents();
-
         for (Component component : components) {
 
             if (component instanceof ResultSetPanel) {
@@ -349,8 +357,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
      * @param maxRecords - the maximum records to return
      * @param query - the executed query of the result set
      */
-    public int setResultSet(ResultSet rset, boolean showRowNumber,
-                            int maxRecords, String query) {
+    public int setResultSet(ResultSet rset, boolean showRowNumber, int maxRecords, String query) {
 
         ResultSetTableModel model = new ResultSetTableModel(rset, maxRecords, query);
 
@@ -379,7 +386,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     private ResultSetPanel createResultSetPanel() {
 
         ResultSetPanel panel = new ResultSetPanel(this);
-
         resultSetTableColumnResizingManager.manageResultSetTable(panel.getTable());
 
         return panel;
@@ -388,7 +394,6 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     private void resetTabCount() {
 
         int tabCount = getTabCount();
-
         if (tabCount == 0 || (tabCount == 1 && hasOutputPane())) {
 
             resultSetTabTitleCounter = 0;
@@ -398,10 +403,15 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     }
 
     private void addResultSetPanel(String query, int rowCount, final ResultSetPanel panel) {
+        
+        addResultSetPanel(query, rowCount, panel, false);
+    }
+    
+    private void addResultSetPanel(String query, int rowCount, final ResultSetPanel panel, boolean filtered) {
 
         resetTabCount();
 
-        String title = "Result Set " + resultSetTabTitleCounter;
+        String title = "Result Set " + resultSetTabTitleCounter + (filtered ? " - Filtered" : "");
         if (useSingleResultSetTabs()) {
 
             if (getResultSetTabCount() >= 1) {

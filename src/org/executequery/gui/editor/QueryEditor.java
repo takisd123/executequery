@@ -45,6 +45,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -78,6 +79,7 @@ import org.executequery.print.TablePrinter;
 import org.executequery.print.TextPrinter;
 import org.executequery.sql.TokenizingFormatter;
 import org.executequery.util.UserProperties;
+import org.underworldlabs.swing.DefaultTextField;
 import org.underworldlabs.swing.NumberTextField;
 import org.underworldlabs.util.MiscUtils;
 import org.underworldlabs.util.SystemProperties;
@@ -262,7 +264,7 @@ public class QueryEditor extends DefaultTabView
         });
 
         maxRowCountField = new MaxRowCountField(this);
-
+        
         toolsPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(0, 0, 0, 0);
@@ -290,6 +292,22 @@ public class QueryEditor extends DefaultTabView
 
         gbc.gridx++;
         gbc.weightx = 0;
+        gbc.insets.left = 0;
+        gbc.insets.top = 7;
+        gbc.insets.right = 10;
+        gbc.insets.left = 10;
+        toolsPanel.add(createLabel("Filter:", 'F'), gbc);
+        gbc.gridx++;
+        gbc.weightx = 0.8;
+        gbc.insets.top = 2;
+        gbc.insets.bottom = 2;
+        gbc.insets.right = 2;
+        gbc.insets.left = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        toolsPanel.add(createResultSetFilterTextField(), gbc);
+
+        gbc.gridx++;
+        gbc.weightx = 0;
         gbc.insets.top = 5;
         gbc.insets.left = 10;
         toolsPanel.add(maxRowCountCheckBox, gbc);
@@ -299,13 +317,13 @@ public class QueryEditor extends DefaultTabView
         gbc.insets.right = 10;
         toolsPanel.add(createLabel("Max Rows:", 'R'), gbc);
         gbc.gridx++;
-        gbc.weightx = 0.8;
+        gbc.weightx = 0.3;
         gbc.insets.top = 2;
         gbc.insets.bottom = 2;
         gbc.insets.right = 2;
         gbc.fill = GridBagConstraints.BOTH;
         toolsPanel.add(maxRowCountField, gbc);
-
+        
         splitPane.setBorder(BorderFactory.createEmptyBorder(0,3,3,3));
 
         JPanel base = new JPanel(new BorderLayout());
@@ -333,6 +351,21 @@ public class QueryEditor extends DefaultTabView
 
         statusBar.setCaretPosition(1,1);
         statusBar.setInsertionMode("INS");
+    }
+
+    private JTextField createResultSetFilterTextField() {
+
+        filterTextField = new DefaultTextField();
+        filterTextField.setToolTipText("Apply filter to current result set");
+
+        filterTextField.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {                
+
+                resultsPanel.filter(filterTextField.getText());
+            }
+        });
+
+        return filterTextField;
     }
 
     private void maxRowCountCheckBoxSelected() {
@@ -403,9 +436,11 @@ public class QueryEditor extends DefaultTabView
 
     /** the last divider location before a output hide */
     private int lastDividerLocation;
+
     private QueryEditorAutoCompletePopupProvider queryEditorAutoCompletePopupProvider;
     private DatabaseConnection selectConnection;
     private JPanel baseEditorPanel;
+    private JTextField filterTextField;
 
     /**
      * Toggles the output pane visible or not.
@@ -1088,6 +1123,7 @@ public class QueryEditor extends DefaultTabView
 
     public void preExecute() {
 
+        filterTextField.setText("");
         resultsPanel.preExecute();
     }
 

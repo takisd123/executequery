@@ -22,11 +22,15 @@ package org.executequery.gui.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.executequery.gui.DefaultTable;
+import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.underworldlabs.swing.table.RowNumberHeader;
@@ -126,6 +130,26 @@ public class ResultSetPanel extends JPanel {
         }
     }
 
+    public List<List<RecordDataItem>> filter(String pattern) {
+        
+        List<List<RecordDataItem>> filteredRows = new ArrayList<List<RecordDataItem>>();
+        for (int i = 0, n = model.getRowCount(); i < n; i++) {
+
+            List<RecordDataItem> row = model.getRowDataForRow(i);
+            for (RecordDataItem recordDataItem : row) {
+                
+                if (recordDataItem.valueContains(pattern)) {
+
+                    filteredRows.add(row);
+                    break;
+                }
+                
+            }
+
+        }
+        return filteredRows;
+    }
+    
     public int setResultSet(ResultSetTableModel model, boolean showRowNumber) {
 
         this.model = model;
@@ -134,6 +158,14 @@ public class ResultSetPanel extends JPanel {
         if (rowCount > 0) {
 
             buildTable(rowCount);
+
+        } else {
+            
+            DefaultTable emptyTable = new DefaultTable(model);
+            int columnWidth = SystemProperties.getIntProperty("user", "results.table.column.width");
+            emptyTable.setTableColumnWidth(columnWidth);
+            scroller.getViewport().add(emptyTable);
+            emptyTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         }
 
         return rowCount;
@@ -147,7 +179,6 @@ public class ResultSetPanel extends JPanel {
     private void buildTable(int rowCount) {
 
         boolean sorterWasNull = false;
-
         if (sorter == null) {
 
             sorterWasNull = true;
@@ -175,7 +206,6 @@ public class ResultSetPanel extends JPanel {
         }
 
         table.resetTableColumnWidth();
-
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         if (showRowHeader) {
@@ -301,7 +331,3 @@ public class ResultSetPanel extends JPanel {
     }
 
 }
-
-
-
-

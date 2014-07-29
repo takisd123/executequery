@@ -48,20 +48,17 @@ public abstract class AbstractLobRecordDataItem extends AbstractRecordDataItem
 	abstract byte[] readLob();
 	
     public String asBinaryString() {
-        
-        StringBuilder sb = new StringBuilder();
 
         char space = ' ';
-
         String stripPrefix = "ffffff";
 
         int defaultBytesToProcess = 496;
         int bytesToProcess = Math.min(data.length, defaultBytesToProcess);
 
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < bytesToProcess; i++) {
             
             String hexString = Integer.toHexString(data[i]);
-
             if (hexString.startsWith(stripPrefix)) {
 
                 hexString = hexString.substring(stripPrefix.length());

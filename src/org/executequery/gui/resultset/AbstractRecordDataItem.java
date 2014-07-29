@@ -21,6 +21,7 @@
 package org.executequery.gui.resultset;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databasemediators.SQLTypeObjectFactory;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -84,6 +85,15 @@ public abstract class AbstractRecordDataItem implements RecordDataItem {
 
 	public void setValue(Object value) {
 		this.value = value;
+	}
+
+	public boolean valueContains(String pattern) {
+	    
+	    if (isLob() || isValueNull()) {
+
+	        return false;
+	    }
+	    return StringUtils.containsIgnoreCase(getValue().toString(), pattern);
 	}
 
 	public void valueChanged(Object newValue) {
