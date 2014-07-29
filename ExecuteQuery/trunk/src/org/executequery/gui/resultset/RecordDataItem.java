@@ -54,6 +54,8 @@ public interface RecordDataItem extends TableCellValue {
     
     boolean isLob();
 
+    boolean valueContains(String pattern);
+
 }
 
 

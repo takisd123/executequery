@@ -469,7 +469,6 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             
             return 0;
         }
-
         return columnHeaders.size();
     }
 
@@ -479,10 +478,14 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
             return 0;
         }
-
         return tableData.size();
     }
 
+    public List<String> getColumnNames() {
+        
+        return columnHeaders;
+    }
+    
     public List<RecordDataItem> getRowDataForRow(int row) {
         
         return tableData.get(row);

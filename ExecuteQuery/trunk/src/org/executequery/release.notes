@@ -7,6 +7,7 @@ Summary of changes - v4.2.1 Build 5411:
 
 - Modified format SQL text to apply formatting to query at cursor and replace
   only that region.
+- Added result set filter for the current selection in the Query Editor 
 
 
 Summary of changes - v4.2.0 Build 5406:

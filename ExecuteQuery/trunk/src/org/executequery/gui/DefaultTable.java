@@ -21,9 +21,12 @@
 package org.executequery.gui;
 
 import java.awt.Dimension;
+import java.util.Enumeration;
 
 import javax.swing.JTable;
 import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import org.underworldlabs.swing.plaf.UIUtils;
@@ -75,6 +78,18 @@ public class DefaultTable extends JTable {
 
     }
     
+    public void setTableColumnWidth(int columnWidth) {
+
+        TableColumn col = null;
+        TableColumnModel tcm = getColumnModel();
+        for (Enumeration<TableColumn> i = tcm.getColumns(); i.hasMoreElements();) {
+
+            col = i.nextElement();
+            col.setPreferredWidth(columnWidth);
+        }
+
+    }
+
 }
 
 

@@ -89,7 +89,6 @@ public class ResultSetTable extends JTable {
         cellRenderer.setFont(getFont());
 
         applyUserPreferences();
-        
     }
 
     public void selectCellAtPoint(Point point) {

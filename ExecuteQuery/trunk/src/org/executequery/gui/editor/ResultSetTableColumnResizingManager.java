@@ -53,9 +53,7 @@ public class ResultSetTableColumnResizingManager {
         if (canResizeColumns()) {
             
             TableColumnModel tableColumnModel = table.getColumnModel();
-            
             int count = Math.min(columnWidths.length, tableColumnModel.getColumnCount());
-            
             for (int i = 0; i < count; i++) {
                 
                 tableColumnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
@@ -80,7 +78,6 @@ public class ResultSetTableColumnResizingManager {
         public void columnMarginChanged(ChangeEvent e) {
             
             Object source = e.getSource();
-            
             if (source instanceof TableColumnModel) {
             
                 TableColumnModel columnModel = (TableColumnModel) source;
@@ -106,7 +103,3 @@ public class ResultSetTableColumnResizingManager {
     }
     
 }
-
-
-
-
