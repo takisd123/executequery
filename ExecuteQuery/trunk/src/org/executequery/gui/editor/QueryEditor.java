@@ -296,7 +296,7 @@ public class QueryEditor extends DefaultTabView
         gbc.insets.top = 7;
         gbc.insets.right = 10;
         gbc.insets.left = 10;
-        toolsPanel.add(createLabel("Filter:", 'F'), gbc);
+        toolsPanel.add(createLabel("Filter:", 'l'), gbc);
         gbc.gridx++;
         gbc.weightx = 0.8;
         gbc.insets.top = 2;
@@ -356,6 +356,7 @@ public class QueryEditor extends DefaultTabView
     private JTextField createResultSetFilterTextField() {
 
         filterTextField = new DefaultTextField();
+        filterTextField.setFocusAccelerator('l');
         filterTextField.setToolTipText("Apply filter to current result set");
 
         filterTextField.addActionListener(new ActionListener() {
