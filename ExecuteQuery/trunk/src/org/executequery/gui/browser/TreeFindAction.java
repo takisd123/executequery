@@ -35,6 +35,8 @@ import javax.swing.border.Border;
 import javax.swing.text.Position;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  *
  * Modified from the original by Santhosh Kumar 
@@ -57,6 +59,11 @@ public class TreeFindAction extends FindAction<TreePath> {
 
     protected boolean changed(JComponent comp, String searchString, Position.Bias bias) {
 
+        if (StringUtils.isBlank(searchString)) {
+            
+            return false;
+        }
+        
 		JTree tree = (JTree) comp;
 		String prefix = searchString;
 
@@ -65,8 +72,14 @@ public class TreeFindAction extends FindAction<TreePath> {
             prefix = prefix.toUpperCase();
         }
 
-		List<TreePath> matchedPaths = new ArrayList<TreePath>();
+		boolean wildcardStart = prefix.startsWith("*");
+		if (wildcardStart) {
 
+		    prefix = prefix.substring(1);
+		}
+//		Matcher matcher = Pattern.compile(prefix).matcher("");
+
+		List<TreePath> matchedPaths = new ArrayList<TreePath>();
 		for (int i = 1; i < tree.getRowCount(); i++) {
 
             TreePath path = tree.getPathForRow(i);
@@ -78,10 +91,16 @@ public class TreeFindAction extends FindAction<TreePath> {
                 text = text.toUpperCase();
             }
 
-            if (text.startsWith(prefix, 0)) {
-                
+            if ((wildcardStart && text.contains(prefix)) || text.startsWith(prefix, 0)) {
+
                 matchedPaths.add(path);
             }
+
+//            matcher.reset(text);
+//            if (matcher.find()) {
+//                
+//                matchedPaths.add(path);
+//            }
 		    
 		}
 
