@@ -23,6 +23,8 @@ package org.executequery.gui.browser;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -76,9 +78,14 @@ public class TreeFindAction extends FindAction<TreePath> {
 		if (wildcardStart) {
 
 		    prefix = prefix.substring(1);
-		}
-//		Matcher matcher = Pattern.compile(prefix).matcher("");
+		
+		} else {
 
+		    prefix = "^" + prefix;
+		}
+		prefix = prefix.replaceAll("\\*", ".*");
+		
+		Matcher matcher = Pattern.compile(prefix).matcher("");
 		List<TreePath> matchedPaths = new ArrayList<TreePath>();
 		for (int i = 1; i < tree.getRowCount(); i++) {
 
@@ -91,16 +98,16 @@ public class TreeFindAction extends FindAction<TreePath> {
                 text = text.toUpperCase();
             }
 
-            if ((wildcardStart && text.contains(prefix)) || text.startsWith(prefix, 0)) {
-
-                matchedPaths.add(path);
-            }
-
-//            matcher.reset(text);
-//            if (matcher.find()) {
-//                
+//            if ((wildcardStart && text.contains(prefix)) || text.startsWith(prefix, 0)) {
+//
 //                matchedPaths.add(path);
 //            }
+
+            matcher.reset(text);
+            if (matcher.find()) {
+                
+                matchedPaths.add(path);
+            }
 		    
 		}
 
