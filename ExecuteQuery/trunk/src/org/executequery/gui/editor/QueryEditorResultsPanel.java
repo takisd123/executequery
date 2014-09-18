@@ -186,10 +186,9 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
     
     private String queryForModel(TableModel tableModel) {
 
-        Component[] tabs = getComponents();
-        for (int i = 0; i < tabs.length; i++) {
-
-            Component c = tabs[i];
+        for (int i = 0, n = getTabCount(); i < n; i++) {
+            
+            Component c = getTabComponentAt(i);
             if (c instanceof ResultSetPanel) {
 
                 ResultSetPanel panel = (ResultSetPanel) c;
@@ -199,9 +198,8 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
                 }
 
             }
-
+            
         }
-
         return "";
     }
 
