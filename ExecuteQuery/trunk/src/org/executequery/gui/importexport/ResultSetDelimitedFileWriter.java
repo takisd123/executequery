@@ -115,7 +115,7 @@ public class ResultSetDelimitedFileWriter {
         StringBuilder sb = new StringBuilder();
         for (int i = 1, n = resultSetMetaData.getColumnCount(); i <= n; i++) {
             
-            sb.append(resultSetMetaData.getColumnName(i));
+            sb.append(resultSetMetaData.getColumnLabel(i));
             sb.append(delimiter);
         }
 

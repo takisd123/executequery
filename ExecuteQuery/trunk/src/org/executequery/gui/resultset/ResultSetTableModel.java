@@ -60,9 +60,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     /** Indicates that the query executing has been interrupted */
     private boolean interrupted;
 
-    /** The column names */
+    /** The column labels */
     private List<String> columnHeaders;
 
+    /** The column names - raw column name not alias */
+    private List<String> columnNameHeaders;
+    
     /** The table values */
     private List<List<RecordDataItem>> tableData;
 
@@ -94,6 +97,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         this.query = query;
         
         columnHeaders = new ArrayList<String>();
+        columnNameHeaders = new ArrayList<String>();
         tableData = new ArrayList<List<RecordDataItem>>();
         recordDataItemFactory = new RecordDataItemFactory();
         
@@ -109,6 +113,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public ResultSetTableModel(List<String> columnHeaders, List<List<RecordDataItem>> tableData) {
         
         this.columnHeaders = columnHeaders;
+        this.columnNameHeaders = columnHeaders;
         this.tableData = tableData;
     }
     
@@ -130,6 +135,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             ResultSetMetaData rsmd = resultSet.getMetaData();
 
             columnHeaders.clear();
+            columnNameHeaders.clear();
             tableData.clear();
 
             int zeroBaseIndex = 0;
@@ -140,7 +146,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             for (int i = 1; i <= count; i++) {
 
                 zeroBaseIndex = i - 1;
-                columnHeaders.add(rsmd.getColumnName(i));
+                columnHeaders.add(rsmd.getColumnLabel(i));
+                columnNameHeaders.add(rsmd.getColumnName(i));
                 columnTypes[zeroBaseIndex] = rsmd.getColumnType(i);
                 columnTypeNames[zeroBaseIndex] = rsmd.getColumnTypeName(i);
             }
@@ -566,6 +573,19 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public void setNonEditableColumns(List<String> nonEditableColumns) {
         setCellsEditable(true);
         this.nonEditableColumns = new HashSet<String>(nonEditableColumns);
+    }
+    
+    public String getColumnNameHint(int column) {
+        
+        String columnLabel = getColumnName(column);
+        String columnName = columnNameHeaders.get(column);
+        
+        if (StringUtils.equals(columnLabel, columnName)) {
+            
+            return columnLabel;
+        }
+        
+        return columnLabel + " [ " + columnName + " ]";
     }
     
     public String getColumnName(int column) {

@@ -114,15 +114,13 @@ public final class DerivedQuery {
 
         deriveTables();
         
-        String pattern = "";
         int dotPoint = word.indexOf('.');
-        
         if (dotPoint == -1) {
             
             return queryTables;
         }
         
-        pattern = word.substring(0, dotPoint);
+        String pattern = word.substring(0, dotPoint);
         return asList(getTableForNameOrAlias(pattern));
     }
     

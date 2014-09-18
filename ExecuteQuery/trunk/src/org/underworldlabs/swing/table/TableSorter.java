@@ -200,7 +200,6 @@ public class TableSorter extends AbstractTableModel {
     public void setTableHeader(JTableHeader tableHeader) {
         
         this.tableHeader = tableHeader;
-        
         if (tableHeader != null) {
             tableHeader.addMouseListener(mouseListener);
             tableHeader.setDefaultRenderer(headerRenderer);
@@ -309,7 +308,6 @@ public class TableSorter extends AbstractTableModel {
             int tableModelRowCount = tableModel.getRowCount();
             
             viewToModel = new Row[tableModelRowCount];
-            
             for (int row = 0; row < tableModelRowCount; row++) {
 
                 viewToModel[row] = new Row(row);
@@ -328,7 +326,6 @@ public class TableSorter extends AbstractTableModel {
     public int modelIndex(int viewIndex) {
         
         Row[] rows = getViewToModel();
-        
         if (viewIndex >= rows.length) {
             return -1;
         }

@@ -23,6 +23,7 @@ package org.executequery.gui.resultset;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.MouseEvent;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -31,6 +32,7 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -39,6 +41,7 @@ import javax.swing.table.TableModel;
 
 import org.executequery.GUIUtilities;
 import org.underworldlabs.swing.table.StringCellEditor;
+import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.util.SystemProperties;
 
 /**
@@ -91,6 +94,33 @@ public class ResultSetTable extends JTable {
         applyUserPreferences();
     }
 
+    protected JTableHeader createDefaultTableHeader() {
+
+        return new JTableHeader(columnModel) {
+        
+            public String getToolTipText(MouseEvent e) {
+
+                if (getModel() instanceof TableSorter) {
+                
+                    TableSorter model = (TableSorter) getModel();
+                    if (model.getTableModel() instanceof ResultSetTableModel) {
+                    
+                        ResultSetTableModel resultSetTableModel = (ResultSetTableModel) model.getTableModel();
+                        
+                        Point point = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(point.x);
+                        int realIndex = columnModel.getColumn(index).getModelIndex();
+                        
+                        return resultSetTableModel.getColumnNameHint(realIndex);
+                    }
+                }
+
+                return super.getToolTipText(e);
+            }
+
+        };
+    }
+    
     public void selectCellAtPoint(Point point) {
 
         int row = rowAtPoint(point);
@@ -317,6 +347,18 @@ public class ResultSetTable extends JTable {
 
     } // class ResultsTableColumnModel
 
+    
+    
+    class ResultSetTableHeader extends JTableHeader {
+        
+        @Override
+        public String getToolTipText(MouseEvent event) {
+
+            return super.getToolTipText(event);
+        }
+        
+    }
+    
 }
 
 
