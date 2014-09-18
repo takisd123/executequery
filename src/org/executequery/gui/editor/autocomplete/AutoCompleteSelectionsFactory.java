@@ -75,7 +75,7 @@ public class AutoCompleteSelectionsFactory {
             }
 
             if (autoCompleteSchema) {
-             
+
                 databaseTablesForHost(databaseHost);
                 databaseColumnsForTables(databaseHost, tables);
             }

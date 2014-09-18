@@ -27,7 +27,7 @@ public class ResultSetCsvExporter implements ResultSetExporter {
             int columnCount = metaData.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
 
-                sb.append(metaData.getColumnName(i)).append(",");
+                sb.append(metaData.getColumnLabel(i)).append(",");
             }
             write(writer, sb);
 

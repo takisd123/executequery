@@ -9,6 +9,8 @@ Summary of changes - v4.2.1 Build 5411:
   only that region.
 - Added result set filter for the current selection in the Query Editor.
 - Added wildcard starts with for browser node search.
+- Fixed result set table column in the editor not showing correct label on some 
+  DBs when executing statements with aliases.
 
 
 Summary of changes - v4.2.0 Build 5406:

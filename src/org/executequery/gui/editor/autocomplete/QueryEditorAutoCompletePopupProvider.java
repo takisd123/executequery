@@ -328,7 +328,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
     // introduce query types (select, insert etc)
     // track columns/tables in statement ????
 
-    private static final int MINIMUM_CHARS_FOR_SCHEMA_LOOKUP = 2;
+    private static final int MINIMUM_CHARS_FOR_DATABASE_LOOKUP = 2;
 
     private List<AutoCompleteListItem> itemsStartingWith(List<QueryTable> tables, String prefix) {
 
@@ -340,6 +340,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
         trace("Building list of items starting with [ " + prefix + " ] from table list with size " + tables.size());
 
+        List<AutoCompleteListItem> searchList = autoCompleteListItems;
         String wordPrefix = prefix.trim().toUpperCase();
 
         int dotIndex = prefix.indexOf('.');
@@ -348,20 +349,19 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
             wordPrefix = wordPrefix.substring(dotIndex + 1);
 
-        } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_SCHEMA_LOOKUP && !hasTables) {
+        } else if (wordPrefix.length() < MINIMUM_CHARS_FOR_DATABASE_LOOKUP && !hasTables) {
 
             return buildItemsStartingWithForList(
                     selectionsFactory.buildKeywords(databaseHost, autoCompleteKeywords), tables, wordPrefix, false);
         }
 
         List<AutoCompleteListItem> itemsStartingWith =
-            buildItemsStartingWithForList(autoCompleteListItems, tables, wordPrefix, hasDotIndex);
+            buildItemsStartingWithForList(searchList, tables, wordPrefix, hasDotIndex);
 
         if (itemsStartingWith.isEmpty()) {
 
             // do it one more time without the tables...
-            itemsStartingWith = buildItemsStartingWithForList(
-                    autoCompleteListItems, null, wordPrefix, hasDotIndex);
+            itemsStartingWith = buildItemsStartingWithForList(searchList, null, wordPrefix, hasDotIndex);
 
             if (itemsStartingWith.isEmpty()) { // now bail...
 
