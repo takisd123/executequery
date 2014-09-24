@@ -315,7 +315,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
                 while (rs.next()) {
             
                     DefaultDatabaseFunction function = new DefaultDatabaseFunction(this, rs.getString(3));
-                    function.setRemarks(rs.getString(7));
+                    function.setRemarks(rs.getString(4));
                     list.add(function);
                 }
 
@@ -365,22 +365,30 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
 
     private ResultSet getProceduresResultSet() throws SQLException {
         
-        String catalogName = getHost().getCatalogNameForQueries(getCatalogName());
-        String schemaName = getHost().getSchemaNameForQueries(getSchemaName());
+        String catalogName = catalogNameForQuery();
+        String schemaName = schemaNameForQuery();
         
         DatabaseMetaData dmd = getHost().getDatabaseMetaData();
         return dmd.getProcedures(catalogName, schemaName, null);
     }
+
+    private String schemaNameForQuery() {
+        
+        return getHost().getSchemaNameForQueries(getSchemaName());
+    }
+
+    private String catalogNameForQuery() {
+        
+        return getHost().getCatalogNameForQueries(getCatalogName());
+    }
     
     private ResultSet getFunctionsResultSet() throws SQLException {
         
-        String catalogName = getHost().getCatalogNameForQueries(getCatalogName());
-        String schemaName = getHost().getSchemaNameForQueries(getSchemaName());
+        String catalogName = catalogNameForQuery();
+        String schemaName = schemaNameForQuery();
         
-        DatabaseMetaData dmd = getHost().getDatabaseMetaData();
-        
-        // TODO: 1.6 getFunctions
-        return dmd.getProcedures(catalogName, schemaName, null);
+        DatabaseMetaData dmd = getHost().getDatabaseMetaData();        
+        return dmd.getFunctions(catalogName, schemaName, null);
     }
 
     /**

@@ -11,6 +11,7 @@ Summary of changes - v4.2.1 Build 5411:
 - Added wildcard starts with for browser node search.
 - Fixed result set table column in the editor not showing correct label on some 
   DBs when executing statements with aliases.
+- Added procedure and function names to Query Editor autocomplete suggestions
 
 
 Summary of changes - v4.2.0 Build 5406:

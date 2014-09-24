@@ -44,6 +44,8 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
     private static final Icon databaseTable;
     private static final Icon nothingFound;
     private static final Icon databaseTableColumn;
+    private static final Icon databaseFunction;
+    private static final Icon databaseProcedure;
     private static final ImageIcon animatedSpinner;
     private static final ImageIcon databaseTableView;
     static {
@@ -55,6 +57,8 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
         databaseTable = GUIUtilities.loadIcon("PlainTable16.png", true);
         databaseTableColumn = GUIUtilities.loadIcon("TableColumn16.png", true);
         databaseTableView = GUIUtilities.loadIcon("TableView16.png", true);
+        databaseFunction = GUIUtilities.loadIcon("Function16.png", true);
+        databaseProcedure = GUIUtilities.loadIcon("Procedure16.png", true);
     }
     
 
@@ -96,6 +100,14 @@ public class AutoCompleteListItemCellRenderer extends DefaultListCellRenderer {
                     setIcon(databaseTableColumn);
                     break;
     
+                case DATABASE_FUNCTION:
+                    setIcon(databaseFunction);
+                    break;
+
+                case DATABASE_PROCEDURE:
+                    setIcon(databaseProcedure);
+                    break;
+                    
                 case NOTHING_PROPOSED:
                     setBackground(list.getBackground());
                     setForeground(list.getForeground());
