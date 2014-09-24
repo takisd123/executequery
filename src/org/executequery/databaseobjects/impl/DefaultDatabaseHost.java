@@ -390,7 +390,6 @@ public class DefaultDatabaseHost extends AbstractNamedObject
             name = name.toUpperCase();
 
             List<DatabaseSchema> _schemas = getSchemas();
-
             for (DatabaseSchema schema : _schemas) {
 
                 if (name.equals(schema.getName().toUpperCase())) {
