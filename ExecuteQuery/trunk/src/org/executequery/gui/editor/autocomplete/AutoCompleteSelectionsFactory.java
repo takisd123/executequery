@@ -40,6 +40,10 @@ public class AutoCompleteSelectionsFactory {
 
     private static final String DATABASE_TABLE_DESCRIPTION = "Database Table";
     
+    private static final String DATABASE_FUNCTION_DESCRIPTION = "Database Function";
+    
+    private static final String DATABASE_PROCEDURE_DESCRIPTION = "Database Procedure";
+    
     private static final String DATABASE_TABLE_VIEW = "Database View";
     
     private static final String DATABASE_COLUMN_DESCRIPTION = "Database Column";
@@ -77,6 +81,7 @@ public class AutoCompleteSelectionsFactory {
             if (autoCompleteSchema) {
 
                 databaseTablesForHost(databaseHost);
+                databaseFunctionsAndProceduresForHost(databaseHost);
                 databaseColumnsForTables(databaseHost, tables);
             }
 
@@ -107,17 +112,17 @@ public class AutoCompleteSelectionsFactory {
 
         return listSelections;
     }
+
+    private void databaseFunctionsAndProceduresForHost(DatabaseHost databaseHost) {
+
+        databaseExecutableForHost(databaseHost, "FUNCTION", DATABASE_FUNCTION_DESCRIPTION, AutoCompleteListItemType.DATABASE_FUNCTION);
+        databaseExecutableForHost(databaseHost, "PROCEDURE", DATABASE_PROCEDURE_DESCRIPTION, AutoCompleteListItemType.DATABASE_PROCEDURE);
+    }
     
     private void databaseTablesForHost(DatabaseHost databaseHost) {
 
         databaseObjectsForHost(databaseHost, "TABLE", DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
         databaseObjectsForHost(databaseHost, "VIEW", DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
-        
-//        List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
-//        tablesToAutoCompleteListItems(list, tables, 
-//                DATABASE_TABLE_DESCRIPTION, AutoCompleteListItemType.DATABASE_TABLE);
-//        tablesToAutoCompleteListItems(list, views,
-//                DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
     }
 
     private static final int INCREMENT = 5;
@@ -183,6 +188,66 @@ public class AutoCompleteSelectionsFactory {
     		
     }
 
+    private void databaseExecutableForHost(DatabaseHost databaseHost, String type, 
+            String databaseObjectDescription, AutoCompleteListItemType autocompleteType) {
+        
+        trace("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+        
+        ResultSet rs = null;
+        DatabaseMetaData databaseMetaData = databaseHost.getDatabaseMetaData();
+        try {
+            String catalog = databaseHost.getCatalogNameForQueries(defaultCatalogForHost(databaseHost));
+            String schema = databaseHost.getSchemaNameForQueries(defaultSchemaForHost(databaseHost));
+
+            List<String> names = new ArrayList<String>();
+            List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
+            
+            if (autocompleteType == AutoCompleteListItemType.DATABASE_FUNCTION) {
+            
+                rs = databaseMetaData.getFunctions(catalog, schema, null);
+                
+            } else {
+                
+                rs = databaseMetaData.getProcedures(catalog, schema, null);
+            }
+            
+            int count = 0;
+            while (rs.next()) {
+
+                try {
+                    if (Thread.interrupted() || databaseMetaData.getConnection().isClosed()) {
+
+                        return;
+                    }
+                } catch (SQLException e) {}
+                
+                names.add(rs.getString(3));
+                count++;
+                
+                if (count >= INCREMENT) {
+                    
+                    addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
+                    count = 0;
+                    list.clear();
+                    names.clear();
+                }
+                
+            }
+            
+            addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
+
+        } catch (SQLException e) {
+
+            error("Tables not available for type " + type + " - driver returned: " + e.getMessage());
+
+        } finally {
+
+            releaseResources(rs);
+            trace("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
+        }
+            
+    }
+    
     private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
             List<AutoCompleteListItem> list, List<String> tables, 
             String databaseObjectDescription, AutoCompleteListItemType autoCompleteListItemType) {

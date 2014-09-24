@@ -30,6 +30,8 @@ public enum AutoCompleteListItemType {
     DATABASE_VIEW, 
     DATABASE_SEQUENCE,
     DATABASE_DATA_TYPE,
+    DATABASE_FUNCTION,
+    DATABASE_PROCEDURE,
     NOTHING_PROPOSED,
     GENERATING_LIST;
 
@@ -53,6 +55,16 @@ public enum AutoCompleteListItemType {
     public boolean isTable() {
 
         return this == DATABASE_TABLE;
+    }
+
+    public boolean isProcedure() {
+        
+        return this == DATABASE_PROCEDURE;
+    }
+    
+    public boolean isFunction() {
+        
+        return this == DATABASE_FUNCTION;
     }
     
 }
