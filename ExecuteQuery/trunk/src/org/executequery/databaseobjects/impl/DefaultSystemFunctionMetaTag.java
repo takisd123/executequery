@@ -83,7 +83,7 @@ public class DefaultSystemFunctionMetaTag extends AbstractDatabaseObject
 
         List<NamedObject> objects = null;
         if (!MiscUtils.isNull(functions)) {
-            String[] _functions = MiscUtils.splitSeparatedValues(functions, ",");            
+            String[] _functions = MiscUtils.splitSeparatedValues(functions, ",");
             DatabaseMetaTag parent = getMetaTagParent();
             objects = new ArrayList<NamedObject>(_functions.length);
             for (int i = 0; i < _functions.length; i++) {

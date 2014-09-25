@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.impl.ColumnInformation;
@@ -47,6 +48,8 @@ public class AutoCompleteSelectionsFactory {
     private static final String DATABASE_TABLE_VIEW = "Database View";
     
     private static final String DATABASE_COLUMN_DESCRIPTION = "Database Column";
+    
+    private static final String DATABASE_SYSTEM_FUNCTION_DESCRIPTION = "System Function";
     
     private QueryEditorAutoCompletePopupProvider provider;
     
@@ -75,6 +78,7 @@ public class AutoCompleteSelectionsFactory {
             if (autoCompleteKeywords) {
             
                 addDatabaseDefinedKeywords(databaseHost, listSelections);
+                databaseSystemFunctionsForHost(databaseHost, listSelections);
                 addToProvider(listSelections);
             }
 
@@ -104,6 +108,7 @@ public class AutoCompleteSelectionsFactory {
     
             if (databaseHost != null && databaseHost.isConnected()) {
     
+                databaseSystemFunctionsForHost(databaseHost, listSelections);
                 addDatabaseDefinedKeywords(databaseHost, listSelections);
             }
     
@@ -125,6 +130,49 @@ public class AutoCompleteSelectionsFactory {
         databaseObjectsForHost(databaseHost, "VIEW", DATABASE_TABLE_VIEW, AutoCompleteListItemType.DATABASE_VIEW);
     }
 
+    private void databaseSystemFunctionsForHost(DatabaseHost databaseHost, List<AutoCompleteListItem> listSelections) {
+        
+        trace("Building autocomplete object list using [ " + databaseHost.getName() + " ] for type - SYSTEM_FUNCTION");
+        
+        ResultSet rs = null;
+        DatabaseMetaData databaseMetaData = databaseHost.getDatabaseMetaData();
+        
+        try {
+
+            List<String> tableNames = new ArrayList<String>();
+
+            extractNames(tableNames, databaseMetaData.getStringFunctions());
+            extractNames(tableNames, databaseMetaData.getNumericFunctions());
+            extractNames(tableNames, databaseMetaData.getTimeDateFunctions());
+
+            addTablesToProvider(DATABASE_SYSTEM_FUNCTION_DESCRIPTION, 
+                    AutoCompleteListItemType.SYSTEM_FUNCTION, tableNames, listSelections);
+            
+        } catch (SQLException e) {
+
+            error("Values not available for type SYSTEM_FUNCTION - driver returned: " + e.getMessage());
+
+        } finally {
+
+            releaseResources(rs);
+            trace("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - SYSTEM_FUNCTION");
+        }
+
+    }
+
+    private void extractNames(List<String> tableNames, String functions) {
+
+        if (StringUtils.isNotEmpty(functions)) {
+            
+            String[] names = functions.split(",");
+            for (String name : names) {
+                
+                tableNames.add(name);
+            }
+
+        }
+    }
+    
     private static final int INCREMENT = 5;
     
     private void databaseObjectsForHost(DatabaseHost databaseHost, String type, 
@@ -363,8 +411,7 @@ public class AutoCompleteSelectionsFactory {
         return null;
     }
 
-    private void addDatabaseDefinedKeywords(DatabaseHost databaseHost,
-            List<AutoCompleteListItem> list) {
+    private void addDatabaseDefinedKeywords(DatabaseHost databaseHost, List<AutoCompleteListItem> list) {
 
         String[] keywords = databaseHost.getDatabaseKeywords();
         List<String> asList = new ArrayList<String>();
@@ -376,7 +423,6 @@ public class AutoCompleteSelectionsFactory {
 
         addKeywordsFromList(asList, list, 
                 "Database Defined Keyword", AutoCompleteListItemType.DATABASE_DEFINED_KEYWORD);
-        
     }
 
     private void addSQL92Keywords(List<AutoCompleteListItem> list) {
@@ -407,8 +453,7 @@ public class AutoCompleteSelectionsFactory {
         
         for (String keyword : keywords) {
             
-            list.add(new AutoCompleteListItem(keyword, 
-                    keyword, description, autoCompleteListItemType)); 
+            list.add(new AutoCompleteListItem(keyword, keyword, description, autoCompleteListItemType)); 
         }
         
     }

@@ -32,6 +32,7 @@ public enum AutoCompleteListItemType {
     DATABASE_DATA_TYPE,
     DATABASE_FUNCTION,
     DATABASE_PROCEDURE,
+    SYSTEM_FUNCTION,
     NOTHING_PROPOSED,
     GENERATING_LIST;
 
@@ -65,6 +66,11 @@ public enum AutoCompleteListItemType {
     public boolean isFunction() {
         
         return this == DATABASE_FUNCTION;
+    }
+
+    public boolean isSystemFunction() {
+        
+        return this == SYSTEM_FUNCTION;
     }
     
 }

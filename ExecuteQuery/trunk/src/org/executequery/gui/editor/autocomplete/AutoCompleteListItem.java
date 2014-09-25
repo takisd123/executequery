@@ -54,9 +54,18 @@ public class AutoCompleteListItem {
         
         this.value = value;
         this.parentName = parentName;
-        this.displayValue = displayValue;
         this.description = description;
         this.type = type;
+        
+        if (type.isFunction() || type.isSystemFunction()) {
+            
+            this.displayValue = displayValue + "()";
+
+        } else {
+            
+            this.displayValue = displayValue;
+        }
+        
     }
 
     public boolean isNothingProposed() {
@@ -108,7 +117,11 @@ public class AutoCompleteListItem {
                 
                 int dotIndex = value.indexOf('.');
                 insertionValue = value.substring(dotIndex + 1);
-            
+
+            } else if (type.isFunction() || type.isSystemFunction()) {
+                
+                insertionValue = value + "()";
+                
             } else {
                 
                 insertionValue = value;
