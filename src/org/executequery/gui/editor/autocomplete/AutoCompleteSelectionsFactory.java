@@ -85,8 +85,8 @@ public class AutoCompleteSelectionsFactory {
             if (autoCompleteSchema) {
 
                 databaseTablesForHost(databaseHost);
-                databaseFunctionsAndProceduresForHost(databaseHost);
                 databaseColumnsForTables(databaseHost, tables);
+                databaseFunctionsAndProceduresForHost(databaseHost);
             }
 
         }
@@ -94,6 +94,7 @@ public class AutoCompleteSelectionsFactory {
     }
 
     private void addToProvider(List<AutoCompleteListItem> listSelections) {
+
         provider.addListItems(listSelections);
         listSelections.clear();
     }
@@ -145,8 +146,7 @@ public class AutoCompleteSelectionsFactory {
             extractNames(tableNames, databaseMetaData.getNumericFunctions());
             extractNames(tableNames, databaseMetaData.getTimeDateFunctions());
 
-            addTablesToProvider(DATABASE_SYSTEM_FUNCTION_DESCRIPTION, 
-                    AutoCompleteListItemType.SYSTEM_FUNCTION, tableNames, listSelections);
+            addKeywordsFromList(tableNames, listSelections, DATABASE_SYSTEM_FUNCTION_DESCRIPTION, AutoCompleteListItemType.SYSTEM_FUNCTION);
             
         } catch (SQLException e) {
 
