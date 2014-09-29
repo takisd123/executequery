@@ -50,7 +50,6 @@ public class QueryEditorPopupMenu extends JPopupMenu
     public QueryEditorPopupMenu(QueryDelegate queryDelegate) {
 
         this.queryDelegate = queryDelegate;
-
         init();
     }
 
@@ -87,8 +86,9 @@ public class QueryEditorPopupMenu extends JPopupMenu
         add(createUseKeywordAutoComplete());
         add(createUseSchemaAutoComplete());
         add(createRemoveCommentsForQueryMenuItem());
-        add(createRecycleResultSetTabMenuItem());
         add(createShowHideToolsPanelMenuItem());
+        add(createRecycleResultSetTabMenuItem());
+        add(createShowRowNumberHeaderMenuItem());
 
         addSeparator();
         add(createOptionsMenuItem());
@@ -176,6 +176,11 @@ public class QueryEditorPopupMenu extends JPopupMenu
         checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.display.toolsPanel");
     }
     
+    public void toggleRowNumbersVisible(ActionEvent e) {
+        
+        checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "results.table.row.numbers");
+    }
+    
     public void removeCommentsPriorToQueryExecution(ActionEvent e) {
 
         checkboxPreferenceChanged((JCheckBoxMenuItem) e.getSource(), "editor.execute.remove.comments");
@@ -242,7 +247,7 @@ public class QueryEditorPopupMenu extends JPopupMenu
 
     private JMenuItem createRecycleResultSetTabMenuItem() {
         JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
-        menuItem.setText("Use Single Resut Set Tab");
+        menuItem.setText("Use single resut set tab");
         menuItem.setSelected(UserPreferencesManager.isResultSetTabSingle());
         menuItem.setActionCommand("recycleResultSetTabs");
         executeActionButtons().add(menuItem);
@@ -255,6 +260,16 @@ public class QueryEditorPopupMenu extends JPopupMenu
         menuItem.setSelected(SystemProperties.getBooleanProperty(
                 Constants.USER_PROPERTIES_KEY, "editor.display.toolsPanel"));
         menuItem.setActionCommand("toggleToolsPanelVisible");
+        executeActionButtons().add(menuItem);
+        return menuItem;
+    }
+    
+    private JMenuItem createShowRowNumberHeaderMenuItem() {
+        JCheckBoxMenuItem menuItem = MenuItemFactory.createCheckBoxMenuItem(action());
+        menuItem.setText("Show row number header ");
+        menuItem.setSelected(SystemProperties.getBooleanProperty(
+                Constants.USER_PROPERTIES_KEY, "results.table.row.numbers"));
+        menuItem.setActionCommand("toggleRowNumbersVisible");
         executeActionButtons().add(menuItem);
         return menuItem;
     }
