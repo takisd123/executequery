@@ -95,6 +95,8 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         add(create("Export Selection", "exportSelection"));
         add(create("Export Table", "exportTable"));
         addSeparator();
+        add(create("Visible Columns", "visibleColumnsDialog"));
+        addSeparator();        
         add(create("View", "openDataItemViewer"));
         add(printMenu);
         addSeparator();        
@@ -175,6 +177,11 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         dialog.display();
     }
 
+    public void visibleColumnsDialog(ActionEvent e) {
+        
+        new VisibleResultSetColumnsDialog((ResultSetTableModel) ((TableSorter) table.getModel()).getTableModel());
+    }
+    
     public void cellOpensDialog(ActionEvent e) {
         
         JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();

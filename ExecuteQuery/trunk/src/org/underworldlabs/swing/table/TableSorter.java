@@ -660,6 +660,11 @@ public class TableSorter extends AbstractTableModel {
         
         public void mouseClicked(MouseEvent e) {
             
+            if (e.getButton() > 1) {
+                
+                return;
+            }
+            
             JTableHeader header = (JTableHeader)e.getSource();
             TableColumnModel columnModel = header.getColumnModel();
 
