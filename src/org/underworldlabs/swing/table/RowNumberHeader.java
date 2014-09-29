@@ -157,7 +157,3 @@ public class RowNumberHeader extends JList
 
 }
 
-
-
-
-
