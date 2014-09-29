@@ -23,7 +23,9 @@ package org.underworldlabs.swing.table;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.FontMetrics;
+
 import javax.swing.AbstractListModel;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
@@ -32,6 +34,8 @@ import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.JTableHeader;
+
+import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
  * Provides row numbers for a <code>JTable</code>.
@@ -115,16 +119,18 @@ public class RowNumberHeader extends JList
         RowHeaderRenderer(JTable table) {
             setOpaque(true);
             setHorizontalAlignment(RIGHT);
-            setBorder(UIManager.getBorder("TableHeader.cellBorder"));
+            setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, UIUtils.getDefaultBorderColour()));
             setFont(UIManager.getFont("TableHeader.font"));
             setForeground(UIManager.getColor("TableHeader.foreground"));
             setBackground(UIManager.getColor("TableHeader.background"));
             //setToolTipText("Add this to the row selection");
         }
 
-        public Component getListCellRendererComponent( JList list,
+        public Component getListCellRendererComponent(JList list,
                 Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            
             setText((value == null) ? "" : value.toString() + " ");
+            
             return this;
         }
 
