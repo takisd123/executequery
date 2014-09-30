@@ -25,6 +25,11 @@ import java.sql.Types;
 
 public class RecordDataItemFactory {
 
+    public RecordDataItem create(ResultSetColumnHeader header) {
+        
+        return create(header.getLabel(), header.getDataType(), header.getDataTypeName());
+    }
+    
 	public RecordDataItem create(String name, int dataType, String dataTypeName) {
 
 		switch (dataType) {
