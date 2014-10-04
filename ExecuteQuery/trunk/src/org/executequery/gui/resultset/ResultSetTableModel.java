@@ -58,13 +58,9 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     /** Indicates that the query executing has been interrupted */
     private boolean interrupted;
 
-    private List<ResultSetColumnHeader> columnHeaders2;
+    private List<ResultSetColumnHeader> columnHeaders;
     
-    /** The column labels */
-//    private List<String> columnHeaders;
-
-    /** The column names - raw column name not alias */
-//    private List<String> columnNameHeaders;
+    private List<ResultSetColumnHeader> visibleColumnHeaders;
     
     /** The table values */
     private List<List<RecordDataItem>> tableData;
@@ -96,10 +92,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         this.maxRecords = maxRecords;
         this.query = query;
         
-        columnHeaders2 = new ArrayList<ResultSetColumnHeader>();
-
-//        columnHeaders = new ArrayList<String>();
-//        columnNameHeaders = new ArrayList<String>();
+        columnHeaders = new ArrayList<ResultSetColumnHeader>();
+        visibleColumnHeaders = new ArrayList<ResultSetColumnHeader>();
 
         tableData = new ArrayList<List<RecordDataItem>>();
         recordDataItemFactory = new RecordDataItemFactory();
@@ -115,11 +109,13 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     
     public ResultSetTableModel(List<String> columnHeaders, List<List<RecordDataItem>> tableData) {
         
-//        this.columnHeaders = columnHeaders;
-//        this.columnNameHeaders = columnHeaders;
-        this.tableData = tableData;
-        
-        this.columnHeaders2 = createHeaders(columnHeaders);
+        this.tableData = tableData;        
+        this.columnHeaders = createHeaders(columnHeaders);
+    }
+    
+    public List<ResultSetColumnHeader> getColumnHeaders() {
+     
+        return columnHeaders;
     }
     
     private List<ResultSetColumnHeader> createHeaders(List<String> columnHeaders) {
@@ -151,32 +147,22 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             resetMetaData();
             ResultSetMetaData rsmd = resultSet.getMetaData();
 
-            columnHeaders2.clear();
-//            columnHeaders.clear();
-//            columnNameHeaders.clear();
+            columnHeaders.clear();
+            visibleColumnHeaders.clear();
             tableData.clear();
 
             int zeroBaseIndex = 0;
             int count = rsmd.getColumnCount();
-//            int[] columnTypes = new int[count];
-//            String[] columnTypeNames = new String[count];
-
             for (int i = 1; i <= count; i++) {
 
                 zeroBaseIndex = i - 1;
 
-                columnHeaders2.add(
+                columnHeaders.add(
                         new ResultSetColumnHeader(zeroBaseIndex,
                                                   rsmd.getColumnLabel(i), 
                                                   rsmd.getColumnName(i),
                                                   rsmd.getColumnType(i),
                                                   rsmd.getColumnTypeName(i)));
-
-//                columnHeaders.add(rsmd.getColumnLabel(i));
-//                columnNameHeaders.add(rsmd.getColumnName(i));
-//                columnTypes[zeroBaseIndex] = rsmd.getColumnType(i);
-//                columnTypeNames[zeroBaseIndex] = rsmd.getColumnTypeName(i);
-
             }
 
             int recordCount = 0;
@@ -198,17 +184,11 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
                     zeroBaseIndex = i - 1;
 
-//                	RecordDataItem value = recordDataItemFactory.create(
-//                			columnHeaders.get(zeroBaseIndex),
-//                            columnTypes[zeroBaseIndex],
-//                            columnTypeNames[zeroBaseIndex]);
-
-                    ResultSetColumnHeader header = columnHeaders2.get(zeroBaseIndex);
+                    ResultSetColumnHeader header = columnHeaders.get(zeroBaseIndex);
                 	RecordDataItem value = recordDataItemFactory.create(header);
                 	
                     try {
 
-//                        int dataType = columnTypes[zeroBaseIndex];
                         int dataType = header.getDataType();
                         switch (dataType) {
 
@@ -502,30 +482,29 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
     // ----------------------------------------------------------
     
-    public int getColumnCount() {
-        
-        if (columnHeaders2 == null) {
-            
-            return 0;
-        }
-        
-        int count = 0;
-        for (ResultSetColumnHeader header : columnHeaders2) {
+    @Override
+    public void fireTableStructureChanged() {
+
+        visibleColumnHeaders.clear();
+        for (ResultSetColumnHeader header : columnHeaders) {
             
             if (header.isVisible()) {
                 
-                count++;
+                visibleColumnHeaders.add(header);
             }
+
         }
         
-        return count;
-        /*
-        if (columnHeaders == null) {
+        super.fireTableStructureChanged();
+    }
+    
+    public int getColumnCount() {
+
+        if (visibleColumnHeaders == null) {
             
             return 0;
         }
-        return columnHeaders.size();
-        */
+        return visibleColumnHeaders.size();
     }
 
     public int getRowCount() {
@@ -540,14 +519,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     public List<String> getColumnNames() {
         
         List<String> list = new ArrayList<String>();
-        for (ResultSetColumnHeader header : columnHeaders2) { 
+        for (ResultSetColumnHeader header : columnHeaders) { 
             
             list.add(header.getLabel());
         }
         
         return list;
-        
-//        return columnHeaders;
     }
     
     public List<RecordDataItem> getRowDataForRow(int row) {
@@ -562,8 +539,8 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         if (column < rowData.size()) {
 
             try {
-            
-                rowData.get(column).valueChanged(value);
+
+                rowData.get(asVisibleColumnIndex(column)).valueChanged(value);
                 fireTableCellUpdated(row, column);
                 
             } catch (DataSourceException e) {
@@ -579,6 +556,21 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         }
     }
     
+    private int asVisibleColumnIndex(int column) {
+        
+        ResultSetColumnHeader columnHeader = visibleColumnHeaders.get(column);
+        for (int i = 0, n = columnHeaders.size(); i < n; i++) {
+            
+            if (columnHeader.getId().equals(columnHeaders.get(i).getId())) {
+
+                return i;
+            }
+            
+        }
+
+        return column;
+    }
+    
     public Object getValueAt(int row, int column) {
 
         if (row < tableData.size()) {
@@ -586,7 +578,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             List<RecordDataItem> rowData = tableData.get(row);
             if (column < rowData.size()) {
 
-                return rowData.get(column);
+                return rowData.get(asVisibleColumnIndex(column));
             }
         }
 
@@ -599,8 +591,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     }
 
     private boolean cellsEditable;
-//    private Set<String> nonEditableColumns;
-    
+
     public void setCellsEditable(boolean cellsEditable) {
      
         this.cellsEditable = cellsEditable;
@@ -608,24 +599,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     
     public boolean isCellEditable(int row, int column) {
 
-        if (!columnHeaders2.get(column).isEditable()) {
+        if (!visibleColumnHeaders.get(column).isEditable()) {
             
             return false; 
         }
         
-        /*
-        if (columnHeaders != null) {
-            
-            String name = columnHeaders.get(column);
-            if (nonEditableColumns != null && nonEditableColumns.contains(name)) {
-                
-                return false;
-            }
-            
-        }
-        */
-
-        RecordDataItem recordDataItem = tableData.get(row).get(column);
+        RecordDataItem recordDataItem = tableData.get(row).get(asVisibleColumnIndex(column));
         if (recordDataItem.isLob()) {
 
             return false;
@@ -640,47 +619,33 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
         
         for (String nonEditableColumn : nonEditableColumns) {
             
-            for (ResultSetColumnHeader header : columnHeaders2) {
+            for (ResultSetColumnHeader header : columnHeaders) {
                 
                 if (header.getLabel().equals(nonEditableColumn)) {
-                    
+
                     header.setEditable(false);
+                    break;
                 }
                 
             }
             
         }
         
-//        this.nonEditableColumns = new HashSet<String>(nonEditableColumns);
     }
     
     public String getColumnNameHint(int column) {
         
-        return columnHeaders2.get(column).getNameHint();
-        
-        /*
-        String columnLabel = getColumnName(column);
-        String columnName = columnNameHeaders.get(column);
-        
-        if (StringUtils.equals(columnLabel, columnName)) {
-            
-            return columnLabel;
-        }
-        
-        return columnLabel + " [ " + columnName + " ]";
-        */
+        return visibleColumnHeaders.get(column).getNameHint();
     }
     
     public String getColumnName(int column) {
         
-        return columnHeaders2.get(column).getLabel();
-        
-//        return columnHeaders.get(column);
+        return visibleColumnHeaders.get(column).getLabel();
     }
 
-    public Class<?> getColumnClass(int col) {
+    public Class<?> getColumnClass(int column) {
 
-        RecordDataItem recordDataItem = tableData.get(0).get(col);
+        RecordDataItem recordDataItem = tableData.get(0).get(column);
         if (recordDataItem.isValueNull()) {
             
             return String.class;

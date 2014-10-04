@@ -1,9 +1,12 @@
 package org.executequery.gui.resultset;
 
+import java.util.UUID;
+
 import org.apache.commons.lang.StringUtils;
 
 public class ResultSetColumnHeader {
 
+    private String id;
     private int originalIndex;
     private String label;
     private String name;
@@ -21,6 +24,7 @@ public class ResultSetColumnHeader {
     }
     
     public ResultSetColumnHeader(int index, String label, String name, int dataType, String dataTypeName) {
+        this.id = UUID.randomUUID().toString();
         this.originalIndex = index;
         this.label = label;
         this.name = name;
@@ -28,6 +32,10 @@ public class ResultSetColumnHeader {
         this.dataTypeName = dataTypeName;
         this.visible = true;
         this.editable = true;
+    }
+    
+    public String getId() {
+        return id;
     }
     
     public boolean isVisible() {
@@ -58,6 +66,10 @@ public class ResultSetColumnHeader {
         this.editable = editable;
     }
 
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+    
     public int getOriginalIndex() {
         return originalIndex;
     }

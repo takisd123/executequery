@@ -315,8 +315,6 @@ public class TableDataTab extends JPanel
                 if (databaseTable.hasPrimaryKey()) {
 
                     primaryKeyColumns = databaseTable.getPrimaryKeyColumnNames();
-					tableModel.setNonEditableColumns(primaryKeyColumns);
-					
 					canEditTableLabel.setText("This table has a primary key(s) and data may be edited here");
                 }
 
@@ -344,6 +342,7 @@ public class TableDataTab extends JPanel
 
                 createResultSetTable();
             }
+            tableModel.setNonEditableColumns(primaryKeyColumns);
 
             TableSorter sorter = new TableSorter(tableModel);
             table.setModel(sorter);

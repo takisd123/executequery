@@ -179,7 +179,7 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
 
     public void visibleColumnsDialog(ActionEvent e) {
         
-        new VisibleResultSetColumnsDialog((ResultSetTableModel) ((TableSorter) table.getModel()).getTableModel());
+        new VisibleResultSetColumnsDialog(table);
     }
     
     public void cellOpensDialog(ActionEvent e) {

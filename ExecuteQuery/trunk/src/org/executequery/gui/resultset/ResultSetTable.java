@@ -40,6 +40,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import org.executequery.GUIUtilities;
+import org.executequery.gui.StandardTable;
 import org.underworldlabs.swing.table.StringCellEditor;
 import org.underworldlabs.swing.table.TableSorter;
 import org.underworldlabs.util.SystemProperties;
@@ -51,7 +52,7 @@ import org.underworldlabs.util.SystemProperties;
  * @date     $Date$
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public class ResultSetTable extends JTable {
+public class ResultSetTable extends JTable implements StandardTable {
 
     private DefaultCellEditor cellEditor;
 
@@ -323,7 +324,7 @@ public class ResultSetTable extends JTable {
         return SystemProperties.getIntProperty("user", "results.table.column.width");
     }
 
-    private void setTableColumnWidth(int columnWidth) {
+    public void setTableColumnWidth(int columnWidth) {
         TableColumnModel tcm = getColumnModel();
         if (columnWidth != 75) {
             TableColumn col = null;
@@ -358,9 +359,12 @@ public class ResultSetTable extends JTable {
         }
         
     }
+
+    public void columnVisibilityChanged() {
+
+        ResultSetTableModel model = (ResultSetTableModel) ((TableSorter) getModel()).getTableModel();
+        model.fireTableStructureChanged();
+        applyUserPreferences();
+    }
     
 }
-
-
-
-
