@@ -162,8 +162,7 @@ public class ResultSetPanel extends JPanel {
         } else {
             
             DefaultTable emptyTable = new DefaultTable(model);
-            int columnWidth = SystemProperties.getIntProperty("user", "results.table.column.width");
-            emptyTable.setTableColumnWidth(columnWidth);
+            table.setTableColumnWidth(SystemProperties.getIntProperty("user", "results.table.column.width"));
             scroller.getViewport().add(emptyTable);
             emptyTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         }
@@ -205,13 +204,14 @@ public class ResultSetPanel extends JPanel {
             sorter.setTableHeader(table.getTableHeader());
         }
 
-        table.resetTableColumnWidth();
+        setTableProperties();
+//        table.resetTableColumnWidth();
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        if (showRowHeader) {
-
-            addRowNumberHeader();
-        }
+//        if (showRowHeader) {
+//
+//            addRowNumberHeader();
+//        }
 
     }
 

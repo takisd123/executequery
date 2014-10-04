@@ -15,6 +15,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
@@ -25,43 +28,102 @@ import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.TableModel;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.gui.resultset.ResultSetColumnHeader;
+import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
+import org.underworldlabs.swing.LinkButton;
 import org.underworldlabs.swing.actions.ReflectiveAction;
+import org.underworldlabs.swing.table.TableSorter;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class VisibleResultSetColumnsDialog extends BaseDialog {
 
-    private ResultSetTableModel tableModel;
+    private ResultSetTable table;
     private List<ResultSetColumn> columns = new ArrayList<VisibleResultSetColumnsDialog.ResultSetColumn>();
     
-    public VisibleResultSetColumnsDialog(ResultSetTableModel tableModel) {
+    public VisibleResultSetColumnsDialog(ResultSetTable table) {
      
         super("Visible Columns", true);
-        this.tableModel = tableModel;
-        this.columns = createColumns(tableModel);
+        this.table = table;
+        this.columns = createColumns(tableModel());
         init();
         
         pack();
         this.setLocation(GUIUtilities.getLocationForDialog(this.getSize()));
         setVisible(true);
     }
-    
+
     private void init() {
 
-        JPanel listPanel = new JPanel(new BorderLayout());
-//        listPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-        JList list = new ResultSetColumnList(columns);
-        JScrollPane scrollPane = new JScrollPane(list);
-        listPanel.add(scrollPane, BorderLayout.CENTER);
+        final JList list = new ResultSetColumnList(columns);
+        Action selectAllAction = new AbstractAction("Select All") {
+            public void actionPerformed(ActionEvent e) {
+                for (ResultSetColumn column : columns) {                    
+                    column.visible = true;
+                }
+                list.repaint();
+            }
+        };        
+        Action selectNoneAction = new AbstractAction("Select None") {
+            public void actionPerformed(ActionEvent e) {
+                for (ResultSetColumn column : columns) {                    
+                    column.visible = false;
+                }                
+                list.repaint();
+            }
+        };
+        
+        LinkButton selectAllCheck = new LinkButton(selectAllAction);
+        LinkButton selectNoneCheck = new LinkButton(selectNoneAction);
+        
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEtchedBorder());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.gridy++;
+        gbc.gridx++;
+        gbc.insets.top = 10;
+        gbc.insets.left = 7;
+        gbc.insets.right = 5;
+        gbc.insets.bottom = 5;
+        panel.add(selectAllCheck, gbc);
+        gbc.gridx++;
+        gbc.weightx = 1.0;
+        gbc.insets.left = 20;
+        panel.add(selectNoneCheck, gbc);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.insets.left = 5;
+        gbc.insets.top = 5;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel.add(new JScrollPane(list), gbc);
         
         ReflectiveAction action = new ReflectiveAction(this);
         
+        JPanel base = new JPanel(new BorderLayout());
+        base.setPreferredSize(new Dimension(400, 350));
+
+        base.add(panel, BorderLayout.CENTER);
+        base.add(buttonPanel(action), BorderLayout.SOUTH);
+        
+        Container c = getContentPane();
+        c.setLayout(new GridBagLayout());
+        c.add(base, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
+                            GridBagConstraints.SOUTHEAST, GridBagConstraints.BOTH,
+                            new Insets(5, 5, 5, 5), 0, 0));
+
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+    }
+
+    private JPanel buttonPanel(ReflectiveAction action) {
+
         JButton okButton = new DefaultPanelButton(action, "OK", "update");
         JButton cancelButton = new DefaultPanelButton(action, "Cancel", "cancel");
 
@@ -76,34 +138,43 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
         gbc.insets.left = 5;
         buttonPanel.add(cancelButton, gbc);
 
-        JPanel base = new JPanel(new BorderLayout());
-        base.setPreferredSize(new Dimension(400, 350));
+        return buttonPanel;
+    }
 
-        base.add(listPanel, BorderLayout.CENTER);
-        base.add(buttonPanel, BorderLayout.SOUTH);
+    private ResultSetTableModel tableModel() {
         
-        Container c = getContentPane();
-        c.setLayout(new GridBagLayout());
-        c.add(base, new GridBagConstraints(1, 1, 1, 1, 1.0, 1.0,
-                            GridBagConstraints.SOUTHEAST, GridBagConstraints.BOTH,
-                            new Insets(5, 5, 5, 5), 0, 0));
-
-        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        return (ResultSetTableModel) ((TableSorter) table.getModel()).getTableModel();
     }
 
     public void update(ActionEvent e) {
 
+        int visibleCount = 0;
         for (ResultSetColumn column : columns) {
-            
-            if (column.visible) {
+
+            for (ResultSetColumnHeader resultSetColumnHeader : tableModel().getColumnHeaders()) {
                 
-//                column.index;
-                
+                if (column.id.equals(resultSetColumnHeader.getId())) {
+
+                    if (column.visible) {
+
+                        visibleCount++;
+                    }
+                    resultSetColumnHeader.setVisible(column.visible);
+                    break;
+                }
+
             }
-            
+
         }
         
+        if (visibleCount == 0) {
+
+            GUIUtilities.displayErrorMessage("At least one column from this result set must be visible");
+            return;
+        }
         
+        table.columnVisibilityChanged();
+        dispose();
     }
 
     public void cancel(ActionEvent e) {
@@ -111,12 +182,12 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
         dispose();
     }
 
-    private List<ResultSetColumn> createColumns(TableModel tableModel) {
+    private List<ResultSetColumn> createColumns(ResultSetTableModel tableModel) {
 
         List<ResultSetColumn> list = new ArrayList<VisibleResultSetColumnsDialog.ResultSetColumn>();
-        for (int i = 0, n = tableModel.getColumnCount(); i < n; i++) {
+        for (ResultSetColumnHeader resultSetColumnHeader : tableModel.getColumnHeaders()) {
             
-            list.add(new ResultSetColumn(i, tableModel.getColumnName(i), true));
+            list.add(new ResultSetColumn(resultSetColumnHeader.getId(), resultSetColumnHeader.getLabel(), resultSetColumnHeader.isVisible()));
         }
 
         return list;
@@ -175,13 +246,14 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
 
             ResultSetColumn resultSetColumn = (ResultSetColumn) value;
 
-            setText(resultSetColumn.name);
+            setText(resultSetColumn.name + " " + index);
             setSelected(resultSetColumn.visible);
 
             setEnabled(list.isEnabled());
             setFont(list.getFont());
             setFocusPainted(false);
 
+            setBackground(list.getBackground());
             setBorderPainted(true);
 //            setBorder(isSelected ? UIManager.getBorder("List.focusCellHighlightBorder") : noFocusBorder);
             setBorder(noFocusBorder);
@@ -194,17 +266,22 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
     
     class ResultSetColumn {        
         
-        private int index;
+        private String id;
         private String name;
         private boolean visible;
         
-        public ResultSetColumn(int index, String name, boolean visible) {
+        public ResultSetColumn(String id, String name, boolean visible) {
             
-            this.index = index;
+            this.id = id;
             this.name = name;
             this.visible = visible;
         }
 
+        public String getId() {
+         
+            return id;
+        }
+        
         public void setVisible(boolean visible) {
 
             this.visible = visible;

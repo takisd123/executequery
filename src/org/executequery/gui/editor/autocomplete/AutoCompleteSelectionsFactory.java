@@ -284,7 +284,7 @@ public class AutoCompleteSelectionsFactory {
             
             addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             error("Tables not available for type " + type + " - driver returned: " + e.getMessage());
 

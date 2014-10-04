@@ -39,7 +39,7 @@ import org.underworldlabs.swing.table.DefaultTableHeaderRenderer;
  * @version  $Revision$
  * @date     $Date$
  */
-public class DefaultTable extends JTable {
+public class DefaultTable extends JTable implements StandardTable {
     
     private static final int DEFAULT_ROW_HEIGHT = 24;
     
