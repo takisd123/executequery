@@ -72,6 +72,7 @@ import org.executequery.event.UserPreferenceListener;
 import org.executequery.gui.FocusablePanel;
 import org.executequery.gui.SaveFunction;
 import org.executequery.gui.editor.autocomplete.QueryEditorAutoCompletePopupProvider;
+import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.log.Log;
@@ -767,6 +768,11 @@ public class QueryEditor extends DefaultTabView
         return resultsPanel.getResultSetTableModel();
     }
 
+    public ResultSetTable getResultSetTable() {
+        
+        return resultsPanel.getResultSetTable();
+    }
+    
     public void setResultText(int updateCount, int type) {
 
         resultsPanel.setResultText(updateCount, type);
@@ -1321,7 +1327,7 @@ public class QueryEditor extends DefaultTabView
 
     public Printable getPrintableForResultSet() {
 
-        return new TablePrinter(resultsPanel.getResultsTable(),
+        return new TablePrinter(resultsPanel.getResultSetTable(),
                 "Query: " + editorPanel.getQueryAreaText());
     }
 
