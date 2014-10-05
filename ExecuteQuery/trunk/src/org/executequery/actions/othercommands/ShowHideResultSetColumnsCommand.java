@@ -26,17 +26,16 @@ import javax.swing.JPanel;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.QueryEditor;
-import org.executequery.gui.editor.QueryEditorResultsExporter;
+import org.executequery.gui.editor.VisibleResultSetColumnsDialog;
 
 
 /** 
- * The Expot Query Results command.
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1185 $
+ * @date     $Date: 2013-02-08 22:16:55 +1100 (Fri, 08 Feb 2013) $
  */
-public class ExportResultsTableCommand extends AbstractBaseCommand {
+public class ShowHideResultSetColumnsCommand extends AbstractBaseCommand {
     
     public void execute(ActionEvent e) {
 
@@ -46,7 +45,7 @@ public class ExportResultsTableCommand extends AbstractBaseCommand {
             QueryEditor editor = (QueryEditor) panel;
             if (editor.isResultSetSelected()) {
             
-                new QueryEditorResultsExporter(editor.getResultSetTableModel());
+                new VisibleResultSetColumnsDialog(editor.getResultSetTable());
             
             } else {
               

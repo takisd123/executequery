@@ -46,8 +46,8 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
     private List<ResultSetColumn> columns = new ArrayList<VisibleResultSetColumnsDialog.ResultSetColumn>();
     
     public VisibleResultSetColumnsDialog(ResultSetTable table) {
-     
-        super("Visible Columns", true);
+
+        super("Visible Result Set Columns", true);
         this.table = table;
         this.columns = createColumns(tableModel());
         init();

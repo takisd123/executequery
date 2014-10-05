@@ -41,6 +41,7 @@ import org.executequery.UserPreferencesManager;
 import org.executequery.databasemediators.QueryTypes;
 import org.executequery.gui.LoggingOutputPanel;
 import org.executequery.gui.resultset.RecordDataItem;
+import org.executequery.gui.resultset.ResultSetTable;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.sql.SqlMessages;
 import org.underworldlabs.swing.GUIUtils;
@@ -645,7 +646,7 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         return false;
     }
 
-    public JTable getResultsTable() {
+    public ResultSetTable getResultSetTable() {
         ResultSetPanel panel = getSelectedResultSetPanel();
         if (panel != null) {
             return panel.getTable();

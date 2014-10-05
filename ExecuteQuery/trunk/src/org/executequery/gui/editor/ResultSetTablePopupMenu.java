@@ -44,6 +44,7 @@ import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.gui.resultset.SimpleRecordDataItem;
 import org.executequery.print.PrintingSupport;
 import org.executequery.print.TablePrinter;
+import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.table.TableSorter;
@@ -95,7 +96,7 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         add(create("Export Selection", "exportSelection"));
         add(create("Export Table", "exportTable"));
         addSeparator();
-        add(create("Visible Columns", "visibleColumnsDialog"));
+        add(createFromAction("editor-show-hide-rs-columns-command", "Show/hide result set columns"));
         addSeparator();        
         add(create("View", "openDataItemViewer"));
         add(printMenu);
@@ -121,6 +122,15 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         
         return menuItem;
     }
+
+    private JMenuItem createFromAction(String actionId, String toolTipText) {
+
+        JMenuItem menuItem = MenuItemFactory.createMenuItem(ActionBuilder.get(actionId));
+        menuItem.setToolTipText(toolTipText);
+        menuItem.setIcon(null);
+
+        return menuItem;
+    }
     
     private JMenuItem create(String text, String actionCommand) {
 
@@ -134,7 +144,6 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
     private RecordDataItem tableCellDataAtPoint(Point point) {
         
         Object value = table.valueAtPoint(point);
-
         if (value instanceof RecordDataItem) {
 
             return (RecordDataItem) value;
@@ -177,11 +186,6 @@ public class ResultSetTablePopupMenu extends JPopupMenu implements MouseListener
         dialog.display();
     }
 
-    public void visibleColumnsDialog(ActionEvent e) {
-        
-        new VisibleResultSetColumnsDialog(table);
-    }
-    
     public void cellOpensDialog(ActionEvent e) {
         
         JCheckBoxMenuItem menuItem = (JCheckBoxMenuItem) e.getSource();

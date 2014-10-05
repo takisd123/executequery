@@ -455,6 +455,12 @@
           small-icon="/org/executequery/icons/ExportDelimited16.png"
           execute-class="org.executequery.actions.othercommands.ExportResultsTableCommand"/>
 
+  <action id="editor-show-hide-rs-columns-command"
+          name="Visible Result Set Columns"
+          accel-editable="false"
+          small-icon="/org/executequery/icons/TableColumn16.png"
+          execute-class="org.executequery.actions.othercommands.ShowHideResultSetColumnsCommand"/>
+
   <action id="toggle-editor-output-command"
           name="Show/Hide Editor Output"
           accel-editable="false"

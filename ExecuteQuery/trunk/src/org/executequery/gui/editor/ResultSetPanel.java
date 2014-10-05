@@ -294,7 +294,7 @@ public class ResultSetPanel extends JPanel {
      *
      * @return the table
      */
-    public JTable getTable() {
+    public ResultSetTable getTable() {
 
         return table;
     }

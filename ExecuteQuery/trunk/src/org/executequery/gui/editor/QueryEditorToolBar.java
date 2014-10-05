@@ -69,6 +69,8 @@ class QueryEditorToolBar extends PanelToolBar {
 
     private static final String EDITOR_EXPORT_COMMAND = "editor-export-command";
 
+    private static final String EDITOR_SHOW_HIDE_RS_COLUMNS_COMMAND = "editor-show-hide-rs-columns-command";
+    
     private static final String EDITOR_REFRESH_AUTOCOMPLETE_COMMAND = "editor-refresh-autocomplete-command";
     
     private static final String EDITOR_RS_METADATA_COMMAND = "editor-rs-metadata-command";
@@ -177,6 +179,9 @@ class QueryEditorToolBar extends PanelToolBar {
         addButton(createButton(EDITOR_RS_METADATA_COMMAND,
                      "Display this result set's meta data"));
 
+        addButton(createButton(EDITOR_SHOW_HIDE_RS_COLUMNS_COMMAND,
+                "Show/hide result set columns"));
+        
         addButton(createButton(EDITOR_EXPORT_COMMAND,
                      "Export the selected result set to file"));
 
@@ -290,6 +295,7 @@ class QueryEditorToolBar extends PanelToolBar {
 
     public void setExportButtonEnabled(boolean enable) {
         buttons.get(EDITOR_EXPORT_COMMAND).setEnabled(enable);
+        buttons.get(EDITOR_SHOW_HIDE_RS_COLUMNS_COMMAND).setEnabled(enable);
     }
 
     public String toString() {
@@ -341,10 +347,3 @@ class QueryEditorToolBar extends PanelToolBar {
     }
 
 }
-
-
-
-
-
-
-
