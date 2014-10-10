@@ -594,19 +594,22 @@ public class TableDataTab extends JPanel
         if (isDatabaseTable()) {
 
             int row = e.getFirstRow();
-            List<RecordDataItem> rowDataForRow = tableModel.getRowDataForRow(row);
-            for (RecordDataItem recordDataItem : rowDataForRow) {
-				
-            	if (recordDataItem.isChanged()) {
-            		
-            		Log.debug("Change detected in column [ " + recordDataItem.getName() + " ] - value [ " + recordDataItem.getValue() + " ]");
-            		
-            		asDatabaseTable().addTableDataChange(new TableDataChange(rowDataForRow));
-            		return;
-            	}
+            if (row >= 0) {
 
-			}
-            
+                List<RecordDataItem> rowDataForRow = tableModel.getRowDataForRow(row);
+                for (RecordDataItem recordDataItem : rowDataForRow) {
+    				
+                	if (recordDataItem.isChanged()) {
+                		
+                		Log.debug("Change detected in column [ " + recordDataItem.getName() + " ] - value [ " + recordDataItem.getValue() + " ]");
+                		
+                		asDatabaseTable().addTableDataChange(new TableDataChange(rowDataForRow));
+                		return;
+                	}
+    
+    			}
+
+            }
         }
 
     }
