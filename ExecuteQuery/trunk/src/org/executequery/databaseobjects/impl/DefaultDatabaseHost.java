@@ -273,6 +273,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         }
     }
 
+    @SuppressWarnings("resource")
     public boolean hasTablesForType(String catalog, String schema, String type) {
         
         ResultSet rs = null;

@@ -33,6 +33,7 @@ import org.executequery.databaseobjects.DatabaseMetaTag;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseSchema;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -384,11 +385,29 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
     
     private ResultSet getFunctionsResultSet() throws SQLException {
         
-        String catalogName = catalogNameForQuery();
-        String schemaName = schemaNameForQuery();
+        try {
         
-        DatabaseMetaData dmd = getHost().getDatabaseMetaData();        
-        return dmd.getFunctions(catalogName, schemaName, null);
+            String catalogName = catalogNameForQuery();
+            String schemaName = schemaNameForQuery();
+            
+            DatabaseMetaData dmd = getHost().getDatabaseMetaData();        
+            return dmd.getFunctions(catalogName, schemaName, null);
+        
+        } catch (SQLException e) {
+            
+            // possible SQLFeatureNotSupportedException
+            
+            Log.warning("Error retrieving database functions - " + e.getMessage());
+            Log.warning("Reverting to old function retrieval implementation");
+
+            return getFunctionResultSetOldImpl();
+        }
+    }
+
+    private ResultSet getFunctionResultSetOldImpl() throws SQLException {
+
+        DatabaseMetaData dmd = getHost().getDatabaseMetaData();
+        return dmd.getProcedures(getCatalogName(), getSchemaName(), null);
     }
 
     /**
