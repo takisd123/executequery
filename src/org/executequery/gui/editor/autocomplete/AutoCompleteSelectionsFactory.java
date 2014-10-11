@@ -251,38 +251,46 @@ public class AutoCompleteSelectionsFactory {
             List<AutoCompleteListItem> list = new ArrayList<AutoCompleteListItem>();
             
             if (autocompleteType == AutoCompleteListItemType.DATABASE_FUNCTION) {
-            
-                rs = databaseMetaData.getFunctions(catalog, schema, null);
+                
+                try {
+                
+                    rs = databaseMetaData.getFunctions(catalog, schema, null);
+                    
+                } catch (Exception e) {}
                 
             } else {
                 
                 rs = databaseMetaData.getProcedures(catalog, schema, null);
             }
             
-            int count = 0;
-            while (rs.next()) {
-
-                try {
-                    if (Thread.interrupted() || databaseMetaData.getConnection().isClosed()) {
-
-                        return;
-                    }
-                } catch (SQLException e) {}
-                
-                names.add(rs.getString(3));
-                count++;
-                
-                if (count >= INCREMENT) {
+            if (rs != null) {
+            
+                int count = 0;
+                while (rs.next()) {
+    
+                    try {
+                        if (Thread.interrupted() || databaseMetaData.getConnection().isClosed()) {
+    
+                            return;
+                        }
+                    } catch (SQLException e) {}
                     
-                    addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
-                    count = 0;
-                    list.clear();
-                    names.clear();
+                    names.add(rs.getString(3));
+                    count++;
+                    
+                    if (count >= INCREMENT) {
+                        
+                        addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
+                        count = 0;
+                        list.clear();
+                        names.clear();
+                    }
+                    
                 }
                 
+                addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
+
             }
-            
-            addTablesToProvider(databaseObjectDescription, autocompleteType, names, list);
 
         } catch (Exception e) {
 
