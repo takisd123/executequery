@@ -246,7 +246,7 @@ public class VisibleResultSetColumnsDialog extends BaseDialog {
 
             ResultSetColumn resultSetColumn = (ResultSetColumn) value;
 
-            setText(resultSetColumn.name + " " + index);
+            setText(resultSetColumn.name);
             setSelected(resultSetColumn.visible);
 
             setEnabled(list.isEnabled());
