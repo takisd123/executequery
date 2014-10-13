@@ -792,10 +792,9 @@ public class QueryEditorTextPane extends SQLTextPane
     private QueryWithPosition getQueryAt(int position) {
 
         String text = getText();
-
         if (MiscUtils.isNull(text)) {
             
-            return new QueryWithPosition(0, 0, Constants.EMPTY);
+            return new QueryWithPosition(0, 0, 0, Constants.EMPTY);
         }
 
         char[] chars = text.toCharArray();
@@ -886,7 +885,7 @@ public class QueryEditorTextPane extends SQLTextPane
             return getQueryAt(start);
         }
 
-        return new QueryWithPosition(start, end + 1, query);
+        return new QueryWithPosition(position, start, end + 1, query);
     }
 
     // ----------------------------------------

@@ -121,13 +121,3 @@ public class DefaultSystemFunctionMetaTag extends AbstractDatabaseObject
     }
 
 }
-
-
-
-
-
-
-
-
-
-
