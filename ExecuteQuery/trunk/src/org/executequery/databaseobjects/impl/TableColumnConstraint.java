@@ -550,24 +550,27 @@ public class TableColumnConstraint extends AbstractDatabaseObjectElement
         this.metaData = metaData;
         for (String key : this.metaData.keySet()) {
             
-            if (StringUtils.equalsIgnoreCase("DELETE_RULE", key)) {
-                
-                Short value = Short.valueOf(this.metaData.get(key));
-                this.metaData.put(key, translateDeletedRule(value));
-
-            } else if (StringUtils.equalsIgnoreCase("UPDATE_RULE", key)) {
-                
-                Short value = Short.valueOf(this.metaData.get(key));
-                this.metaData.put(key, translateUpdateRule(value));
-
-            } else if (StringUtils.equalsIgnoreCase("DEFERRABILITY", key)) {
-                
-                Short value = Short.valueOf(this.metaData.get(key));
-                this.metaData.put(key, translateDeferrabilityRule(value));
+            String value = this.metaData.get(key);
+            if (StringUtils.isNotBlank(value)) {
+                if (StringUtils.equalsIgnoreCase("DELETE_RULE", key)) {
+                    
+                    this.metaData.put(key, translateDeletedRule(shortValue(value)));
     
-            }
-            
+                } else if (StringUtils.equalsIgnoreCase("UPDATE_RULE", key)) {
+                    
+                    this.metaData.put(key, translateUpdateRule(shortValue(value)));
+    
+                } else if (StringUtils.equalsIgnoreCase("DEFERRABILITY", key)) {
+                    
+                    this.metaData.put(key, translateDeferrabilityRule(shortValue(value)));
+                }
+            }            
         }
+    }
+
+    private Short shortValue(String value) {
+
+        return Short.valueOf(value);
     }
     
     private String translateDeferrabilityRule(Short value) {
