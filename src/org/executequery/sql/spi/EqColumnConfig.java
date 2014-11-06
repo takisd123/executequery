@@ -23,8 +23,10 @@ package org.executequery.sql.spi;
 import liquibase.change.AddColumnConfig;
 import liquibase.database.Database;
 import liquibase.database.core.MySQLDatabase;
+import liquibase.database.core.OracleDatabase;
 import liquibase.datatype.DataTypeFactory;
 import liquibase.datatype.LiquibaseDataType;
+import liquibase.datatype.core.NumberType;
 
 import org.executequery.sql.liquibase.MaxDBDatabase;
 
@@ -42,12 +44,11 @@ class EqColumnConfig extends AddColumnConfig {
     public String getType() {
 
         LiquibaseDataType dataType = DataTypeFactory.getInstance().fromDescription(typeName);
-        if (dataType.getMaxParameters(database) < 1) {
-
-            return dataType.getName();
+        if ((isNumber(dataType) && isOracle(database)) || dataType.getMaxParameters(database) > 0) {
+            
+            return super.getType();
         }
-        
-        return super.getType();
+        return dataType.getName();
     }
     
     public String getDefaultValue() {
@@ -83,6 +84,16 @@ class EqColumnConfig extends AddColumnConfig {
         return super.getDefaultValue();
     }
 
+    private boolean isNumber(LiquibaseDataType dataType) {
+        
+        return (dataType instanceof NumberType);
+    }
+    
+    private boolean isOracle(Database database) {
+        
+        return (database instanceof OracleDatabase);
+    }
+    
     private boolean shouldQuoteDefaultValue(Database database) {
 
         return database instanceof MySQLDatabase
@@ -90,6 +101,3 @@ class EqColumnConfig extends AddColumnConfig {
     }
 
 }
-
-
-
