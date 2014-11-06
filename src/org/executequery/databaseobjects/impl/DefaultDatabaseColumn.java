@@ -275,8 +275,8 @@ public class DefaultDatabaseColumn extends AbstractDatabaseObjectElement
                  _type == Types.VARCHAR ||
                  _type == Types.LONGVARCHAR)) {
 
-            if (getColumnSize() > 0 && !isDateDataType() 
-                                    && !isNonPrecisionType()) {
+            if (getColumnSize() > 0 && !isDateDataType() && !isNonPrecisionType()) {
+                
                 buffer.append("(");
                 buffer.append(getColumnSize());
 
