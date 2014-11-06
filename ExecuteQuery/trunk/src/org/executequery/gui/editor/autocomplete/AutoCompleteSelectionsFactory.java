@@ -255,12 +255,16 @@ public class AutoCompleteSelectionsFactory {
                 try {
                 
                     rs = databaseMetaData.getFunctions(catalog, schema, null);
-                    
-                } catch (Exception e) {}
+
+                } catch (Throwable e) {
+
+                    trace("Functions not available using [ getFunctions() ] - reverting to [ getProcedures() ] - " + e.getMessage());
+                    rs = getProcedures(databaseMetaData, catalog, schema);
+                }
                 
             } else {
                 
-                rs = databaseMetaData.getProcedures(catalog, schema, null);
+                rs = getProcedures(databaseMetaData, catalog, schema);
             }
             
             if (rs != null) {
@@ -302,6 +306,13 @@ public class AutoCompleteSelectionsFactory {
             trace("Finished autocomplete object list using [ " + databaseHost.getName() + " ] for type - " + type);
         }
             
+    }
+
+    private ResultSet getProcedures(DatabaseMetaData databaseMetaData,
+            String catalog, String schema) throws SQLException {
+        ResultSet rs;
+        rs = databaseMetaData.getProcedures(catalog, schema, null);
+        return rs;
     }
     
     private List<AutoCompleteListItem> tablesToAutoCompleteListItems(
@@ -492,6 +503,11 @@ public class AutoCompleteSelectionsFactory {
 
     private void error(String message) {
 
+        Log.error(message);
+    }
+    
+    private void warning(String message) {
+        
         Log.error(message);
     }
     
