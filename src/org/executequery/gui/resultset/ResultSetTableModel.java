@@ -109,8 +109,10 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     
     public ResultSetTableModel(List<String> columnHeaders, List<List<RecordDataItem>> tableData) {
         
-        this.tableData = tableData;        
+        this.tableData = tableData;
         this.columnHeaders = createHeaders(columnHeaders);
+        visibleColumnHeaders = new ArrayList<ResultSetColumnHeader>();
+        resetVisibleColumnHeaders();
     }
     
     public List<ResultSetColumnHeader> getColumnHeaders() {
@@ -485,6 +487,12 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
     @Override
     public void fireTableStructureChanged() {
 
+        resetVisibleColumnHeaders();        
+        super.fireTableStructureChanged();
+    }
+
+    private void resetVisibleColumnHeaders() {
+
         visibleColumnHeaders.clear();
         for (ResultSetColumnHeader header : columnHeaders) {
             
@@ -494,8 +502,6 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             }
 
         }
-        
-        super.fireTableStructureChanged();
     }
     
     public int getColumnCount() {
