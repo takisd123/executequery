@@ -20,15 +20,16 @@
 
 package org.executequery.datasource;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.sql.DataSource;
+
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Vector;
 
 /**
  *
@@ -44,9 +45,9 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     
     private int initialConnections = INITIAL_POOL_SIZE;
 
-    private final List<PooledConnection> openConnections = new Vector<PooledConnection>();
+    private final List<PooledConnection> openConnections = new ArrayList<PooledConnection>();
     
-    private final List<PooledConnection> activeConnections = new Vector<PooledConnection>();
+    private final List<PooledConnection> activeConnections = new ArrayList<PooledConnection>();
     
     private final DatabaseConnection databaseConnection;
 
