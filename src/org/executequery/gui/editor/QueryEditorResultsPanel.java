@@ -30,7 +30,6 @@ import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.TableModel;
@@ -373,9 +372,18 @@ public class QueryEditorResultsPanel extends SimpleCloseTabbedPane
         } else {
 
             ResultSetPanel panel = createResultSetPanel();
-            panel.setResultSet(model, showRowNumber);
+            ResultSetTable table = panel.getTable();
+            try {
+                
+                resultSetTableColumnResizingManager.suspend(table);
+                
+                panel.setResultSet(model, showRowNumber);
+                resultSetTableColumnResizingManager.setColumnWidthsForTable(table);
 
-            resultSetTableColumnResizingManager.setColumnWidthsForTable(panel.getTable());
+            } finally {
+
+                resultSetTableColumnResizingManager.reinstate(table);
+            }
             addResultSetPanel(query, rowCount, panel);
         }
 

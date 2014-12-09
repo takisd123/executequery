@@ -325,13 +325,17 @@ public class ResultSetTable extends JTable implements StandardTable {
     }
 
     public void setTableColumnWidth(int columnWidth) {
+
         TableColumnModel tcm = getColumnModel();
         if (columnWidth != 75) {
+
             TableColumn col = null;
             for (Enumeration<TableColumn> i = tcm.getColumns(); i.hasMoreElements();) {
                 col = i.nextElement();
+                col.setWidth(columnWidth);
                 col.setPreferredWidth(columnWidth);
             }
+
         }
     }
 

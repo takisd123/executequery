@@ -27,6 +27,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.TableColumnModelEvent;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -41,13 +42,35 @@ public class ResultSetTableColumnResizingManager {
     public void manageResultSetTable(JTable table) {
 
         if (isStoringResizedColumns()) {
-        
+            
             table.getTableHeader().getColumnModel().addColumnModelListener(
                     new ResultSetTableColumnResizeListener());
         }
-
     }
 
+    public void reinstate(JTable table) {
+        
+        manageResultSetTable(table);
+    }
+    
+    public void suspend(JTable table) {
+        
+        TableColumnModel tableColumnModel = table.getTableHeader().getColumnModel();
+        if (isStoringResizedColumns() && tableColumnModel instanceof DefaultTableColumnModel) {
+            
+            DefaultTableColumnModel defaultTableColumnModel = (DefaultTableColumnModel) tableColumnModel; 
+            for (TableColumnModelListener listener : defaultTableColumnModel.getColumnModelListeners()) {
+                
+                if (listener instanceof ResultSetTableColumnResizeListener) {
+                    
+                    defaultTableColumnModel.removeColumnModelListener(listener);
+                }
+            }
+
+        }
+        
+    }
+    
     public void setColumnWidthsForTable(JTable table) {
         
         if (canResizeColumns()) {
@@ -56,6 +79,7 @@ public class ResultSetTableColumnResizingManager {
             int count = Math.min(columnWidths.length, tableColumnModel.getColumnCount());
             for (int i = 0; i < count; i++) {
                 
+                tableColumnModel.getColumn(i).setWidth(columnWidths[i]);
                 tableColumnModel.getColumn(i).setPreferredWidth(columnWidths[i]);
             }
         
