@@ -1033,6 +1033,7 @@ public class QueryEditor extends DefaultTabView
         statusBar = null;
         toolBar = null;
         editorPanel = null;
+        queryEditorAutoCompletePopupProvider = null;
 
         delegate.disconnected(getSelectedConnection());
 

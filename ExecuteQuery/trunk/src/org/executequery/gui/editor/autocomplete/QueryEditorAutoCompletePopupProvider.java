@@ -84,7 +84,7 @@ public class QueryEditorAutoCompletePopupProvider implements AutoCompletePopupPr
 
     private static final String LIST_SELECTION_ACTION_KEY = "selectionActionKey";
 
-    private final QueryEditor queryEditor;
+    private QueryEditor queryEditor;
 
     private AutoCompleteSelectionsFactory selectionsFactory;
 

@@ -98,7 +98,7 @@ public class ResultSetPanel extends JPanel {
         scroller.getViewport().setBackground(bg);
 
         add(scroller, BorderLayout.CENTER);
-        setTableProperties();
+//        setTableProperties();
 
         table.addMouseListener(new ResultSetTablePopupMenu(table, resultSetTableContainer));
     }
