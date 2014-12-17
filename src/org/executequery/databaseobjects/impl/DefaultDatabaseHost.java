@@ -1157,7 +1157,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
         try {
 
-            return (getConnection() != null && !getConnection().isClosed());
+            Connection _connection = getConnection();
+            return (_connection != null && !_connection.isClosed());
 
         } catch (SQLException e) {
 
