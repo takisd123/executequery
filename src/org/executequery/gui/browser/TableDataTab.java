@@ -67,7 +67,6 @@ import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
-import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.LinkButton;
 import org.underworldlabs.swing.ProgressBar;
 import org.underworldlabs.swing.ProgressBarFactory;
