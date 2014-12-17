@@ -308,9 +308,10 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
 
         ResultSet rs = null;
         Statement stmnt = null;
+        Connection connection = null;
         try {
 
-            Connection connection = getHost().getConnection();
+            connection = getHost().getTemporaryConnection();
             stmnt = connection.createStatement();
             rs = stmnt.executeQuery(recordCountQueryString());
 
@@ -333,6 +334,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
         }  finally {
 
             releaseResources(stmnt, rs);
+            releaseResources(connection);
         }
 
     }
@@ -401,7 +403,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                 } catch (SQLException e) {}
             }
 
-            connection = getHost().getConnection();
+            connection = getHost().getTemporaryConnection();
             statement = connection.createStatement();
 
             rs = statement.executeQuery(query);

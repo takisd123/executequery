@@ -386,7 +386,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             while (rs.next()) {
 
                 String name = rs.getString(6);
-
                 if (StringUtils.isBlank(name)) {
 
                     continue;

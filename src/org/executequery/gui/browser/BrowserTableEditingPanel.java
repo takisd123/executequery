@@ -507,53 +507,66 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
      */
     public void stateChanged(ChangeEvent e) {
         
-        int index = tabPane.getSelectedIndex();
+        final int index = tabPane.getSelectedIndex();
         if (index != TABLE_DATA_TAB_INDEX && tableDataPanel.isExecuting()) {
 
             tableDataPanel.cancelStatement();
             return;
         }
         
-        switch (index) {
-            case 2:
-                loadIndexes();
-                break;
-            case 3:
-                loadPrivileges();
-                break;
-            case 4:
-                loadReferences();
-                break;
-            case 5:
-                tableDataPanel.loadDataForTable(table);
-                break;
-            case 6:
-                try {
-                    // check for any table defn changes
-                    // and update the alter text pane
-                    if (table.isAltered()) {
-
-                        alterSqlText.setSQLText(table.getAlteredSQLText().trim());
+        GUIUtils.startWorker(new Runnable() {
+            
+            public void run() {
                 
-                    } else {
+                tabIndexSelected(index);
+            }
 
-                        alterSqlText.setSQLText(EMPTY);
-                    }
-
-                } catch (DataSourceException exc) {
-                  
-                    controller.handleException(exc);
-                    alterSqlText.setSQLText(EMPTY);
-                }
-                
-                break;
-            case 7:
-                loadTableMetaData();
-                break;
-        }
+        });
         
     }
     
+    private void tabIndexSelected(int index) {
+
+        switch (index) {
+        case 2:
+            loadIndexes();
+            break;
+        case 3:
+            loadPrivileges();
+            break;
+        case 4:
+            loadReferences();
+            break;
+        case 5:
+            tableDataPanel.loadDataForTable(table);
+            break;
+        case 6:
+            try {
+                // check for any table defn changes
+                // and update the alter text pane
+                if (table.isAltered()) {
+
+                    alterSqlText.setSQLText(table.getAlteredSQLText().trim());
+            
+                } else {
+
+                    alterSqlText.setSQLText(EMPTY);
+                }
+
+            } catch (DataSourceException exc) {
+              
+                controller.handleException(exc);
+                alterSqlText.setSQLText(EMPTY);
+            }
+            
+            break;
+        case 7:
+            loadTableMetaData();
+            break;
+        }
+        
+    }
+
     /** 
      * Indicates that the references tab has been previously displayed
      * for the current selection. Aims to keep any changes made to the 
@@ -716,13 +729,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     public void setValues(DatabaseTable table) {
 
         this.table = table;
-        reloadView();
         
+        reloadView();                
         if (SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
-        
-            reloadDataRowCount();
-        }
 
+            reloadDataRowCount();                    
+        }
+                
         stateChanged(null);
     }
     
@@ -732,11 +745,11 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
             if (SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
             
-                rowCountField.setText("Querying...");
+                updateRowCount("Querying...");
 
             } else {
                 
-                rowCountField.setText("Option Disabled");
+                updateRowCount("Option Disabled");
             }
             
             referencesLoaded = false;
@@ -747,8 +760,8 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             
             alterSqlText.setSQLText(EMPTY);
             try {
-                
-                createSqlText.setSQLText(createTableStatementFormatted());
+
+                    createSqlText.setSQLText(createTableStatementFormatted());                        
 
             } catch (Exception e) { // some liquibase generated issues... ??
 
@@ -776,7 +789,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
     private SwingWorker worker;
     
     protected void reloadDataRowCount() {
-
+        
         if (worker != null) {
 
             if (loadingRowCount) {
@@ -809,12 +822,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             }
             public void finished() {
 
-                GUIUtils.invokeLater(new Runnable() {
-                    public void run() {
-                        rowCountField.setText(get().toString());
-                    }
-                });
-                
+                updateRowCount(get().toString());                
             }
         };
         worker.start();
@@ -994,6 +1002,14 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             }
         }
         return null;
+    }
+
+    private void updateRowCount(final String text) {
+        GUIUtils.invokeLater(new Runnable() {
+            public void run() {
+                rowCountField.setText(text);
+            }
+        });
     }
 
 }

@@ -277,8 +277,6 @@ public interface DatabaseHost extends NamedObject {
 
     boolean supportCatalogOrSchemaInFunctionOrProcedureCalls();
 
+    Connection getTemporaryConnection();
+
 }
-
-
-
-
