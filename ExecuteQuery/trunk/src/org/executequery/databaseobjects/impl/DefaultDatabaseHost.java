@@ -149,7 +149,9 @@ public class DefaultDatabaseHost extends AbstractNamedObject
      * @return the sql connection
      */
     public Connection getConnection() throws DataSourceException {
+        
         try {
+            
             if ((connection == null || connection.isClosed())
                     && getDatabaseConnection().isConnected()) {
 
@@ -164,6 +166,11 @@ public class DefaultDatabaseHost extends AbstractNamedObject
         return connection;
     }
 
+    public Connection getTemporaryConnection() {
+
+        return ConnectionManager.getConnection(getDatabaseConnection());
+    }
+    
     /**
      * Returns the database meta data for this host.
      *

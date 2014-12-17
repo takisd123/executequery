@@ -52,6 +52,7 @@ public class TransactionAgnosticResultSet extends DelegatingResultSet {
             if (connection != null) {
                 try {
                     connection.commit();
+                    connection.close();
                 } catch (SQLException e) {}
             }
 

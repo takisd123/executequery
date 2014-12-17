@@ -20,6 +20,7 @@
 
 package org.executequery.databaseobjects.impl;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -113,6 +114,20 @@ public abstract class AbstractNamedObject implements NamedObject,
     }
 
     /**
+     * Closes the specified connection
+     *
+     * @param connection connection to be closed
+     */
+    protected void releaseResources(Connection connection) {
+        try {
+            if (connection != null) {
+             
+                connection.close();
+            }
+        } catch (SQLException e) {}
+    }
+
+    /**
      * Closes the specified sql statement and result set objects.
      *
      * @param stmnt statement to be closed
@@ -122,7 +137,7 @@ public abstract class AbstractNamedObject implements NamedObject,
         releaseResources(rs);
         releaseResources(stmnt);
     }
-
+    
     /**
      * Closes the specified sql statement object.
      *

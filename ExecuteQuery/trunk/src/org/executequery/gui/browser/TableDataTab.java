@@ -67,6 +67,7 @@ import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
+import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.LinkButton;
 import org.underworldlabs.swing.ProgressBar;
 import org.underworldlabs.swing.ProgressBarFactory;
@@ -237,7 +238,6 @@ public class TableDataTab extends JPanel
         return panel;
     }
 
-    // TODO Auto-generated method stub
     public synchronized void loadDataForTable(final DatabaseObject databaseObject) {
 
         if (worker != null) {
@@ -252,11 +252,11 @@ public class TableDataTab extends JPanel
 
                     removeAll();
                     add(cancelPanel, scrollerConstraints);
-
-                    repaint();
-                    cancelPanel.start();
                     
+                    repaint();
+                    cancelPanel.start();                    
                     executing = true;
+                    
                     return setTableResultsPanel(databaseObject);
 
                 } catch (Exception e) {
@@ -279,9 +279,9 @@ public class TableDataTab extends JPanel
         
         if (executing) {
             try {
-                
+
                 Log.debug("Cancelling open statement for data tab for table - " + databaseObject.getName());
-                databaseObject.cancelStatement();
+                cancelStatement();
 
             } finally {
                 
@@ -545,7 +545,20 @@ public class TableDataTab extends JPanel
     /** Cancels the currently executing statement. */
     public void cancelStatement() {
 
-        databaseObject.cancelStatement();
+        if (worker != null) {
+
+            worker.interrupt();
+        }
+
+        worker = new SwingWorker() {
+            @Override
+            public Object construct() {
+
+                databaseObject.cancelStatement();                
+                return "done";
+            }
+        };
+        worker.start();
     }
 
     /** Sets default table display properties. */

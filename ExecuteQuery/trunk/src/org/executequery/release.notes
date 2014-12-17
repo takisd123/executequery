@@ -18,6 +18,9 @@ Summary of changes - v4.2.1 Build 5412:
 - Fixed column data type precision not showing for some database impls.
 - Fixed column width size not being retained when set via preferences within the
   Query Editor. 
+- Fixed locking issue for certain database types where on open transaction would
+  cause the browser to hang.
+
 
 Summary of changes - v4.2.0 Build 5406:
 ----------------------------------------
