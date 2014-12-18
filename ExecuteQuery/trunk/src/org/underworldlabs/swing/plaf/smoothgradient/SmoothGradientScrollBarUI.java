@@ -201,18 +201,21 @@ public final class SmoothGradientScrollBarUI extends MetalScrollBarUI {
             g.drawLine(1, 1, 1, thumbBounds.height - 2);
             
             //			paintBumps(g, c, 3, 4, thumbBounds.width - 6, thumbBounds.height - 7);
+
+            if (is3D()) {
             
-            // draw the center lines
-            int lineY = 4 + (thumbBounds.height - 13) / 2;
-            g.setColor(centerLineHighlight);
-            g.drawLine(4, lineY, 11, lineY);
-            g.drawLine(4, lineY+3, 11, lineY+3);
-            g.drawLine(4, lineY+6, 11, lineY+6);
-            g.setColor(centerLineShadow);
-            g.drawLine(5, lineY+1, 12, lineY+1);
-            g.drawLine(5, lineY+4, 12, lineY+4);
-            g.drawLine(5, lineY+7, 12, lineY+7);
-            
+                // draw the center lines
+                int lineY = 4 + (thumbBounds.height - 13) / 2;
+                g.setColor(centerLineHighlight);
+                g.drawLine(4, lineY, 11, lineY);
+                g.drawLine(4, lineY+3, 11, lineY+3);
+                g.drawLine(4, lineY+6, 11, lineY+6);
+                g.setColor(centerLineShadow);
+                g.drawLine(5, lineY+1, 12, lineY+1);
+                g.drawLine(5, lineY+4, 12, lineY+4);
+                g.drawLine(5, lineY+7, 12, lineY+7);
+            }
+
             if (!isFreeStanding) {
                 if (!leftToRight) {
                     thumbBounds.width -= 1;
@@ -241,17 +244,20 @@ public final class SmoothGradientScrollBarUI extends MetalScrollBarUI {
             
             // draw the center lines
 
-            int lineX = (thumbBounds.width - 7) / 2;
+            if (is3D()) {
             
-            g.setColor(centerLineShadow);
-            g.drawLine(lineX, 4, lineX, 11);
-            g.drawLine(lineX+3, 4, lineX+3, 11);
-            g.drawLine(lineX+6, 4, lineX+6, 11);
-            g.setColor(centerLineHighlight);
-            g.drawLine(lineX+1, 5, lineX+1, 12);
-            g.drawLine(lineX+4, 5, lineX+4, 12);
-            g.drawLine(lineX+7, 5, lineX+7, 12);
-            
+                int lineX = (thumbBounds.width - 7) / 2;
+                
+                g.setColor(centerLineShadow);
+                g.drawLine(lineX, 4, lineX, 11);
+                g.drawLine(lineX+3, 4, lineX+3, 11);
+                g.drawLine(lineX+6, 4, lineX+6, 11);
+                g.setColor(centerLineHighlight);
+                g.drawLine(lineX+1, 5, lineX+1, 12);
+                g.drawLine(lineX+4, 5, lineX+4, 12);
+                g.drawLine(lineX+7, 5, lineX+7, 12);
+            }
+
             if (!isFreeStanding) {
                 thumbBounds.height -= 2;
             }
@@ -260,9 +266,13 @@ public final class SmoothGradientScrollBarUI extends MetalScrollBarUI {
         
         g.translate(-thumbBounds.x, -thumbBounds.y);
         
-        if (SmoothGradientUtils.is3D(PROPERTY_PREFIX))
+        if (is3D())
             paintThumb3D(g, thumbBounds);
         
+    }
+
+    private boolean is3D() {
+        return SmoothGradientUtils.is3D(PROPERTY_PREFIX);
     }
     
     /*
