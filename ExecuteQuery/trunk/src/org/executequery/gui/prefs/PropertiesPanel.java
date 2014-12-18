@@ -115,7 +115,9 @@ public class PropertiesPanel extends JPanel
     private void init() throws Exception {
 
         JSplitPane splitPane = null;
-        if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
+        int lookAndFeel = GUIUtilities.getLookAndFeel();
+        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
+
             splitPane = new FlatSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         } else {
             splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -123,7 +125,7 @@ public class PropertiesPanel extends JPanel
 
         splitPane.setDividerSize(6);
 
-        int panelWidth = 760;
+        int panelWidth = 900;
         int panelHeight = 550;
         setPreferredSize(new Dimension(panelWidth, panelHeight));
 

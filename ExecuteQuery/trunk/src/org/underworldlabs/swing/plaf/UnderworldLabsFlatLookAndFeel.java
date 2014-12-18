@@ -28,19 +28,31 @@ import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
  * Themed extension to SmoothGradientLookAndFeel.
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1205 $
+ * @date     $Date: 2013-02-24 22:08:58 +1100 (Sun, 24 Feb 2013) $
  */
-public class UnderworldLabsLookAndFeel extends SmoothGradientLookAndFeel {
+public class UnderworldLabsFlatLookAndFeel extends SmoothGradientLookAndFeel {
     
-    public UnderworldLabsLookAndFeel() {
+    public UnderworldLabsFlatLookAndFeel() {
         
-        setCurrentTheme(new BluerpleTheme());
+        setCurrentTheme(new BluerpleTheme() {
+            @Override
+            public void addCustomEntriesToTable(UIDefaults table) {
+
+                super.addCustomEntriesToTable(table);
+                table.put("MenuBar.gradient", null); 
+            }
+            @Override
+            public int getDefaultFontSize() {
+
+                return 13;
+            }
+        });
     }
     
     public String getName() {
         
-        return "Default UnderworldLabs Look and Feel with the default Bluerple Theme";
+        return "Default UnderworldLabs Flat Look and Feel with the default Bluerple Theme";
     }
     
     public String getDescription() {
@@ -49,6 +61,17 @@ public class UnderworldLabsLookAndFeel extends SmoothGradientLookAndFeel {
                 "The JGoodies Plastic Look and Feel";
     }
     
+    protected void initClassDefaults(UIDefaults table) {
+        
+        super.initClassDefaults(table);
+        
+        Object[] uiDefaults = {
+            "ButtonUI", "javax.swing.plaf.metal.MetalButtonUI",
+        };
+        
+        table.putDefaults(uiDefaults);
+    }
+
     @Override
     protected void initComponentDefaults(UIDefaults table) {
 
@@ -60,16 +83,19 @@ public class UnderworldLabsLookAndFeel extends SmoothGradientLookAndFeel {
     		// wee average but minor reference here:
     		// http://lists.apple.com/archives/java-dev/2008/Apr/msg00209.html
     		
-    		
     	}
     	
     	super.initComponentDefaults(table);
+
+    	Boolean is3D = Boolean.FALSE;
+    	Object[] defaults = {
+            "Button.is3DEnabled",           is3D,
+            "ComboBox.is3DEnabled",         is3D,
+            "ScrollBar.is3DEnabled",        is3D,
+            "ToggleButton.is3DEnabled",     is3D
+    	};
+    	
+    	table.putDefaults(defaults);
     }
     
-
 }
-
-
-
-
-

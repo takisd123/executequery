@@ -300,7 +300,8 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
 
         // setup the split panes
         JSplitPane verticalSplit = null;
-        if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
+        int lookAndFeel = GUIUtilities.getLookAndFeel();
+        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
             verticalSplit = new FlatSplitPane(JSplitPane.VERTICAL_SPLIT);
         } else {
             verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);

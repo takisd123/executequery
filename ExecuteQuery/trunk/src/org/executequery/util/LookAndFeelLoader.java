@@ -21,13 +21,11 @@
 package org.executequery.util;
 
 import java.awt.event.KeyEvent;
-import java.util.Map.Entry;
 
 import javax.swing.InputMap;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
-import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -86,6 +84,9 @@ public final class LookAndFeelLoader {
                     break;
                 case Constants.NATIVE_LAF:
                     loadNativeLookAndFeel();
+                    break;
+                case Constants.EQ_3D_LAF:
+                    loadDefault3DLookAndFeel();
                     break;
                 default:
                     loadDefaultLookAndFeel();
@@ -202,8 +203,8 @@ public final class LookAndFeelLoader {
     public void loadDefaultLookAndFeel() {
 
         try {
-            org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel metal =
-                    new org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel();
+            org.underworldlabs.swing.plaf.UnderworldLabsFlatLookAndFeel metal =
+                    new org.underworldlabs.swing.plaf.UnderworldLabsFlatLookAndFeel();
 
             UIManager.setLookAndFeel(metal);
 
@@ -214,6 +215,24 @@ public final class LookAndFeelLoader {
 
     }
 
+    /**
+     * Sets the default old 'Execute Query' look and feel.
+     */
+    public void loadDefault3DLookAndFeel() {
+        
+        try {
+            org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel metal =
+                    new org.underworldlabs.swing.plaf.UnderworldLabsLookAndFeel();
+            
+            UIManager.setLookAndFeel(metal);
+            
+        } catch (UnsupportedLookAndFeelException e) {
+            
+            throw new ApplicationException(e);
+        }
+        
+    }
+    
     public void loadNativeLookAndFeel() {
         try {
 

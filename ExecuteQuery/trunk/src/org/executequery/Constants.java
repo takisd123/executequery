@@ -51,7 +51,8 @@ public interface Constants {
                                                    "Windows", 
                                                    "GTK+", 
                                                    "Plugin",
-                                                   "Native"};
+                                                   "Native",
+                                                   "Execute Query Default 3D"};
 
     int EQ_DEFAULT_LAF = 0;
     int SMOOTH_GRADIENT_LAF = 1;
@@ -64,6 +65,7 @@ public interface Constants {
     int GTK_LAF = 8;
     int PLUGIN_LAF = 9;
     int NATIVE_LAF = 10;
+    int EQ_3D_LAF = 11;
 
     //----------------------------
     // syntax colours and styles

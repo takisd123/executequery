@@ -235,7 +235,9 @@ public class QueryEditor extends DefaultTabView
         resultsBase = new JPanel(new BorderLayout());
         resultsBase.add(resultsPanel, BorderLayout.CENTER);
 
-        if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
+        int lookAndFeel = GUIUtilities.getLookAndFeel();
+        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
+
             splitPane = new EditorSplitPane(JSplitPane.VERTICAL_SPLIT,
                                             baseEditorPanel, resultsBase);
         }

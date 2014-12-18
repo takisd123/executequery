@@ -23,6 +23,7 @@ package org.executequery.components;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.io.File;
@@ -147,6 +148,8 @@ public class FileChooserDialog extends JFileChooser {
         contentPane.setLayout(new BorderLayout());
         contentPane.add(this, BorderLayout.CENTER);
 
+        setPreferredSize(new Dimension(700, getPreferredSize().height));
+        
         // add any custom panel
         if (customPanel != null) {
             contentPane.add(customPanel, BorderLayout.SOUTH);
@@ -325,6 +328,7 @@ public class FileChooserDialog extends JFileChooser {
             int lookAndFeel = GUIUtilities.getLookAndFeel();
             return (lookAndFeel == Constants.SMOOTH_GRADIENT_LAF ||
                   lookAndFeel == Constants.EQ_THM ||
+                  lookAndFeel == Constants.EQ_3D_LAF ||
                   lookAndFeel == Constants.EQ_DEFAULT_LAF);
 
         }

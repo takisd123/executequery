@@ -168,9 +168,9 @@ public final class SmoothGradientUtils {
      * Checks and answers if the specified component type has 3D effects.
      */
     static boolean is3D(String key) {
-        return true;
-        //		Object value = UIManager.get(key + "is3DEnabled");
-        //		return Boolean.TRUE.equals(value);
+//        return true;
+        		Object value = UIManager.get(key + "is3DEnabled");
+        		return Boolean.TRUE.equals(value);
     }
     
     

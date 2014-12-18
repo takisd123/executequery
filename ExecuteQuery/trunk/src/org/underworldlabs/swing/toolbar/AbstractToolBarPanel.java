@@ -90,7 +90,7 @@ public abstract class AbstractToolBarPanel extends JPanel {
      */
     public AbstractToolBarPanel(LayoutManager layout, boolean isDoubleBuffered) {
         super(layout, isDoubleBuffered);
-        fillGradient = UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean();
+        fillGradient = UIUtils.is3DLookAndFeel() || UIUtils.usingOcean();
         if (fillGradient) {
             colour1 = getBackground();
             colour2 = UIUtils.getDarker(colour1, 0.85);
