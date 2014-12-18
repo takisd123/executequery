@@ -202,7 +202,9 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
         resultsBase.add(resultsPanel, BorderLayout.CENTER);
         
         JSplitPane splitPane = null;
-        if (GUIUtilities.getLookAndFeel() < Constants.GTK_LAF) {
+        int lookAndFeel = GUIUtilities.getLookAndFeel();
+        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
+
             
             splitPane = new FlatSplitPane(JSplitPane.VERTICAL_SPLIT,
                                           new JScrollPane(table),

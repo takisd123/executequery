@@ -111,7 +111,7 @@ public final class SmoothGradientScrollBarUI extends MetalScrollBarUI {
                 g.drawLine(1, 0, trackBounds.width - 2, 0);
                 
                 g.setColor(shadowColor);
-                //	g.setColor( Color.red);
+//                	g.setColor( Color.red);
                 g.drawLine(1, 1, 1, trackBounds.height - 2);
                 g.drawLine(1, 1, trackBounds.width - 3, 1);
                 if (scrollbar.getValue() != scrollbar.getMaximum()) { // thumb shadow

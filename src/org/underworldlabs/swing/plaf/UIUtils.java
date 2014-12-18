@@ -30,6 +30,7 @@ import java.io.Serializable;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JMenuItem;
+import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.plaf.UIResource;
@@ -137,6 +138,17 @@ public class UIUtils {
                 //|| usingOcean();
     }
 
+    /**
+     * Returns whether the current applied look and feel is
+     * the SmoothGradientLookAndFeel default look and feel.
+     *
+     * @return true | false
+     */
+    public static boolean is3DLookAndFeel() {
+        LookAndFeel lookAndFeel = UIManager.getLookAndFeel();
+        return (lookAndFeel instanceof SmoothGradientLookAndFeel && !(lookAndFeel instanceof UnderworldLabsFlatLookAndFeel));
+    }
+    
     /**
      * Returns whether the current applied look and feel is 
      * an instance of GTK look and feel.

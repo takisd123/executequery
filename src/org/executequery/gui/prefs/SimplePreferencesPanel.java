@@ -229,7 +229,7 @@ public class SimplePreferencesPanel extends JPanel
         table.setRowHeight(22);
         TableColumnModel tcm = table.getColumnModel();
 
-        int secondColumnWidth = 160;
+        int secondColumnWidth = 200;
         TableColumn column = tcm.getColumn(2);
         column.setCellRenderer(rowRendererValues);
         column.setCellEditor(rowEditor);

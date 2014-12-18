@@ -140,7 +140,6 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
         };
         
         table.putDefaults(uiDefaults);
-        
     }
     
     
@@ -154,8 +153,7 @@ public class SmoothGradientLookAndFeel extends MetalLookAndFeel {
         Integer rowHeight = Integer.valueOf(treeFontSize + 6);
         Object treeExpandedIcon = SmoothGradientIconFactory.getExpandedTreeIcon();
         Object treeCollapsedIcon = SmoothGradientIconFactory.getCollapsedTreeIcon();
-        ColorUIResource gray = new ColorUIResource(
-                UIUtils.getBrighter(Color.GRAY,0.8));
+        ColorUIResource gray = new ColorUIResource(UIUtils.getBrighter(Color.GRAY,0.8));
         
         final Object[] internalFrameIconArgs = new Object[1];
         internalFrameIconArgs[0] = Integer.valueOf(16);

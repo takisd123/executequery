@@ -73,7 +73,7 @@ public class DefaultTableHeaderRenderer extends DefaultTableCellRenderer {
 
         setHorizontalAlignment(JLabel.CENTER);
 
-        fillGradient = (UIUtils.isDefaultLookAndFeel() || UIUtils.usingOcean() || UIUtils.isNativeMacLookAndFeel());
+        fillGradient = (UIUtils.is3DLookAndFeel() || UIUtils.usingOcean() || UIUtils.isNativeMacLookAndFeel());
         if (fillGradient) {
             colour1 = UIManager.getColor("Label.background");
             colour2 = UIUtils.getDarker(colour1, 0.85);

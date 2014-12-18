@@ -203,7 +203,7 @@ public class BluerpleTheme extends DefaultMetalTheme {
         
         return userFont;
     }
-    
+
     public FontUIResource getMenuTextFont() {
         
         if (menuFont == null) {
