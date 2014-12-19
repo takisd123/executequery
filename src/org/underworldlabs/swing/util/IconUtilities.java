@@ -102,6 +102,25 @@ public class IconUtilities {
         return icon;
     }
 
+    // http://codehustler.org/blog/java-to-create-grayscale-images-icons/
+    
+    /*
+    private Icon getGray(ImageIcon icon) {
+        
+        BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(),
+                BufferedImage.TYPE_INT_RGB);
+
+        Graphics g = bufferedImage.createGraphics();
+        g.drawImage(icon.getImage(), 0, 0, null);
+        g.dispose();
+        
+        BufferedImageOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null); 
+        BufferedImage image = op.filter(bufferedImage, null);
+        
+        return new ImageIcon(image);
+    }
+    */
+    
     private IconUtilities() {}
 
 }

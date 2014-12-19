@@ -252,9 +252,10 @@ public final class ActionBuilder {
         }
         
         private ImageIcon loadIcon(String path) {
-            URL url = ActionHandler.class.getResource(path);
-            
+
+            URL url = ActionHandler.class.getResource(path);            
             if (url != null) {
+
                 return new ImageIcon(url);
             }
             
