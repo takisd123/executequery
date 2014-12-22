@@ -653,7 +653,7 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
 
         if (tableData.isEmpty()) {
             
-            return null;
+            return String.class;
         }
 
         RecordDataItem recordDataItem = tableData.get(0).get(column);
