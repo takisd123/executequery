@@ -1,6 +1,29 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 19 June 2014
+Date: 29 December 2014
+
+Summary of changes - v4.2.1 Build 5416:
+----------------------------------------
+
+- Modified format SQL text to apply formatting to query at cursor and replace
+  only that region.
+- Added result set filter for the current selection in the Query Editor.
+- Added wildcard starts with for browser node search.
+- Fixed result set table column in the editor not showing correct label on some 
+  DBs when executing statements with aliases.
+- Added ability to select the visible result set columns after a query is 
+  executed.
+- Added procedure and function names to Query Editor autocomplete suggestions.
+- Fixed issue with number format errors returned when generating SQL scripts.
+- Fixed column data type precision not showing for some database impls.
+- Fixed column width size not being retained when set via preferences within the
+  Query Editor. 
+- Fixed locking issue for certain database types where on open transaction would
+  cause the browser to hang.
+- Added new updated default EQ look and feel.
+- Modified references tab in Browser panel to always show selected table 
+  irrespective of imported or exported constraints.
+
 
 Summary of changes - v4.2.0 Build 5406:
 ----------------------------------------
@@ -72,7 +95,7 @@ Summary of changes - v4.0.1 Build 5306:
 Summary of changes - v4.0.0 Build 5297:
 ----------------------------------------
 
-- Fixed possible NPE on null catalog value when setting show defaiult cat/schema
+- Fixed possible NPE on null catalog value when setting show default cat/schema
   option only.
 - Added database table data edit support for the browser Data tab where a 
   primary key exists for that table.
@@ -401,7 +424,7 @@ At present the recommended Java 2 Runtime Environment (JRE) version is at least
 This program has been tested under JRE version 1.6.0 on the
 following platforms:
 
-   -- Windows versions 2000, XP and Vista, 7
+   -- Windows versions 2000, XP and Vista, 7, 8, 
    -- Solaris8, Solaris9, Solaris10 and OpenSolaris
    -- Various flavours of Linux
 
@@ -452,4 +475,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-19 June 2014 
+29 December 2014

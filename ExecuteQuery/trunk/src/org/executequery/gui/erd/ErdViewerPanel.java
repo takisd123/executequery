@@ -1083,20 +1083,24 @@ public class ErdViewerPanel extends DefaultTabView
         return layeredPane.getScale();
     }
     
-    protected void setScaledView(double scale) {
-        ErdTable table = null;
+    public void setScaledView(double scale) {
         
-        if (tables == null)
+        if (tables == null) {
+        
             tables = new Vector();
-        
+        }
+
         for (int i = 0, k = tables.size(); i < k; i++) {
-            table = (ErdTable)tables.elementAt(i);
+
+            ErdTable table = (ErdTable) tables.elementAt(i);
             table.setScale(scale);
         }
         
-        if (erdTitlePanel != null)
+        if (erdTitlePanel != null) {
+            
             erdTitlePanel.setScale(scale);
-        
+        }
+
         layeredPane.setScale(scale);
         scroll.setScale(scale);
         layeredPane.repaint();

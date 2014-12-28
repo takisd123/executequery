@@ -650,7 +650,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
                 }
 
             }
-            
+
+            if (tableNames.isEmpty()) {
+
+                tableNames.add(table.getName());
+                columns.add(new ColumnData[0]);
+            }
+
             referencesPanel.setTables(tableNames, columns);
 
         }
