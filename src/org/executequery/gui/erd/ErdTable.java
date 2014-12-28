@@ -34,6 +34,7 @@ import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.executequery.gui.browser.ColumnData;
 
 /**
@@ -157,6 +158,11 @@ public class ErdTable extends ErdMoveableComponent
         
         // add 20px to the final width
         FINAL_WIDTH = maxWordLength;// + 20;
+        
+        if (ArrayUtils.isEmpty(columns)) {
+
+            FINAL_WIDTH += 80;
+        }
         
         // minimum width is 130px
         //      if (FINAL_WIDTH < 130)
@@ -504,6 +510,11 @@ public class ErdTable extends ErdMoveableComponent
     
     protected void drawTable(Graphics2D g, int offsetX, int offsetY) {
 
+        if (parent == null) {
+            
+            return;
+        }
+        
         Font tableNameFont = parent.getTableNameFont();
         Font columnNameFont = parent.getColumnNameFont();
 
@@ -542,38 +553,46 @@ public class ErdTable extends ErdMoveableComponent
         
         int drawCount = 0;
         String value = null;
-        for (int i = 0; i < columns.length; i++) {
-            ColumnData column = columns[i];
-            if (displayReferencedKeysOnly && !column.isKey()) {
-                continue;
-            }
+        if (ArrayUtils.isNotEmpty(columns)) {
 
-            int y = (((drawCount++)+1) * lineHeight) + heightPlusSep;
-            int x = leftMargin;
-
-            // draw the column value string
-            value = column.getColumnName();
-            g.drawString(value, x, y);
-
-            // draw the data type and size string
-            x = leftMargin + dataTypeOffset;
-            value = column.getFormattedDataType();
-            g.drawString(value, x, y);
-
-            // draw the key label
-            if (column.isKey()) {
-                if (column.isPrimaryKey() && column.isForeignKey()) {
-                    value = PRIMARY + FOREIGN;
+            for (int i = 0; i < columns.length; i++) {
+                ColumnData column = columns[i];
+                if (displayReferencedKeysOnly && !column.isKey()) {
+                    continue;
                 }
-                else if (column.isPrimaryKey()) {
-                    value = PRIMARY;
-                }
-                else if (column.isForeignKey()) {
-                    value = FOREIGN;
-                }
-
-                x = leftMargin + dataTypeOffset + keyLabelOffset;
+    
+                int y = (((drawCount++)+1) * lineHeight) + heightPlusSep;
+                int x = leftMargin;
+    
+                // draw the column value string
+                value = column.getColumnName();
                 g.drawString(value, x, y);
+    
+                // draw the data type and size string
+                x = leftMargin + dataTypeOffset;
+                value = column.getFormattedDataType();
+                g.drawString(value, x, y);
+    
+                // draw the key label
+                if (column.isKey()) {
+
+                    if (column.isPrimaryKey() && column.isForeignKey()) {
+                        
+                        value = PRIMARY + FOREIGN;
+
+                    } else if (column.isPrimaryKey()) {
+                        
+                        value = PRIMARY;
+
+                    } else if (column.isForeignKey()) {
+                      
+                        value = FOREIGN;
+                    }
+    
+                    x = leftMargin + dataTypeOffset + keyLabelOffset;
+                    g.drawString(value, x, y);
+                }
+
             }
 
         }
@@ -596,14 +615,22 @@ public class ErdTable extends ErdMoveableComponent
     /** <p>Resets all of this component's joins. */
     public void resetAllJoins() {
         
-        for (int i = 0; i < verticalLeftJoins.length; i++) {
-            verticalLeftJoins[i].reset();
-            verticalRightJoins[i].reset();
+        if (ArrayUtils.isNotEmpty(verticalLeftJoins)) {
+        
+            for (int i = 0; i < verticalLeftJoins.length; i++) {
+                verticalLeftJoins[i].reset();
+                verticalRightJoins[i].reset();
+            }
+        
         }
         
-        for (int i = 0; i < horizontalBottomJoins.length; i++) {
-            horizontalBottomJoins[i].reset();
-            horizontalTopJoins[i].reset();
+        if (ArrayUtils.isNotEmpty(horizontalBottomJoins)) {
+        
+            for (int i = 0; i < horizontalBottomJoins.length; i++) {
+                horizontalBottomJoins[i].reset();
+                horizontalTopJoins[i].reset();
+            }
+
         }
         
     }

@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 10 December 2014
+Date: 29 December 2014
 
-Summary of changes - v4.2.1 Build 5412:
+Summary of changes - v4.2.1 Build 5416:
 ----------------------------------------
 
 - Modified format SQL text to apply formatting to query at cursor and replace
@@ -20,6 +20,9 @@ Summary of changes - v4.2.1 Build 5412:
   Query Editor. 
 - Fixed locking issue for certain database types where on open transaction would
   cause the browser to hang.
+- Added new updated default EQ look and feel.
+- Modified references tab in Browser panel to always show selected table 
+  irrespective of imported or exported constraints.
 
 
 Summary of changes - v4.2.0 Build 5406:
@@ -92,7 +95,7 @@ Summary of changes - v4.0.1 Build 5306:
 Summary of changes - v4.0.0 Build 5297:
 ----------------------------------------
 
-- Fixed possible NPE on null catalog value when setting show defaiult cat/schema
+- Fixed possible NPE on null catalog value when setting show default cat/schema
   option only.
 - Added database table data edit support for the browser Data tab where a 
   primary key exists for that table.
@@ -472,4 +475,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-10 December 2014
+29 December 2014
