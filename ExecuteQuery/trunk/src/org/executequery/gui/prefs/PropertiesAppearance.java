@@ -23,7 +23,8 @@ package org.executequery.gui.prefs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.executequery.Constants;
+import org.executequery.plaf.LookAndFeelType;
+import org.underworldlabs.util.LabelValuePair;
 import org.underworldlabs.util.SystemProperties;
 
 /**
@@ -115,11 +116,11 @@ public class PropertiesAppearance extends PropertiesBasePanel {
 
         key = "startup.display.lookandfeel";
         list.add(new UserPreference(
-                    UserPreference.STRING_TYPE,
+                    UserPreference.ENUM_TYPE,
                     key,
                     "Look and feel (requires restart)",
-                    stringUserProperty(key),
-                    Constants.LOOK_AND_FEELS));
+                    LookAndFeelType.valueOf(stringUserProperty(key)),
+                    lookAndFeelValuePairs()));
 
         key = "display.aa.fonts";
         list.add(new UserPreference(
@@ -154,6 +155,19 @@ public class PropertiesAppearance extends PropertiesBasePanel {
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
 
+    }
+
+    private Object[] lookAndFeelValuePairs() {
+
+        LookAndFeelType[] lookAndFeelTypes = LookAndFeelType.values();
+        LabelValuePair[] values = new LabelValuePair[lookAndFeelTypes.length];
+        for (int i = 0; i < lookAndFeelTypes.length; i++) {
+            
+            LookAndFeelType lookAndFeelType = lookAndFeelTypes[i];
+            values[i] = new LabelValuePair(lookAndFeelType, lookAndFeelType.getDescription());
+        }
+        
+        return values;
     }
 
     public void restoreDefaults() {

@@ -38,36 +38,6 @@ public interface Constants {
     String ACTION_CONF_PATH = "org/executequery/actions.xml";
     
     //----------------------------
-    // look and feel names
-    //----------------------------
-
-    String[] LOOK_AND_FEELS = {"Execute Query Default",
-                                                   "Smooth Gradient", 
-                                                   "Bumpy Gradient", 
-                                                   "Execute Query Theme", 
-                                                   "Metal - Classic",
-                                                   "Metal - Ocean (JDK1.5+)",
-                                                   "CDE/Motif", 
-                                                   "Windows", 
-                                                   "GTK+", 
-                                                   "Plugin",
-                                                   "Native",
-                                                   "Execute Query Default 3D"};
-
-    int EQ_DEFAULT_LAF = 0;
-    int SMOOTH_GRADIENT_LAF = 1;
-    int BUMPY_GRADIENT_LAF = 2;
-    int EQ_THM = 3;
-    int METAL_LAF = 4;
-    int OCEAN_LAF = 5;
-    int MOTIF_LAF = 6;
-    int WIN_LAF = 7;
-    int GTK_LAF = 8;
-    int PLUGIN_LAF = 9;
-    int NATIVE_LAF = 10;
-    int EQ_3D_LAF = 11;
-
-    //----------------------------
     // syntax colours and styles
     //----------------------------
     

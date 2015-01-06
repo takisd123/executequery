@@ -120,12 +120,13 @@ public class PropertyWrapperModel extends AbstractSortableTableModel {
     }
     
     public Object getValueAt(int row, int col) {        
+
         KeyValuePair value = valuePairs[row];
         
         if (col == 0) {
-            return value.key;
+            return value.getKey();
         } else {
-            return value.value;
+            return value.getValue();
         }
         
     }
@@ -143,11 +144,11 @@ public class PropertyWrapperModel extends AbstractSortableTableModel {
             String value2 = null;
 
             if (sortBy == SORT_BY_KEY) {
-                value1 = pair1.key.toUpperCase();
-                value2 = pair2.key.toUpperCase();
+                value1 = pair1.getKey().toString().toUpperCase();
+                value2 = pair2.getKey().toString().toUpperCase();
             } else {
-                value1 = pair1.value.toUpperCase();
-                value2 = pair2.value.toUpperCase();
+                value1 = pair1.getValue().toString().toUpperCase();
+                value2 = pair2.getValue().toString().toUpperCase();
             }
 
             return value1.compareTo(value2);

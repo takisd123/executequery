@@ -39,6 +39,7 @@ import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.ExecuteQueryFrame;
 import org.executequery.gui.menu.ExecuteQueryMenu;
 import org.executequery.log.Log;
+import org.executequery.plaf.LookAndFeelType;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.util.ApplicationProperties;
@@ -257,11 +258,11 @@ public class ApplicationLauncher {
 
     private void loadLookAndFeel(LookAndFeelLoader loader) {
 
-        int lookAndFeel = userProperties().getIntProperty("startup.display.lookandfeel");
-
+        String lookAndFeel = userProperties().getStringProperty("startup.display.lookandfeel");
         try {
 
-            loader.loadLookAndFeel(lookAndFeel);
+            LookAndFeelType lookAndFeelType = loader.loadLookAndFeel(lookAndFeel);
+            userProperties().setStringProperty("startup.display.lookandfeel", lookAndFeelType.name());
 
         } catch (ApplicationException e) {
 
@@ -270,7 +271,6 @@ public class ApplicationLauncher {
                 Log.debug("Error loading look and feel", e);
             }
             loadDefaultLookAndFeel(loader);
-        
         }
 
     }
@@ -279,9 +279,9 @@ public class ApplicationLauncher {
 
         try {
 
-            loader.loadLookAndFeel(Constants.EQ_DEFAULT_LAF);
-            userProperties().setIntProperty(
-                    "startup.display.lookandfeel", Constants.EQ_DEFAULT_LAF);
+            loader.loadLookAndFeel(LookAndFeelType.EXECUTE_QUERY);
+            userProperties().setStringProperty(
+                    "startup.display.lookandfeel", LookAndFeelType.EXECUTE_QUERY.name());
 
         } catch (ApplicationException e) {
 

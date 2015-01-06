@@ -52,10 +52,10 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 
-import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabViewActionPanel;
+import org.executequery.components.SplitPaneFactory;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObjectFactory;
@@ -67,7 +67,6 @@ import org.executequery.event.ConnectionListener;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.DynamicComboBoxModel;
-import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
 
 /**
@@ -299,14 +298,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
                                 GUIUtilities.getDefaultBorderColour()));
 
         // setup the split panes
-        JSplitPane verticalSplit = null;
-        int lookAndFeel = GUIUtilities.getLookAndFeel();
-        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
-            verticalSplit = new FlatSplitPane(JSplitPane.VERTICAL_SPLIT);
-        } else {
-            verticalSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        }
-
+        JSplitPane verticalSplit = new SplitPaneFactory().createVertical();
         verticalSplit.setTopComponent(topPanel);
         verticalSplit.setBottomComponent(tablePanel);
         verticalSplit.setResizeWeight(0.7);

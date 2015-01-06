@@ -21,7 +21,9 @@
 package org.executequery.gui.prefs;
 
 import java.awt.Color;
+
 import org.executequery.Constants;
+import org.underworldlabs.util.LabelValuePair;
 
 /**
  *
@@ -38,6 +40,7 @@ public class UserPreference {
     public static final int CATEGORY_TYPE = 4;
     public static final int FILE_TYPE = 5;
     public static final int PASSWORD_TYPE = 6;
+    public static final int ENUM_TYPE = 7;
 
     private boolean collapsed;
     private boolean saveActual;
@@ -48,12 +51,11 @@ public class UserPreference {
     private String key;
     private Object value;
     private String displayedKey;
-    private String[] availableValues;
+    private Object[] availableValues;
 
     public UserPreference() {}
 
-    public UserPreference(int type, int maxLength, String key, 
-                          String displayedKey, Object value) {
+    public UserPreference(int type, int maxLength, String key, String displayedKey, Object value) {
 
         this(type, maxLength, key, displayedKey, value, null);
     }
@@ -63,21 +65,27 @@ public class UserPreference {
         this(type, -1, key, displayedKey, value, null);
     }
 
-    public UserPreference(int type, String key, String displayedKey,
-                          Object value, String[] availableValues) {
+    public UserPreference(int type, String key, String displayedKey, Object value, Object[] availableValues) {
         
         this(type, -1, key, displayedKey, value, availableValues);
     }
 
-    public UserPreference(int type, int maxLength, String key, String displayedKey,
-                          Object value, String[] availableValues) {
+    public UserPreference(int type, int maxLength, String key, String displayedKey, Object value, Object[] availableValues) {
 
         this.type = type;
         this.key = key;
         this.maxLength = maxLength;
         
         if (type == STRING_TYPE) {
-            savedValue = value.toString();
+
+            if (value.getClass().isEnum()) {
+                
+                savedValue = ((Enum) value).name();
+                
+            } else {                
+                
+                savedValue = value.toString();
+            }
 
             if (availableValues != null && availableValues.length > 0) {
 
@@ -87,12 +95,12 @@ public class UserPreference {
                     this.value = availableValues[index];
                 
                 } catch (NumberFormatException e) {
-                    
+
                     saveActual = true;
                     // try the value
                     for (int i = 0; i < availableValues.length; i++) {
                         
-                        if (availableValues[i].equals(value)) {
+                        if (valueOf(availableValues[i]).equals(value)) {
                     
                             this.value = availableValues[i];
                             break;
@@ -114,6 +122,15 @@ public class UserPreference {
 
         this.displayedKey = displayedKey;
         this.availableValues = availableValues;        
+    }
+
+    private Object valueOf(Object object) {
+
+        if (object instanceof LabelValuePair) {
+            
+            return ((LabelValuePair) object).getValue();
+        }
+        return object;
     }
 
     public int getMaxLength() {
@@ -167,7 +184,7 @@ public class UserPreference {
     }
 
     public String getSaveValue() {
-        switch (type) {
+        switch (type) {        
             case STRING_TYPE:
                 
                 if (availableValues != null) {
@@ -185,15 +202,20 @@ public class UserPreference {
                 }
                 
                 if (value == null) {
+                
                     return Constants.EMPTY;
                 }
+
                 return value.toString();
-            case INTEGER_TYPE:
-                return value.toString();
-            case BOOLEAN_TYPE:
-                return value.toString();
+
             case COLOUR_TYPE:
                 return Integer.toString(((Color)value).getRGB());
+
+            case ENUM_TYPE:
+                return ((Enum) valueOf(value)).name();
+                
+            case BOOLEAN_TYPE:
+            case INTEGER_TYPE:
             default:
                 return value.toString();
         }
@@ -207,11 +229,11 @@ public class UserPreference {
         this.displayedKey = displayedKey;
     }
 
-    public String[] getAvailableValues() {
+    public Object[] getAvailableValues() {
         return availableValues;
     }
 
-    public void setAvailableValues(String[] availableValues) {
+    public void setAvailableValues(Object[] availableValues) {
         this.availableValues = availableValues;
     }
 
@@ -224,7 +246,3 @@ public class UserPreference {
     }
 
 }
-
-
-
-

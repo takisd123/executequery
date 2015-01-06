@@ -324,16 +324,12 @@ public class FileChooserDialog extends JFileChooser {
         }
 
         private boolean isEQLookAndFeel() {
-            
-            int lookAndFeel = GUIUtilities.getLookAndFeel();
-            return (lookAndFeel == Constants.SMOOTH_GRADIENT_LAF ||
-                  lookAndFeel == Constants.EQ_THM ||
-                  lookAndFeel == Constants.EQ_3D_LAF ||
-                  lookAndFeel == Constants.EQ_DEFAULT_LAF);
 
+            return GUIUtilities.getLookAndFeel().isExecuteQueryLookCompatible();
         }
         
         public Boolean isTraversable(File f) {
+            
             return f.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
         }
 

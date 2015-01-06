@@ -88,6 +88,7 @@ import org.executequery.listeners.OpenEditorConnectionListener;
 import org.executequery.listeners.PreferencesChangesListener;
 import org.executequery.listeners.ToolBarVisibilityListener;
 import org.executequery.log.Log;
+import org.executequery.plaf.LookAndFeelType;
 import org.executequery.print.PrintFunction;
 import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseConnectionRepository;
@@ -1303,9 +1304,9 @@ public final class GUIUtilities {
     /**
      * Returns the current look and feel value.
      */
-    public static final int getLookAndFeel() {
+    public static final LookAndFeelType getLookAndFeel() {
 
-        return UserProperties.getInstance().getIntProperty("startup.display.lookandfeel");
+        return LookAndFeelType.valueOf(UserProperties.getInstance().getStringProperty("startup.display.lookandfeel"));
     }
 
     /**

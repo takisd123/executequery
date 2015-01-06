@@ -49,6 +49,7 @@ import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabViewActionPanel;
 import org.executequery.components.ItemSelectionListener;
+import org.executequery.components.SplitPaneFactory;
 import org.executequery.components.TableSelectionCombosGroup;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.spi.DefaultStatementExecutor;
@@ -65,7 +66,6 @@ import org.executequery.event.ConnectionListener;
 import org.executequery.gui.editor.QueryEditorResultsPanel;
 import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.swing.DynamicComboBoxModel;
-import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.actions.ActionUtilities;
 
@@ -201,22 +201,7 @@ public class ExecuteProcedurePanel extends DefaultTabViewActionPanel
         JPanel resultsBase = new JPanel(new BorderLayout());
         resultsBase.add(resultsPanel, BorderLayout.CENTER);
         
-        JSplitPane splitPane = null;
-        int lookAndFeel = GUIUtilities.getLookAndFeel();
-        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
-
-            
-            splitPane = new FlatSplitPane(JSplitPane.VERTICAL_SPLIT,
-                                          new JScrollPane(table),
-                                          resultsBase);
-
-        } else {
-          
-            splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
-                                       new JScrollPane(table),
-                                       resultsBase);
-        }
-
+        JSplitPane splitPane = new SplitPaneFactory().create(JSplitPane.VERTICAL_SPLIT, new JScrollPane(table), resultsBase);
         splitPane.setResizeWeight(0.5);
         splitPane.setDividerLocation(0.75);
         splitPane.setDividerSize(5);

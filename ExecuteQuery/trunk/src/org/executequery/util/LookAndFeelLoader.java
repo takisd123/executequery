@@ -31,61 +31,73 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.text.DefaultEditorKit;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.executequery.ApplicationException;
-import org.executequery.Constants;
 import org.executequery.plaf.ExecuteQueryTheme;
+import org.executequery.plaf.LookAndFeelType;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.swing.plaf.base.CustomTextAreaUI;
 import org.underworldlabs.swing.plaf.base.CustomTextPaneUI;
 import org.underworldlabs.swing.plaf.bumpygradient.BumpyGradientLookAndFeel;
+import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
 
 public final class LookAndFeelLoader {
 
-    public int loadLookAndFeel(int lookAndFeel) {
+    public LookAndFeelType loadLookAndFeel(String lookAndFeelType) {
+
+        if (NumberUtils.isDigits(lookAndFeelType)) {
+            
+            // legacy numeric setting - default to EQ L&F
+            
+            return loadLookAndFeel(LookAndFeelType.EXECUTE_QUERY);
+        }        
+        return loadLookAndFeel(LookAndFeelType.valueOf(lookAndFeelType));
+    }
+    
+    public LookAndFeelType loadLookAndFeel(LookAndFeelType lookAndFeelType) {
 
         try {
 
-            switch (lookAndFeel) {
-                case Constants.EQ_DEFAULT_LAF:
+            switch (lookAndFeelType) {
+                case EXECUTE_QUERY:
                     loadDefaultLookAndFeel();
                     break;
-                case Constants.SMOOTH_GRADIENT_LAF:
-                    loadDefaultLookAndFeel();
+                case SMOOTH_GRADIENT:                    
+                    UIManager.setLookAndFeel(new SmoothGradientLookAndFeel());
                     break;
-                case Constants.BUMPY_GRADIENT_LAF:
-                    BumpyGradientLookAndFeel
-                            .setCurrentTheme(new ExecuteQueryTheme());
+                case BUMPY_GRADIENT:
+                    BumpyGradientLookAndFeel.setCurrentTheme(new ExecuteQueryTheme());
                     UIManager.setLookAndFeel(new BumpyGradientLookAndFeel());
                     break;
-                case Constants.EQ_THM:
+                case EXECUTE_QUERY_THEME:
                     loadDefaultLookAndFeelTheme();
                     break;
-                case Constants.METAL_LAF:
+                case METAL:
                     loadDefaultMetalLookAndFeelTheme();
                     break;
-                case Constants.OCEAN_LAF:
+                case OCEAN:
                     UIManager.setLookAndFeel(
                             "javax.swing.plaf.metal.MetalLookAndFeel");
                     break;
-                case Constants.MOTIF_LAF:
+                case MOTIF:
                     UIManager.setLookAndFeel(
                             "com.sun.java.swing.plaf.motif.MotifLookAndFeel");
                     break;
-                case Constants.WIN_LAF:
+                case WINDOWS:
                     UIManager.setLookAndFeel(
                             "com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
                     break;
-                case Constants.GTK_LAF:
+                case GTK:
                     UIManager.setLookAndFeel(
                             "com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
                     break;
-                case Constants.PLUGIN_LAF:
+                case PLUGIN:
                     loadCustomLookAndFeel();
                     break;
-                case Constants.NATIVE_LAF:
+                case NATIVE:
                     loadNativeLookAndFeel();
                     break;
-                case Constants.EQ_3D_LAF:
+                case EXECUTE_QUERY_GRADIENT:
                     loadDefault3DLookAndFeel();
                     break;
                 default:
@@ -93,34 +105,21 @@ public final class LookAndFeelLoader {
                     break;
             }
 
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (UnsupportedLookAndFeelException | IllegalAccessException | InstantiationException | ClassNotFoundException e ) {
 
             throw new ApplicationException(e);
-
-        } catch (ClassNotFoundException e) {
-
-            throw new ApplicationException(e);
-
-        } catch (InstantiationException e) {
-
-            throw new ApplicationException(e);
-
-        } catch (IllegalAccessException e) {
-
-            throw new ApplicationException(e);
-        
         } 
-     
+
         if (!UIUtils.isNativeMacLookAndFeel()) {
 
             CustomTextAreaUI.initialize();
-            CustomTextPaneUI.initialize();            	
+            CustomTextPaneUI.initialize();              
         }
         
         applyMacSettings();        
-        return lookAndFeel;
+        return lookAndFeelType;
     }
-
+    
     private void applyMacSettings() {
 
         if (UIUtils.isMac()) {
@@ -141,14 +140,13 @@ public final class LookAndFeelLoader {
 
         }
         
-        
     }
 
     private void loadCustomLookAndFeel() {
 
         PluginLookAndFeelManager pluginManager = new PluginLookAndFeelManager();
-
         try {
+
             pluginManager.loadLookAndFeel();
 
         } catch (Exception e) {
@@ -216,7 +214,7 @@ public final class LookAndFeelLoader {
     }
 
     /**
-     * Sets the default old 'Execute Query' look and feel.
+     * Sets the default OLD 'Execute Query' look and feel.
      */
     public void loadDefault3DLookAndFeel() {
         
@@ -262,12 +260,3 @@ public final class LookAndFeelLoader {
     }
 
 }
-
-
-
-
-
-
-
-
-
