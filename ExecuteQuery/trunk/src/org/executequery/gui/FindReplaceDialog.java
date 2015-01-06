@@ -104,7 +104,7 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
         JPanel optionsPanel = new JPanel(new GridBagLayout());
         optionsPanel.setBorder(BorderFactory.createTitledBorder("Options"));
         
-        Dimension optionsDim = new Dimension(400, 90);
+        Dimension optionsDim = new Dimension(500, 120);
         optionsPanel.setPreferredSize(optionsDim);
         
         TextEditor textFunction = GUIUtilities.getTextEditorInFocus();
@@ -119,11 +119,6 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
         replaceField = WidgetFactory.createComboBox(TextAreaSearch.getPrevReplaceValues());
         findField.setEditable(true);
         replaceField.setEditable(true);
-        
-        Dimension comboDim = findField.getSize();
-        comboDim.setSize(comboDim.getWidth(), 22);
-        findField.setPreferredSize(comboDim);
-        replaceField.setPreferredSize(comboDim);
         
         KeyAdapter keyListener = createKeyListener();
         findFieldTextEditor().addKeyListener(keyListener);
@@ -163,7 +158,7 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
         JPanel panel = new JPanel(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        Insets ins = new Insets(5,10,0,5);
+        Insets ins = new Insets(15,10,0,5);
         gbc.insets = ins;
         gbc.anchor = GridBagConstraints.WEST;
         optionsPanel.add(matchCaseCheck, gbc);
@@ -184,7 +179,7 @@ public class FindReplaceDialog extends DefaultActionButtonsPanel
         gbc.gridy = 1;
         optionsPanel.add(searchDownRadio, gbc);
         gbc.gridy = 0;
-        gbc.insets.top = 5;
+        gbc.insets.top = 15;
         optionsPanel.add(searchUpRadio, gbc);
         gbc.weightx = 0;
         gbc.gridx = 0;
