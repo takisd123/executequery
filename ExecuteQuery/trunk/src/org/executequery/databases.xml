@@ -176,6 +176,14 @@
    </database>
 
    <database>
+      <id>21</id>
+      <name>SQLite</name>
+      <url-patterns>
+          <url>jdbc:sqlite:[source]</url>
+      </url-patterns>
+   </database>
+
+   <database>
       <id>8</id>
       <name>ODBC</name>
       <url-patterns>
