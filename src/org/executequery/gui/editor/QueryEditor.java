@@ -56,6 +56,7 @@ import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DefaultTabView;
+import org.executequery.components.SplitPaneFactory;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.event.ApplicationEvent;
@@ -235,8 +236,7 @@ public class QueryEditor extends DefaultTabView
         resultsBase = new JPanel(new BorderLayout());
         resultsBase.add(resultsPanel, BorderLayout.CENTER);
 
-        int lookAndFeel = GUIUtilities.getLookAndFeel();
-        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
+        if (new SplitPaneFactory().usesCustomSplitPane()) {
 
             splitPane = new EditorSplitPane(JSplitPane.VERTICAL_SPLIT,
                                             baseEditorPanel, resultsBase);

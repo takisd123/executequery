@@ -1,5 +1,5 @@
 /*
- * KeyValuePair.java
+ * LabelValuePair.java
  *
  * Copyright (C) 2002-2013 Takis Diakoumis
  *
@@ -21,21 +21,20 @@
 package org.underworldlabs.util;
 
 /**
- * Simple key/value pair POJO object.
  *
  * @author   Takis Diakoumis
- * @version  $Revision$
- * @date     $Date$
+ * @version  $Revision: 1185 $
+ * @date     $Date: 2013-02-08 22:16:55 +1100 (Fri, 08 Feb 2013) $
  */
-public class KeyValuePair implements java.io.Serializable {
+public class LabelValuePair implements java.io.Serializable {
     
-    private Object key;
+    private String label;
     private Object value;
     
-    public KeyValuePair() {}
+    public LabelValuePair() {}
 
-    public KeyValuePair(Object key, Object value) {
-        this.key = key;
+    public LabelValuePair(Object value, String label) {
+        this.label = label;
         this.value = value;
     }
 
@@ -43,21 +42,14 @@ public class KeyValuePair implements java.io.Serializable {
         return value;
     }
     
-    public Object getKey() {
-        return key;
+    public String getLabel() {
+        return label;
     }
     
+    @Override
+    public String toString() {
+        return label;
+    }
+    
+    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

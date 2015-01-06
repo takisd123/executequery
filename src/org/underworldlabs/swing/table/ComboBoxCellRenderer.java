@@ -28,6 +28,8 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
+import org.underworldlabs.util.LabelValuePair;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -55,9 +57,19 @@ public class ComboBoxCellRenderer extends JLabel
         setFont(table.getFont());
         
         if (value == null) {
+
             setText("");
+
         } else {
-            setText(value.toString());            
+            
+            if (value instanceof LabelValuePair) {
+            
+                setText(((LabelValuePair) value).getLabel());
+                
+            } else {
+             
+                setText(value.toString());
+            }
         }
 
         return this;

@@ -62,14 +62,15 @@ abstract class PropertiesBasePanel extends JPanel
     
     public PropertiesBasePanel() {
 
-        super(new GridBagLayout());
-        
-        setBorder(BorderFactory.createLineBorder(
-                GUIUtilities.getDefaultBorderColour()));
+        super(new GridBagLayout());        
+        setBorder(BorderFactory.createLineBorder(GUIUtilities.getDefaultBorderColour()));
         
         try {
+
             init();
+
         } catch (Exception e) {
+        
             e.printStackTrace();
         }
         
@@ -96,12 +97,3 @@ abstract class PropertiesBasePanel extends JPanel
     }
 
 }
-
-
-
-
-
-
-
-
-

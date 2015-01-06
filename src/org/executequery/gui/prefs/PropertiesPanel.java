@@ -43,16 +43,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.executequery.ActiveComponent;
-import org.executequery.Constants;
 import org.executequery.EventMediator;
 import org.executequery.GUIUtilities;
 import org.executequery.components.BottomButtonPanel;
+import org.executequery.components.SplitPaneFactory;
 import org.executequery.components.table.PropertiesTreeCellRenderer;
 import org.executequery.event.DefaultUserPreferenceEvent;
 import org.executequery.event.UserPreferenceEvent;
 import org.executequery.gui.ActionContainer;
 import org.executequery.util.ThreadUtils;
-import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.tree.DynamicTree;
 
 /**
@@ -114,15 +113,7 @@ public class PropertiesPanel extends JPanel
 
     private void init() throws Exception {
 
-        JSplitPane splitPane = null;
-        int lookAndFeel = GUIUtilities.getLookAndFeel();
-        if (lookAndFeel < Constants.GTK_LAF || lookAndFeel == Constants.EQ_3D_LAF) {
-
-            splitPane = new FlatSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        } else {
-            splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        }
-
+        JSplitPane splitPane = new SplitPaneFactory().createHorizontal();
         splitPane.setDividerSize(6);
 
         int panelWidth = 900;

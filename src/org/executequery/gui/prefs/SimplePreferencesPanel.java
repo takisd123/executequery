@@ -132,8 +132,9 @@ public class SimplePreferencesPanel extends JPanel
             DefaultCellEditor editor = null;
 
             switch(type) {
+                case UserPreference.ENUM_TYPE:
                 case UserPreference.STRING_TYPE:
-                    String[] values = preferences[i].getAvailableValues();
+                    Object[] values = preferences[i].getAvailableValues();
                     if (values != null && values.length > 0) {
                         editor = new DefaultCellEditor(new TableComboBox(values));
                         rowEditor.setEditorAt(i, editor);
@@ -258,18 +259,19 @@ public class SimplePreferencesPanel extends JPanel
         for (int i = 0; i < preferences.length; i++) {
             
             switch (preferences[i].getType()) {
+                case UserPreference.ENUM_TYPE:
                 case UserPreference.STRING_TYPE:
                 case UserPreference.INTEGER_TYPE:
                     preferences[i].reset(
-                            SystemProperties.getProperty("defaults",preferences[i].getKey()));
+                            SystemProperties.getProperty("defaults", preferences[i].getKey()));
                     break;                
                 case UserPreference.BOOLEAN_TYPE:
                     preferences[i].reset(
-                            new Boolean(SystemProperties.getProperty("defaults",preferences[i].getKey())));
+                            new Boolean(SystemProperties.getProperty("defaults", preferences[i].getKey())));
                     break;
                 case UserPreference.COLOUR_TYPE:
                     preferences[i].reset(
-                            SystemProperties.getColourProperty("defaults",preferences[i].getKey()));
+                            SystemProperties.getColourProperty("defaults", preferences[i].getKey()));
                     break;
             }
 
@@ -403,7 +405,8 @@ public class SimplePreferencesPanel extends JPanel
 
     class TableComboBox extends JComboBox {
 
-        public TableComboBox(String[] values) {
+        public TableComboBox(Object[] values) {
+            
             super(values);
             setFont(PropertiesBasePanel.panelFont);
         }
@@ -411,16 +414,3 @@ public class SimplePreferencesPanel extends JPanel
     } // class TableComboBox
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

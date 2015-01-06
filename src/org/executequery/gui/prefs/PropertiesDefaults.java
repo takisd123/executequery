@@ -32,13 +32,6 @@ import javax.swing.JPanel;
 
 import org.executequery.gui.prefs.PropertiesPanel;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /**
  * resets defaults on propertie frame
  * <P>

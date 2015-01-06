@@ -39,9 +39,6 @@ import javax.swing.plaf.metal.OceanTheme;
 
 import org.underworldlabs.swing.plaf.smoothgradient.SmoothGradientLookAndFeel;
 
-import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
-import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;
-
 /**
  * User interface utilities. Allows for central determination of
  * colours, icons etc.
@@ -156,8 +153,7 @@ public class UIUtils {
      * @return true | false
      */
     public static boolean isGtkLookAndFeel() {
-        String lafName = UIManager.getLookAndFeel().getClass().getName();
-        return ("com.sun.java.swing.plaf.gtk.GTKLookAndFeel".equals(lafName));
+        return isLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
     }
     
     /**
@@ -177,7 +173,7 @@ public class UIUtils {
      * @return true | false
      */
     public static boolean isMotifLookAndFeel() {
-        return UIManager.getLookAndFeel() instanceof MotifLookAndFeel;
+        return isLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
     }
 
     /**
@@ -187,9 +183,13 @@ public class UIUtils {
      * @return true | false
      */
     public static boolean isWindowsLookAndFeel() {
-        return UIManager.getLookAndFeel() instanceof WindowsLookAndFeel;
+        return isLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
     }
 
+    private static boolean isLookAndFeel(String name) {
+        return UIManager.getLookAndFeel().getClass().getName().equals(name);
+    }
+    
     /**
      * Returns true if we're using the Ocean Theme under the
      * MetalLookAndFeel.
