@@ -170,6 +170,11 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
             int recordCount = 0;
             interrupted = false;
 
+            if (holdMetaData) {
+
+                setMetaDataVectors(rsmd);
+            }
+
             List<RecordDataItem> rowData;
             long time = System.currentTimeMillis();
             while (resultSet.next()) {
@@ -260,11 +265,6 @@ public class ResultSetTableModel extends AbstractSortableTableModel {
                     break;
                 }
 
-            }
-
-            if (holdMetaData) {
-
-                setMetaDataVectors(rsmd);
             }
 
             if (Log.isTraceEnabled()) {
