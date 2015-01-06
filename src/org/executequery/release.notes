@@ -24,6 +24,7 @@ Summary of changes - v4.2.1 Build 5416:
 - Modified references tab in Browser panel to always show selected table 
   irrespective of imported or exported constraints.
 - Added SQLite to preconfigured database list for driver selection.
+- Fixed SQLite issue with rendering query result sets within the editor.
 
 
 Summary of changes - v4.2.0 Build 5406:
