@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 29 December 2014
+Date: 8 January 2015
 
-Summary of changes - v4.2.1 Build 5416:
+Summary of changes - v4.3.0 Build 5427:
 ----------------------------------------
 
 - Modified format SQL text to apply formatting to query at cursor and replace
@@ -477,4 +477,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-29 December 2014
+8 January 2015
