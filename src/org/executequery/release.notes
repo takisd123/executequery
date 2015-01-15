@@ -1,6 +1,12 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 8 January 2015
+Date: 15 January 2015
+
+Summary of changes - v4.3.1 Build 5431:
+----------------------------------------
+
+- Added view menu to table references tab in the Browser. 
+
 
 Summary of changes - v4.3.0 Build 5427:
 ----------------------------------------
@@ -477,4 +483,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-8 January 2015
+15 January 2015

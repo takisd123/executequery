@@ -133,11 +133,19 @@ public class ErdViewerPanel extends DefaultTabView
     /** flag whether to display reference keys only */
     private boolean displayKeysOnly = true;
     
+    private static final int INITIAl_VIEW_HEIGHT = 450;
+
+    private double defaultScaledView;
+
     /** The scale values */
     protected static final String[] scaleValues = {"25%", "50%", "75%", "100%",
                                                    "125%", "150%", "175%", "200%"};
     
     private static int openCount = 1;
+
+    private List tableNames;
+
+    private List columnData;
                                                    
     public ErdViewerPanel(boolean showTools, boolean editable) {
         this(null, null, true, showTools, editable);
@@ -245,6 +253,31 @@ public class ErdViewerPanel extends DefaultTabView
                                         GridBagConstraints.BOTH,
                                         Constants.EMPTY_INSETS, 0, 0));
         
+        if (!editable && !showTools) {
+            
+            layeredPane.displayPopupMenuViewItemsOnly();
+        }
+        
+        /*
+        ActionMap actionMap = getActionMap();
+        actionMap.put("zoom-in", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                zoom(true);
+            }
+        });
+        
+        actionMap.put("zoom-out", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                zoom(false);
+            }
+        });
+        
+        InputMap inputMap = getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        inputMap.put(KeyStroke.getKeyStroke("control EQUALS"), "zoom-in");
+        inputMap.put(KeyStroke.getKeyStroke("control MINUS"), "zoom-out");
+        */
     }
     
     public void addTitlePanel(ErdTitlePanel erdTitlePanel) {
@@ -268,16 +301,16 @@ public class ErdViewerPanel extends DefaultTabView
         layeredPane.validate();
     }
     
-    private static final int INITIAl_VIEW_HEIGHT = 450;
-    
     /** <p>Builds the ERD table views on feature startup.
      *
      *  @param a <code>Vector</code> of table names
      *  @param the column meta data for the tables
      */
     public void setTables(List tableNames, List columnData) {
-        ErdTable table = null;
-        
+
+        this.tableNames = tableNames;
+        this.columnData = columnData;
+
         // next position of component added
         int next_x = 20;
         int next_y = 20;
@@ -296,6 +329,7 @@ public class ErdViewerPanel extends DefaultTabView
         int size = tableNames.size();
         tables = new Vector(size);
         
+        ErdTable table = null;
         for (int i = 0; i < size; i++) {
             
             // create the ERD display component
@@ -901,13 +935,13 @@ public class ErdViewerPanel extends DefaultTabView
         
         if (titlePanelData != null) {
             ErdTitlePanel _erdTitlePanel = new ErdTitlePanel(this,
-            titlePanelData.getErdName(),
-            titlePanelData.getErdDate(),
-            titlePanelData.getErdDescription(),
-            titlePanelData.getErdDatabase(),
-            titlePanelData.getErdAuthor(),
-            titlePanelData.getErdRevision(),
-            titlePanelData.getErdFileName());
+                titlePanelData.getErdName(),
+                titlePanelData.getErdDate(),
+                titlePanelData.getErdDescription(),
+                titlePanelData.getErdDatabase(),
+                titlePanelData.getErdAuthor(),
+                titlePanelData.getErdRevision(),
+                titlePanelData.getErdFileName());
             _erdTitlePanel.setBounds(titlePanelData.getTitleBounds());
             layeredPane.add(_erdTitlePanel);
             _erdTitlePanel.toFront();
@@ -1083,7 +1117,22 @@ public class ErdViewerPanel extends DefaultTabView
         return layeredPane.getScale();
     }
     
+    public void setDefaultScaledView(double defaultScaledView) {
+        this.defaultScaledView = defaultScaledView;
+        setScaledView(defaultScaledView);
+    }
+    
+    public void reset() {
+        resetTableValues(tableNames, columnData);
+        setScaledView(defaultScaledView);
+    }
+    
     public void setScaledView(double scale) {
+        
+        if (defaultScaledView == 0) {
+            
+            defaultScaledView = scale;
+        }
         
         if (tables == null) {
         
@@ -1115,7 +1164,9 @@ public class ErdViewerPanel extends DefaultTabView
             
             if (scale < 2.0) {
                 scale += 0.25;
-                tools.incrementScaleCombo(1);
+                if (tools != null) {
+                    tools.incrementScaleCombo(1);
+                }
             }
             else
                 return;
@@ -1124,11 +1175,13 @@ public class ErdViewerPanel extends DefaultTabView
             
             if (scale > 0.25) {
                 scale -= 0.25;
-                tools.incrementScaleCombo(-1);
+                if (tools != null) {
+                    tools.incrementScaleCombo(-1);
+                }
             }
-            else
+            else {
                 return;
-            
+            }
         }
         
         setScaledView(scale);
