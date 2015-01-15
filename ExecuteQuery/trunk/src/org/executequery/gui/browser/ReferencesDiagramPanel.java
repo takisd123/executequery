@@ -44,7 +44,7 @@ public class ReferencesDiagramPanel extends JPanel {
         super(new BorderLayout());
         viewerPanel = new ErdViewerPanel(false, false);
         viewerPanel.setCanvasBackground(Color.WHITE);
-        viewerPanel.setScaledView(0.85d);
+        viewerPanel.setDefaultScaledView(0.85d);
         setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         add(viewerPanel, BorderLayout.CENTER);
     }

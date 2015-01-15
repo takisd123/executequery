@@ -23,25 +23,13 @@ package org.executequery.gui.erd;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.Vector;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JLayeredPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-
-import org.executequery.GUIUtilities;
-import org.underworldlabs.swing.actions.ActionBuilder;
-import org.underworldlabs.swing.menu.MenuItemFactory;
-import org.underworldlabs.swing.util.MenuBuilder;
 
 /**
  *
@@ -58,7 +46,7 @@ public class ErdLayeredPane extends JLayeredPane
     private ErdViewerPanel parent;
     
     /** The popup menu */
-    private PopMenu popup;
+    private ErdPopupMenu popup;
     
     /** The currently selected component */
     private static ErdMoveableComponent selectedComponent;
@@ -71,9 +59,9 @@ public class ErdLayeredPane extends JLayeredPane
     
     public ErdLayeredPane(ErdViewerPanel parent) {
         this.parent = parent;
-        popup = new PopMenu();
+        popup = new ErdPopupMenu(parent);
         addMouseListener(this);
-        addMouseMotionListener(this);
+        addMouseMotionListener(this);        
     }
     
     public void setScale(double scale) {
@@ -247,9 +235,9 @@ public class ErdLayeredPane extends JLayeredPane
     }
     
     private void maybeShowPopup(MouseEvent e) {
-        if (!parent.isEditable()) {
-            return;
-        }
+//        if (!parent.isEditable()) {
+//            return;
+//        }
         
         // check for popup menu
         if (e.isPopupTrigger()) {
@@ -288,9 +276,14 @@ public class ErdLayeredPane extends JLayeredPane
         popup.removeAll();
     }
 
+    public void displayPopupMenuViewItemsOnly() {
+        popup.displayViewItemsOnly();
+    }
+
     /**
      * ERD panel popup menu.
      */
+    /*
     class PopMenu extends JPopupMenu 
                   implements ActionListener {
         
@@ -437,9 +430,6 @@ public class ErdLayeredPane extends JLayeredPane
         }
         
     } // class PopMenu
-   
+    */
+    
 }
-
-
-
-
