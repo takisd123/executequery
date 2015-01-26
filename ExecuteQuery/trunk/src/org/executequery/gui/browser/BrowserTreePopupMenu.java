@@ -27,10 +27,13 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.databaseobjects.DatabaseCatalog;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.gui.browser.nodes.DatabaseCatalogNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.underworldlabs.swing.menu.MenuItemFactory;
@@ -48,6 +51,7 @@ class BrowserTreePopupMenu extends JPopupMenu {
     private JMenuItem disconnect;
     private JMenuItem reload;
     private JMenuItem duplicate;
+    private JMenuItem duplicateWithSource;
     private JMenuItem delete;
     private JMenuItem recycleConnection;
     private JMenuItem copyName;
@@ -89,6 +93,8 @@ class BrowserTreePopupMenu extends JPopupMenu {
         add(addNewConnection);
         duplicate = createMenuItem("Duplicate", "duplicate", listener);
         add(duplicate);
+        duplicateWithSource = createMenuItem("Duplicate source", "duplicateWithSource", listener);
+        add(duplicateWithSource);
         delete = createMenuItem("Delete", "delete", listener);
         add(delete);
 
@@ -131,18 +137,20 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
     private void setToConnect(boolean canConnect) {
+
         connect.setEnabled(canConnect);
         disconnect.setEnabled(!canConnect);
         delete.setEnabled(canConnect);
 
         String label = null;
+        DefaultMutableTreeNode currentPathComponent = (DefaultMutableTreeNode) listener.getCurrentPathComponent();
+
         // check whether reload is available
         if (listener.hasCurrentPath()) {
-            Object object = listener.getCurrentPathComponent();
-            
-            if (object instanceof DatabaseObjectNode) {
+
+            if (currentPathComponent instanceof DatabaseObjectNode) {
                 
-                DatabaseObjectNode node = (DatabaseObjectNode)object;
+                DatabaseObjectNode node = asDatabaseObjectNode(currentPathComponent);
                 
                 //if (node.getUserObject() instanceof DatabaseHost) {
                 
@@ -177,11 +185,24 @@ class BrowserTreePopupMenu extends JPopupMenu {
 
         // re-label the menu items
         if (listener.hasCurrentSelection()) {
+
             String name = listener.getCurrentSelection().getName();
             connect.setText("Connect Data Source " + name);
             disconnect.setText("Disconnect Data Source " + name);
             delete.setText("Remove Data Source " + name);
-            duplicate.setText("Create Duplicate of Data Source " + name);
+            duplicate.setText("Create Duplicate of Connection " + name);
+            
+            // eeekkk...
+            if (isCatalog(currentPathComponent) && asDatabaseCatalog(currentPathComponent).getHost().supportsCatalogsInTableDefinitions()) {
+                
+                duplicateWithSource.setEnabled(true);
+                duplicateWithSource.setText("Create Connection with Data Source as " + currentPathComponent.toString());
+
+            } else {
+
+                duplicateWithSource.setText("Create Connection with Selected Data Source");
+                duplicateWithSource.setEnabled(false);
+            }
 
             if (label != null) {
                 reload.setText("Reload " + label);
@@ -193,12 +214,25 @@ class BrowserTreePopupMenu extends JPopupMenu {
 
     }
 
+    private DatabaseCatalog asDatabaseCatalog(DefaultMutableTreeNode currentPathComponent) {
+
+        return (DatabaseCatalog) (asDatabaseObjectNode(currentPathComponent)).getDatabaseObject();
+    }
+
+    private DatabaseObjectNode asDatabaseObjectNode(DefaultMutableTreeNode currentPathComponent) {
+
+        return (DatabaseObjectNode) currentPathComponent;
+    }
+
+    private boolean isCatalog(DefaultMutableTreeNode currentPathComponent) {
+        
+        return currentPathComponent instanceof DatabaseCatalogNode;
+    }
+
     private void createImportMenu(ActionListener listener) {
         importData = MenuItemFactory.createMenu("Import Data");
-        importData.add(
-                createMenuItem("Import from XML File", "importXml", listener));
-        importData.add(
-                createMenuItem("Import from Delimited File", "importDelimited", listener));
+        importData.add(createMenuItem("Import from XML File", "importXml", listener));
+        importData.add(createMenuItem("Import from Delimited File", "importDelimited", listener));
         add(importData);
     }
 

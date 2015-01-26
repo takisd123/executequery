@@ -98,13 +98,3 @@ public class DatabaseSchemaNode extends DatabaseObjectNode {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
