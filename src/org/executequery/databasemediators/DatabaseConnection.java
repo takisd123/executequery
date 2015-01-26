@@ -133,14 +133,9 @@ public interface DatabaseConnection extends Serializable {
     ConnectionsFolder getFolder();
 
     void setFolderId(String folderId);
+
+    DatabaseConnection withName(String name);
+
+    DatabaseConnection withSource(String source);
     
 }
-
-
-
-
-
-
-
-
-

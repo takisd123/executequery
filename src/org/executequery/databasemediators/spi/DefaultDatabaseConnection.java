@@ -412,16 +412,22 @@ public class DefaultDatabaseConnection implements DatabaseConnection {
         
         return ((ConnectionFoldersRepository) RepositoryCache.load(ConnectionFoldersRepository.REPOSITORY_ID)).findById(folderId);
     }
+
+    @Override
+    public DatabaseConnection withName(String name) {
+
+        setName(name);
+        return this;
+    }
+
+    @Override
+    public DatabaseConnection withSource(String source) {
+
+        setSourceName(source);
+        return this;
+    }
     
     private static final long serialVersionUID = 950081216942320441L;
     
 }
-
-
-
-
-
-
-
-
 
