@@ -393,7 +393,7 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
             DatabaseMetaData dmd = getHost().getDatabaseMetaData();        
             return dmd.getFunctions(catalogName, schemaName, null);
         
-        } catch (SQLException e) {
+        } catch (Throwable e) {
             
             // possible SQLFeatureNotSupportedException
             
