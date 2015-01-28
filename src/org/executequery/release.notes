@@ -6,6 +6,11 @@ Summary of changes - v4.3.1 Build 5431:
 ----------------------------------------
 
 - Added view menu to table references tab in the Browser. 
+- Added menu item for a schema node selection to create a new connection with 
+  the selected schema as the data source.
+- Fixed possible issue with older JDBC drivers where DatabaseMetaData method 
+  getFunctions() is not implemented throwing an AbstractMethodError and failing
+  to render the selection details. 
 
 
 Summary of changes - v4.3.0 Build 5427:
