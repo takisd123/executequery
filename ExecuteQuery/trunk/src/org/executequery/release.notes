@@ -10,7 +10,8 @@ Summary of changes - v4.3.1 Build 5431:
   the selected schema as the data source.
 - Fixed possible issue with older JDBC drivers where DatabaseMetaData method 
   getFunctions() is not implemented throwing an AbstractMethodError and failing
-  to render the selection details. 
+  to render the selection details.
+- Fixed possible concurrency issue with connection pool.
 
 
 Summary of changes - v4.3.0 Build 5427:

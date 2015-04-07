@@ -23,6 +23,7 @@ package org.executequery.datasource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -45,9 +46,9 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
     
     private int initialConnections = INITIAL_POOL_SIZE;
 
-    private final List<PooledConnection> openConnections = new ArrayList<PooledConnection>();
+    private final List<PooledConnection> openConnections = Collections.synchronizedList(new ArrayList<PooledConnection>());
     
-    private final List<PooledConnection> activeConnections = new ArrayList<PooledConnection>();
+    private final List<PooledConnection> activeConnections = Collections.synchronizedList(new ArrayList<PooledConnection>());
     
     private final DatabaseConnection databaseConnection;
 
