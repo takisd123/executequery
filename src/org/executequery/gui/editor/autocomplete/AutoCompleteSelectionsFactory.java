@@ -236,6 +236,7 @@ public class AutoCompleteSelectionsFactory {
     		
     }
 
+    @SuppressWarnings("resource")
     private void databaseExecutableForHost(DatabaseHost databaseHost, String type, 
             String databaseObjectDescription, AutoCompleteListItemType autocompleteType) {
         
@@ -390,8 +391,10 @@ public class AutoCompleteSelectionsFactory {
                 columns.clear();
                 list.clear();
             
-            } catch (SQLException e) {
+            } catch (Throwable e) {
 
+                // don't want to break the editor here so just log and bail...
+                
                 error("Error retrieving column data for table " + table.getDisplayValue() + " - driver returned: " + e.getMessage());
                 
             } finally {
@@ -506,6 +509,7 @@ public class AutoCompleteSelectionsFactory {
         Log.error(message);
     }
     
+    @SuppressWarnings("unused")
     private void warning(String message) {
         
         Log.error(message);
