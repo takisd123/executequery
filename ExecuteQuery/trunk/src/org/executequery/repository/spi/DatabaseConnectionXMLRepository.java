@@ -22,6 +22,7 @@ package org.executequery.repository.spi;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -31,6 +32,7 @@ import org.executequery.Constants;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.DatabaseConnectionFactory;
 import org.executequery.databasemediators.spi.DatabaseConnectionFactoryImpl;
+import org.executequery.log.Log;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryException;
 import org.executequery.util.UserSettingsProperties;
@@ -126,14 +128,22 @@ public class DatabaseConnectionXMLRepository extends AbstractXMLRepository<Datab
 
     private List<DatabaseConnection> open() {
 
-        ensureFileExists();
-        return (List<DatabaseConnection>)read(filePath(), new DatabaseConnectionHandler());
+        try {
+        
+            ensureFileExists();
+            return (List<DatabaseConnection>) read(filePath(), new DatabaseConnectionHandler());
+
+        } catch (RepositoryException e) {
+            
+            Log.error("Error reading saved connections file - " + e.getMessage(), e);
+            return new ArrayList<DatabaseConnection>(0);
+        }
+
     }
 
     private void ensureFileExists() {
 
         File file = new File(filePath());
-
         if (!file.exists()) {
 
             try {

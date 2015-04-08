@@ -95,7 +95,7 @@ abstract class AbstractXMLRepository<T> {
 
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private List<T> read(InputStream in, DefaultHandler handler) 
         throws RepositoryException {
 
