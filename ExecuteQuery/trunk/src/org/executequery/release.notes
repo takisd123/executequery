@@ -12,6 +12,7 @@ Summary of changes - v4.3.1 Build 5431:
   getFunctions() is not implemented throwing an AbstractMethodError and failing
   to render the selection details.
 - Fixed possible concurrency issue with connection pool.
+- Modified to restore new connections XML on failed file load.
 
 
 Summary of changes - v4.3.0 Build 5427:

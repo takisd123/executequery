@@ -26,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -234,7 +235,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
                 if (_columns != null) {
 
-                    columns = new ArrayList<DatabaseColumn>(_columns.size());
+                    columns = databaseColumnListWithSize(_columns.size());
                     for (DatabaseColumn i : _columns) {
 
                         columns.add(new DatabaseTableColumn(this, i));
@@ -309,7 +310,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 // catch and re-throw here to create
                 // an empty column list so we don't
                 // keep hitting the same error
-                columns = new ArrayList<DatabaseColumn>(0);
+                columns = databaseColumnListWithSize(0);
                 throw e;
 
             } catch (SQLException e) {
@@ -317,7 +318,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
                 // catch and re-throw here to create
                 // an empty column list so we don't
                 // keep hitting the same error
-                columns = new ArrayList<DatabaseColumn>(0);
+                columns = databaseColumnListWithSize(0);
                 throw new DataSourceException(e);
 
             } finally {
@@ -330,6 +331,21 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         return columns;
     }
 
+    private List<DatabaseColumn> databaseColumnListWithSize(int size) {
+
+        return Collections.synchronizedList(new ArrayList<DatabaseColumn>(size));
+    }
+
+    private List<ColumnConstraint> databaseConstraintsListWithSize(int size) {
+        
+        return Collections.synchronizedList(new ArrayList<ColumnConstraint>(size));
+    }
+    
+    private List<TableColumnIndex> databaseIndexListWithSize(int size) {
+        
+        return Collections.synchronizedList(new ArrayList<TableColumnIndex>(size));
+    }
+    
     /**
      * Returns the columns of this table.
      *
@@ -360,7 +376,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         } else {
 
-            return new ArrayList<ColumnConstraint>(0);
+            return databaseConstraintsListWithSize(0);
         }
     }
 
@@ -382,7 +398,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             DatabaseHost _host = getHost();
             rs = _host.getDatabaseMetaData().getIndexInfo(getCatalogName(), getSchemaName(), getName(), false, true);
 
-            indexes = new ArrayList<TableColumnIndex>();
+            indexes = databaseIndexListWithSize(10);
             while (rs.next()) {
 
                 String name = rs.getString(6);
@@ -407,7 +423,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
-            indexes = new ArrayList<TableColumnIndex>(0);
+            indexes = databaseIndexListWithSize(0);
             throw e;
 
         } catch (SQLException e) {
@@ -415,7 +431,7 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
             // catch and re-throw here to create
             // an empty index list so we don't
             // keep hitting the same error
-            indexes = new ArrayList<TableColumnIndex>(0);
+            indexes = databaseIndexListWithSize(0);
             throw new DataSourceException(e);
 
         } finally {
@@ -656,7 +672,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
         }
 
         List<ColumnConstraint> constraints = getConstraints();
-
         if (constraints != null) {
 
             for (ColumnConstraint i : constraints) {
@@ -682,7 +697,6 @@ public class DefaultDatabaseTable extends DefaultDatabaseObject implements Datab
 
         // retrieve column alter changes
         List<DatabaseColumn> _columns = getColumns();
-
         if (_columns != null) {
 
             StatementGenerator statementGenerator = createStatementGenerator();

@@ -71,7 +71,7 @@ public class DefaultDatabaseColumn extends AbstractDatabaseObjectElement
     private String defaultValue;
 
     /** the column meta data map */
-    private Map<String,String> metaData;
+    private Map<String, String> metaData;
     
     public DefaultDatabaseColumn() {}    
 
