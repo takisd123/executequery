@@ -506,22 +506,37 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
 
         public Object getValueAt(int row, int col) {
 
-            switch (col) {
-                case 0:
-                    return Boolean.valueOf(values.get(row).isConnected());
-                case 1:
-                    return values.get(row).getName();
-                case 2:
-                    return values.get(row).getHost();
-                case 3:
-                    return values.get(row).getSourceName();
-                case 4:
-                    return values.get(row).getUserName();
-                case 5:
-                    return values.get(row).getDriverName();
-            }
+            DatabaseConnection databaseConnection = values.get(row);
+            if (databaseConnection != null) {
+                switch (col) {
+                    case 0:
+                        return Boolean.valueOf(databaseConnection.isConnected());
+                    case 1:
+                        return databaseConnection.getName();
+                    case 2:
+                        return databaseConnection.getHost();
+                    case 3:
+                        return databaseConnection.getSourceName();
+                    case 4:
+                        return databaseConnection.getUserName();
+                    case 5:
+                        return databaseConnection.getDriverName();
+                }
+            } else {
+                
+                // check the rest - failure reported when conns file is corrupted
+                for (int i = 0, n = values.size(); i < n; i++) {
 
-            return values.get(row);
+                    if (values.size() > 0 && values.get(i) == null) {
+                        
+                        values.remove(i);
+                        i--;
+                    }
+                    
+                }
+                fireTableDataChanged();
+            }
+            return databaseConnection;
         }
 
     }
