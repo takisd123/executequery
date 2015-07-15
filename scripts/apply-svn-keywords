@@ -1,1 +1,0 @@
-find . \( -name "*.java" -o -name "*.xml" -o -name "*.txt" -o -name "*.properties" \) -exec svn propset svn:keywords "Id Revision Date" {} \;

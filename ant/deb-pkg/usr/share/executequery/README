@@ -1,8 +1,0 @@
-expected layout:
-
-drwxr-xr-x 4 takisd takisd    4096 2010-03-16 14:42 .
-drwxr-xr-x 8 takisd takisd    4096 2010-03-16 14:42 ..
-drwxr-xr-x 2 takisd takisd    4096 2010-03-16 14:42 docs
--rwxr-xr-x 1 takisd takisd 5280903 2010-03-11 10:29 eq.jar
-drwxr-xr-x 2 takisd takisd    4096 2010-03-16 14:42 lib
-

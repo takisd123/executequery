@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Execute Query
-Comment=Database query and visualisation tool
-Type=Application
-Exec=executequery
-Icon=/usr/share/pixmaps/executequery.png
-Terminal=false
-Categories=Database;Development;
