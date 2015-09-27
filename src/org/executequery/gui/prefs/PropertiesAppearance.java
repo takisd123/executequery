@@ -20,10 +20,17 @@
 
 package org.executequery.gui.prefs;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
+import org.executequery.GUIUtilities;
 import org.executequery.plaf.LookAndFeelType;
+import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.LabelValuePair;
 import org.underworldlabs.util.SystemProperties;
 
@@ -31,10 +38,10 @@ import org.underworldlabs.util.SystemProperties;
  * System preferences appearance panel.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1509 $
+ * @date     $Date: 2015-09-24 22:09:54 +1000 (Thu, 24 Sep 2015) $
  */
-public class PropertiesAppearance extends PropertiesBasePanel {
+public class PropertiesAppearance extends PropertiesBasePanel implements ItemListener {
 
     private SimplePreferencesPanel preferencesPanel;
 
@@ -49,6 +56,7 @@ public class PropertiesAppearance extends PropertiesBasePanel {
     }
 
     /** Initializes the state of this instance. */
+    @SuppressWarnings("rawtypes")
     private void init() throws Exception {
 
     	List<UserPreference> list = new ArrayList<UserPreference>();
@@ -154,9 +162,70 @@ public class PropertiesAppearance extends PropertiesBasePanel {
                 (UserPreference[])list.toArray(new UserPreference[list.size()]);
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
-
+        
+//        lookAndFeelCombBox().addItemListener(this);
     }
 
+    @SuppressWarnings("rawtypes")
+    private JComboBox lookAndFeelCombBox() {
+
+        return (JComboBox) preferencesPanel.getComponentEditorForKey("startup.display.lookandfeel");
+    }
+
+    private boolean lafChangeWarningShown = false;
+    private LabelValuePair lastLookAndFeelSelection;
+    
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+
+        LabelValuePair labelValuePair = (LabelValuePair) e.getItem();
+        LookAndFeelType lookAndFeelType = (LookAndFeelType) labelValuePair.getValue();
+        if (e.getStateChange() == ItemEvent.DESELECTED) {
+            
+            lastLookAndFeelSelection = labelValuePair;
+
+            if (UIUtils.isDarkLookAndFeel() && !isDarkTheme(lookAndFeelType) && !lafChangeWarningShown) {
+                
+                showColoursWarning();
+            }
+        
+        } else if (e.getStateChange() == ItemEvent.SELECTED) {
+            
+            if (isDarkTheme(lookAndFeelType) && !UIUtils.isDarkLookAndFeel() && !lafChangeWarningShown) {
+
+                showColoursWarning();
+            }
+
+        }
+        
+    }
+
+    private void showColoursWarning() {
+
+        int result = GUIUtilities.displayConfirmDialog(
+                "Changing to this look and feel from your current selection "
+                + "also changes\nthe colours applied to the Query Editor including "
+                + "syntax\nhighlighting and the results set tables to better suit "
+                + "the selected look.");
+        
+        if (result == JOptionPane.OK_OPTION) {
+            
+            
+            
+        
+        } else {
+            
+            lookAndFeelCombBox().setSelectedItem(lastLookAndFeelSelection);            
+        }
+        
+        
+    }
+
+    private boolean isDarkTheme(LookAndFeelType lookAndFeelType) {
+
+        return lookAndFeelType == LookAndFeelType.EXECUTE_QUERY_DARK;
+    }
+    
     private Object[] lookAndFeelValuePairs() {
 
         LookAndFeelType[] lookAndFeelTypes = LookAndFeelType.values();
@@ -179,10 +248,4 @@ public class PropertiesAppearance extends PropertiesBasePanel {
     }
 
 }
-
-
-
-
-
-
 
