@@ -37,8 +37,8 @@ import org.underworldlabs.jdbc.DataSourceException;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1511 $
+ * @date     $Date: 2015-09-27 21:22:38 +1000 (Sun, 27 Sep 2015) $
  */
 public class ConnectionPoolImpl extends AbstractConnectionPool implements PooledConnectionListener {
 
@@ -261,8 +261,15 @@ public class ConnectionPoolImpl extends AbstractConnectionPool implements Pooled
             
             int transactionIsolation = databaseConnection.getTransactionIsolation();
             if (transactionIsolation != -1) {
-            
-                realConnection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+
+                try {
+                
+                    realConnection.setTransactionIsolation(databaseConnection.getTransactionIsolation());
+
+                } catch (SQLException e) {
+                    
+                    Log.warning("Error setting transaction isolation level: " + e.getMessage());
+                }
             }
 
             connection = new PooledConnection(realConnection);

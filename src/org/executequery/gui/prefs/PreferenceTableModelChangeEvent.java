@@ -1,5 +1,5 @@
 /*
- * UserPreferenceFunction.java
+ * PreferenceTableModelChangeEvent.java
  *
  * Copyright (C) 2002-2015 Takis Diakoumis
  *
@@ -20,18 +20,37 @@
 
 package org.executequery.gui.prefs;
 
+import org.underworldlabs.util.LabelValuePair;
+
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1512 $
- * @date     $Date: 2015-09-27 21:23:07 +1000 (Sun, 27 Sep 2015) $
+ * @version  $Revision: 1487 $
+ * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
-public interface UserPreferenceFunction extends PreferenceChangeListener {
+public class PreferenceTableModelChangeEvent {
 
-    void save();
+    private UserPreference userPreference;
     
-    void restoreDefaults();
-    
-    void addPreferenceChangeListener(PreferenceChangeListener preferenceChangeListener);
+    public PreferenceTableModelChangeEvent(UserPreference userPreference) {
 
+        this.userPreference = userPreference;
+    }
+    
+    public String getKey() {
+        
+        return userPreference.getKey();
+    }
+    
+    public Object getValue() {
+
+        Object value = userPreference.getValue(); 
+        if (value instanceof LabelValuePair) {
+            
+            value = ((LabelValuePair) value).getValue();
+        }
+        
+        return value;
+    }
+    
 }

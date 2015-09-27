@@ -26,11 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 
 import org.executequery.GUIUtilities;
 import org.executequery.plaf.LookAndFeelType;
-import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.LabelValuePair;
 import org.underworldlabs.util.SystemProperties;
 
@@ -38,14 +36,13 @@ import org.underworldlabs.util.SystemProperties;
  * System preferences appearance panel.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1509 $
- * @date     $Date: 2015-09-24 22:09:54 +1000 (Thu, 24 Sep 2015) $
+ * @version  $Revision: 1512 $
+ * @date     $Date: 2015-09-27 21:23:07 +1000 (Sun, 27 Sep 2015) $
  */
-public class PropertiesAppearance extends PropertiesBasePanel implements ItemListener {
+public class PropertiesAppearance extends AbstractPropertiesBasePanel implements ItemListener {
 
     private SimplePreferencesPanel preferencesPanel;
 
-    /** <p>Constructs a new instance. */
     public PropertiesAppearance() {
         try  {
             init();
@@ -56,7 +53,6 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
     }
 
     /** Initializes the state of this instance. */
-    @SuppressWarnings("rawtypes")
     private void init() throws Exception {
 
     	List<UserPreference> list = new ArrayList<UserPreference>();
@@ -163,7 +159,7 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
         preferencesPanel = new SimplePreferencesPanel(preferences);
         addContent(preferencesPanel);
         
-//        lookAndFeelCombBox().addItemListener(this);
+        lookAndFeelCombBox().addItemListener(this);
     }
 
     @SuppressWarnings("rawtypes")
@@ -173,11 +169,20 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
     }
 
     private boolean lafChangeWarningShown = false;
-    private LabelValuePair lastLookAndFeelSelection;
-    
+
     @Override
     public void itemStateChanged(ItemEvent e) {
 
+        if (!lafChangeWarningShown && e.getStateChange() == ItemEvent.DESELECTED) {
+
+            GUIUtilities.displayInformationMessage("Changing the look and feel may also change "
+                    + "the colours applied to syntax\nhighlighting and the results set "
+                    + "table views to better suit the selected look");
+            lafChangeWarningShown = true;
+        }
+        
+        /*
+        
         LabelValuePair labelValuePair = (LabelValuePair) e.getItem();
         LookAndFeelType lookAndFeelType = (LookAndFeelType) labelValuePair.getValue();
         if (e.getStateChange() == ItemEvent.DESELECTED) {
@@ -197,35 +202,16 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
             }
 
         }
-        
+        */
     }
 
-    private void showColoursWarning() {
-
-        int result = GUIUtilities.displayConfirmDialog(
-                "Changing to this look and feel from your current selection "
-                + "also changes\nthe colours applied to the Query Editor including "
-                + "syntax\nhighlighting and the results set tables to better suit "
-                + "the selected look.");
-        
-        if (result == JOptionPane.OK_OPTION) {
-            
-            
-            
-        
-        } else {
-            
-            lookAndFeelCombBox().setSelectedItem(lastLookAndFeelSelection);            
-        }
-        
-        
-    }
-
+    /*
     private boolean isDarkTheme(LookAndFeelType lookAndFeelType) {
 
         return lookAndFeelType == LookAndFeelType.EXECUTE_QUERY_DARK;
     }
-    
+    */
+
     private Object[] lookAndFeelValuePairs() {
 
         LookAndFeelType[] lookAndFeelTypes = LookAndFeelType.values();
@@ -239,6 +225,11 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
         return values;
     }
 
+    public LookAndFeelType getSelectedLookAndFeel() {
+        
+        return (LookAndFeelType) lookAndFeelCombBox().getSelectedItem();
+    }
+    
     public void restoreDefaults() {
         preferencesPanel.savePreferences();
     }
@@ -248,4 +239,3 @@ public class PropertiesAppearance extends PropertiesBasePanel implements ItemLis
     }
 
 }
-
