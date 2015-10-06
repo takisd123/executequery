@@ -75,8 +75,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1520 $
+ * @date     $Date: 2015-10-06 15:16:43 +1100 (Tue, 06 Oct 2015) $
  */
 public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                                   implements ConnectionListener,
@@ -1096,7 +1096,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         DatabaseObjectNode node = getHostNode(dc);
 
         // if the host node itself is selected - enable/disable buttons
-        if (tree.getSelectionPath().getLastPathComponent() == node) {
+        TreePath selectionPath = tree.getSelectionPath();
+        if (selectionPath != null && selectionPath.getLastPathComponent() == node) {
 
             enableButtons(true, true, true, false);
         }
