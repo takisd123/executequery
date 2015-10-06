@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 5 October 2015
+Date: 6 October 2015
 
-Summary of changes - v4.3.2 Build 5446:
+Summary of changes - v4.3.2 Build 5447:
 ----------------------------------------
 
 - Modified to examine result set return values as objects and strings to render
@@ -13,7 +13,10 @@ Summary of changes - v4.3.2 Build 5446:
 - Now logging a warning only when attempting and failing to set transaction 
   isolation level on a connection.
 - Modified text pane log event thread in render to avoid possible write locks.
-- Fixed result ste table sort issue when selecting and rendering boolean types.
+- Fixed result set table sort issue when selecting and rendering boolean types.
+- Added delay to table row count query for browser node selections to avoid 
+  system hang when moving through selection nodes - eg. keyboard arrow
+  scrolling up/down quickly.   
 
 
 Summary of changes - v4.3.1 Build 5443:
@@ -512,4 +515,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-5 October 2015
+6 October 2015
