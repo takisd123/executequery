@@ -75,8 +75,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1520 $
- * @date     $Date: 2015-10-06 15:16:43 +1100 (Tue, 06 Oct 2015) $
+ * @version  $Revision: 1526 $
+ * @date     $Date: 2015-10-07 10:33:58 +1100 (Wed, 07 Oct 2015) $
  */
 public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                                   implements ConnectionListener,
@@ -1293,27 +1293,19 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         if (oldSelectionPath != null) {
 
             Object lastObject = oldSelectionPath.getLastPathComponent();
-
-            if (isADatabaseObjectNode(lastObject)) {
+            if (!canProceedWithChangesApplied(lastObject)) {
 
                 try {
                 
-                    DatabaseObjectNode databaseObjectNode = (DatabaseObjectNode)lastObject;
-                    boolean applyChanges = databaseObjectChangeProvider(databaseObjectNode.getDatabaseObject()).applyChanges(true);
-                    
-                    if (!applyChanges) {
-                        
-                        tree.setSelectionPath(oldSelectionPath);
-                        return;                    
-                    }
-                
-                } catch (DataSourceException e) {
-                    
-                    GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
+                    removeTreeSelectionListener();
                     tree.setSelectionPath(oldSelectionPath);
-                    return;                    
+                    return;
+                    
+                } finally {
+                    
+                    addTreeSelectionListener();
                 }
-                 
+
             }
             
         }
@@ -1374,6 +1366,30 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
         worker.start();
     }
 
+    private boolean canProceedWithChangesApplied(Object selectedNode) {
+        
+        if (isADatabaseObjectNode(selectedNode)) {
+
+            try {
+            
+                DatabaseObjectNode databaseObjectNode = (DatabaseObjectNode) selectedNode;
+                boolean applyChanges = databaseObjectChangeProvider(databaseObjectNode.getDatabaseObject()).applyChanges(true);
+                
+                if (!applyChanges) {
+                    
+                    return false;
+                }
+                
+            } catch (DataSourceException e) {
+                
+                GUIUtilities.displayExceptionErrorDialog(e.getMessage(), e);
+                return false;
+            }
+             
+        }
+        return true;
+    }
+    
     private DatabaseObjectChangeProvider databaseObjectChangeProvider(NamedObject namedObject) {
 
         return new DatabaseObjectChangeProvider(namedObject); 
@@ -1688,7 +1704,13 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     }
 
     protected void disconnect(DatabaseConnection dc) {
-        controller.disconnect(dc);
+        
+        if (canProceedWithChangesApplied(tree.getLastPathComponent())) {
+
+            setSelectedConnection(dc);            
+            controller.disconnect(dc);            
+        }
+        
     }
 
     protected void connect(DatabaseConnection dc) {
