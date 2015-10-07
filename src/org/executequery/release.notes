@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 6 October 2015
+Date: 7 October 2015
 
-Summary of changes - v4.3.2 Build 5447:
+Summary of changes - v4.3.2 Build 5448:
 ----------------------------------------
 
 - Modified to examine result set return values as objects and strings to render
@@ -16,7 +16,11 @@ Summary of changes - v4.3.2 Build 5447:
 - Fixed result set table sort issue when selecting and rendering boolean types.
 - Added delay to table row count query for browser node selections to avoid 
   system hang when moving through selection nodes - eg. keyboard arrow
-  scrolling up/down quickly.   
+  scrolling up/down quickly.
+- Added delay to table data retrieval for browser node selection ensuring no 
+  unecessary connections are opened and statements executed. 
+- Fixed error on selecting to disconnect from the browser tree popup menu when 
+  the current selection is not a host node.
 
 
 Summary of changes - v4.3.1 Build 5443:
@@ -515,4 +519,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-6 October 2015
+7 October 2015
