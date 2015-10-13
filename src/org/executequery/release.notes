@@ -21,6 +21,10 @@ Summary of changes - v4.3.2 Build 5448:
   unecessary connections are opened and statements executed. 
 - Fixed error on selecting to disconnect from the browser tree popup menu when 
   the current selection is not a host node.
+- Modified to allow double-click item selections on available/selected list 
+  panels, ie. import/export column selections.
+- Added new menu items to Result Set table to copy cells as comma-separated 
+  values with or without quotes. 
 
 
 Summary of changes - v4.3.1 Build 5443:
