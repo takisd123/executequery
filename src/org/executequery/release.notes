@@ -1,8 +1,8 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 7 October 2015
+Date: 14 October 2015
 
-Summary of changes - v4.3.2 Build 5448:
+Summary of changes - v4.3.2 Build 5449:
 ----------------------------------------
 
 - Modified to examine result set return values as objects and strings to render
@@ -523,4 +523,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-7 October 2015
+14 October 2015
