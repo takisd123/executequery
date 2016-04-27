@@ -42,8 +42,8 @@ import org.underworldlabs.swing.util.SwingWorker;
  * Checks to see if a newer version of Execute Query is available. 
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1536 $
+ * @date     $Date: 2015-10-15 14:51:18 +1100 (Thu, 15 Oct 2015) $
  */
 public class CheckForUpdateNotifier implements Interruptible {
 
@@ -338,7 +338,6 @@ public class CheckForUpdateNotifier implements Interruptible {
     private void showExceptionErrorDialog(ApplicationException e) {
 
         GUIUtilities.showNormalCursor();
-        
         GUIUtilities.displayExceptionErrorDialog(genericIOError(), e);
     }
 
@@ -353,8 +352,8 @@ public class CheckForUpdateNotifier implements Interruptible {
         return "New version " + version.getVersion() + 
             " (Build " + version.getBuild() + ") " +
             " is available for download at " +
-            "<a href=\"http://executequery.org\">http://executequery.org</a>." +
-            "\nClick <a href=\"http://executequery.org/download.jsp\">here</a>" +
+            "<a style=\"color:#3F7ED3\" href=\"http://executequery.org\">http://executequery.org</a>." +
+            "\nClick <a style=\"color:#3F7ED3\" href=\"http://executequery.org/download.jsp\">here</a>" +
             " to go to the download page.\n\nDo you wish to view the " +
             "version notes for this release?";
     }
