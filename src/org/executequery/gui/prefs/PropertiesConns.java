@@ -33,8 +33,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1512 $
- * @date     $Date: 2015-09-27 21:23:07 +1000 (Sun, 27 Sep 2015) $
+ * @version  $Revision: 1766 $
+ * @date     $Date: 2017-08-14 23:34:37 +1000 (Mon, 14 Aug 2017) $
  */
 public class PropertiesConns extends AbstractPropertiesBasePanel {
     
@@ -79,7 +79,7 @@ public class PropertiesConns extends AbstractPropertiesBasePanel {
                 UserPreference.BOOLEAN_TYPE,
                 key,
                 "Reuse connection",
-                new Boolean(SystemProperties.getProperty("user", key))));
+                Boolean.valueOf(SystemProperties.getProperty("user", key))));
 
         key = "connection.reuse.count";
         list.add(new UserPreference(
@@ -94,7 +94,7 @@ public class PropertiesConns extends AbstractPropertiesBasePanel {
                 UserPreference.BOOLEAN_TYPE,
                 key,
                 "Connect at startup",
-                new Boolean(SystemProperties.getProperty("user", key))));
+                Boolean.valueOf(SystemProperties.getProperty("user", key))));
         
         key = "startup.connection.name";
         list.add(new UserPreference(
