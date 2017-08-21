@@ -60,8 +60,8 @@ import org.underworldlabs.util.SystemProperties;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1768 $
- * @date     $Date: 2017-08-20 21:33:48 +1000 (Sun, 20 Aug 2017) $
+ * @version  $Revision: 1769 $
+ * @date     $Date: 2017-08-21 00:13:31 +1000 (Mon, 21 Aug 2017) $
  */
 public class ApplicationLauncher {
 
@@ -196,6 +196,7 @@ public class ApplicationLauncher {
 
             ThreadUtils.invokeLater(new Runnable() {
 
+                @Override
                 public void run() {
 
                     frame.setVisible(true);
@@ -225,7 +226,7 @@ public class ApplicationLauncher {
             
             Log.trace(" --- System properties --- ");
 
-            List<String> keys = new ArrayList<String>();
+            List<String> keys = new ArrayList<>();
             Properties properties = System.getProperties();
             for (Enumeration<Object> i = properties.keys(); i.hasMoreElements();) {
                 
@@ -383,7 +384,7 @@ public class ApplicationLauncher {
                         "/org/executequery/images/SplashImage.png",
                         versionString(),
                         versionTextColour(),
-                        110, 210);
+                        220, 230);
 //        5, 15); // top-left
     }
 
@@ -457,6 +458,7 @@ public class ApplicationLauncher {
 
             ThreadUtils.invokeLater(new Runnable() {
 
+                @Override
                 public void run() {
 
                     openConnection(databaseConnectionRepository().findByName(name));
@@ -489,7 +491,6 @@ public class ApplicationLauncher {
             String pwd = pd.getValue();
 
             pd.dispose();
-            pd = null;
 
             if (result <= PasswordDialog.CANCEL) {
 
@@ -526,7 +527,7 @@ public class ApplicationLauncher {
                 awtAppClassName.setAccessible(true);
                 awtAppClassName.set(null, ExecuteQueryFrame.TITLE);
             
-            } catch (Exception e) {
+            } catch (IllegalAccessException | IllegalArgumentException | NoSuchFieldException | SecurityException e) {
 
                 e.printStackTrace();
             }
@@ -559,6 +560,4 @@ public class ApplicationLauncher {
 
     
 }
-
-
 

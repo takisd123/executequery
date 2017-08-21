@@ -29,6 +29,7 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.components.SimpleHtmlContentPane;
 import org.executequery.components.StatusBarPanel;
+import org.executequery.gui.PulsatingCircle;
 import org.executequery.gui.InformationDialog;
 import org.executequery.log.Log;
 import org.executequery.repository.LatestVersionRepository;
@@ -42,8 +43,8 @@ import org.underworldlabs.swing.util.SwingWorker;
  * Checks to see if a newer version of Execute Query is available. 
  * 
  * @author   Takis Diakoumis
- * @version  $Revision: 1536 $
- * @date     $Date: 2015-10-15 14:51:18 +1100 (Thu, 15 Oct 2015) $
+ * @version  $Revision: 1770 $
+ * @date     $Date: 2017-08-21 22:01:25 +1000 (Mon, 21 Aug 2017) $
  */
 public class CheckForUpdateNotifier implements Interruptible {
 
@@ -85,7 +86,7 @@ public class CheckForUpdateNotifier implements Interruptible {
                 
                 logNewVersonInfo();
                 setNotifierInStatusBar();
-                
+
             } else {
                 
                 Log.info("Execute Query is up to date.");
@@ -103,7 +104,8 @@ public class CheckForUpdateNotifier implements Interruptible {
         JLabel label = getUpdateNotificationLabel();
 
         label.addMouseListener(new NotificationLabelMouseAdapter());        
-        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.gif"));
+//        label.setIcon(GUIUtilities.loadIcon("YellowBallAnimated16.gif"));
+        label.setIcon(new PulsatingCircle(label, 6));
         label.setToolTipText(newVersionAvailableText());
 
         statusBar().setThirdLabelText("Update available");
