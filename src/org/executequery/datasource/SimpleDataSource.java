@@ -42,8 +42,8 @@ import org.underworldlabs.util.MiscUtils;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1774 $
+ * @date     $Date: 2017-08-24 21:50:47 +1000 (Thu, 24 Aug 2017) $
  */
 @SuppressWarnings({ "rawtypes" })
 public class SimpleDataSource implements DataSource, DatabaseDataSource {
@@ -86,7 +86,6 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
     public Connection getConnection(String username, String password) throws SQLException {
 
         Properties advancedProperties = buildAdvancedProperties();
-        
         if (StringUtils.isNotBlank(username)) {
             
             advancedProperties.put("user", username);
@@ -108,11 +107,15 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
     private Properties buildAdvancedProperties() {
 
         Properties advancedProperties = new Properties();
-        
         for (Iterator<?> i = properties.keySet().iterator(); i.hasNext();) {
             
             String key = i.next().toString();
             advancedProperties.put(key, properties.get(key));
+        }
+        
+        if (advancedProperties.size() > 0) {
+            
+            Log.debug("Using advanced properties :: " + advancedProperties);
         }
         
         return advancedProperties;
@@ -126,7 +129,6 @@ public class SimpleDataSource implements DataSource, DatabaseDataSource {
     protected final String generateUrl(DatabaseConnection databaseConnection) {
 
         String url = databaseConnection.getURL();
-        
         if (StringUtils.isBlank(url)) {
         
             url = databaseConnection.getJDBCDriver().getURL();            
