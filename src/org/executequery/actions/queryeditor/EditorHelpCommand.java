@@ -21,6 +21,7 @@
 package org.executequery.actions.queryeditor;
 
 import org.executequery.actions.helpcommands.HelpCommand;
+import org.executequery.localisation.eqlang;
 
 /** 
  * Contextual help for the Query Editor.
@@ -33,7 +34,7 @@ public class EditorHelpCommand extends HelpCommand {
 
     public EditorHelpCommand() {
 
-        super("query-editor");
+        super(eqlang.getString("query-editor"));
     }
     
 }

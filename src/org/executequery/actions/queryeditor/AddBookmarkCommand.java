@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.editor.AddQueryBookmarkPanel;
+import org.executequery.localisation.eqlang;
 
 /** 
  * <p>The Query Editor's add bookmark command.
@@ -50,7 +51,7 @@ public class AddBookmarkCommand extends AbstractQueryEditorCommand {
 
             } else {
                 
-                GUIUtilities.displayErrorMessage("Query editor has no text");
+                GUIUtilities.displayErrorMessage(eqlang.getString("Query editor has no text"));
             }
             
         }

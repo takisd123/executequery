@@ -23,6 +23,7 @@ package org.executequery.actions.othercommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.gui.prefs.UserPreferenceFunction;
+import org.executequery.localisation.eqlang;
 
 /* ----------------------------------------------------------
  * CVS NOTE: Changes to the CVS repository prior to the 
@@ -43,7 +44,7 @@ public class RestoreDefaultsCommand extends AbstractBaseCommand {
     private UserPreferenceFunction frame;
     
     public RestoreDefaultsCommand(UserPreferenceFunction frame) {
-        super("Restore Defaults");
+        super(eqlang.getString("Restore Defaults"));
         this.frame = frame;
     }
     

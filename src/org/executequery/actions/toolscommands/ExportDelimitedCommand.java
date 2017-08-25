@@ -23,6 +23,7 @@ package org.executequery.actions.toolscommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
@@ -49,11 +50,11 @@ public class ExportDelimitedCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Export Data")) {
+        if (!isDialogOpen(eqlang.getString("Export Data"))) {
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Export Data", false, false);
+                        createDialog(eqlang.getString("Export Data"), false, false);
                 ImportExportDelimitedPanel panel = 
                         new ImportExportDelimitedPanel(dialog, ImportExportDataProcess.EXPORT);
                 dialog.addDisplayComponent(panel);

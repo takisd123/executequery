@@ -23,6 +23,7 @@ package org.executequery.actions.toolscommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
@@ -49,11 +50,11 @@ public class ExportExcelCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Export Excel Spreadsheet")) {
+        if (!isDialogOpen(eqlang.getString("Export Excel Spreadsheet"))) {
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Export Excel Spreadsheet", false, false);
+                        createDialog(eqlang.getString("Export Excel Spreadsheet"), false, false);
                 ImportExportExcelPanel panel = 
                         new ImportExportExcelPanel(dialog, ImportExportDataProcess.EXPORT);
                 dialog.addDisplayComponent(panel);

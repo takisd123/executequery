@@ -23,6 +23,7 @@ package org.executequery.actions.helpcommands;
 import java.awt.event.ActionEvent;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.InformationDialog;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
@@ -36,7 +37,7 @@ public class LicenseCommand extends OpenFrameCommand
                             implements BaseCommand {
     
     public void execute(ActionEvent e) {
-        new InformationDialog("License", 
+        new InformationDialog(eqlang.getString("License"),
                 "org/executequery/gpl.license", InformationDialog.RESOURCE_PATH_VALUE);
     }
     

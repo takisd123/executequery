@@ -27,6 +27,7 @@ import javax.swing.SwingUtilities;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.SQLHistoryDialog;
+import org.executequery.localisation.eqlang;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.repository.SqlCommandHistoryRepository;
 
@@ -51,7 +52,7 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
 
                     if (history == null || history.isEmpty()) {
                         
-                        GUIUtilities.displayInformationMessage("No SQL command history available");
+                        GUIUtilities.displayInformationMessage(eqlang.getString("No SQL command history available"));
                         return;
                     } 
 

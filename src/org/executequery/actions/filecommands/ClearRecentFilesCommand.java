@@ -22,6 +22,7 @@ package org.executequery.actions.filecommands;
 
 import java.awt.event.ActionEvent;
 
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.repository.RecentlyOpenFileRepository;
 import org.executequery.repository.RepositoryCache;
@@ -38,7 +39,7 @@ public class ClearRecentFilesCommand implements BaseCommand {
 
         } catch (RepositoryException re) {
 
-            Log.error("An IO error occurred clearing the recent open files list: " +
+            Log.error(eqlang.getString("An IO error occurred clearing the recent open files list:") +
                     re.getMessage());
             
         }

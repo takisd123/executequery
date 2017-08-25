@@ -23,6 +23,7 @@ package org.executequery.actions.toolscommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
@@ -49,11 +50,11 @@ public class ExportXMLCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Export XML")) {
+        if (!isDialogOpen(eqlang.getString("Export XML"))) {
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Export XML", false, false);
+                        createDialog(eqlang.getString("Export XML"), false, false);
                 ImportExportXMLPanel panel = 
                         new ImportExportXMLPanel(dialog, ImportExportDataProcess.EXPORT);
                 dialog.addDisplayComponent(panel);

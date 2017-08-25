@@ -23,6 +23,7 @@ package org.executequery.actions;
 import org.executequery.GUIUtilities;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.BaseDialog;
+import org.executequery.localisation.eqlang;
 
 /**
  * Base command for those opening a new frame
@@ -38,7 +39,7 @@ public abstract class OpenFrameCommand {
         if (!ConnectionManager.hasConnections()) {
 
             GUIUtilities.displayErrorMessage(
-                            "Not Connected.\nPlease connect to continue.");
+                    eqlang.getString("Not Connected."));
 
             return false;
         }

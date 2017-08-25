@@ -26,6 +26,7 @@ import javax.swing.JOptionPane;
 
 import org.executequery.GUIUtilities;
 import org.executequery.gui.SystemLogsViewer;
+import org.executequery.localisation.eqlang;
 import org.executequery.repository.LogRepository;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.util.ThreadUtils;
@@ -142,20 +143,20 @@ public class ApplicationLogsCommand extends ReflectiveAction
 
     private boolean resetLogConfirmed(int type) {
 
-        String message = "Are you sure you want to reset the ";
+        String message = eqlang.getString("Are you sure you want to reset the");
 
         switch (type) {
 
             case LogRepository.ACTIVITY:
-                message += "system activity log?";
+                message += eqlang.getString("system activity log?");
                 break;
 
             case LogRepository.EXPORT:
-                message += "data export log?";
+                message += eqlang.getString("data export log?");
                 break;
 
             case LogRepository.IMPORT:
-                message += "data import log?";
+                message += eqlang.getString("data import log?");
                 break;
 
         }

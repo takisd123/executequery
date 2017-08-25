@@ -23,6 +23,7 @@ package org.executequery.actions.othercommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 
 /** <p>This represents a generic close/cancel command
  *  performed from any open <code>JInternalFrame</code>.
@@ -46,7 +47,7 @@ public class CancelCommand extends AbstractBaseCommand {
      * cancel command or otherwise.
      */
     public CancelCommand(boolean isDialog) {
-        super("Cancel");
+        super(eqlang.getString("Cancel"));
         this.isDialog = isDialog;
     }
 

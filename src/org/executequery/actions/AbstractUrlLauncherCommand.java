@@ -24,6 +24,7 @@ import java.awt.event.ActionEvent;
 
 import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.executequery.util.SystemWebBrowserLauncher;
 import org.underworldlabs.swing.actions.BaseCommand;
 
@@ -44,7 +45,7 @@ public abstract class AbstractUrlLauncherCommand implements BaseCommand {
         } catch (ApplicationException applicationException) {
             
             GUIUtilities.displayExceptionErrorDialog(
-                    "Error launching local web browser:\n" + 
+                    eqlang.getString("Error launching local web browser:") +
                     applicationException.getMessage(), applicationException);
             
         }

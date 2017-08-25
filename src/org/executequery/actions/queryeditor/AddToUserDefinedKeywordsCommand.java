@@ -23,6 +23,7 @@ package org.executequery.actions.queryeditor;
 import java.awt.event.ActionEvent;
 
 import org.apache.commons.lang.StringUtils;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
@@ -52,12 +53,12 @@ public class AddToUserDefinedKeywordsCommand extends AbstractQueryEditorCommand 
                     if (!keywordRepository.contains(wordAtCursor)) {
 
                         keywordRepository.addUserDefinedKeyword(wordAtCursor);
-                        Log.info("Keyword [ " + wordAtCursor + 
-                                " ] added to user defined keyword list.");
+                        Log.info(eqlang.getString("Keyword [") + wordAtCursor +
+                                eqlang.getString("] added to user defined keyword list."));
                         
                     } else {
                         
-                        Log.info("Keyword already exists as a part of the defined keyword list.");
+                        Log.info(eqlang.getString("Keyword already exists as a part of the defined keyword list."));
                     }
                     
                 }

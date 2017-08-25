@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.editor.QueryEditor;
+import org.executequery.localisation.eqlang;
 import org.executequery.print.*;
 import org.executequery.gui.editor.PrintSelectDialog;
 import org.underworldlabs.swing.GUIUtils;
@@ -105,7 +106,7 @@ public class PrintPreviewCommand implements BaseCommand {
                         printFunction.getPrintable(), printFunction.getPrintJobName());
             } 
             
-            return "Done";
+            return eqlang.getString("Done");
         
         } finally {
 

@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.gui.editor.VisibleResultSetColumnsDialog;
+import org.executequery.localisation.eqlang;
 
 
 /** 
@@ -50,7 +51,7 @@ public class ShowHideResultSetColumnsCommand extends AbstractBaseCommand {
             } else {
               
                 GUIUtilities.displayErrorMessage(
-                        "The required result set tab panel must be selected to proceed.");
+                        eqlang.getString("The required result set tab panel must be selected to proceed."));
             }
 
         }        

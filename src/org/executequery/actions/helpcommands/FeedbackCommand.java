@@ -28,6 +28,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.FeedbackPanel;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 
 /** 
@@ -59,22 +60,22 @@ public class FeedbackCommand extends AbstractBaseCommand {
 
     private void handleException(Throwable e) {
 
-        Log.error("Error executing feedback command:", e);
+        Log.error(eqlang.getString("Error executing feedback command:"), e);
     }
 
     public void featureRequest(ActionEvent e) {
         
-        showDialog(FeedbackPanel.FEATURE_REQUEST, "Feature Request");
+        showDialog(FeedbackPanel.FEATURE_REQUEST, eqlang.getString("Feature Request"));
     }
 
     public void userComments(ActionEvent e) {
         
-        showDialog(FeedbackPanel.USER_COMMENTS, "User Comments");
+        showDialog(FeedbackPanel.USER_COMMENTS, eqlang.getString("User Comments"));
     }
 
     public void bugReport(ActionEvent e) {
         
-        showDialog(FeedbackPanel.BUG_REPORT, "Report Bug");
+        showDialog(FeedbackPanel.BUG_REPORT, eqlang.getString("Report Bug"));
     }
 
     private void showDialog(int type, String title) {
