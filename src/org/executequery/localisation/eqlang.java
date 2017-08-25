@@ -40,17 +40,15 @@ public class eqlang {
     }
     public static List<MenuItem> translatemenu(List<MenuItem> items) {
         for (MenuItem item : items ){
-            String id=item.getId();
-            if (!item.isSeparator())
-            if(id==null) {
-                id = item.getName();
-                    try {
+            if (!item.isSeparator()) {
+                String id = item.getName();
+                try {
 
-                        item.setName(getString(id + "-name"));
+                    item.setName(getString(id + "-name"));
 
-                    } catch (Exception e) {
+                } catch (Exception e) {
 
-                    }
+                }
                 try {
 
                     item.setToolTip(getString(id + "-description"));
@@ -58,13 +56,14 @@ public class eqlang {
                 } catch (Exception e) {
 
                 }
-            }
-            try {
 
-                item.setChildren(translatemenu(item.getChildren()));
+                try {
 
-            } catch (Exception e) {
+                    item.setChildren(translatemenu(item.getChildren()));
 
+                } catch (Exception e) {
+
+                }
             }
         }
         return items;

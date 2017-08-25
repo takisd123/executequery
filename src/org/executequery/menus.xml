@@ -408,6 +408,8 @@
 
           </menu>
 
+          <menu-item id="separator"/>
+
           <menu-item id="editor-command"
                      class="org.underworldlabs.swing.menu.MainMenuItem"/>
 
