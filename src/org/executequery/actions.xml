@@ -807,5 +807,15 @@
   <action id="text-selection-command"
           accel-editable="false"
           execute-class="org.executequery.actions.editcommands.TextSelectionCommand"/>
+  <action id="english-language-command"
+          name="English"
+          mnemonic="EN"
+          accel-editable="true"
+          execute-class="org.executequery.actions.languagecommands.English"/>
+  <action id="russian-language-command"
+          name="Russian"
+          mnemonic="RU"
+          accel-editable="true"
+          execute-class="org.executequery.actions.languagecommands.Russian"/>
 
 </actions>
