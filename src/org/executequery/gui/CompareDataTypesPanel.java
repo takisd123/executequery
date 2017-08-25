@@ -64,6 +64,7 @@ import org.executequery.datasource.ConnectionManager;
 import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -81,7 +82,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
                                               ListSelectionListener,
                                               ConnectionListener {
     
-    public static final String TITLE = "Compare Data Types ";
+    public static final String TITLE = eqlang.getString("compare-data-types-name");
     public static final String FRAME_ICON = "CompareDataTypes16.png";
     
     /** the active connections combo box model */
@@ -186,14 +187,14 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         GridBagConstraints gbc = new GridBagConstraints();
         
         JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setBorder(BorderFactory.createTitledBorder("First Connection"));
+        leftPanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("first-connection")));
         
         databaseField_1 = new DisabledField();
         
         gbc.insets = new Insets(3,2,2,2);
         gbc.anchor = GridBagConstraints.NORTHWEST;
         gbc.gridy++;
-        leftPanel.add(new JLabel("Connection:"), gbc);
+        leftPanel.add(new JLabel(eqlang.getString("Connection:")), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.left = 5;
@@ -206,7 +207,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         gbc.insets.left = 2;
         gbc.insets.top = 2;
         gbc.fill = GridBagConstraints.NONE;
-        leftPanel.add(new JLabel("Database:"), gbc);
+        leftPanel.add(new JLabel(eqlang.getString("Database:")), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.left = 5;
@@ -224,7 +225,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         leftPanel.add(new JScrollPane(masterList), gbc);
         
         JPanel rightPanel = new JPanel(new GridBagLayout());
-        rightPanel.setBorder(BorderFactory.createTitledBorder("Second Connection"));
+        rightPanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Second Connection")));
         
         databaseField_2 = new DisabledField();
         
@@ -234,7 +235,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         gbc.insets.left = 2;
         gbc.weighty = 0;
         gbc.weightx = 0;
-        rightPanel.add(new JLabel("Connection:"), gbc);
+        rightPanel.add(new JLabel(eqlang.getString("Connection:")), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.left = 5;
@@ -246,7 +247,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         gbc.insets.left = 2;
         gbc.insets.top = 2;
         gbc.fill = GridBagConstraints.NONE;
-        rightPanel.add(new JLabel("Database:"), gbc);
+        rightPanel.add(new JLabel(eqlang.getString("Database:")), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.left = 5;
@@ -286,7 +287,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         gbc.weightx = 0;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        tablePanel.add(new JLabel("Data Type Meta Data Comparison:"), gbc);
+        tablePanel.add(new JLabel(eqlang.getString("Data Type Meta Data Comparison:")), gbc);
         gbc.gridy++;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -416,7 +417,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
     
     private void handleError(Throwable e) {
         GUIUtilities.displayExceptionErrorDialog(
-                "Error retrieving data types.\nThe system returned:\n\n" +
+                eqlang.getString("Error retrieving data types") +
                 e.getMessage(), e);
     }
     
@@ -448,7 +449,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
 
         } catch (DataSourceException e) {
 
-            setDatabaseFieldText(1, "Not Available");
+            setDatabaseFieldText(1, eqlang.getString("Not Available"));
         }
 
         ResultSet rs = null;
@@ -460,8 +461,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         } catch (DataSourceException e) {
 
             GUIUtilities.displayExceptionErrorDialog(
-                    "Error retrieving data types for selected " +
-                    "connection:.\n\nThe system returned:\n" + 
+                    eqlang.getString("Error retrieving data types for selected connection") +
                     e.getExtendedMessage(), e);
             return;
 
@@ -535,7 +535,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
 
         } catch (DataSourceException e) {
 
-            setDatabaseFieldText(2, "Not Available");
+            setDatabaseFieldText(2, eqlang.getString("Not Available"));
         }
 
         ResultSet rs = null;
@@ -547,8 +547,7 @@ public class CompareDataTypesPanel extends DefaultTabViewActionPanel
         } catch (DataSourceException e) {
 
             GUIUtilities.displayExceptionErrorDialog(
-                    "Error retrieving data types for the selected " +
-                    "connection.\n\nThe system returned:\n" + 
+                    eqlang.getString("Error retrieving data types for the selected connection") +
                     e.getExtendedMessage(), e);
             return;
 
