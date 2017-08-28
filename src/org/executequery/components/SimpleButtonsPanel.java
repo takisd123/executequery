@@ -28,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.localisation.eqlang;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
 import org.underworldlabs.util.MiscUtils;
@@ -120,11 +121,11 @@ public class SimpleButtonsPanel extends JPanel {
     }
 
     private String defaultCancelText() {
-        return loadBundle().getString("SimpleButtonsPanel.cancel");
+        return eqlang.getString("Cancel");
     }
 
     private String defaultOkText() {
-        return loadBundle().getString("SimpleButtonsPanel.ok");
+        return eqlang.getString("OK");
     }
     
     private StringBundle loadBundle() {

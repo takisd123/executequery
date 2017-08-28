@@ -26,6 +26,7 @@ import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseMetaTag;
 import org.executequery.databaseobjects.DatabaseSchema;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -174,7 +175,7 @@ public class DefaultDatabaseCatalog extends AbstractDatabaseSource
     @Override
     public String getDescription() {
 
-        return "CATALOG: " + getName();
+        return eqlang.getString("CATALOG:") + getName();
     }
     
 }

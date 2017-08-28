@@ -23,6 +23,7 @@ package org.executequery.databasemediators.spi;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.executequery.databasemediators.DatabaseDriver;
 import org.executequery.datasource.DatabaseDefinition;
+import org.executequery.localisation.eqlang;
 
 /**
  *
@@ -70,7 +71,7 @@ public class DefaultDatabaseDriver implements DatabaseDriver {
     }
     
     public String getDescription() {
-        return description == null ? "Not Available" : description;
+        return description == null ? eqlang.getString("Not Available") : description;
     }
     
     public void setDescription(String description) {

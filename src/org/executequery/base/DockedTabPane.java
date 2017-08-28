@@ -45,6 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.event.MouseInputListener;
 
 import org.executequery.gui.GUIConstants;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.plaf.UIUtils;
 
@@ -910,9 +911,9 @@ public class DockedTabPane extends AbstractTabPane {
                                         deriveFont(Font.PLAIN, 10);
             setFont(font);
             
-            close = MenuItemFactory.createMenuItem("Close");
-            minimise = MenuItemFactory.createMenuItem("Minimize");
-            minimiseAll = MenuItemFactory.createMenuItem("Minimize All");
+            close = MenuItemFactory.createMenuItem(eqlang.getString("Close"));
+            minimise = MenuItemFactory.createMenuItem(eqlang.getString("Minimize"));
+            minimiseAll = MenuItemFactory.createMenuItem(eqlang.getString("Minimize All"));
             
             close.addActionListener(this);
             minimiseAll.addActionListener(this);

@@ -39,6 +39,7 @@ import javax.swing.SwingUtilities;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
 import org.executequery.databasemediators.ConnectionBuilder;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.ProgressBar;
 import org.underworldlabs.swing.ProgressBarFactory;
@@ -64,7 +65,7 @@ public class ConnectionProgressDialog extends JDialog
 
     public ConnectionProgressDialog(ConnectionBuilder connectonBuilder) {
 
-        super(GUIUtilities.getParentFrame(), "Connecting...", true);
+        super(GUIUtilities.getParentFrame(), eqlang.getString("Connecting..."), true);
         this.connectonBuilder = connectonBuilder;
         init();
     }
@@ -85,7 +86,7 @@ public class ConnectionProgressDialog extends JDialog
         JButton cancelButton = new CancelButton();
         cancelButton.addActionListener(this);
 
-        connectionNameLabel = new JLabel("Establishing connection to " + connectonBuilder.getConnectionName());
+        connectionNameLabel = new JLabel(eqlang.getString("Establishing connection to") + connectonBuilder.getConnectionName());
 
         GridBagConstraints gbc = new GridBagConstraints();
         Insets ins = new Insets(10, 20, 10, 20);
@@ -117,7 +118,7 @@ public class ConnectionProgressDialog extends JDialog
 
     public void updateLabel(String name) {
 
-        connectionNameLabel.setText("Establishing connection to " + name);
+        connectionNameLabel.setText(eqlang.getString("Establishing connection to") + name);
         Runnable update = new Runnable() {
             public void run() {
                 Dimension dim = connectionNameLabel.getSize();
@@ -129,7 +130,7 @@ public class ConnectionProgressDialog extends JDialog
 
     public void actionPerformed(ActionEvent e) {
 
-        Log.info("Connection cancelled");
+        Log.info(eqlang.getString("Connection cancelled"));
 
         connectonBuilder.cancel();
         dispose();
@@ -154,7 +155,7 @@ public class ConnectionProgressDialog extends JDialog
 
         public CancelButton() {
 
-            super("Cancel");
+            super(eqlang.getString("Cancel"));
             setMargin(Constants.EMPTY_INSETS);
         }
 

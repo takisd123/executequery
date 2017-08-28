@@ -13,7 +13,24 @@ public class eqlang {
     public static String getString(String key) {
         Locale locale = new Locale(System.getProperty("user.language"));
         ResourceBundle rb = ResourceBundle.getBundle("org.executequery.localisation.langResources", locale);
-        return rb.getString(key);
+        try{
+            key=rb.getString(key);
+        }
+        catch (Exception e)
+        {
+
+        }
+        return key;
+    }
+    public static String[] getStrings(String[] key) {
+        for (int i=0;i<key.length;i++)
+        {
+
+                key[i]=getString(key[i]);
+
+        }
+
+        return key;
     }
 
     public static Map<String, Action> translateActions(Map<String, Action> actionsMap) {

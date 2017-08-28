@@ -20,6 +20,8 @@
 
 package org.executequery.gui.browser;
 
+import org.executequery.localisation.eqlang;
+
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -33,7 +35,8 @@ public class ColumnIndexTableModel extends AbstractTableModel {
     /** The index data */
     private ColumnIndex[] data;
     
-    private static final String[] header = {"", "Index Name", "Indexed Column", "Non-Unique"};
+    private static final String[] header = {"", eqlang.getString("Index Name"),  eqlang.getString("Indexed Column"),
+            eqlang.getString( "Non-Unique")};
     
     public ColumnIndexTableModel() {}
     

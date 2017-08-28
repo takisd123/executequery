@@ -48,6 +48,7 @@ import org.executequery.databaseobjects.DatabaseSource;
 import org.executequery.databaseobjects.ProcedureParameter;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -224,7 +225,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
             } else {
 
-                statementResult.setMessage("Invalid table name");
+                statementResult.setMessage(eqlang.getString("Invalid table name"));
             }
 
         } catch (SQLException e) {
@@ -253,7 +254,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         if (databaseConnection == null || !databaseConnection.isConnected()) {
 
-            statementResult.setMessage("Not Connected");
+            statementResult.setMessage(eqlang.getString("Not Connected"));
             return false;
         }
 
@@ -271,7 +272,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
                     } catch (SQLException e) {
 
-                        Log.warning("Error setting default commit mode for statement execution - " + e.getMessage());
+                        Log.warning(eqlang.getString("Error setting default commit mode for statement execution") + e.getMessage());
                     }
                 }
 
@@ -284,7 +285,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } else if (conn.isClosed()) { // check its still open
 
-            statementResult.setMessage("Connection closed.");
+            statementResult.setMessage(eqlang.getString("Connection closed."));
             return false;
         }
 
@@ -296,7 +297,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } else {
 
-            statementResult.setMessage("Connection closed.");
+            statementResult.setMessage(eqlang.getString("Connection closed."));
             return false;
         }
 
@@ -1150,7 +1151,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
 
         } catch (SQLException e) {
 
-            Log.warning("Attempt to set statement escape processing failed - " + e.getMessage());
+            Log.warning(eqlang.getString("Attempt to set statement escape processing failed - ") + e.getMessage());
         }
     }
 
@@ -1294,15 +1295,15 @@ public class DefaultStatementExecutor implements StatementExecutor {
                 if (commit) {
 
                     conn.commit();
-                    Log.info("Commit complete.");
-                    statementResult.setMessage("Commit complete.");
+                    Log.info(eqlang.getString("Commit complete."));
+                    statementResult.setMessage(eqlang.getString("Commit complete."));
                     closeMaxedConn();
 
                 } else {
 
                     conn.rollback();
-                    Log.info("Rollback complete.");
-                    statementResult.setMessage("Rollback complete.");
+                    Log.info(eqlang.getString("Rollback complete."));
+                    statementResult.setMessage(eqlang.getString("Rollback complete."));
                     closeMaxedConn();
                 }
 
@@ -1368,7 +1369,7 @@ public class DefaultStatementExecutor implements StatementExecutor {
     @Override
     public void cancelCurrentStatement() {
 
-        Log.info("Attempting to cancel the current statement...");
+        Log.info(eqlang.getString("Attempting to cancel the current statement..."));
 
         if (stmnt != null) {
 
@@ -1377,10 +1378,10 @@ public class DefaultStatementExecutor implements StatementExecutor {
                 stmnt.close();
                 stmnt = null;
 
-                Log.info("Statement cancelled");
+                Log.info(eqlang.getString("Statement cancelled"));
 
                 closeConnection(conn);
-                statementResult.setMessage("Statement cancelled.");
+                statementResult.setMessage(eqlang.getString("Statement cancelled."));
 
             } catch (SQLException e) {
 

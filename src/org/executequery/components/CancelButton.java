@@ -22,6 +22,7 @@ package org.executequery.components;
 
 import org.executequery.actions.othercommands.CancelCommand;
 import org.executequery.gui.DefaultPanelButton;
+import org.executequery.localisation.eqlang;
 
 /** 
  * <p>Simple button and action for closing an
@@ -36,7 +37,7 @@ public class CancelButton extends DefaultPanelButton {
     
     public CancelButton() {
 
-        this("Cancel");
+        this(eqlang.getString("Cancel"));
     }
     
     public CancelButton(String text) {

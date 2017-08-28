@@ -50,6 +50,7 @@ import org.executequery.gui.browser.BaseDatabaseObject;
 import org.executequery.gui.browser.ColumnConstraint;
 import org.executequery.gui.browser.ColumnData;
 import org.executequery.gui.browser.ColumnIndex;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.util.MiscUtils;
@@ -149,9 +150,9 @@ public class MetaDataValues implements ConnectionListener {
 
                 if (Log.isDebugEnabled()) {
                     if (connection != null) {
-                        Log.debug("Connection is closed.");
+                        Log.debug(eqlang.getString("Connection is closed."));
                     } else {
-                        Log.debug("Connection is null - checking cache");
+                        Log.debug(eqlang.getString("Connection is null - checking cache"));
                     }
                 }
 
@@ -165,8 +166,8 @@ public class MetaDataValues implements ConnectionListener {
                 if (connection == null) {
                     
                     if (Log.isDebugEnabled()) {
-                        Log.debug("ensureConnection: Connection is null in cache.");
-                        Log.debug("ensureConnection: Retrieving new connection.");
+                        Log.debug(eqlang.getString("ensureConnection: Connection is null in cache."));
+                        Log.debug(eqlang.getString("ensureConnection: Retrieving new connection."));
                     }
                     
                     // retrieve and add to the cache
@@ -178,7 +179,7 @@ public class MetaDataValues implements ConnectionListener {
                 // if still null - something bad has happened, or maybe closed
                 if (connection == null || connection.isClosed()) {
 
-                    throw new DataSourceException("No connection available", true);
+                    throw new DataSourceException(eqlang.getString("No connection available"), true);
                 }
 
             }
@@ -1624,7 +1625,7 @@ public class MetaDataValues implements ConnectionListener {
      */
     public String getDataSourceName() {
         String name = databaseConnection.getSourceName();
-        return name == null ? "Not Available" : name.toUpperCase();
+        return name == null ? eqlang.getString("Not Available") : name.toUpperCase();
     }
     
     /** <p>Retrieves the connected port number.
@@ -1653,7 +1654,7 @@ public class MetaDataValues implements ConnectionListener {
      */
     public String getHost() {
         String host = databaseConnection.getHost();
-        return host == null ? "Not Available" : host.toUpperCase();
+        return host == null ? eqlang.getString("Not Available") : host.toUpperCase();
     }
   
     /** 
@@ -1663,7 +1664,7 @@ public class MetaDataValues implements ConnectionListener {
      */
     public String getSchemaName() {
         String schema = databaseConnection.getUserName();
-        return schema == null ? "Not Available" : schema.toUpperCase();
+        return schema == null ? eqlang.getString("Not Available") : schema.toUpperCase();
     }
     
     public String getCatalogName() {
@@ -1680,7 +1681,7 @@ public class MetaDataValues implements ConnectionListener {
         finally {
             releaseResources();
         }        
-        return catalog == null ? "Not Available" : catalog.toUpperCase();
+        return catalog == null ? eqlang.getString("Not Available") : catalog.toUpperCase();
     }
     
     private DatabaseDataSource getDataSource() {

@@ -65,6 +65,7 @@ import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.executequery.gui.browser.tree.SchemaTree;
 import org.executequery.gui.connections.ImportConnectionsPanel;
+import org.executequery.localisation.eqlang;
 import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
@@ -86,7 +87,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                                              ConnectionRepositoryListener,
                                              UserPreferenceListener {
 
-    public static final String TITLE = "Connections";
+    public static final String TITLE = eqlang.getString("Connections");
 
     private SchemaTree tree;
 
@@ -549,8 +550,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     private void deleteFolder(ConnectionsFolderNode folder) {
 
         int yesNo = GUIUtilities.displayConfirmCancelDialog(
-                "Are you sure you want to delete the folder " + folder + 
-                " ?\nAny connections within this folder will also be deleted.");
+                eqlang.getString("Are you sure you want to delete the folder") + folder +
+                " ?\n"+eqlang.getString("Any connections within this folder will also be deleted."));
 
         if (yesNo != JOptionPane.YES_OPTION) {
         
@@ -581,7 +582,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     public void deleteConnection(DatabaseHostNode node) {
 
         int yesNo = GUIUtilities.displayConfirmCancelDialog(
-                        "Are you sure you want to delete the connection " +
+                        eqlang.getString("Are you sure you want to delete the connection") +
                         node + " ?");
 
         if (yesNo != JOptionPane.YES_OPTION) {
@@ -838,7 +839,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     public ConnectionsFolder newFolder() {
 
-        String name = GUIUtilities.displayInputMessage("New Folder", "Folder Name:");
+        String name = GUIUtilities.displayInputMessage(eqlang.getString("New Folder"), eqlang.getString("Folder Name:"));
         if (!JOptionPane.UNINITIALIZED_VALUE.equals(name)) {
          
             ConnectionsFolder folder = new ConnectionsFolder(name);
@@ -882,7 +883,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      */
     public void newConnection() {
         
-        String name = buildConnectionName("New Connection");
+        String name = buildConnectionName(eqlang.getString("New Connection"));
         newConnection(databaseConnectionFactory().create(name));
     }
     
@@ -1626,7 +1627,7 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 }
 
                 int yesNo = GUIUtilities.displayConfirmDialog(
-                                   "Are you sure you want to drop " + dbObject + "?");
+                                   eqlang.getString("Are you sure you want to drop") + dbObject + "?");
 
                 if (yesNo == JOptionPane.NO_OPTION) {
 
@@ -1644,8 +1645,8 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                 } catch (DataSourceException e) {
 
                     StringBuilder sb = new StringBuilder();
-                    sb.append("An error occurred removing the selected object.").
-                       append("\n\nThe system returned:\n").
+                    sb.append(eqlang.getString("An error occurred removing the selected object.")).
+                       append("\n\n"+eqlang.getString("The system returned:")+"\n").
                        append(e.getExtendedMessage());
 
                     GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);

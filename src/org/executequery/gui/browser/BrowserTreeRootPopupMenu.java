@@ -25,26 +25,27 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 
 public class BrowserTreeRootPopupMenu extends JPopupMenu {
 
     public BrowserTreeRootPopupMenu(ConnectionsTreePanel treePanel) {
 
-        add(createMenuItem("New Folder", "newFolder", treePanel));
-        add(createMenuItem("New Connection", "newConnection", treePanel));
+        add(createMenuItem(eqlang.getString("New Folder"), "newFolder", treePanel));
+        add(createMenuItem(eqlang.getString("New Connection"), "newConnection", treePanel));
         addSeparator();
 
-        add(createMenuItem("Connect All", "connectAll", treePanel));
-        add(createMenuItem("Disconnect All", "disconnectAll", treePanel));
+        add(createMenuItem(eqlang.getString("Connect All"), "connectAll", treePanel));
+        add(createMenuItem(eqlang.getString("Disconnect All"), "disconnectAll", treePanel));
 
         addSeparator();
-        add(createMenuItem("Sort Connections", "sortConnections", treePanel));
-        add(createMenuItem("Search Nodes...", "searchNodes", treePanel));
+        add(createMenuItem(eqlang.getString("Sort Connections"), "sortConnections", treePanel));
+        add(createMenuItem(eqlang.getString("Search Nodes..."), "searchNodes", treePanel));
 
         addSeparator();
-        add(createMenuItem("Export", "exportConnections", treePanel));
-        add(createMenuItem("Import", "importConnections", treePanel));
+        add(createMenuItem(eqlang.getString("Export"), "exportConnections", treePanel));
+        add(createMenuItem(eqlang.getString("Import"), "importConnections", treePanel));
     }
     
     private JMenuItem createMenuItem(String text,

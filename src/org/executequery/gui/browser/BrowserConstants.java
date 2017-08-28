@@ -20,7 +20,9 @@
 
 package org.executequery.gui.browser;
 
-/** 
+import org.executequery.localisation.eqlang;
+
+/**
  *  Reuseable constants for construction and reference
  *  to the tree structure within the Database Browser Panel.<br>
  *  This is purely a convenience class due to the large
@@ -65,16 +67,17 @@ public class BrowserConstants {
 
     
     // same index as node values above
-    public static final String[] META_TYPES = {"FUNCTION",
-                                               "INDEX",
-                                               "PROCEDURE",
-                                               "SEQUENCE",
-                                               "SYNONYM",
-                                               "SYSTEM TABLE",
-                                               "TABLE",
-                                               "TRIGGER",
-                                               "VIEW",
-                                               "SYSTEM FUNCTIONS"};
+    public static final String[] META_TYPES = {eqlang.getString("FUNCTION"),
+                                               eqlang.getString("INDEX"),
+            eqlang.getString("PROCEDURE"),
+            eqlang.getString("SEQUENCE"),
+            eqlang.getString("SYNONYM"),
+            eqlang.getString("SYSTEM TABLE"),
+            eqlang.getString("TABLE"),
+            eqlang.getString("TRIGGER"),
+            eqlang.getString("VIEW"),
+            eqlang.getString("SYSTEM FUNCTIONS")
+    };
     
     // ------------------------------------------
     // to add a new node - ALL icons must be in same order as META_TYPES

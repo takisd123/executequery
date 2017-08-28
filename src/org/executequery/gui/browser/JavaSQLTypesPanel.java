@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.executequery.gui.SortableColumnsTable;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.table.AbstractSortableTableModel;
 import org.underworldlabs.swing.table.SortableTableModel;
 
@@ -57,7 +58,7 @@ public class JavaSQLTypesPanel extends ConnectionPropertiesPanel {
 
         if (model == null) {
 
-            add(new JLabel("Not Available"));
+            add(new JLabel(eqlang.getString("Not Available")));
             return;
         }
         
@@ -102,7 +103,7 @@ public class JavaSQLTypesPanel extends ConnectionPropertiesPanel {
 
         private String[][] values;
         
-        private String[] header = new String[]{"Name", "Value"};
+        private String[] header = eqlang.getStrings(new String[]{"Name", "Value"});
         
         JavaSQLTypesModel(String[][] values) {
 

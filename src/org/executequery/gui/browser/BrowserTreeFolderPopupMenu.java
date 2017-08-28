@@ -25,21 +25,22 @@ import java.awt.event.ActionListener;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 
 public class BrowserTreeFolderPopupMenu extends JPopupMenu {
 
     public BrowserTreeFolderPopupMenu(ConnectionsTreePanel treePanel) {
 
-        add(createMenuItem("New Connection", "newConnection", treePanel));
-        add(createMenuItem("Delete Folder", "deleteConnection", treePanel));
+        add(createMenuItem(eqlang.getString("New Connection"), "newConnection", treePanel));
+        add(createMenuItem(eqlang.getString("Delete Folder"), "deleteConnection", treePanel));
         addSeparator();
 
-        add(createMenuItem("Connect All", "connectAll", treePanel));
-        add(createMenuItem("Disconnect All", "disconnectAll", treePanel));
+        add(createMenuItem(eqlang.getString("Connect All"), "connectAll", treePanel));
+        add(createMenuItem(eqlang.getString("Disconnect All"), "disconnectAll", treePanel));
 
         addSeparator();
-        add(createMenuItem("Sort Connections", "sortConnections", treePanel));
+        add(createMenuItem(eqlang.getString("Sort Connections"), "sortConnections", treePanel));
     }
 
     private JMenuItem createMenuItem(String text,

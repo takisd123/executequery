@@ -36,6 +36,7 @@ import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.browser.nodes.DatabaseCatalogNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 
 /**
@@ -68,39 +69,39 @@ class BrowserTreePopupMenu extends JPopupMenu {
 
         this.listener = listener;
         
-        connect = createMenuItem("Connect", "connect", listener);
+        connect = createMenuItem(eqlang.getString("Connect"), "connect", listener);
         add(connect);
-        disconnect = createMenuItem("Disconnect", "disconnect", listener);
+        disconnect = createMenuItem(eqlang.getString("Disconnect"), "disconnect", listener);
         add(disconnect);
 
         addSeparator();
 
-        reload = createMenuItem("Reload", "reload", listener);
+        reload = createMenuItem(eqlang.getString("Reload"), "reload", listener);
         add(reload);
-        recycleConnection = createMenuItem("Recycle this Connection", "recycle", listener);
+        recycleConnection = createMenuItem(eqlang.getString("Recycle this Connection"), "recycle", listener);
         add(recycleConnection);
 
         addSeparator();
 
         showDefaultCatalogsAndSchemas = createCheckBoxMenuItem(
-                "Show only default Catalog or Schema", 
+                eqlang.getString("Show only default Catalog or Schema"),
                 "switchDefaultCatalogAndSchemaDisplay", listener);
         add(showDefaultCatalogsAndSchemas);
 
         addSeparator();
 
-        addNewConnection = createMenuItem("New Connection", "addNewConnection", listener);
+        addNewConnection = createMenuItem(eqlang.getString("New Connection"), "addNewConnection", listener);
         add(addNewConnection);
-        duplicate = createMenuItem("Duplicate", "duplicate", listener);
+        duplicate = createMenuItem(eqlang.getString("Duplicate"), "duplicate", listener);
         add(duplicate);
-        duplicateWithSource = createMenuItem("Duplicate source", "duplicateWithSource", listener);
+        duplicateWithSource = createMenuItem(eqlang.getString("Duplicate source"), "duplicateWithSource", listener);
         add(duplicateWithSource);
-        delete = createMenuItem("Delete", "delete", listener);
+        delete = createMenuItem(eqlang.getString("Delete"), "delete", listener);
         add(delete);
 
         addSeparator();
 
-        copyName = createMenuItem("Copy Name", "copyName", listener);
+        copyName = createMenuItem(eqlang.getString("Copy Name"), "copyName", listener);
         add(copyName);
         
         createSqlMenu(listener);
@@ -108,8 +109,8 @@ class BrowserTreePopupMenu extends JPopupMenu {
         createImportMenu(listener);
 
         addSeparator();
-        add(createMenuItem("Move to folder...", "moveToFolder", listener));
-        add(createMenuItem("Connection Properties", "properties", listener));
+        add(createMenuItem(eqlang.getString("Move to folder..."), "moveToFolder", listener));
+        add(createMenuItem(eqlang.getString("Connection Properties"), "properties", listener));
     }
 
     public void show(Component invoker, int x, int y) {
@@ -188,27 +189,27 @@ class BrowserTreePopupMenu extends JPopupMenu {
         if (listener.hasCurrentSelection()) {
 
             String name = listener.getCurrentSelection().getName();
-            connect.setText("Connect Data Source " + name);
-            disconnect.setText("Disconnect Data Source " + name);
-            delete.setText("Remove Data Source " + name);
-            duplicate.setText("Create Duplicate of Connection " + name);
+            connect.setText(eqlang.getString("Connect Data Source") + name);
+            disconnect.setText(eqlang.getString("Disconnect Data Source") + name);
+            delete.setText(eqlang.getString("Remove Data Source") + name);
+            duplicate.setText(eqlang.getString("Create Duplicate of Connection") + name);
             
             // eeekkk...
             if (isCatalog(currentPathComponent) && asDatabaseCatalog(currentPathComponent).getHost().supportsCatalogsInTableDefinitions()) {
                 
                 duplicateWithSource.setEnabled(true);
-                duplicateWithSource.setText("Create Connection with Data Source as " + currentPathComponent.toString());
+                duplicateWithSource.setText(eqlang.getString("Create Connection with Data Source as") + currentPathComponent.toString());
 
             } else {
 
-                duplicateWithSource.setText("Create Connection with Selected Data Source");
+                duplicateWithSource.setText(eqlang.getString("Create Connection with Selected Data Source"));
                 duplicateWithSource.setEnabled(false);
             }
 
             if (label != null) {
-                reload.setText("Reload " + label);
+                reload.setText(eqlang.getString("Reload")+" " + label);
             } else {
-                reload.setText("Reload");
+                reload.setText(eqlang.getString("Reload"));
             }
 
         }
@@ -231,27 +232,27 @@ class BrowserTreePopupMenu extends JPopupMenu {
     }
 
     private void createImportMenu(ActionListener listener) {
-        importData = MenuItemFactory.createMenu("Import Data");
-        importData.add(createMenuItem("Import from XML File", "importXml", listener));
-        importData.add(createMenuItem("Import from Delimited File", "importDelimited", listener));
+        importData = MenuItemFactory.createMenu(eqlang.getString("Import Data"));
+        importData.add(createMenuItem(eqlang.getString("Import from XML File"), "importXml", listener));
+        importData.add(createMenuItem(eqlang.getString("Import from Delimited File"), "importDelimited", listener));
         add(importData);
     }
 
     private void createExportMenu(ActionListener listener) {
-        exportData = MenuItemFactory.createMenu("Export Data");
-        exportData.add(createMenuItem("Export as SQL", "exportSQL", listener));
-        exportData.add(createMenuItem("Export to XML File", "exportXml", listener));
-        exportData.add(createMenuItem("Export to Delimited File", "exportDelimited", listener));
-        exportData.add(createMenuItem("Export to Excel Spreadsheet", "exportExcel", listener));
+        exportData = MenuItemFactory.createMenu(eqlang.getString("Export Data"));
+        exportData.add(createMenuItem(eqlang.getString("Export as SQL"), "exportSQL", listener));
+        exportData.add(createMenuItem(eqlang.getString("Export to XML File"), "exportXml", listener));
+        exportData.add(createMenuItem(eqlang.getString("Export to Delimited File"), "exportDelimited", listener));
+        exportData.add(createMenuItem(eqlang.getString("Export to Excel Spreadsheet"), "exportExcel", listener));
         add(exportData);
     }
 
     private void createSqlMenu(ActionListener listener) {
-        sql = MenuItemFactory.createMenu("SQL");
-        sql.add(createMenuItem("SELECT statement", "selectStatement", listener));
-        sql.add(createMenuItem("INSERT statement", "insertStatement", listener));
-        sql.add(createMenuItem("UPDATE statement", "updateStatement", listener));
-        sql.add(createMenuItem("CREATE TABLE statement", "createTableStatement", listener));            
+        sql = MenuItemFactory.createMenu(eqlang.getString("SQL"));
+        sql.add(createMenuItem(eqlang.getString("SELECT statement"), "selectStatement", listener));
+        sql.add(createMenuItem(eqlang.getString("INSERT statement"), "insertStatement", listener));
+        sql.add(createMenuItem(eqlang.getString("UPDATE statement"), "updateStatement", listener));
+        sql.add(createMenuItem(eqlang.getString("CREATE TABLE statement"), "createTableStatement", listener));
         add(sql);
     }
 

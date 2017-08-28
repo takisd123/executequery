@@ -33,6 +33,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -51,7 +52,7 @@ public class MetaKeyPanel extends BrowserNodeBasePanel {
     
     private Map cache;
     
-    private static String HEADER_PREFIX = "Database Object: ";
+    private static String HEADER_PREFIX = eqlang.getString("Database Object:");
     
     /** the browser's control object */
     private BrowserController controller;

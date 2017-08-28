@@ -44,6 +44,7 @@ import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.TablePrivilege;
 import org.executequery.datasource.ConnectionManager;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.util.MiscUtils;
@@ -180,7 +181,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
         if (!isConnected()) {
 
-            throw new DataSourceException("Connection closed.", true);
+            throw new DataSourceException(eqlang.getString("Connection closed."), true);
         }
 
         try {
@@ -304,8 +305,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Tables not available for type "
-                        + type + " - driver returned: " + e.getMessage());
+                Log.error(eqlang.getString("Tables not available for type")
+                        + type + " - "+eqlang.getString("driver returned:") + e.getMessage());
             }
 
             return false;
@@ -377,8 +378,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Tables not available for type "
-                        + type + " - driver returned: " + e.getMessage());
+                Log.error(eqlang.getString("Tables not available for type")
+                        + type + " - "+eqlang.getString("driver returned:") + e.getMessage());
             }
 
             return new ArrayList<NamedObject>(0);
@@ -547,8 +548,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Tables not available for type "
-                        + type + " - driver returned: " + e.getMessage());
+                Log.error(eqlang.getString("Tables not available for type")
+                        + type + " - "+eqlang.getString("driver returned:") + e.getMessage());
             }
 
             return new ArrayList<String>(0);
@@ -592,8 +593,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table 
-                        + " using connection " + getDatabaseConnection(), e);
+                Log.error(eqlang.getString("Error retrieving column data for table") + table
+                        + eqlang.getString("using connection") + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -652,8 +653,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table 
-                        + " using connection " + getDatabaseConnection(), e);
+                Log.error(eqlang.getString("Error retrieving column data for table") + table
+                        + eqlang.getString("using connection") + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -769,8 +770,8 @@ public class DefaultDatabaseHost extends AbstractNamedObject
 
             if (Log.isDebugEnabled()) {
 
-                Log.error("Error retrieving column data for table " + table 
-                        + " using connection " + getDatabaseConnection(), e);
+                Log.error(eqlang.getString("Error retrieving column data for table") + table
+                        + eqlang.getString("using connection") + getDatabaseConnection(), e);
             }
 
             return columns;
@@ -1181,7 +1182,7 @@ public class DefaultDatabaseHost extends AbstractNamedObject
                     getDatabaseMetaData().getSQLKeywords(), ",");
         }
         catch (SQLException e) {
-            Log.error("Error attempting to retrieve database SQL keywords: " + e.getMessage());
+            Log.error(eqlang.getString("Error attempting to retrieve database SQL keywords:" )+ e.getMessage());
             return new String[0];
         }
     }

@@ -32,6 +32,7 @@ import org.executequery.databaseobjects.DatabaseColumn;
 import org.executequery.databaseobjects.DatabaseHost;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.TablePrivilege;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -265,7 +266,7 @@ public abstract class AbstractDatabaseObject extends AbstractNamedObject
                 break;
             case OTHER:
                 throw new DataSourceException(
-                        "Dropping objects of this type is not currently supported");
+                        eqlang.getString("Dropping objects of this type is not currently supported"));
         }
 
         Statement stmnt = null;

@@ -56,6 +56,7 @@ import org.executequery.event.ConnectionRepositoryListener;
 import org.executequery.gui.SortableColumnsTable;
 import org.executequery.gui.WidgetFactory;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
+import org.executequery.localisation.eqlang;
 import org.executequery.print.TablePrinter;
 import org.executequery.repository.DatabaseConnectionRepository;
 import org.executequery.repository.RepositoryCache;
@@ -115,12 +116,12 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         tcm.getColumn(0).setCellRenderer(new ConnectCellRenderer());
 
         // new connection button
-        JButton button = WidgetFactory.createButton("New Connection");
+        JButton button = WidgetFactory.createButton(eqlang.getString("New Connection"));
         button.addActionListener(this);
 
         JPanel tablePanel = new JPanel(new GridBagLayout());
         tablePanel.add(new JScrollPane(table), getPanelConstraints());
-        tablePanel.setBorder(BorderFactory.createTitledBorder("Available Connections"));
+        tablePanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Available Connections")));
 
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -130,13 +131,12 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        panel.add(new JLabel("User defined database connection parameters."), gbc);
+        panel.add(new JLabel(eqlang.getString("User defined database connection parameters.")), gbc);
         gbc.gridy++;
         gbc.gridwidth = 1;
         gbc.insets.top = 0;
         gbc.fill = GridBagConstraints.NONE;
-        panel.add(new JLabel("Select the New Connection button to add a new " +
-                             "connection to the system"), gbc);
+        panel.add(new JLabel(eqlang.getString("Select the New Connection button to add a new connection to the system")), gbc);
         gbc.gridx = 1;
         gbc.insets.left = 0;
         gbc.insets.bottom = 0;
@@ -150,7 +150,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         panel.add(tablePanel, gbc);
 
-        setHeaderText("Database Connections");
+        setHeaderText(eqlang.getString("Database Connections"));
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseConnect24.png"));
         setContentPanel(panel);
 
@@ -389,7 +389,7 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     public void cleanup() {}
 
     public Printable getPrintable() {
-        return new TablePrinter(table, "Database Connections", false);
+        return new TablePrinter(table, eqlang.getString("Database Connections"), false);
     }
 
     /** The table's popup menu function */
@@ -400,13 +400,13 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         private JMenuItem properties;
 
         public PopMenu() {
-            connect = MenuItemFactory.createMenuItem("Connect");
+            connect = MenuItemFactory.createMenuItem(eqlang.getString("Connect"));
             connect.addActionListener(this);
 
-            disconnect = MenuItemFactory.createMenuItem("Disconnect");
+            disconnect = MenuItemFactory.createMenuItem(eqlang.getString("Disconnect"));
             disconnect.addActionListener(this);
 
-            properties = MenuItemFactory.createMenuItem("Properties");
+            properties = MenuItemFactory.createMenuItem(eqlang.getString("Properties"));
             properties.addActionListener(this);
 
             add(connect);
@@ -472,8 +472,8 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
     private class ConnectionsTableModel extends AbstractSortableTableModel {
 
         private List<DatabaseConnection> values;
-        private String[] header = {"", "Connection Name", "Host",
-                                   "Data Source", "User", "Driver"};
+        private String[] header = eqlang.getStrings(new String[]{"", "Connection Name", "Host",
+                                   "Data Source", "User", "Driver"});
 
         public ConnectionsTableModel(List<DatabaseConnection> values) {
             this.values = values;
@@ -564,10 +564,10 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
 
             if (connected != null && connected) {
                 setIcon(connectedImage);
-                setToolTipText("Connected (double-click icon to disconnect)");
+                setToolTipText(eqlang.getString("Connected (double-click icon to disconnect)"));
             } else {
                 setIcon(notConnectedImage);
-                setToolTipText("Disconnected (double-click icon to connect)");
+                setToolTipText(eqlang.getString("Disconnected (double-click icon to connect)"));
             }
 
             if (isSelected) {

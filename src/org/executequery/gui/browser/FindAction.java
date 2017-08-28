@@ -55,6 +55,7 @@ import javax.swing.text.Position;
 import org.apache.commons.lang.StringUtils;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.WidgetFactory;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.plaf.UIUtils;
 
 /**
@@ -81,7 +82,7 @@ public abstract class FindAction<T> extends AbstractAction
 	
 	public FindAction() {
 
-		super("Incremental Search");
+		super(eqlang.getString("Incremental Search"));
 
         putValue(Action.ACCELERATOR_KEY, INVOKE_KEY_STROKE);
         putValue(Action.SMALL_ICON, GUIUtilities.loadIcon("Zoom16.png"));

@@ -23,6 +23,7 @@ package org.executequery.datasource;
 import com.mchange.v2.c3p0.DataSources;
 import com.mchange.v2.c3p0.PoolBackedDataSource;
 import org.executequery.databasemediators.DatabaseConnection;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 
 import javax.sql.DataSource;
@@ -204,7 +205,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
         if (initialConnections < 1) {
             
-            throw new IllegalArgumentException("Initial connection count must be at least 1");
+            throw new IllegalArgumentException(eqlang.getString("Initial connection count must be at least 1"));
         }
 
         c3poPoolProperties.put(INITIAL_POOL_SIZE_KEY, asString(initialConnections));
@@ -214,7 +215,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
         if (maximumConnections < 1) {
             
-            throw new IllegalArgumentException("Maximum connection count must be at least 1");
+            throw new IllegalArgumentException(eqlang.getString("Maximum connection count must be at least 1"));
         }
 
         c3poPoolProperties.put(MAX_POOL_SIZE_KEY, asString(maximumConnections));
@@ -229,7 +230,7 @@ public class C3poConnectionPool extends AbstractConnectionPool {
 
         if (minimumConnections < 1) {
             
-            throw new IllegalArgumentException("Minimum connection count must be at least 1");
+            throw new IllegalArgumentException(eqlang.getString("Minimum connection count must be at least 1"));
         }
         
         c3poPoolProperties.put(MIN_POOL_SIZE_KEY, asString(minimumConnections));

@@ -33,6 +33,7 @@ import org.executequery.databaseobjects.DatabaseMetaTag;
 import org.executequery.databaseobjects.DatabaseObject;
 import org.executequery.databaseobjects.DatabaseSchema;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.underworldlabs.jdbc.DataSourceException;
 
@@ -397,8 +398,8 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
             
             // possible SQLFeatureNotSupportedException
             
-            Log.warning("Error retrieving database functions - " + e.getMessage());
-            Log.warning("Reverting to old function retrieval implementation");
+            Log.warning(eqlang.getString("Error retrieving database functions")+" - " + e.getMessage());
+            Log.warning(eqlang.getString("Reverting to old function retrieval implementation"));
 
             return getFunctionResultSetOldImpl();
         }
@@ -418,13 +419,13 @@ public class DefaultDatabaseMetaTag extends AbstractNamedObject
         List<NamedObject> objects = new ArrayList<NamedObject>(3);
 
         objects.add(new DefaultSystemFunctionMetaTag(
-                this, SYSTEM_STRING_FUNCTIONS, "String Functions"));
+                this, SYSTEM_STRING_FUNCTIONS, eqlang.getString("String Functions")));
         
         objects.add(new DefaultSystemFunctionMetaTag(
-                this, SYSTEM_NUMERIC_FUNCTIONS, "Numeric Functions"));
+                this, SYSTEM_NUMERIC_FUNCTIONS, eqlang.getString("Numeric Functions")));
         
         objects.add(new DefaultSystemFunctionMetaTag(
-                this, SYSTEM_DATE_TIME_FUNCTIONS, "Date/Time Functions"));
+                this, SYSTEM_DATE_TIME_FUNCTIONS, eqlang.getString("Date/Time Functions")));
         
         return objects;
     }

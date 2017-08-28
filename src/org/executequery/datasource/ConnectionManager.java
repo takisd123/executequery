@@ -31,6 +31,7 @@ import javax.sql.DataSource;
 
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.databasemediators.DatabaseDriver;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.repository.DatabaseDriverRepository;
 import org.executequery.repository.RepositoryCache;
@@ -69,7 +70,7 @@ public final class ConnectionManager {
 
             } else {
 
-                throw new DataSourceException("No JDBC driver specified");
+                throw new DataSourceException(eqlang.getString("No JDBC driver specified"));
             }
 
         }

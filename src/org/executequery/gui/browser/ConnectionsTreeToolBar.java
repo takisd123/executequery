@@ -23,6 +23,7 @@ package org.executequery.gui.browser;
 import javax.swing.JButton;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.toolbar.PanelToolBar;
 
@@ -63,46 +64,46 @@ class ConnectionsTreeToolBar extends PanelToolBar {
         
         newConnectionButton = addButton(
                 treePanel, "newConnection", 
-                GUIUtilities.getAbsoluteIconPath("NewConnection16.png"), 
-                "New connection");
+                GUIUtilities.getAbsoluteIconPath("NewConnection16.png"),
+                eqlang.getString("New connection"));
 
         addButton(
                 treePanel, "newFolder", 
-                GUIUtilities.getAbsoluteIconPath("NewFolder16.png"), 
-                "New folder");
+                GUIUtilities.getAbsoluteIconPath("NewFolder16.png"),
+                eqlang.getString("New folder"));
         
         deleteConnectionButton = addButton(
                 treePanel, "deleteConnection", 
                 GUIUtilities.getAbsoluteIconPath("Delete16.png"),
-                "Delete");
+                eqlang.getString("Delete"));
 
         upButton = addButton(
                 treePanel, "moveConnectionUp", 
                 GUIUtilities.getAbsoluteIconPath("Up16.png"),
-                "Move connection up");
+                eqlang.getString("Move connection up"));
 
         downButton = addButton(
                 treePanel, "moveConnectionDown", 
-                GUIUtilities.getAbsoluteIconPath("Down16.png"), 
-                "Move connection down");
+                GUIUtilities.getAbsoluteIconPath("Down16.png"),
+                eqlang.getString("Move connection down"));
 
         reloadButton = addButton(
                 treePanel, "reloadSelection", 
 //                GUIUtilities.getAbsoluteIconPath("Reload16.png"), 
-                GUIUtilities.getAbsoluteIconPath("Refresh16.png"), 
-                "Reload the currently selected node");
+                GUIUtilities.getAbsoluteIconPath("Refresh16.png"),
+                eqlang.getString("Reload the currently selected node"));
 
         addButton(
                 treePanel, "sortConnections", 
-                GUIUtilities.getAbsoluteIconPath("SortAtoZ16.png"), 
-                "Sort connections");
+                GUIUtilities.getAbsoluteIconPath("SortAtoZ16.png"),
+                eqlang.getString("Sort connections"));
 
         addButton(treePanel.getTreeFindAction());
 
         addButton(
                 treePanel, "collapseAll", 
-                GUIUtilities.getAbsoluteIconPath("Collapse16.png"), 
-                "Collapse all");
+                GUIUtilities.getAbsoluteIconPath("Collapse16.png"),
+                eqlang.getString("Collapse all"));
 
     }
 

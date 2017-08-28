@@ -34,6 +34,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.swing.FileSelector;
 
 /**
@@ -85,19 +86,19 @@ public class OpenFileDialog extends FileChooserDialog
     
     private void jbInit() throws Exception {
         
-        textFiles = new FileSelector(new String[] {"txt"}, "Text files");
-        sqlFiles = new FileSelector(new String[] {"sql"}, "SQL files");
-        eqFiles = new FileSelector(new String[] {"eqd"}, "Execute Query ERD");
+        textFiles = new FileSelector(new String[] {"txt"}, eqlang.getString("Text files"));
+        sqlFiles = new FileSelector(new String[] {"sql"}, eqlang.getString("SQL files"));
+        eqFiles = new FileSelector(new String[] {"eqd"}, eqlang.getString("Execute Query ERD"));
         
         setFileSelectionMode(JFileChooser.FILES_ONLY);
         addChoosableFileFilter(textFiles);
         addChoosableFileFilter(eqFiles);
         addChoosableFileFilter(sqlFiles);
         
-        openEditorCheck = new JCheckBox("Open Query Editor Window");
-        newEditorCheck = new JCheckBox("New Query Editor Window", true);
-        scratchPadCheck = new JCheckBox("New Scratch Pad Window");
-        erdPanelCheck = new JCheckBox("New ERD Window");
+        openEditorCheck = new JCheckBox(eqlang.getString("Open Query Editor Window"));
+        newEditorCheck = new JCheckBox(eqlang.getString("New Query Editor Window"), true);
+        scratchPadCheck = new JCheckBox(eqlang.getString("New Scratch Pad Window"));
+        erdPanelCheck = new JCheckBox(eqlang.getString("New ERD Window"));
         
         openEditorCheck.setEnabled(false);
         
@@ -122,7 +123,7 @@ public class OpenFileDialog extends FileChooserDialog
         gbc.insets.right = 5;
         optionsPanel.add(scratchPadCheck, gbc);
         
-        optionsPanel.setBorder(BorderFactory.createTitledBorder("Open With:"));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Open With:")));
         
         customPanel = new JPanel(new BorderLayout());
         customPanel.setBorder(BorderFactory.createEmptyBorder(0,7,7,7));

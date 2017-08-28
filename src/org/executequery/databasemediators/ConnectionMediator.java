@@ -28,6 +28,7 @@ import org.executequery.databasemediators.spi.DefaultConnectionBuilder;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.DefaultConnectionEvent;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.GUIUtils;
 
@@ -80,7 +81,7 @@ public final class ConnectionMediator {
 
             } else {
 
-                throw new ApplicationException("Unknown error establishing connection.");
+                throw new ApplicationException(eqlang.getString("Unknown error establishing connection."));
             }
 
         }

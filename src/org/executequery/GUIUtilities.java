@@ -87,6 +87,7 @@ import org.executequery.listeners.LogUserPreferenceListener;
 import org.executequery.listeners.OpenEditorConnectionListener;
 import org.executequery.listeners.PreferencesChangesListener;
 import org.executequery.listeners.ToolBarVisibilityListener;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.plaf.LookAndFeelType;
 import org.executequery.print.PrintFunction;
@@ -192,7 +193,7 @@ public final class GUIUtilities {
         desktopMediator = new DesktopMediator(frame);
 
         // initialise and add the status bar
-        statusBar = new StatusBarPanel(" Not Connected", Constants.EMPTY);
+        statusBar = new StatusBarPanel(" "+ eqlang.getString("Not Connected"), Constants.EMPTY);
         statusBar.setFourthLabelText(
                 "JDK" + System.getProperty("java.version").substring(0,5),
                 SwingConstants.CENTER);

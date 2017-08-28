@@ -73,6 +73,7 @@ import org.executequery.gui.forms.AbstractFormObjectViewPanel;
 import org.executequery.gui.table.TableConstraintFunction;
 import org.executequery.gui.text.SimpleSqlTextPanel;
 import org.executequery.gui.text.TextEditor;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -185,7 +186,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         // column indexes panel
         JPanel indexesPanel = new JPanel(new BorderLayout());
-        indexesPanel.setBorder(BorderFactory.createTitledBorder("Table Indexes"));
+        indexesPanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Table Indexes")));
         indexesPanel.add(new JScrollPane(columnIndexTable), BorderLayout.CENTER);
 
         // table meta data table
@@ -202,13 +203,13 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         
         // alter sql text panel
         alterSqlText = new SimpleSqlTextPanel();
-        alterSqlText.setBorder(BorderFactory.createTitledBorder("Alter Table"));
+        alterSqlText.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Alter Table")));
         alterSqlText.setPreferredSize(new Dimension(100, 100));
         alterSqlText.getEditorTextComponent().addFocusListener(this);
 
         // create sql text panel
         createSqlText = new SimpleSqlTextPanel();
-        createSqlText.setBorder(BorderFactory.createTitledBorder("Create Table"));
+        createSqlText.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Create Table")));
         createSqlText.getEditorTextComponent().addFocusListener(this);
         
         // sql text split pane
@@ -220,12 +221,12 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         
         constraintsTable = new EditableColumnConstraintTable();
         JPanel constraintsPanel = new JPanel(new BorderLayout());
-        constraintsPanel.setBorder(BorderFactory.createTitledBorder("Table Keys"));
+        constraintsPanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Table Keys")));
         constraintsPanel.add(new JScrollPane(constraintsTable), BorderLayout.CENTER);
         
         descriptionTable = new EditableDatabaseTable();
         JPanel descTablePanel = new JPanel(new GridBagLayout());
-        descTablePanel.setBorder(BorderFactory.createTitledBorder("Table Columns"));
+        descTablePanel.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Table Columns")));
         descTablePanel.add(
                 new JScrollPane(descriptionTable),
                 new GridBagConstraints(
@@ -245,20 +246,20 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         tabPane = new JTabbedPane();
         tabPane.setModel(model);
 
-        tabPane.add("Description", descTablePanel);
-        tabPane.add("Constraints", constraintsPanel);
-        tabPane.add("Indexes", indexesPanel);
-        tabPane.add("Privileges", tablePrivilegePanel);
-        tabPane.add("References", referencesPanel);
-        tabPane.add("Data", tableDataPanel);
-        tabPane.add("SQL", splitPane);
-        tabPane.add("Meta Data", metaDataPanel);
+        tabPane.add(eqlang.getString("Description"), descTablePanel);
+        tabPane.add(eqlang.getString("Constraints"), constraintsPanel);
+        tabPane.add(eqlang.getString("Indexes"), indexesPanel);
+        tabPane.add(eqlang.getString("Privileges"), tablePrivilegePanel);
+        tabPane.add(eqlang.getString("References"), referencesPanel);
+        tabPane.add(eqlang.getString("Data"), tableDataPanel);
+        tabPane.add(eqlang.getString("SQL"), splitPane);
+        tabPane.add(eqlang.getString("Meta Data"), metaDataPanel);
         
         tabPane.addChangeListener(this);
         
         // apply/cancel buttons
-        applyButton = new DefaultPanelButton("Apply");
-        cancelButton = new DefaultPanelButton("Cancel");
+        applyButton = new DefaultPanelButton(eqlang.getString("Apply"));
+        cancelButton = new DefaultPanelButton(eqlang.getString("Cancel"));
 
         applyButton.addActionListener(this);
         cancelButton.addActionListener(this);
@@ -272,7 +273,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        base.add(new JLabel("Table Name:"), gbc);
+        base.add(new JLabel(eqlang.getString("Table Name:")), gbc);
         gbc.insets.left = 5;
         gbc.insets.right = 5;
         gbc.gridx = 1;
@@ -310,7 +311,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.WEST;
-        base.add(new JLabel("Data Row Count:"), gbc);
+        base.add(new JLabel(eqlang.getString("Data Row Count:")), gbc);
         gbc.gridx = 2;
         gbc.insets.top = 0;
         gbc.weightx = 1.0;
@@ -343,7 +344,7 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
         setContentPanel(base);
         setHeaderIcon(GUIUtilities.loadIcon("DatabaseTable24.png"));
-        setHeaderText("Database Table");
+        setHeaderText(eqlang.getString("Database Table"));
         
         // register for keyword changes
         EventMediator.registerListener(this);
@@ -439,30 +440,30 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
             
             case 0:
                 return new TablePrinter(descriptionTable,
-                                        "Table: " + table.getName());
+                                        eqlang.getString("Table:") + table.getName());
                 
             case 1:
                 return new TablePrinter(constraintsTable,
-                                        "Constraints for table: " + table.getName(), false);
+                        eqlang.getString("Constraints for table:") + table.getName(), false);
                 
             case 2:
                 return new TablePrinter(columnIndexTable,
-                                        "Indexes for table: " + table.getName());
+                        eqlang.getString("Indexes for table:") + table.getName());
                 
             case 3:
                 return new TablePrinter(tablePrivilegePanel.getTable(),
-                                        "Access rights for table: " + table.getName());
+                        eqlang.getString("Access rights for table:") + table.getName());
                 
             case 4:
                 return referencesPanel.getPrintable();
 
             case 5:
                 return new TablePrinter(tableDataPanel.getTable(),
-                                        "Table Data: " + table.getName());
+                        eqlang.getString("Table Data:") + table.getName());
 
             case 7:
                 return new TablePrinter(metaDataPanel.getTable(),
-                                        "Table Meta Data: " + table.getName());
+                        eqlang.getString("Table Meta Data:") + table.getName());
 
             default:
                 return null;
@@ -750,11 +751,11 @@ public class BrowserTableEditingPanel extends AbstractFormObjectViewPanel
 
             if (SystemProperties.getBooleanProperty("user", "browser.query.row.count")) {
             
-                updateRowCount("Querying...");
+                updateRowCount(eqlang.getString("Querying..."));
 
             } else {
                 
-                updateRowCount("Option Disabled");
+                updateRowCount(eqlang.getString("Option Disabled"));
             }
             
             referencesLoaded = false;

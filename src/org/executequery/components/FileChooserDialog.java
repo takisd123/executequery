@@ -42,6 +42,7 @@ import javax.swing.filechooser.FileView;
 import org.apache.commons.lang.StringUtils;
 import org.executequery.Constants;
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.util.SystemProperties;
 
 /** 
@@ -87,7 +88,7 @@ public class FileChooserDialog extends JFileChooser {
         }
         
         if (file.exists()) {
-            int _result = GUIUtilities.displayConfirmCancelDialog("Overwrite existing file?");
+            int _result = GUIUtilities.displayConfirmCancelDialog(eqlang.getString("Overwrite existing file?"));
 
             if (_result == JOptionPane.CANCEL_OPTION) {
                 return CANCEL_OPTION;
@@ -222,46 +223,46 @@ public class FileChooserDialog extends JFileChooser {
             String name = f.getName().toLowerCase();
 
             if (name.endsWith(".jar"))
-                return "Java Archive File";
+                return eqlang.getString("Java Archive File");
 
             else if (name.endsWith(".sql"))
-                return "SQL Script File";
+                return eqlang.getString("SQL Script File");
 
             else if (name.endsWith(".eqd"))
-                return "Execute Query ERD File";
+                return eqlang.getString("Execute Query ERD File");
 
             else if (name.endsWith(".zip"))
-                return "ZIP Archive File";
+                return eqlang.getString("ZIP Archive File");
 
             else if (name.endsWith(".txt"))
-                return "Text File";
+                return eqlang.getString("Text File");
 
             else if (name.endsWith(".gif"))
-                return "GIF Image File";
+                return eqlang.getString("GIF Image File");
 
             else if (name.endsWith(".jpeg"))
-                return "JPEG Image File";
+                return eqlang.getString("JPEG Image File");
 
             else if (name.endsWith(".jpg"))
-                return "JPEG Image File";
+                return eqlang.getString("JPEG Image File");
 
             else if (name.endsWith(".xml"))
-                return "XML File";
+                return eqlang.getString("XML File");
 
             else if (name.endsWith(".log"))
-                return "System Log File";
+                return eqlang.getString("System Log File");
 
             else if (name.endsWith(".exe"))
-                return "Executable File";
+                return eqlang.getString("Executable File");
 
             else if (name.endsWith(".bat"))
-                return "Windows Batch Script";
+                return eqlang.getString("Windows Batch Script");
 
             else if (name.endsWith(".sh"))
-                return "Unix Shell Script";
+                return eqlang.getString("Unix Shell Script");
 
             else
-                return "File";
+                return eqlang.getString("File");
 
         }
 

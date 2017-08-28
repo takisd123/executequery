@@ -53,6 +53,7 @@ import org.executequery.components.FileChooserDialog;
 import org.executequery.databasemediators.DatabaseConnection;
 import org.executequery.gui.ActionContainer;
 import org.executequery.gui.WidgetFactory;
+import org.executequery.localisation.eqlang;
 import org.executequery.repository.ConnectionExporter;
 import org.executequery.repository.ConnectionFoldersRepository;
 import org.executequery.repository.DatabaseConnectionRepository;
@@ -73,7 +74,7 @@ import org.underworldlabs.swing.tree.CheckTreeSelectionModel;
  */
 public class ExportConnectionsPanel extends ActionPanel {
     
-    public static final String TITLE = "Export Connections";
+    public static final String TITLE = eqlang.getString("Export Connections");
     public static final String FRAME_ICON = "ExportConnections16.png";
     
     private JTextField fileNameField;
@@ -101,12 +102,12 @@ public class ExportConnectionsPanel extends ActionPanel {
         
         fileNameField = WidgetFactory.createTextField();
 
-        JButton button = WidgetFactory.createInlineFieldButton("Browse");
+        JButton button = WidgetFactory.createInlineFieldButton(eqlang.getString("Browse"));
         button.setActionCommand("browse");
         button.addActionListener(this);
         button.setMnemonic('r');
 
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Database Connections");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(eqlang.getString("Database Connections"));
         
         List<ConnectionsFolder> folders = folders();
         List<DatabaseConnection> connectionsAdded = new ArrayList<DatabaseConnection>();
@@ -158,7 +159,7 @@ public class ExportConnectionsPanel extends ActionPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         
-        mainPanel.add(new JLabel("Select the connections and/or folders you wish to export below."), gbc);        
+        mainPanel.add(new JLabel(eqlang.getString("Select the connections and/or folders you wish to export below.")), gbc);
 
         gbc.gridy++;
         mainPanel.add(new JLabel("<html><b><i>Note: </i></b>Passwords will be exported as they are stored - if you "
@@ -176,7 +177,7 @@ public class ExportConnectionsPanel extends ActionPanel {
         gbc.weightx = 0;
         gbc.weighty = 0;
         gbc.fill = GridBagConstraints.NONE;
-        mainPanel.add(new JLabel("Export File:"), gbc);
+        mainPanel.add(new JLabel(eqlang.getString("Export File:")), gbc);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         gbc.insets.top = 0;
@@ -189,7 +190,7 @@ public class ExportConnectionsPanel extends ActionPanel {
         
         mainPanel.setBorder(BorderFactory.createEtchedBorder());
         
-        BottomButtonPanel buttonPanel = new BottomButtonPanel(this, "Export", "export-connections", true);
+        BottomButtonPanel buttonPanel = new BottomButtonPanel(this, eqlang.getString("Export"), "export-connections", true);
         buttonPanel.setOkButtonActionCommand("doExport");
         
         JPanel base = new JPanel(new BorderLayout());

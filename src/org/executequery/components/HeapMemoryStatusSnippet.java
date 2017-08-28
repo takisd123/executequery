@@ -33,6 +33,7 @@ import javax.swing.JProgressBar;
 import javax.swing.event.MouseInputAdapter;
 
 import org.executequery.GUIUtilities;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.HeapMemoryDialog;
 
@@ -141,7 +142,7 @@ public class HeapMemoryStatusSnippet extends JPanel
             int free = (int)Runtime.getRuntime().freeMemory();
             int used = total - free;
             String text = (used/1000) + "Kb/" + (total/1000) + "Kb";
-            memProgress.setToolTipText("Java heap size: " + text);
+            memProgress.setToolTipText(eqlang.getString("Java heap size:") + text);
         }
         
     } // class ProgressMouseAdapter

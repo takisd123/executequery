@@ -43,6 +43,7 @@ import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.WidgetFactory;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.util.StringBundle;
 import org.executequery.util.SystemResources;
@@ -249,7 +250,7 @@ public class TableSelectionPanel extends ActionPanel
     
     private JLabel createLabel(String key) {
 
-        return new JLabel(bundleString(key));
+        return new JLabel(eqlang.getString(key));
     }
 
     private JComboBox createSchemasCombo() {
@@ -302,7 +303,7 @@ public class TableSelectionPanel extends ActionPanel
 
     private void handleDataSourceException(DataSourceException e) {
         
-        Log.error("Error during database object selection", e);
+        Log.error(eqlang.getString("Error during database object selection"), e);
         
         throw new ApplicationException(e);
     }

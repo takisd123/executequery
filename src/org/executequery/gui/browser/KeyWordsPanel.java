@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import org.executequery.gui.DefaultTable;
+import org.executequery.localisation.eqlang;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
 import org.underworldlabs.swing.table.SingleColumnTableModel;
@@ -68,7 +69,7 @@ public class KeyWordsPanel extends ConnectionPropertiesPanel {
         setTableProperties(keywordsTable);
         
         JPanel panel1 = new JPanel(new BorderLayout());
-        panel1.setBorder(BorderFactory.createTitledBorder("Database Specific"));
+        panel1.setBorder(BorderFactory.createTitledBorder(eqlang.getString("Database Specific")));
         panel1.add(new JScrollPane(keywordsTable));
         
         List<String> sql92 = keywords().getSQL92();

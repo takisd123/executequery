@@ -39,6 +39,7 @@ import org.executequery.gui.importexport.ImportExportDelimitedPanel;
 import org.executequery.gui.importexport.ImportExportExcelPanel;
 import org.executequery.gui.importexport.ImportExportDataProcess;
 import org.executequery.gui.importexport.ImportExportXMLPanel;
+import org.executequery.localisation.eqlang;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.actions.ActionBuilder;
 import org.underworldlabs.swing.actions.ReflectiveAction;
@@ -123,7 +124,7 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         if (currentSelection != null) {
 
             String name = treePanel.buildConnectionName(
-                            currentSelection.getName() + " (Copy") + ")";
+                            currentSelection.getName() + " ("+ eqlang.getString("Copy")) + ")";
             DatabaseConnection dc = currentSelection.copy().withName(name);
             treePanel.newConnection(dc);
         }
@@ -207,35 +208,35 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
             switch (transferType) {
 
                 case ImportExportDataProcess.EXPORT_DELIMITED:
-                    dialog = new BaseDialog("Export Data", false, false);
+                    dialog = new BaseDialog(eqlang.getString("Export Data"), false, false);
                     panel = new ImportExportDelimitedPanel(
                                     dialog, ImportExportDataProcess.EXPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportDataProcess.IMPORT_DELIMITED:
-                    dialog = new BaseDialog("Import Data", false, false);
+                    dialog = new BaseDialog(eqlang.getString("Import Data"), false, false);
                     panel = new ImportExportDelimitedPanel(
                                     dialog, ImportExportDataProcess.IMPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportDataProcess.EXPORT_XML:
-                    dialog = new BaseDialog("Export XML", false, false);
+                    dialog = new BaseDialog(eqlang.getString("Export XML"), false, false);
                     panel = new ImportExportXMLPanel(
                                     dialog, ImportExportDataProcess.EXPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportDataProcess.IMPORT_XML:
-                    dialog = new BaseDialog("Import XML", false, false);
+                    dialog = new BaseDialog(eqlang.getString("Import XML"), false, false);
                     panel = new ImportExportXMLPanel(
                                     dialog, ImportExportDataProcess.IMPORT,
                                     dc, schemaName, tableName);
                     break;
 
                 case ImportExportDataProcess.EXCEL:
-                    dialog = new BaseDialog("Export Excel Spreadsheet", false, false);
+                    dialog = new BaseDialog(eqlang.getString("Export Excel Spreadsheet"), false, false);
                     panel = new ImportExportExcelPanel(
                                     dialog, ImportExportDataProcess.EXPORT,
                                     dc, schemaName, tableName);

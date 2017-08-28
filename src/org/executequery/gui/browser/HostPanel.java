@@ -36,6 +36,7 @@ import org.executequery.event.ApplicationEvent;
 import org.executequery.event.ConnectionEvent;
 import org.executequery.event.ConnectionListener;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
+import org.executequery.localisation.eqlang;
 import org.executequery.log.Log;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -110,14 +111,14 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
         javaSqlTypesPanel = new JavaSQLTypesPanel();
 
         tabPane = new JTabbedPane(JTabbedPane.TOP);
-        tabPane.addTab("Connection", connectionPanel);
-        tabPane.addTab("Database Properties", databasePropertiesPanel);
-        tabPane.addTab("SQL Keywords", keyWordsPanel);
-        tabPane.addTab("Data Types", dataTypesPanel);
+        tabPane.addTab(eqlang.getString("Connection"), connectionPanel);
+        tabPane.addTab(eqlang.getString("Database Properties"), databasePropertiesPanel);
+        tabPane.addTab(eqlang.getString("SQL Keywords"), keyWordsPanel);
+        tabPane.addTab(eqlang.getString("Data Types"), dataTypesPanel);
         tabPane.addTab("java.sql.Types", javaSqlTypesPanel);
         enableConnectionTabs(false);
 
-        setHeaderText("Database Connection");
+        setHeaderText(eqlang.getString("Database Connection"));
         setHeaderIcon(GUIUtilities.loadIcon("Database24.png"));
         setContentPanel(tabPane);
 
@@ -304,7 +305,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     public Printable getPrintable() {
         
         String hostText = hostField != null ? hostField.getText() : "";
-        return new TablePrinter(schemaTable, "Database Server: " + hostText);
+        return new TablePrinter(schemaTable, eqlang.getString("Database Server:") + hostText);
     }
     
     public JTable getTable() {
@@ -335,7 +336,7 @@ public class HostPanel extends AbstractFormObjectViewPanel implements Connection
     private class HostModel extends AbstractTableModel {
         
         private Vector values = new Vector(0);
-        private String header = "Catalog Name";
+        private String header = eqlang.getString("Catalog Name");
         
         public void setValues(Vector values) {
             this.values = values;
