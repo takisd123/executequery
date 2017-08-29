@@ -53,8 +53,8 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1775 $
+ * @date     $Date: 2017-08-27 22:51:41 +1000 (Sun, 27 Aug 2017) $
  */
 public final class ActionBuilder {
     
@@ -203,34 +203,41 @@ public final class ActionBuilder {
      * Returns the action with the specified key name.
      */
     public static Action get(Object key) {
-        return (Action)actionsMap.get(key);
+        
+        return (Action) actionsMap.get(key);
     }
     
     private static Map<String, Action> loadActions(String path) {
+        
         InputStream input = null;
         ClassLoader cl = ActionBuilder.class.getClassLoader();
         
         if (cl != null) {
+          
             input = cl.getResourceAsStream(path);
-        }
-        else {
+
+        } else {
+        
             input = ClassLoader.getSystemResourceAsStream(path);
         }
         
         try {
+            
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             
             SAXParser parser = factory.newSAXParser();
             ActionHandler handler = new ActionHandler();
             parser.parse(input, handler);
+        
             return handler.getActions();
-        } 
-        catch (Exception e) {
+        
+        } catch (Exception e) {
+         
             e.printStackTrace();
             throw new InternalError();
-        }
-        finally {
+
+        } finally {
             try {
                 if (input != null) {
                     input.close();

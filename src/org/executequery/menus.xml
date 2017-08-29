@@ -5,8 +5,8 @@
     File:         menus.xml
     Author:       Takis Diakoumis
     Description:  Menu and menu item definitions
-    Date:         $Date$
-    Version:      $Revision$
+    Date:         $Date: 2017-08-27 22:51:41 +1000 (Sun, 27 Aug 2017) $
+    Version:      $Revision: 1775 $
     =======================================================================
 -->
 
@@ -345,8 +345,16 @@
                          index="0"
                          class="org.underworldlabs.swing.menu.MainMenuItem"/>
 
+              <menu-item id="export-connections-command"
+                         index="1"
+                         class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
+              <menu-item id="import-connections-command"
+                         index="2"
+                         class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
               <menu-item id="separator"
-                         index="1"/>
+                         index="3"/>
 
           </menu>
 
