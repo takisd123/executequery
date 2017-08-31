@@ -21,6 +21,8 @@
 package org.executequery.actions.queryeditor;
 
 import org.executequery.actions.helpcommands.HelpCommand;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** 
  * Contextual help for the Query Editor.
@@ -33,7 +35,17 @@ public class EditorHelpCommand extends HelpCommand {
 
     public EditorHelpCommand() {
 
-        super("query-editor");
+        super(bundleString("query-editor"));
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(EditorHelpCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("EditorHelpCommand." + key);
     }
     
 }

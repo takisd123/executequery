@@ -23,6 +23,8 @@ package org.executequery.actions.helpcommands;
 import java.awt.event.ActionEvent;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.InformationDialog;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
@@ -36,10 +38,19 @@ public class ReleaseNotesCommand extends OpenFrameCommand
                                  implements BaseCommand {
     
     public void execute(ActionEvent e) {
-        new InformationDialog("Release Notes", 
+        new InformationDialog(bundleString("ReleaseNotes"),
                 "org/executequery/release.notes", InformationDialog.RESOURCE_PATH_VALUE);
     }
+    private StringBundle bundle() {
 
+        StringBundle   bundle = SystemResources.loadBundle(ReleaseNotesCommand.class);
+
+        return bundle;
+    }
+
+    private String bundleString(String key) {
+        return bundle().getString("ReleaseNotesCommand." + key);
+    }
 }
 
 

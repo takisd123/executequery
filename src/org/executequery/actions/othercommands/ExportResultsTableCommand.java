@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.gui.editor.QueryEditorResultsExporter;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 
 /** 
@@ -51,12 +53,23 @@ public class ExportResultsTableCommand extends AbstractBaseCommand {
             } else {
               
                 GUIUtilities.displayErrorMessage(
-                        "The required result set tab panel must be selected to proceed.");
+                        bundleString("errorMessage"));
             }
 
         }        
     }
-    
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(ExportResultsTableCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("ExportResultsTableCommand." + key);
+    }
+
+
 }
 
 

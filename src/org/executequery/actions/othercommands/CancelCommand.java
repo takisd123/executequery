@@ -23,6 +23,9 @@ package org.executequery.actions.othercommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.languagecommands.English;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** <p>This represents a generic close/cancel command
  *  performed from any open <code>JInternalFrame</code>.
@@ -46,7 +49,7 @@ public class CancelCommand extends AbstractBaseCommand {
      * cancel command or otherwise.
      */
     public CancelCommand(boolean isDialog) {
-        super("Cancel");
+        super(bundleString("Cancel"));
         this.isDialog = isDialog;
     }
 
@@ -62,6 +65,16 @@ public class CancelCommand extends AbstractBaseCommand {
         } else {
             //GUIUtilities.closeSelectedInternalFrame();
         }
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(CancelCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("CancelCommand." + key);
     }
     
 }

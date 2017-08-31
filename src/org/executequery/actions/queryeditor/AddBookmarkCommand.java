@@ -23,8 +23,11 @@ package org.executequery.actions.queryeditor;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.othercommands.ShowHideResultSetColumnsCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.editor.AddQueryBookmarkPanel;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** 
  * <p>The Query Editor's add bookmark command.
@@ -50,11 +53,21 @@ public class AddBookmarkCommand extends AbstractQueryEditorCommand {
 
             } else {
                 
-                GUIUtilities.displayErrorMessage("Query editor has no text");
+                GUIUtilities.displayErrorMessage(bundleString("errorMessage"));
             }
             
         }
 
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(AddBookmarkCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("AddBookmarkCommand." + key);
     }
     
 }

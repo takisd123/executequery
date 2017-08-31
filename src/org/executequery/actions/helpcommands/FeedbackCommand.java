@@ -25,10 +25,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.filecommands.PrintPreviewCommand;
 import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.gui.BaseDialog;
 import org.executequery.gui.FeedbackPanel;
 import org.executequery.log.Log;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** 
  * Command to open the feedback dialog.
@@ -59,22 +62,22 @@ public class FeedbackCommand extends AbstractBaseCommand {
 
     private void handleException(Throwable e) {
 
-        Log.error("Error executing feedback command:", e);
+        Log.error(bundleString("ErrorExecutingFeedbackCommand"), e);
     }
 
     public void featureRequest(ActionEvent e) {
         
-        showDialog(FeedbackPanel.FEATURE_REQUEST, "Feature Request");
+        showDialog(FeedbackPanel.FEATURE_REQUEST, bundleString("FeatureRequest"));
     }
 
     public void userComments(ActionEvent e) {
         
-        showDialog(FeedbackPanel.USER_COMMENTS, "User Comments");
+        showDialog(FeedbackPanel.USER_COMMENTS, bundleString("UserComments"));
     }
 
     public void bugReport(ActionEvent e) {
         
-        showDialog(FeedbackPanel.BUG_REPORT, "Report Bug");
+        showDialog(FeedbackPanel.BUG_REPORT, bundleString("ReportBug"));
     }
 
     private void showDialog(int type, String title) {
@@ -94,6 +97,16 @@ public class FeedbackCommand extends AbstractBaseCommand {
 
             GUIUtilities.showNormalCursor();
         }
+    }
+    private StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(FeedbackCommand.class);
+
+        return bundle;
+    }
+
+    private String bundleString(String key) {
+        return bundle().getString("FeedbackCommand." + key);
     }
 
 }

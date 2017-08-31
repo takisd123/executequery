@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 
 import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.executequery.util.SystemWebBrowserLauncher;
 import org.underworldlabs.swing.actions.BaseCommand;
 
@@ -44,13 +46,22 @@ public abstract class AbstractUrlLauncherCommand implements BaseCommand {
         } catch (ApplicationException applicationException) {
             
             GUIUtilities.displayExceptionErrorDialog(
-                    "Error launching local web browser:\n" + 
+                    bundleString("error.launchBrowser") +
                     applicationException.getMessage(), applicationException);
             
         }
 
     }
+    private static StringBundle bundle() {
 
+        StringBundle   bundle = SystemResources.loadBundle(AbstractUrlLauncherCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("AbstractUrlLauncherCommand." + key);
+    }
     public abstract String url();
     
 }

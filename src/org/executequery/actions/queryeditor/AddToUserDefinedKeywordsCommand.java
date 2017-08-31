@@ -26,6 +26,8 @@ import org.apache.commons.lang.StringUtils;
 import org.executequery.log.Log;
 import org.executequery.repository.KeywordRepository;
 import org.executequery.repository.RepositoryCache;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** 
  *
@@ -52,12 +54,12 @@ public class AddToUserDefinedKeywordsCommand extends AbstractQueryEditorCommand 
                     if (!keywordRepository.contains(wordAtCursor)) {
 
                         keywordRepository.addUserDefinedKeyword(wordAtCursor);
-                        Log.info("Keyword [ " + wordAtCursor + 
-                                " ] added to user defined keyword list.");
+                        Log.info(bundleString("log.addKeyword1") + wordAtCursor +
+                                bundleString("log.addKeyword2"));
                         
                     } else {
                         
-                        Log.info("Keyword already exists as a part of the defined keyword list.");
+                        Log.info(bundleString("log.errorAddKeyword"));
                     }
                     
                 }
@@ -66,6 +68,16 @@ public class AddToUserDefinedKeywordsCommand extends AbstractQueryEditorCommand 
             
         }
 
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(AddToUserDefinedKeywordsCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("AddToUserDefinedKeywordsCommand." + key);
     }
 
 }

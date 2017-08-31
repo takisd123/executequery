@@ -23,6 +23,8 @@ package org.executequery.actions.othercommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.gui.prefs.UserPreferenceFunction;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /* ----------------------------------------------------------
  * CVS NOTE: Changes to the CVS repository prior to the 
@@ -43,14 +45,24 @@ public class RestoreDefaultsCommand extends AbstractBaseCommand {
     private UserPreferenceFunction frame;
     
     public RestoreDefaultsCommand(UserPreferenceFunction frame) {
-        super("Restore Defaults");
+        super(bundleString("RestoreDefaults"));
         this.frame = frame;
     }
     
     public void execute(ActionEvent e) {
         frame.restoreDefaults();
     }
-    
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(RestoreDefaultsCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("RestoreDefaultsCommand." + key);
+    }
+
 }
 
 

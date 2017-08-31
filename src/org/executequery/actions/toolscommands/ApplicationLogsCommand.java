@@ -25,9 +25,12 @@ import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.searchcommands.GotoCommand;
 import org.executequery.gui.SystemLogsViewer;
 import org.executequery.repository.LogRepository;
 import org.executequery.repository.RepositoryCache;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.underworldlabs.swing.actions.ReflectiveAction;
@@ -48,7 +51,7 @@ public class ApplicationLogsCommand extends ReflectiveAction
 
     public void resetAllLogs(ActionEvent e) {
 
-        String message = "Are you sure you want to reset ALL system logs?";
+        String message = bundleString("messageResetAll");
 
         if (confirmReset(message)) {
 
@@ -142,20 +145,20 @@ public class ApplicationLogsCommand extends ReflectiveAction
 
     private boolean resetLogConfirmed(int type) {
 
-        String message = "Are you sure you want to reset the ";
+        String message = bundleString("messageReset");
 
         switch (type) {
 
             case LogRepository.ACTIVITY:
-                message += "system activity log?";
+                message += bundleString("SystemActivityLog");
                 break;
 
             case LogRepository.EXPORT:
-                message += "data export log?";
+                message += bundleString("DataExportLog");
                 break;
 
             case LogRepository.IMPORT:
-                message += "data import log?";
+                message += bundleString("DataImportLog");
                 break;
 
         }
@@ -167,7 +170,16 @@ public class ApplicationLogsCommand extends ReflectiveAction
 
         return GUIUtilities.displayConfirmDialog(message) == JOptionPane.YES_OPTION;
     }
+    private static StringBundle bundle() {
 
+        StringBundle   bundle = SystemResources.loadBundle(ApplicationLogsCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("ApplicationLogsCommand." + key);
+    }
 }
 
 

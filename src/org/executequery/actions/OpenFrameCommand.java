@@ -23,6 +23,8 @@ package org.executequery.actions;
 import org.executequery.GUIUtilities;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.BaseDialog;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /**
  * Base command for those opening a new frame
@@ -38,7 +40,7 @@ public abstract class OpenFrameCommand {
         if (!ConnectionManager.hasConnections()) {
 
             GUIUtilities.displayErrorMessage(
-                            "Not Connected.\nPlease connect to continue.");
+                            bundleString("error.notConnected"));
 
             return false;
         }
@@ -85,7 +87,16 @@ public abstract class OpenFrameCommand {
     protected final BaseDialog createDialog(String name, boolean modal, boolean resizeable) {
         return new BaseDialog(name, modal, resizeable);
     }
+    private static StringBundle bundle() {
 
+        StringBundle   bundle = SystemResources.loadBundle(OpenFrameCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("OpenFrameCommand." + key);
+    }
 }
 
 

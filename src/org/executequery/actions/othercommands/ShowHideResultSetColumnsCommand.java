@@ -27,6 +27,8 @@ import javax.swing.JPanel;
 import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.gui.editor.VisibleResultSetColumnsDialog;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 
 /** 
@@ -50,10 +52,20 @@ public class ShowHideResultSetColumnsCommand extends AbstractBaseCommand {
             } else {
               
                 GUIUtilities.displayErrorMessage(
-                        "The required result set tab panel must be selected to proceed.");
+                        bundle().getString("ExportResultsTableCommand." + "errorMessage"));
             }
 
         }        
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(ShowHideResultSetColumnsCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("ShowHideResultSetColumnsCommand." + key);
     }
     
 }

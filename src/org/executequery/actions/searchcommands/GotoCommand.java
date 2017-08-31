@@ -24,6 +24,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 
 import org.executequery.GUIUtilities;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.gui.editor.QueryEditor;
 
@@ -48,12 +50,21 @@ public class GotoCommand implements BaseCommand {
             QueryEditor queryEditor = (QueryEditor)panel;            
             try {
                 queryEditor.goToRow(Integer.parseInt(
-                GUIUtilities.displayInputMessage("Go To", "Line Number:")));
+                GUIUtilities.displayInputMessage(bundleString("GoTo"), bundleString("LineNumber"))));
             } catch (NumberFormatException numExc) {}
         }
         panel = null;        
     }
-    
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(GotoCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("GotoCommand." + key);
+    }
 }
 
 

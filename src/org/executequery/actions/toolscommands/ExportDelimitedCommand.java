@@ -23,6 +23,8 @@ package org.executequery.actions.toolscommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
@@ -49,11 +51,11 @@ public class ExportDelimitedCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Export Data")) {
+        if (!isDialogOpen(bundleString("title"))) {
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Export Data", false, false);
+                        createDialog(bundleString("title"), false, false);
                 ImportExportDelimitedPanel panel = 
                         new ImportExportDelimitedPanel(dialog, ImportExportDataProcess.EXPORT);
                 dialog.addDisplayComponent(panel);
@@ -64,6 +66,16 @@ public class ExportDelimitedCommand extends OpenFrameCommand
             }
         }
 
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(ExportDelimitedCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("ExportDelimitedCommand." + key);
     }
     
 }

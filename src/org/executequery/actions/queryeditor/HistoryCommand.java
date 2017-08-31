@@ -29,6 +29,8 @@ import org.executequery.GUIUtilities;
 import org.executequery.gui.editor.SQLHistoryDialog;
 import org.executequery.repository.RepositoryCache;
 import org.executequery.repository.SqlCommandHistoryRepository;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 
 /** 
  * <p>The Query Editor's history command execution.
@@ -51,7 +53,7 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
 
                     if (history == null || history.isEmpty()) {
                         
-                        GUIUtilities.displayInformationMessage("No SQL command history available");
+                        GUIUtilities.displayInformationMessage(bundleString("historyEmptyMessage"));
                         return;
                     } 
 
@@ -67,6 +69,16 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
 
         return (SqlCommandHistoryRepository)RepositoryCache.load(
                 SqlCommandHistoryRepository.REPOSITORY_ID);        
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(HistoryCommand.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("HistoryCommand." + key);
     }
 
 }

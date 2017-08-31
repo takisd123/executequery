@@ -29,6 +29,8 @@ import org.executequery.gui.BaseDialog;
 import org.executequery.gui.editor.QueryEditor;
 import org.executequery.print.*;
 import org.executequery.gui.editor.PrintSelectDialog;
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.actions.BaseCommand;
 import org.underworldlabs.swing.util.SwingWorker;
@@ -91,6 +93,16 @@ public class PrintPreviewCommand implements BaseCommand {
         return new PrintSelectDialog(
                 dialog, (QueryEditor) printFunction, PrintSelectDialog.PRINT_PREVIEW);
     }
+    private StringBundle bundle() {
+
+         StringBundle   bundle = SystemResources.loadBundle(PrintPreviewCommand.class);
+
+        return bundle;
+    }
+
+    private String bundleString(String key) {
+        return bundle().getString("PrintPreviewCommand." + key);
+    }
 
     private String showPreview() {
         
@@ -105,7 +117,7 @@ public class PrintPreviewCommand implements BaseCommand {
                         printFunction.getPrintable(), printFunction.getPrintJobName());
             } 
             
-            return "Done";
+            return bundleString("Done");
         
         } finally {
 
