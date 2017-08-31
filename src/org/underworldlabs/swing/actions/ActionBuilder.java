@@ -39,6 +39,8 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.apache.commons.lang.StringUtils;
+import org.executequery.localization.Bundles;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
@@ -113,28 +115,10 @@ public final class ActionBuilder {
 
             if (command.hasAccelerator()) {
 
-                inputMap.put((KeyStroke)command.getValue(
-                                            Action.ACCELERATOR_KEY), actionId);
+                inputMap.put((KeyStroke) command.getValue(Action.ACCELERATOR_KEY), actionId);
             }
             
         }
-        
-//        Set actionSet = actionsMap.keySet();
-//
-//        for (Iterator i = actionSet.iterator(); i.hasNext();) {
-//
-//            command = (BaseActionCommand)actionsMap.get(i.next());
-//            actionId = command.getActionId();
-//            actionMap.put(actionId, command);
-//
-//            if (command.hasAccelerator()) {
-//
-//                inputMap.put((KeyStroke)command.getValue(
-//                                            Action.ACCELERATOR_KEY), actionId);
-//
-//            }
-//
-//        } 
         
     }
 
@@ -183,9 +167,9 @@ public final class ActionBuilder {
      * @param inputMap - the input map to bind to
      * @param shortcuts - the new shortcut keys
      */
-    public static void updateUserDefinedShortcuts(InputMap inputMap, 
-                                                  Properties shortcuts) {
+    public static void updateUserDefinedShortcuts(InputMap inputMap, Properties shortcuts) {
         if (shortcuts == null) {
+
             return;
         }
         buildUserKeymap(shortcuts, inputMap);
@@ -242,7 +226,7 @@ public final class ActionBuilder {
                 if (input != null) {
                     input.close();
                 }
-            } catch (IOException ioExc) {}
+            } catch (IOException e) {}
         }
         
     }
@@ -281,8 +265,12 @@ public final class ActionBuilder {
             if (localName.equals(ACTION)) {
                 
                 actionCommand = new BaseActionCommand();
-                actionCommand.setActionId(attrs.getValue(ID));
-                actionCommand.putValue(Action.NAME, attrs.getValue(NAME));
+                
+                String id = attrs.getValue(ID);
+                actionCommand.setActionId(id);
+                
+                String name = attrs.getValue(NAME);
+                actionCommand.putValue(Action.NAME, nameOrBundleValue(id, name));
                 
                 value = attrs.getValue(MNEMONIC);
                 if (!MiscUtils.isNull(value)) {
@@ -338,16 +326,18 @@ public final class ActionBuilder {
                     */
                 }
 
-                actionCommand.putValue(Action.SHORT_DESCRIPTION, attrs.getValue(DESCRIPTION));
+                String description = attrs.getValue(DESCRIPTION);
+                actionCommand.putValue(Action.SHORT_DESCRIPTION, descriptionOrBundleValue(id, description));
+
                 actionCommand.setCommand(attrs.getValue(EXECUTE_CLASS));                
             } 
             
         }
 
-        public void endElement(String nameSpaceURI, String localName,
-                               String qName) {
+        public void endElement(String nameSpaceURI, String localName, String qName) {
             
             if (localName.equals(ACTION)) {
+
                 map.put(actionCommand.getActionId(), actionCommand);
             } 
             
@@ -364,6 +354,27 @@ public final class ActionBuilder {
         public void error(SAXParseException spe) throws SAXException {
             throw new SAXException(spe.getMessage());
         }
+        
+        private String nameOrBundleValue(String id, String name) {
+            
+            String value = Bundles.get("action." + id);
+            if (StringUtils.isNotBlank(value)) {
+                
+                return value;
+            }
+            return name;
+        }
+
+        private String descriptionOrBundleValue(String id, String description) {
+            
+            String value = Bundles.get("action." + id + ".description");
+            if (StringUtils.isNotBlank(value)) {
+                
+                return value;
+            }
+            return description;
+        }
+        
         
     } // ActionHandler
     

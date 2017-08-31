@@ -64,6 +64,7 @@ import org.executequery.gui.importexport.ImportExportDataProcess;
 import org.executequery.gui.resultset.RecordDataItem;
 import org.executequery.gui.resultset.ResultSetTableModel;
 import org.executequery.gui.resultset.ResultSetTableModelToXMLWriter;
+import org.executequery.localization.Bundles;
 import org.underworldlabs.swing.AbstractBaseDialog;
 import org.underworldlabs.swing.CharLimitedTextField;
 import org.underworldlabs.swing.actions.ActionUtilities;
@@ -129,8 +130,8 @@ public class QueryEditorResultsExporter extends AbstractBaseDialog {
         browseButton.setText("Browse");
         browseButton.setActionCommand("browse");
         
-        JButton okButton = new DefaultPanelButton(action, "OK", "export");
-        JButton cancelButton = new DefaultPanelButton(action, "Cancel", "cancel");
+        JButton okButton = new DefaultPanelButton(action, Bundles.get("common.ok.button"), "export");
+        JButton cancelButton = new DefaultPanelButton(action, Bundles.get("common.cancel.button"), "cancel");
         
         columnHeadersCheck = new JCheckBox("Include column names as first row");
         applyQuotesCheck = new JCheckBox("Use double quotes for char/varchar/longvarchar columns", true);

@@ -50,6 +50,7 @@ import javax.swing.JTabbedPane;
 
 import org.executequery.ActiveComponent;
 import org.executequery.GUIUtilities;
+import org.executequery.localization.Bundles;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.GUIUtils;
 import org.underworldlabs.swing.HeapMemoryPanel;
@@ -130,7 +131,7 @@ public class AboutPanel extends BaseDialog
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setPreferredSize(new Dimension(350, 50));
 
-        JButton okButton = new DefaultPanelButton("OK");
+        JButton okButton = new DefaultPanelButton(Bundles.get("common.ok.button"));
         okButton.setMnemonic('O');
 
         GridBagConstraints gbc = new GridBagConstraints();
