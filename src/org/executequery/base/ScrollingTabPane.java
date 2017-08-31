@@ -56,6 +56,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 
+import org.executequery.util.StringBundle;
+import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.menu.MenuItemFactory;
 import org.underworldlabs.swing.plaf.UIUtils;
 
@@ -752,9 +754,9 @@ public class ScrollingTabPane extends AbstractTabPane
             }
             setFont(popupMenuFont);
             
-            close = MenuItemFactory.createMenuItem("Close");
-            closeAll = MenuItemFactory.createMenuItem("Close All");
-            closeOther = MenuItemFactory.createMenuItem("Close Others");
+            close = MenuItemFactory.createMenuItem(bundleString("menuItem.Close"));
+            closeAll = MenuItemFactory.createMenuItem(bundleString("menuItem.CloseAll"));
+            closeOther = MenuItemFactory.createMenuItem(bundleString("menuItem.CloseOthers"));
             
             close.addActionListener(this);
             closeAll.addActionListener(this);
@@ -1384,6 +1386,16 @@ public class ScrollingTabPane extends AbstractTabPane
             }
         }
 
+    }
+    private static StringBundle bundle() {
+
+        StringBundle   bundle = SystemResources.loadBundle(ScrollingTabPane.class);
+
+        return bundle;
+    }
+
+    private static String bundleString(String key) {
+        return bundle().getString("ScrollingTabPane." + key);
     }
     
 }
