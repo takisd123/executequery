@@ -78,8 +78,9 @@ public class SystemResources {
         String key = packageName.replaceAll("\\.", "/");
         if (!bundles.containsKey(key)) {
             String path = key + "/resource/resources";
+            Locale locale = new Locale(System.getProperty("user.language"));
             ResourceBundle bundle = 
-                    ResourceBundle.getBundle(path, Locale.getDefault());
+                    ResourceBundle.getBundle(path, locale);
             bundles.put(key, new StringBundle(bundle, key));
         }
 

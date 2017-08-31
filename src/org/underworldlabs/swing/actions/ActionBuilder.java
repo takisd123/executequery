@@ -39,6 +39,7 @@ import javax.swing.KeyStroke;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.executequery.localisation.TranslaterMenu;
 import org.executequery.log.Log;
 import org.underworldlabs.swing.plaf.UIUtils;
 import org.underworldlabs.util.MiscUtils;
@@ -82,7 +83,7 @@ public final class ActionBuilder {
      * @param path - the path to the action XML conf file
      */
     public static void build(ActionMap actionMap, InputMap inputMap, String path) {
-        actionsMap = loadActions(path);
+        actionsMap = TranslaterMenu.translateActions(loadActions(path));
         build(actionMap, inputMap);
     }
     

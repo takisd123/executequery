@@ -404,6 +404,20 @@
           class="org.underworldlabs.swing.menu.MainMenu"
           mnemonic="T">
 
+          <menu name="Language"
+              class="org.underworldlabs.swing.menu.MainMenu"
+              mnemonic="LG">
+
+          <menu-item id="english-language-command"
+                       class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
+          <menu-item id="russian-language-command"
+                       class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
+          </menu>
+
+          <menu-item id="separator"/>
+
           <menu-item id="editor-command"
                      class="org.underworldlabs.swing.menu.MainMenuItem"/>
 

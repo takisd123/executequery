@@ -152,6 +152,10 @@ public class MenuItem {
         
         return children;
     }
+    public void setChildren(List<MenuItem> items) {
+
+        children=items;
+    }
 
     public String getName() {
         return name;

@@ -29,6 +29,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JPopupMenu.Separator;
 
+import org.executequery.localisation.TranslaterMenu;
 import org.executequery.repository.MenuItemRepository;
 import org.executequery.repository.spi.MenuItemXMLRepository;
 
@@ -66,8 +67,8 @@ public class ExecuteQueryMenu extends JMenuBar {
         jMenuItemFactory = new JMenuItemFactory();
         
         MenuItemRepository menuItemRepository = new MenuItemXMLRepository();        
-        List<MenuItem> menuItems = menuItemRepository.getMenuItems();
-        
+        List<MenuItem> menuItems = TranslaterMenu.translatemenu( menuItemRepository.getMenuItems());
+
         construct(menuItems);
     }
 
