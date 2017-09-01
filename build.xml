@@ -29,11 +29,8 @@
 		<copy todir="${compile.outdir}">
 			<fileset dir="${src.path}" excludes="**/*.java **/*.properties" />
 		</copy>
-		<delete>
-			<fileset dir="${compile.outdir}/org/executequery/localisation" includes="*.properties"/>
-		</delete>
-		<native2ascii encoding="UTF-8" src="${src.path}/org/executequery/localisation"
-					  dest="${compile.outdir}/org/executequery/localisation" includes="*.properties" ext=".properties" />
+
+
 
         <native2ascii encoding="UTF-8" src="${src.path}"
 					          dest="${compile.outdir}" includes="**/*.properties" ext=".properties" />
