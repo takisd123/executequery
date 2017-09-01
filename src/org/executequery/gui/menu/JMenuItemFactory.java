@@ -60,7 +60,7 @@ public class JMenuItemFactory {
     
                 if (menuItem.hasName()) {
                     
-                    jMenuItem.setText(menuItem.getName());
+                    jMenuItem.setText(nameOrBundleValue(menuItem));
                 }
     
                 if (menuItem.hasActionCommand()) {
