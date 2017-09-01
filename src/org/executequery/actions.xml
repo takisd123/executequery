@@ -798,7 +798,8 @@
           name="Customise"
           accel-editable="false"
           mnemonic="S"
-          execute-class="org.executequery.actions.viewcommands.CustomiseToolBarsCommand"/>
+          execute-class="org.executequery.actions.viewcommands.CustomiseToolBarsCommand"
+          description="Customize the tool bars"/>
 
   <action id="customise-query-editor-command"
           name="Query Editor Options"
