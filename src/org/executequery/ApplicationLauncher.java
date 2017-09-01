@@ -253,7 +253,7 @@ public class ApplicationLauncher {
         String timezone = userProperties().getStringProperty("locale.timezone");
 
         return !(MiscUtils.isNull(language))
-                && !(MiscUtils.isNull(country))
+                && !((country)==null)
                 && !(MiscUtils.isNull(timezone));
     }
 

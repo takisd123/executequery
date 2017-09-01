@@ -25,8 +25,8 @@ public final class Bundles {
 
             String packageName = Bundles.class.getPackage().getName();
             String path = packageName.replaceAll("\\.", "/") + "/resources";
-            
-            ResourceBundle bundle = ResourceBundle.getBundle(path, Locale.getDefault());
+            Locale loc = new Locale(System.getProperty("user.language"));
+            ResourceBundle bundle = ResourceBundle.getBundle(path, loc);
             stringBundle = new StringBundle(bundle);
         }
 
