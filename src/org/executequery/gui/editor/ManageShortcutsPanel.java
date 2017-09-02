@@ -55,7 +55,6 @@ import org.executequery.repository.EditorSQLShortcut;
 import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.RepositoryException;
 import org.executequery.util.StringBundle;
-import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.DefaultMutableListModel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.MutableValueJList;
@@ -80,8 +79,6 @@ public class ManageShortcutsPanel extends DefaultActionButtonsPanel
     private JList list;
 
     private SQLTextPane textPane;
-
-    private StringBundle bundle;
 
     private int lastSelectedIndex = -1;
     
@@ -357,17 +354,6 @@ public class ManageShortcutsPanel extends DefaultActionButtonsPanel
         }
         
         return shortcutList;
-    }
-
-    private StringBundle bundle() {
-        if (bundle == null) {
-            bundle = SystemResources.loadBundle(ManageShortcutsPanel.class);
-        }
-        return bundle;
-    }
-
-    private String bundleString(String key) {
-        return bundle().getString("ManageShortcutsPanel." + key);
     }
 
     private DefaultListModel modelFromList() {

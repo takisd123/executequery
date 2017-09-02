@@ -70,11 +70,11 @@ public class NewImportExportProgressPanel extends AbstractImportExportPanel
         String labelText = null;
         if (isExport()) {
 
-            labelText = getString("ImportExportProgressPanel.exportDataLabel");
+            labelText = bundledString("ImportExportProgressPanel.exportDataLabel");
 
         } else {
             
-            labelText = getString("ImportExportProgressPanel.importDataLabel");
+            labelText = bundledString("ImportExportProgressPanel.importDataLabel");
         }
         
         output = new LoggingOutputPane();

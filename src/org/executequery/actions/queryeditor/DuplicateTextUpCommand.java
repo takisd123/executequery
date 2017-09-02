@@ -42,12 +42,3 @@ public class DuplicateTextUpCommand extends AbstractQueryEditorCommand {
 
 }
 
-
-
-
-
-
-
-
-
-

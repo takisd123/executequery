@@ -39,6 +39,7 @@ public class CancelCommand extends AbstractBaseCommand {
     private boolean isDialog;
     
     public CancelCommand() {
+        
         this(false);
     }
 
@@ -47,6 +48,7 @@ public class CancelCommand extends AbstractBaseCommand {
      * cancel command or otherwise.
      */
     public CancelCommand(boolean isDialog) {
+        
         super(Bundles.get("common.cancel.button"));
         this.isDialog = isDialog;
     }
@@ -57,13 +59,12 @@ public class CancelCommand extends AbstractBaseCommand {
      *  @param the <code>ActionEvent</code> initiating this command
      */
     public void execute(ActionEvent e) {
-        if (isDialog) {
-            GUIUtilities.closeSelectedDialog();
-        } else {
-            //GUIUtilities.closeSelectedInternalFrame();
+
+    	if (isDialog) {
+            
+        	GUIUtilities.closeSelectedDialog();        
         }
+
     }
-    
+
 }
-
-

@@ -51,7 +51,7 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
 
                     if (history == null || history.isEmpty()) {
                         
-                        GUIUtilities.displayInformationMessage("No SQL command history available");
+                        GUIUtilities.displayInformationMessage(bundledString("historyEmptyMessage"));
                         return;
                     } 
 
@@ -70,13 +70,4 @@ public class HistoryCommand extends AbstractQueryEditorCommand {
     }
 
 }
-
-
-
-
-
-
-
-
-
 

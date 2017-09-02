@@ -49,26 +49,11 @@ public class ExportResultsTableCommand extends AbstractBaseCommand {
                 new QueryEditorResultsExporter(editor.getResultSetTableModel());
             
             } else {
-              
-                GUIUtilities.displayErrorMessage(
-                        "The required result set tab panel must be selected to proceed.");
+
+                GUIUtilities.displayErrorMessage(bundledString("errorMessage"));
             }
 
         }        
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

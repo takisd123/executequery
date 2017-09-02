@@ -21,6 +21,7 @@
 package org.executequery.actions;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.BaseDialog;
 
@@ -31,15 +32,13 @@ import org.executequery.gui.BaseDialog;
  * @version  $Revision: 1487 $
  * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
-public abstract class OpenFrameCommand {
+public abstract class OpenFrameCommand extends AbstractBaseCommand {
     
     protected final boolean isConnected() {
 
         if (!ConnectionManager.hasConnections()) {
 
-            GUIUtilities.displayErrorMessage(
-                            "Not Connected.\nPlease connect to continue.");
-
+            GUIUtilities.displayErrorMessage(bundledString("error.notConnected"));
             return false;
         }
 
@@ -56,10 +55,8 @@ public abstract class OpenFrameCommand {
         if (GUIUtilities.isDialogOpen(title)) {
 
             GUIUtilities.setSelectedDialog(title);
-
             return true;
         }
-
         return false;
     }
     
@@ -87,13 +84,3 @@ public abstract class OpenFrameCommand {
     }
 
 }
-
-
-
-
-
-
-
-
-
-

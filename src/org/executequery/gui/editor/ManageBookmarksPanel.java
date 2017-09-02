@@ -52,8 +52,6 @@ import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
 import org.executequery.repository.RepositoryException;
-import org.executequery.util.StringBundle;
-import org.executequery.util.SystemResources;
 import org.underworldlabs.swing.DefaultMutableListModel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.MoveJListItemsStrategy;
@@ -81,8 +79,6 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
     private SQLTextPane textPane;
 
     private MoveJListItemsStrategy moveStrategy;
-
-    private StringBundle bundle;
 
     private int lastSelectedIndex = -1;
     
@@ -405,17 +401,6 @@ public class ManageBookmarksPanel extends DefaultActionButtonsPanel
         }
         
         return bookmarkList;
-    }
-
-    private StringBundle bundle() {
-        if (bundle == null) {
-            bundle = SystemResources.loadBundle(ManageBookmarksPanel.class);
-        }
-        return bundle;
-    }
-
-    private String bundleString(String key) {
-        return bundle().getString("ManageBookmarksPanel." + key);
     }
 
     private DefaultListModel modelFromList() {

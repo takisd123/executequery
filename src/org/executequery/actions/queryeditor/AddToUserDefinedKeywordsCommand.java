@@ -52,12 +52,12 @@ public class AddToUserDefinedKeywordsCommand extends AbstractQueryEditorCommand 
                     if (!keywordRepository.contains(wordAtCursor)) {
 
                         keywordRepository.addUserDefinedKeyword(wordAtCursor);
-                        Log.info("Keyword [ " + wordAtCursor + 
-                                " ] added to user defined keyword list.");
+                        Log.info(bundledString("log.addKeyword1") + wordAtCursor +
+                                bundledString("log.addKeyword2"));
                         
                     } else {
                         
-                        Log.info("Keyword already exists as a part of the defined keyword list.");
+                        Log.info(bundledString("log.errorAddKeyword"));
                     }
                     
                 }
@@ -69,8 +69,3 @@ public class AddToUserDefinedKeywordsCommand extends AbstractQueryEditorCommand 
     }
 
 }
-
-
-
-
-

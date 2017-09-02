@@ -22,11 +22,6 @@ package org.executequery.actions.queryeditor;
 
 import java.awt.event.ActionEvent;
 
-import javax.swing.JPanel;
-
-import org.executequery.GUIUtilities;
-import org.executequery.gui.editor.QueryEditor;
-
 /** 
  * The Query Editor's cancel statement command execution.
  *
@@ -46,13 +41,3 @@ public class StopCommand extends AbstractQueryEditorCommand {
     }
     
 }
-
-
-
-
-
-
-
-
-
-

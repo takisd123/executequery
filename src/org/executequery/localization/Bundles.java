@@ -14,9 +14,19 @@ public final class Bundles {
         return bundle().getString(key);
     }
     
+    public static String get(String key, Object...args) {
+        
+        return bundle().getString(key, args);
+    }
+    
     public static String get(Class<?> clazz, String key) {
         
         return bundle().getString(keyForClazz(clazz, key));
+    }
+    
+    public static String get(Class<?> clazz, String key, Object...args) {
+        
+        return bundle().getString(keyForClazz(clazz, key), args);
     }
     
     private static StringBundle bundle() {

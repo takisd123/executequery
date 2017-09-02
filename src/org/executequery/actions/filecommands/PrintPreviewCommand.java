@@ -25,12 +25,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 
 import org.executequery.GUIUtilities;
+import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.gui.BaseDialog;
-import org.executequery.gui.editor.QueryEditor;
-import org.executequery.print.*;
 import org.executequery.gui.editor.PrintSelectDialog;
+import org.executequery.gui.editor.QueryEditor;
+import org.executequery.print.PrintFunction;
+import org.executequery.print.PrintPreviewer;
 import org.underworldlabs.swing.GUIUtils;
-import org.underworldlabs.swing.actions.BaseCommand;
 import org.underworldlabs.swing.util.SwingWorker;
 
 /**
@@ -39,7 +40,7 @@ import org.underworldlabs.swing.util.SwingWorker;
  * @version  $Revision: 1487 $
  * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
-public class PrintPreviewCommand implements BaseCommand {
+public class PrintPreviewCommand extends AbstractBaseCommand {
     
     public void execute(ActionEvent e) {
         
@@ -105,7 +106,7 @@ public class PrintPreviewCommand implements BaseCommand {
                         printFunction.getPrintable(), printFunction.getPrintJobName());
             } 
             
-            return "Done";
+            return bundledString("done");
         
         } finally {
 
@@ -115,13 +116,4 @@ public class PrintPreviewCommand implements BaseCommand {
     }
     
 }
-
-
-
-
-
-
-
-
-
 

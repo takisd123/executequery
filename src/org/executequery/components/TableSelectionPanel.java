@@ -43,9 +43,8 @@ import org.executequery.databaseobjects.NamedObject;
 import org.executequery.databaseobjects.impl.DatabaseObjectFactoryImpl;
 import org.executequery.datasource.ConnectionManager;
 import org.executequery.gui.WidgetFactory;
+import org.executequery.localization.Bundles;
 import org.executequery.log.Log;
-import org.executequery.util.StringBundle;
-import org.executequery.util.SystemResources;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.ActionPanel;
 import org.underworldlabs.swing.DynamicComboBoxModel;
@@ -67,14 +66,10 @@ public class TableSelectionPanel extends ActionPanel
     
     private JComboBox tablesCombo;
 
-    private StringBundle bundle;
-    
     public TableSelectionPanel() {
         
         super(new GridBagLayout());
-
         init();
-        
         connectionSelected();
     }
 
@@ -249,7 +244,7 @@ public class TableSelectionPanel extends ActionPanel
     
     private JLabel createLabel(String key) {
 
-        return new JLabel(bundleString(key));
+        return new JLabel(Bundles.get(getClass(), key));
     }
 
     private JComboBox createSchemasCombo() {
@@ -303,29 +298,8 @@ public class TableSelectionPanel extends ActionPanel
     private void handleDataSourceException(DataSourceException e) {
         
         Log.error("Error during database object selection", e);
-        
         throw new ApplicationException(e);
     }
 
-    private StringBundle bundle() {
-        
-        if (bundle == null) {
-        
-            bundle = SystemResources.loadBundle(TableSelectionPanel.class);
-        }
-
-        return bundle;
-    }
-
-    private String bundleString(String key) {
-
-        return bundle().getString("TableSelectionPanel." + key);
-    }
 
 }
-
-
-
-
-
-

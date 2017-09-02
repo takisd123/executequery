@@ -35,15 +35,5 @@ public class EditorHelpCommand extends HelpCommand {
 
         super("query-editor");
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-

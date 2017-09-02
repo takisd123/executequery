@@ -23,11 +23,11 @@ package org.executequery.actions.toolscommands;
 import java.awt.event.ActionEvent;
 
 import org.executequery.GUIUtilities;
-import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
-import org.executequery.gui.importexport.ImportExportDelimitedPanel;
 import org.executequery.gui.importexport.ImportExportDataProcess;
+import org.executequery.gui.importexport.ImportExportDelimitedPanel;
+import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
  * Performs the action for the 'Export to Delimited File' feature.
@@ -49,32 +49,23 @@ public class ExportDelimitedCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Export Data")) {
+        if (!isDialogOpen(bundledString("title"))) {
+
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Export Data", false, false);
+                        createDialog(bundledString("title"), false, false);
                 ImportExportDelimitedPanel panel = 
                         new ImportExportDelimitedPanel(dialog, ImportExportDataProcess.EXPORT);
                 dialog.addDisplayComponent(panel);
                 dialog.display();
-            }
-            finally {
+
+            } finally {
                 GUIUtilities.showNormalCursor();
             }
+
         }
 
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -49,25 +49,10 @@ public class ShowHideResultSetColumnsCommand extends AbstractBaseCommand {
             
             } else {
               
-                GUIUtilities.displayErrorMessage(
-                        "The required result set tab panel must be selected to proceed.");
+                GUIUtilities.displayErrorMessage(bundledString("errorMessage"));
             }
 
         }        
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
