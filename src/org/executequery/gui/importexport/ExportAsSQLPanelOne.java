@@ -122,7 +122,7 @@ class ExportAsSQLPanelOne extends AbstractImportExportPanel  {
         add(connectionsCombo, gbc);
         gbc.gridy++;
         gbc.gridx = 0;
-        add(new MultiLineLabel(getString("ExportAsSQLPanelOne.exportTip")), gbc);
+        add(new MultiLineLabel(bundledString("ExportAsSQLPanelOne.exportTip")), gbc);
         gbc.insets.left = 20;
         gbc.gridy++;
         add(new JLabel("Select single or multiple table transfer."), gbc);

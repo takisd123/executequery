@@ -33,13 +33,3 @@ public class CloseSelectedCentralPaneCommand implements BaseCommand {
     }
     
 }
-
-
-
-
-
-
-
-
-
-

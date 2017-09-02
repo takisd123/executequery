@@ -20,7 +20,6 @@
 
 package org.executequery.gui.menu;
 
-import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JMenu;

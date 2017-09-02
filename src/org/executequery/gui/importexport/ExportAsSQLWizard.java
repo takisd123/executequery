@@ -282,7 +282,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
 
         if (!thirdPanel.hasSelections()) {
 
-            displayErrorDialog(getString("ImportExportPanelThree.invalidDataFileSelection"));
+            displayErrorDialog(bundledString("ImportExportPanelThree.invalidDataFileSelection"));
             return false;
         }
         
@@ -301,7 +301,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
 
         if (sb.length() > 0) {
             
-            int result = displayConfirmCancelDialog(getString("ImportExportPanelThree.filesExist", sb));
+            int result = displayConfirmCancelDialog(bundledString("ImportExportPanelThree.filesExist", sb));
             if (result == JOptionPane.CANCEL_OPTION || result == JOptionPane.NO_OPTION) {
 
                 return false;

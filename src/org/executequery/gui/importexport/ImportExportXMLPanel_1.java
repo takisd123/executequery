@@ -112,11 +112,11 @@ public class ImportExportXMLPanel_1 extends AbstractImportExportPanelOne  {
         int type = parent.getTransferType();
         if (type == ImportExportDataProcess.EXPORT) {
           
-            importExportTip = getString("ImportExportXMLPanel.exportTip");
+            importExportTip = bundledString("ImportExportXMLPanel.exportTip");
 
         } else if (type == ImportExportDataProcess.IMPORT) {
             
-            importExportTip = getString("ImportExportXMLPanel.importTip");
+            importExportTip = bundledString("ImportExportXMLPanel.importTip");
         }
 
         GridBagConstraints gbc = new GridBagConstraints();

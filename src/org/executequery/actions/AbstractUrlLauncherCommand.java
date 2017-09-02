@@ -24,8 +24,8 @@ import java.awt.event.ActionEvent;
 
 import org.executequery.ApplicationException;
 import org.executequery.GUIUtilities;
+import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.util.SystemWebBrowserLauncher;
-import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
  *
@@ -33,7 +33,7 @@ import org.underworldlabs.swing.actions.BaseCommand;
  * @version  $Revision: 1487 $
  * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
-public abstract class AbstractUrlLauncherCommand implements BaseCommand {
+public abstract class AbstractUrlLauncherCommand extends AbstractBaseCommand {
 
     public void execute(ActionEvent e) {
         
@@ -44,7 +44,7 @@ public abstract class AbstractUrlLauncherCommand implements BaseCommand {
         } catch (ApplicationException applicationException) {
             
             GUIUtilities.displayExceptionErrorDialog(
-                    "Error launching local web browser:\n" + 
+                    bundledString("error.launchBrowser") +
                     applicationException.getMessage(), applicationException);
             
         }
@@ -54,14 +54,3 @@ public abstract class AbstractUrlLauncherCommand implements BaseCommand {
     public abstract String url();
     
 }
-
-
-
-
-
-
-
-
-
-
-

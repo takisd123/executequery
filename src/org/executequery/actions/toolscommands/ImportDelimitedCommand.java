@@ -25,8 +25,8 @@ import java.awt.event.ActionEvent;
 import org.executequery.GUIUtilities;
 import org.executequery.actions.OpenFrameCommand;
 import org.executequery.gui.BaseDialog;
-import org.executequery.gui.importexport.ImportExportDelimitedPanel;
 import org.executequery.gui.importexport.ImportExportDataProcess;
+import org.executequery.gui.importexport.ImportExportDelimitedPanel;
 import org.underworldlabs.swing.actions.BaseCommand;
 
 /** 
@@ -50,11 +50,11 @@ public class ImportDelimitedCommand extends OpenFrameCommand
             return;
         }
         
-        if (!isDialogOpen("Import Data")) {
+        if (!isDialogOpen(bundledString("title"))) {
             GUIUtilities.showWaitCursor();
             try {
                 BaseDialog dialog = 
-                        createDialog("Import Data", false, false);
+                        createDialog(bundledString("title"), false, false);
                 ImportExportDelimitedPanel panel = 
                         new ImportExportDelimitedPanel(dialog, ImportExportDataProcess.IMPORT);
                 dialog.addDisplayComponent(panel);
@@ -68,9 +68,3 @@ public class ImportDelimitedCommand extends OpenFrameCommand
     }
     
 }
-
-
-
-
-
-

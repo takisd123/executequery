@@ -50,7 +50,7 @@ public class AddBookmarkCommand extends AbstractQueryEditorCommand {
 
             } else {
                 
-                GUIUtilities.displayErrorMessage("Query editor has no text");
+                GUIUtilities.displayErrorMessage(bundledString("errorMessage"));
             }
             
         }
@@ -58,13 +58,3 @@ public class AddBookmarkCommand extends AbstractQueryEditorCommand {
     }
     
 }
-
-
-
-
-
-
-
-
-
-

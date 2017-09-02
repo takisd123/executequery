@@ -25,6 +25,8 @@ import java.lang.reflect.Method;
 
 import javax.swing.AbstractAction;
 
+import org.executequery.localization.Bundles;
+
 /**
  *
  * @author   Takis Diakoumis
@@ -101,12 +103,9 @@ public class ReflectiveAction extends AbstractAction {
         // default do nothing
     }
 
+    protected String bundledString(String key) {
+
+        return Bundles.get(getClass(), key);
+    }
+
 }
-
-
-
-
-
-
-
-

@@ -49,7 +49,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 
 import org.executequery.actions.editcommands.RedoCommand;
 import org.executequery.actions.editcommands.UndoCommand;

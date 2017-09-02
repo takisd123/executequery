@@ -28,12 +28,10 @@ import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import org.underworldlabs.swing.FlatSplitPane;
 
@@ -65,9 +63,6 @@ public class BaseApplicationPane extends JPanel
     // primary desktop components
     // ---------------------------------------
     
-    /** the content panel border */
-    private Border contentBorder;
-
     /** the left main split pane */
     private FlatSplitPane leftSplitPane;
 
@@ -276,30 +271,6 @@ public class BaseApplicationPane extends JPanel
                 rightSplitPane.setDividerSize(0);
                 break;
         }
-    }
-    
-    /** 
-     * Adds the component to a bordered base panel.
-     *
-     * @param the component to add
-     */
-    private JPanel createBasePanel(Component c) {
-        if (c == null) {
-            return null;
-        }
-        
-        if (contentBorder == null) {
-            contentBorder = BorderFactory.createEmptyBorder(
-                                ApplicationConstants.TAB_COMPONENT_BORDER_THICKNESS,
-                                ApplicationConstants.TAB_COMPONENT_BORDER_THICKNESS,
-                                ApplicationConstants.TAB_COMPONENT_BORDER_THICKNESS,
-                                ApplicationConstants.TAB_COMPONENT_BORDER_THICKNESS);            
-        }
-        
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(contentBorder);
-        panel.add(c, BorderLayout.CENTER);
-        return panel;
     }
 
     /**

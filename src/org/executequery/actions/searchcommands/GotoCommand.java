@@ -21,18 +21,12 @@
 package org.executequery.actions.searchcommands;
 
 import java.awt.event.ActionEvent;
+
 import javax.swing.JPanel;
 
 import org.executequery.GUIUtilities;
-import org.underworldlabs.swing.actions.BaseCommand;
+import org.executequery.actions.othercommands.AbstractBaseCommand;
 import org.executequery.gui.editor.QueryEditor;
-
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
 
 /** <p>Command for Search | Go To
  *
@@ -40,7 +34,7 @@ import org.executequery.gui.editor.QueryEditor;
  * @version  $Revision: 1487 $
  * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
-public class GotoCommand implements BaseCommand {
+public class GotoCommand extends AbstractBaseCommand {
     
     public void execute(ActionEvent e) {
         JPanel panel = GUIUtilities.getSelectedCentralPane();
@@ -48,29 +42,10 @@ public class GotoCommand implements BaseCommand {
             QueryEditor queryEditor = (QueryEditor)panel;            
             try {
                 queryEditor.goToRow(Integer.parseInt(
-                GUIUtilities.displayInputMessage("Go To", "Line Number:")));
+                GUIUtilities.displayInputMessage(bundledString("goTo"), bundledString("lineNumber"))));
             } catch (NumberFormatException numExc) {}
         }
         panel = null;        
     }
-    
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -59,8 +59,7 @@ import org.underworldlabs.util.MiscUtils;
 public class SystemResources {
 
     /** resource bundle cache */
-    private static Map<String,StringBundle> bundles = 
-                            new HashMap<String,StringBundle>();
+    private static Map<String,StringBundle> bundles = new HashMap<String,StringBundle>();
 
     /**
      * Loads the resource bundle for the specified class.
@@ -70,6 +69,7 @@ public class SystemResources {
      *
      * @param clazz the clazz to load the bundle for
      * @return the wrapped resource bundle
+     * @deprecated use Bundles
      */
     public static StringBundle loadBundle(Class<?> clazz) {
         String clazzName = clazz.getName();
@@ -78,8 +78,9 @@ public class SystemResources {
         String key = packageName.replaceAll("\\.", "/");
         if (!bundles.containsKey(key)) {
             String path = key + "/resource/resources";
+            Locale locale = new Locale(System.getProperty("user.language"));
             ResourceBundle bundle = 
-                    ResourceBundle.getBundle(path, Locale.getDefault());
+                    ResourceBundle.getBundle(path, locale);
             bundles.put(key, new StringBundle(bundle, key));
         }
 

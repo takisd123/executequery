@@ -27,18 +27,11 @@ import org.underworldlabs.swing.actions.BaseCommand;
 import org.executequery.search.TextAreaSearch;
 import org.executequery.gui.text.TextEditor;
 
-/* ----------------------------------------------------------
- * CVS NOTE: Changes to the CVS repository prior to the 
- *           release of version 3.0.0beta1 has meant a 
- *           resetting of CVS revision numbers.
- * ----------------------------------------------------------
- */
-
 /** <p>Executes the menu item Search | Find Next.
  *
  *  @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ *  @version  $Revision: 1487 $
+ *  @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
  */
 public class FindPreviousCommand implements BaseCommand {
     
@@ -65,22 +58,3 @@ public class FindPreviousCommand implements BaseCommand {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

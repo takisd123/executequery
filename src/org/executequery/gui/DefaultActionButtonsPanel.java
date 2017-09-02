@@ -175,4 +175,10 @@ public abstract class DefaultActionButtonsPanel extends BaseActionPanel {
 
     private static final int EMPTY_BORDER_WIDTH = 4;
     
+    protected String bundleString(String key) {
+
+        return Bundles.get(getClass(), key);
+    }
+
+    
 }

@@ -48,8 +48,6 @@ import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.QueryBookmark;
 import org.executequery.repository.QueryBookmarks;
 import org.executequery.repository.RepositoryException;
-import org.executequery.util.StringBundle;
-import org.executequery.util.SystemResources;
 import org.underworldlabs.util.MiscUtils;
 
 public class AddQueryBookmarkPanel extends DefaultActionButtonsPanel 
@@ -69,8 +67,6 @@ public class AddQueryBookmarkPanel extends DefaultActionButtonsPanel
 
     private final String queryText;
 
-    private StringBundle bundle;
-    
     public AddQueryBookmarkPanel(ActionContainer parent, String queryText) {
         
         this.parent = parent;
@@ -94,7 +90,7 @@ public class AddQueryBookmarkPanel extends DefaultActionButtonsPanel
         gbc.gridx = 0;
         gbc.insets.top = 7;
         gbc.insets.left = 5;
-        panel.add(new JLabel(bundle().getString("AddQueryBookmarkPanel.bookmarkName")), gbc);
+        panel.add(new JLabel(bundleString("AddQueryBookmarkPanel.bookmarkName")), gbc);
         gbc.gridx = 1;
         gbc.insets.top = 5;
         gbc.insets.right = 5;
@@ -272,17 +268,6 @@ public class AddQueryBookmarkPanel extends DefaultActionButtonsPanel
 
     public Component getDefaultFocusComponent() {
         return nameField;
-    }
-
-    private StringBundle bundle() {
-        if (bundle == null) {
-            bundle = SystemResources.loadBundle(AddQueryBookmarkPanel.class);
-        }
-        return bundle;
-    }
-
-    private String bundleString(String key) {
-        return bundle().getString("AddQueryBookmarkPanel." + key);
     }
 
 }

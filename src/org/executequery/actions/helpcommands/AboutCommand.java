@@ -41,13 +41,3 @@ public class AboutCommand extends OpenFrameCommand
     }
 
 }
-
-
-
-
-
-
-
-
-
-
