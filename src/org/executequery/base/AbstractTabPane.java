@@ -40,8 +40,8 @@ import org.underworldlabs.swing.plaf.UIUtils;
  * Abstract tab pane base.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1496 $
- * @date     $Date: 2015-09-17 17:09:08 +1000 (Thu, 17 Sep 2015) $
+ * @version  $Revision: 1778 $
+ * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
  */
 public abstract class AbstractTabPane extends JPanel
                                       implements TabPane {

@@ -54,7 +54,6 @@ import org.executequery.gui.text.SQLTextPane;
 import org.executequery.repository.EditorSQLShortcut;
 import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.RepositoryException;
-import org.executequery.util.StringBundle;
 import org.underworldlabs.swing.DefaultMutableListModel;
 import org.underworldlabs.swing.FlatSplitPane;
 import org.underworldlabs.swing.MutableValueJList;
@@ -64,8 +63,8 @@ import org.underworldlabs.util.MiscUtils;
 /** 
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1770 $
- * @date     $Date: 2017-08-21 22:01:25 +1000 (Mon, 21 Aug 2017) $
+ * @version  $Revision: 1778 $
+ * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
  */
 public class ManageShortcutsPanel extends DefaultActionButtonsPanel 
                                   implements ListSelectionListener {

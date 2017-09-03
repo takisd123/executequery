@@ -37,8 +37,8 @@ import org.underworldlabs.swing.util.SwingWorker;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1487 $
- * @date     $Date: 2015-08-23 22:21:42 +1000 (Sun, 23 Aug 2015) $
+ * @version  $Revision: 1778 $
+ * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
  */
 public class PrintPreviewCommand extends AbstractBaseCommand {
     

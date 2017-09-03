@@ -63,8 +63,8 @@ import liquibase.database.Database;
  * Abstract import/export worker class.
  *
  * @author   Takis Diakoumis Dragan Vasic
- * @version  $Revision: 1767 $
- * @date     $Date: 2017-08-16 22:26:50 +1000 (Wed, 16 Aug 2017) $
+ * @version  $Revision: 1778 $
+ * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
  */
 public abstract class AbstractImportExportWorker implements ImportExportWorker {
 

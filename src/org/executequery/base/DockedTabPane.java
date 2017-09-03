@@ -52,8 +52,8 @@ import org.underworldlabs.swing.plaf.UIUtils;
  * Left, right and bottom docked tab pane.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1766 $
- * @date     $Date: 2017-08-14 23:34:37 +1000 (Mon, 14 Aug 2017) $
+ * @version  $Revision: 1778 $
+ * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
  */
 public class DockedTabPane extends AbstractTabPane {
     
