@@ -1,7 +1,7 @@
 /*
  * AbstractImportExportWorker.java
  *
- * Copyright (C) 2002-2015 Takis Diakoumis
+ * Copyright (C) 2002-2017 Takis Diakoumis
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -63,8 +63,8 @@ import liquibase.database.Database;
  * Abstract import/export worker class.
  *
  * @author   Takis Diakoumis Dragan Vasic
- * @version  $Revision: 1778 $
- * @date     $Date: 2017-09-03 15:27:47 +1000 (Sun, 03 Sep 2017) $
+ * @version  $Revision: 1780 $
+ * @date     $Date: 2017-09-03 15:52:36 +1000 (Sun, 03 Sep 2017) $
  */
 public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
@@ -974,6 +974,7 @@ public abstract class AbstractImportExportWorker implements ImportExportWorker {
 
 
 }
+
 
 
 
