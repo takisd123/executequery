@@ -1,2 +1,6 @@
 /bin/
 eq.jar
+/classes/
+/temp/
+.classpath
+.project
