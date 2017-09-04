@@ -255,7 +255,7 @@ public class ApplicationLauncher {
 
         /*
         return !(MiscUtils.isNull(language))
-                && !((country)==null)
+                && !(MiscUtils.isNull(country))
                 && !(MiscUtils.isNull(timezone));
         */
         
