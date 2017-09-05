@@ -43,6 +43,7 @@ import org.executequery.databaseobjects.NamedObject;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
 import org.executequery.gui.forms.FormObjectView;
+import org.executequery.localization.Bundles;
 import org.executequery.log.Log;
 import org.executequery.sql.SqlStatementResult;
 import org.underworldlabs.jdbc.DataSourceException;
@@ -90,12 +91,8 @@ public class BrowserController {
 
         } catch (DataSourceException e) {
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("The connection to the database could not be established.");
-            sb.append("\nPlease ensure all required fields have been entered ");
-            sb.append("correctly and try again.\n\nThe system returned:\n");
-            sb.append(e.getExtendedMessage());
-            GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
+
+            GUIUtilities.displayExceptionErrorDialog(Bundles.getCommon("error.connection"), e);
         }
     }
 
@@ -491,7 +488,7 @@ public class BrowserController {
             // if specified, ask the user again
             if (valueChange) {
                 int yesNo = GUIUtilities.displayConfirmCancelDialog(
-                                            "Do you wish to apply your changes?");
+                                            Bundles.get("common.message.apply-changes"));
                 if (yesNo == JOptionPane.NO_OPTION) {
                     node = treePanel.getSelectedBrowserNode();
                     editingPanel.selectionChanged(node.getDatabaseUserObject(), true);
@@ -521,11 +518,8 @@ public class BrowserController {
                         editingPanel.setSQLText();
                         SQLException e = result.getSqlException();
                         if (e != null) {
-                            StringBuilder sb = new StringBuilder();
-                            sb.append("An error occurred applying the specified changes.").
-                               append("\n\nThe system returned:\n").
-                               append(MiscUtils.formatSQLError(e));
-                            GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
+
+                            GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes"), e);
                         }
                         else {
                             GUIUtilities.displayErrorMessage(result.getErrorMessage());
@@ -537,11 +531,7 @@ public class BrowserController {
                 querySender.execute(QueryTypes.COMMIT, null);
             }
             catch (SQLException e) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("An error occurred applying the specified changes.").
-                   append("\n\nThe system returned:\n").
-                   append(MiscUtils.formatSQLError(e));
-                GUIUtilities.displayExceptionErrorDialog(sb.toString(), e);
+                GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes"), e);
                 treePanel.setNodeSelected(node);
                 return;
             }
@@ -580,12 +570,12 @@ public class BrowserController {
     protected void handleException(Throwable e) {
         if (Log.isDebugEnabled()) {
             e.printStackTrace();
-            Log.debug("Error retrieving data.", e);
+            Log.debug(bundleString("error.handle.log"), e);
         }
 
         boolean isDataSourceException = (e instanceof DataSourceException);
         GUIUtilities.displayExceptionErrorDialog(
-                "Error retrieving the selected database object.\n\nThe system returned:\n" +
+                bundleString("error.handle.exception") +
                 (isDataSourceException ? ((DataSourceException)e).getExtendedMessage() : e.getMessage()), e);
 
 
@@ -792,6 +782,10 @@ public class BrowserController {
     public void connectionNameChanged(String name) {
 
         hostPanel().connectionNameChanged(name);
+    }
+    private String bundleString(String key)
+    {
+        return Bundles.get(BrowserController.class,key);
     }
 
 }

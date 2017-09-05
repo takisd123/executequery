@@ -31,6 +31,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import org.executequery.localization.Bundles;
 import org.underworldlabs.swing.GradientLabel;
 
 /**
@@ -122,6 +123,11 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
 
     public void setReload(boolean reload) {
         this.reload = reload;
+    }
+
+    protected String bundleString(String key)
+    {
+        return Bundles.get(getClass(),key);
     }
     
 }

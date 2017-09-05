@@ -45,6 +45,7 @@ import org.executequery.databaseobjects.impl.DefaultDatabaseProcedure;
 import org.executequery.databaseobjects.impl.SystemDatabaseFunction;
 import org.executequery.gui.DefaultTable;
 import org.executequery.gui.forms.AbstractFormObjectViewPanel;
+import org.executequery.localization.Bundles;
 import org.executequery.print.TablePrinter;
 import org.underworldlabs.jdbc.DataSourceException;
 import org.underworldlabs.swing.DisabledField;
@@ -94,11 +95,11 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         table.setRowSelectionAllowed(false);
         
         JPanel paramPanel = new JPanel(new BorderLayout());
-        paramPanel.setBorder(BorderFactory.createTitledBorder("Parameters"));
+        paramPanel.setBorder(BorderFactory.createTitledBorder(Bundles.getCommon("parameters")));
         paramPanel.add(new JScrollPane(table), BorderLayout.CENTER);
         
         JTabbedPane tabs = new JTabbedPane(JTabbedPane.TOP);
-        tabs.add("Description", paramPanel);
+        tabs.add(Bundles.getCommon("description"), paramPanel);
         
         objectNameLabel = new JLabel();
         procNameField = new DisabledField();
@@ -137,7 +138,7 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         gbc.insets.top = 0;
         //base.add(schemaNameField, gbc);
         
-        setHeaderText("Database Procedure");
+        setHeaderText(bundleString("procedure"));
         setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
         setContentPanel(base);
         cache = new HashMap();
@@ -180,32 +181,32 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
 
         switch (type) {
             case NamedObject.FUNCTION:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("function"));
                 setHeaderIcon(GUIUtilities.loadIcon("Function24.png", true));
                 break;
 
             case NamedObject.PROCEDURE:
-                objectNameLabel.setText("Procedure Name:");
-                setHeaderText("Database Procedure");
+                objectNameLabel.setText(bundleString("procedure-name"));
+                setHeaderText(bundleString("procedure"));
                 setHeaderIcon(GUIUtilities.loadIcon("Procedure24.png", true));
                 break;
 
             case NamedObject.SYSTEM_STRING_FUNCTIONS:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System String Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-string-function"));
                 setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case NamedObject.SYSTEM_NUMERIC_FUNCTIONS:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System Numeric Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-numeric-function"));
                 setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
 
             case NamedObject.SYSTEM_DATE_TIME_FUNCTIONS:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System Date/Time Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-date-function"));
                 setHeaderIcon(GUIUtilities.loadIcon("SystemFunction24.png", true));
                 break;
         }
@@ -230,32 +231,32 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         int type = metaObject.getType();
         switch (type) {
             case BrowserConstants.FUNCTIONS_NODE:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("function"));
                 setHeaderIcon("Function24.png");
                 break;
 
             case BrowserConstants.PROCEDURE_NODE:
-                objectNameLabel.setText("Procedure Name:");
-                setHeaderText("Database Procedure");
+                objectNameLabel.setText(bundleString("procedure-name"));
+                setHeaderText(bundleString("procedure"));
                 setHeaderIcon("Procedure24.png");
                 break;
 
             case BrowserConstants.SYSTEM_STRING_FUNCTIONS_NODE:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System String Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-string-function"));
                 setHeaderIcon("SystemFunction24.png");
                 break;
 
             case BrowserConstants.SYSTEM_NUMERIC_FUNCTIONS_NODE:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System Numeric Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-numeric-function"));
                 setHeaderIcon("SystemFunction24.png");
                 break;
 
             case BrowserConstants.SYSTEM_DATE_TIME_FUNCTIONS_NODE:
-                objectNameLabel.setText("Function Name:");
-                setHeaderText("Database System Date/Time Function");
+                objectNameLabel.setText(bundleString("function-name"));
+                setHeaderText(bundleString("system-date-function"));
                 setHeaderIcon("SystemFunction24.png");
                 break;
         }
@@ -284,7 +285,7 @@ public class BrowserProcedurePanel extends AbstractFormObjectViewPanel {
         private String INOUT = "INOUT";
         private String OUT = "OUT";
         
-        private String[] columns = {"Parameter", "Data Type", "Mode"};
+        private String[] columns = Bundles.getCommons(new String[]{"parameter", "data-type", "mode"});
         private ProcedureParameter[] procParams;
         
         public ProcedureTableModel() {}

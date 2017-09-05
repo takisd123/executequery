@@ -28,6 +28,7 @@ import javax.swing.table.AbstractTableModel;
 import org.executequery.GUIUtilities;
 import org.executequery.databaseobjects.DatabaseCatalog;
 import org.executequery.databaseobjects.DatabaseSchema;
+import org.executequery.localization.Bundles;
 import org.underworldlabs.jdbc.DataSourceException;
 
 /**
@@ -47,7 +48,7 @@ public class CatalogPanel extends BrowserNodeBasePanel {
 
     public CatalogPanel(BrowserController controller) {
 
-        super("Catalog Name:");
+        super(Bundles.get(CatalogPanel.class,"catalogName"));
 
         this.controller = controller;
         
@@ -68,7 +69,7 @@ public class CatalogPanel extends BrowserNodeBasePanel {
         
         tablePanel().setBorder(BorderFactory.createTitledBorder("Available Schemas"));
         
-        setHeaderText("Database Catalog");
+        setHeaderText(bundleString("DatabaseCatalog"));
         setHeaderIcon(GUIUtilities.loadIcon("DBImage24.png"));        
     }
     
@@ -79,7 +80,7 @@ public class CatalogPanel extends BrowserNodeBasePanel {
 
     protected String getPrintablePrefixLabel() {
 
-        return "Database Catalog: ";
+        return bundleString("DatabaseCatalog")+": ";
     }
 
     public void refresh() {}
@@ -103,7 +104,7 @@ public class CatalogPanel extends BrowserNodeBasePanel {
     private class CatalogModel extends AbstractTableModel {
         
         private List<DatabaseSchema> values;
-        private String header = "Schema Name";
+        private String header = bundleString("SchemaName");
         
         public void setValues(List<DatabaseSchema> values) {
 
