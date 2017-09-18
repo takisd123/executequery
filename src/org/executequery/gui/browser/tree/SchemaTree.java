@@ -57,6 +57,7 @@ import org.executequery.gui.browser.nodes.ConnectionsFolderNode;
 import org.executequery.gui.browser.nodes.DatabaseHostNode;
 import org.executequery.gui.browser.nodes.DatabaseObjectNode;
 import org.executequery.gui.browser.nodes.RootDatabaseObjectNode;
+import org.executequery.localization.Bundles;
 import org.executequery.util.ThreadUtils;
 import org.underworldlabs.swing.tree.DynamicTree;
 
@@ -326,7 +327,7 @@ public class SchemaTree extends DynamicTree
             if (loadingNode) {
 
                 // hack! 
-                throw new SuppressedException("Node selection pending before drag");
+                throw new SuppressedException(Bundles.get("SchemaTree.error.exportAsDrag"));
             }
             
             super.exportAsDrag(comp, e, action);

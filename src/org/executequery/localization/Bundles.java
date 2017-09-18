@@ -24,6 +24,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.executequery.util.StringBundle;
+import org.underworldlabs.util.MiscUtils;
 
 public final class Bundles {
 
@@ -32,6 +33,23 @@ public final class Bundles {
     public static String get(String key) {
 
         return bundle().getString(key);
+    }
+    public static String getCommon(String key) {
+
+        return bundle().getString("common."+key);
+    }
+    public static String[] getCommons(String[] keys) {
+
+        for (int i=0;i<keys.length;i++)
+            if(!MiscUtils.isNull(keys[i]))
+            keys[i]=getCommon(keys[i]);
+        return keys;
+    }
+    public static String[] get(Class<?> clazz,String[] keys) {
+        for (int i=0;i<keys.length;i++)
+            if(!MiscUtils.isNull(keys[i]))
+            keys[i]=get(clazz,keys[i]);
+        return keys;
     }
     
     public static String get(String key, Object...args) {

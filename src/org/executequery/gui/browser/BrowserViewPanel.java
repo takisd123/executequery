@@ -29,6 +29,7 @@ import org.executequery.event.DefaultConnectionRepositoryEvent;
 import org.executequery.gui.forms.FormObjectViewContainer;
 import org.executequery.gui.text.TextEditor;
 import org.executequery.gui.text.TextEditorContainer;
+import org.executequery.localization.Bundles;
 import org.executequery.print.PrintFunction;
 
 /**
@@ -44,7 +45,7 @@ public class BrowserViewPanel extends FormObjectViewContainer
                                          TextEditorContainer {
     
     /** The title to be applied to the <code>JInternalFrame</code> */
-    public static final String TITLE = "Database Browser";
+    public static final String TITLE = Bundles.getCommon("database-browser");
 
     /** The icon to be applied to the <code>JInternalFrame</code> */
     public static final String FRAME_ICON = "DBmag16.png";
@@ -177,7 +178,7 @@ public class BrowserViewPanel extends FormObjectViewContainer
      * @return the print job's name
      */
     public String getPrintJobName() {
-        return "Execute Query - Database Browser";
+        return bundleString("JobName");
     }
     
     /** 

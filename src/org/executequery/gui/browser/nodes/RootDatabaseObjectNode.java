@@ -26,6 +26,7 @@ import java.util.List;
 import javax.swing.tree.MutableTreeNode;
 
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.localization.Bundles;
 
 /** 
  *
@@ -35,7 +36,7 @@ import org.executequery.databaseobjects.NamedObject;
  */
 public class RootDatabaseObjectNode extends DatabaseObjectNode {
     
-    private static final String NAME = "Database Connections";
+    private static final String NAME = Bundles.getCommon("database-connections");
     
     private List<DatabaseHostNode> hostNodes = new ArrayList<DatabaseHostNode>();
 

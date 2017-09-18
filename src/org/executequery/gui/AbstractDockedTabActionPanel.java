@@ -23,6 +23,7 @@ package org.executequery.gui;
 import java.awt.LayoutManager;
 import org.executequery.GUIUtilities;
 import org.executequery.base.DockedTabView;
+import org.executequery.localization.Bundles;
 import org.underworldlabs.swing.ActionPanel;
 
 /**
@@ -110,6 +111,11 @@ public abstract class AbstractDockedTabActionPanel extends ActionPanel
      */
     public boolean tabViewDeselected() {
         return true;
+    }
+
+    protected String bundleString(String key)
+    {
+        return Bundles.get(getClass(),key);
     }
 
     

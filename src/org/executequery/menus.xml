@@ -23,6 +23,7 @@
           <menu-item id="open-command" class="org.underworldlabs.swing.menu.MainMenuItem"/>
 
           <menu name="Recent Files"
+                key="menu.file.recent-files"
                 mnemonic="R"
                 class="org.executequery.gui.menu.RecentFilesMenu">
 
@@ -341,7 +342,7 @@
 
               <menu-item id="customise-tool-bars-command"
                          class="org.underworldlabs.swing.menu.MainMenuItem"
-                         tool-tip="Customize the tool bars"/>
+                         />
 
           </menu>
 

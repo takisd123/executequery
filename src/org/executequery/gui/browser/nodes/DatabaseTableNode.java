@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.executequery.databaseobjects.DatabaseTable;
 import org.executequery.databaseobjects.NamedObject;
+import org.executequery.localization.Bundles;
 import org.underworldlabs.jdbc.DataSourceException;
 
 public class DatabaseTableNode extends DatabaseObjectNode {
@@ -45,7 +46,6 @@ public class DatabaseTableNode extends DatabaseObjectNode {
 
         return nodes;
     }
-    
     private DatabaseTable databaseTable() {
         
         return (DatabaseTable) getDatabaseObject();
@@ -79,7 +79,7 @@ public class DatabaseTableNode extends DatabaseObjectNode {
         @Override
         public String getName() {
             
-            return "Columns";
+            return bundleString("columns");
         }
         
         @Override
@@ -102,7 +102,7 @@ public class DatabaseTableNode extends DatabaseObjectNode {
         @Override
         public String getName() {
             
-            return "Foreign Keys";
+            return bundleString("foreign-keys");
         }
 
         @Override
@@ -124,7 +124,7 @@ public class DatabaseTableNode extends DatabaseObjectNode {
         @Override
         public String getName() {
             
-            return "Primary Keys";
+            return bundleString("primary-keys");
         }
 
         @Override
@@ -146,7 +146,7 @@ public class DatabaseTableNode extends DatabaseObjectNode {
         @Override
         public String getName() {
             
-            return "Indexes";
+            return bundleString("indexes");
         }
      
         @Override

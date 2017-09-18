@@ -20,6 +20,8 @@
 
 package org.executequery.gui.forms;
 
+import org.executequery.localization.Bundles;
+
 import java.awt.CardLayout;
 import java.util.HashMap;
 import java.util.Map;
@@ -136,6 +138,10 @@ public class FormObjectViewContainer extends JPanel {
             return false;
         }
         return panels.containsKey(name);
+    }
+    protected String bundleString(String key)
+    {
+        return Bundles.get(getClass(),key);
     }
 
 }

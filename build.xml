@@ -25,6 +25,7 @@
         <delete dir="${compile.outdir}" quiet="true"/>
 		<mkdir dir="${compile.outdir}" />
 
+
 		<copy todir="${compile.outdir}">
 			<fileset dir="${src.path}" excludes="**/*.java **/*.properties" />
 		</copy>
@@ -34,7 +35,9 @@
         
         <copy file="${src.path}/org/executequery/release.notes" tofile="${dist.outdir}/README.txt"/>
 
+
 	</target>
+
 
 	<target name="compile" depends="init">
 
@@ -67,14 +70,14 @@
 
         </jar>
 
-        <delete dir="${compile.outdir}" quiet="true"/>
+		<delete dir="${compile.outdir}" quiet="true"/>
 
-	</target>
+    </target>
 
     <target name="clean">
         <delete dir="${compile.outdir}" quiet="true"/>
     </target>
 
-	<target name="all" depends="compile,jar" />
+    <target name="all" depends="compile,jar" />
 
 </project>
