@@ -139,14 +139,10 @@ public class FormObjectViewContainer extends JPanel {
         }
         return panels.containsKey(name);
     }
-    protected String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+    
+    protected String bundleString(String key) {
+        return Bundles.get(getClass(), key);
     }
 
 }
-
-
-
-
 

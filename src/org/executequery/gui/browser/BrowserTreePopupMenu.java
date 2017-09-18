@@ -275,7 +275,10 @@ class BrowserTreePopupMenu extends JPopupMenu {
     protected TreePath getCurrentPath() {
         return listener.getCurrentPath();
     }
-    private String bundleString(String key){return Bundles.get(getClass(),key);}
+
+    private String bundleString(String key) {
+        return Bundles.get(getClass(), key);
+    }
 
 }
 

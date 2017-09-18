@@ -66,9 +66,11 @@ public class BrowserTreeRootPopupMenu extends JPopupMenu {
         menuItem.addActionListener(listener);
         return menuItem;
     }
-    private String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+
+    private String bundleString(String key) {
+
+        return Bundles.get(getClass(), key);
     }
+    
 }
 

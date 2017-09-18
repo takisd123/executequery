@@ -80,7 +80,7 @@ public class CatalogPanel extends BrowserNodeBasePanel {
 
     protected String getPrintablePrefixLabel() {
 
-        return bundleString("DatabaseCatalog")+": ";
+        return bundleString("DatabaseCatalog") + ": ";
     }
 
     public void refresh() {}
@@ -155,14 +155,3 @@ public class CatalogPanel extends BrowserNodeBasePanel {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -114,10 +114,12 @@ public abstract class AbstractConnectionPanel extends ActionPanel {
         }
         
     }
-    protected String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+
+    protected String bundleString(String key) {
+        
+        return Bundles.get(getClass(), key);
     }
+
 }
 
 

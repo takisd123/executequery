@@ -52,14 +52,11 @@ public class BrowserTreeFolderPopupMenu extends JPopupMenu {
         menuItem.addActionListener(listener);
         return menuItem;
     }
-    private String bundleString(String key)
-    {
+    
+    private String bundleString(String key) {
+        
         return Bundles.get(getClass(),key);
     }
 
 }
-
-
-
-
 

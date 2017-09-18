@@ -124,10 +124,10 @@ class ConnectionsTreeToolBar extends PanelToolBar {
 
         });
     }
-    private String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+    private String bundleString(String key) {
+        return Bundles.get(getClass(), key);
     }
+
 }
 
 

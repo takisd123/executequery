@@ -783,9 +783,10 @@ public class BrowserController {
 
         hostPanel().connectionNameChanged(name);
     }
-    private String bundleString(String key)
-    {
-        return Bundles.get(BrowserController.class,key);
+   
+    private String bundleString(String key) {
+
+        return Bundles.get(BrowserController.class, key);
     }
 
 }

@@ -301,19 +301,11 @@ public class DatabaseObjectNode extends DefaultMutableTreeNode {
     public String toString() {
         return getDisplayName();
     }
-    protected String bundleString(String key)
-    {
-        return Bundles.get(getClass(), key);}
+
+    protected String bundleString(String key) {
+    
+        return Bundles.get(getClass(), key);
+    }
     
 }
-
-
-
-
-
-
-
-
-
-
 

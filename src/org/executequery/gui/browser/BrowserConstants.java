@@ -225,9 +225,10 @@ public class BrowserConstants {
                                                FOLDER_INDEXES_IMAGE,
                                                FOLDER_PRIMARY_KEYS_IMAGE
                                                };
-    public static String bundleString(String key)
-    {
-        return Bundles.get(BrowserConstants.class,key);
+
+    private static String bundleString(String key) {
+
+        return Bundles.get(BrowserConstants.class, key);
     }
 }
 

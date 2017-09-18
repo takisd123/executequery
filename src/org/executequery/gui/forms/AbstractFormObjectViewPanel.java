@@ -125,9 +125,9 @@ public abstract class AbstractFormObjectViewPanel extends JPanel
         this.reload = reload;
     }
 
-    protected String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+    protected String bundleString(String key) {
+
+        return Bundles.get(getClass(), key);
     }
     
 }
