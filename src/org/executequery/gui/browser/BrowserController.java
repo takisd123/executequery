@@ -53,8 +53,8 @@ import org.underworldlabs.util.MiscUtils;
  * Performs SQL execution tasks from browser components.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1783 $
- * @date     $Date: 2017-09-19 00:04:44 +1000 (Tue, 19 Sep 2017) $
+ * @version  $Revision: 1789 $
+ * @date     $Date: 2017-10-09 16:38:29 +1100 (Mon, 09 Oct 2017) $
  */
 public class BrowserController {
 
@@ -91,8 +91,7 @@ public class BrowserController {
 
         } catch (DataSourceException e) {
 
-
-            GUIUtilities.displayExceptionErrorDialog(Bundles.getCommon("error.connection"), e);
+            GUIUtilities.displayExceptionErrorDialog(Bundles.getCommon("error.connection") + e.getExtendedMessage(), e);
         }
     }
 
@@ -519,7 +518,7 @@ public class BrowserController {
                         SQLException e = result.getSqlException();
                         if (e != null) {
 
-                            GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes"), e);
+                            GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes") + MiscUtils.formatSQLError(e), e);
                         }
                         else {
                             GUIUtilities.displayErrorMessage(result.getErrorMessage());
@@ -531,7 +530,7 @@ public class BrowserController {
                 querySender.execute(QueryTypes.COMMIT, null);
             }
             catch (SQLException e) {
-                GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes"), e);
+                GUIUtilities.displayExceptionErrorDialog(Bundles.get("common.error.apply-changes") + MiscUtils.formatSQLError(e), e);
                 treePanel.setNodeSelected(node);
                 return;
             }
