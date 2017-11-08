@@ -35,8 +35,6 @@ import javax.swing.tree.TreeSelectionModel;
  * and provides convenience methods for removal/insertion of nodes.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1792 $
- * @date     $Date: 2017-11-08 23:26:08 +1100 (Wed, 08 Nov 2017) $
  */
 public class DynamicTree extends JTree {
 //                         implements PropertyChangeListener,

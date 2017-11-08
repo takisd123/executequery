@@ -47,8 +47,6 @@ import org.underworldlabs.swing.actions.ReflectiveAction;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1791 $
- * @date     $Date: 2017-11-08 22:32:21 +1100 (Wed, 08 Nov 2017) $
  */
 public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
 
