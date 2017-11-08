@@ -7,6 +7,8 @@ Summary of changes - v4.4.1 Build 5478:
 
 - Fixed missing error messages on exception dialog.
 - Fixed missing column and key labels on table node expansion.
+- Fixed regression bug that would break the tree model when adding or removing 
+  connections.
 
 
 Summary of changes - v4.4.0 Build 5476:

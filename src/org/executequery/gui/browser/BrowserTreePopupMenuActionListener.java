@@ -47,8 +47,8 @@ import org.underworldlabs.swing.actions.ReflectiveAction;
 /**
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1783 $
- * @date     $Date: 2017-09-19 00:04:44 +1000 (Tue, 19 Sep 2017) $
+ * @version  $Revision: 1791 $
+ * @date     $Date: 2017-11-08 22:32:21 +1100 (Wed, 08 Nov 2017) $
  */
 public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
 
@@ -86,8 +86,7 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
 
     public void delete(ActionEvent e) {
         if (currentPath != null) {
-            DatabaseHostNode node =
-                    (DatabaseHostNode)currentPath.getLastPathComponent();
+            DatabaseHostNode node = (DatabaseHostNode)currentPath.getLastPathComponent();
             treePanel.deleteConnection(node);
         }
     }
@@ -124,7 +123,7 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
         if (currentSelection != null) {
 
             String name = treePanel.buildConnectionName(
-                            currentSelection.getName() + " ("+ Bundles.getCommon("Copy")) + ")";
+                            currentSelection.getName() + " (" + Bundles.getCommon("copy")) + ")";
             DatabaseConnection dc = currentSelection.copy().withName(name);
             treePanel.newConnection(dc);
         }
@@ -323,7 +322,3 @@ public class BrowserTreePopupMenuActionListener extends ReflectiveAction {
     }
 
 }
-
-
-
-

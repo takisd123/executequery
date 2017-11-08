@@ -30,8 +30,8 @@ import org.underworldlabs.swing.ActionPanel;
  * Abstract tab action panel.
  *
  * @author   Takis Diakoumis
- * @version  $Revision: 1783 $
- * @date     $Date: 2017-09-19 00:04:44 +1000 (Tue, 19 Sep 2017) $
+ * @version  $Revision: 1791 $
+ * @date     $Date: 2017-11-08 22:32:21 +1100 (Wed, 08 Nov 2017) $
  */
 public abstract class AbstractDockedTabActionPanel extends ActionPanel 
                                                    implements DockedTabView {
@@ -113,9 +113,9 @@ public abstract class AbstractDockedTabActionPanel extends ActionPanel
         return true;
     }
 
-    protected String bundleString(String key)
-    {
-        return Bundles.get(getClass(),key);
+    protected String bundleString(String key, Object...args) {
+
+        return Bundles.get(getClass(), key, args);
     }
 
     
