@@ -68,6 +68,13 @@ public class ConnectionsMenu extends MainMenu
         reloadConnectionMenu();
     }
     
+    @Override
+    public void connectionImported(
+            ConnectionRepositoryEvent connectionRepositoryEvent) {
+        
+        reloadConnectionMenu();
+    }
+    
     public void connectionAdded(
             ConnectionRepositoryEvent connectionRepositoryEvent) {
 

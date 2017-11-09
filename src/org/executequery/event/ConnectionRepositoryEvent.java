@@ -36,6 +36,9 @@ public interface ConnectionRepositoryEvent extends ApplicationEvent {
     /** Method name for connection modified */
     String CONNECTION_MODIFIED = "connectionModified";
     
+    /** Method name for connection imported */
+    String CONNECTION_IMPORTED = "connectionImported";
+    
     /** Method name for connection removed */
     String CONNECTION_REMOVED = "connectionRemoved";
 

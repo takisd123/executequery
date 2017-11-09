@@ -160,6 +160,10 @@ public class ConnectionsListPanel extends AbstractFormObjectViewPanel
         connectionsChanged();
     }
     
+    public void connectionImported(ConnectionRepositoryEvent connectionRepositoryEvent) {
+        connectionsChanged();
+    }
+    
     public void connectionModified(ConnectionRepositoryEvent connectionRepositoryEvent) {
         connectionsChanged();
     }

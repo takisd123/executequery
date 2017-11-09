@@ -1144,8 +1144,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
 
     public boolean canHandleEvent(ApplicationEvent event) {
         return (event instanceof ConnectionEvent) 
-                || (event instanceof UserPreferenceEvent);
-//                || (event instanceof ConnectionRepositoryEvent);
+                || (event instanceof UserPreferenceEvent)
+                || (event instanceof ConnectionRepositoryEvent 
+                        && "connectionImported".equals(((ConnectionRepositoryEvent) event).getMethod()));
     }
 
     // ------------------------------------------
@@ -1934,6 +1935,14 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
                         this, ConnectionsFolderRepositoryEvent.FOLDER_MODIFIED, connectionsFolder));
     }
 
+    @Override
+    public void connectionImported(ConnectionRepositoryEvent connectionRepositoryEvent) {
+        
+        System.out.println("imported");
+        
+//        tree.reset(createTreeStructure());
+    }
+    
     @Override
     public void connectionAdded(ConnectionRepositoryEvent connectionRepositoryEvent) {
         

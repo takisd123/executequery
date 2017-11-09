@@ -160,7 +160,7 @@ public class ImportConnectionsPanel extends WizardProcessPanel implements Active
             ConnectionImport connectionImport = new ConnectionImporter().read(importFile, this);
 
             EventMediator.fireEvent(new DefaultConnectionRepositoryEvent(
-                            this, ConnectionRepositoryEvent.CONNECTION_ADDED, connectionImport.getConnections()));
+                            this, ConnectionRepositoryEvent.CONNECTION_IMPORTED, connectionImport.getConnections()));
 
             secondPanel.append("\nProcessed " + connectionImport.getFolderCount() +" folders and " 
                     + connectionImport.getConnectionCount() + " connections");
