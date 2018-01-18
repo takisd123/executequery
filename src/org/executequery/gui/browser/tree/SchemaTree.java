@@ -159,12 +159,11 @@ public class SchemaTree extends DynamicTree
         // do nothing
     }
 
-    @SuppressWarnings("unchecked")
     private boolean hasFolders() {
         
-        for (Enumeration<DefaultMutableTreeNode> i = getRootNode().children(); i.hasMoreElements();) {
+        for (Enumeration<TreeNode> i = getRootNode().children(); i.hasMoreElements();) {
             
-            DefaultMutableTreeNode element = i.nextElement();
+            DefaultMutableTreeNode element = (DefaultMutableTreeNode) i.nextElement();
             if (element instanceof ConnectionsFolderNode) {
                 
                 return true;

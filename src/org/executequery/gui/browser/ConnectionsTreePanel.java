@@ -242,9 +242,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
     @SuppressWarnings("unchecked")
     public void collapseAll() {
         
-        for (Enumeration<DefaultMutableTreeNode> i = tree.getRootNode().children(); i.hasMoreElements();) {
+        for (Enumeration<TreeNode> i = tree.getRootNode().children(); i.hasMoreElements();) {
             
-            DefaultMutableTreeNode node = i.nextElement();
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) i.nextElement();
             tree.collapsePath(new TreePath(node.getPath()));
         }
         
@@ -517,9 +517,9 @@ public class ConnectionsTreePanel extends AbstractDockedTabActionPanel
      
         if (folder.getChildCount() > 0) {
 
-            for (Enumeration<DatabaseHostNode> i = folder.children(); i.hasMoreElements();) {
+            for (Enumeration<TreeNode> i = folder.children(); i.hasMoreElements();) {
                 
-                connections.remove(i.nextElement().getDatabaseConnection());
+                connections.remove(((DatabaseHostNode) i.nextElement()).getDatabaseConnection());
             }
             
         }

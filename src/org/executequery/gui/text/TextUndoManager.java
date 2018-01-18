@@ -128,8 +128,8 @@ public class TextUndoManager extends UndoManager
         
         UndoableEdit edit = undoableEditEvent.getEdit();
         AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
+        
         EventType eventType = event.getType();
-
         if (eventType == EventType.INSERT) {
             
             try {
