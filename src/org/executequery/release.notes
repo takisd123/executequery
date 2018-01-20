@@ -1,11 +1,12 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 27 November 2017
+Date: 21 January 2018
 
 Summary of changes - v4.4.2 Build 5486:
 ----------------------------------------
 
 - Optimized delimited export process.
+- Incremental fix for the Java9 issue and undo/redo for text components. 
 
 
 Summary of changes - v4.4.1 Build 5484:
@@ -574,4 +575,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-27 November 2017
+21 January 2018

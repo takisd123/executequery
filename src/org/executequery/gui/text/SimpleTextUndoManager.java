@@ -24,9 +24,10 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.Action;
+import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentEvent.EventType;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -47,9 +48,7 @@ import org.underworldlabs.swing.actions.ActionBuilder;
  *
  * @author   Takis Diakoumis
  */
-public class TextUndoManager extends UndoManager 
-                             implements UndoableEditListener,
-                                        FocusListener {
+public class SimpleTextUndoManager extends UndoManager implements FocusListener {
     
     /** the text component this manager is assigned to */
     private JTextComponent textComponent;
@@ -67,11 +66,11 @@ public class TextUndoManager extends UndoManager
     private Action redoCommand;
     
     private boolean addNextInsert;
-    
+
     private static final String[] WHITESPACE = {"\t", " ", "\n", "\r"};
 
     /** Creates a new instance of TextUndoManager */
-    public TextUndoManager(JTextComponent textComponent) {
+    public SimpleTextUndoManager(JTextComponent textComponent) {
 
         this.textComponent = textComponent;
         document = textComponent.getDocument();
@@ -86,6 +85,12 @@ public class TextUndoManager extends UndoManager
         
         // initialise the compound edit
         compoundEdit = new CompoundEdit();
+        
+        // Java 9 seems to have removed edit detailed info so adding
+        // a simple document listener to listen for breaks used for 
+        // compound edits
+        document.addDocumentListener(new SimpleDocumentListenerForJava9());
+
     }
 
     /**
@@ -125,49 +130,83 @@ public class TextUndoManager extends UndoManager
     }
     
     public void undoableEditHappened(UndoableEditEvent undoableEditEvent) {
-        
+
         UndoableEdit edit = undoableEditEvent.getEdit();
-        AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
         
-        EventType eventType = event.getType();
-        if (eventType == EventType.INSERT) {
+        if (edit instanceof AbstractDocument.DefaultDocumentEvent) {
             
-            try {
-
-                if (addNextInsert) {
-
-                    add();
-                }
-
-                compoundEdit.addEdit(edit);
+            AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
+            
+            EventType eventType = event.getType();
+            if (eventType == EventType.INSERT) {
                 
-                int start = event.getOffset();
-                int length = event.getLength();
-
-                String text = event.getDocument().getText(start, length);
-                if (StringUtils.endsWithAny(text, WHITESPACE)) {
-
-                    addNextInsert = true;
-                }
+                insert(edit);
                 
-            } catch (BadLocationException e) {
+            } else if (eventType == EventType.REMOVE) {
+    
+                remove(edit);
                 
-                Log.debug(e);
+            } else if (eventType == EventType.CHANGE) {
+                
+                change(edit);            
             }
-            
-        } else if (eventType == EventType.REMOVE) {
 
-            add();
-            compoundEdit.addEdit(edit);
-            add();
+        } else {
             
-        } else if (eventType == EventType.CHANGE) {
-            
-            compoundEdit.addEdit(edit);            
+            // Java 9 ... no insight into the edit info now... why?
+            // some notes here from issue notes from Netbeans:
+            // http://statistics.netbeans.org/exceptions/detail.do?id=223463
+
+            if (addNextInsert) {
+                
+                add();
+            }
+   
+            change(edit);            
         }
-
+        
         redoCommand.setEnabled(false);
         undoCommand.setEnabled(true);
+    }
+
+    private void change(UndoableEdit edit) {
+        
+        compoundEdit.addEdit(edit);
+    }
+
+    private void remove(UndoableEdit edit) {
+        
+        add();
+        change(edit);
+        add();
+    }
+
+    private void insert(UndoableEdit edit) {
+
+        try {
+
+            AbstractDocument.DefaultDocumentEvent event = (AbstractDocument.DefaultDocumentEvent) edit;
+   
+            if (addNextInsert) {
+   
+                add();
+            }
+   
+            change(edit);
+            
+            int start = event.getOffset();
+            int length = event.getLength();
+   
+            String text = event.getDocument().getText(start, length);
+            if (StringUtils.endsWithAny(text, WHITESPACE)) {
+   
+                addNextInsert = true;
+            }
+            
+        } catch (BadLocationException e) {
+            
+            Log.debug(e);
+        }
     }
 
     private void add() {
@@ -250,6 +289,30 @@ public class TextUndoManager extends UndoManager
         discardAllEdits();
     }
     
+    
+    class SimpleDocumentListenerForJava9 implements DocumentListener {
+
+        @Override
+        public void insertUpdate(DocumentEvent event) {
+
+            try {
+
+                String text = document.getText(event.getOffset(), event.getLength());
+                if (StringUtils.endsWithAny(text, WHITESPACE)) {
+                    
+                    addNextInsert = true;
+                }
+
+            } catch (BadLocationException e) {}
+            
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent event) {}
+
+        @Override
+        public void changedUpdate(DocumentEvent event) {}
+
+    }
+    
 }
-
-

@@ -56,7 +56,7 @@ import org.executequery.GUIUtilities;
 import org.executequery.components.LineNumber;
 import org.executequery.gui.UndoableComponent;
 import org.executequery.gui.text.SQLTextPane;
-import org.executequery.gui.text.TextUndoManager;
+import org.executequery.gui.text.SimpleTextUndoManager;
 import org.executequery.repository.EditorSQLShortcut;
 import org.executequery.repository.EditorSQLShortcuts;
 import org.executequery.repository.KeywordRepository;
@@ -90,7 +90,7 @@ public class QueryEditorTextPane extends SQLTextPane
     private LineNumber lineBorder;
 
     /** The text pane's undo manager */
-    protected TextUndoManager undoManager;
+    protected SimpleTextUndoManager undoManager;
 
     private Map<String, EditorSQLShortcut> editorShortcuts;
 
@@ -443,7 +443,7 @@ public class QueryEditorTextPane extends SQLTextPane
         addCaretListener(this);
 
         // undo functionality
-        undoManager = new TextUndoManager(this);
+        undoManager = new SimpleTextUndoManager(this);        
         undoManager.setLimit(userProperties().getIntProperty("editor.undo.count"));
 
         document.addDocumentListener(this);
@@ -605,8 +605,9 @@ public class QueryEditorTextPane extends SQLTextPane
 
         try {
 
-            undoManager.reset();
-            undoManager.suspend();
+//            undoManager.reset();
+//            undoManager.suspend();
+
             fireTextUpdateStarting();
 
             // clear the current held edits
@@ -638,7 +639,7 @@ public class QueryEditorTextPane extends SQLTextPane
         } finally {
 
             fireTextUpdateFinished();
-            undoManager.reinstate();
+//            undoManager.reinstate();
             setCaretPosition(0);
         }
 
@@ -747,7 +748,7 @@ public class QueryEditorTextPane extends SQLTextPane
     }
 
     public void goToRow(int row) {
-        int goToRow = getRowPosition(row-1);
+        int goToRow = getRowPosition(row - 1);
         if (goToRow < 0) {
             GUIUtilities.displayErrorMessage("The line number enterinsertTextAftered is invalid.");
             return;

@@ -40,7 +40,7 @@ public class GotoCommand extends AbstractBaseCommand {
             QueryEditor queryEditor = (QueryEditor)panel;            
             try {
                 queryEditor.goToRow(Integer.parseInt(
-                GUIUtilities.displayInputMessage(bundledString("goTo"), bundledString("lineNumber"))));
+                        GUIUtilities.displayInputMessage(bundledString("goTo"), bundledString("lineNumber"))));
             } catch (NumberFormatException numExc) {}
         }
         panel = null;        
