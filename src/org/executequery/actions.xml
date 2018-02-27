@@ -761,6 +761,13 @@
           small-icon="/org/executequery/icons/ExportSQL16.png"
           execute-class="org.executequery.actions.toolscommands.ExportSQLCommand"/>
 
+  <action id="export-dbunit-command"
+          name="Export as DBUnit Dataset"
+          mnemonic="Q"
+          accel-editable="true"
+          small-icon="/org/executequery/icons/ExportXML16.png"
+          execute-class="org.executequery.actions.toolscommands.ExportDBUnitCommand"/>
+
   <action id="insert-row-command"
           name="Create a new table column after the current selection"
           accel-editable="false"

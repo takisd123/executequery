@@ -45,37 +45,37 @@ import org.underworldlabs.swing.wizard.DefaultWizardProcessModel;
  *
  * @author   Takis Diakoumis
  */
-public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
+public class ExportAsDBUnitWizard extends ImportExportWizardProcessPanel
                                implements ActiveComponent, ImportExportWizard {
 
-    public static final String TITLE = "Export as SQL";
+    public static final String TITLE = "Export as DBUnit Dataset";
 
     private static final Dimension panelSize = new Dimension(580, 420);
 
-    private ExportAsSQLDataModel exportDataModel;
+    private DefaultImportExportDataModel exportDataModel;
     
     private TableSelectionCombosGroup tableSelectionCombosGroup;
 
-    private ExportAsSQLPanelOne firstPanel;
+    private ExportAsDBUnitPanelOne firstPanel;
 
     private ImportExportPanelTwo secondPanel;
     
     private ImportExportPanelThree thirdPanel;
 
-    private ExportAsSQLPanelFour fourthPanel;
+    private ExportAsDBUnitPanelFour fourthPanel;
 
-    private ExportAsSQLWorker exportAsSQLWorker;
+    private ExportAsDBUnitWorker exportAsDBUnitWorker;
     
     private NewImportExportProgressPanel fifthPanel;
     
     private final ActionContainer parent;
 
-    public ExportAsSQLWizard(ActionContainer parent) {
+    public ExportAsDBUnitWizard(ActionContainer parent) {
     
         this(parent, null);
     }
     
-    public ExportAsSQLWizard(ActionContainer parent, 
+    public ExportAsDBUnitWizard(ActionContainer parent, 
                              DatabaseTable databaseTable) {
 
         this.parent = parent;
@@ -90,12 +90,12 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
 
     private void init() {
 
-        setModel(new ExportAsSQLWizardModel());
+        setModel(new ExportAsDBunitWizardModel());
 
         tableSelectionCombosGroup = new TableSelectionCombosGroup();
         exportDataModel = createExportDataModel(tableSelectionCombosGroup.getSelectedHost());
      
-        firstPanel = new ExportAsSQLPanelOne(this);
+        firstPanel = new ExportAsDBUnitPanelOne(this);
         initAndAddPanel(firstPanel);
 
         prepare();
@@ -114,22 +114,26 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         getModel().addPanel(panel);
     }
     
-    private ExportAsSQLDataModel createExportDataModel(DatabaseHost databaseHost) {
-        return new ExportAsSQLDataModel(databaseHost);
+    private DefaultImportExportDataModel createExportDataModel(DatabaseHost databaseHost) {
+        
+        DefaultImportExportDataModel model = new DefaultImportExportDataModel();
+        model.setDatabaseHost(databaseHost);
+        
+        return model;
     }
     
     public String getFileSuffix() {
 
-        return "sql";
+        return "xml";
     }
     
     public void stopTransfer() {
         setButtonsEnabled(true);
-        exportAsSQLWorker.cancelTransfer();
+        exportAsDBUnitWorker.cancelTransfer();
         setBackButtonEnabled(true);
     }
 
-    public ExportAsSQLDataModel getExportDataModel() {
+    public DefaultImportExportDataModel getExportDataModel() {
         return exportDataModel;
     }
 
@@ -205,7 +209,7 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
                 }
 
                 if (fourthPanel == null) {
-                    fourthPanel = new ExportAsSQLPanelFour(this);
+                    fourthPanel = new ExportAsDBUnitPanelFour(this);
                     initAndAddPanel(fourthPanel);
                 }
     
@@ -245,9 +249,9 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
     
     private void startExport() {
 
-        if (exportAsSQLWorker == null) {
+        if (exportAsDBUnitWorker == null) {
             
-            exportAsSQLWorker = new ExportAsSQLWorker(this);
+            exportAsDBUnitWorker = new ExportAsDBUnitWorker(this);
         }
 
         Log.info("Beginning data export process");
@@ -256,15 +260,12 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         setCancelButtonEnabled(false);
         setBackButtonEnabled(false);
 
-        exportAsSQLWorker.export();
+        exportAsDBUnitWorker.export();
     }
 
     private void fourthPanelToModel() {
 
         exportDataModel.setOnErrorOption(fourthPanel.getOnErrorOption());
-        exportDataModel.setIncludeCreateTableStatements(fourthPanel.getIncludeCreateTableStatement());
-        exportDataModel.setIncludePrimaryKeyConstraints(fourthPanel.getIncludePrimaryKeyConstraints());
-        exportDataModel.setIncludeForeignKeyConstraints(fourthPanel.getIncludeForeignKeyConstraints());
     }
 
     private void thirdPanelToModel() {
@@ -394,9 +395,9 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
         return true;
     }
     
-    private class ExportAsSQLWizardModel extends DefaultWizardProcessModel {
+    private class ExportAsDBunitWizardModel extends DefaultWizardProcessModel {
         
-        public ExportAsSQLWizardModel() {
+        public ExportAsDBunitWizardModel() {
 
             String[] titles = {"Database Connection and Export Type",
                                "Table Selection",
@@ -435,3 +436,10 @@ public class ExportAsSQLWizard extends ImportExportWizardProcessPanel
     }
 
 }
+
+
+
+
+
+
+

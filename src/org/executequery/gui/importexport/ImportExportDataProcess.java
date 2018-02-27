@@ -78,7 +78,8 @@ public interface ImportExportDataProcess {
     int SINGLE_FILE = 10;
     /** A multiple file export - multiple table */
     int MULTIPLE_FILE = 11;
-    
+    /** DBUnit dataset export */
+    int EXPORT_DBUNIT = 12;
     
     /** indicator for commit and end of file */
     int COMMIT_END_OF_FILE = -99;

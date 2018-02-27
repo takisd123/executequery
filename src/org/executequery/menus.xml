@@ -479,6 +479,9 @@
               <menu-item id="export-sql-command"
                          class="org.underworldlabs.swing.menu.MainMenuItem"/>
 
+              <menu-item id="export-dbunit-command"
+                         class="org.underworldlabs.swing.menu.MainMenuItem"/>
+
               <menu-item id="export-excel-command"
                          class="org.underworldlabs.swing.menu.MainMenuItem"/>
 

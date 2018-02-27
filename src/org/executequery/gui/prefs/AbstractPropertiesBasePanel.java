@@ -47,6 +47,8 @@ abstract class AbstractPropertiesBasePanel extends JPanel
                                      PreferenceChangeListener,
                                      PreferenceTableModelListener {
 
+    public static final int TABLE_ROW_HEIGHT = 26;
+    
     /** common font used across props panels */
     protected static Font panelFont;
     

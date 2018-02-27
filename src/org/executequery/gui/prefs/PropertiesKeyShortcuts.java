@@ -93,7 +93,7 @@ public class PropertiesKeyShortcuts extends AbstractPropertiesBasePanel
         table.setFont(AbstractPropertiesBasePanel.panelFont);
         table.addMouseListener(new MouseHandler());
         
-        table.setRowHeight(20);
+        table.setRowHeight(TABLE_ROW_HEIGHT);
         table.setCellSelectionEnabled(true);
         table.setColumnSelectionAllowed(false);
         table.setRowSelectionAllowed(false);

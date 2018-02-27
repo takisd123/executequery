@@ -1,12 +1,13 @@
 --- Execute Query - RELEASE NOTES ---
 
-Date: 21 January 2018
+Date: 26 February 2018
 
-Summary of changes - v4.4.2 Build 5486:
+Summary of changes - v4.4.2 Build 5488:
 ----------------------------------------
 
 - Optimized delimited export process.
-- Incremental fix for the Java9 issue and undo/redo for text components. 
+- Incremental fix for the Java9 issue and undo/redo for text components.
+- Added (finally) DBUnit dataset export support.  
 
 
 Summary of changes - v4.4.1 Build 5484:
@@ -575,4 +576,4 @@ Thank you for trying Execute Query.
 
 Takis Diakoumis
 takisd@executequery.org
-21 January 2018
+26 February 2018
