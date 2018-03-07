@@ -277,7 +277,8 @@ public class DarkBluerpleTheme extends DefaultMetalTheme {
                 "Table.selectionBackground", new ColorUIResource(47,101,202),
                 "Table.selectionForeground", new ColorUIResource(187,187,187),
                 "Table.sortIconColor", new ColorUIResource(153,153,153),
-                "TableHeader.background", new ColorUIResource(60,63,65),
+//                "TableHeader.background", new ColorUIResource(60,63,65),
+                "TableHeader.background", new ColorUIResource(60,61,62),
                 "TableHeader.focusCellBackground", new ColorUIResource(255,255,255),
                 "TableHeader.foreground", new ColorUIResource(187,187,187),
                 "TextArea.background", new ColorUIResource(69,73,74),
@@ -387,6 +388,8 @@ public class DarkBluerpleTheme extends DefaultMetalTheme {
 
                 "ComboBoxUI", "javax.swing.plaf.metal.MetalComboBoxUI",
 
+                "TableHeader.cellBorder", new org.underworldlabs.swing.plaf.ThinTableHeaderLineBorderUIResource(),
+                
                 "MenuItem.border", new org.underworldlabs.swing.plaf.SimpleMenuItemBorder(),
                 "CheckBoxMenuItem.border", new org.underworldlabs.swing.plaf.SimpleMenuItemBorder(),
                 "Menu.border", new org.underworldlabs.swing.plaf.SimpleMenuItemBorder(),
