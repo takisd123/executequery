@@ -388,8 +388,8 @@
                          index="2"
                          class="org.underworldlabs.swing.menu.MainMenuItem"/>
 
-              <menu-item id="separator"
-                         index="3"/>
+              <!-- <menu-item id="separator"
+                         index="3"/> -->
 
           </menu>
 
